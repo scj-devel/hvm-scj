@@ -144,8 +144,7 @@ public abstract class ManagedMemory extends MemoryArea {
 		else { 
 			// (ms is instanceof ManagedLongEventHandler)
 			devices.Console.println("ManagedMemory.enter: UPS ManagedLongEventHandler not implemented");
-			@SuppressWarnings("unused")
-			ManagedLongEventHandler mevh = (ManagedLongEventHandler) ms;
+			//ManagedLongEventHandler mevh = (ManagedLongEventHandler) ms;
 			// finish this ...
 		}
 	}
@@ -217,6 +216,16 @@ public abstract class ManagedMemory extends MemoryArea {
 	 *            provides the run method that is to be executed within the
 	 *            inner-nested private memory area.
 	 */
+	/*@ 
+	  public static normal_behavior
+	    requires logic != null;	 
+	    ensures true;  // not finished
+	  also
+	  public static exceptional_behaviour
+	    requires logic == null; 
+	    signals (IllegalStateException) true;
+	  
+	  @*/
 	@SCJAllowed
 	public static void enterPrivateMemory(int size, Runnable logic) throws IllegalStateException {
 		/**
@@ -228,15 +237,19 @@ public abstract class ManagedMemory extends MemoryArea {
 		if (logic == null)
 			throw exception;
 		
+		vm.ClockInterruptHandler.instance.disable();  // atomic operation ??
+		
 		ManagedSchedulable ms = getCurrentProcess().getTarget();
-		//devices.Console.println("enterPrivateMemory by " + getCurrentProcess().index);
+		devices.Console.println("enterPrivateMemory by " + getCurrentProcess().index);
 		runEnterPrivateMemory(ms, size, logic);
+		
+		vm.ClockInterruptHandler.instance.enable();
 	}
 
 	private static void  runEnterPrivateMemory(ManagedSchedulable ms, int size, Runnable logic)
 	{
 		ManagedMemory prev = getMemory (ms);
-		//devices.Console.println("enterPrivateMemory: prev " + prev);
+		devices.Console.println("enterPrivateMemory: prev " + prev);
 		long prevFree = prev.memoryConsumed();
 
 		InnerPrivateMemory inner = 
@@ -275,15 +288,17 @@ public abstract class ManagedMemory extends MemoryArea {
 	@SCJAllowed
 	public static void executeInAreaOf(Object obj, Runnable logic) {
 		if (obj == null || logic == null)
-			throw exception;
+			throw exception;		
 		
-		//devices.Console.println("executeInAreaOf 1"); 
+		vm.ClockInterruptHandler.instance.disable();  // atomic operation ??
+		
 		ManagedMemory memAreaOfObject = (ManagedMemory)MemoryArea.getMemoryArea(obj);
-		//devices.Console.println("executeInAreaOf 2");
 		
 		Memory mem = Memory.switchToArea(memAreaOfObject.getDelegate());
 		logic.run();
 		Memory.switchToArea(mem);
+		
+		vm.ClockInterruptHandler.instance.enable();  // atomic operation ??
 	}
 
 	@SCJAllowed

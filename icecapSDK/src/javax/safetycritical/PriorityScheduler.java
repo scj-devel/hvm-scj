@@ -139,6 +139,7 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 
 		else if (handler.process.state == ScjProcess.State.BLOCKED) {
 			handler.process.state = ScjProcess.State.READY;
+			handler.process.start();
 			pFrame.readyQueue.insert(handler.process);
 		} else {
 			; // it is already ready
