@@ -50,7 +50,7 @@ public abstract class ManagedMemory extends MemoryArea {
 	static boolean flag = true;
 
 	@SuppressWarnings("unused")
-	private static MemoryArea backingStore;
+	//private static MemoryArea backingStore;
 
 	/**
 	 * statically allocated Exception prevents memory area reference mismatches.
@@ -182,7 +182,7 @@ public abstract class ManagedMemory extends MemoryArea {
 		}		
 	}
 
-	static final ManagedMemory getOuterMemory(ManagedMemory mem) {
+	static final ManagedMemory getOuterMemory(MemoryArea mem) {
 		if (mem instanceof InnerPrivateMemory)
 			return ((InnerPrivateMemory) mem).prev;
 		
@@ -240,7 +240,7 @@ public abstract class ManagedMemory extends MemoryArea {
 		vm.ClockInterruptHandler.instance.disable();  // atomic operation ??
 		
 		ManagedSchedulable ms = getCurrentProcess().getTarget();
-		devices.Console.println("enterPrivateMemory by " + getCurrentProcess().index);
+		//devices.Console.println("enterPrivateMemory by " + getCurrentProcess().index);
 		runEnterPrivateMemory(ms, size, logic);
 		
 		vm.ClockInterruptHandler.instance.enable();
@@ -249,7 +249,6 @@ public abstract class ManagedMemory extends MemoryArea {
 	private static void  runEnterPrivateMemory(ManagedSchedulable ms, int size, Runnable logic)
 	{
 		ManagedMemory prev = getMemory (ms);
-		devices.Console.println("enterPrivateMemory: prev " + prev);
 		long prevFree = prev.memoryConsumed();
 
 		InnerPrivateMemory inner = 
@@ -288,11 +287,12 @@ public abstract class ManagedMemory extends MemoryArea {
 	@SCJAllowed
 	public static void executeInAreaOf(Object obj, Runnable logic) {
 		if (obj == null || logic == null)
-			throw exception;		
+			throw exception;
 		
 		vm.ClockInterruptHandler.instance.disable();  // atomic operation ??
 		
 		ManagedMemory memAreaOfObject = (ManagedMemory)MemoryArea.getMemoryArea(obj);
+		//devices.Console.println("executeInAreaOf: memAreaOfObject: " + memAreaOfObject);
 		
 		Memory mem = Memory.switchToArea(memAreaOfObject.getDelegate());
 		logic.run();
@@ -306,12 +306,15 @@ public abstract class ManagedMemory extends MemoryArea {
 		if (logic == null)
 			throw exception;
 
-		ManagedSchedulable ms = getCurrentProcess().getTarget();		
-		ManagedMemory currentMem = getMemory (ms);	
-		devices.Console.println("executeInOuterArea: currentMem: " + currentMem);
+		vm.ClockInterruptHandler.instance.disable();  // atomic operation ??
+		
+		MemoryArea currentMem = MemoryArea.getCurrentMemoryArea();
+		//devices.Console.println("executeInOuterArea: currentMem: " + currentMem);
 		
 		if (currentMem instanceof ManagedMemory.ImmortalMemory) {
 			devices.Console.println("executeInOuterArea: already in ImmortalMemory");
+			
+			vm.ClockInterruptHandler.instance.enable();  // atomic operation ??
 			throw new IllegalStateException("executeInOuterArea: already in ImmortalMemory");		
 		}				
 		
@@ -320,6 +323,8 @@ public abstract class ManagedMemory extends MemoryArea {
 		Memory mem = Memory.switchToArea(outerMemory.getDelegate());
 		logic.run();
 		Memory.switchToArea(mem);
+		
+		vm.ClockInterruptHandler.instance.enable();  // atomic operation ??
 	}
 
 	/**
@@ -365,7 +370,21 @@ public abstract class ManagedMemory extends MemoryArea {
 			return CyclicScheduler.instance().getCurrentProcess();
 	}
 
-	Memory getDelegate() {
+	protected Memory getDelegate() {
 		return delegate;
 	}
+	
+	
+	// For JML annotations
+	/*@ spec_public @*/ static MemoryArea getCurretAllocationArea()
+	{
+		return null;
+	}
+	
+	// For JML annotations
+	/*@ spec_public @*/  MemoryArea getTopMostArea()
+	{
+		return null;
+	}
+	
 }

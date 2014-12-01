@@ -28,6 +28,8 @@ package javax.realtime;
 
 import icecaptools.IcecapCompileMe;
 
+
+import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 
@@ -311,10 +313,7 @@ public abstract class MemoryArea extends Object {
 	public static MemoryArea getMemoryArea(Object object) {
 		int ref = ObjectInfo.getAddress(object);
 		
-//		if (object instanceof MissionSequencer<?>)
-//		  devices.Console.println("M2" + "; ref is " + ref); 
-		
-		return getMemoryArea(backingStore, ref);
+		return getMemoryArea(backingStore, ref); 
 	}
 	
 	private static MemoryArea getMemoryArea(MemoryArea provider, int ref) {
@@ -327,6 +326,33 @@ public abstract class MemoryArea extends Object {
 		while (current != null)
 		{
 			MemoryArea result = getMemoryArea(current, ref);
+			if (result != null)
+			{
+				return result;
+			}
+			current = current.nextContainedMemory;
+		}
+		return null;
+	}
+	
+	
+	protected static MemoryArea getCurrentMemoryArea()
+	{
+		vm.Memory mem = vm.Memory.getCurrentMemoryArea();
+		
+		return getCurrentMemoryArea (backingStore, mem);
+	}
+	
+	static MemoryArea getCurrentMemoryArea (MemoryArea provider, Memory mem)
+	{
+		if (provider.delegate == mem)
+		{
+			return provider;
+		}
+		MemoryArea current = provider.containedMemories;
+		while (current != null)
+		{
+			MemoryArea result = getCurrentMemoryArea(current, mem);
 			if (result != null)
 			{
 				return result;
