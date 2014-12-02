@@ -50,18 +50,25 @@ import vm.Memory;
 
 @SCJAllowed(Level.INFRASTRUCTURE)
 public abstract class MemoryArea extends Object {
-	/* The global over all backing store area. This is the root area of all other areas. It does not have a provider. */ 
-	public static MemoryArea backingStore;
+	
+	/* The global over all backing store area. This is the root area of 
+	 * all other areas. It does not have a provider. 
+	 */ 
+	public static MemoryArea overAllBackingStore;
 
+	// -------------------------------------------------------------------
+	// Backing store for this memory area:
+	
 	/* The MemoryArea providing the backing store for this MemoryArea */
 	protected MemoryArea backingStoreProvider;
 
 	/* The head of a linked list of MemoryAreas contained in this MemoryArea (provided by this MemoryArea) */
-	private MemoryArea containedMemories;
-	
-	/* */
+	private MemoryArea headOfContainedMemories;  	
 	private MemoryArea nextContainedMemory;
 
+	// -------------------------------------------------------------------
+	// Allocation area:
+	
 	protected Memory delegate;
 
 	private int reservedEnd;
@@ -118,50 +125,10 @@ public abstract class MemoryArea extends Object {
 		}
 	}
 	
-	private static void print(MemoryArea backingStoreProvider, int indent) {
-		MemoryArea current = backingStoreProvider.containedMemories;
-
-		int count = indent;
-		while (count > 0) {
-			devices.Console.print("   ");
-			count--;
-		}
-
-		int bsstart = backingStoreProvider.delegate.getBase() + backingStoreProvider.delegate.getSize();
-		
-		devices.Console.print(backingStoreProvider.delegate.getName() + "[used " + backingStoreProvider.delegate.consumedMemory()
-				+ " of " + backingStoreProvider.delegate.getSize());
-		
-		int bssize = backingStoreProvider.reservedEnd - bsstart;
-
-		if (bssize > 0)
-		{
-			int consumedBackingStore;
-			if (backingStoreProvider.maxUsage > 0)
-			{
-				consumedBackingStore = backingStoreProvider.maxUsage - bsstart;
-			}
-			else
-			{
-				consumedBackingStore = 0;
-			}
-			
-			devices.Console.println(", used " + consumedBackingStore + " of " + bssize + "]");
-		}
-		else
-		{
-			devices.Console.println("]");
-		}
-
-		while (current != null) {
-			print(current, indent + 1);
-			current = current.nextContainedMemory;
-		}
-	}
-
+	
 	private void addContainedMemory(MemoryArea memoryArea) {
-		memoryArea.nextContainedMemory = containedMemories;
-		containedMemories = memoryArea;
+		memoryArea.nextContainedMemory = headOfContainedMemories;
+		headOfContainedMemories = memoryArea;
 		if (memoryArea.reservedEnd > maxUsage)
 		{
 			maxUsage = memoryArea.reservedEnd;
@@ -169,10 +136,10 @@ public abstract class MemoryArea extends Object {
 	}
 
 	private void removeContainedMemory(MemoryArea memoryArea) {
-		if (containedMemories == memoryArea) {
-			containedMemories = containedMemories.nextContainedMemory;
+		if (headOfContainedMemories == memoryArea) {
+			headOfContainedMemories = headOfContainedMemories.nextContainedMemory;
 		} else {
-			MemoryArea current = containedMemories;
+			MemoryArea current = headOfContainedMemories;
 
 			while (current.nextContainedMemory != null) {
 				if (current.nextContainedMemory == memoryArea) {
@@ -189,7 +156,7 @@ public abstract class MemoryArea extends Object {
 	 * The head is ImmortalMemory and is never removed.
 	 */
 	protected void removeMemArea() {
-		if (this != backingStore) {
+		if (this != overAllBackingStore) {
 			backingStoreProvider.removeContainedMemory(this);
 		}
 	}
@@ -240,7 +207,7 @@ public abstract class MemoryArea extends Object {
 
 		if (memoryConsumed() < newSize) {
 			if (this.delegate.getBase() + newSize < reservedEnd) {
-				if (containedMemories == null) {
+				if (headOfContainedMemories == null) {
 					delegate.resize((int) newSize);
 					return;
 				}
@@ -255,12 +222,12 @@ public abstract class MemoryArea extends Object {
 	 * @return the overall remaining backing store size.
 	 */
 	public static int getRemainingMemorySize() {
-		return backingStore.getRemainingBackingstoreSize();
+		return overAllBackingStore.getRemainingBackingstoreSize();
 	}
 
 	public int getRemainingBackingstoreSize() {
 		int maxEnd = delegate.getBase() + delegate.getSize();
-		MemoryArea current = containedMemories;
+		MemoryArea current = headOfContainedMemories;
 		while (current != null) {
 			maxEnd = maxEnd > current.reservedEnd ? maxEnd : current.reservedEnd;
 			current = current.nextContainedMemory;
@@ -275,11 +242,11 @@ public abstract class MemoryArea extends Object {
 
 	// for test purpose
 	public static void printMemoryAreas() {
-		print(backingStore, 0);
+		print(overAllBackingStore, 0);
 	}
 
 	protected static MemoryArea getNamedMemoryArea(String name) {
-		return getNamedMemoryArea(backingStore, name);
+		return getNamedMemoryArea(overAllBackingStore, name);
 	}
 
 	private static MemoryArea getNamedMemoryArea(MemoryArea provider, String name) {
@@ -287,7 +254,7 @@ public abstract class MemoryArea extends Object {
 		{
 			return provider;
 		}
-		MemoryArea current = provider.containedMemories;
+		MemoryArea current = provider.headOfContainedMemories;
 		while (current != null)
 		{
 			MemoryArea result = getNamedMemoryArea(current, name);
@@ -313,7 +280,7 @@ public abstract class MemoryArea extends Object {
 	public static MemoryArea getMemoryArea(Object object) {
 		int ref = ObjectInfo.getAddress(object);
 		
-		return getMemoryArea(backingStore, ref); 
+		return getMemoryArea(overAllBackingStore, ref); 
 	}
 	
 	private static MemoryArea getMemoryArea(MemoryArea provider, int ref) {
@@ -322,7 +289,7 @@ public abstract class MemoryArea extends Object {
 		{
 			return provider;
 		}
-		MemoryArea current = provider.containedMemories;
+		MemoryArea current = provider.headOfContainedMemories;
 		while (current != null)
 		{
 			MemoryArea result = getMemoryArea(current, ref);
@@ -340,7 +307,7 @@ public abstract class MemoryArea extends Object {
 	{
 		vm.Memory mem = vm.Memory.getCurrentMemoryArea();
 		
-		return getCurrentMemoryArea (backingStore, mem);
+		return getCurrentMemoryArea (overAllBackingStore, mem);
 	}
 	
 	static MemoryArea getCurrentMemoryArea (MemoryArea provider, Memory mem)
@@ -349,7 +316,7 @@ public abstract class MemoryArea extends Object {
 		{
 			return provider;
 		}
-		MemoryArea current = provider.containedMemories;
+		MemoryArea current = provider.headOfContainedMemories;
 		while (current != null)
 		{
 			MemoryArea result = getCurrentMemoryArea(current, mem);
@@ -361,4 +328,46 @@ public abstract class MemoryArea extends Object {
 		}
 		return null;
 	}
+	
+	private static void print(MemoryArea backingStoreProvider, int indent) {
+		MemoryArea current = backingStoreProvider.headOfContainedMemories;
+
+		int count = indent;
+		while (count > 0) {
+			devices.Console.print("   ");
+			count--;
+		}
+
+		int bsstart = backingStoreProvider.delegate.getBase() + backingStoreProvider.delegate.getSize();
+		
+		devices.Console.print(backingStoreProvider.delegate.getName() + "[used " + backingStoreProvider.delegate.consumedMemory()
+				+ " of " + backingStoreProvider.delegate.getSize());
+		
+		int bssize = backingStoreProvider.reservedEnd - bsstart;
+
+		if (bssize > 0)
+		{
+			int consumedBackingStore;
+			if (backingStoreProvider.maxUsage > 0)
+			{
+				consumedBackingStore = backingStoreProvider.maxUsage - bsstart;
+			}
+			else
+			{
+				consumedBackingStore = 0;
+			}
+			
+			devices.Console.println(", used " + consumedBackingStore + " of " + bssize + "]");
+		}
+		else
+		{
+			devices.Console.println("]");
+		}
+
+		while (current != null) {
+			print(current, indent + 1);
+			current = current.nextContainedMemory;
+		}
+	}
+
 }

@@ -71,13 +71,13 @@ public abstract class ManagedMemory extends MemoryArea {
 	 *            The size of the backing store used by the SCJ application
 	 */
 	static void allocateBackingStore(int size) {
-		MemoryArea.backingStore = new BackingStore(Memory.allocateInHeap(size));
+		MemoryArea.overAllBackingStore = new BackingStore(Memory.allocateInHeap(size));
 	}
 
 	public static class ImmortalMemory extends ManagedMemory // HSO: not public
 	{
 		ImmortalMemory(int sizeOfArea) {
-			super(sizeOfArea, sizeOfArea, MemoryArea.backingStore, "Imm");
+			super(sizeOfArea, sizeOfArea, MemoryArea.overAllBackingStore, "Imm");
 		}
 
 		static ImmortalMemory instance() {

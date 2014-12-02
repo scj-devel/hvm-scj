@@ -62,7 +62,7 @@ public class Launcher implements Runnable {
 		if (Memory.memoryAreaTrackingEnabled) {			
 			new PrivateMemory(Const.MEMORY_TRACKER_AREA_SIZE, 
 					          Const.MEMORY_TRACKER_AREA_SIZE, 
-					          MemoryArea.backingStore, "MemTrk");
+					          MemoryArea.overAllBackingStore, "MemTrk");
 		}
 
 		ManagedMemory immortalMem = new ManagedMemory.ImmortalMemory(

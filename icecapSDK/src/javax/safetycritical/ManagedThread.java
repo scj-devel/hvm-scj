@@ -82,7 +82,7 @@ public class ManagedThread extends NoHeapRealtimeThread implements
 				MemoryArea.getRemainingMemorySize() : 
 				(int) this.storage.totalBackingStore;
 	    MemoryArea backingStoreProvider = 
-			mission == null ? MemoryArea.backingStore : 
+			mission == null ? MemoryArea.overAllBackingStore : 
 				mission.currMissSeq.missionMemory;
 	    
 	    String privateMemoryName = Memory.getNextMemoryName("PvtMem");
