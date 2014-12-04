@@ -20,7 +20,6 @@ import java.io.FileOutputStream;
 import test.icecaptools.compiler.TestConversionConfiguration;
 
 public class CompilationManager {
-	@SuppressWarnings("unused")
 	public static void main(String args[]) throws Throwable {
 		boolean aotCompile = false;
 		boolean includeJMLMethods = true;

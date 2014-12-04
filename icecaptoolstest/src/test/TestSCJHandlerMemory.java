@@ -24,7 +24,6 @@ import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.AperiodicEventHandler;
 import javax.safetycritical.Launcher;
-import javax.safetycritical.ManagedThread;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
