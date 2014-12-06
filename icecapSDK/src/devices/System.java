@@ -52,6 +52,14 @@ public class System {
 		{
 			return "\n";
 		}
+		else if (key.equals("org.jmlspecs.openjml.racexceptions"))
+		{
+			return "true";
+		}
+		else if (key.equals("org.jmlspecs.openjml.racjavaassert"))
+		{
+			return "true";
+		}
 		else
 		{
 			return null;
