@@ -50,7 +50,7 @@ public class System {
 	{
 		if (key.equals("line.separator"))
 		{
-			return "\n";
+			return "\n"; 
 		}
 		else if (key.equals("org.jmlspecs.openjml.racexceptions"))
 		{
