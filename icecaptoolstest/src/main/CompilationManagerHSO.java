@@ -26,58 +26,110 @@ public class CompilationManagerHSO {
 
 		@Override
 		public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-			if (mdesc.getClassName().contains("jml"))
-	        {
-	            return true;
-	        }
-	        return false;
+			if (mdesc.getClassName().contains("jml")) {
+				return true;
+			}
+			if (mdesc.getClassName().startsWith("sun.security.action.GetPropertyAction")) {
+				return true;
+			}
+			if (mdesc.getClassName().startsWith("java.io.BufferedWriter")) {
+				return true;
+			}
+
+			if (mdesc.getClassName().startsWith("java.io.PrintStream")) {
+				return true;
+			}
+			return false;
 		}
 
 		@Override
-		public boolean isMethodExcluded(String clazz, String targetMethodName,
-				String targetMethodSignature) {
+		public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
 			// java.lang.CharacterData
 			// java.io.
 			// java.lang.System
 			// java.lang.SecurityManager
 			// java.lang.Terminator
 			// java.lang.Shutdown
-			
-//			if (clazz.startsWith("java.lang.CharacterData")) { // No
-//	            return true;
-//	        }
-//			if (clazz.startsWith("java.lang.System")) { // No
-//	            return true;
-//	        }
-//			if (clazz.startsWith("java.lang.SecurityManager")) {
-//	            return true;
-//	        }
-//			if (clazz.startsWith("java.lang.Terminator")) {
-//	            return true;
-//	        }
-//			if (clazz.startsWith("java.lang.Shutdown")) {
-//	            return true;
-//	        }
+
+			//			if (clazz.startsWith("java.lang.CharacterData")) { // No
+			//	            return true;
+			//	        }
+			//			if (clazz.startsWith("java.lang.System")) { // No
+			//	            return true;
+			//	        }
+			//			if (clazz.startsWith("java.lang.SecurityManager")) {
+			//	            return true;
+			//	        }
+			//			if (clazz.startsWith("java.lang.Terminator")) {
+			//	            return true;
+			//	        }
+			//			if (clazz.startsWith("java.lang.Shutdown")) {
+			//	            return true;
+			//	        }
 			if (clazz.startsWith("sun.")) {
-	            return true;
-	        }
-	        if (clazz.startsWith("java.util.concurrent")) {
-	            return true;
-	        }
-	        if (clazz.startsWith("java.io.File")) {
-	            return true;
-	        }
-	        if (clazz.startsWith("java.lang.Thread")){
-	            return true;
-	        }
-	        return false;
+				if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
+					return false;
+				}
+				return true;
+			}
+			if (clazz.startsWith("java.util.concurrent")) {
+				return true;
+			}
+			if (clazz.startsWith("java.io")) {
+				if (clazz.startsWith("java.io.PrintStream")) {
+					return false;
+				}
+				if (clazz.startsWith("java.io.FilterOutputStream")) {
+					return false;
+				}
+				if (clazz.startsWith("java.io.Writer")) {
+					return false;
+				}
+				if (clazz.startsWith("java.io.BufferedWriter")) {
+					return false;
+				}
+				if (clazz.startsWith("java.io.OutputStreamWriter")) {
+					return false;
+				}
+				if (clazz.startsWith("java.io.OutputStream") && targetMethodName.contains("init")) {
+					return false;
+				}
+				return true;
+			}
+			if (clazz.startsWith("java.nio")) {
+				return true;
+			}
+			if (clazz.startsWith("java.lang.Thread")) {
+				return true;
+			}
+			if (clazz.startsWith("java.lang.ClassLoader")) {
+				return true;
+			}
+			if (clazz.startsWith("java.lang.System")) {
+				if (targetMethodName.startsWith("initProperties")) {
+					return true;
+				}
+				if (targetMethodName.startsWith("setErr0")) {
+					return true;
+				}
+				if (targetMethodName.startsWith("setIn0")) {
+					return true;
+				}
+				if (targetMethodName.startsWith("setOut")) {
+					return true;
+				}
+				if (targetMethodName.startsWith("getProperty")) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 		@Override
 		public boolean alwaysClearOutputFolder() {
 			return true;
 		}
-		
+
 	}
     public static void main(String args[]) throws Throwable {
         boolean aotCompile = false;
@@ -96,9 +148,14 @@ public class CompilationManagerHSO {
         // String inputFolder = "/home/hso/java/SCJ_Workspace/EmbeddedSDJ/bin";
 
         // For JML test:
-        String inputFolder = "/home/hso/java/SCJ_Workspace/SCJJMLTest/bin/" +
-         pathSeparator + "/home/hso/java/SCJ_Workspace/JML/jml4c.jar";
+        //String inputFolder = "/home/hso/java/SCJ_Workspace/SCJJMLTest/bin/" +
+        // pathSeparator + "/home/hso/java/SCJ_Workspace/JML/jml4c.jar";
 
+        // For OpenJML test:
+        String inputFolder = "/home/hso/java/SCJ_Workspace/OpenJMLTest/bin/" +
+         pathSeparator + "/home/hso/java/SCJ_Workspace/OpenJMLTest/lib/jmlruntime.jar";
+        
+        
         String outputFolder = "";
 
         // String inputPackage = "test.safetycritical.cyclicschedule3";
@@ -146,6 +203,13 @@ public class CompilationManagerHSO {
          
          
          /* Level 1-2 tests  end */
+        
+        /* OpenJML tests */
+        
+        String inputPackage = "test";
+        String inputClass = "JMLTest1";
+        
+        /* OpenJML tests end */
 
         /* JML tests */
 
@@ -153,14 +217,14 @@ public class CompilationManagerHSO {
 
          //String inputPackage = "javax.realtime.test.clock";
          //String inputPackage = "javax.realtime.test.priorityParameters";
-         String inputPackage = "javax.realtime.test.releaseParameters";
+         //String inputPackage = "javax.realtime.test.releaseParameters";
          //String inputPackage = "javax.realtime.test.timeClasses";
         
          
          //String inputPackage = "javax.safetycritical.test.priorityScheduling";
          //String inputPackage = "javax.safetycritical.test.cyclicExecutive"; 
          //String inputPackage = "javax.safetycritical.test.storageParameters";
-         String inputClass = "AllTests";
+         //String inputClass = "AllTests";
 
         //String inputClass = "Main2Clock";
         // String inputClass = "Main2RealtimeClock";
