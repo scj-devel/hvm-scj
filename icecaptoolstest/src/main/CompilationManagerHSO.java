@@ -147,7 +147,7 @@ public class CompilationManagerHSO {
         //String inputFolder = "/home/hso/java/SCJ_Workspace/icecaptoolstest/bin";
         // String inputFolder = "/home/hso/java/SCJ_Workspace/EmbeddedSDJ/bin";
 
-        // For JML test:
+        // For JML test  with jml4c:
         //String inputFolder = "/home/hso/java/SCJ_Workspace/SCJJMLTest/bin/" +
         // pathSeparator + "/home/hso/java/SCJ_Workspace/JML/jml4c.jar";
 
@@ -206,8 +206,11 @@ public class CompilationManagerHSO {
         
         /* OpenJML tests */
         
-        String inputPackage = "test";
-        String inputClass = "JMLTest1";
+        //String inputPackage = "test";
+        //String inputClass = "JMLTest1";
+        
+        String inputPackage = "account";
+        String inputClass = "AllTests";
         
         /* OpenJML tests end */
 
