@@ -122,7 +122,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 		String privateMemoryName = Memory.getNextMemoryName("PvtMem");
 		
-		privateMemory = new PrivateMemory((int) this.storage.maxMemoryArea,
+		privateMemory = new PrivateMemory((int) this.storage.getMaxMemoryArea(),
 		           backingStoreOfThisMemory,
 	               backingStoreProvider, 
 	               privateMemoryName);		
