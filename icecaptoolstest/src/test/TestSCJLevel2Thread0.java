@@ -59,7 +59,7 @@ public class TestSCJLevel2Thread0
       catch (InterruptedException e) {}
       devices.Console.println("MyThread: continue after 2 secs");
       
-      Mission.getCurrentMission().requestTermination();
+      Mission.getMission().requestTermination();
     }   
   }
   
