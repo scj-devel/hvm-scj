@@ -1,5 +1,10 @@
+
 #include <stdio.h>
+#ifdef USEGETTIMEOFDAY
+#include <sys/time.h>
+#else
 #include <time.h>
+#endif
 
 #include "ostypes.h"
 #include "types.h"
@@ -45,11 +50,19 @@ int16 n_vm_RealtimeClock_getNativeResolution(int32 *sp) {
 #if defined(N_VM_REALTIMECLOCK_GETNATIVETIME)
 extern int16 javax_realtime_HighResolutionTime_setNormalized(int32 *fp);
 int16 n_vm_RealtimeClock_getNativeTime(int32 *sp) {
+#ifdef USEGETTIMEOFDAY
+	struct timeval timevalue;
+#else
     struct timespec timevalue;
+#endif
     int32 stat;
     long millis;
 
+#ifdef USEGETTIMEOFDAY
+    stat = gettimeofday(&timevalue, 0);
+#else
     stat = clock_gettime(CLOCK_REALTIME, &timevalue);
+#endif
 
     if (sizeof(long) != 8) {
         if (time_offset == (unsigned long) -1) {
@@ -61,7 +74,11 @@ int16 n_vm_RealtimeClock_getNativeTime(int32 *sp) {
     millis = timevalue.tv_sec * 1000;
     sp[1] = ((millis >> 16) >> 16);
     sp[2] = millis & 0xFFFFFFFF;
+#ifdef USEGETTIMEOFDAY
+    sp[3] = timevalue.tv_usec * 1000;
+#else
     sp[3] = timevalue.tv_nsec;
+#endif
 
     javax_realtime_HighResolutionTime_setNormalized(sp);
 

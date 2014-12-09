@@ -242,7 +242,7 @@ public class CompilationSequence {
 
 		observer = new Observer(methodObserver, usedElementsObserver);
 
-		Converter converter = new Converter(out, observer, cregistry);
+		Converter converter = new Converter(out, observer, cregistry, supportLoading);
 
 		converter.setObserver(observer);
 

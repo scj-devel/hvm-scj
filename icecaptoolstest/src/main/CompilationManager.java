@@ -111,7 +111,7 @@ public class CompilationManager {
 
 	public static void main(String args[]) throws Throwable {
 		boolean aotCompile = false;
-		boolean includeJMLMethods = true;
+		boolean includeJMLMethods = false;
 		// String pathSeparator = System.getProperty("path.separator");
 
 		/*System.out.println("Press any key to start");
@@ -172,7 +172,7 @@ public class CompilationManager {
 		// String inputPackage = "javax.realtime.test";
 		// String inputPackage = "javax.safetycritical.test";
 
-		String inputClass = "TestDeterminant";
+		String inputClass = "Main";
 
 		// String inputClass = "Main2Clock";
 		// String inputClass = "Main2RealtimeClock";
@@ -191,7 +191,7 @@ public class CompilationManager {
 
 		// String inputPackage = "jml.test.apr";
 
-		String inputPackage = "test";
+		String inputPackage = "jembench";
 		// String inputClass = "TestSCJBoundedBuffer";
 
 		// String inputPackage = "test.icecapvm.minitests";
@@ -236,7 +236,8 @@ public class CompilationManager {
 
 		String outputFolder = "";
 		//String inputFolder = "/home/skr/workspace/OpenJMLTest/bin:/home/skr/workspace/OpenJMLTest/lib/jmlruntime.jar:/home/skr/git/hvm-scj/icecapSDK/bin";
-		String inputFolder = "/home/skr/git/hvm-scj/icecaptoolstest:/home/skr/git/hvm-scj/icecapSDK/bin";
+		// String inputFolder = "/home/skr/git/hvm-scj/icecaptoolstest:/home/skr/git/hvm-scj/icecapSDK/bin";
+		String inputFolder = "/home/skr/workspace/jembench/bin";
 
 		// String sourceFileName = null;
 		// String inputFolder = "/home/sek/workspace/CDj/bin";
@@ -265,12 +266,13 @@ public class CompilationManager {
 			System.out.println("Using default values\nUsage: CompilationManager " + inputFolder + " " + inputPackage
 					+ " " + inputClass);
 		} else {
-			if (args.length >= 3) {
+			if (args.length >= 4) {
 				inputFolder = args[0];
 				inputPackage = args[1];
 				inputClass = args[2];
-				if (args.length == 4) {
-					if ("-aot".compareTo(args[3]) == 0) {
+				outputFolder = args[3];
+				if (args.length == 5) {
+					if ("-aot".compareTo(args[4]) == 0) {
 						aotCompile = true;
 					}
 				}

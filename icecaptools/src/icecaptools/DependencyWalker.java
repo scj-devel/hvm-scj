@@ -633,6 +633,20 @@ public class DependencyWalker {
 		}
 	}
 
+	private void handleCurrentTimeMillis(MethodCallBNode bnode, NewList newList, NewList mr) throws Throwable {
+		JavaClass clazz = lookupClass("devices.System");
+
+		MethodEntryPoints entryPoints = converter.convertByteCode(bnode, clazz, "currentTimeMillis", "()J", true);
+
+		if (entryPoints != null) {
+			NewList calledMethodResult = analyseMethod(entryPoints, newList);
+			mergeResult(newList, mr, calledMethodResult);
+		}
+		
+		observer.classUsed("devices.System");
+		
+	}
+
 	private void handleGetProperty(MethodCallBNode bnode, NewList newList, NewList mr) throws Throwable {
 		JavaClass clazz = lookupClass("devices.System");
 
@@ -920,10 +934,14 @@ public class DependencyWalker {
 			if (bnode.getMethodName().equals("getProperty")) {
 				handleGetProperty(bnode, newList, mr);
 			}
+			if (bnode.getMethodName().equals("currentTimeMillis")) {
+				handleCurrentTimeMillis(bnode, newList, mr);
+			}
 		}
 		dispatchRest(bnode, newList, mr, workItemStack);
 	}
 
+	
 	private void addMethodToExtent(MethodCallBNode bnode, JavaClass declaringClass, String methodName,
 			String methodSig, boolean isStatic, NewList newList, NewList exitList) throws Throwable {
 		MethodEntryPoints entryPoints;

@@ -14,6 +14,8 @@
 #include "methodinterpreter.h"
 #include "gc.h"
 
+extern MethodInfo *methods;
+
 #if defined(JAVA_LANG_THROWABLE_INIT_)
 extern void handleException(unsigned short classIndex);
 #endif
@@ -65,155 +67,149 @@ static int32* mainMethodJavaStack;
 
 extern void init_compiler_specifics(void);
 
-int run_vm(void)
-{
+int run_vm(void) {
 #if !defined(VM_CLOCKINTERRUPTHANDLER_INTERRUPT)
-    Object temp;
-    int32* mainMethodJavaStack;
+	Object temp;
+	int32* mainMethodJavaStack;
 #endif
 
-    int16 execp = 0;
-    /* Required for certain compilers. */
-    init_compiler_specifics();
+	int16 execp = 0;
+	/* Required for certain compilers. */
+	init_compiler_specifics();
 
-    /* Function below allocates the initial heap. This is done in
-     * initDefaultRAMAllocationPoint in allocation_point.c
-     */
-    init_vm();
+	/* Function below allocates the initial heap. This is done in
+	 * initDefaultRAMAllocationPoint in allocation_point.c
+	 */
+	init_vm();
 
 #if defined(ENABLE_DEBUG)
-    connectToDebugger();
-    sendStartEvent();
-    while (awaitCommandFromDebugger(0, 0, 0) != RESUME_EVENT) { ; }
+	connectToDebugger();
+	sendStartEvent();
+	while (awaitCommandFromDebugger(0, 0, 0) != RESUME_EVENT) {;}
 #endif
 
-    /* Allocating the main stack is delegated to the target specific function
-     * 'get_java_stack_base'. On some architectures/environments it is located
-     * at fixed positions in certain compiler specific sections. The implementor
-     * can allocate the stack in the heap if so desired.
-     * */
-    mainMethodJavaStack = get_java_stack_base(JAVA_STACK_SIZE);
+	/* Allocating the main stack is delegated to the target specific function
+	 * 'get_java_stack_base'. On some architectures/environments it is located
+	 * at fixed positions in certain compiler specific sections. The implementor
+	 * can allocate the stack in the heap if so desired.
+	 * */
+	mainMethodJavaStack = get_java_stack_base(JAVA_STACK_SIZE);
 
 #if defined(VM_CLOCKINTERRUPTHANDLER_INTERRUPT)
-    /* If more threads are started we give the main thread a new C stack pointer.
-     * In case of no other threads running the main thread just inherits the
-     * current C stack.
-     *
-     * In this case we save the current C stack so we may restore it later. This
-     * is required to terminate the process properly.
-     */
-    mainStackPointer = (pointer) get_stack_pointer();
+	/* If more threads are started we give the main thread a new C stack pointer.
+	 * In case of no other threads running the main thread just inherits the
+	 * current C stack.
+	 *
+	 * In this case we save the current C stack so we may restore it later. This
+	 * is required to terminate the process properly.
+	 */
+	mainStackPointer = (pointer) get_stack_pointer();
 
-    /* mainMethodJavaStack contains both Java and C stack. Java stack grows
-     * upwards from the beginning, C stack downwards from the end. */
-    stackPointer = (pointer) &mainMethodJavaStack[JAVA_STACK_SIZE - 2];
-    /* 'set_stack_pointer' sets the C stack */
-    stackPointer = (pointer) & mainMethodJavaStack[JAVA_STACK_SIZE - 2];
-    set_stack_pointer();
+	/* mainMethodJavaStack contains both Java and C stack. Java stack grows
+	 * upwards from the beginning, C stack downwards from the end. */
+	stackPointer = (pointer) &mainMethodJavaStack[JAVA_STACK_SIZE - 2];
+	/* 'set_stack_pointer' sets the C stack */
+	stackPointer = (pointer) & mainMethodJavaStack[JAVA_STACK_SIZE - 2];
+	set_stack_pointer();
 #endif
 
 #if defined(REPORTCYCLES)
-    papi_start();
-    papi_mark();
-    papi_mark();
-    papi_mark();
-    papi_mark();
-    papi_mark();
-    papi_mark();
+	papi_start();
+	papi_mark();
+	papi_mark();
+	papi_mark();
+	papi_mark();
+	papi_mark();
+	papi_mark();
 #endif
 
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED)
-    execp = initializeConstants(mainMethodJavaStack);
-    if (execp == -1) {
+	execp = initializeConstants(mainMethodJavaStack);
+	if (execp == -1) {
 #endif
 
-    execp = initializeExceptions(mainMethodJavaStack);
-    if (execp == -1) {
+		execp = initializeExceptions(mainMethodJavaStack);
+		if (execp == -1) {
 
 #if defined(INVOKECLASSINITIALIZERS)
-    execp = invokeClassInitializers(mainMethodJavaStack);
-    if (execp == -1) {
+			execp = invokeClassInitializers(mainMethodJavaStack);
+			if (execp == -1) {
 #endif
-    /* This is only for testing. All tests will write 0 (null) to
-     * '*mainMethodJavaStack' if the test is successful.
-     */
-    *mainMethodJavaStack = (int32)(pointer) & temp;
+				/* This is only for testing. All tests will write 0 (null) to
+				 * '*mainMethodJavaStack' if the test is successful.
+				 */
+				*mainMethodJavaStack = (int32) (pointer) &temp;
 
 #if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
-    start_system_tick();
+				start_system_tick();
 #endif
 
 #if defined(DEVICES_SYSTEM_INITIALIZESYSTEMCLASS)
-    execp = enterMethodInterpreter(DEVICES_SYSTEM_INITIALIZESYSTEMCLASS, mainMethodJavaStack);
-    if (execp == -1) {
+				execp = enterMethodInterpreter(
+				DEVICES_SYSTEM_INITIALIZESYSTEMCLASS, mainMethodJavaStack);
+				if (execp == -1) {
 #endif
-
-    /* Start the VM */
-      execp = enterMethodInterpreter(MAINMETHODINDEX, mainMethodJavaStack);
-
+						/* Start the VM */
+						execp = enterMethodInterpreter(mainMethodIndex,
+								mainMethodJavaStack);
 #if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
-      stop_system_tick();
+						stop_system_tick();
 #endif
-
 #if defined(DEVICES_SYSTEM_INITIALIZESYSTEMCLASS)
-    }
+				}
 #endif
-
-    }
-    /* TODO: use executeWithStack instead */
+			}
+			/* TODO: use executeWithStack instead */
 #if defined(INVOKECLASSINITIALIZERS)
-     }
+		}
 #endif
 
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED)
-    }
+	}
 #endif
-
 
 #if defined(REPORTCYCLES)
-    papi_mark();
+	papi_mark();
 #endif
 
+	mark_error();
 
-
-    mark_error();
-
-    if (execp >= 0) {
+	if (execp >= 0) {
 #if defined(JAVA_LANG_THROWABLE_INIT_)
-        handleException(execp);
+		handleException(execp);
 #endif
 #if defined(VM_CLOCKINTERRUPTHANDLER_INTERRUPT)
-        /* Restore C stack pointer. Otherwise we could not return from here properly */
-        stackPointer = (pointer) mainStackPointer;
-        set_stack_pointer();
+		/* Restore C stack pointer. Otherwise we could not return from here properly */
+		stackPointer = (pointer) mainStackPointer;
+		set_stack_pointer();
 #endif
-        return ERROR;
-    }
+		return ERROR;
+	}
 
-    #if defined(VM_CLOCKINTERRUPTHANDLER_INTERRUPT)
-    /* Restore C stack pointer. Otherwise we could not return from here properly */
-    stackPointer = (pointer) mainStackPointer;
-    set_stack_pointer();
+#if defined(VM_CLOCKINTERRUPTHANDLER_INTERRUPT)
+	/* Restore C stack pointer. Otherwise we could not return from here properly */
+	stackPointer = (pointer) mainStackPointer;
+	set_stack_pointer();
 #endif
 
 #if defined(ENABLE_DEBUG)
-    disconnectFromDebugger();
+	disconnectFromDebugger();
 #endif
 
-    if (*mainMethodJavaStack) {
-        return ERROR;
-    } else {
-        mark_success();
-        return SUCCESS;
-    }
+	if (*mainMethodJavaStack) {
+		return ERROR;
+	} else {
+		mark_success();
+		return SUCCESS;
+	}
 
-    return 0;
+	return 0;
 }
 
 /* TODO: Use the Process concept to handle main and main processes */
 #ifndef EXCLUDEMAIN
 int main(void) {
-    return run_vm();
+	return run_vm();
 }
 #endif
 

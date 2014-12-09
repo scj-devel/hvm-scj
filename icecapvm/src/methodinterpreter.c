@@ -2515,7 +2515,7 @@ static unsigned char handlePutHWField(unsigned char* method_code, int32* sp) {
 		}
 #endif
 
-		if ((REFLECT_HEAPACCESSOR != -1) && isSubClassOf(classIndex, REFLECT_HEAPACCESSOR)) {
+		if (((uint16)REFLECT_HEAPACCESSOR_var != (uint16)-1) && isSubClassOf(classIndex, REFLECT_HEAPACCESSOR_var)) {
 			data = HEAP_REF(data, unsigned char *);
 		}
 
@@ -2733,7 +2733,7 @@ static signed char handleGetHWField(unsigned char* method_code, int32* sp) {
 #if defined(VM_ADDRESS64BIT_INIT_)
 		}
 #endif
-		if ((REFLECT_HEAPACCESSOR != -1) && isSubClassOf(classIndex, REFLECT_HEAPACCESSOR)) {
+		if (((uint16)REFLECT_HEAPACCESSOR_var != (uint16)-1) && isSubClassOf(classIndex, REFLECT_HEAPACCESSOR_var)) {
 			data = HEAP_REF(data, unsigned char *);
 		}
 

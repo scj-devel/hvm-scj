@@ -18,7 +18,7 @@ public class TestMiniTests {
     @Before
     public void setUp() {
         try {
-            converter = new Converter(System.out, new DefaultMethodObserver(), new DefaultCompilationRegistry());
+            converter = new Converter(System.out, new DefaultMethodObserver(), new DefaultCompilationRegistry(), false);
         } catch (ClassNotFoundException e) {
             Assert.fail();
         }

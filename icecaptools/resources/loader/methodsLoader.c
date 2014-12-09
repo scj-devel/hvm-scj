@@ -7,34 +7,36 @@
 extern void printStr(const char* str);
 extern void printShort(unsigned short c);
 
-uint16 NUMBEROFCLASSINITIALIZERS_var;
-uint16 NUMBEROFCONSTANTS_var;
-uint16 JAVA_LANG_STRING_INITFROMCHARARRAY_var;
-uint16 JAVA_LANG_CLASSCASTEXCEPTION_INIT__var;
-uint16 JAVA_LANG_ARITHMETICEXCEPTION_INIT__var;
-uint16 JAVA_LANG_OUTOFMEMORYERROR_INIT__var;
-uint16 JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var;
-uint16 JAVA_LANG_OBJECT_CLONE_var;
-uint16 VM_INTERRUPTDISPATCHER_INTERRUPT_var;
-uint16 TASKS_MODBUSDISPATCHER_DISPATCH_var;
-uint16 JAVA_LANG_STRINGBUFFER_APPEND_var;
-uint16 JAVA_LANG_STRINGBUILDER_APPEND_var;
-uint16 JAVA_LANG_STRING_INIT__var;
-uint16 JAVA_LANG_FLOAT_TOSTRING_var;
+extern uint16 NUMBEROFCLASSINITIALIZERS_var;
+extern uint16 NUMBEROFCONSTANTS_var;
+extern uint16 JAVA_LANG_STRING_INITFROMCHARARRAY_var;
+extern uint16 JAVA_LANG_CLASSCASTEXCEPTION_INIT__var;
+extern uint16 JAVA_LANG_ARITHMETICEXCEPTION_INIT__var;
+extern uint16 JAVA_LANG_OUTOFMEMORYERROR_INIT__var;
+extern uint16 JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var;
+extern uint16 JAVA_LANG_OBJECT_CLONE_var;
+extern uint16 VM_INTERRUPTDISPATCHER_INTERRUPT_var;
+extern uint16 TASKS_MODBUSDISPATCHER_DISPATCH_var;
+extern uint16 JAVA_LANG_STRINGBUFFER_APPEND_var;
+extern uint16 JAVA_LANG_STRINGBUILDER_APPEND_var;
+extern uint16 JAVA_LANG_STRING_INIT__var;
+extern uint16 JAVA_LANG_FLOAT_TOSTRING_var;
 
 MethodInfo *methods;
 unsigned short *classInitializerSequence;
 ConstantInfo *constants;
 uint16 mainMethodIndex;
+Object** stringConstants;
 
-/* gcc -Wall -pedantic -g -O0 -DPC64 -DPRINTFSUPPORT -DJAVA_HEAP_SIZE=131072 loader/methods.c loader/classes.c loader/io_allOS.c loader/io_i86.c icecapvm.c  methodinterpreter.c  gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c  print.c natives_target.c */
+/* gcc -Wall -pedantic -g -O0 -DPC64 -DSUPPORT_LOADING -DPRINTFSUPPORT -DJAVA_HEAP_SIZE=1310720 loader/classesLoader.c  icecapvm.c  methodinterpreter.c  loader/methodsLoader.c loader/io_allOS.c loader/io_i86.c gc.c natives_allOS.c natives_i86.c rom_heap.c natives_target.c allocation_point.c rom_access.c native_scj.c print.c methods.c -lpthread x86_64_interrupt.s -lrt */
 
 static ExceptionHandler* readExceptionHandlers(unsigned char numExceptionHandlers);
 static unsigned char* readCode(unsigned short codeSize);
 
-unsigned char initMethods(void) {
+unsigned char loadApp(void) {
     unsigned short numberOfMethods;
     int count;
+    ConstantInfo *currentConstant;
 
     printStr("Reading from ");
     printStr(getOutputFile());
@@ -55,6 +57,7 @@ unsigned char initMethods(void) {
 
     for (count = 0; count < numberOfMethods; count++) {
         MethodInfo* current = &methods[count];
+        current->classIndex = count << 1;
         current->maxStack = readShort();
         current->maxLocals = readShort();
         current->numArgs = readByte();
@@ -74,6 +77,10 @@ unsigned char initMethods(void) {
                 return 0;
             }
         }
+        else
+        {
+        	*(unsigned char**) (&current->code) = 0;
+        }
 
         current->name = readName();
         printStr("method [");
@@ -89,7 +96,7 @@ unsigned char initMethods(void) {
     NUMBEROFCONSTANTS_var = readShort();
     printStr("deserializing ");
     printShort(NUMBEROFCONSTANTS_var);
-    printStr(" constants");
+    printStr(" constants ");
     constants = _malloc_(sizeof(ConstantInfo) * NUMBEROFCONSTANTS_var);
 
     if (!constants) {
@@ -97,13 +104,15 @@ unsigned char initMethods(void) {
     }
 
     for (count = 0; count < NUMBEROFCONSTANTS_var; count++) {
-        ConstantInfo *current = &constants[count];
+        currentConstant = &constants[count];
         printStr(".");
-        current->type = readByte();
-        current->value = readInt();
-        if (current->type == CONSTANT_STRING) {
-            unsigned short length = current->value;
-            char* str = _malloc_(length);
+        currentConstant->type = readByte();
+        if (currentConstant->type == CONSTANT_STRING) {
+            unsigned short length;
+            char* str;
+            currentConstant->value = readInt();
+            length = currentConstant->value & 0xffff;
+            str = _malloc_(length);
 
             if (!str) {
                 return 0;
@@ -113,15 +122,20 @@ unsigned char initMethods(void) {
                 *str++ = readByte();
                 length--;
             }
-            str -= current->value;
-            current->data = str;
-        } else if (current->type == CONSTANT_INTEGER) {
-            current->value = readInt();
-        } else if (current->type == CONSTANT_FLOAT) {
-            current->fvalue = (float) readInt();
-        } else if (current->type == CONSTANT_CLASS) {
-            current->value = readInt();
-        } else if ((current->type == CONSTANT_LONG) || (current->type == CONSTANT_DOUBLE)) {
+            str -= currentConstant->value & 0xffff;
+            currentConstant->data = str;
+            printStr("string [");
+            printShort(currentConstant->value & 0xffff);
+            printStr("][");
+            printStr(str);
+            printStr("]\n");
+        } else if (currentConstant->type == CONSTANT_INTEGER) {
+        	currentConstant->value = readInt();
+        } else if (currentConstant->type == CONSTANT_FLOAT) {
+        	currentConstant->fvalue = (float) readInt();
+        } else if (currentConstant->type == CONSTANT_CLASS) {
+        	currentConstant->value = readInt();
+        } else if ((currentConstant->type == CONSTANT_LONG) || (currentConstant->type == CONSTANT_DOUBLE)) {
             unsigned char *data = _malloc_(8);
             unsigned char i;
 
@@ -132,7 +146,7 @@ unsigned char initMethods(void) {
             for (i = 0; i < 8; i++) {
                 *data++ = readByte();
             }
-            current->data = data - 8;
+            currentConstant->data = data - 8;
         }
     }
     printStr("done\n");
@@ -204,4 +218,11 @@ static unsigned char* readCode(unsigned short codeSize) {
     } else {
         return 0;
     }
+}
+
+int16 unknownNativeFunc(int32 *sp)
+{
+	printStr("Unknown native function called\n");
+
+	return -1;
 }

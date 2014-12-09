@@ -27,7 +27,7 @@ public class TestLocalVariableUsageAnalyser extends TestCase {
             Method[] methods = clazz.getMethods();
             for (Method method : methods) {
                 if (method.getName().equals("test1")) {
-                    Converter converter = new Converter(System.out, new DefaultMethodObserver(), new DefaultCompilationRegistry());
+                    Converter converter = new Converter(System.out, new DefaultMethodObserver(), new DefaultCompilationRegistry(), false);
 
                     ClassPath classPath = new IcecapClassPath(".");
 

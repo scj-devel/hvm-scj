@@ -23,3 +23,20 @@ extern uint16 JAVA_LANG_STRING_OFFSET_offset_var;
 extern uint16 JAVA_LANG_STRING_COUNT_offset_var;
 extern uint16 JAVA_LANG_THROWABLE_BACKTRACE_offset_var;
 extern uint16 JAVA_LANG_FLOAT_VALUE_offset_var;
+extern uint16 REFLECT_HEAPACCESSOR_var;
+
+typedef struct PACKED _vm_Address32Bit_c {
+    Object header;
+    uint32 address_f;
+} vm_Address32Bit_c;
+
+typedef struct PACKED _vm_HardwareObject_c {
+    Object header;
+    uint32 address_f;
+} vm_HardwareObject_c;
+
+typedef struct PACKED _java_lang_String_c {
+    Object header;
+    uint32 value_f;
+    uint32 hash_f;
+} java_lang_String_c;
