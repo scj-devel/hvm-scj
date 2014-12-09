@@ -13,4 +13,6 @@ public interface HVMProperties {
     public boolean isIncludeJMLMethods();
 
     public void setIncludeJMLMethods(boolean includeJMLMethods);
+
+	public String getProperty(String string);
 }

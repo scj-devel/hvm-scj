@@ -288,7 +288,7 @@ public class ConstantGenerator {
 		} catch (CharacterCodingException cce) {
 			;
 		}
-		return result.replace("*/", "__");
+		return result.replace("*/", "__").replace("/*", "__");
 	}
 
 	public int numberOfConstants() {
