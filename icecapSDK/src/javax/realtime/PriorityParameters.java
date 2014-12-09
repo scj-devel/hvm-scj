@@ -62,13 +62,8 @@ import javax.safetycritical.annotate.SCJAllowed;
  */
 @SCJAllowed
 public class PriorityParameters extends SchedulingParameters {
+	
 	private int priority;
-
-	/*@ 
-	  public invariant 
-	    javax.safetycritical.PriorityScheduler.instance().getMinPriority() <= getPriority() && 
-	    getPriority() <= javax.safetycritical.PriorityScheduler.instance().getMaxPriority();
-	  @*/
 
 	/**
 	 * Creates an instance of <code>PriorityParameters</code> 
@@ -77,31 +72,6 @@ public class PriorityParameters extends SchedulingParameters {
 	 * @throws IllegalArgumentException if <code>priority</code> is not in 
 	 *    the range of supported priorities.
 	 */
-	// This specification does not work:
-	//  /*@ 
-	//    public normal_behavior
-	//      requires 
-	//        javax.safetycritical.PriorityScheduler.instance().getMinPriority() <= priority && 
-	//        priority <= javax.safetycritical.PriorityScheduler.instance().getMaxPriority();
-	//
-	//      ensures getPriority() == priority; 
-	//    also
-	//    public exceptional_behaviour
-	//      requires
-	//        priority < javax.safetycritical.PriorityScheduler.instance().getMinPriority()  ||
-	//        priority > javax.safetycritical.PriorityScheduler.instance().getMaxPriority();
-	//
-	//      signals (IllegalArgumentException) true;  
-	//  @*/
-
-	/*@ 
-	  public behavior
-	    requires 
-	      javax.safetycritical.PriorityScheduler.instance().getMinPriority() <= priority && 
-	      priority <= javax.safetycritical.PriorityScheduler.instance().getMaxPriority();
-
-	    ensures getPriority() == priority;  
-	 @*/
 	public PriorityParameters(int priority) {
 		// HSO: the if stmt does not work; also see  @scjComment above
 		//	if (priority < javax.safetycritical.PriorityScheduler.instance().getMinPriority() || 
@@ -114,23 +84,10 @@ public class PriorityParameters extends SchedulingParameters {
 	 * Gets the priority value.
 	 * @return The priority.
 	 */
-	/*@
-	  public behavior 
-	    requires true;
-	    assignable \nothing; 
-	  @*/
 	public int getPriority() {
 		return priority;
 	}
-
-	/*@
-	  public behavior 
-	    requires 
-	      javax.safetycritical.PriorityScheduler.instance().getMinPriority() <= value && 
-	      value <= javax.safetycritical.PriorityScheduler.instance().getMaxPriority(); 
-	   
-	    ensures getPriority() == value;   
-	  @*/
+	
 	public void setPriority(int value) // not public in SCJ; called in javax.safetycritical.Monitor
 	{
 		priority = value;

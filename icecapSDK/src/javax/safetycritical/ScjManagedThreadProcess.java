@@ -13,7 +13,7 @@ class ScjManagedThreadProcess extends ScjProcess {
 	{
 		if (state == ScjProcess.State.HANDLED) {
 			// thread finished and removed.
-			Mission.getCurrentMission().msSetForMission.removeMSObject(msObject);
+			Mission.getMission().msSetForMission.removeMSObject(msObject);
 			//devices.Console.println("ScjManagedThreadProcess: terminate: " + this);
 			state = ScjProcess.State.TERMINATED;
 		} 

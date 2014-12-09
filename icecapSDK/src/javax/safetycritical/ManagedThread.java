@@ -29,7 +29,7 @@ import javax.realtime.AbsoluteTime;
 //import javax.realtime.Clock;
 import javax.realtime.HighResolutionTime;
 import javax.realtime.MemoryArea;
-import javax.realtime.NoHeapRealtimeThread;
+import javax.realtime.RealtimeThread;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.annotate.Level;
@@ -53,7 +53,7 @@ import vm.Memory;
  *
  */
 @SCJAllowed(Level.LEVEL_2)
-public class ManagedThread extends NoHeapRealtimeThread implements
+public class ManagedThread extends RealtimeThread implements
 		ManagedSchedulable {
 
 	PriorityParameters priority;
@@ -62,6 +62,10 @@ public class ManagedThread extends NoHeapRealtimeThread implements
 	Mission mission = null;
 
 	ManagedMemory privateMemory;
+	
+	// used in JML spec. methods
+	boolean isRegistered;
+	boolean isInMissionScope;
 	
 	public ManagedThread(PriorityParameters priority, StorageParameters storage) {
 		this(priority, storage, null);
@@ -75,7 +79,7 @@ public class ManagedThread extends NoHeapRealtimeThread implements
 			throw new IllegalArgumentException("storage is null");
 		
 		this.storage = storage;
-		this.mission = Mission.getCurrentMission();
+		this.mission = Mission.getMission();
 		
 		int backingStoreOfThisMemory = 
 			mission == null ? 
@@ -91,6 +95,8 @@ public class ManagedThread extends NoHeapRealtimeThread implements
 	    								   backingStoreOfThisMemory, 
 	    								   backingStoreProvider,
 	    								   privateMemoryName);
+	    this.isRegistered = false;
+	    this.isInMissionScope = false;
 	}	
 	
 	Mission getMission() {
@@ -100,8 +106,11 @@ public class ManagedThread extends NoHeapRealtimeThread implements
 	@SCJAllowed(Level.INFRASTRUCTURE)
 	@SCJRestricted(Phase.INITIALIZE)
 	public final void register() {
-		ManagedSchedulableSet msSet = Mission.getCurrentMission().msSetForMission;
+		ManagedSchedulableSet msSet = Mission.getMission().msSetForMission;
 		msSet.addMS(this);
+		
+		isRegistered = true;
+		isInMissionScope = true;
 	}
 	
 	@SCJAllowed(Level.SUPPORT)

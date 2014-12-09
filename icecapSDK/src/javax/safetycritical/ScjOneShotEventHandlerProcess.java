@@ -12,7 +12,7 @@ class ScjOneShotEventHandlerProcess extends ScjProcess {
 	{
 		if (state == ScjProcess.State.HANDLED) {
 			// oneShotHandler finished
-			Mission.getCurrentMission().msSetForMission.removeMSObject(msObject);
+			Mission.getMission().msSetForMission.removeMSObject(msObject);
 			state = ScjProcess.State.TERMINATED;
 		} 
 		else if (state == ScjProcess.State.WAITING) {

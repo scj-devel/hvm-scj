@@ -49,9 +49,6 @@ import javax.safetycritical.annotate.SCJAllowed;
  *      <code>RealTimeClock</code>? 
  *  <p>
  *  - implementation issue:
- *   The constructor <code> public Clock() </code> is public, 
- *   if user-defined clocks are allowed, else package protected. <p>
- *   - implementation issue: Omitted ? , - the  following methods are not implemented:<br>
  *   <ul>
  *   <code>
  *   <li>public abstract boolean drivesEvents();<br>
@@ -64,18 +61,6 @@ import javax.safetycritical.annotate.SCJAllowed;
 public abstract class Clock {
 	
 	boolean active;
-	
-	/*@ 
-	  static invariant 
-	    Clock.getRealtimeClock() != null;
-	@*/
-
-	/*@ 
-	  instance invariant 
-	    getResolution() != null &&
-	    ( getResolution().getMilliseconds() > 0 || 
-	      getResolution().getMilliseconds() == 0 && getResolution().getNanoseconds() > 0) ;
-	  @*/
 
 	/**
 	 * This constructor for the abstract class may allocate objects within 
@@ -86,7 +71,7 @@ public abstract class Clock {
 	 *   When false, indicates that the clock can only be queried for the current time.
 	 * 
 	 */
-	protected /*@ helper @*/ Clock(boolean active) {
+	protected Clock(boolean active) {
 		this.active = active;
 	}
 
@@ -103,15 +88,6 @@ public abstract class Clock {
 	/**
 	 * @return The singleton instance of the default <code>Clock</code>.
 	 */
-	/*@ 
-	  public behavior
-	    requires true;    
-	    ensures \result != null;
-	    ensures \result.getResolution() != null;
-	    ensures ( \result.getResolution().getMilliseconds() > 0 || 
-	              \result.getResolution().getMilliseconds() == 0 
-	               && \result.getResolution().getNanoseconds() > 0) ;
-	  @*/
 	public static Clock getRealtimeClock() {
 		return RealtimeClock.instance();
 	}
@@ -122,14 +98,6 @@ public abstract class Clock {
 	 * @return The initially allocated resolution object. The returned object 
 	 *    is associated with this clock.
 	 */
-	/*@ 
-	  public behavior
-	    requires true;
-	    assignable \nothing;
-	    ensures \result != null;
-	    ensures ( \result.getMilliseconds() > 0 || 
-	              \result.getMilliseconds() == 0 && \result.getNanoseconds() > 0) ;
-	  @*/
 	@SCJAllowed
 	public abstract RelativeTime getResolution();
 
@@ -144,14 +112,6 @@ public abstract class Clock {
 	 *    object of <code>this</code>. Otherwise a newly allocated object is 
 	 *    returned. The returned object is associated with <code></code>this clock.
 	 */
-	/*@ 
-	  public behavior
-	    requires true;
-	    ensures \result != null;
-	    ensures (dest == null) || dest.equals(\result);
-	    ensures ( \result.getMilliseconds() > 0 || 
-	              \result.getMilliseconds() == 0 && \result.getNanoseconds() > 0) ;
-	  @*/
 	@SCJAllowed
 	public abstract RelativeTime getResolution(RelativeTime dest);
 
@@ -160,11 +120,6 @@ public abstract class Clock {
 	 *
 	 * @return A new <code>AbsoluteTime</code> object whose time is <i>now</i> of this clock. 
 	 */
-	/*@ 
-	  public behavior
-	    requires true;
-	    ensures \result != null;
-	  @*/
 	@SCJAllowed
 	public abstract AbsoluteTime getTime();
 
@@ -176,12 +131,6 @@ public abstract class Clock {
 	 * 
 	 * @return The resulting value.
 	 */
-	/*@ 
-	  public behavior
-	    requires true;
-	    ensures \result != null;
-	    ensures (dest == null) || dest.equals(\result);
-	  @*/
 	@SCJAllowed
 	public abstract AbsoluteTime getTime(AbsoluteTime dest);
 

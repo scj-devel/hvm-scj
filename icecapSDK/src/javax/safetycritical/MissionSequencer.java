@@ -136,8 +136,8 @@ public abstract class MissionSequencer<SpecificMission extends Mission>
 		
 
 		if (Launcher.level == 2 && !isOuterMostSeq) {
-			if (Mission.getCurrentMission() != null)
-				outerSeq = Mission.getCurrentMission().currMissSeq;
+			if (Mission.getMission() != null)
+				outerSeq = Mission.getMission().currMissSeq;
 		}
 		
 		Services.setCeiling(this, this.priority.getPriority()); 

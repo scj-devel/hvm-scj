@@ -1,5 +1,5 @@
 package javax.realtime;
 
-public class SchedulingParameters implements Cloneable {
+public abstract class SchedulingParameters implements Cloneable {
 
 }

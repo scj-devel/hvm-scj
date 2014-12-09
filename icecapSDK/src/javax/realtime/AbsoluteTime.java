@@ -66,12 +66,6 @@ public class AbsoluteTime extends HighResolutionTime {
 	 * Equivalent to <code>new AbsoluteTime(0,0)</code>. <br>
 	 * The clock association is implicitly made with the real-time clock.
 	 */
-	/*@ 
-	public behavior
-	  requires true;        
-	  ensures getMilliseconds() == 0L && getNanoseconds() == 0;
-	  ensures getClock() == Clock.getRealtimeClock(); 
-	@*/
 	public AbsoluteTime() {
 		this(0L, 0);
 	}
@@ -88,13 +82,6 @@ public class AbsoluteTime extends HighResolutionTime {
 	 * @param nanos is the desired value for the nanosecond component.
 	 *    The actual value is the result of parameter normalization.
 	 */
-	/*@ 
-	  public behavior
-	    requires true;
-	    ensures getMilliseconds() - millis + (getNanoseconds() - nanos ) / 1000000 == 0;
-	    ensures (getNanoseconds() - nanos ) % 1000000 == 0;     
-	    ensures getClock() == Clock.getRealtimeClock();
-	  @*/
 	public AbsoluteTime(long millis, int nanos) {
 		super(millis, nanos, Clock.getRealtimeClock());
 	}
@@ -109,15 +96,6 @@ public class AbsoluteTime extends HighResolutionTime {
 	 * 
 	 * @throws IllegalArgumentException if the <code>time</code> parameter is null.
 	 */
-	/*@ 
-	  public normal_behavior
-	    requires time != null;
-	    ensures equals(time);
-	  also
-	  public exceptional_behavior
-	    requires time == null;
-	    signals (IllegalArgumentException) true;
-	  @*/
 	public AbsoluteTime(AbsoluteTime time) {
 		this();
 		if (time == null)
@@ -138,13 +116,6 @@ public class AbsoluteTime extends HighResolutionTime {
 	 * 
 	 * @param clock is the desired value for the clock.
 	 */
-	/*@ 
-	  public behavior
-	    requires true;  
-	    ensures getMilliseconds() - millis + (getNanoseconds() - nanos ) / 1000000 == 0;
-	    ensures (getNanoseconds() - nanos ) % 1000000 == 0;
-	    ensures this.getClock()  == clock;
-	  @*/
 	public AbsoluteTime(long millis, int nanos, Clock clock) {
 		super(millis, nanos, clock);
 	}
@@ -170,15 +141,6 @@ public class AbsoluteTime extends HighResolutionTime {
 	 * @return a new <code>AbsoluteTime</code> object whose time is the 
 	 *    normalization of <code>this </code> plus <code>millis</code> and <code>nanos</code>.
 	 */
-	/*@ 
-	  public behavior
-	    requires true;  
-	    ensures \result != null && \result instanceof AbsoluteTime;
-	    ensures \result.getMilliseconds() - getMilliseconds() - millis + 
-	              (\result.getNanoseconds() - getNanoseconds() - nanos) / 1000000 == 0;      
-	    ensures ( \result.getNanoseconds() - getNanoseconds() - nanos ) % 1000000 == 0;      
-	    ensures \result.getClock() == getClock();
-	  @*/
 	public AbsoluteTime add(long millis, int nanos) {
 		return new AbsoluteTime(this.millis + millis, this.nanos + nanos,
 				this.clock);
@@ -200,17 +162,6 @@ public class AbsoluteTime extends HighResolutionTime {
 	 * @return the result of the normalization of <code>this</code> plus <code>millis</code> and nanos</code> 
 	 *     in <code>dest</code> if it is not null, otherwise the result is returned in a newly allocated object.
 	 */
-	/*@ 
-	  public behavior
-	    requires true;
-	    ensures \result != null && \result instanceof AbsoluteTime;
-	  
-	    ensures \result.getMilliseconds() - \old(this.getMilliseconds()) - millis + 
-	            (\result.getNanoseconds() - \old(this.getNanoseconds()) - nanos) / 1000000 == 0;      
-	    ensures  (\result.getNanoseconds() - \old(this.getNanoseconds()) - nanos) % 1000000  == 0;
-	         
-	    ensures dest== null || \result == dest; 
-	@*/
 	public AbsoluteTime add(long millis, int nanos, AbsoluteTime dest) {
 		if (dest == null)
 			dest = new AbsoluteTime(this.clock);
@@ -230,25 +181,6 @@ public class AbsoluteTime extends HighResolutionTime {
 	 * @throws IllegalArgumentException if the clock associated with <code>this</code> and the clock associated with the 
 	 * <code>time</code> parameter are different, or when the <code>time</code> parameter is null.
 	 */
-	/*@ 
-	  public normal_behavior
-	    requires time != null;
-	    requires time.getClock() == this.getClock();
-	
-	    ensures \result != null && \result instanceof AbsoluteTime;
-	    ensures \result.getMilliseconds() - getMilliseconds() - time.getMilliseconds() + 
-	              ( \result.getNanoseconds() - getNanoseconds() - time.getNanoseconds() ) / 1000000 == 0;      
-	    ensures ( \result.getNanoseconds() - getNanoseconds() - time.getNanoseconds() ) % 1000000  == 0;       
-	    ensures \result.getClock() == getClock();
-	  also
-	  public exceptional_behaviour
-	    requires time == null;
-	    signals (IllegalArgumentException) true;
-	  also
-	  public exceptional_behaviour
-	    requires time != null && time.getClock() != this.getClock();
-	    signals (IllegalArgumentException) true;
-	  @*/
 	public AbsoluteTime add(RelativeTime time) {
 		if (time == null)
 			throw new IllegalArgumentException("time is null");
@@ -276,27 +208,6 @@ public class AbsoluteTime extends HighResolutionTime {
 	 * @throws IllegalArgumentException if the clock associated with <code>this</code> and the clock 
 	 * associated with the <code>time</code> parameter are different, or when the <code>time</code> parameter is null.
 	 */
-	/*@ 
-	  public normal_behavior
-	    requires time != null; 
-	    requires time.getClock() == this.getClock();
-	  
-	    ensures \result != null && \result instanceof AbsoluteTime;
-	    ensures \result.getMilliseconds() - \old(this.getMilliseconds()) - time.getMilliseconds() + 
-	              (\result.getNanoseconds() - \old(this.getNanoseconds()) - time.getNanoseconds()) / 1000000 == 0;      
-	    ensures (\result.getNanoseconds() - \old(this.getNanoseconds()) - time.getNanoseconds() ) % 1000000 == 0; 
-	    
-	    ensures \result.getClock() == time.getClock();     
-	    ensures dest== null || \result == dest; 
-	  also
-	  public exceptional_behaviour
-	    requires time == null;
-	    signals (IllegalArgumentException) true;
-	  also
-	  public exceptional_behaviour
-	    requires time != null && time.getClock() != this.getClock();
-	    signals (IllegalArgumentException) true; 
-	  @*/
 	public AbsoluteTime add(RelativeTime time, AbsoluteTime dest) {
 		if (time == null)
 			throw new IllegalArgumentException("time is null");
@@ -318,25 +229,6 @@ public class AbsoluteTime extends HighResolutionTime {
 	 * @throws IllegalArgumentException if the clock associated with <code>this</code> and the clock associated 
 	 * with the <code>time</code> parameter are different, or when the <code>time</code> parameter is null.
 	 */
-	/*@ 
-	  public normal_behavior
-	    requires time != null;
-	    requires time.getClock() == this.getClock();
-
-	    ensures \result != null && \result instanceof RelativeTime;      
-	    ensures \result.getMilliseconds() - (this.getMilliseconds() - time.getMilliseconds()) + 
-	              (\result.getNanoseconds() - (this.getNanoseconds() - time.getNanoseconds())) / 1000000 == 0;      
-	    ensures (\result.getNanoseconds() - (getNanoseconds() - time.getNanoseconds()) ) % 1000000 == 0;       
-	    ensures \result.getClock() == getClock();
-	  also
-	  public exceptional_behaviour
-	    requires time == null;
-	    signals (IllegalArgumentException) true;
-	  also
-	  public exceptional_behaviour
-	    requires time != null && time.getClock() != this.getClock();
-	    signals (IllegalArgumentException) true; 
-	  @*/
 	public RelativeTime subtract(AbsoluteTime time) {
 		if (time == null) {
 			throw new IllegalArgumentException("time is null");
@@ -364,27 +256,6 @@ public class AbsoluteTime extends HighResolutionTime {
 	 * @throws IllegalArgumentException if the clock associated with <code>this</code> and the clock associated 
 	 * with the <code>time</code> parameter are different, or when the <code>time</code> parameter is null.
 	 */
-	/*@ 
-	  public normal_behavior
-	    requires time != null;
-	    requires time.clock == this.clock; 
-	  
-	    ensures \result != null && \result instanceof RelativeTime;
-	    ensures (\result.getMilliseconds() - (getMilliseconds() - time.getMilliseconds()) + 
-	              (\result.getNanoseconds() - (getNanoseconds() - time.getNanoseconds())) / 1000000) == 0;      
-	    ensures (\result.getNanoseconds() - (getNanoseconds() - time.getNanoseconds()) ) % 1000000 == 0;
-	    
-	    ensures \result.getClock() == getClock(); 
-	    ensures dest== null || \result == dest;
-	  also
-	  public exceptional_behaviour
-	    requires time == null;
-	    signals (IllegalArgumentException) true;
-	  also
-	  public exceptional_behaviour
-	    requires time != null && time.getClock() != this.getClock();
-	    signals (IllegalArgumentException) true; 
-	  @*/
 	public RelativeTime subtract(AbsoluteTime time, RelativeTime dest) {
 		if (time == null)
 			throw new IllegalArgumentException("time is null");
@@ -417,25 +288,6 @@ public class AbsoluteTime extends HighResolutionTime {
 	 * the clock associated with the <code>time<Code> parameter are different  or when
 	 * the <code>time</code> parameter is null.
 	 */
-	/*@ 
-	  public normal_behavior
-	    requires time != null;
-	    requires time.getClock() == getClock();
-
-	    ensures \result != null && \result instanceof AbsoluteTime;
-	    ensures \result.getMilliseconds() - (getMilliseconds() - time.getMilliseconds()) + 
-	              (\result.getNanoseconds() - (getNanoseconds() - time.getNanoseconds())) / 1000000 == 0;      
-	    ensures (\result.getNanoseconds() - (getNanoseconds() - time.getNanoseconds()) ) % 1000000  == 0;
-	    ensures \result.getClock() == getClock();
-	  also
-	  public exceptional_behaviour
-	    requires time == null;
-	    signals (IllegalArgumentException) true;
-	  also
-	  public exceptional_behaviour
-	    requires time != null && time.getClock() != this.getClock();
-	    signals (IllegalArgumentException) true;  
-	  @*/
 	public AbsoluteTime subtract(RelativeTime time) {
 		if (time == null)
 			throw new IllegalArgumentException("time is null");
@@ -461,27 +313,6 @@ public class AbsoluteTime extends HighResolutionTime {
 	 * @throws IllegalArgumentException if the clock associated with <code>this</code> and the clock associated 
 	 * with the <code>time</code> parameter are different, or when the <code>time</code> parameter is null.
 	 */
-	/*@ 
-	  public normal_behavior
-	    requires time != null;
-	    requires time.getClock() == getClock();
-	  
-	    ensures \result != null && \result instanceof AbsoluteTime;
-	    ensures \result.getMilliseconds() - (\old(this.getMilliseconds()) - time.getMilliseconds()) + 
-	              (\result.getNanoseconds() - (\old(this.getNanoseconds()) - time.getNanoseconds())) / 1000000 == 0;      
-	    ensures (\result.getNanoseconds() - (\old(this.getNanoseconds()) - time.getNanoseconds()) ) % 1000000  == 0;
-	    
-	    ensures \result.getClock() == getClock();
-	    ensures dest== null || \result == dest; 
-	  also
-	  public exceptional_behaviour
-	    requires time == null;
-	    signals (IllegalArgumentException) true;
-	  also
-	  public exceptional_behaviour
-	    requires time != null && time.getClock() != this.getClock();
-	    signals (IllegalArgumentException) true; 
-	  @*/
 	public AbsoluteTime subtract(RelativeTime time, AbsoluteTime dest) {
 		if (time == null)
 			throw new IllegalArgumentException("time is null");

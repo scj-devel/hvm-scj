@@ -38,12 +38,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  * Hans S&oslash;ndergaard, VIA University College, Denmark, 
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  * 
- * @scjComment 
- *  - SCJ issue: constructors have the first parameter <code>start</code> 
- *    of type <code>HighResolutionTime</code> as in RTSJ, but in SCJ only 
- *    <code>RelativeTime start</code> is used. <br>
- *    Below is used <code>RelativeTime start</code>. <p>
- *    
+ * @scjComment     
  *  - implementation issue: 
  *    the following two public methods are not in SCJ: <br>
  *   <ul>
@@ -55,9 +50,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  */
 @SCJAllowed
 public class PeriodicParameters extends ReleaseParameters {
-	/**
-	 * Attributes that are accessible by the infrastructure.
-	 */
+	
 	RelativeTime start;
 	RelativeTime period;
 
@@ -72,39 +65,8 @@ public class PeriodicParameters extends ReleaseParameters {
 	 * 
 	 * @throws IllegalArgumentException if <code>period</code> is null.
 	 */
-	/*@ 
-	  public normal_behavior
-	    requires period != null &&
-	             (period.getMilliseconds() > 0L ||
-	             (period.getMilliseconds() == 0L && period.getNanoseconds() > 0)); 
-	    requires (start != null) ==> 
-	    			start.getMilliseconds() >= 0L && start.getNanoseconds() >= 0; 
-	  
-	    ensures ( start != null ==> getStart().equals (start) ) || 
-	              (getStart().getMilliseconds() == 0 && getStart().getNanoseconds() == 0 ); 
-	    
-	    ensures getPeriod() != null && getPeriod().equals(period);
-	    ensures getDeadline() != null && getDeadline().equals (period);
-	    ensures getMissHandler() == null;
-	  also
-	  public exceptional_behavior
-	    requires period == null;
-	    signals (IllegalArgumentException) true;  
-	@*/
 	public PeriodicParameters(RelativeTime start, RelativeTime period) {
 		this(start, period, null, null);
-		
-//		super(period, null);
-//
-//		if (start == null)
-//			this.start = new RelativeTime();
-//		else
-//			this.start = new RelativeTime(start);
-//
-//		if (period == null)
-//			throw new IllegalArgumentException();
-//
-//		this.period = new RelativeTime(period);
 	}
 
 	/**
@@ -120,28 +82,6 @@ public class PeriodicParameters extends ReleaseParameters {
 	 * 
 	 * @throws IllegalArgumentException if <code>period</code> is null.
 	 */
-	/*@ 
-	  public normal_behavior
-	    requires  period != null &&
-	              (period.getMilliseconds() > 0L ||
-	               period.getMilliseconds() == 0L && period.getNanoseconds() > 0 );
-	    requires (start != null) ==> start.getMilliseconds() >= 0L && start.getNanoseconds() >= 0;
-	  
-	    ensures ( start != null ==> getStart().equals (start) ) || 
-	             (getStart().getMilliseconds() == 0 && getStart().getNanoseconds() == 0 );
-	                 
-	    ensures getPeriod() != null && getPeriod().equals(period);  
-	      
-	    ensures ( deadline != null ==> getDeadline().equals (deadline) ) ||
-	              (getDeadline().equals (period) );    
-	    ensures ( missHandler != null ==> getMissHandler().equals (missHandler) ) ||
-	              (getMissHandler() == null );
-	  
-	  also
-	  public exceptional_behavior
-	    requires period == null;
-	    signals (IllegalArgumentException) true; 
-	@*/
 	@SCJAllowed(Level.LEVEL_1)
 	public PeriodicParameters(RelativeTime start, RelativeTime period,
 			RelativeTime deadline, AsyncEventHandler missHandler) {
@@ -166,13 +106,23 @@ public class PeriodicParameters extends ReleaseParameters {
 		this.period = new RelativeTime(period);
 	}
 
-	// Not in SCJ
+	// Not public in SCJ
 	public RelativeTime getPeriod() {
 		return period;
 	}
 
-	//Not in SCJ
+	// Not public in SCJ
 	public RelativeTime getStart() {
 		return start;
 	}
+	
+	// used for JML annotation only (not public)
+	RelativeTime period() {
+    	return period;
+    }
+    
+    // used for JML annotation only (not public)
+	RelativeTime start() {
+    	return start;
+    }
 }

@@ -59,22 +59,7 @@ public abstract class HighResolutionTime implements
 	Clock clock;
 	long millis;
 	int nanos;
-
-	/*@ 
-	  public invariant 
-	      ( getMilliseconds() >= 0L 
-	        && (0 <= getNanoseconds() && getNanoseconds() < 1000000) ) 
-	    ||
-	      ( getMilliseconds() <= 0L 
-	        && (-1000000 < getNanoseconds() && getNanoseconds() <= 0) );
-	  @*/
-
-	/*@ 
-	  behaviour
-	   requires true;
-	   ensures (millis-getMilliseconds())*NANOS_PER_MILLI +
-	           (nanos-getNanoseconds()) == 0; 
-	  @*/
+	
 	HighResolutionTime(long millis, int nanos, Clock clock) {
 		if (!isNormalized(millis, nanos)) {
 			setNormalized(millis, nanos);			
@@ -95,11 +80,6 @@ public abstract class HighResolutionTime implements
 	 * 
 	 * @return a reference to the clock associated with <code>this</code>.
 	 */
-	/*@ 
-	  public behaviour
-	    requires true;
-	    assignable \nothing;
-	  @*/
 	public final Clock getClock() {
 		return this.clock;
 	}
@@ -108,11 +88,6 @@ public abstract class HighResolutionTime implements
 	 * 
 	 * @return the milliseconds component of the time represented by <code>this</code>.
 	 */
-	/*@ 
-	  public behaviour
-	    requires true;
-	    assignable \nothing;
-	  @*/
 	public final long getMilliseconds() {
 		return this.millis;
 	}
@@ -121,11 +96,6 @@ public abstract class HighResolutionTime implements
 	 * 
 	 * @return the nanoseconds component of the time represented by <code>this</code>.
 	 */
-	/*@ 
-	  public behaviour
-	    requires true;
-	    assignable \nothing;
-	  @*/
 	public final int getNanoseconds() {
 		return this.nanos;
 	}
@@ -141,23 +111,6 @@ public abstract class HighResolutionTime implements
 	 *    not associated with the same clock as <code>this</code>, or when 
 	 *    the <code>time</code> parameter is null.
 	 */
-	/*@ 
-	  public normal_behaviour
-	    requires time != null  && 
-	             this.getClass() == time.getClass();
-	             
-	    ensures getMilliseconds() == time.getMilliseconds(); 
-	    ensures getNanoseconds() == time.getNanoseconds();
-	    ensures getClock() == time.getClock();
-	  also
-	  public exceptional_behaviour
-	    requires time == null; 
-	    signals (IllegalArgumentException) true;
-	  also  
-	  public exceptional_behaviour
-	    requires time != null && getClass() != time.getClass();
-	    signals (ClassCastException) true;
-	  @*/
 	public void set(HighResolutionTime time) {
 		if (time == null)
 			throw new IllegalArgumentException("null parameter");
@@ -176,12 +129,6 @@ public abstract class HighResolutionTime implements
 	 * 
 	 * @param millis is the new value of the millisecond component.
 	 */
-	/*@ 
-	  public behaviour
-	    requires true;
-	    ensures getMilliseconds() == millis; 
-	    ensures getNanoseconds() == 0;
-	  @*/
 	public void set(long millis) {
 		this.millis = millis;
 		this.nanos = 0;
@@ -194,12 +141,6 @@ public abstract class HighResolutionTime implements
 	 * @param millis is the new value of the millisecond component.
 	 * @param nanos is the new value of the nanosecond component.
 	 */
-	/*@ 
-	  public behaviour
-	    requires true;
-	    ensures getMilliseconds() - millis + (getNanoseconds() - nanos) / 1000000 == 0;
-	    ensures (getNanoseconds() - nanos) % 1000000 == 0;
-	 @*/
 	public void set(long millis, int nanos) {
 		if (!isNormalized(millis, nanos))
 			setNormalized(millis, nanos);
@@ -225,20 +166,6 @@ public abstract class HighResolutionTime implements
 	 * @return true just when the parameter <code>time</code> is of the same 
 	 *   type and has the same values as <code>this</code>.
 	 */
-	/*@ 
-	  public behaviour
-	    requires true;
-	
-	    ensures 
-	    ( 
-	      \result == ( time != null  && 
-	                   getClass()        == time.getClass() &&
-	                   getMilliseconds() == time.getMilliseconds()  &&
-	                   getNanoseconds()  == time.getNanoseconds()   &&
-	                   getClock()        == time.getClock() 
-	                 )
-	    ); 
-	  @*/
 	public boolean equals(HighResolutionTime time) {
 		if (time == null)
 			return false;
@@ -282,36 +209,6 @@ public abstract class HighResolutionTime implements
 	 *    not associated with the same clock as <code>this</code>, or when 
 	 *    the <code>time</code> parameter is null.
 	 */
-	/*@  
-	  public normal_behaviour
-	    requires time != null  && 
-	             this.getClass() == time.getClass() &&
-	             this.getClock() == time.getClock();   
-	   
-	    ensures 
-	       ( \result < 0 ==> ( (getMilliseconds() < time.getMilliseconds()) 
-	                           || (getMilliseconds() == time.getMilliseconds() 
-	                               && getNanoseconds() < time.getNanoseconds()) )  ) 
-	     ||               
-	       ( \result > 0 ==> ( (getMilliseconds() == time.getMilliseconds() 
-	                              && getNanoseconds() > time.getNanoseconds()) 
-	                            || (getMilliseconds() > time.getMilliseconds()) )  ) 
-	     ||  
-	       ( \result ==  0 ==> ( getMilliseconds() == time.getMilliseconds() 
-	                               && getNanoseconds() == time.getNanoseconds() ) );       
-	    also
-	    public exceptional_behaviour
-	      requires time == null; 
-	      signals (IllegalArgumentException) true;
-	    also  
-	    public exceptional_behaviour
-	      requires time != null && getClass() != time.getClass();
-	      signals (ClassCastException) true; 
-	    also
-	    public exceptional_behaviour
-	      requires time != null && getClass() == time.getClass() && this.getClock() != time.getClock();
-	      signals (IllegalArgumentException) true; 
-	  @*/
 	public int compareTo(HighResolutionTime time) {
 		if (time == null)
 			throw new IllegalArgumentException();
@@ -342,7 +239,7 @@ public abstract class HighResolutionTime implements
 	 * Sets the normalized values of millis and nanos in this. 
 	 */
 	@IcecapCompileMe
-	/*@  helper @*/final void setNormalized(final long ms, final int ns) {
+	final void setNormalized(final long ms, final int ns) {
 		/*
 		 * Examples:
 		 *   3.12 millis =  3 millis and  120*1000 nanos

@@ -16,10 +16,10 @@ class ScjMissionSequencerProcess extends ScjProcess {
 				msObject.cleanUp();
 			} else {
 				//devices.Console.println("---- ScjMissionSequencerProcess: " + index + ";target: " + target);
-				Mission m = Mission.getCurrentMission();
+				Mission m = Mission.getMission();
 				if (m != null) {
 					msObject.cleanUp();
-					Mission.getCurrentMission().msSetForMission.removeMSObject(msObject);
+					Mission.getMission().msSetForMission.removeMSObject(msObject);
 				}
 			}
 			state = ScjProcess.State.TERMINATED;

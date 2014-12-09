@@ -46,40 +46,18 @@ import javax.safetycritical.annotate.SCJAllowed;
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  * 
  * @scjComment 
- *  - implementation issue: 
- *    the following public method is not in SCJ; it is used in an JML annotation: <br>
- *   <ul>
- *    <code>
- *     <li>public RelativeTime getDeadline();
- *    </code>
- *   </ul>
  */
 @SCJAllowed
 public abstract class ReleaseParameters implements Cloneable {
-	/**
-	 * Attributes that are accessible by the infrastructure.
-	 */
+	
 	RelativeTime deadline;
 	AsyncEventHandler missHandler;
-
-	/*@ 
-	  // The non-negative deadline is not checked in the code, should it?
-	  public invariant 
-	    deadline != null ==> 
-	      ( getDeadline().getMilliseconds() >= 0L && 
-	        getDeadline().getNanoseconds()  >= 0 );
-	 @*/
 
 	/**
 	 * Constructs an object which has no deadline checking facility. <br>
 	 * There is no default for deadline in this class. 
 	 * The default is set by the subclasses.
 	 */
-	/*@ 
-	  protected behaviour
-	    requires true; 
-	    ensures getDeadline() == null && getMissHandler() == null;
-	@*/
 	protected ReleaseParameters() {
 	}
 
@@ -88,14 +66,6 @@ public abstract class ReleaseParameters implements Cloneable {
 	 * @param deadline is the deadline to be checked. It is cloned to become immutable.
 	 * @param missHandler is the event handler to be released if the deadline is missed.
 	 */
-	/*@ 
-	  protected behaviour
-	    requires true;
-	   
-	    ensures (deadline != null) ==> getDeadline().equals(deadline);
-	    ensures deadline == null ==> getDeadline() == null;
-	    ensures getMissHandler() == missHandler; 
-	  @*/
 	@SCJAllowed(Level.LEVEL_1)
 	protected ReleaseParameters(RelativeTime deadline,
 			AsyncEventHandler missHandler) {
@@ -108,13 +78,13 @@ public abstract class ReleaseParameters implements Cloneable {
 		return clone;
 	}
 
-	//Used in JML annotations; also used in JML annotations in CyclicExecutive
-	public RelativeTime getDeadline() {
+	// Used in JML annotations; also used in JML annotations in CyclicExecutive
+	RelativeTime getDeadline() {
 		return deadline;
 	}
 
 	// Used in JML annotations
-	public AsyncEventHandler getMissHandler() //  /*@ spec_public @*/
+	AsyncEventHandler getMissHandler() //  /*@ spec_public @*/
 	{
 		return missHandler;
 	}

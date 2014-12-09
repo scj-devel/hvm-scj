@@ -72,4 +72,28 @@ final class ManagedSchedMethods {
 		else
 			return null;
 	}
+	
+	static boolean isRegistered (ManagedSchedulable target)
+	{
+		if (target instanceof ManagedEventHandler)
+			return ((ManagedEventHandler)target).isRegistered;
+		else if (target instanceof ManagedThread)
+			return ((ManagedThread)target).isRegistered;
+		else if (target instanceof ManagedLongEventHandler)
+			return ((ManagedLongEventHandler)target).isRegistered;
+		else
+			return false;
+	}
+	
+	static boolean isInMissionScope (ManagedSchedulable target)
+	{
+		if (target instanceof ManagedEventHandler)
+			return ((ManagedEventHandler)target).isInMissionScope;
+		else if (target instanceof ManagedThread)
+			return ((ManagedThread)target).isInMissionScope;
+		else if (target instanceof ManagedLongEventHandler)
+			return ((ManagedLongEventHandler)target).isInMissionScope;
+		else
+			return false;
+	}
 }

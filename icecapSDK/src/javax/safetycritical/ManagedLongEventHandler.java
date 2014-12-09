@@ -21,6 +21,10 @@ public abstract class ManagedLongEventHandler extends BoundAsyncLongEventHandler
 	 */
 	ScjProcess process;
 	
+	// used in JML spec. methods
+	boolean isRegistered;
+	boolean isInMissionScope;
+	
 	public void run() {
 		// TODO Auto-generated method stub
 
@@ -28,7 +32,10 @@ public abstract class ManagedLongEventHandler extends BoundAsyncLongEventHandler
 
 	public void register() {
 		// TODO Auto-generated method stub
+		
 
+		this.isRegistered = true;
+		this.isInMissionScope = true;
 	}
 
 	public void cleanUp() {

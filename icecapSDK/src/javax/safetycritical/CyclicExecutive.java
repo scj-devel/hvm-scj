@@ -97,8 +97,8 @@ public abstract class CyclicExecutive extends Mission {
 
 	
 	void runInitialize() {
-	// overrides the method in class Mission and is called in mission memory
-		missionPhase = Phase.INITIALIZE;
+	    // overrides the method in class Mission and is called in mission memory
+		phaseOfMission = Phase.INITIALIZE;
 		msSetForMission = new ManagedSchedulableSet();
 		initialize();
 	}
@@ -111,7 +111,7 @@ public abstract class CyclicExecutive extends Mission {
 	// overrides the method in class Mission and is called in mission memory
 	{
 		final CyclicSchedule schedule = 
-			getSchedule((PeriodicEventHandler[]) Mission.getCurrentMission().msSetForMission.managedSchObjects);
+			getSchedule((PeriodicEventHandler[]) Mission.getMission().msSetForMission.managedSchObjects);
 
 		/**
 		 * local reference to frames
@@ -154,7 +154,7 @@ public abstract class CyclicExecutive extends Mission {
 	void runCleanup(MissionMemory mem)
 	//overrides the method in class Mission and is called in mission memory
 	{
-		Mission.getCurrentMission().msSetForMission.terminateMSObjects();
+		Mission.getMission().msSetForMission.terminateMSObjects();
 	}
 
 	private void waitForNextFrame(RelativeTime duration) {
@@ -172,49 +172,49 @@ public abstract class CyclicExecutive extends Mission {
 	}
 
 	// Used in JML annotations
-	boolean feasible(PeriodicEventHandler[] handlerList, CyclicSchedule schedule) {
-		// checks a cyclic schedule. It is assumed, conservatively, that every handler runs to its deadline.
-
-		RelativeTime[] nextDeadline = new RelativeTime[handlerList.length];
-		for (int h = 0; h < handlerList.length; h++)
-			nextDeadline[h] = new RelativeTime(
-					handlerList[h].release.getDeadline());
-
-		Frame[] frames = schedule.getFrames();
-
-		RelativeTime next = new RelativeTime();
-
-		for (int step = 0; step < frames.length; step++) {
-			PeriodicEventHandler[] handlers = frames[step].handlers;
-			PeriodicEventHandler hx;
-			int n = handlers.length;
-			RelativeTime startFrame = new RelativeTime(next);
-
-			for (int handlerIdx = 0; handlerIdx < n; handlerIdx++) {
-				hx = handlers[handlerIdx];
-				// check handler declared
-				int h = find(handlerList, hx);
-				if (h < 0)
-					return false;
-				// run handler hx
-				next.add(hx.release.getDeadline());
-				// check against absolute deadline
-				if (next.compareTo(nextDeadline[h]) > 0)
-					return false;
-				nextDeadline[h].add(((PeriodicParameters) hx.release)
-						.getPeriod());
-			}
-			// advance to next frame
-			if (next.compareTo(startFrame.add(frames[step].duration)) > 0)
-				return false;
-			next.add(frames[step].duration);
-		}
-		// the schedule was OK for handlers in the frames
-		// check no handler left behind.
-		for (int h = 0; h < handlerList.length; h++)
-			if (nextDeadline[h].compareTo(next) <= 0)
-				return false;
-
-		return true;
-	}
+//	boolean feasible(PeriodicEventHandler[] handlerList, CyclicSchedule schedule) {
+//		// checks a cyclic schedule. It is assumed, conservatively, that every handler runs to its deadline.
+//
+//		RelativeTime[] nextDeadline = new RelativeTime[handlerList.length];
+//		for (int h = 0; h < handlerList.length; h++)
+//			nextDeadline[h] = new RelativeTime(
+//					handlerList[h].release.getDeadline());
+//
+//		Frame[] frames = schedule.getFrames();
+//
+//		RelativeTime next = new RelativeTime();
+//
+//		for (int step = 0; step < frames.length; step++) {
+//			PeriodicEventHandler[] handlers = frames[step].handlers;
+//			PeriodicEventHandler hx;
+//			int n = handlers.length;
+//			RelativeTime startFrame = new RelativeTime(next);
+//
+//			for (int handlerIdx = 0; handlerIdx < n; handlerIdx++) {
+//				hx = handlers[handlerIdx];
+//				// check handler declared
+//				int h = find(handlerList, hx);
+//				if (h < 0)
+//					return false;
+//				// run handler hx
+//				next.add(hx.release.getDeadline());
+//				// check against absolute deadline
+//				if (next.compareTo(nextDeadline[h]) > 0)
+//					return false;
+//				nextDeadline[h].add(((PeriodicParameters) hx.release)
+//						.getPeriod());
+//			}
+//			// advance to next frame
+//			if (next.compareTo(startFrame.add(frames[step].duration)) > 0)
+//				return false;
+//			next.add(frames[step].duration);
+//		}
+//		// the schedule was OK for handlers in the frames
+//		// check no handler left behind.
+//		for (int h = 0; h < handlerList.length; h++)
+//			if (nextDeadline[h].compareTo(next) <= 0)
+//				return false;
+//
+//		return true;
+//	}
 }

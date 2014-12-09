@@ -88,6 +88,15 @@ public abstract class ManagedMemory extends MemoryArea {
 			}
 			return null;
 		}
+		
+//		public static javax.realtime.ImmortalMemory instance() {
+//			MemoryArea result = MemoryArea.getNamedMemoryArea("Imm");
+//			if (result != null)
+//			{
+//				return (javax.realtime.ImmortalMemory)result;
+//			}
+//			return null;
+//		}
 	}
 
 	/**
@@ -187,12 +196,12 @@ public abstract class ManagedMemory extends MemoryArea {
 			return ((InnerPrivateMemory) mem).prev;
 		
 		else if (mem instanceof PrivateMemory)
-			return Mission.getCurrentMission().getSequencer().getMissionMemory();
+			return Mission.getMission().getSequencer().getMissionMemory();
 		
 		else if (mem instanceof MissionMemory)
 		{
 			// return nearest outermost memory
-			MissionSequencer<?> missSeq = Mission.getCurrentMission().getSequencer();
+			MissionSequencer<?> missSeq = Mission.getMission().getSequencer();
 			if (missSeq.outerSeq == null)
 				return ImmortalMemory.instance();
 			else

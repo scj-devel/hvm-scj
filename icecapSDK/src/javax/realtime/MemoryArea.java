@@ -28,7 +28,6 @@ package javax.realtime;
 
 import icecaptools.IcecapCompileMe;
 
-
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 
@@ -124,7 +123,6 @@ public abstract class MemoryArea extends Object {
 		}
 	}
 	
-	
 	private void addContainedMemory(MemoryArea memoryArea) {
 		memoryArea.nextContainedMemory = headOfContainedMemories;
 		headOfContainedMemories = memoryArea;
@@ -163,12 +161,6 @@ public abstract class MemoryArea extends Object {
 	/**
 	 * @return The memory consumed (in bytes) in this memory area.
 	 */
-	/*@ 
-	public behaviour
-	  requires true;
-	  assignable \nothing;
-	  ensures \result >= 0;
-	@*/
 	@SCJAllowed
 	public long memoryConsumed() {
 		return (long) delegate.consumedMemory();
@@ -177,12 +169,6 @@ public abstract class MemoryArea extends Object {
 	/**
 	 * @return The memory remaining (in bytes) in this memory area.
 	 */
-	/*@ 
-	public behaviour
-	  requires true;
-	  assignable \nothing;
-	  ensures \result == size() + memoryConsumed();
-	@*/
 	@SCJAllowed
 	public long memoryRemaining() {
 		return size() - memoryConsumed();
@@ -192,12 +178,6 @@ public abstract class MemoryArea extends Object {
 	 * @return The size of the current memory area in bytes.
 	 */
 	@SCJAllowed
-	/*@ 
-	public behaviour
-	  requires true;
-	  assignable \nothing;
-	  ensures \result >= 0;
-	@*/
 	public long size() {
 		return this.delegate.getSize();
 	}
@@ -270,11 +250,6 @@ public abstract class MemoryArea extends Object {
 	 * @param object An object.
 	 * @return The memory area in which <code>object</code> is allocated.
 	 */
-	/*@  
-	   public behavior    
-	     requires object != null;  
-	     ensures  \result != null;  // is tested elsewhere, see javax.realtime.test.TestMemoryArea
-	  @*/
 	@SCJAllowed
 	public static MemoryArea getMemoryArea(Object object) {
 		int ref = ObjectInfo.getAddress(object);

@@ -116,7 +116,7 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	 */
 	@SCJAllowed(Level.LEVEL_1)
 	public boolean deschedule() {
-		ManagedSchedulableSet hs = Mission.getCurrentMission().msSetForMission;
+		ManagedSchedulableSet hs = Mission.getMission().msSetForMission;
 
 		if (hs.contains(this)) {
 			hs.removeMSObject(this);

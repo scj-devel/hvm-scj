@@ -55,47 +55,12 @@ public final class Frame {
 	RelativeTime duration;
 	PeriodicEventHandler[] handlers;
 
-	/*@ 
-	  public invariant 
-	    this.getDuration() != null && this.getHandlers() != null &&
-	    ( (this.getDuration().getMilliseconds() > 0 || this.getDuration().getNanoseconds() > 0) );
-	  @*/
-
 	/**
 	 * Constructor for a frame.
 	 * 
 	 * @param duration is a <code>RelativeTime</code> object.
 	 * @param handlers is the list of periodic handlers.
 	 */
-	/*@ 
-	  public normal_behavior
-	    requires duration != null && handlers != null;
-	    
-	    requires (duration.getMilliseconds() > 0 ||
-	              duration.getNanoseconds() > 0 );
-	    
-	//       requires this.getHandlers().length >= 0 ==>
-	//         (\forall int i; 0 <= i && i < this.getHandlers().length;
-	//             Mission.getCurrentMission().isRegistered(this.getHandlers()[i])  && 
-	//             Mission.getCurrentMission().inMissionScope(this.getHandlers()[i]) 
-	//         ); // thus no need to copy.
-	    
-	    ensures this.getDuration() == duration && this.getHandlers() == handlers; 
-	  also
-	  public exceptional_behavior
-	    requires duration == null; 
-	    signals (IllegalArgumentException) true;
-	    
-	  also
-	  public exceptional_behavior
-	    requires duration != null && duration.getMilliseconds() <= 0 && duration.getNanoseconds() <= 0;
-	    signals (IllegalArgumentException) true;
-	
-	  also
-	  public exceptional_behavior
-	    requires handlers == null;
-	    signals (IllegalArgumentException) true;       
-	  @*/
 	@SCJAllowed
 	public Frame(RelativeTime duration, PeriodicEventHandler[] handlers) {
 		if (duration == null)
@@ -113,13 +78,8 @@ public final class Frame {
 	 * 
 	 * @return The list of handlers
 	 */
-	/*@ // implementation specification 
-	  behavior
-	    requires true; 
-	    assignable \nothing;      
-	    ensures \result == this.handlers;
-	  @*/
-	PeriodicEventHandler[] getHandlers() // /*@ spec_public @*/
+	// used for JML annotation only (not public)
+	PeriodicEventHandler[] getHandlers() 
 	{
 		return handlers;
 	}
@@ -128,13 +88,8 @@ public final class Frame {
 	 * 
 	 * @return The duration
 	 */
-	/*@ // implementation specification 
-	  behavior   
-	    requires true; 
-	    assignable \nothing;      
-	    ensures \result == this.duration;
-	  @*/
-	RelativeTime getDuration() // /*@ spec_public @*/
+	// used for JML annotation only (not public)
+	RelativeTime getDuration() 
 	{
 		return duration;
 	}

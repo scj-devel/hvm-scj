@@ -63,5 +63,15 @@ public class PriorityScheduler extends Scheduler {
 	public int getMinPriority() {
 		return Priorities.MIN_PRIORITY;
 	}
+	
+	/**
+	 * 
+	 * @return The normal software real-time priority supported by this
+	 *         scheduler.
+	 */
+	@SCJAllowed(Level.LEVEL_1)
+	public int getNormPriority() {
+		return (Priorities.MIN_PRIORITY + Priorities.MAX_PRIORITY)/2;
+	}
 
 }

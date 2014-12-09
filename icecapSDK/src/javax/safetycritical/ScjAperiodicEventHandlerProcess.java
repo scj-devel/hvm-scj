@@ -13,12 +13,12 @@ class ScjAperiodicEventHandlerProcess extends ScjProcess {
 	{
 		if (state == ScjProcess.State.HANDLED) {
 			// AperiodicEventHandler finished handling
-			if (Mission.getCurrentMission().terminationPending()) {
-				Mission.getCurrentMission().msSetForMission
+			if (Mission.getMission().terminationPending()) {
+				Mission.getMission().msSetForMission
 						.removeMSObject(msObject);
 
 				// remove the rest of aperiodic handlers
-				Mission.getCurrentMission().msSetForMission
+				Mission.getMission().msSetForMission
 						.removeAperiodicHandlers();
 
 				state = ScjProcess.State.TERMINATED;

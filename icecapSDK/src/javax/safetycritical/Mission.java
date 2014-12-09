@@ -28,6 +28,7 @@ package javax.safetycritical;
 
 import icecaptools.IcecapCompileMe;
 
+import javax.realtime.AbsoluteTime;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
@@ -73,7 +74,7 @@ public abstract class Mission {
 	boolean missionTerminate = false;
 
 	ManagedSchedulableSet msSetForMission; 
-	Phase missionPhase;
+	Phase phaseOfMission;
 
 	protected int missionIndex = -1;
 
@@ -83,6 +84,11 @@ public abstract class Mission {
 
 	static volatile boolean isMissionSetInit = false;
 
+	@SCJAllowed
+	public Mission(AbsoluteTime start) {
+		// ToDo: implement
+	}
+	
 	@SCJAllowed
 	public Mission() {
 	}
@@ -101,7 +107,7 @@ public abstract class Mission {
 
 	@SCJAllowed
 	@IcecapCompileMe
-	public static Mission getCurrentMission() {
+	public static Mission getMission() {
 		Mission mission = null;
 		
 		if (Launcher.level == 0 && CyclicScheduler.instance().seq != null) {
@@ -189,16 +195,22 @@ public abstract class Mission {
 	 * Note that those activities may not have completed.
 	 */
 	@SCJAllowed
-	public final void requestTermination() {
-		missionTerminate = true;
+	public final boolean requestTermination() {
+		if (missionTerminate == false) {	// called the first time during mission execution	
 		
-		// terminate all the sequencer's MSObjects that were created by the mission.
+		  // terminate all the sequencer's MSObjects that were created by the mission.
 
-		for (int i = 0; i < msSetForMission.noOfRegistered; i++) {
+		  for (int i = 0; i < msSetForMission.noOfRegistered; i++) {
 			if (msSetForMission.managedSchObjects[i] != null) {
 				msSetForMission.managedSchObjects[i].signalTermination();
 			}
+		  }
+		  
+		  missionTerminate = true;
+		  return false;
 		}
+		else
+			return true;  // called more than once: nothing done
 	}
 
 	/**
@@ -231,7 +243,7 @@ public abstract class Mission {
 		}
 		missionIndex = addNewMission(this);
 
-		//missionPhase = Phase.INITIALIZE;  // used by JML ??
+		phaseOfMission = Phase.INITIALIZE;  // used by JML ??
 		msSetForMission = new ManagedSchedulableSet();
 		initialize();
 
@@ -246,7 +258,7 @@ public abstract class Mission {
 	{
 		vm.ClockInterruptHandler.instance.disable();
 
-		missionPhase = Phase.EXECUTE;
+		phaseOfMission = Phase.EXECUTE;
 		ManagedSchedulableSet msSet = msSetForMission;
 		PriorityFrame frame = PriorityScheduler.instance().pFrame;
 		
@@ -271,7 +283,7 @@ public abstract class Mission {
 	//  For cyclic schedule execution, this method is overwritten in 
 	//  the subclass CyclicExecutive. 
 	{
-		missionPhase = Phase.CLEANUP;
+		phaseOfMission = Phase.CLEANUP;
 		// wait until (all handlers in mission have terminated)			
 		while (msSetForMission.msCount > 0) {
 			vm.RealtimeClock.awaitNextTick();
@@ -304,8 +316,9 @@ public abstract class Mission {
 	    ensures \result == true ;  // not finished
 	  @*/
 
-	/*@ spec_public @*/boolean isRegistered(ManagedSchedulable evh) {
-		return true;
+	//@ pure helper
+	/*@ spec_public @*/ boolean isRegistered(ManagedSchedulable target) {
+		return ManagedSchedMethods.isRegistered(target);
 	}
 
 	/*@ 
@@ -315,8 +328,8 @@ public abstract class Mission {
 	    ensures \result == true ; // not finished
 	  @*/
 
-	/*@ spec_public @*/boolean inMissionScope(ManagedSchedulable evh) {
-		return true;
+	/*@ spec_public @*/boolean inMissionScope(ManagedSchedulable target) {
+		return ManagedSchedMethods.isInMissionScope(target);
 	}
 
 	/*@ 
@@ -330,7 +343,7 @@ public abstract class Mission {
 	}
 
 	/*@ spec_public @*/Phase getPhase() {
-		return missionPhase;
+		return phaseOfMission;
 	}
 
 }

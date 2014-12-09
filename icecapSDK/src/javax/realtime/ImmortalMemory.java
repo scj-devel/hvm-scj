@@ -26,6 +26,7 @@
 
 package javax.realtime;
 
+import javax.safetycritical.ManagedMemory;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 
@@ -54,4 +55,7 @@ public final class ImmortalMemory extends MemoryArea {
 //		return (ImmortalMemory) head;
 //	}
 
+//	public static ImmortalMemory instance() {
+//		return ManagedMemory.ImmortalMemory.instance();
+//	}
 }

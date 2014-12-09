@@ -40,6 +40,8 @@ import javax.safetycritical.annotate.SCJAllowed;
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  *
  */
+
+// HSO: Not used any more; delete the class
 @SCJAllowed(Level.LEVEL_2)
 public class NoHeapRealtimeThread extends RealtimeThread {
 	

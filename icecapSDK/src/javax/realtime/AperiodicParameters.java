@@ -51,12 +51,6 @@ public class AperiodicParameters extends ReleaseParameters {
 	 * Construct a new <code>AperiodicParameters</code> object within the 
 	 * current memory area with no deadline detection facility.
 	 */
-	/*@ 
-	  public behavior
-	    requires true;
-	    ensures getDeadline() == null;
-	    ensures getMissHandler() == null; 
-	 @*/
 	public AperiodicParameters() {
 		super();
 	}
@@ -71,13 +65,6 @@ public class AperiodicParameters extends ReleaseParameters {
 	 *   if the handler misses its deadline. 
 	 *   A null parameter indicates that no handler should be released.
 	 */
-	/*@ 
-	  public behavior
-	    requires true; 
-	    ensures ( deadline != null ==> getDeadline().equals (deadline) ) || 
-	            getDeadline() == null;
-	    ensures getMissHandler() == missHandler; 
-	  @*/
 	public AperiodicParameters(RelativeTime deadline,
 			AsyncEventHandler missHandler) {
 		super(deadline, missHandler);

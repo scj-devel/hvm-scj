@@ -67,6 +67,10 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	ReleaseParameters release;
 
 	String name;
+	
+	// used in JML spec. methods
+	boolean isRegistered;
+	boolean isInMissionScope;
 
 	/**
 	 * Constructs an event handler.
@@ -107,7 +111,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 			throw new IllegalArgumentException("storage is null");
 
 		this.storage = storage;
-		this.mission = Mission.getCurrentMission();
+		this.mission = Mission.getMission();
 
 		int backingStoreOfThisMemory;
 
@@ -125,7 +129,10 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		privateMemory = new PrivateMemory((int) this.storage.getMaxMemoryArea(),
 		           backingStoreOfThisMemory,
 	               backingStoreProvider, 
-	               privateMemoryName);		
+	               privateMemoryName);	
+		
+		this.isRegistered = false;
+		this.isInMissionScope = false;
 	}
 
 	/*@ 
@@ -157,6 +164,9 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	public void register() {
 		ManagedSchedulableSet hs = mission.msSetForMission;
 		hs.addMS(this);
+		
+		isRegistered = true;
+		isInMissionScope = true;
 	}
 
 	@SCJAllowed(Level.SUPPORT)
