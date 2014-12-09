@@ -153,7 +153,8 @@ public class CompilationManagerHSO {
 
         // For OpenJML test:
         String inputFolder = "/home/hso/java/SCJ_Workspace/OpenJMLTest/bin/" +
-         pathSeparator + "/home/hso/java/SCJ_Workspace/OpenJMLTest/lib/jmlruntime.jar";
+         pathSeparator + "/home/hso/java/SCJ_Workspace/OpenJMLTest/lib/jmlruntime.jar" +
+         pathSeparator + "/home/hso/git/hvm-scj/icecapSDK/bin/";
         
         
         String outputFolder = "";
@@ -209,7 +210,11 @@ public class CompilationManagerHSO {
         //String inputPackage = "test";
         //String inputClass = "JMLTest1";
         
-        String inputPackage = "account";
+        //String inputPackage = "account";
+        //String inputPackage = "scj.safetycritical";
+        //String inputPackage = "javax.realtime.test.memoryParameters";
+        String inputPackage = "javax.safetycritical.test.storageParameters";
+        
         String inputClass = "AllTests";
         
         /* OpenJML tests end */
