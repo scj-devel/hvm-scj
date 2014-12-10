@@ -124,7 +124,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		MemoryArea backingStoreProvider = (mission == null) ? 
 				MemoryArea.overAllBackingStore : mission.currMissSeq.missionMemory;
 
-		String privateMemoryName = Memory.getNextMemoryName("PvtMem");
+		String privateMemoryName = Memory.getNextMemoryName("PvtMem");		
 		
 		privateMemory = new PrivateMemory((int) this.storage.getMaxMemoryArea(),
 		           backingStoreOfThisMemory,

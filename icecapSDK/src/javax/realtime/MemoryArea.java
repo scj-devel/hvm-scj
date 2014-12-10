@@ -116,7 +116,7 @@ public abstract class MemoryArea extends Object {
 			reservedEnd = base + reservedSize;
 			backingStoreProvider.addContainedMemory(this);
 		} else {
-			devices.Console.println("   MemoryArea: throw");
+			System.out.println("   MemoryArea: throw " + label);
 			throw new OutOfMemoryError("thrown from MemoryArea :: constructor : Out of backingstore exception: size: "
 					+ initialSize + " backingStoreSize: " + reservedSize + " base: " + base + " backingStoreEnd: "
 					+ endOfAvailableSpace);

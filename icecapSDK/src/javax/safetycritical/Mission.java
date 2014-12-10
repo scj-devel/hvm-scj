@@ -47,25 +47,7 @@ import javax.scj.util.Const;
  *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  * 
  * 
- * @scjComment - SCJ issue: <br>
- *             <ul>
- *             <code>
- *    <li>public static Mission getCurrentMission();
- *   </code>
- *             </ul>
- * <br>
- *             This static function has a problematic semantics.Consider a Level
- *             2 application with nested missions:
- *             <ul>
- *             <li>What is <code>getCurrentMission</code>'s value inside a
- *             mission constructor, and what is it during mission
- *             <li> <code>initialize</code>: it can be replaced by specific
- *             parameters for handlers that need it.
- *             </ul>
- * <br>
- *             The <code>getCurrentMission</code> function can be replaced by
- *             specific parameters for handlers that need it.
- * 
+ * @scjComment 
  */
 @SCJAllowed
 public abstract class Mission {
@@ -152,12 +134,6 @@ public abstract class Mission {
 	 * registered by the <code>initialize</code> method upon return from 
 	 * the <code>initialize</code> method.
 	 */
-//	/*@ 
-//	  behaviour
-//	    requires Mission.getCurrentMission().getSequencer().getMissionMemory() 
-//	             == ManagedMemory.getCurrentMemory();
-//	    ensures true ;  
-//	  @*/
 	@SCJAllowed(Level.SUPPORT)
 	protected abstract void initialize();
 
@@ -309,40 +285,23 @@ public abstract class Mission {
 		return missionSet[missionIndex].msSetForMission.scjProcesses[scjProcessIndex];
 	}
 
-	/*@ 
-	  behaviour
-	    requires evh != null;
-	    assignable \nothing;
-	    ensures \result == true ;  // not finished
-	  @*/
-
-	//@ pure helper
-	/*@ spec_public @*/ boolean isRegistered(ManagedSchedulable target) {
+	// used for JML annotation only (not public)
+	boolean isRegistered(ManagedSchedulable target) {
 		return ManagedSchedMethods.isRegistered(target);
 	}
 
-	/*@ 
-	  behaviour
-	    requires evh != null;
-	    assignable \nothing;
-	    ensures \result == true ; // not finished
-	  @*/
-
-	/*@ spec_public @*/boolean inMissionScope(ManagedSchedulable target) {
+	// used for JML annotation only (not public)
+	boolean inMissionScope(ManagedSchedulable target) {
 		return ManagedSchedMethods.isInMissionScope(target);
 	}
 
-	/*@ 
-	  behaviour
-	    requires cs != null;
-	    assignable \nothing;
-	    ensures \result == true ; // not finished
-	  @*/
-	/*@ spec_public @*/boolean inMissionScope(CyclicSchedule cs) {
+	// used for JML annotation only (not public)
+	boolean inMissionScope(CyclicSchedule cs) {
 		return true;
 	}
 
-	/*@ spec_public @*/Phase getPhase() {
+	// used for JML annotation only (not public)
+	Phase getPhase() {
 		return phaseOfMission;
 	}
 

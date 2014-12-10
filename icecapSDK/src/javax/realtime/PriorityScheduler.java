@@ -25,6 +25,8 @@
  *************************************************************************/
 package javax.realtime;
 
+import icecaptools.IcecapCompileMe;
+
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 import javax.scj.util.Priorities;
@@ -72,6 +74,16 @@ public class PriorityScheduler extends Scheduler {
 	@SCJAllowed(Level.LEVEL_1)
 	public int getNormPriority() {
 		return (Priorities.MIN_PRIORITY + Priorities.MAX_PRIORITY)/2;
+	}
+	
+	// used for JML annotation only (not public)
+    int getMaxPr() {
+		return Priorities.MAX_PRIORITY;
+	}
+    
+    // used for JML annotation only (not public)
+    int getMinPr() {
+		return Priorities.MIN_PRIORITY;
 	}
 
 }

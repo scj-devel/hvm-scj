@@ -66,11 +66,11 @@ import javax.safetycritical.annotate.SCJRestricted;
  *      </ul>
  */
 @SCJAllowed
-public abstract class MissionSequencer<SpecificMission extends Mission> 
+public abstract class MissionSequencer<MissionType extends Mission> 
 	extends ManagedEventHandler {
 	
 	MissionMemory missionMemory;
-	SpecificMission currMission;
+	MissionType currMission;
 
 	interface State {
 		public final static int START = 1;
@@ -275,7 +275,7 @@ public abstract class MissionSequencer<SpecificMission extends Mission>
 	    ensures true;      
 	  @*/
 	@SCJAllowed(Level.SUPPORT)
-	protected abstract SpecificMission getNextMission();
+	protected abstract MissionType getNextMission();
 
 	public final void register() {
 		super.register();
