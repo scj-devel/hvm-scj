@@ -210,12 +210,23 @@ public class CompilationManagerHSO {
         //String inputPackage = "test";
         //String inputClass = "JMLTest1";
         
-        //String inputPackage = "account";
-        //String inputPackage = "scj.safetycritical";
-        //String inputPackage = "javax.realtime.test.memoryParameters";
-        String inputPackage = "javax.safetycritical.test.storageParameters";
+        //String inputPackage = "account";       
+       
+        //String inputPackage = "javax.realtime.test.releaseParameters";
+        //String inputPackage = "javax.realtime.test.priorityParameters";
+        //String inputPackage = "javax.realtime.test.timeClasses";
         
-        String inputClass = "AllTests";
+        String inputPackage = "javax.realtime.test";
+        //String inputPackage = "javax.safetycritical.test";
+        
+        //String inputClass = "AllTests";
+        
+        //String inputClass = "TckTestMemoryParameters";
+        //String inputClass = "TckTestPriorityScheduler";
+        String inputClass = "TckTestPeriodicParameters";
+        
+        //String inputClass = "TckTestStorageParameters";
+        //String inputClass = "TckTestFrame1";
         
         /* OpenJML tests end */
 
