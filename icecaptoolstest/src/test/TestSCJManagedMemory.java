@@ -375,7 +375,7 @@ public class TestSCJManagedMemory
     devices.Console.println("\n***** TestSCJManagedMemory begin *****");
     
     Memory memory = Memory.getHeapArea();
-    
+    new SmallObject();
     int x = memory.consumedMemory();
     new SmallObject();
     int y = memory.consumedMemory();

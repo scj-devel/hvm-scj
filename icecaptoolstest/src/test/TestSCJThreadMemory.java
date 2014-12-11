@@ -219,7 +219,7 @@ public class TestSCJThreadMemory {
 
 	public static void main(String[] args) {
 		Memory memory = Memory.getHeapArea();
-		
+		new SmallObject();
 		int x = memory.consumedMemory();
 		new SmallObject();
 		int y = memory.consumedMemory();
