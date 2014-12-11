@@ -73,7 +73,7 @@ public class TestSCJHandlerMemory {
       devices.Console.println("-- MyPEH1: " + count);
       count++;
       doWork();
-      if (count == 5) {
+      if (count == 3) {
         myAEH.release();
       }
     }
@@ -92,9 +92,10 @@ public class TestSCJHandlerMemory {
         fail = true;
       }
 
+      x = memory.consumedMemory();
       new SmallObject();
-
-      y = memory.consumedMemory(); 
+      y = memory.consumedMemory();
+      
       if (y != x + sizeOfSmallObject)
       {
         devices.Console.println("---- MyPEH1 Fail 2, y = " + y + ", x = " + x);
@@ -132,9 +133,10 @@ public class TestSCJHandlerMemory {
         fail = true;
       }
 
+      x = memory.consumedMemory();
       new BiggerObject();
-
       y = memory.consumedMemory(); 
+      
       if (y != x + sizeOfBiggerObject) {
         devices.Console.println("-------- MyPEH2 Fail 2, y = " + y + ", x = " + x);
         fail = true;
@@ -260,7 +262,7 @@ public class TestSCJHandlerMemory {
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
 				new long[] { Const.HANDLER_STACK_SIZE }, 2002, 0, 0);
 		
-		new Launcher(new MyApp(), 2);
+		new Launcher(new MyApp(), 1);
 		
 		devices.Console.println("********* TestSCJHandlerMemory main.end ********************");
 		

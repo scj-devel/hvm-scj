@@ -203,26 +203,5 @@ public class TestResult
   {
     return failureCount() == 0 && errorCount() == 0 && JMLerrorCount () == 0;
   }
-  
-  public void print(String testName, int numberOfCases) {
-	  	System.out.println("\n" + testName + ":");
-	  	System.out.println("    Test cases:  " + numberOfCases /*runCount()*/);
-	  	System.out.println("    Test errors: " + errorCount());
-	  	System.out.println("    JML errors:  " + JMLerrorCount());
 
-	  	if (errorCount() > 0) {
-	  		System.out.println("\nTest errors are in:");
-
-	  		for (Enumeration<TestFailure> e = errors(); e.hasMoreElements();) {
-	  			System.out.println("" + e.nextElement());
-	  		}
-	  	}
-	  	if (JMLerrorCount() > 0) {
-	  		System.out.println("\nJML errors are in:");
-
-	  		for (Enumeration<TestFailure> e = JMLerrors(); e.hasMoreElements();) {
-	  			System.out.println("" + e.nextElement());
-	  		}
-	  	}
-	  }
 }

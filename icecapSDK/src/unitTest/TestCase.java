@@ -32,7 +32,11 @@ public abstract class TestCase extends Assert implements Test {
 	public TestCase(String name) {
 		fName = name;
 	}
-
+	
+	public void test (int i) {
+		// empty implementation; override this
+	}
+	
 	/**
 	 * Counts the number of test cases executed by run(TestResult result).
 	 */
