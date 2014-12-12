@@ -208,7 +208,7 @@ public abstract class HighResolutionTime implements
 	 * @throws IllegalArgumentException if the <code>time</code> parameter is 
 	 *    not associated with the same clock as <code>this</code>, or when 
 	 *    the <code>time</code> parameter is null.
-	 */
+	 */	
 	public int compareTo(HighResolutionTime time) {
 		if (time == null)
 			throw new IllegalArgumentException();
@@ -238,7 +238,7 @@ public abstract class HighResolutionTime implements
 	/**
 	 * Sets the normalized values of millis and nanos in this. 
 	 */
-	@IcecapCompileMe
+	@IcecapCompileMe  // Don't remove this CompileMe annotation
 	final void setNormalized(final long ms, final int ns) {
 		/*
 		 * Examples:
@@ -266,4 +266,14 @@ public abstract class HighResolutionTime implements
 //	public static boolean waitForObject(Object target, HighResolutionTime time) {
 //		return javax.safetycritical.PriorityScheduler.waitForObject(target, time);
 //	}
+	
+	// used for JML annotation only (not public)
+    long getMillis() {
+		return millis;
+	}
+    
+    // used for JML annotation only (not public)
+    int getNanos() {
+		return nanos;
+	}
 }

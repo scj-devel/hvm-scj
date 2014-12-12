@@ -180,7 +180,7 @@ public class AbsoluteTime extends HighResolutionTime {
 	 * 
 	 * @throws IllegalArgumentException if the clock associated with <code>this</code> and the clock associated with the 
 	 * <code>time</code> parameter are different, or when the <code>time</code> parameter is null.
-	 */
+	 */	
 	public AbsoluteTime add(RelativeTime time) {
 		if (time == null)
 			throw new IllegalArgumentException("time is null");

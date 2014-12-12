@@ -39,8 +39,8 @@ import icecaptools.IcecapCompileMe;
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
 class RealtimeClock extends Clock {
-	private static vm.RealtimeClock nativeClock = vm.RealtimeClock
-			.getRealtimeClock();
+	private static vm.RealtimeClock nativeClock = 
+		vm.RealtimeClock.getRealtimeClock();
 
 	private static Clock rtClock; 
 

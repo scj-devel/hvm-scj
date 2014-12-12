@@ -60,6 +60,11 @@ import javax.safetycritical.annotate.SCJAllowed;
 @SCJAllowed
 public abstract class Clock {
 	
+//	static Clock rtClock; 
+//
+//	// The nominal interval between ticks.
+//	protected static RelativeTime resolution; 
+	
 	boolean active;
 
 	/**
@@ -133,5 +138,12 @@ public abstract class Clock {
 	 */
 	@SCJAllowed
 	public abstract AbsoluteTime getTime(AbsoluteTime dest);
+	
+	
+//	// used for JML annotation only (not public)
+//	RelativeTime getResol()
+//	{
+//		return resolution;
+//	}
 
 }

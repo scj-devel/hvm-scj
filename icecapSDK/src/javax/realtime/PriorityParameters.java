@@ -26,6 +26,7 @@
 package javax.realtime;
 
 import javax.safetycritical.annotate.SCJAllowed;
+import javax.scj.util.Priorities;
 
 /**
  * This class is restricted relative to the RTSJ so that it allows the 
@@ -91,5 +92,10 @@ public class PriorityParameters extends SchedulingParameters {
 	public void setPriority(int value) // not public in SCJ; called in javax.safetycritical.Monitor
 	{
 		priority = value;
+	}
+	
+	// used for JML annotation only (not public)
+    int getPr() {
+		return priority;
 	}
 }
