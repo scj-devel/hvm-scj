@@ -39,32 +39,25 @@ import icecaptools.IcecapCompileMe;
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
 class RealtimeClock extends Clock {
-	private static vm.RealtimeClock nativeClock = 
-		vm.RealtimeClock.getRealtimeClock();
+//	private static vm.RealtimeClock nativeClock = 
+//		vm.RealtimeClock.getRealtimeClock();
 
-	private static Clock rtClock; 
+	static Clock rtClock = new RealtimeClock(); 
 
-	// The nominal interval between ticks.
-	private static RelativeTime resolution; 
-
-	/*@ helper @*/ RealtimeClock() {
+	RealtimeClock() {
 		super(true);
+		
+//		int granularity = nativeClock.getGranularity();
+//
+//		long millis = granularity / 1000000;
+//		int nanos = granularity % 1000000;
+//
+//		resolution = new RelativeTime(millis, nanos, rtClock);
+		
+		resolution.clock = rtClock;
 	}
 
-	private /*@ helper @*/ static RelativeTime setResolution() {
-		int granularity = nativeClock.getGranularity();
-
-		long millis = granularity / 1000000;
-		int nanos = granularity % 1000000;
-
-		return new RelativeTime(millis, nanos, rtClock);
-	}
-
-	/*@ helper @*/ static Clock instance() {
-		if (rtClock == null) {
-			rtClock = new RealtimeClock();
-			resolution = setResolution();
-		}
+	static Clock instance() {
 		return rtClock;
 	}
 
@@ -87,23 +80,11 @@ class RealtimeClock extends Clock {
 	 * 
 	 * @return clock resolution.
 	 */
-	/*@ 
-	  public behaviour
-	    requires true;
-	    assignable \nothing;
-	    ensures \result.equals(new RelativeTime(resolution));
-	  @*/
 	@Override
 	public RelativeTime getResolution() {
 		return new RelativeTime(resolution);
 	}
 
-	/*@ 
-	  public behaviour
-	    requires true;
-	    assignable \nothing;
-	    ensures \result.equals(new RelativeTime(resolution));
-	@*/
 	@Override
 	public RelativeTime getResolution(RelativeTime dest) {
 		if (dest == null)
@@ -115,24 +96,11 @@ class RealtimeClock extends Clock {
 		}
 	}
 
-	/*@ 
-	  public behaviour
-	    requires true;
-	    assignable \nothing;
-	    ensures true;
-	  @*/
 	@Override
 	public AbsoluteTime getTime() {
 		return getTime(new AbsoluteTime(0, 0, this));
 	}
 
-	/*@ 
-	  public behaviour
-	    requires true;
-	    assignable \nothing;
-	    ensures \result != null;
-	    ensures (dest == null) || dest.equals(\result);
-	  @*/
 	@Override
 	@IcecapCompileMe
 	public AbsoluteTime getTime(AbsoluteTime dest) {

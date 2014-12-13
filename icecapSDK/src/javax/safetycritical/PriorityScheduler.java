@@ -59,7 +59,7 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 	RelativeTime timeGrain;
 	AbsoluteTime now;
 
-	private static PriorityScheduler scheduler = new PriorityScheduler();;
+	private static PriorityScheduler scheduler = new PriorityScheduler();
 
 	ScjProcess outerMostSeqProcess = null;
 

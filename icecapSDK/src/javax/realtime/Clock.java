@@ -25,6 +25,7 @@
  *************************************************************************/
 package javax.realtime;
 
+
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
@@ -60,10 +61,11 @@ import javax.safetycritical.annotate.SCJAllowed;
 @SCJAllowed
 public abstract class Clock {
 	
-//	static Clock rtClock; 
-//
-//	// The nominal interval between ticks.
-//	protected static RelativeTime resolution; 
+	protected static vm.RealtimeClock nativeClock = 
+			vm.RealtimeClock.getRealtimeClock();
+
+	// The nominal interval between ticks.
+	protected RelativeTime resolution; 
 	
 	boolean active;
 
@@ -78,6 +80,13 @@ public abstract class Clock {
 	 */
 	protected Clock(boolean active) {
 		this.active = active;
+		
+		int granularity = nativeClock.getGranularity();
+
+		long millis = granularity / 1000000;
+		int nanos = granularity % 1000000;
+
+		resolution = new RelativeTime(millis, nanos);
 	}
 
 	/**
@@ -140,10 +149,16 @@ public abstract class Clock {
 	public abstract AbsoluteTime getTime(AbsoluteTime dest);
 	
 	
-//	// used for JML annotation only (not public)
-//	RelativeTime getResol()
-//	{
-//		return resolution;
-//	}
+	// used for JML annotation only (not public)
+	boolean getAct()
+	{
+		return active;
+	}
+		
+	// used for JML annotation only (not public)
+	RelativeTime getResol()
+	{
+		return resolution;
+	}
 
 }

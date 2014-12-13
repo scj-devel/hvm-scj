@@ -267,8 +267,10 @@ public abstract class MemoryArea extends Object {
 		while (current != null)
 		{
 			MemoryArea result = getMemoryArea(current, ref);
+			
 			if (result != null)
 			{
+				//System.out.println("MemoryArea.result: " + result);
 				return result;
 			}
 			current = current.nextContainedMemory;
