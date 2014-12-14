@@ -332,7 +332,7 @@ public class TestSCJManagedMemory
 //             }
 //          });
  
-      missSeq.requestSequenceTermination();
+      missSeq.signalTermination();
     }
   } 
   

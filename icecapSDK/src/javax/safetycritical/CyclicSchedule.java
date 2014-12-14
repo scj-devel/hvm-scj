@@ -51,7 +51,15 @@ public final class CyclicSchedule {
 	 * 
 	 * @param frames is the frame array.
 	 */
-	public CyclicSchedule(Frame[] frames) {
+	public CyclicSchedule(Frame[] frames) throws IllegalArgumentException {
+		if (frames == null)
+			throw new IllegalArgumentException ("frames is null");
+		// frames != null:
+		for (int i = 0; i < frames.length; i++) {
+			if (frames[i] == null)
+				throw new IllegalArgumentException ("a frame element is null");
+		}
+		
 		this.frames = new Frame[frames.length];
 		for (int i = 0; i < frames.length; i++)
 			this.frames[i] = frames[i];

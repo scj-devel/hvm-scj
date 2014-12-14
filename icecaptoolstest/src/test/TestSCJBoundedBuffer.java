@@ -40,33 +40,29 @@ public class TestSCJBoundedBuffer {
 	static boolean failed;
 
 	private static class MyAperiodicEvh extends AperiodicEventHandler {
-		MissionSequencer<MyMission> missSeq;
 
 		public MyAperiodicEvh(PriorityParameters priority, AperiodicParameters release,
-				StorageParameters storageParameters, MissionSequencer<MyMission> missSeq) {
+				StorageParameters storageParameters) {
 			super(priority, release, storageParameters);
-			this.missSeq = missSeq;
 		}
 
 		public void handleAsyncEvent() {
 			devices.Console.println("--> MyAPEvh: inv broken");
 			failed = true;
-			missSeq.requestSequenceTermination();
+			Mission.getMission().requestTermination();
 		}
 	}
 
 	private static class MyAperiodicEvh1 extends AperiodicEventHandler {
-		MissionSequencer<MyMission> missSeq;
 
 		public MyAperiodicEvh1(PriorityParameters priority, AperiodicParameters release,
-				StorageParameters storageParameters, MissionSequencer<MyMission> missSeq) {
+				StorageParameters storageParameters) {
 			super(priority, release, storageParameters);
-			this.missSeq = missSeq;
 		}
 
 		public void handleAsyncEvent() {
 			failed = false;
-			missSeq.requestSequenceTermination();
+			Mission.getMission().requestTermination();
 		}
 	}
 
@@ -79,7 +75,8 @@ public class TestSCJBoundedBuffer {
 		private AperiodicEventHandler aevh;
 		private AperiodicEventHandler aevh1;
 
-		public Producer(PriorityParameters priority, PeriodicParameters periodic, StorageParameters storageParameters,
+		public Producer(PriorityParameters priority, PeriodicParameters periodic, 
+				StorageParameters storageParameters,
 				BoundedBuffer buf, AperiodicEventHandler aevh, AperiodicEventHandler aevh1) {
 			super(priority, periodic, storageParameters);
 			this.buf = buf;
@@ -115,7 +112,8 @@ public class TestSCJBoundedBuffer {
 		private BoundedBuffer buf;
 		private AperiodicEventHandler aevh;
 
-		public Consumer(PriorityParameters priority, PeriodicParameters periodic, StorageParameters storageParameters,
+		public Consumer(PriorityParameters priority, PeriodicParameters periodic, 
+				StorageParameters storageParameters,
 				BoundedBuffer buf, AperiodicEventHandler aevh) {
 			super(priority, periodic, storageParameters);
 			this.buf = buf;
@@ -142,7 +140,8 @@ public class TestSCJBoundedBuffer {
 
 		private AperiodicEventHandler aevh;
 
-		public Display(PriorityParameters priority, PeriodicParameters periodic, StorageParameters storageParameters,
+		public Display(PriorityParameters priority, PeriodicParameters periodic, 
+				StorageParameters storageParameters,
 				BoundedBuffer buf, AperiodicEventHandler aevh) {
 			super(priority, periodic, storageParameters);
 			this.buf = buf;
@@ -240,23 +239,18 @@ public class TestSCJBoundedBuffer {
 	}
 
 	private static class MyMission extends Mission {
-		MissionSequencer<MyMission> missSeq;
-
-		public MyMission(MissionSequencer<MyMission> missSeq) {
-			this.missSeq = missSeq;
-		}
 
 		public void initialize() {
 			BoundedBuffer buffer = new BoundedBuffer(10);
 
 			AperiodicEventHandler aevh = new MyAperiodicEvh(new PriorityParameters(Priorities.PR98),
 					new AperiodicParameters(new RelativeTime(100, 0, Clock.getRealtimeClock()), null),
-					storageParameters_Handlers, missSeq);
+					storageParameters_Handlers);
 			aevh.register();
 
 			AperiodicEventHandler aevh1 = new MyAperiodicEvh1(new PriorityParameters(Priorities.PR98),
 					new AperiodicParameters(new RelativeTime(100, 0, Clock.getRealtimeClock()), null),
-					storageParameters_Handlers, missSeq);
+					storageParameters_Handlers);
 			aevh1.register();
 
 			new Producer(new PriorityParameters(Priorities.PR97), new PeriodicParameters(new RelativeTime(
@@ -285,6 +279,7 @@ public class TestSCJBoundedBuffer {
 	}
 
 	private static class MyApp implements Safelet<MyMission> {
+		
 		public MissionSequencer<MyMission> getSequencer() {
 			return new MySequencer();
 		}
@@ -301,7 +296,7 @@ public class TestSCJBoundedBuffer {
 
 			MySequencer() {
 				super(new PriorityParameters(Priorities.PR94), storageParameters_Sequencer);
-				this.mission = new MyMission(this);
+				this.mission = new MyMission();
 			}
 
 			public MyMission getNextMission() {
@@ -324,7 +319,8 @@ public class TestSCJBoundedBuffer {
 		vm.Process.enableStackAnalysis();
 
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
+				new long[] { Const.HANDLER_STACK_SIZE }, 
+				Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
 
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
 				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, 0, 0);

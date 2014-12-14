@@ -7,6 +7,7 @@ import javax.safetycritical.CyclicExecutive;
 import javax.safetycritical.CyclicSchedule;
 import javax.safetycritical.Frame;
 import javax.safetycritical.Launcher;
+import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
@@ -14,7 +15,8 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
-public class TestSCJLevel0SimpleCyclicExecutive1 extends CyclicExecutive implements Safelet<CyclicExecutive> {
+public class TestSCJLevel0SimpleCyclicExecutive1 extends CyclicExecutive 
+	implements Safelet<CyclicExecutive> {
 
     private static MissionSequencer<CyclicExecutive> sequencer;
 
@@ -34,7 +36,7 @@ public class TestSCJLevel0SimpleCyclicExecutive1 extends CyclicExecutive impleme
             devices.Console.println("Running");
             ++eventCounter;
             if (eventCounter == 3) {
-                sequencer.requestSequenceTermination();
+            	sequencer.signalTermination();
             }
         }
     }

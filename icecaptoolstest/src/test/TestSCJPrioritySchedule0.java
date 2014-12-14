@@ -47,7 +47,7 @@ public class TestSCJPrioritySchedule0 {
             if (n == 1) {
                 testCount++;
                 if (count % 5 == 3)
-                    missSeq.requestSequenceTermination();
+                    missSeq.signalTermination();
             }
         }
     }

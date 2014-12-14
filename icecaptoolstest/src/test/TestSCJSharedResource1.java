@@ -96,7 +96,7 @@ public class TestSCJSharedResource1 {
         public void handleAsyncEvent() {
             devices.Console.println("--> MyAPEvh: inv broken: " + res.get());
             failed = true;
-            missSeq.requestSequenceTermination();
+            missSeq.signalTermination();
         }
     }
 

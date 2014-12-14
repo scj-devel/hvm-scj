@@ -212,21 +212,28 @@ public class CompilationManagerHSO {
         
         //String inputPackage = "account";       
        
-        //String inputPackage = "javax.realtime.test.releaseParameters";
-        //String inputPackage = "javax.realtime.test.priorityParameters";
-        //String inputPackage = "javax.realtime.test.timeClasses";
         
-        String inputPackage = "javax.realtime.test";
+        //String inputPackage = "javax.realtime.test.timeClasses";
+        //String inputPackage = "javax.realtime.test.clock";
+        //String inputPackage = "javax.realtime.test.memoryArea";
+        String inputPackage = "javax.safetycritical.test.cyclic";
+        
+        //String inputPackage = "javax.realtime.test";
         //String inputPackage = "javax.safetycritical.test";
         
-        //String inputClass = "AllTests";
+        String inputClass = "AllTests";
+        //String inputClass = "TckTestCyclicSchedule3";
         
         //String inputClass = "TckTestMemoryParameters";
         //String inputClass = "TckTestPriorityScheduler";
-        String inputClass = "TckTestPeriodicParameters";
+        //String inputClass = "TckTestAperiodicParameters";
+        //String inputClass = "TckTestPriorityParameters";        
+        //String inputClass = "TckTestAbsoluteTime";        
+        //String inputClass = "TckTestRelativeTime";
         
         //String inputClass = "TckTestStorageParameters";
-        //String inputClass = "TckTestFrame1";
+        //String inputClass = "TckTestFrame2";
+        //String inputClass = "TckTestCyclicSchedule0";
         
         /* OpenJML tests end */
 

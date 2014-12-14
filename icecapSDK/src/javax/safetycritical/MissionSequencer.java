@@ -55,15 +55,7 @@ import javax.safetycritical.annotate.SCJRestricted;
  *         Hans S&oslash;ndergaard, VIA University College, Denmark, <A
  *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  * 
- * 
  * @scjComment 
- *   - SCJ issue: Why Level 2 only for the following two methods?
- *     <ul>
- *       <code>
- *       <li>public final void requestSequenceTermination() <br>
- *       <li>public final boolean sequenceTerminationPending() 
- *       </code>
- *      </ul>
  */
 @SCJAllowed
 public abstract class MissionSequencer<MissionType extends Mission> 
@@ -99,13 +91,10 @@ public abstract class MissionSequencer<MissionType extends Mission>
 	 * with the memory resources specified by its parameters.
 	 */
 	//	/*@ 
-	//      public normal_behaviour
-	//        requires priority != null;
-	//        ensures true;
-	//      also
-	//      public exceptional_behaviour
-	//        requires ??; // not invoked in appropriate time
-	//        signals (IllegalStateException) true;
+	//    also
+	//    public exceptional_behaviour
+	//      requires ??; // not invoked in appropriate phase
+	//      signals (IllegalStateException) true;
 	//      @*/
 	@SCJAllowed
 	@SCJRestricted(Phase.INITIALIZE)
@@ -279,44 +268,6 @@ public abstract class MissionSequencer<MissionType extends Mission>
 
 	public final void register() {
 		super.register();
-	}
-
-	/**
-	 * Invokes the currently running <code>Mission</code>'s <code>
-	 * requestTermination</code> method. <br>
-	 * Upon completion of the currently running <code>Mission</code>, this
-	 * <code>MissionSequencer</code> returns without starting any additional
-	 * missions.
-	 * <p>
-	 * Note that <code>requestSequenceTermination</code> does not force the
-	 * sequence to terminate because the currently running <code>Mission</code>
-	 * must voluntarily relinquish its resources.
-	 */
-	/*@ 
-	  public behavior
-	    requires true;
-	    ensures true;      
-	  @*/
-	@SCJAllowed
-	public final void requestSequenceTermination() {
-		terminateSeq = true;
-		currMission.requestTermination();
-	}
-
-	/**
-	 * Checks if the current <code>Mission</code> is trying to terminate.
-	 * 
-	 * @return True if and only if this <code>MissionSequencer</code>'s
-	 *         <code>requestSequenceTermination</code> method has been invoked.
-	 */
-	//	/*@ 
-	//      public behavior
-	//        requires true;
-	//        ensures \result == ??;      
-	//      @*/
-	@SCJAllowed
-	public final boolean sequenceTerminationPending() {
-		return terminateSeq;
 	}
 	
 	@Override

@@ -49,9 +49,6 @@ public abstract class ManagedMemory extends MemoryArea {
 
 	static boolean flag = true;
 
-	//@SuppressWarnings("unused")
-	//private static MemoryArea backingStore;
-
 	/**
 	 * statically allocated Exception prevents memory area reference mismatches.
 	 */
@@ -216,16 +213,16 @@ public abstract class ManagedMemory extends MemoryArea {
 	 *            provides the run method that is to be executed within the
 	 *            inner-nested private memory area.
 	 */
-	/*@ 
-	  public static normal_behavior
-	    requires logic != null;	 
-	    ensures true;  // not finished
-	  also
-	  public static exceptional_behaviour
-	    requires logic == null; 
-	    signals (IllegalStateException) true;
-	  
-	  @*/
+//	/*@ 
+//	  public static normal_behavior
+//	    requires logic != null;	 
+//	    ensures true;  // not finished
+//	  also
+//	  public static exceptional_behaviour
+//	    requires logic == null; 
+//	    signals (IllegalStateException) true;
+//	  
+//	  @*/
 	@SCJAllowed
 	public static void enterPrivateMemory(int size, Runnable logic) throws IllegalStateException {
 		/**

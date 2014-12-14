@@ -50,11 +50,6 @@ public abstract class CyclicExecutive extends Mission {
 	AbsoluteTime next;
 	RelativeTime deltaTime;
 
-	/*@ 
-	  public behavior
-	    requires true;    
-	    ensures true;
-	  @*/
 	@SCJAllowed
 	public CyclicExecutive() {
 		this.rtClock = Clock.getRealtimeClock();
@@ -79,18 +74,6 @@ public abstract class CyclicExecutive extends Mission {
 	 * The handler objects must reside in an enclosing scope of <code>this</code>.
 	 * @return A cyclic schedule for the handlers.
 	 */
-	/*@ 
-	  public behavior
-	    requires handlers != null;      
-	    requires (\forall int i; 0 <= i && i < handlers.length;
-	               Mission.getCurrentMission().isRegistered(handlers[i]) && 
-	               Mission.getCurrentMission().inMissionScope(handlers[i])
-	             );
-	    
-	    ensures \result != null; 
-	    ensures Mission.getCurrentMission().inMissionScope(\result);
-	    //ensures feasible(handlers,\result);
-	  @*/
 	@SCJAllowed(Level.INFRASTRUCTURE)
 	public abstract CyclicSchedule getSchedule(PeriodicEventHandler[] handlers);
 
@@ -109,8 +92,14 @@ public abstract class CyclicExecutive extends Mission {
 	void runExecute()
 	// overrides the method in class Mission and is called in mission memory
 	{
-		final CyclicSchedule schedule = 
-			getSchedule((PeriodicEventHandler[]) Mission.getMission().msSetForMission.managedSchObjects);
+		// The following four lines of code: to meet the precondition in getSchedule.
+		ManagedSchedulable[] msObjects = Mission.getMission().msSetForMission.managedSchObjects;
+		PeriodicEventHandler[] pevs = new PeriodicEventHandler[Mission.getMission().msSetForMission.noOfRegistered];
+		
+		for (int i = 0; i < pevs.length; i++)
+			pevs[i] = (PeriodicEventHandler)msObjects[i];
+		
+		CyclicSchedule schedule = getSchedule(pevs) ;
 
 		/**
 		 * local reference to frames
@@ -138,10 +127,16 @@ public abstract class CyclicExecutive extends Mission {
 		}
 	}
 
-	void runCleanup(MissionMemory mem)
+	void runCleanup(MissionMemory missMem)
 	//overrides the method in class Mission and is called in mission memory
 	{
+		vm.ClockInterruptHandler.instance.disable();
+		
 		Mission.getMission().msSetForMission.terminateMSObjects();
+		
+		cleanUp();
+		missMem.resetArea();
+		vm.ClockInterruptHandler.instance.enable();
 	}
 
 	private void waitForNextFrame(RelativeTime duration) {

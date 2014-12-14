@@ -8,6 +8,7 @@ import javax.safetycritical.CyclicExecutive;
 import javax.safetycritical.CyclicSchedule;
 import javax.safetycritical.Frame;
 import javax.safetycritical.Launcher;
+import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
@@ -18,8 +19,8 @@ import javax.scj.util.Priorities;
 public class TestSCJCyclicSchedule4 {
 
     public static class MyCyclicSchedule {
-        static CyclicSchedule generate(/* CyclicExecutive cyclicExec, */
-        PeriodicEventHandler[] handlers) {
+    	
+        static CyclicSchedule generate(PeriodicEventHandler[] handlers) {
             Frame[] frames = new Frame[2];
             PeriodicEventHandler[] frame0 = new PeriodicEventHandler[2];
             PeriodicEventHandler[] frame1 = new PeriodicEventHandler[1];
@@ -42,15 +43,12 @@ public class TestSCJCyclicSchedule4 {
         int n;
         int count = 0;
 
-        MissionSequencer<MyMission> missSeq;
-
         protected MyPeriodicEvh(PriorityParameters priority, 
                 PeriodicParameters periodic, 
                 StorageParameters storageParameters,                
-                int n, MissionSequencer<MyMission> missSeq) {
+                int n) {
             super(priority, periodic, storageParameters);
             this.n = n;
-            this.missSeq = missSeq;
         }
 
         public void handleAsyncEvent() {
@@ -58,30 +56,24 @@ public class TestSCJCyclicSchedule4 {
             devices.Console.println("  *** MyPEvh:" + n + "; " + count);
 
             if (count % 7 == 5 && n == 4)
-                missSeq.requestSequenceTermination();
+            	Mission.getMission().requestTermination();
         }
     }
 
     public static class MyMission extends CyclicExecutive {
-        MissionSequencer<MyMission> missSeq;
-
-        public MyMission(MissionSequencer<MyMission> missSeq) {
-            this.missSeq = missSeq;
-        }
 
         public void initialize() {
             PeriodicEventHandler pevh1 = new MyPeriodicEvh(new PriorityParameters(Priorities.MIN_PRIORITY), new PeriodicParameters(new RelativeTime(), // start
                     new RelativeTime(200, 0)), // period
                     storageParameters_Handlers,
-                    2, // used in handleAsyncEvent
-                    missSeq);
+                    2); // used in handleAsyncEvent
+                   
             pevh1.register();
 
             PeriodicEventHandler pevh2 = new MyPeriodicEvh(new PriorityParameters(Priorities.MIN_PRIORITY), new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()), // start
                     new RelativeTime(400, 0, Clock.getRealtimeClock())), // period
                     storageParameters_Handlers,
-                    4, // used in handleAsyncEvent
-                    missSeq);
+                    4); // used in handleAsyncEvent
             pevh2.register();
         }
 
@@ -91,7 +83,7 @@ public class TestSCJCyclicSchedule4 {
 
         public CyclicSchedule getSchedule(PeriodicEventHandler[] handlers) {
             devices.Console.println("  *** MyMission: getSchedule");
-            return MyCyclicSchedule.generate(/* this, */handlers);
+            return MyCyclicSchedule.generate(handlers);
         }
     }
 
@@ -102,7 +94,7 @@ public class TestSCJCyclicSchedule4 {
             super(new PriorityParameters(Priorities.PR95), // lowest priority
             	  storageParameters_Sequencer);                                                                            // size
 
-            mission = new MyMission(this);
+            mission = new MyMission();
         }
 
         public MyMission getNextMission() {

@@ -98,10 +98,10 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 	/*@ 
 	  public behavior
 	//      requires MissionSequencer.getPhase() == Phase.EXECUTE;
-	    requires Mission.getCurrentMission().isRegistered(this);      
+	    requires Mission.getMission().isRegistered(this);      
 	  
 	//      ensures MissionSequencer.getPhase() == Phase.EXECUTE;
-	    ensures Mission.getCurrentMission().isRegistered(this);
+	    ensures Mission.getMission().isRegistered(this);
 	//      ensures PriorityScheduler.activated(this);      
 	  @*/
 	@SCJAllowed

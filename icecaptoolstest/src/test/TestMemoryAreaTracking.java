@@ -56,7 +56,7 @@ public class TestMemoryAreaTracking {
 		}
 
 		public void handleAsyncEvent() {
-			missSeq.requestSequenceTermination();
+			missSeq.signalTermination();
 			devices.Console.println("Ap Term");
 			light.on(1);
 		}
