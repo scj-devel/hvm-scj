@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="AdditionalResourceManager" name="AdditionalResourceManager" schema="schema/additionalResourceManager.exsd"/>
+   <extension-point id="ArchitectureDependentCodeGenerator" name="ArchitectureDependentCodeGenerator" schema="schema/architectureDependentCodeGenerator.exsd"/>
+   <extension-point id="NativeMethodCodeGenerator" name="NativeMethodCodeGenerator" schema="schema/nativeMethodCodeGenerator.exsd"/>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="icecaptools.classfileconverter"
+            objectClass="org.eclipse.jdt.core.IMethod">
+         <menu
+               id="icecaptools.menu3"
+               label="Icecap tools"
+               path="additions">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               class="icecaptools.actions.ConvertJavaFileAction"
+               enablesFor="1"
+               id="icecaptools.convertclassfile.action"
+               label="Convert to Icecap Application"
+               menubarPath="icecaptools.menu3/group1">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="icecaptools.setoutputfolder"
+            objectClass="org.eclipse.core.resources.IFolder">
+         <menu
+               id="icecaptools.menu2"
+               label="Icecap tools"
+               path="additions">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               class="icecaptools.SetOutputFolderAction"
+               enablesFor="1"
+               id="icecaptools.setoutputfolder.action"
+               label="Set output folder"
+               menubarPath="icecaptools.menu2/group1">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="icecaptools"
+            name="Icecap Tools">
+      </category>
+      <view
+            category="icecaptools"
+            class="icecaptools.views.DependencyView"
+            icon="icons/icecap.gif"
+            id="icecaptools.views.dependencyextent"
+            name="Icecap tools dependency extent"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="icecaptools.launching.HVMPOSIXLaunchConfigurationDelegate"
+            id="icecaptools.HVMPOSIXLaunchConfigurationType"
+            modes="run, debug"
+            name="HVM POSIX Launcher"
+            sourceLocatorId="icecaptools.launching.HVMSourceLookupDirector"
+            sourcePathComputerId="icecaptools.launching.HVMSourcePathComputer">
+      </launchConfigurationType>
+      <launchConfigurationType
+            delegate="icecaptools.launching.ev3.HVMEV3LaunchConfigurationDelegate"
+            id="icecaptools.HVMEV3LaunchConfigurationType"
+            modes="run, debug"
+            name="HVM EV3 Launcher"
+            sourceLocatorId="icecaptools.launching.HVMSourceLookupDirector"
+            sourcePathComputerId="icecaptools.launching.HVMSourcePathComputer">
+      </launchConfigurationType>
+      <launchConfigurationType
+            delegate="icecaptools.launching.beaglebone.HVMBeagleBoneLaunchConfigurationDelegate"
+            id="icecaptools.HVMBeagleBoneLaunchConfigurationType"
+            modes="run, debug"
+            name="HVM BeagleBone Launcher"
+            sourceLocatorId="icecaptools.launching.HVMSourceLookupDirector"
+            sourcePathComputerId="icecaptools.launching.HVMSourcePathComputer">
+      </launchConfigurationType>
+      <launchConfigurationType
+            delegate="icecaptools.launching.arduino.HVMArduinoLaunchConfigurationDelegate"
+            id="icecaptools.HVMArduinoLaunchConfigurationType"
+            modes="run, debug"
+            name="HVM Arduino Launcher"
+            sourceLocatorId="icecaptools.launching.HVMSourceLookupDirector"
+            sourcePathComputerId="icecaptools.launching.HVMSourcePathComputer">
+      </launchConfigurationType>
+      <launchConfigurationType
+            delegate="icecaptools.launching.HVMGenericLaunchConfigurationDelegate"
+            id="icecaptools.HVMGenericLaunchConfigurationType"
+            modes="run, debug"
+            name="HVM Generic Launcher"
+            sourceLocatorId="icecaptools.launching.HVMSourceLookupDirector"
+            sourcePathComputerId="icecaptools.launching.HVMSourcePathComputer">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="icecaptools.HVMPOSIXLaunchConfigurationType"
+            icon="icons/pc.gif"
+            id="icecaptools.POSIXlaunchConfigurationTypeImage">
+      </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="icecaptools.HVMEV3LaunchConfigurationType"
+            icon="icons/ev3.gif"
+            id="icecaptools.EV3launchConfigurationTypeImage">
+      </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="icecaptools.HVMBeagleBoneLaunchConfigurationType"
+            icon="icons/beagle.png"
+            id="icecaptools.BeagleBonelaunchConfigurationTypeImage">
+      </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="icecaptools.HVMArduinoLaunchConfigurationType"
+            icon="icons/arduino.png"
+            id="icecaptools.ArduinolaunchConfigurationTypeImage">
+      </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="icecaptools.HVMGenericLaunchConfigurationType"
+            icon="icons/generic.png"
+            id="icecaptools.GenericlaunchConfigurationTypeImage">
+      </launchConfigurationTypeImage>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="icecaptools.launching.HVMPOSIXLaunchTabGroup"
+            id="icecaptools.POSIXlaunchConfigurationTabGroup"
+            type="icecaptools.HVMPOSIXLaunchConfigurationType">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="icecaptools.launching.ev3.HVMEV3LaunchTabGroup"
+            id="icecaptools.EV3launchConfigurationTabGroup"
+            type="icecaptools.HVMEV3LaunchConfigurationType">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="icecaptools.launching.beaglebone.HVMBeagleBoneLaunchTabGroup"
+            id="icecaptools.BeagleBonelaunchConfigurationTabGroup"
+            type="icecaptools.HVMBeagleBoneLaunchConfigurationType">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="icecaptools.launching.arduino.HVMArduinoLaunchTabGroup"
+            id="icecaptools.ArduinolaunchConfigurationTabGroup"
+            type="icecaptools.HVMArduinoLaunchConfigurationType">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="icecaptools.launching.HVMGenericLaunchTabGroup"
+            id="icecaptools.GenericlaunchConfigurationTabGroup"
+            type="icecaptools.HVMGenericLaunchConfigurationType">
+      </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.sourceLocators">
+      <sourceLocator
+            class="icecaptools.launching.HVMSourceLookupDirector"
+            id="icecaptools.launching.HVMSourceLookupDirector"
+            name="HVM Source Lookup Director">
+      </sourceLocator>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.sourcePathComputers">
+      <sourcePathComputer
+            class="icecaptools.launching.HVMSourcePathComputer"
+            id="icecaptools.launching.HVMSourcePathComputer">
+      </sourcePathComputer>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.debugModelPresentations">
+      <debugModelPresentation
+            class="icecaptools.debugging.HVMDebugModelPresentation"
+            id="icecaptools.launching.hvm">
+      </debugModelPresentation>
+   </extension>
+
+</plugin>

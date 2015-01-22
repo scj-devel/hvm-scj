@@ -1,0 +1,1 @@
+scp -r web/* root@icelab.dk:/usr/local/apache-tomcat-5.5.26/webapps/ROOT/.

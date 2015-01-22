@@ -1,0 +1,31 @@
+Persistent fields
+-----------------
+
+If an object contains volatile fields, some part of that object will be placed
+in a special heap, the pheap. This heap will be placed in ROM in the final
+executable.
+
+The GC will return a reference to that part of the object which is placed in
+phead, so the reference will point into pheap.
+
+The object in pheap will, apart from its volatile fields, contain a pointer 
+into the normal heap. This pointer will point to its non-volatile fields.
+
+Influence on bytecodes
+----------------------
+
+The new bytecode will call gc_allocateObject supplying it with two parameters - 
+the size of the volatile fields and the size of the non-volatile fields.
+
+gc_allocateObject will allocate the object in pheap (if applicable) and the 
+normal heap.
+
+Objects without volatile fields, will be kept entirely in the normal heap.
+
+the putfield bytecode will have a reference to the object either in pheap
+or the normal heap. It will know whether this reference is one or the other.
+
+If it is a reference into pheap special lookup procedures are in effect.
+
+todo
+----

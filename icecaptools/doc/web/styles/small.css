@@ -1,0 +1,212 @@
+@charset "UTF-8";
+/* CSS Document */
+
+* {
+	margin: 0px;
+	padding: 0px;
+}
+body {
+	background-color: #FFF;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	line-height: 20px;
+	background-image: none;
+}
+#wrapper {
+	margin-right: auto;
+	margin-left: auto;
+	position: relative;
+	max-width: 980px;
+	background-color: #FFF;
+}
+header {
+	/* [disabled]background-image: url(../images/banner_lille.jpg); */
+	/* [disabled]background-repeat: no-repeat; */
+	/* [disabled]background-position: right 0px; */
+	height: 110px;
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
+	border-bottom-color: #336699;
+}
+header a.logo {
+	/* [disabled]background-image: url(../images/logo_lille.png); */
+	background-repeat: no-repeat;
+	height: 110px;
+	width: 100%;
+	position: absolute;
+	display: block;
+	/* [disabled]right: 30px; */
+	top: 0px;
+	background-position: 40px;
+}
+
+#intro_left {
+	/* [disabled]background-color: #369; */
+	float: none;
+	width: 90%;
+	padding: 5%;
+	border-radius: 10px;
+}
+#intro_right {
+	/* [disabled]background-color: #369; */
+	float: none;
+	width: 90%;
+	padding: 5%;
+	border-radius: 10px;
+	margin-bottom: 20px;
+}
+.intro_box_text {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	color: #FFF;
+	line-height: normal;
+	margin-bottom: 10px;
+}
+ul .intro_box_text {
+	margin-left: 3%;
+}
+#text {
+	clear: both;
+}
+
+article {
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+.boks_indhold {
+}
+a.boks_link {
+	font-size: 0.9em;
+	font-weight: bolder;
+	text-decoration: none;
+	text-transform: uppercase;
+	margin-top: 5px;
+}
+.bokse_container {
+	padding: 0px;
+}
+.bokse {
+	float: none;
+	width: 90%;
+	background-position: 20px 13px;
+	padding-top: 10px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	border: 1px solid #51A2CA;
+	border-radius: 10px;
+	margin-right: auto;
+	margin-left: auto;
+}
+.boks_indhold {
+	padding: 3%;
+	width: 94%;
+}
+.en {
+	/* [disabled]background-image: url(../images/boks1.jpg); */
+	background-repeat: no-repeat;
+}
+.to {
+	/* [disabled]background-image: url(../images/boks2.jpg); */
+	background-repeat: no-repeat;
+	margin-bottom: 15px;
+}
+.tre {
+	/* [disabled]background-image: url(../images/boks3.jpg); */
+	background-repeat: no-repeat;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+
+
+footer {
+	/* [disabled]background-color: #6CF; */
+	color: #FFF;
+	padding-top: 8px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+	/* [disabled]font-size: 0.9em; */
+}
+nav {
+	display: block;
+	width: 100%;
+	position: static;
+	/* [disabled]background-color: #66CCFF; */
+	top: 200px;
+	padding-top: 10px;
+	padding-right: 0px;
+	padding-bottom: 10px;
+	padding-left: 0px;
+	height: auto;
+}
+.stopper {
+	clear: both;
+}
+nav a:link	 {
+	text-transform: uppercase;
+	/* [disabled]color: #666; */
+	font-weight: bolder;
+	text-decoration: none;
+	display: block;
+	font-size: 1em;
+	background-image: url(../images/mobile_link_arrow.png);
+	background-repeat: no-repeat;
+	background-position: right center;
+	border-radius: 12px;
+	border: 1px solid #FFF;
+	margin: 15px;
+	padding: 9px;
+}
+nav a:hover {
+	color: #FFF;
+	background-color: rgba(255,255,255,.15);
+}
+h1 {
+	font-size: 36px;
+	/* [disabled]font-weight: normal; */
+	/* [disabled]color: #66F; */
+	margin-bottom: 3px;
+	line-height: normal;
+}
+h2 {
+	font-size: 16px;
+}
+h3 {
+	font-size: 1.5em;
+}
+a {
+	color: #33C;
+}
+a:link {
+	color: #33C;
+}
+a:visited {
+	color: #33C;
+}
+a:hover {
+	color: #F90;
+}
+.foto_right_tutorial {
+	float: none;
+	width: 100%;
+}
+.foto_right_tutorial_40 {
+	float: none;
+	width: 100%;
+}
+.foto_full_width {
+	float: none;
+	width: 100%;
+}
+.foto_left_tutorial {
+	float: none;
+	width: 100%;
+}
+.foto_right_tutorial_75 {
+	float: none;
+	width: 100%;
+}

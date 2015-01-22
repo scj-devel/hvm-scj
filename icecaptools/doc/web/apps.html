@@ -1,0 +1,87 @@
+<!doctype html>
+<html><!-- InstanceBegin template="/Templates/template_icelab.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Icelab - HVM - apps for industrial devices</title>
+<!-- InstanceEndEditable -->
+<link href="styles/main.css" rel="stylesheet" type="text/css">
+<!-- small -->
+<link href="styles/small.css" rel="stylesheet" type="text/css" media="only screen and (max-width:500px)">
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+
+<body>
+
+<div id="wrapper">
+
+  <header>
+  <a class="logo" href="index.html"></a>
+  </header>
+  <!-- InstanceBeginEditable name="article" -->
+  <article>
+    <h1>HVM - apps for industrial devices </h1>
+    <p>&nbsp;</p>
+    <div class="intro_box_text" id="intro_left">
+      <ul>
+        <li class="intro_box_text">Download Java apps to micro-controller platforms</li>
+        <li class="intro_box_text">Extend fixed firmware behavior with in-the-field loadable apps</li>
+        <li class="intro_box_text">Open up embedded platforms</li>
+        <li class="intro_box_text">Let the costumer finish the programming</li>
+      </ul>
+    </div>
+    <div class="intro_box_text" id="intro_right">
+      <p class="intro_box_textOVER">The HVM (Hardware near Virtual Machine) is a lean Java VM for embedded systems. It</p>
+      <p>&nbsp;</p>
+      <ul>
+        <li class="intro_box_text">Integrates with existing C-based development and execution environments</li>
+        <li class="intro_box_text">Requires 20 kB ROM and 500 bytes RAM</li>
+        <li class="intro_box_text">Launching and debugging in Eclipse</li>
+        <li class="intro_box_text">Supports Java application download and version update without requiring a full firmware upgrade</li>
+      </ul>
+    </div>
+    <p>&nbsp;</p>
+    <div id="text">
+      <div class="foto_right_tutorial">
+        <img src="images/architecture.jpg" width="100%" />
+      </div>
+      <h2>The HVM supports the following features specifically targeted at embedded systems: </h2>
+      <ol>
+        <li>Intelligent class linking. Only those parts of the used libraries that may be accessed at runtime are linked with the application.</li>
+        <li>SDK independence. The HVM works with standard Java libraries such as the latest SDK from Oracle, but it will also work with domain specific libraries or SDKs from other vendors.</li>
+        <li>OS independence. The HVM is designed to run without an OS (bare bone), but may be easily integrated with other OSs such as e.g. Linux and Windows.</li>
+        <li>Simple build procedure. Building HVM applications can be done from the command line on all hosts where a C compiler for the target is available. The build procedure is basically &quot;gcc -nostdlib *.c&quot;</li>
+        <li>HVM supports Hardware Objects and 1st level interrupt handling in Java. The Java language has been seamlessly extended to allow for direct memory access (including access to device registers and interrupt control registers). Everything the embedded developer is accustomed to be able to do in C/assembler, is also possible in HVM.</li>
+        <li>HVM is ROM/RAM aware. HVM is careful to place read-only data in read-only data segments to minimize the use of RAM. The interpreter itself occupies about 30 kB of ROM and the default Java heap size is 4 kB.</li>
+        <li>Hybrid execution style. Any subset of reachable methods can be marked for compilation. Marked methods will be compiled into C code by an ahead-of-time compiler. Unmarked methods will be interpreted. The selection of which methods to compile is supported through an Eclipse view, where the developer can browse reachable methods. Compiled methods execute significantly faster than interpreted methods, but they take up more ROM memory. More elaborate evaluation results available in the evaluation document.<br>
+        </li>
+      </ol>
+      <p>&nbsp;</p>
+      <p>See the tutorial for detailed information about how to run the HVM on a particular target.</p>
+    </div>
+ </article>
+  <!-- InstanceEndEditable --><!-- InstanceBeginEditable name="bokse" --><!-- InstanceEndEditable -->
+  <nav>
+    <p>
+      <a href="index.html">Home</a>
+      <a href="overview.html">Overview</a>
+      <a href="apps.html">Apps</a>
+      <a href="licensing.html">Licensing</a>
+      <a href="references.html">References</a>
+      <a href="download.html">Download</a>
+      <a href="tutorial.html">Tutorial</a>
+    <a href="news.html">News</a></p>
+  </nav>
+ 
+  
+  <footer>Stephan Korsholm, icecap, Denmark<br>
+    email: skr@icelab.dk<br>
+  phone: +4587554244</footer>
+
+</div>
+
+
+</body>
+<!-- InstanceEnd --></html>

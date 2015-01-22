@@ -1,0 +1,390 @@
+<project name="icecaptools" default="dist" basedir=".">
+	<description>
+		This is an Ant build file for icecaptools and icecapvm
+	</description>
+
+	<property name="src" location="../src" />
+	<property name="build" location="../bin" />
+	<property name="dist" location="../dist" />
+	<property name="lib" location="../lib" />
+	<property name="output.jar" value="icecaptools" />
+	<property name="icecapvm.output.name" value="icecapvm.exe" />
+
+	<!--
+		IDEAS:
+		
+			Avoid need to pass sp as parameter
+			Don't return anything if exceptions cannot be thrown
+			Put constants in flash
+			Let the HVM when running on PC platforms dynamically extend it's heap size as required.
+						
+	    These two properties are defining tests being used in compilation manager testing.
+		Values are comma- or space-separated. All files included when include omitted.
+		TestDelayNative.class, TestAllocationArea.class, TestProcess*.class, TestExecuteWithStack.class, TestArrayList.class, TestSCJ*.class
+		
+		 />
+		
+	-->
+	<property name="tests.include" value="TestSCJ*.class" />
+	<property name="tests.exclude" value="TestMiniTests.class, TestArrayList.class, TestCAS.class, TestHashMap.class, TestHashSet.class, TestIntegerCache.class" />
+
+	<condition property="isLinux">
+		<os family="unix" />
+	</condition>
+
+	<target name="if_Unix" if="isLinux">
+		<property name="icecapvm.output.name" value="icecapvm.elf" />
+	</target>
+
+	<property name="failonerror" value="true" />
+	<!-- solves Eclipse plugin dependencies -->
+	<property name="eclipsePath" value="/usr/local/eclipse" />
+
+	<path id="icecapvm.dir">
+		<pathelement path="../../icecapvm" />
+	</path>
+
+	<path id="icecapsdk.dir">
+		<pathelement path="../../icecapSDK" />
+	</path>
+
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${build}" />
+	</target>
+
+	<target name="compile.icecaptools" depends="init" description="compile the source ">
+		<!--
+			Compile the java code from ${src} into ${build}
+			setup classpath as needed
+		-->
+
+		<javac srcdir="${src}" destdir="${build}">
+			<classpath>
+				<pathelement path="${classpath}" />
+
+				<pathelement location="${lib}/bcel-6.0.jar" />
+				<pathelement location="${lib}/junit.jar" />
+				<pathelement location="../../icecapSDK/bin" />
+				<fileset dir="${eclipsePath}/plugins">
+					<include name="*osgi*.jar" />
+					<include name="*org.eclipse.*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<macrodef name="compile.minitest">
+		<attribute name="minitestname" />
+		<sequential>
+			<java classname="icecaptools.compiler.CompilationManager" classpath="${java.library.path};${lib};${build}" fork="true" failonerror="true">
+				<jvmarg line="-Xss10M" />
+				<classpath>
+					<pathelement path="${classpath}" />
+					<pathelement path="../../icecapSDK/bin" />
+					<pathelement location="${lib}/bcel-6.0.jar" />
+					<fileset dir="${eclipsePath}/plugins">
+						<include name="*osgi*.jar" />
+						<include name="*org.eclipse.*.jar" />
+					</fileset>
+				</classpath>
+				<arg value="/home/hso/java/SCJ_Workspace/icecaptools/bin" />
+				<arg value="test.icecapvm.minitests" />
+				<arg value="@{minitestname}" />
+			</java>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="compile.minitest.aot">
+		<attribute name="minitestname" />
+		<sequential>
+			<java classname="icecaptools.compiler.CompilationManager" classpath="${java.library.path};${lib};${build}" fork="true" failonerror="true">
+				<jvmarg line="-Xss10M" />
+				<classpath>
+					<pathelement path="${classpath}" />
+					<pathelement path="../../icecapSDK/bin" />
+					<pathelement location="${lib}/bcel-6.0.jar" />
+					<fileset dir="${eclipsePath}/plugins">
+						<include name="*osgi*.jar" />
+						<include name="*org.eclipse.*.jar" />
+					</fileset>
+				</classpath>
+				<arg value="/home/hso/java/SCJ_Workspace/icecapvm/tools/bin" />
+				<arg value="test.icecapvm.minitests" />
+				<arg value="@{minitestname}" />
+				<arg value="-aot" />
+			</java>
+		</sequential>
+	</macrodef>
+
+	<target name="run.compilationmanager.test" description="Run icecaptools compilation manager">
+		<fileset id="fs" dir="${build}/test/icecapvm/minitests" includes="${tests.include}" excludes="${tests.exclude}" />
+		<script language="javascript">
+			<![CDATA[
+				// Get the files (array) of that fileset
+				ds = fs.getDirectoryScanner(project);
+				srcFiles = ds.getIncludedFiles();
+				var echoTask = project.createTask("echo");
+				var task = icecaptools.createTask("compile.minitest");
+
+				for(i = 0; i < srcFiles.length; i++){
+				    if (!srcFiles[i].contains("$"))
+				    {
+					   echoTask.setMessage('Processing file: ' + srcFiles[i]);
+					   echoTask.perform();
+
+					   task.setDynamicAttribute('minitestname', srcFiles[i].replace(".class$", ""));
+					   task.perform();
+
+					   project.executeTarget('run.icecapvm');
+					   echoTask.setMessage('Last processed file: ' + srcFiles[i]);
+					   echoTask.perform();
+			        }
+				}
+			]]>
+		</script>
+		<!-- <compileMiniTest miniTestName="Test10" /> -->
+	</target>
+
+	<target name="run.compilationmanager.download" depends="download.clean" description="Run icecaptools compilation manager">
+		<fileset id="fs" dir="${build}/test/icecapvm/minitests" includes="${tests.include}" excludes="${tests.exclude}" />
+		<script language="javascript">
+			<![CDATA[
+					// Get the files (array) of that fileset
+					ds = fs.getDirectoryScanner(project);
+					srcFiles = ds.getIncludedFiles();
+					var echoTask = project.createTask("echo");
+					var task = icecaptools.createTask("compile.minitest");
+
+					for(i = 0; i < srcFiles.length; i++){
+					    if (!srcFiles[i].contains("$"))
+					    {
+						   echoTask.setMessage('Processing file: ' + srcFiles[i]);
+						   echoTask.perform();
+
+						   task.setDynamicAttribute('minitestname', srcFiles[i].replace(".class$", ""));
+						   task.perform();
+
+						   project.executeTarget('run.icecapvm.download');
+						   echoTask.setMessage('Last processed file: ' + srcFiles[i]);
+						   echoTask.perform();
+				        }
+					}
+				]]>
+		</script>
+		<!-- <compileMiniTest miniTestName="Test10" /> -->
+	</target>
+
+	<target name="run.compilationmanager.test.aot" description="Run icecaptools compilation manager">
+		<fileset id="fs" dir="${build}/test/icecapvm/minitests" includes="${tests.include}" excludes="${tests.exclude}" />
+		<script language="javascript">
+			<![CDATA[
+					// Get the files (array) of that fileset
+					ds = fs.getDirectoryScanner(project);
+					srcFiles = ds.getIncludedFiles();
+					var echoTask = project.createTask("echo");
+					var task = icecaptools.createTask("compile.minitest.aot");
+
+					for(i = 0; i < srcFiles.length; i++){
+					    if (!srcFiles[i].contains("$"))
+					    {
+						   echoTask.setMessage('Processing file: ' + srcFiles[i]);
+						   echoTask.perform();
+
+						   task.setDynamicAttribute('minitestname', srcFiles[i].replace(".class$", ""));
+						   task.perform();
+
+						   project.executeTarget('run.icecapvm');
+						   echoTask.setMessage('Last processed file: ' + srcFiles[i]);
+						   echoTask.perform();
+				        }
+					}
+				]]>
+		</script>
+		<!-- <compileMiniTest miniTestName="Test10" /> -->
+	</target>
+
+
+	<target name="copy.compilationmanager.output" description="Copy classes.[ch] and methods.[ch] to icecapvm dir">
+		<copy file="../classes.c" overwrite="true" todir="${toString:icecapvm.dir}/src" />
+		<copy file="../classes.h" overwrite="true" todir="${toString:icecapvm.dir}/src" />
+		<copy file="../methods.c" overwrite="true" todir="${toString:icecapvm.dir}/src" />
+		<copy file="../methods.h" overwrite="true" todir="${toString:icecapvm.dir}/src" />
+		<copy file="../natives_target.c" overwrite="true" todir="${toString:icecapvm.dir}/src" />
+		<copy file="../natives_host.c" overwrite="true" todir="${toString:icecapvm.dir}/src" />
+		<copy file="../natives.h" overwrite="true" todir="${toString:icecapvm.dir}/src" />
+	</target>
+
+	<target name="compile.clean" description="Delete selected autogenerated files">
+		<delete file="${toString:icecapvm.dir}/src/methods.c" />
+		<delete file="${toString:icecapvm.dir}/src/classes.c" />
+		<delete file="methods.c" />
+		<delete file="classes.c" />
+	</target>
+
+	<target name="download.clean" description="Delete selected autogenerated files">
+		<delete file="${toString:icecapvm.dir}/src/natives_target.c" />
+		<delete file="${toString:icecapvm.dir}/src/natives_host.c" />
+		<delete file="${toString:icecapvm.dir}/src/natives.h" />
+		<delete file="natives_target.c" />
+		<delete file="natives_host.c" />
+		<delete file="natives.h" />
+	</target>
+
+	
+	<target name="compile.icecapvm" depends="copy.compilationmanager.output" description="compiles icecapvm using gcc ">
+		<exec executable="gcc" dir="${toString:icecapvm.dir}/src" searchpath="true" failonerror="${failonerror}">
+			<arg value="--version" />
+		</exec>
+		<exec executable="gcc" dir="${toString:icecapvm.dir}/src" searchpath="true" failonerror="${failonerror}">
+			<arg value="-Wall" />
+			<arg value="-pedantic" />
+			<arg value="-g" />
+			<arg value="-O0" />
+			<arg value="-DPC32" />
+			<arg value="-DSUPPORTGC" />
+			<arg value="-DJAVA_HEAP_SIZE=10240000" />
+			<arg value="classes.c" />
+			<arg value="icecapvm.c" />
+			<arg value="print.c" />
+			<arg value="methodinterpreter.c" />
+			<arg value="methods.c" />
+			<arg value="gc.c" />
+			<arg value="allocation_point.c" />
+			<arg value="rom_heap.c" />
+			<arg value="rom_access.c" />
+			<arg value="natives_allOS.c" />
+			<arg value="natives_i86.c" />
+			<arg value="native_scj.c" />
+			<arg value="x86_32_interrupt.s" />
+			<arg value="natives_jml.c" />
+			<arg value="-o" />
+			<arg value="${toString:icecapvm.dir}/src/${icecapvm.output.name}" />
+			<arg value="-lpthread" />
+			<arg value="-lrt" />
+			<arg value="-lm" />
+		</exec>
+	</target>
+	<!--
+	<target name="compile.icecapvm" depends="copy.compilationmanager.output" description="compiles icecapvm using gcc ">
+		<exec executable="gcc" dir="${toString:icecapvm.dir}/src" searchpath="true" failonerror="${failonerror}">
+			<arg value="-version" />
+		</exec>
+		<exec executable="gcc" dir="${toString:icecapvm.dir}/src" searchpath="true" failonerror="${failonerror}">
+			<arg value="-Wall" />
+			<arg value="-Werror" />
+			<arg value="-pedantic" />
+			<arg value="-g" />
+			<arg value="-Os" />
+			<arg value="-DPC64" />
+			<arg value="-DSUPPORTGC" />
+			<arg value="-DJAVA_HEAP_SIZE=10240000" />
+			<arg value="classes.c" />
+			<arg value="icecapvm.c" />
+			<arg value="print.c" />
+			<arg value="methodinterpreter.c" />
+			<arg value="methods.c" />
+			<arg value="gc.c" />
+			<arg value="allocation_point.c" />
+			<arg value="rom_heap.c" />
+			<arg value="rom_access.c" />
+			<arg value="natives_allOS.c" />
+			<arg value="natives_i86.c" />
+			<arg value="native_scj.c" />
+			<arg value="x86_64_interrupt.s" />
+			<arg value="-o" />
+			<arg value="${toString:icecapvm.dir}/src/${icecapvm.output.name}" />
+			<arg value="-L/usr/lib64" />
+			<arg value="-lpthread" />
+			<arg value="-lrt" />
+			<arg value="-lm" />
+		</exec>
+	</target>
+	-->
+	
+	<target name="compile.icecapvm.serializer" depends="copy.compilationmanager.output" description="compiles serializer using gcc ">
+		<exec executable="gcc" dir="${toString:icecapvm.dir}/src/loader" searchpath="true" failonerror="${failonerror}">
+			<arg value="-Wall" />
+			<arg value="-Werror" />
+			<arg value="-pedantic" />
+			<arg value="-DPC32" />
+			<arg value="serializer.c" />
+			<arg value="../methods.c" />
+			<arg value="../classes.c" />
+			<arg value="../natives_host.c" />
+			<arg value="io_i86.c" />
+			<arg value="io_allOS.c" />
+		</exec>
+	</target>
+
+	<target name="run.icecapvm.serializer" depends="compile.icecapvm.serializer" description="Executes serializer">
+		<exec executable="${toString:icecapvm.dir}/src/loader/a.out" resultproperty="exitCode" failonerror="${failonerror}" dir="${toString:icecapvm.dir}/src/loader" />
+	</target>
+
+	<target name="copy.icecapvm.serializer" depends="run.icecapvm.serializer" description="Copies output from serializer">
+		<copy file="${toString:icecapvm.dir}/src/loader/classes.h" overwrite="true" todir="${toString:icecapvm.dir}/src" />
+		<copy file="${toString:icecapvm.dir}/src/loader/app.ice" overwrite="true" todir="${toString:icecapvm.dir}/src" />
+		<copy file="${toString:icecapvm.dir}/src/loader/methods.h" overwrite="true" todir="${toString:icecapvm.dir}/src" />
+	</target>
+
+	<target name="compile.icecapvm.download" depends="copy.icecapvm.serializer" description="compiles icecapvm using gcc ">
+		<exec executable="gcc" dir="${toString:icecapvm.dir}/src" searchpath="true" failonerror="${failonerror}">
+			<arg value="--version" />
+		</exec>
+		<exec executable="gcc" dir="${toString:icecapvm.dir}/src" searchpath="true" failonerror="${failonerror}">
+			<arg value="-Wall" />
+			<arg value="-Werror" />
+			<arg value="-pedantic" />
+			<arg value="-g" />
+			<arg value="-Os" />
+			<arg value="-DPC32" />
+			<arg value="-DJAVA_HEAP_SIZE=10240000" />
+			<arg value="loader/classes.c" />
+			<arg value="icecapvm.c" />
+			<arg value="print.c" />
+			<arg value="methodinterpreter.c" />
+			<arg value="loader/methods.c" />
+			<arg value="loader/io_allOS.c" />
+			<arg value="loader/io_i86.c" />
+			<arg value="gc.c" />
+			<arg value="allocation_point.c" />
+			<arg value="rom_heap.c" />
+			<arg value="rom_access.c" />
+			<arg value="natives_allOS.c" />
+			<arg value="natives_target.c" />
+			<arg value="natives_i86.c" />
+			<arg value="native_scj.c" />
+			<arg value="x86_32_interrupt.s" />
+			<arg value="-o" />
+			<arg value="${toString:icecapvm.dir}/src/${icecapvm.output.name}" />
+			<arg value="-L/usr/lib64" />
+			<arg value="-lpthread" />
+			<arg value="-lrt" />
+			<arg value="-lm" />
+		</exec>
+	</target>
+
+	<target name="run.icecapvm" depends="compile.icecapvm" description="Tries to execute compiled 'icecapvm' binary, fails if exit status != 0">
+		<exec executable="${toString:icecapvm.dir}/src/${icecapvm.output.name}" resultproperty="exitCode" failonerror="${failonerror}" />
+		<echo>VM returned : ${exitCode}</echo>
+	</target>
+
+	<target name="run.icecapvm.download" depends="compile.icecapvm.download" description="Tries to execute compiled 'icecapvm' binary, fails if exit status != 0">
+		<exec executable="${toString:icecapvm.dir}/src/${icecapvm.output.name}" resultproperty="exitCode" failonerror="${failonerror}" dir="${toString:icecapvm.dir}/src" />
+		<echo>VM returned : ${exitCode}</echo>
+	</target>
+
+	<target name="dist" depends="compile.icecaptools" description="generate the distribution">
+		<!-- Create the distribution directory -->
+		<mkdir dir="${dist}" />
+		<jar jarfile="${dist}/${output.jar}.jar" basedir="${build}" index="true" />
+	</target>
+
+	<target name="clean" description="clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${toString:icecapvm.dir}/Release/src" />
+	</target>
+
+</project>

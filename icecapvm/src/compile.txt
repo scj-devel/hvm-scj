@@ -1,0 +1,1 @@
+gcc -m32 -Wall -Os -DREPORTCYCLES -DPC64 -DPRINTFSUPPORT classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c instruction_count.c -lpapi

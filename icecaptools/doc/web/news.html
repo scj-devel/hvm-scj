@@ -1,0 +1,335 @@
+<!doctype html>
+<html><!-- InstanceBegin template="/Templates/template_icelab.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Icelab - HVM - apps for industrial devices</title>
+<!-- InstanceEndEditable -->
+<link href="styles/main.css" rel="stylesheet" type="text/css">
+<!-- small -->
+<link href="styles/small.css" rel="stylesheet" type="text/css" media="only screen and (max-width:500px)">
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+
+<body>
+
+<div id="wrapper">
+
+  <header>
+  <a class="logo" href="index.html"></a>
+  </header>
+  <!-- InstanceBeginEditable name="article" -->
+  <article>
+<h1>News</h1>
+<ul>
+  <li>fre aug 22 09:20:38 CEST 2014
+    <ul>
+      <li>Reduced overall RAM memory requirements and SCJ RAM memory requirements specifically.
+    </ul>
+  </li>
+  <li>man jul 28 15:25:34 CEST 2014
+    <ul>
+      <li>The HVM now runs under Java 8 and supports the use of Java 8 in HVM applications. This is bound to give unforseen problems. So please report any issues. 
+    </ul>
+  </li>
+  <li>Thu mar  6 20:31:23 CET 2014
+    <ul>
+      <li>The HVM is now open source. Check out the download and licensing sections      
+    </ul>
+  </li>
+  <li>Sun feb  2 20:34:51 CET 2014
+    <ul>
+      <li>Improving performance of SCJ applications running on EV3</li>
+      <li>Updated icecapSDK.jar - mostly javadoc and jml, a few optimizations</li>      
+    </ul>
+  </li>
+   <li>Sun jan 26 21:45:40 CET 2014
+    <ul>
+      <li>Arduino support works with Windows hosts</li>
+    </ul>
+  </li>
+  <li>fre jan 17 14:28:22 CET 2014
+    <ul>
+      <li>Arduino output (devices.Console.println("hello")) is now being routed back to Eclipse and displayed in the Eclipse console</li>
+    </ul>
+  </li>
+  <li>tir jan 14 12:17:58 CET 2014
+    <ul>
+      <li>Added the option to excluded classes and methods from the
+      executable, even though the dependency analyzer includes
+      them. Right click on a selection of items in the dependency view
+      to exclude them. Excluded methods are declared as external native
+      methods, which must be given an empty implementation. Do this in
+      natives_allOS.c, or some other file. Some commonly excluded
+      natives have been added to natives_allOS.c already. These can be
+      used as templates for others. Excluding the proper set of native
+      methods reduces the application size and RAM requirements, which
+      is especially good for the Arduino Uno platform. For EV3 or
+      Beaglebone there is not much point in playing around with
+      exclusion of methods.</li>
+    </ul>
+  </li>
+  <li>Man dec 16 12:45:16 CET 2013
+    <ul>
+      <li>Added Lego EV3 support</li>
+    </ul>
+  </li>
+  <li>Sun Nov  3 10:30:05 CET 2013
+    <ul>
+      <li>Added support for Java level debugging in Eclipse</li>
+    </ul>
+  </li>
+  <li>Tue Oct 15 16:23:30 CEST 2013
+    <ul>
+      <li>Added a new Eclipse Launch Configuration to the plugin for easy launching on POSIX hosts</li>
+    </ul>
+  </li>
+  <li>Mon Sep 16 12:27:16 CEST 2013
+    <ul>
+      <li>Added a NXT Java application  <a href="http://icelab.dk/resources/NXTBrick.tar">NXTBrick.tar</a>  to demonstrate how to write text to the NXT display using only hardware objects.</li>
+    </ul>
+  </li>
+  <li>Fri May 31 10:09:14 CEST 2013
+    <ul>
+      <li>Support for multi dimensional arrays (both interpreter and compiler)</li>
+      <li>Compiler optimizations:
+        <ul>
+          <li>Class initializers are now run before main is started. This avoids the need for checking whether they should be run later and simplifies the generated C significantly. This behavior is not proper Java behavior. It is required for SCJ applications, and may be acceptable in many embedded scenarios.</li>
+          <li>Object and static field access optimized. In compiled code object and static field accesses are now implemented through access to members of structs (the natural way). This allows GCC to produce tighter code than with the previous solution. Structs are automatically generated for all classes and for static class data. This works across compilation/interpretation boundaries and does not assume anything about how the compiler will layout the structs.</li>
+          </ul>
+        </li>
+      <li>Simple reflection layer has been added to support ongoing GC work. Look at classes ObjectInfo and ClassInfo and the tests referring those. Can basically be used to scan the heap and stacks for references</li>
+      <li>A new Round-Robin Scheduler has been added. Very simple. Supports unprioritized preemptive scheduling of tasks. See the new Thread package in icecapSDK</li>
+      </ul>
+  </li>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Wed Apr 24 14:42:41 CEST 2013
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Added limited reflection support. See reflect package in icecapSDK.jar, and tests in 'TestReflectClasses1' and 'TestReflectClasses2'</li>
+    <li>Various other minor corrections</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Mon Jan 28 13:49:41 CET 2013
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Added support for application download and upgrade. Only supported for interpreted code. Contact the author for more information</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Tue Dec 18 12:47:30 CET 2012
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Exported the SCJ scoped memory model to be used in non-SCJ applications. Look at TestAllocationArea.java for an example</li>
+    <li>Exported the SCJ Process model to be used in non-SCJ applications. Look at TestProcess*.java for an example</li>
+    <li>Various bug fixes. Especially process preemption issues and AllocationArea issues: static data and constants are now allocated in immortal memory</li>
+    <li>Avoid redundant check for class initialization. Reduces code size for compiled methods significantly</li>
+    <li>SCJ refactored and uses a clean interface towards the VM (look at VM.java)</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Sat Oct 20 22:58:32 CEST 2012
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Added cr16c_interrupts.s to support preemptive scheduling on the CR16C embeedded target</li>
+    <li>Added the CR16CRealtimeClock class to the SDK to support a real time clock for the CR16C embeedded target</li>
+    <li>Added the TestSCJPrioritySchedule2 to the SDK. This has been verified to run on the CR16C embeedded target</li>
+    <li>Enabling the SCJ infrastructure (including preemptive scheduling) for low-end embedded 8 and 16 bit micro controllers should be straight forward based on the CR16C example. Readers are invited to contact the author for assistance in enabling new embedded targets</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Fri Jul 6 12:45:53 CEST 2012
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Added <a href="http://icelab.dk/resources/evaluation.pdf">evaluation document</a></li>
+    <li>Updated SCJ level 0 + 1 in icecapSDK</li>
+    <li>Added miniCDj benchmark to icecapSDK</li>
+    <li>Added C benchmarks <a href="http://icelab.dk/resources/determinant.c">determinant.c</a>, <a href="http://icelab.dk/resources/quicksort.c">quicksort.c</a>, <a href="http://icelab.dk/resources/wordreader.c">wordreader.c</a> and <a href="http://icelab.dk/resources/trie.c">trie.c</a></li>
+    <li>To measure instruction count use libpapi and <a href="http://icelab.dk/resources/instruction_count.c">instruction_count.c</a></li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Fri Jun 15 11:51:09 CEST 2012
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Optimized AOT compiler. On 32 bit platforms the HVM is on par with KESO &amp; FijiVM. On 8 bit platforms half as fast as KESO</li>
+    <li>Added native task switching (no POSIX required)</li>
+    <li>Added support of SCJ level 0 and 1 to javax.safetycritical packages</li>
+    <li>Added new test suite to test.icecapvm.minitest packages. These tests can be used as example programs and indicate what the HVM can and cannot handle</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Fri Apr 20 12:49:14 CEST 2012
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Added preliminary support for the Thread.class and Semaphore.class</li>
+    <li>Minimized the VM, only include those parts in the executable that are actually used. Simple Java programs are now approx 8KB</li>
+    <li>Add support for SCJ memory areas</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Thu Mar 8 11:34:03 CET 2012
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Using the CDT code formatter (if installed) to format generated code</li>
+    <li>Added scoped memory support</li>
+    <li>Added support for gcc-4.7.0 and Java 7. Java 7 leaks a lot more than Java 6, so be careful</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Thu Dec 22 11:41:18 CET 2011
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Optimized AOT compilation. Speed approx 6 times faster than interpretation, approx half as fast as compiled C</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Thu Nov 3 14:34:35 CET 2011
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Added support for AOT compilation of selected methods</li>
+    <li>Added dependency view for browsing the dependency extent</li>
+    <li>Various optimizations</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Thu Aug 11 15:44:03 CEST 2011</li>
+</ul>
+<ul>
+  <ul>
+    <li>Added support for arrays in ROM</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Tue May 3 14:26:34 CEST 2011
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Fixed error with inherited static native methods called on sub class but defined in super class</li>
+    <li>Added support for keeping entire objects or parts of objects in ROM in order to save heap memory</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Tue Apr 12 11:19:19 CEST 2011
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Added some project suggestions above</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Wed Jan 19 21:34:37 RST 2011
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Added the "wide" opcode</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Mon Jan 17 14:46:47 RST 2011
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Added HelloWorld example and explanation</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Sat Jan 15 21:14:03 RST 2011
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Fixed minor bugs in relation to big/little endian</li>
+    <li>Added example of using UART on CR16C to print messages on the console. Implemented using 1st level interrupts and HW objects</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Wed Jan 5 22:07:46 RST 2011
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Fixed bugs in relation to long static variables</li>
+    <li>Support added for handling exceptions thrown by static initializers</li>
+    <li>Updated icecapSDK to support the CR16C embedded processor from National</li>
+    <li>Embedded the interpreter into the plugin to ease installation and use</li>
+    </ul>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+  <li>Mon Dec 27 17:08:12 RST 2010
+  </li>
+</ul>
+<ul>
+  <ul>
+    <li>Fixed scalability issue: put class and method names in ROM</li>
+    <li>Added icecapSDK, an example of using interrupts and HW Objects on the ATMega2560</li>
+  </ul>
+</ul></article>
+  <!-- InstanceEndEditable --><!-- InstanceBeginEditable name="bokse" --><!-- InstanceEndEditable -->
+  <nav>
+    <p>
+      <a href="index.html">Home</a>
+      <a href="overview.html">Overview</a>
+      <a href="apps.html">Apps</a>
+      <a href="licensing.html">Licensing</a>
+      <a href="references.html">References</a>
+      <a href="download.html">Download</a>
+      <a href="tutorial.html">Tutorial</a>
+      <a href="http://www.icelab.dk/hvmforum/HVMForum?cmd=listentries">Forum</a>
+      <a href="news.html">News</a></p>
+  </nav>
+   <footer>Stephan Korsholm, icecap, Denmark<br>
+    email: skr@icelab.dk<br>
+  phone: +4587554244</footer>
+
+</div>
+
+
+</body>
+<!-- InstanceEnd --></html>

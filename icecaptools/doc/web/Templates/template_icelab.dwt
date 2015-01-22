@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>Icelab - HVM - apps for industrial devices</title>
+<!-- TemplateEndEditable -->
+<link href="../styles/main.css" rel="stylesheet" type="text/css">
+<!-- small -->
+<link href="../styles/small.css" rel="stylesheet" type="text/css" media="only screen and (max-width:500px)">
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+</head>
+
+<body>
+
+<div id="wrapper">
+
+  <header>
+  <a class="logo" href="../index.html"></a>
+  </header>
+  <!-- TemplateBeginEditable name="article" -->
+  <article>
+    <h1>HVM - apps for industrial devices </h1>
+    <p>&nbsp;</p>
+    <div class="intro_box_text" id="intro_left">
+      <ul>
+        <li class="intro_box_text">Download Java apps to micro-controller platforms</li>
+        <li class="intro_box_text">Extend fixed firmware behavior with in-the-field loadable apps</li>
+        <li class="intro_box_text">Open up embedded platforms</li>
+        <li class="intro_box_text">Let the costumer finish the programming</li>
+      </ul>
+    </div>
+    <div class="intro_box_text" id="intro_right">
+      <p class="intro_box_textOVER">The HVM (Hardware near Virtual Machine) is a lean Java VM for embedded systems. It</p>
+      <p>&nbsp;</p>
+      <ul>
+        <li class="intro_box_text">Integrates with existing C-based development and execution environments</li>
+        <li class="intro_box_text">Requires 20 kB ROM and 500 bytes RAM</li>
+        <li class="intro_box_text">Integrates with Eclipse</li>
+        <li class="intro_box_text">Supports Java application download and version update without requiring a full firmware upgrade</li>
+      </ul>
+    </div>
+    <p>&nbsp;</p>
+    <div id="text">
+      <h2>The HVM supports the following features specifically targeted at embedded systems:</h2>
+      <ol>
+        <li>Intelligent class linking. Only those parts of the used libraries that may be accessed at runtime are linked with the application.</li>
+        <li>SDK independence. The HVM works with standard Java libraries such as the latest SDK from Sun, but it will also work with domain specific libraries or SDKs from other vendors.</li>
+        <li>OS independence. The HVM is designed to run without an OS (bare bone), but may be easily integrated with other OSs such as e.g. Linux and Windows.</li>
+        <li>Simple build procedure. Building HVM applications can be done from the command line on all hosts where a C compiler for the target is available. The build procedure is basically &quot;gcc -nostdlib *.c&quot;</li>
+        <li>HVM supports Hardware Objects and 1st level interrupt handling in Java. The Java language has been seamlessly extended to allow for direct memory access (including access to device registers and interrupt control registers). Everything the embedded developer is accustomed to be able to do in C/assembler, is also possible in HVM.</li>
+        <li>HVM is ROM/RAM aware. HVM is careful to place read-only data in read-only data segments to minimize the use of RAM. The interpreter itself occupies about 30 kB of ROM and the default Java heap size is 4 kB.</li>
+        <li>Hybrid execution style. Any subset of reachable methods can be marked for compilation. Marked methods will be compiled into C code by an ahead-of-time compiler. Unmarked methods will be interpreted. The selection of which methods to compile is supported through an Eclipse view, where the developer can browse reachable methods. Compiled methods execute significantly faster than interpreted methods, but they take up more ROM memory. More elaborate evaluation results available in the evaluation document.<br>
+        </li>
+      </ol>
+      <p>&nbsp;</p>
+      <p>See the tutorial for detailed information about how to run the HVM on a particular target.</p>
+    </div>
+  </article>
+  <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="bokse" -->
+  <div class="bokse_container">
+    <div class="bokse to">
+      <div class="boks_indhold">
+        <h3>HVM for the Lego NXT</h3>
+        The HVM is platform independent and has been ported to several targets as described in the <a href="http://icelab.dk/hello_world.html">tutorial</a> and the <a href="http://icelab.dk/#Porting">Porting</a> section. Most recently support for the Lego NXT has been added. To obtain a C cross compiler for the Lego NXT the <a href="http://nxtgcc.sourceforge.net/">NXTGCC project</a> is a good choice. <a href="http://icelab.dk/HelloBrick.tar">This</a> small C based native layer contains enough C code to get into main and write dots to the display. A call to the HVM interpreter has been added and a small build script has been added as well. Downloading the resulting application can be done using Lego's own environment. What remains is to construct a Java API to control the display, motors and sensors of the Lego NXT. This can be done almost entirely in Java. </div>
+    </div>
+    <div class="bokse tre">
+      <div class="boks_indhold">
+        <h3 id="Projects">Ongoing projects</h3>
+        <p>SCJ. Implementation of Safety Critical Java, Level 0 + 1, according to JSR 302: Safety Critical Java Technology, <a href="http://jcp.org/en/jsr/detail?id=302" target="_blank">http://jcp.org/en/jsr/detail?id=302</a>. Contact Hans Søndergaard (hso@viauc.dk)</p>
+        <h3>&nbsp;</h3>
+      </div>
+    </div>
+    <div class="stopper"></div>
+  </div>
+  <!-- TemplateEndEditable -->
+  <nav>
+    <p><a href="../architecture.html">Architecture</a>
+      <a href="../using.html">Using</a>
+      <a href="../porting.html">Porting</a>
+      <a href="../licensing.html">Licensing</a>
+      <a href="../references.html">References</a>
+      <a href="../download.html">Download</a>
+      <a href="../tutorial.html">Tutorial</a>
+    <a href="../news.html">News</a></p>
+  </nav>
+ 
+  
+  <footer>Stephan Korsholm, icecap, Denmark<br>
+    email: skr@icelab.dk<br>
+  phone: +4587554244</footer>
+
+</div>
+
+
+</body>
+</html>

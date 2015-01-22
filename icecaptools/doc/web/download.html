@@ -1,0 +1,72 @@
+<!doctype html>
+<html><!-- InstanceBegin template="/Templates/template_icelab.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Icelab - HVM - apps for industrial devices</title>
+<!-- InstanceEndEditable -->
+<link href="styles/main.css" rel="stylesheet" type="text/css">
+<!-- small -->
+<link href="styles/small.css" rel="stylesheet" type="text/css" media="only screen and (max-width:500px)">
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+
+<body>
+
+<div id="wrapper">
+
+  <header>
+  <a class="logo" href="index.html"></a>
+  </header>
+  <!-- InstanceBeginEditable name="article" -->
+  <article>
+    <h1>Download</h1>
+    <p>For the <strong>SCJ Level 0 end Level 1</strong> implementation, download <a href="http://icelab.dk/resources/icecapSDK.jar">icecapSDK.jar</a>. This package contains:</p>
+    <ul>
+      <li><strong>javax.*</strong> - the SCJ level 0 level 1 implementation</li>
+      <li><strong>minicdj.*</strong> - a slightly adjusted version of the miniCDj benchmark</li>
+      <li><strong>test.*</strong> - a series of mini tests used when regression testing the HVM</li>
+    </ul>
+    <p>The <strong>HVM itself</strong> as an Eclipse plugin is available <a href="http://icelab.dk/resources/icecaptools_2.1.12.jar">below</a>. The Eclipse plugin includes the interpreter source, which will automatically be extracted into the destination folder if not already present. After installing new plugins it may be necessary to start Eclipse from the command line with the -clean option. The HVM plugin requires that CDT is installed to function.</p>
+    <p>&nbsp;</p>
+    <p>Java doc for the SCJ implementation <a href="http://icelab.dk/resources/SCJ_Javadoc.zip">here</a>  </p>
+    <p>&nbsp;</p>
+    <p>Remember to remove any previous versions of the icecaptools_x.y.z.jar plugin before installing a new one.</p>
+    <p>&nbsp;</p>
+    <p>Check out <a href="http://icelab.dk/resources/InstallationAndFirstRun.pdf">this installation guide</a>.</p>
+  	<ul>
+	<li><a href="http://icelab.dk/resources/icecaptools_2.1.12.jar">icecaptools_2.1.12.jar</a></li>
+	<li><a href="http://icelab.dk/resources/icecaptools_2.1.11.jar">icecaptools_2.1.11.jar</a></li>
+	<li><a href="http://icelab.dk/resources/icecaptools_2.1.10.jar">icecaptools_2.1.10.jar</a></li>
+	<li><a href="http://icelab.dk/resources/icecaptools_2.1.9.jar">icecaptools_2.1.9.jar</a></li>
+	<li><a href="http://icelab.dk/resources/icecaptools_2.1.8.jar">icecaptools_2.1.8.jar</a></li>	
+	<li><a href="http://icelab.dk/resources/icecaptools_2.1.7.jar">icecaptools_2.1.7.jar</a></li>
+  	</ul>
+  	<p>The full source for the HVM plugin, the runtime system and the libraries are also available as three individual modules that can be checkout using anonymous CVS:</p>
+  	<ul>
+  	<li>The HVM Eclipse plugin (including the AOT compiler): <code>cvs -d:pserver:anonymous@icelab.dk:/data/cvs co icecaptools</code></li>
+  	<li>The HVM runtime (including the interpreter): <code>cvs -d:pserver:anonymous@icelab.dk:/data/cvs co icecapvm</code></li>
+  	<li>The HVM libraries (including the SCJ API): <code>cvs -d:pserver:anonymous@icelab.dk:/data/cvs co icecapSDK</code></li>
+  	<li>The SCJ TCK: <code>cvs -d:pserver:anonymous@icelab.dk:/data/cvs co SCJJMLTest</code></li>  	
+  	</ul>
+  	<p>Contributions are always welcome!</p>
+  </article>
+  <!-- InstanceEndEditable --><!-- InstanceBeginEditable name="bokse" --><!-- InstanceEndEditable -->
+  <nav>
+    <p>
+      <a href="index.html">Home</a>
+      <a href="licensing.html">Licensing</a>
+      <a href="download.html">Download</a>
+  </nav>
+  
+  <footer>Stephan Korsholm, icecap, Denmark<br>
+    email: skr@icelab.dk<br>
+  phone: +4587554244</footer>
+
+</div>
+
+
+</body>
+<!-- InstanceEnd --></html>

@@ -1,0 +1,135 @@
+@charset "UTF-8";
+/* CSS Document */
+
+* {
+	margin: 0px;
+	padding: 0px;
+}
+body {
+	background-color: #6CF;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	line-height: 20px;
+}
+#wrapper {
+	margin-right: auto;
+	margin-left: auto;
+	position: relative;
+	max-width: 980px;
+	background-color: #FFF;
+}
+header {
+	background-image: url(../images/banner_medium.jpg);
+	background-repeat: no-repeat;
+	background-position: right 0px;
+	height: 200px;
+}
+header a.logo {
+	background-image: url(../images/logo_medium.png);
+	background-repeat: no-repeat;
+	height: 70px;
+	width: 115px;
+	position: absolute;
+	display: block;
+	right: 30px;
+	top: 28px;
+}
+article {
+	padding-top: 60px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+.boks_indhold {
+}
+a.boks_link {
+	font-size: 0.9em;
+	font-weight: bolder;
+	text-decoration: none;
+	text-transform: uppercase;
+	margin-top: 5px;
+}
+.bokse_container {
+	padding-top: 20px;
+	padding-right: 15px;
+	padding-bottom: 0px;
+	padding-left: 20px;
+}
+.bokse {
+	float: left;
+	width: 33%;
+	background-position: 0px 0px;
+}
+.boks_indhold {
+	padding-top: 70px;
+	padding-right: 30px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+}
+.en {
+	background-image: url(../images/boks1.jpg);
+	background-repeat: no-repeat;
+}
+.to {
+	background-image: url(../images/boks2.jpg);
+	background-repeat: no-repeat;
+}
+.tre {
+	background-image: url(../images/boks3.jpg);
+	background-repeat: no-repeat;
+}
+
+
+
+footer {
+	background-color: #6CF;
+	color: #FFF;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 0px;
+	font-size: 0.90em;
+}
+nav {
+	display: block;
+	width: 100%;
+	position: absolute;
+	background-color: #FFB75E;
+	top: 200px;
+}
+.stopper {
+	clear: both;
+}
+nav a {
+	text-transform: uppercase;
+	color: #666;
+	font-weight: bolder;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 1em;
+	margin-top: 12px;
+	margin-right: 20px;
+	margin-bottom: 10px;
+	margin-left: 20px;
+}
+nav a:hover {
+	color: #FFF;
+}
+h1 {
+	font-size: 2em;
+	font-weight: normal;
+	color: #66F;
+	margin-bottom: 3px;
+}
+h2 {
+	font-size: 1.7em;
+}
+h3 {
+	font-size: 1.5em;
+}
+a {
+	color: #33C;
+}
+a:hover {
+	color: #F90;
+}

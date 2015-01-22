@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="lib/bcel-6.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-net-3.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/RXTXcomm.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/junit.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/Linux" sourcepath="lib/Linux"/>
+	<classpathentry exported="true" kind="lib" path="lib/Windows" sourcepath="lib/Windows"/>
+	<classpathentry exported="true" kind="lib" path="lib/Mac" sourcepath="lib/Mac"/>
+	<classpathentry kind="lib" path="lib/icecapSDK.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

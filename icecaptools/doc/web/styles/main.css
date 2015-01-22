@@ -1,0 +1,250 @@
+@charset "UTF-8";
+/* CSS Document */
+
+* {
+	margin: 0px;
+	padding: 0px;
+}
+body {
+	background-color: #EBF1F5;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	line-height: 20px;
+	background-image: url(../images/baggrund_streger.jpg);
+	background-repeat: repeat-x;
+}
+#wrapper {
+	margin-right: auto;
+	margin-left: auto;
+	position: relative;
+	max-width: 980px;
+	background-color: #FFF;
+	/* [disabled]border-top-style: none; */
+	/* [disabled]border-right-style: solid; */
+	/* [disabled]border-bottom-style: solid; */
+	/* [disabled]border-left-style: solid; */
+	/* [disabled]border-right-width: 1px; */
+	/* [disabled]border-bottom-width: 1px; */
+	/* [disabled]border-left-width: 1px; */
+	/* [disabled]border-right-color: #336698; */
+	/* [disabled]border-bottom-color: #336698; */
+	/* [disabled]border-left-color: #336698; */
+}
+header {
+	background-image: url(../images/banner_stor.jpg);
+	background-repeat: no-repeat;
+	background-position: right 0px;
+	height: 200px;
+}
+header a.logo {
+	background-image: url(../images/logo_stor.png);
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 323px;
+	position: absolute;
+	display: block;
+	right: 30px;
+	top: 49px;
+}
+#intro_left {
+	background-color: #99B8CE;
+	float: left;
+	width: 44%;
+	padding: 2%;
+	border-radius: 10px;
+}
+#intro_right {
+	background-color: #99B8CE;
+	float: right;
+	width: 44%;
+	padding: 2%;
+	border-radius: 10px;
+	margin-bottom: 20px;
+}
+.intro_box_text {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	color: #FFF;
+	line-height: normal;
+	margin-bottom: 10px;
+}
+.intro_box_textOVER {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	color: #3C5899;
+	line-height: normal;
+	margin-bottom: 0px;
+	font-weight: bold;
+}
+ul .intro_box_text {
+	margin-left: 3%;
+}
+#text {
+	clear: both;
+}
+article {
+	padding-top: 60px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+article ol {
+	margin-left: 20px;
+}
+article ul {
+	margin-left: 20px;
+}
+.boks_indhold {
+}
+a.boks_link {
+	font-size: 0.9em;
+	font-weight: bolder;
+	text-decoration: none;
+	text-transform: uppercase;
+	margin-top: 5px;
+}
+.bokse_container {
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 15px;
+	padding-left: 20px;
+}
+.bokse {
+	float: left;
+	width: 42%;
+	/* [disabled]background-position: 0px 3px; */
+	border: 1px solid #51A2CA;
+	border-radius: 10px;
+	padding: 3%;
+}
+.boks_indhold {
+	padding-top: 0px;
+	/* [disabled]padding-right: 30px; */
+	padding-bottom: 0px;
+	/* [disabled]padding-left: 70px; */
+}
+#bredbox {
+	background-color: #CCC;
+	padding: 15px;
+	margin-top: 20px;
+	border-radius: 10px;
+}
+#bredbox ul li {
+	margin-left: 5%;
+}
+.en {
+	/* [disabled]background-image: url(../images/boks1.jpg); */
+	background-repeat: no-repeat;
+}
+.to {
+	/* [disabled]background-image: url(../images/boks2.jpg); */
+	background-repeat: no-repeat;
+}
+.tre {
+	/* [disabled]background-image: url(../images/boks3.jpg); */
+	background-repeat: no-repeat;
+	float: right;
+	margin-right: 20px;
+}
+
+
+
+footer {
+	background-color: #99B8CE;
+	color: #FFF;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+	font-size: 13px;
+}
+nav {
+	display: block;
+	width: 100%;
+	position: absolute;
+	background-color: #336699;
+	top: 200px;
+	z-index: 1000;
+	height: 43px;
+}
+.stopper {
+	clear: both;
+}
+nav a:link {
+	text-transform: uppercase;
+	color: #FFF;
+	font-weight: bolder;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 1em;
+	margin-top: 12px;
+	margin-right: 0px;
+	margin-bottom: 10px;
+	margin-left: 20px;
+}
+nav a:visited {
+	text-transform: uppercase;
+	color: #FFF;
+	font-weight: bolder;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 1em;
+	margin-top: 12px;
+	margin-right: 0px;
+	margin-bottom: 10px;
+	margin-left: 20px;
+}
+nav a:hover {
+	color: #CCC;
+}
+h1 {
+	font-size: 3em;
+	font-weight: normal;
+	color: #F90;
+	margin-bottom: 20px;
+	font-family: Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+	margin-top: 20px;
+}
+h2 {
+	font-size: 18px;
+	margin-bottom: 5px;
+	color: #4E5899;
+}
+#text ol {
+	margin-left: 20px;
+}
+#text ol li {
+	margin-bottom: 5px;
+}
+h3 {
+	font-size: 1.5em;
+}
+a:link {
+	color: #33C;
+}
+a:visited {
+	color: #33C;
+}
+a:hover {
+	color: #F90;
+}
+.foto_right_tutorial {
+	float: right;
+	width: 60%;
+}
+.foto_right_tutorial_75 {
+	float: right;
+	width: 75%;
+}
+.foto_left_tutorial {
+	float: left;
+	width: 80%;
+}
+.foto_full_width {
+	float: none;
+	width: 100%;
+}
+.foto_right_tutorial_40 {
+	float: right;
+	width: 40%;
+}
