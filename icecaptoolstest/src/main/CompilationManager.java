@@ -23,7 +23,7 @@ public class CompilationManager {
 	@SuppressWarnings("unused")
 	public static void main(String args[]) throws Throwable {
 		boolean aotCompile = false;
-		boolean includeJMLMethods = false;
+		boolean includeJMLMethods = true;
 		String pathSeparator = System.getProperty("path.separator");
 
 		/*System.out.println("Press any key to start");
@@ -48,8 +48,8 @@ public class CompilationManager {
 		// String inputFolder = "/home/hso/java/SCJ_Workspace/icecaptools/bin";
 		// String inputFolder = "/home/hso/java/SCJ_Workspace/EmbeddedSDJ/bin";
 
-		// String inputFolder = "/home/hso/java/SCJ_Workspace/SCJJMLTest/bin/" +
-		// pathSeparator + "/home/hso/java/SCJ_Workspace/JML/jml4c.jar";
+		String inputFolder = "/home/skr/workspace/SCJJMLTest/bin/" + pathSeparator
+				+ "/home/skr/workspace/jml4c/exe/jml4c.jar";
 
 		// String outputFolder = "/home/hso/java/SCJ_Workspace/icecaptools/";
 
@@ -84,7 +84,7 @@ public class CompilationManager {
 		// String inputPackage = "javax.realtime.test";
 		// String inputPackage = "javax.safetycritical.test";
 
-		// String inputClass = "AllTests";
+		String inputClass = "AllTests";
 
 		// String inputClass = "Main2Clock";
 		// String inputClass = "Main2RealtimeClock";
@@ -103,7 +103,7 @@ public class CompilationManager {
 
 		// String inputPackage = "jml.test.apr";
 
-		String inputPackage = "test";
+		String inputPackage = "jml.account.test";
 		// String inputClass = "TestSCJBoundedBuffer";
 
 		// String inputPackage = "test.icecapvm.minitests";
@@ -147,13 +147,13 @@ public class CompilationManager {
 		// "/home/skr/workspace/JMLTest/bin:/home/skr/workspace/JMLTest/lib/jml4c.jar";
 
 		String outputFolder = "";
-		String inputFolder = "/home/skr/workspace/icecaptoolstest/bin/";
+		//String inputFolder = "/home/skr/workspace/icecaptoolstest/bin/";
 
 		// String sourceFileName = null;
 		// String inputFolder = "/home/sek/workspace/CDj/bin";
 		// String inputPackage = "heap";
 
-		String inputClass = "TestSCJThreadMemory";
+		//String inputClass = "TestSCJThreadMemory";
 
 		// String sourceFileName =
 		// "C:\\home\\workspace\\Modbus\\src\\main\\Main.java";
@@ -241,7 +241,7 @@ public class CompilationManager {
 			public void endAnalysis() {
 			}
 		});
-		config.setResourceManager(new TestResourceManager("/home/skr/workspace/icecapvm/src"));
+		config.setResourceManager(new TestResourceManager("/home/skr/git/hvm-scj/icecapvm/src"));
 
 		CompilationSequence sequencer = new CompilationSequence();
 
@@ -254,9 +254,9 @@ public class CompilationManager {
 		config = null;
 		cregistry = null;
 		System.out.println("Instancecount = " + NewList.getInstanceCount());
-		
-		 System.out.println("Done. Press any key to exit");
-		 
+
+		System.out.println("Done. Press any key to exit");
+
 		// in.next(); in.close();
 	}
 }

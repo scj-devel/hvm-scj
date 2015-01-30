@@ -1,1 +1,8 @@
 /bin
+/classes.c
+/classes.h
+/methods.c
+/methods.h
+/natives_host.c
+/natives_target.c
+/natives.h
