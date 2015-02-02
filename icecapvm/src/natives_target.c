@@ -13,6 +13,8 @@ fptr readNativeFunc(void) {
         return n_java_lang_Class_desiredAssertionStatus;
     case N_JAVA_LANG_CLASS_GETCOMPONENTTYPE_NUM:
         return n_java_lang_Class_getComponentType;
+    case N_JAVA_LANG_CLASS_GETGENERICINTERFACES_NUM:
+        return n_java_lang_Class_getGenericInterfaces;
     case N_JAVA_LANG_CLASS_GETNAME0_NUM:
         return n_java_lang_Class_getName0;
     case N_JAVA_LANG_CLASS_GETPRIMITIVECLASS_NUM:
@@ -29,36 +31,26 @@ fptr readNativeFunc(void) {
         return n_java_lang_Object_getClass;
     case N_JAVA_LANG_OBJECT_HASHCODE_NUM:
         return n_java_lang_Object_hashCode;
-    case N_JAVA_LANG_OBJECT_NOTIFY_NUM:
-        return n_java_lang_Object_notify;
-    case N_JAVA_LANG_OBJECT_WAIT__NUM:
-        return n_java_lang_Object_wait_;
+    case N_JAVA_LANG_STRINGBUILDER_APPEND_NUM:
+        return n_java_lang_StringBuilder_append;
     case N_JAVA_LANG_SYSTEM_ARRAYCOPY_NUM:
         return n_java_lang_System_arraycopy;
+    case N_JAVA_LANG_SYSTEM_IDENTITYHASHCODE_NUM:
+        return n_java_lang_System_identityHashCode;
     case N_JAVA_LANG_SYSTEM_REGISTERNATIVES_NUM:
         return n_java_lang_System_registerNatives;
+    case N_JAVA_LANG_THREAD_CLINIT__NUM:
+        return n_java_lang_Thread_clinit_;
+    case N_JAVA_LANG_THREAD_CURRENTTHREAD_NUM:
+        return n_java_lang_Thread_currentThread;
+    case N_JAVA_LANG_THREAD_TOSTRING_NUM:
+        return n_java_lang_Thread_toString;
     case N_JAVA_LANG_THROWABLE_CLINIT__NUM:
         return n_java_lang_Throwable_clinit_;
     case N_JAVA_LANG_THROWABLE_FILLINSTACKTRACE__NUM:
         return n_java_lang_Throwable_fillInStackTrace_;
-    case N_JAVA_LANG_THROWABLE_PRINTSTACKTRACE_NUM:
-        return n_java_lang_Throwable_printStackTrace;
     case N_JAVA_LANG_REFLECT_ARRAY_NEWARRAY_NUM:
         return n_java_lang_reflect_Array_newArray;
-    case N_VM_MONITOR_ATTACHMONITOR_NUM:
-        return n_vm_Monitor_attachMonitor;
-    case N_VM_MONITOR_GETATTACHEDMONITOR_NUM:
-        return n_vm_Monitor_getAttachedMonitor;
-    case N_VM_PROCESS_EXECUTEWITHSTACK_NUM:
-        return n_vm_Process_executeWithStack;
-    case N_VM_PROCESS_TRANSFER_NUM:
-        return n_vm_Process_transfer;
-    case N_VM_REALTIMECLOCK_AWAITNEXTTICK_NUM:
-        return n_vm_RealtimeClock_awaitNextTick;
-    case N_VM_REALTIMECLOCK_GETNATIVERESOLUTION_NUM:
-        return n_vm_RealtimeClock_getNativeResolution;
-    case N_VM_REALTIMECLOCK_GETNATIVETIME_NUM:
-        return n_vm_RealtimeClock_getNativeTime;
     }
     printStr("Unsupported native function");
     return 0;

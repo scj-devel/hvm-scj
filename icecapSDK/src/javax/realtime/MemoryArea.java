@@ -28,7 +28,6 @@ package javax.realtime;
 
 import icecaptools.IcecapCompileMe;
 
-import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 
