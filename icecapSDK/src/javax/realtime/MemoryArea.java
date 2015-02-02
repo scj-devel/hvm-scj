@@ -28,6 +28,7 @@ package javax.realtime;
 
 import icecaptools.IcecapCompileMe;
 
+import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 
@@ -73,7 +74,7 @@ public abstract class MemoryArea extends Object {
 	}
 
 	/**
-	 * Dummy constructor for javax.safetycritical.BackingStore.BackingStore
+	 * Dummy constructor for javax.safetycritical.ManagedMemory.BackingStore
 	 */
 	protected MemoryArea(Memory delegate) {
 		this.delegate = delegate;
