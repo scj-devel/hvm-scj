@@ -79,6 +79,21 @@ uint8 workingRegister5;
 static Object *head;
 #endif
 
+#if defined (N_JAVA_LANG_SYSTEM_GETPROPERTY)
+int16 n_java_lang_System_getProperty(int32 *sp)
+{
+   *sp = 0;
+   return -1;
+}
+#endif
+
+#if defined (N_JAVA_LANG_SYSTEM_SETOUT)
+int16 n_java_lang_System_setOut(int32 *sp)
+{
+   return -1;
+}
+#endif
+
 #if defined (N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined (N_JAVA_LANG_CLASS_GETNAME0) || defined(N_JAVA_LANG_FLOAT_TOSTRING)
 int32 _strlen(const char* str) {
     int32 count = 0;

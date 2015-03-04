@@ -168,8 +168,6 @@ unsigned char handleLMULLDIVLREM(int32* sp, unsigned char code) _NOINLINE_;
 static int32* pushStackFrame(unsigned short maxLocals, unsigned short currentMethodNumber, unsigned short pc, int32* fp, int32* sp);
 unsigned short popStackFrame(int32** fp, int32** sp, const MethodInfo* method, unsigned short *pc);
 unsigned char isSubClassOf(unsigned short subClass, unsigned short superClass);
-unsigned char findMethodVTableIndex(unsigned short indexbyte1, unsigned char indexbyte2, unsigned short classIndex);
-signed short dispatchVirtualOrInterface(unsigned short ci, unsigned char *vTableIndex, int32* sp);
 unsigned char handleLDCWithIndex(int32* sp, unsigned short index);
 
 #if (defined(AASTORE_OPCODE_USED) || defined(FASTORE_OPCODE_USED) || defined(BASTORE_OPCODE_USED) || defined(CASTORE_OPCODE_USED) || defined(SASTORE_OPCODE_USED) || defined(LASTORE_OPCODE_USED) || defined(IASTORE_OPCODE_USED) || defined(PUTFIELD_OPCODE_USED)) && defined(FLASHSUPPORT)

@@ -1,5 +1,5 @@
 cd /home/skr/proguard/work
-java -jar ../proguard5.0/lib/proguard.jar @../../workspace/icecaptools/proguard.cfg
+java -jar ../proguard5.0/lib/proguard.jar @../../git/hvm-scj/icecaptools/proguard.cfg
 cd /home/skr/temp
 rm -rf *
 
@@ -10,18 +10,17 @@ unzip icecaptools_2.1.12.jar
 rm icecaptools_2.1.12.jar
 mkdir temp
 cd temp
-unzip /home/skr/workspace/icecaptools/doc/oicecaptools.jar
+unzip /home/skr/git/hvm-scj/icecaptools/doc/oicecaptools.jar
 rm -rf ../icecaptools
 mv ./icecaptools ..
 cd ..
 rm -rf temp
 zip -r icecaptools_2.1.12.jar .classpath icecaptools icons lib META-INF plugin.xml resources test
-rm /home/skr/workspace/icecaptools/doc/web/resources/icecaptools_*.jar
-cp ./icecaptools_2.1.12.jar /home/skr/workspace/icecaptools/doc/web/resources/icecaptools_2.1.12.jar
-rm /home/skr/workspace/icecaptools/doc/oicecaptools.jar 
-cd /home/skr/workspace/icecaptools/doc/web/resources/
+rm /home/skr/git/hvm-scj/icecaptools/doc/web/resources/icecaptools_*.jar
+cp ./icecaptools_2.1.12.jar /home/skr/git/hvm-scj/icecaptools/doc/web/resources/icecaptools_2.1.12.jar
+rm /home/skr/git/hvm-scj/icecaptools/doc/oicecaptools.jar 
+cd /home/skr/git/hvm-scj/icecaptools/doc/web/resources/
 scp icecaptools_2.1.12.jar root@icelab.dk:/usr/local/apache-tomcat-5.5.26/webapps/ROOT/resources/.
 scp icecapSDK.jar root@icelab.dk:/usr/local/apache-tomcat-5.5.26/webapps/ROOT/resources/.
 cd ..
 scp download.html root@icelab.dk:/usr/local/apache-tomcat-5.5.26/webapps/ROOT/.
-
