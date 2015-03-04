@@ -2,6 +2,7 @@ package main;
 
 import icecaptools.CompilationSequence;
 import icecaptools.HVMProperties;
+import icecaptools.MethodOrFieldDesc;
 import icecaptools.NewList;
 import icecaptools.TestResourceManager;
 import icecaptools.compiler.AOTRegistry;
@@ -20,6 +21,87 @@ import java.io.FileOutputStream;
 import test.icecaptools.compiler.TestConversionConfiguration;
 
 public class CompilationManager {
+	
+	private static class JMLCompilationRegistry implements ICompilationRegistry {
+
+		@Override
+		public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
+			if (mdesc.getClassName().contains("jml")) {
+				return true;
+			}
+			return false;
+		}
+
+		@Override
+		public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
+			// java.lang.CharacterData
+			// java.io.
+			// java.lang.System
+			// java.lang.SecurityManager
+			// java.lang.Terminator
+			// java.lang.Shutdown
+
+			//			if (clazz.startsWith("java.lang.CharacterData")) { // No
+			//	            return true;
+			//	        }
+			//			if (clazz.startsWith("java.lang.System")) { // No
+			//	            return true;
+			//	        }
+			//			if (clazz.startsWith("java.lang.SecurityManager")) {
+			//	            return true;
+			//	        }
+			//			if (clazz.startsWith("java.lang.Terminator")) {
+			//	            return true;
+			//	        }
+			//			if (clazz.startsWith("java.lang.Shutdown")) {
+			//	            return true;
+			//	        }
+			if (clazz.startsWith("sun.")) {
+				return true;
+			}
+			if (clazz.startsWith("java.util.concurrent")) {
+				return true;
+			}
+			if (clazz.startsWith("java.io")) {
+				return true;
+			}
+			if (clazz.startsWith("java.nio")) {
+				return true;
+			}
+			if (clazz.startsWith("java.lang.Thread")) {
+				return true;
+			}
+			if (clazz.startsWith("java.lang.ClassLoader")) {
+				return true;
+			}
+			if (clazz.startsWith("java.lang.System")) {
+				if (targetMethodName.startsWith("initProperties")) {
+					return true;
+				}
+				if (targetMethodName.startsWith("setErr0")) {
+					return true;
+				}
+				if (targetMethodName.startsWith("setIn0")) {
+					return true;
+				}
+				if (targetMethodName.startsWith("setOut")) {
+					return true;
+				}
+				if (targetMethodName.startsWith("getProperty"))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		@Override
+		public boolean alwaysClearOutputFolder() {
+			return true;
+		}
+
+	}
+
 	public static void main(String args[]) throws Throwable {
 		boolean aotCompile = false;
 		boolean includeJMLMethods = true;
@@ -47,8 +129,8 @@ public class CompilationManager {
 		// String inputFolder = "/home/hso/java/SCJ_Workspace/icecaptools/bin";
 		// String inputFolder = "/home/hso/java/SCJ_Workspace/EmbeddedSDJ/bin";
 
-		String inputFolder = "/home/skr/workspace/SCJJMLTest/bin/" + pathSeparator
-				+ "/home/skr/workspace/jml4c/exe/jml4c.jar";
+		//String inputFolder = "/home/skr/workspace/SCJJMLTest/bin/" + pathSeparator
+			//	+ "/home/skr/workspace/jml4c/exe/jml4c.jar";
 
 		// String outputFolder = "/home/hso/java/SCJ_Workspace/icecaptools/";
 
@@ -83,7 +165,7 @@ public class CompilationManager {
 		// String inputPackage = "javax.realtime.test";
 		// String inputPackage = "javax.safetycritical.test";
 
-		String inputClass = "AllTests";
+		String inputClass = "TestSystemOutPrintln";
 
 		// String inputClass = "Main2Clock";
 		// String inputClass = "Main2RealtimeClock";
@@ -102,7 +184,7 @@ public class CompilationManager {
 
 		// String inputPackage = "jml.test.apr";
 
-		String inputPackage = "jml.account.test";
+		String inputPackage = "test";
 		// String inputClass = "TestSCJBoundedBuffer";
 
 		// String inputPackage = "test.icecapvm.minitests";
@@ -146,7 +228,7 @@ public class CompilationManager {
 		// "/home/skr/workspace/JMLTest/bin:/home/skr/workspace/JMLTest/lib/jml4c.jar";
 
 		String outputFolder = "";
-		//String inputFolder = "/home/skr/workspace/icecaptoolstest/bin/";
+		String inputFolder = "/home/skr/git/hvm-scj/icecaptoolstest/bin";
 
 		// String sourceFileName = null;
 		// String inputFolder = "/home/sek/workspace/CDj/bin";
@@ -204,7 +286,7 @@ public class CompilationManager {
 		if (aotCompile) {
 			cregistry = new AOTRegistry();
 		} else {
-			cregistry = new TestCompilationRegistry();
+			cregistry = new JMLCompilationRegistry();
 		}
 
 		ConversionConfiguration config = new TestConversionConfiguration();
