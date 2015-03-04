@@ -454,14 +454,26 @@ public class DependencyWalker {
 
         if (bnode.isGet()) {
             if (clazz.getClassName().replace("/", ".").equals("java.lang.System")) {
-                if (ClassfileUtils.findMethodInClass(clazz, "initializeSystemClass", "()V") != null) {
+            	clazz = lookupClass("devices.System");
+            	if (clazz != null)
+            	{
+            		if (ClassfileUtils.findMethodInClass(clazz, "initializeSystemClass", "()V") != null) {
+                        entryPoints = converter.convertByteCode(bnode, clazz, "initializeSystemClass", "()V", true);
+
+                        if (entryPoints != null) {
+                            NewList calledMethodResult = analyseMethod(entryPoints, newList);
+                            mergeResult(newList, mr, calledMethodResult);
+                        }
+                    }
+            	}
+               /* if (ClassfileUtils.findMethodInClass(clazz, "initializeSystemClass", "()V") != null) {
                     entryPoints = converter.convertByteCode(bnode, clazz, "initializeSystemClass", "()V", true);
 
                     if (entryPoints != null) {
                         NewList calledMethodResult = analyseMethod(entryPoints, newList);
                         mergeResult(newList, mr, calledMethodResult);
                     }
-                }
+                }*/
             } else {
                 observer.classInitializerUsed(clazz.getClassName());
             }
