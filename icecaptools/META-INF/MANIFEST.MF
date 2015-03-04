@@ -3,7 +3,7 @@ Main-Class: icecaptools.compiler.CompilationManager
 Bundle-ManifestVersion: 2
 Bundle-Name: Icecaptools
 Bundle-SymbolicName: icecaptools;singleton:=true
-Bundle-Version: 2.1.12
+Bundle-Version: 2.1.13
 Bundle-Activator: icecaptools.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
