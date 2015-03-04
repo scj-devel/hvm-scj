@@ -1171,13 +1171,13 @@ public abstract class AOTCompiler implements SPManipulator {
                     requiredIncludes.print("extern const ConstantInfo *constants;\n");
                     requiredIncludes.print("#ifndef PRE_INITIALIZE_CONSTANTS\nextern int16 initializeStringConstant(const ConstantInfo* constant, int32* sp);\n#endif\n");
 
-                    sm.push(Size.INT, "(int32) (pointer) stringConstants[constant_->value >> 16]");
+                    sm.push(Size.INT, "(int32) (pointer) stringConstants[pgm_read_dword(&constant_->value) >> 16]");
                 } else if (constant.getType() == LDCConstant.CLASS) {
                     localVariables.print("   const ConstantInfo* constant_;\n");
                     output.append("   constant_ = &constants[" + index + "];\n");
                     requiredIncludes.print("extern const ConstantInfo *constants;\n");
                     requiredIncludes.print("extern Object* getClass(unsigned short classIndex);\n");
-                    sm.push(Size.INT, "(uint32)(pointer)getClass(constant_->value)");
+                    sm.push(Size.INT, "(uint32)(pointer)getClass(pgm_read_dword(&constant_->value))");
                 } else if (constant.getType() == LDCConstant.LONG) {
                     localVariables.print("   int32 msi;\n");
                     localVariables.print("   int32 lsi;\n");
@@ -1186,16 +1186,16 @@ public abstract class AOTCompiler implements SPManipulator {
                     output.append("   constant_ = &constants[" + index + "];\n");
                     requiredIncludes.print("extern const ConstantInfo *constants;\n");
 
-                    output.append("   data_ = constant_->data;\n");
-                    output.append("   msi = ((int32) data_[0]) << 24;\n");
-                    output.append("   msi |= ((int32) data_[1]) << 16;\n");
-                    output.append("   msi |= data_[2] << 8;\n");
-                    output.append("   msi |= data_[3];\n");
+                    output.append("   data_ = (const unsigned char *) pgm_read_pointer(&constant_->data, const void **);\n");
+                    output.append("   msi = ((int32) pgm_read_byte(data_)) << 24;\n");
+                    output.append("   msi |= ((int32) pgm_read_byte(data_ +1)) << 16;\n");
+                    output.append("   msi |= pgm_read_byte(data_ + 2) << 8;\n");
+                    output.append("   msi |= pgm_read_byte(data_ + 3);\n");
 
-                    output.append("   lsi = ((int32) data_[4]) << 24;\n");
-                    output.append("   lsi |= ((int32) data_[5]) << 16;\n");
-                    output.append("   lsi |= data_[6] << 8;\n");
-                    output.append("   lsi |= data_[7];\n");
+                    output.append("   lsi = ((int32) pgm_read_byte(data_ + 4)) << 24;\n");
+                    output.append("   lsi |= ((int32) pgm_read_byte(data_ + 5)) << 16;\n");
+                    output.append("   lsi |= pgm_read_byte(data_ + 6) << 8;\n");
+                    output.append("   lsi |= pgm_read_byte(data_ + 7);\n");
 
                     sm.push(Size.INT, "msi");
                     sm.push(Size.INT, "lsi");
