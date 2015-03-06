@@ -21,12 +21,22 @@ import java.io.FileOutputStream;
 import test.icecaptools.compiler.TestConversionConfiguration;
 
 public class CompilationManager {
-	
+
 	private static class JMLCompilationRegistry implements ICompilationRegistry {
 
 		@Override
 		public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
 			if (mdesc.getClassName().contains("jml")) {
+				return true;
+			}
+			if (mdesc.getClassName().startsWith("sun.security.action.GetPropertyAction")) {
+				return true;
+			}
+			if (mdesc.getClassName().startsWith("java.io.BufferedWriter")) {
+				return true;
+			}
+
+			if (mdesc.getClassName().startsWith("java.io.PrintStream")) {
 				return true;
 			}
 			return false;
@@ -57,12 +67,33 @@ public class CompilationManager {
 			//	            return true;
 			//	        }
 			if (clazz.startsWith("sun.")) {
+				if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
+					return false;
+				}
 				return true;
 			}
 			if (clazz.startsWith("java.util.concurrent")) {
 				return true;
 			}
 			if (clazz.startsWith("java.io")) {
+				if (clazz.startsWith("java.io.PrintStream")) {
+					return false;
+				}
+				if (clazz.startsWith("java.io.FilterOutputStream")) {
+					return false;
+				}
+				if (clazz.startsWith("java.io.Writer")) {
+					return false;
+				}
+				if (clazz.startsWith("java.io.BufferedWriter")) {
+					return false;
+				}
+				if (clazz.startsWith("java.io.OutputStreamWriter")) {
+					return false;
+				}
+				if (clazz.startsWith("java.io.OutputStream") && targetMethodName.contains("init")) {
+					return false;
+				}
 				return true;
 			}
 			if (clazz.startsWith("java.nio")) {
@@ -87,8 +118,7 @@ public class CompilationManager {
 				if (targetMethodName.startsWith("setOut")) {
 					return true;
 				}
-				if (targetMethodName.startsWith("getProperty"))
-				{
+				if (targetMethodName.startsWith("getProperty")) {
 					return true;
 				}
 			}
@@ -130,7 +160,7 @@ public class CompilationManager {
 		// String inputFolder = "/home/hso/java/SCJ_Workspace/EmbeddedSDJ/bin";
 
 		//String inputFolder = "/home/skr/workspace/SCJJMLTest/bin/" + pathSeparator
-			//	+ "/home/skr/workspace/jml4c/exe/jml4c.jar";
+		//	+ "/home/skr/workspace/jml4c/exe/jml4c.jar";
 
 		// String outputFolder = "/home/hso/java/SCJ_Workspace/icecaptools/";
 
