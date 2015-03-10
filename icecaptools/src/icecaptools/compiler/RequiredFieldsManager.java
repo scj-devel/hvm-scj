@@ -7,7 +7,8 @@ public class RequiredFieldsManager extends RequiredEntryManager {
 
     private HashMap<String, FieldInfo> fields;
 
-    public RequiredFieldsManager() {
+    public RequiredFieldsManager(boolean supportLoading) {
+    	super(supportLoading);
         requiredEntries.add("java.lang.String.value");
         requiredEntries.add("java.lang.String.offset");
         requiredEntries.add("java.lang.String.count");

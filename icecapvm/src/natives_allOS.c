@@ -1247,7 +1247,7 @@ int16 initializeExceptions(int32* sp) {
 #else
 Object* outOfMemoryException;
 int16 initializeExceptions(int32* sp) {
-	if (JAVA_LANG_OUTOFMEMORYERROR_var != -1) {
+	if ((uint16)JAVA_LANG_OUTOFMEMORYERROR_var != (uint16)-1) {
 		if (handleNewClassIndex(sp, JAVA_LANG_OUTOFMEMORYERROR_var)) {
 			enterMethodInterpreter(JAVA_LANG_OUTOFMEMORYERROR_INIT__var, sp);
 			outOfMemoryException = (Object*) (pointer) sp[0];

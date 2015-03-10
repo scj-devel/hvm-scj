@@ -16,10 +16,7 @@ extern unsigned char initMethods(void);
 
 extern const MethodInfo *methods;
 extern const ClassInfo *classes;
-extern const unsigned short* const *interfaces;
 
-extern uint16 NUMBEROFCLASSINITIALIZERS_var;
-extern uint16 NUMBEROFCONSTANTS_var;
 extern uint16 JAVA_LANG_STRING_INITFROMCHARARRAY_var;
 extern uint16 JAVA_LANG_CLASSCASTEXCEPTION_INIT__var;
 extern uint16 JAVA_LANG_ARITHMETICEXCEPTION_INIT__var;
@@ -50,20 +47,13 @@ extern uint16 JAVA_LANG_NULLPOINTEREXCEPTION_var;
 extern uint16 _C_var;
 extern uint16 _I_var;
 extern uint16 VM_MEMORY_var;
-extern uint16 JAVA_LANG_STRING_VALUE_offset_var;
-extern uint16 JAVA_LANG_STRING_OFFSET_offset_var;
-extern uint16 JAVA_LANG_STRING_COUNT_offset_var;
-extern uint16 JAVA_LANG_THROWABLE_BACKTRACE_offset_var;
-extern uint16 JAVA_LANG_FLOAT_VALUE_offset_var;
 
 extern ConstantInfo *constants;
 extern uint16 mainMethodIndex;
-extern unsigned short *classInitializers;
+extern unsigned short *classInitializerSequence;
 
 static void dumpExceptionHandlers(unsigned char numExceptionHandlers, const ExceptionHandler* handlers);
-static void dumpVtable(unsigned short size, const unsigned short* vtable);
 static void dumpClassInterfaces(const unsigned short* interfaces);
-static void dumpInterfaces();
 static void dumpCode(unsigned short codeSize, const unsigned char* code);
 static void dumpName(const char* name);
 
@@ -74,7 +64,7 @@ int main(int argv, char** args) {
     initMethods();
 
     printf("serializing to %s\n", getOutputFile());
-    printf("serializing %d methods", NUMBEROFMETHODS);
+    printf("serializing %d methods ", NUMBEROFMETHODS);
     openOutput();
     dumpShort(NUMBEROFMETHODS);
     for (count = 0; count < NUMBEROFMETHODS; count++) {
@@ -95,7 +85,7 @@ int main(int argv, char** args) {
         }
     }
     printf("done\n");
-    printf("serializing %d constants", NUMBEROFCONSTANTS);
+    printf("serializing %d constants ", NUMBEROFCONSTANTS);
     dumpShort(NUMBEROFCONSTANTS);
     for (count = 0; count < NUMBEROFCONSTANTS; count++) {
         ConstantInfo *current = &constants[count];
@@ -116,7 +106,7 @@ int main(int argv, char** args) {
         } else if (current->type == CONSTANT_CLASS) {
             dumpInt(current->value);
         } else if ((current->type == CONSTANT_LONG) || (current->type == CONSTANT_DOUBLE)) {
-            unsigned char *data = current->data;
+            const unsigned char *data = current->data;
             unsigned char i;
             for (i = 0; i < 8; i++) {
                 dumpByte(*data++);
@@ -124,15 +114,15 @@ int main(int argv, char** args) {
         }
     }
     printf("done\n");
-    printf("serializing %d class initializers", NUMBEROFCLASSINITIALIZERS);
+    printf("serializing %d class initializers ", NUMBEROFCLASSINITIALIZERS);
     dumpShort(NUMBEROFCLASSINITIALIZERS);
     for (count = 0; count < NUMBEROFCLASSINITIALIZERS; count++) {
         printf(".");
-        dumpShort(classInitializers[count]);
+        dumpShort(classInitializerSequence[count]);
     }
 
     printf("done\n");
-    printf("serializing method store configuration variables\n");
+    printf("serializing method store configuration variables \n");
     dumpShort(mainMethodIndex);
     dumpShort(JAVA_LANG_STRING_INITFROMCHARARRAY_var);
     dumpShort(JAVA_LANG_CLASSCASTEXCEPTION_INIT__var);
@@ -159,17 +149,13 @@ int main(int argv, char** args) {
         dumpByte(current->hasLock);
         dumpShort(current->dobjectSize);
         dumpShort(current->pobjectSize);
-        dumpShort(current->classSize);
-        dumpShort(current->vtableSize);
-        dumpVtable(current->vtableSize, current->vtable);
         dumpClassInterfaces(current->interfaces);
         dumpName(current->name);
     }
     printf("done\n");
 
-    printf("serializing %d interfaces ", NUMBEROFINTERFACES);
-    dumpInterfaces();
-    printf("done\n");
+    dumpShort(CLASSDATASIZE);
+
     printf("serializing class store configuration variables\n");
     dumpShort(JAVA_LANG_STRING_var);
     dumpShort(JAVA_LANG_OBJECT_var);
@@ -188,33 +174,10 @@ int main(int argv, char** args) {
     dumpShort(_C_var);
     dumpShort(_I_var);
     dumpShort(VM_MEMORY_var);
-    dumpShort(JAVA_LANG_STRING_VALUE_offset_var);
-    dumpShort(JAVA_LANG_STRING_OFFSET_offset_var);
-    dumpShort(JAVA_LANG_STRING_COUNT_offset_var);
-    dumpShort(JAVA_LANG_THROWABLE_BACKTRACE_offset_var);
-    dumpShort(JAVA_LANG_FLOAT_VALUE_offset_var);
     printf("done\n");
     closeIO();
     printf("serialized %d bytes to %s\n", getByteCount(), getOutputFile());
     return 0;
-}
-
-static void dumpInterfaces() {
-    int count;
-    dumpShort(NUMBEROFINTERFACES);
-    for (count = 0; count < NUMBEROFINTERFACES; count++) {
-        const unsigned short* current = interfaces[count];
-        if (current) {
-            unsigned short currentLength = *current++;
-            dumpShort(currentLength);
-            while (currentLength) {
-                dumpShort(*current++);
-                currentLength--;
-            }
-        } else {
-            dumpShort(0);
-        }
-    }
 }
 
 static void dumpClassInterfaces(const unsigned short* interfaces) {
@@ -227,13 +190,6 @@ static void dumpClassInterfaces(const unsigned short* interfaces) {
         }
     } else {
         dumpShort(0);
-    }
-}
-
-static void dumpVtable(unsigned short size, const unsigned short* vtable) {
-    while (size) {
-        dumpShort(*vtable++);
-        size--;
     }
 }
 

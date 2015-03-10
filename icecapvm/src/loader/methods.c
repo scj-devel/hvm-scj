@@ -23,7 +23,7 @@ uint16 JAVA_LANG_STRING_INIT__var;
 uint16 JAVA_LANG_FLOAT_TOSTRING_var;
 
 MethodInfo *methods;
-unsigned short *classInitializers;
+unsigned short *classInitializerSequence;
 ConstantInfo *constants;
 uint16 mainMethodIndex;
 
@@ -141,15 +141,15 @@ unsigned char initMethods(void) {
     printShort(NUMBEROFCLASSINITIALIZERS_var);
     printStr(" class initializers");
 
-    classInitializers = _malloc_(sizeof(unsigned short) * NUMBEROFCLASSINITIALIZERS_var);
+    classInitializerSequence = _malloc_(sizeof(unsigned short) * NUMBEROFCLASSINITIALIZERS_var);
 
-    if (!classInitializers) {
+    if (!classInitializerSequence) {
         return 0;
     }
 
     for (count = 0; count < NUMBEROFCLASSINITIALIZERS_var; count++) {
         printStr(".");
-        classInitializers[count] = readShort();
+        classInitializerSequence[count] = readShort();
     }
     printStr("done\n");
 

@@ -4,7 +4,8 @@ import icecaptools.FieldOffsetCalculator;
 
 public class RequiredClassesManager extends RequiredEntryManager {
 
-    public RequiredClassesManager() {
+    public RequiredClassesManager(boolean supportLoading) {
+    	super(supportLoading);
         requiredEntries.add("java.lang.String");
         requiredEntries.add("java.lang.Object");
         requiredEntries.add("java.lang.Integer");

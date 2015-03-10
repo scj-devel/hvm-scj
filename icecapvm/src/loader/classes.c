@@ -2,9 +2,7 @@
 #include "../types.h"
 #include "io.h"
 
-static unsigned short* readVtable(unsigned short size);
 static unsigned short* readClassInterfaces(unsigned short length);
-static unsigned short** readInterfaces(unsigned short numberOfinterfaces);
 
 extern void printStr(const char* str);
 extern void printShort(unsigned short c);
@@ -41,7 +39,6 @@ unsigned short** interfaces;
 
 unsigned char initClasses(void) {
     unsigned short numberOfclasses;
-    unsigned short numberOfinterfaces;
     unsigned short count;
 
     numberOfclasses = readShort();
@@ -63,30 +60,6 @@ unsigned char initClasses(void) {
         current->hasLock = readByte();
         current->dobjectSize = readShort();
         current->pobjectSize = readShort();
-        current->classSize = readShort();
-        if (current->classSize) {
-            unsigned char* ptr;
-            unsigned short count;
-            count = current->classSize;
-            ptr = _malloc_(count);
-            if (!ptr) {
-                return 0;
-            }
-            current->cfielddata = ptr;
-            while (count) {
-                *ptr++ = 0;
-                count--;
-            }
-        } else {
-            current->cfielddata = 0;
-        }
-        current->vtableSize = readShort();
-        if (current->vtableSize) {
-            current->vtable = readVtable(current->vtableSize);
-            if (!current->vtable) {
-                return 0;
-            }
-        }
         {
             unsigned short length;
             length = readShort();
@@ -95,17 +68,6 @@ unsigned char initClasses(void) {
             }
         }
         current->name = readName();
-    }
-    printStr("done\n");
-    numberOfinterfaces = readShort();
-    printStr("deserializing ");
-    printShort(numberOfinterfaces);
-    printStr(" numberOfinterfaces");
-    if (numberOfinterfaces) {
-        interfaces = readInterfaces(numberOfinterfaces);
-        if (!interfaces) {
-            return 0;
-        }
     }
     printStr("done\n");
     printStr("deserializing class store configuration variables\n");
@@ -126,11 +88,6 @@ unsigned char initClasses(void) {
     _C_var = readShort();
     _I_var = readShort();
     VM_MEMORY_var = readShort();
-    JAVA_LANG_STRING_VALUE_offset_var = readShort();
-    JAVA_LANG_STRING_OFFSET_offset_var = readShort();
-    JAVA_LANG_STRING_COUNT_offset_var = readShort();
-    JAVA_LANG_THROWABLE_BACKTRACE_offset_var = readShort();
-    JAVA_LANG_FLOAT_VALUE_offset_var = readShort();
     printStr("done\n");
     closeIO();
     printStr("deserialized ");
@@ -139,46 +96,6 @@ unsigned char initClasses(void) {
     printStr(getOutputFile());
     printStr("\n");
     return 1;
-}
-
-static unsigned short** readInterfaces(unsigned short numberOfinterfaces) {
-    int count;
-    unsigned short** interfaces = _malloc_(sizeof(unsigned short*) * numberOfinterfaces);
-    if (!interfaces) {
-        return 0;
-    }
-    for (count = 0; count < numberOfinterfaces; count++) {
-        unsigned short currentLength = readShort();
-        printStr(".");
-        if (currentLength) {
-            unsigned short* current;
-            current = _malloc_(sizeof(unsigned short) * (currentLength + 1));
-            if (!current) {
-                return 0;
-            }
-            interfaces[count] = current;
-            *current++ = currentLength;
-            while (currentLength) {
-                *current++ = readShort();
-                currentLength--;
-            }
-        } else {
-            interfaces[count] = 0;
-        }
-    }
-    return interfaces;
-}
-
-static unsigned short* readVtable(unsigned short size) {
-    unsigned short* vtable = _malloc_(sizeof(unsigned short) * size);
-    unsigned short count;
-    if (!vtable) {
-        return 0;
-    }
-    for (count = 0; count < size; count++) {
-        vtable[count] = readShort();
-    }
-    return vtable;
 }
 
 static unsigned short* readClassInterfaces(unsigned short length) {

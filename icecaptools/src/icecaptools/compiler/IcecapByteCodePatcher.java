@@ -57,7 +57,7 @@ public class IcecapByteCodePatcher implements ByteCodePatcher {
     private RequiredMethodVTableIndexManager vtableIndexManager;
     private FieldOffsetCalculator foCalc;
 
-    public IcecapByteCodePatcher(AnalysisObserver observer, IDGenerator idGen, FieldOffsetCalculator foCalc) {
+    public IcecapByteCodePatcher(AnalysisObserver observer, IDGenerator idGen, FieldOffsetCalculator foCalc, boolean supportLoading) {
         methodNumbers = new HashMap<String, MethodAndNumber>();
         classNumbers = new HashMap<String, Integer>();
         objectFields = new HashMap<String, FieldInfo>();
@@ -68,7 +68,7 @@ public class IcecapByteCodePatcher implements ByteCodePatcher {
         numberOfClasses = 0;
 
         registeredBytecodes = new HashMap<String, List<BNode>>();
-        vtableIndexManager = new RequiredMethodVTableIndexManager(idGen);
+        vtableIndexManager = new RequiredMethodVTableIndexManager(idGen, supportLoading);
         this.foCalc = foCalc;
     }
 

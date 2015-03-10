@@ -98,4 +98,8 @@ public class ClassFieldsManager {
     public boolean hasClassFields() {
         return classDataLength > 0;
     }
+
+	public int getClassDataSize() {
+		return classDataLength >> 3;
+	}
 }

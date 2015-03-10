@@ -8,7 +8,8 @@ public class RequiredMethodsManager extends RequiredEntryManager {
 
     private ArrayList<String> entries;
     
-    public RequiredMethodsManager(IDGenerator idGen) {
+    public RequiredMethodsManager(IDGenerator idGen, boolean supportLoading) {
+    	super(supportLoading);
         entries = new ArrayList<String>();
         addRequiredMethod(idGen, "java.lang.String", "<init>", "([C)V", "java_lang_String_initFromCharArray");
         addRequiredMethod(idGen, "java.lang.ClassCastException", "<init>", "()V", "java_lang_ClassCastException_init_");

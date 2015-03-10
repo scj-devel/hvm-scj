@@ -72,8 +72,11 @@ public class Compiler {
     private CodeDetector codeDetector;
     private NativeMethodDetector nativeMethodDetector;
 
-    public Compiler(IDGenerator idGen, RequiredMethodsManager rmManager, IcecapTool manager) {
-        this.idGen = idGen;
+    private boolean supportLoading;
+    
+    public Compiler(IDGenerator idGen, RequiredMethodsManager rmManager, IcecapTool manager, boolean supportLoading) {
+        this.supportLoading = supportLoading;
+    	this.idGen = idGen;
         this.rmManager = rmManager;
         this.codeDetector = manager.getCodeDetector();
         this.nativeMethodDetector = manager.getNativeMethodDetector();
@@ -98,9 +101,9 @@ public class Compiler {
     }
 
     public void writeClassesToFile(String filename, ByteCodePatcher patcher, IcecapTool manager, FieldOffsetCalculator foCalc, AnalysisObserver observer, String outputFolder, ICompilationRegistry cregistry, ResourceManager resourceManager, PrintStream out) throws Throwable {
-        RequiredEntryManager rcManager = new RequiredClassesManager();
-        RequiredFieldsManager fieldsManager = new RequiredFieldsManager();
-        RequiredEntryManager interfacesManager = new RequiredInterfacesManager();
+    	RequiredEntryManager rcManager = new RequiredClassesManager(supportLoading);
+        RequiredFieldsManager fieldsManager = new RequiredFieldsManager(supportLoading);
+        RequiredEntryManager interfacesManager = new RequiredInterfacesManager(supportLoading);
         ReferencesManager referencesManager = new ReferencesManager(foCalc);
         ClassFieldsManager classFieldsManager = new ClassFieldsManager();
         StructsManager structsManager = new StructsManager(foCalc, idGen);
@@ -340,6 +343,7 @@ public class Compiler {
             }
         }
 
+        requieredFields.append("#define CLASSDATASIZE " + classFieldsManager.getClassDataSize() + "\n");
         fileSb.append("unsigned char initClasses(void) {\n");
         if (classFieldsManager.hasClassFields()) {
             fileSb.append("   classData = &_classData[0];\n");
@@ -509,6 +513,7 @@ public class Compiler {
         OutputLocation nativeTargetSource = null;
         OutputLocation nativeHostSource = null;
 
+        MethodsFile methodsFile = new MethodsFile(true);
         StaticInitializersManager siManager = new StaticInitializersManager(patcher);
 
         HVMProperties props = tool.getProperties();
@@ -557,6 +562,8 @@ public class Compiler {
         LabeledMemorySegment requiredIncludes = new LabeledMemorySegment(tool.getProperties());
         NoDuplicatesMemorySegment userIncludes = new NoDuplicatesMemorySegment(tool.getProperties());
 
+        methodsFile.setHeader(header);
+        
         requiredIncludes.print("#include \"classes.h\"\n");
 
         // for code all classes
@@ -759,9 +766,10 @@ public class Compiler {
         }
         header.print("#define NUMBEROFCONSTANTS " + patcher.getConstants().size() + "\n");
         header.print("#define MAINMETHODINDEX " + mainMethodIndex + "\n");
-        header.print("#define NUMBEROFCLASSINITIALIZERS_var NUMBEROFCLASSINITIALIZERS\n");
-        header.print("#define NUMBEROFCONSTANTS_var NUMBEROFCONSTANTS\n");
-
+        
+        methodsFile.generateMainMethodIndexDecl();
+        methodsFile.generateNumberOfClassInitializersDecl();
+        methodsFile.generateNumberOfConstantsDecl();
         header.print("#define NUMBEROFMETHODS " + methodNumber + "\n");
 
         sb.stopProgmem();
@@ -771,12 +779,19 @@ public class Compiler {
         try {
             StringBuffer result = new StringBuffer();
 
+            methodsFile.setImplementation(result);
+
             addToRequiredIncludes(userIncludes.toString(), requiredIncludes);
             addToRequiredIncludes("#include \"types.h\"\n#include \"ostypes.h\"\n#include \"methods.h\"\n\n", requiredIncludes);
             addToRequiredIncludes("extern void unimplemented_native_function(uint16 methodID);", requiredIncludes);
             String includes = oraganizeRequiredIncludes(requiredIncludes);
 
             result.append(includes);
+            
+            methodsFile.generateNumberOfClassInitializersImpl();
+            methodsFile.generateNumberOfConstantsImpl();
+            methodsFile.generateMainMethodIndexImpl();
+
             result.append(sb.toString());
             result.append(nfileManager.getDeclerations(additionalHeaderFileContent));
             if (props.includeMethodAndClassNames()) {
@@ -796,7 +811,7 @@ public class Compiler {
 
             result.append(usedExceptions.toString());
             result.append("const MethodInfo *methods = &_methods[0];\n");
-            if (constantDecls.length() > 0) {
+            if ((constantDecls.length() > 0) || supportLoading) {
                 result.append("const ConstantInfo *constants;\n");
             }
 

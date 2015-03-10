@@ -9,13 +9,16 @@ public abstract class RequiredEntryManager {
 
     private HashMap<String, Integer> createdEntries;
 
+	private boolean supportLoading;
+
     public void registerEntry(String name, int number) {
         createdEntries.put(name, new Integer(number));
     }
 
-    protected RequiredEntryManager() {
+    protected RequiredEntryManager(boolean supportLoading) {
         requiredEntries = new ArrayList<String>();
         createdEntries = new HashMap<String, Integer>();
+        this.supportLoading = supportLoading;
     }
 
     protected StringBuffer getDeclarations(boolean includeRegistered) {
@@ -64,10 +67,16 @@ public abstract class RequiredEntryManager {
         while (iterator.hasNext()) {
             String next = iterator.next();
             String itemName = getItemName(next);
-            
-            declarations.append("#define " + itemName + "_var " + itemName + "\n");
-
-            // initializations.append("RANGE uint16 " + itemName + "_var = " + itemName + ";\n");
+            if (supportLoading)
+            {
+                declarations.append("extern uint16 " + itemName + "_var;\n");
+                initializations.append("RANGE uint16 " + itemName + "_var = " + itemName + ";\n");            	
+            }
+            else
+            {
+                declarations.append("#define " + itemName + "_var " + itemName + "\n");
+                // initializations.append("RANGE uint16 " + itemName + "_var = " + itemName + ";\n");            	
+            }
         }
     }
 }
