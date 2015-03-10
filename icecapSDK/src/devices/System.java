@@ -50,7 +50,7 @@ public class System {
 	{
 		if (key.equals("line.separator"))
 		{
-			return "\n";
+			return "\n"; 
 		}
 		else
 		{
