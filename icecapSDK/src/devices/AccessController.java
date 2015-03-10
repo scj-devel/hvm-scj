@@ -8,6 +8,7 @@ import sun.security.action.GetPropertyAction;
 
 public class AccessController {
 
+	@SuppressWarnings("unchecked")
 	@IcecapCompileMe
 	public static <T> T doPrivileged(PrivilegedAction<T>  action)
 	{

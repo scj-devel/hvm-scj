@@ -49,7 +49,7 @@ public abstract class ManagedMemory extends MemoryArea {
 
 	static boolean flag = true;
 
-	@SuppressWarnings("unused")
+	//@SuppressWarnings("unused")
 	//private static MemoryArea backingStore;
 
 	/**

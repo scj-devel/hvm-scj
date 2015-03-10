@@ -136,7 +136,7 @@ public class TestAll {
 			"TestSCJLevel2Thread0.java", "TestSCJStep0.java",
 			/* "TestCalculator.java",
 			 "TestNewFloat.java",
-			 */"TestLong.java", "TestMiniTests.java", "TestCAS.java", "TestSystemOutPrintln.java" };
+			 */"TestLong.java", "TestMiniTests.java", "TestCAS.java"};
 
 	// private static String[] skippedClasses = { /*"TestStackScan1.java",
 	// "TestReflectClasses2.java", "TestObjectTraversal.java", */

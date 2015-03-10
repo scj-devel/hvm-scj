@@ -13,7 +13,6 @@ import icecaptools.compiler.DefaultIcecapSourceCodeLinker;
 import icecaptools.compiler.DefaultMethodObserver;
 import icecaptools.compiler.ICompilationRegistry;
 import icecaptools.compiler.NativeMethodDetector;
-import icecaptools.compiler.TestCompilationRegistry;
 import icecaptools.conversion.ConversionConfiguration;
 
 import java.io.FileOutputStream;
@@ -44,28 +43,6 @@ public class CompilationManager {
 
 		@Override
 		public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
-			// java.lang.CharacterData
-			// java.io.
-			// java.lang.System
-			// java.lang.SecurityManager
-			// java.lang.Terminator
-			// java.lang.Shutdown
-
-			//			if (clazz.startsWith("java.lang.CharacterData")) { // No
-			//	            return true;
-			//	        }
-			//			if (clazz.startsWith("java.lang.System")) { // No
-			//	            return true;
-			//	        }
-			//			if (clazz.startsWith("java.lang.SecurityManager")) {
-			//	            return true;
-			//	        }
-			//			if (clazz.startsWith("java.lang.Terminator")) {
-			//	            return true;
-			//	        }
-			//			if (clazz.startsWith("java.lang.Shutdown")) {
-			//	            return true;
-			//	        }
 			if (clazz.startsWith("sun.")) {
 				if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
 					return false;
@@ -135,7 +112,7 @@ public class CompilationManager {
 	public static void main(String args[]) throws Throwable {
 		boolean aotCompile = false;
 		boolean includeJMLMethods = true;
-		String pathSeparator = System.getProperty("path.separator");
+		// String pathSeparator = System.getProperty("path.separator");
 
 		/*System.out.println("Press any key to start");
 		Scanner in = new Scanner(System.in);
@@ -195,7 +172,7 @@ public class CompilationManager {
 		// String inputPackage = "javax.realtime.test";
 		// String inputPackage = "javax.safetycritical.test";
 
-		String inputClass = "TestSystemOutPrintln";
+		String inputClass = "JMLTest1";
 
 		// String inputClass = "Main2Clock";
 		// String inputClass = "Main2RealtimeClock";
@@ -258,7 +235,7 @@ public class CompilationManager {
 		// "/home/skr/workspace/JMLTest/bin:/home/skr/workspace/JMLTest/lib/jml4c.jar";
 
 		String outputFolder = "";
-		String inputFolder = "/home/skr/git/hvm-scj/icecaptoolstest/bin";
+		String inputFolder = "/home/skr/workspace/OpenJMLTest/bin:/home/skr/workspace/OpenJMLTest/lib/jmlruntime.jar:/home/skr/git/hvm-scj/icecapSDK/bin";
 
 		// String sourceFileName = null;
 		// String inputFolder = "/home/sek/workspace/CDj/bin";

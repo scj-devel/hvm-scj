@@ -33,10 +33,11 @@ extern unsigned short getClassIndex(Object* obj);
 extern void setClassIndex(Object* obj, unsigned short classIndex);
 extern unsigned char handleNewClassIndex(int32* sp, unsigned short classIndex);
 extern int16 enterMethodInterpreter(unsigned short methodNumber, int32* sp);
-extern unsigned char* createArrayFromElementSize(unsigned short classIndex,
-		unsigned char elementSize, uint16 count FLASHARG(uint8 flash));
+
+#if defined(N_JAVA_LANG_CLASS_NEWINSTANCE) || defined(N_JAVA_LANG_THREAD_START) || (defined(JAVA_LANG_THROWABLE_INIT_) &&  defined(PRE_INITIALIZE_EXCEPTIONS)) || defined(N_JAVA_LANG_CLASS_GETMETHOD)
 extern int16 initializeException(int32* sp, int16 exceptionClass,
 		int16 exceptionInitMethod);
+#endif
 
 #if defined(INVOKECLASSINITIALIZERS)
 int16 invokeClassInitializers(int32* sp);
@@ -83,8 +84,7 @@ static Object *head;
 
 #if defined (N_JAVA_LANG_SYSTEM_GETPROPERTY)
 extern int16 devices_System_getProperty(int32 *fp, int32 key);
-int16 n_java_lang_System_getProperty(int32 *sp)
-{
+int16 n_java_lang_System_getProperty(int32 *sp) {
 	devices_System_getProperty(sp, sp[0]);
 	return -1;
 }
@@ -203,7 +203,8 @@ int16 n_java_lang_Class_getName0(int32 *sp) {
 	classIndex = getClassIndex(this);
 
 	if (classIndex == JAVA_LANG_CLASS) {
-		classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(this, Object*) + sizeof(Object));
+		classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(this,
+				Object*) + sizeof(Object));
 
 		className = (char*) pgm_read_pointer(&classes[classIndex].name, char**);
 
@@ -220,7 +221,8 @@ int16 n_java_lang_Class_getName0(int32 *sp) {
  * return: void
  */
 #ifdef N_DEVICES_X86WRITER_NWRITE
-static void print_to_stdout(unsigned char* src, unsigned char* buffer, int32 buffersize, int32 nb) {
+static void print_to_stdout(unsigned char* src, unsigned char* buffer,
+		int32 buffersize, int32 nb) {
 	int32 count;
 	int32 length;
 
@@ -630,9 +632,9 @@ Object* getClass(unsigned short classIndex) {
 	}
 	{
 		unsigned short dobjectSize =
-				pgm_read_word(&classes[JAVA_LANG_CLASS_var].dobjectSize) >> 3;
+		pgm_read_word(&classes[JAVA_LANG_CLASS_var].dobjectSize) >> 3;
 		unsigned short pobjectSize =
-				pgm_read_word(&classes[JAVA_LANG_CLASS_var].pobjectSize) >> 3;
+		pgm_read_word(&classes[JAVA_LANG_CLASS_var].pobjectSize) >> 3;
 
 		class = gc_allocateObjectInArea(dobjectSize, pobjectSize);
 
@@ -783,6 +785,9 @@ int16 n_java_security_AccessController_doPrivileged(int32 *sp) {
  * return: java.lang.Object
  */
 #ifdef N_JAVA_LANG_REFLECT_ARRAY_NEWARRAY
+extern unsigned char* createArrayFromElementSize(unsigned short classIndex,
+		unsigned char elementSize, uint16 count FLASHARG(uint8 flash));
+
 int16 n_java_lang_reflect_Array_newArray(int32 *sp) {
 	Object* class = (Object*) (pointer) sp[0];
 	int32 size = sp[1];
@@ -981,8 +986,13 @@ int16 n_test_TestCVar1_getLVar(int32 *sp)
 
 pointer stackPointer = 0;
 
+#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED) && defined(VM_INTERRUPTDISPATCHER_INTERRUPT_USED)
 extern void handleException(unsigned short classIndex);
+#endif
+
+#if defined(VM_PROCESS_EXECUTEWITHSTACK)
 extern void set_stack_pointer();
+#endif
 
 #if defined(VM_CLOCKINTERRUPTHANDLER_HANDLE) || defined(VM_PROCESS_INITIALIZE)
 static struct _vm_Process_c* currentProcess;
@@ -1657,7 +1667,8 @@ int16 n_java_lang_Class_getConstructor(int32 *sp) {
 	Object *cls = HEAP_REF((Object* )(pointer )sp[0], Object*);
 	Object *argsarray = HEAP_REF((Object* )(pointer )sp[1], Object*);
 
-	uint16 classIndex = *(unsigned short *) ((unsigned char*) cls + sizeof(Object));
+	uint16 classIndex = *(unsigned short *) ((unsigned char*) cls
+			+ sizeof(Object));
 	uint16 count = *((uint16*) argsarray + 1);
 
 	uint16 i;
@@ -1667,15 +1678,26 @@ int16 n_java_lang_Class_getConstructor(int32 *sp) {
 		if ((methodInfo->classIndex >> 1) == classIndex) {
 			unsigned char minfo = pgm_read_byte(&methodInfo->minfo) >> 6;
 			if ((minfo & 0x1) && (methodInfo->numArgs == count)) {
-				unsigned short dobjectSize = pgm_read_word(&classes[JAVA_LANG_REFLECT_CONSTRUCTOR].dobjectSize) >> 3;
-				unsigned short pobjectSize = pgm_read_word(&classes[JAVA_LANG_REFLECT_CONSTRUCTOR].pobjectSize) >> 3;
+				unsigned short dobjectSize =
+						pgm_read_word(
+								&classes[JAVA_LANG_REFLECT_CONSTRUCTOR].dobjectSize)
+								>> 3;
+				unsigned short pobjectSize =
+						pgm_read_word(
+								&classes[JAVA_LANG_REFLECT_CONSTRUCTOR].pobjectSize)
+								>> 3;
 
-				Object* constructor = gc_allocateObjectInArea(dobjectSize, pobjectSize);
+				Object* constructor = gc_allocateObjectInArea(dobjectSize,
+						pobjectSize);
 
 				if (constructor != 0) {
-					setClassIndex(constructor, (unsigned short) JAVA_LANG_REFLECT_CONSTRUCTOR);
-					*(unsigned short *) ((unsigned char*) HEAP_REF(constructor, Object*) + sizeof(Object)) = i;
-					*(unsigned short *) ((unsigned char*) HEAP_REF(constructor, Object*) + sizeof(Object) + sizeof(unsigned short)) = classIndex;
+					setClassIndex(constructor,
+							(unsigned short) JAVA_LANG_REFLECT_CONSTRUCTOR);
+					*(unsigned short *) ((unsigned char*) HEAP_REF(constructor,
+							Object*) + sizeof(Object)) = i;
+					*(unsigned short *) ((unsigned char*) HEAP_REF(constructor,
+							Object*) + sizeof(Object) + sizeof(unsigned short)) =
+							classIndex;
 					sp[0] = (int32) (pointer) constructor;
 				}
 				return -1;

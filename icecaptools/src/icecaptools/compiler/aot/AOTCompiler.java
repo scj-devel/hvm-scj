@@ -804,6 +804,7 @@ public abstract class AOTCompiler implements SPManipulator {
 
                 } else {
                     output.append("         excep = checkImplements((Object*)object, " + superType + ");\n");
+                    requiredIncludes.print("unsigned char checkImplements(Object* object, unsigned short interfaceIndex);\n");                    
                 }
                 output.append("      }\n");
 
@@ -838,7 +839,6 @@ public abstract class AOTCompiler implements SPManipulator {
                 }
                 localVariables.print("   " + getTypeCast(entrypoints.getReturnTypeSize()) + " excep;\n");
                 requiredIncludes.print("extern unsigned char isSubClassOf(unsigned short subClass, unsigned short superClass);\n");
-                requiredIncludes.print("unsigned char checkImplements(Object* object, unsigned short interfaceIndex);\n");
                 pc += 3;
                 break;
             }
