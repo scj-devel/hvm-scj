@@ -340,7 +340,6 @@ public class Compiler {
         	 fileSb.append("const unsigned char *inheritanceMatrix = &_inheritanceMatrix[0];\n");
         }
         fileSb.append("#endif\n");
-        
         fileSb.append("const ClassInfo *classes = &_classes[0];\n");
 
         if (classFieldsManager.hasClassFields()) {
