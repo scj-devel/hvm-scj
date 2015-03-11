@@ -65,7 +65,7 @@ public class TestCompiler {
 
         AnalysisObserver observer = new DefaultObserver();
 
-        Converter converter = new Converter(System.out, new DefaultMethodObserver(), new DefaultCompilationRegistry());
+        Converter converter = new Converter(System.out, new DefaultMethodObserver(), new DefaultCompilationRegistry(), false);
         converter.setObserver(observer);
         VirtualTable vtable = VirtualTable.createVTable(clazz.getClassName(), observer);
 

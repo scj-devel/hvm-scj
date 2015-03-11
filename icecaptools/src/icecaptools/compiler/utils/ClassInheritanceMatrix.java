@@ -1,6 +1,7 @@
 package icecaptools.compiler.utils;
 
 import icecaptools.compiler.Compiler;
+import icecaptools.compiler.ConstantGenerator;
 
 public class ClassInheritanceMatrix {
 
@@ -49,7 +50,7 @@ public class ClassInheritanceMatrix {
         for (int i = 0; i < bits.length; i++)
         {
             byte b = bits[i];
-            buffer.append("0x").append(Compiler.HEXES.charAt((b & 0xF0) >> 4)).append(Compiler.HEXES.charAt((b & 0x0F)));
+            buffer.append("0x").append(ConstantGenerator.HEXES.charAt((b & 0xF0) >> 4)).append(ConstantGenerator.HEXES.charAt((b & 0x0F)));
             if (i < bits.length - 1)
             {
                 buffer.append(",");

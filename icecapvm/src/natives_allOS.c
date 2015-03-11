@@ -204,7 +204,7 @@ int16 n_java_lang_Class_getName0(int32 *sp) {
 
 	if (classIndex == JAVA_LANG_CLASS) {
 		classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(this,
-				Object*) + sizeof(Object));
+						Object*) + sizeof(Object));
 
 		className = (char*) pgm_read_pointer(&classes[classIndex].name, char**);
 
@@ -478,9 +478,9 @@ static void arraycopy(unsigned char* src, unsigned short srcPos,
 	count = imul(length, elementSize);
 #else
 	src = HEAP_REF(src, unsigned char*) + sizeof(Object) + 2
-			+ (srcPos * elementSize);
+	+ (srcPos * elementSize);
 	dst = HEAP_REF(dst, unsigned char*) + sizeof(Object) + 2
-			+ (dstPos * elementSize);
+	+ (dstPos * elementSize);
 
 	count = length * elementSize;
 #endif
@@ -607,7 +607,7 @@ Object* createStringObject(int32 size, const char* data, int32* sp) {
 
 		for (count = 0; count < size; count++) {
 			*((int32 *) (HEAP_REF(charArrayObject, unsigned char *)
-					+ sizeof(Object) + 2) + count) = pgm_read_byte(
+							+ sizeof(Object) + 2) + count) = pgm_read_byte(
 					data + count);
 		}
 		object = initializeStringObject(sp, charArrayObject);
@@ -623,7 +623,7 @@ Object* getClass(unsigned short classIndex) {
 	Object *class = head;
 	while (class != 0) {
 		if (*(unsigned short *) ((unsigned char*) HEAP_REF(class, Object*)
-				+ sizeof(Object)) == classIndex) {
+						+ sizeof(Object)) == classIndex) {
 			return class;
 		} else {
 			class = *(Object **) ((unsigned char*) HEAP_REF(class, Object*)
@@ -1197,6 +1197,10 @@ extern unsigned char initClasses(void);
 
 unsigned char vm_initialized;
 
+#ifdef SUPPORT_LOADING
+extern unsigned char loadApp();
+#endif
+
 unsigned char init_vm(void) {
 #if defined(ENABLE_DEBUG)
 	unsigned short index;
@@ -1217,12 +1221,16 @@ unsigned char init_vm(void) {
 	}
 #endif
 
-	if (initMethods() && initClasses()) {
-		vm_initialized = 1;
-		return 1;
-	} else {
-		return 0;
+	if (initMethods()) {
+#ifdef SUPPORT_LOADING
+		loadApp();
+#endif
+		if (initClasses()) {
+			vm_initialized = 1;
+			return 1;
+		}
 	}
+	return 0;
 }
 
 #if defined(JAVA_LANG_THROWABLE_INIT_)
@@ -1247,7 +1255,7 @@ int16 initializeExceptions(int32* sp) {
 #else
 Object* outOfMemoryException;
 int16 initializeExceptions(int32* sp) {
-	if ((uint16)JAVA_LANG_OUTOFMEMORYERROR_var != (uint16)-1) {
+	if ((uint16) JAVA_LANG_OUTOFMEMORYERROR_var != (uint16) -1) {
 		if (handleNewClassIndex(sp, JAVA_LANG_OUTOFMEMORYERROR_var)) {
 			enterMethodInterpreter(JAVA_LANG_OUTOFMEMORYERROR_INIT__var, sp);
 			outOfMemoryException = (Object*) (pointer) sp[0];
@@ -1679,13 +1687,13 @@ int16 n_java_lang_Class_getConstructor(int32 *sp) {
 			unsigned char minfo = pgm_read_byte(&methodInfo->minfo) >> 6;
 			if ((minfo & 0x1) && (methodInfo->numArgs == count)) {
 				unsigned short dobjectSize =
-						pgm_read_word(
-								&classes[JAVA_LANG_REFLECT_CONSTRUCTOR].dobjectSize)
-								>> 3;
+				pgm_read_word(
+						&classes[JAVA_LANG_REFLECT_CONSTRUCTOR].dobjectSize)
+				>> 3;
 				unsigned short pobjectSize =
-						pgm_read_word(
-								&classes[JAVA_LANG_REFLECT_CONSTRUCTOR].pobjectSize)
-								>> 3;
+				pgm_read_word(
+						&classes[JAVA_LANG_REFLECT_CONSTRUCTOR].pobjectSize)
+				>> 3;
 
 				Object* constructor = gc_allocateObjectInArea(dobjectSize,
 						pobjectSize);
@@ -1694,10 +1702,10 @@ int16 n_java_lang_Class_getConstructor(int32 *sp) {
 					setClassIndex(constructor,
 							(unsigned short) JAVA_LANG_REFLECT_CONSTRUCTOR);
 					*(unsigned short *) ((unsigned char*) HEAP_REF(constructor,
-							Object*) + sizeof(Object)) = i;
+									Object*) + sizeof(Object)) = i;
 					*(unsigned short *) ((unsigned char*) HEAP_REF(constructor,
-							Object*) + sizeof(Object) + sizeof(unsigned short)) =
-							classIndex;
+									Object*) + sizeof(Object) + sizeof(unsigned short)) =
+					classIndex;
 					sp[0] = (int32) (pointer) constructor;
 				}
 				return -1;

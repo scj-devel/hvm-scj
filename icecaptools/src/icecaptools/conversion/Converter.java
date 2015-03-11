@@ -108,13 +108,16 @@ public class Converter implements ClassManager {
 
     private CallGraph cg;
 
-    public Converter(PrintStream out, RestartableMethodObserver methodObserver, ICompilationRegistry cregistry) throws ClassNotFoundException {
+	private boolean supportLoading;
+
+    public Converter(PrintStream out, RestartableMethodObserver methodObserver, ICompilationRegistry cregistry, boolean supportLoading) throws ClassNotFoundException {
         this.out = out;
         dependencyExtent = new DependencyExtent();
         dependencyRestrictor = new DependencyRestrictor(cregistry);
         this.methodObserver = methodObserver;
         initialized = false;
-
+        this.supportLoading = supportLoading;
+        
         cg = new CallGraph();
     }
 
@@ -148,6 +151,13 @@ public class Converter implements ClassManager {
             if (ClassfileUtils.hasClassInitializer(clazz)) {
                 entryPoint = convertByteCode(null, clazz, "<clinit>", "()V", true);
                 newList = dependencyWalker.analyseMethod(entryPoint, new NewList());
+            }
+            
+            if (supportLoading)
+            {
+            	JavaClass systemClass = dependencyWalker.lookupClass("devices.System");
+            	entryPoint = convertByteCode(null, systemClass, "includeHWObjectSupport", "()V", true);
+            	newList = dependencyWalker.analyseMethod(entryPoint, newList);
             }
 
             if (config.getEntryPointMethodName() == null) {

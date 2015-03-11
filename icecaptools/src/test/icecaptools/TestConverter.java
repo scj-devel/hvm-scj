@@ -28,7 +28,7 @@ public class TestConverter extends TestCase {
     }
 
     public void testCreateVTable() throws Exception {
-        Converter converter = new Converter(System.out, new DefaultMethodObserver(), new DefaultCompilationRegistry());
+        Converter converter = new Converter(System.out, new DefaultMethodObserver(), new DefaultCompilationRegistry(), false);
         ClassPath classPath = new ClassPath("C:\\home\\workspace\\icecaptools\\bin");
 
         SyntheticRepository repository = SyntheticRepository.getInstance(classPath);
@@ -64,7 +64,7 @@ public class TestConverter extends TestCase {
         try {
             JavaClass clazz = Repository.lookupClass("java.net.InetAddress");
             AnalysisObserver observer = new TestObserver();
-            Converter converter = new Converter(System.out, new DefaultMethodObserver(), new DefaultCompilationRegistry());
+            Converter converter = new Converter(System.out, new DefaultMethodObserver(), new DefaultCompilationRegistry(), false);
             converter.setObserver(observer);
             converter.convertByteCode(null, clazz, "<clinit>", "()V", true);
         } catch (ClassNotFoundException e) {
@@ -86,7 +86,7 @@ public class TestConverter extends TestCase {
         try {
             clazz = Repository.lookupClass("java.util.ResourceBundle");
             AnalysisObserver observer = new TestObserver();
-            Converter converter = new Converter(System.out, new DefaultMethodObserver(), new DefaultCompilationRegistry());
+            Converter converter = new Converter(System.out, new DefaultMethodObserver(), new DefaultCompilationRegistry(), false);
             converter.setObserver(observer);
             converter.convertByteCode(null, clazz, "getClassContext", "()[Ljava/lang/Class;", true);
         } catch (ClassNotFoundException e) {

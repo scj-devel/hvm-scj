@@ -6,6 +6,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import test.HelloWorld;
+import vm.Address;
+import vm.Address32Bit;
+import vm.HardwareObject;
+
 public class System {
 	
 	public static void delay(int i) {
@@ -43,6 +48,21 @@ public class System {
 
 	public static void initializeSystemClass() {
 		java.lang.System.setOut(new DevicePrintStream());
+	}
+	
+	private static class DummyHWObject extends HardwareObject
+	{
+		@SuppressWarnings("unused")
+		public int dummyField;
+		public DummyHWObject(Address address) {
+			super(address);
+		}
+	}
+	
+	public static void includeHWObjectSupport()
+	{
+		DummyHWObject dummy = new DummyHWObject(new Address32Bit(0));
+		dummy.dummyField = 42;
 	}
 	
 	@IcecapCompileMe

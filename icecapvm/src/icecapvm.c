@@ -149,7 +149,7 @@ int run_vm(void)
 #endif
 
     /* Start the VM */
-      execp = enterMethodInterpreter(MAINMETHODINDEX, mainMethodJavaStack);
+      execp = enterMethodInterpreter(mainMethodIndex, mainMethodJavaStack);
 
 #if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
       stop_system_tick();

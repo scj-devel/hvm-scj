@@ -7,32 +7,33 @@
 extern void printStr(const char* str);
 extern void printShort(unsigned short c);
 
-uint16 NUMBEROFCLASSINITIALIZERS_var;
-uint16 NUMBEROFCONSTANTS_var;
-uint16 JAVA_LANG_STRING_INITFROMCHARARRAY_var;
-uint16 JAVA_LANG_CLASSCASTEXCEPTION_INIT__var;
-uint16 JAVA_LANG_ARITHMETICEXCEPTION_INIT__var;
-uint16 JAVA_LANG_OUTOFMEMORYERROR_INIT__var;
-uint16 JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var;
-uint16 JAVA_LANG_OBJECT_CLONE_var;
-uint16 VM_INTERRUPTDISPATCHER_INTERRUPT_var;
-uint16 TASKS_MODBUSDISPATCHER_DISPATCH_var;
-uint16 JAVA_LANG_STRINGBUFFER_APPEND_var;
-uint16 JAVA_LANG_STRINGBUILDER_APPEND_var;
-uint16 JAVA_LANG_STRING_INIT__var;
-uint16 JAVA_LANG_FLOAT_TOSTRING_var;
+extern uint16 NUMBEROFCLASSINITIALIZERS_var;
+extern uint16 NUMBEROFCONSTANTS_var;
+extern uint16 JAVA_LANG_STRING_INITFROMCHARARRAY_var;
+extern uint16 JAVA_LANG_CLASSCASTEXCEPTION_INIT__var;
+extern uint16 JAVA_LANG_ARITHMETICEXCEPTION_INIT__var;
+extern uint16 JAVA_LANG_OUTOFMEMORYERROR_INIT__var;
+extern uint16 JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var;
+extern uint16 JAVA_LANG_OBJECT_CLONE_var;
+extern uint16 VM_INTERRUPTDISPATCHER_INTERRUPT_var;
+extern uint16 TASKS_MODBUSDISPATCHER_DISPATCH_var;
+extern uint16 JAVA_LANG_STRINGBUFFER_APPEND_var;
+extern uint16 JAVA_LANG_STRINGBUILDER_APPEND_var;
+extern uint16 JAVA_LANG_STRING_INIT__var;
+extern uint16 JAVA_LANG_FLOAT_TOSTRING_var;
 
 MethodInfo *methods;
 unsigned short *classInitializerSequence;
 ConstantInfo *constants;
 uint16 mainMethodIndex;
+Object** stringConstants;
 
-/* gcc -Wall -pedantic -g -O0 -DPC64 -DPRINTFSUPPORT -DJAVA_HEAP_SIZE=131072 loader/methods.c loader/classes.c loader/io_allOS.c loader/io_i86.c icecapvm.c  methodinterpreter.c  gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c  print.c natives_target.c */
+/* gcc -Wall -pedantic -g -O0 -DPC64 -DSUPPORT_LOADING -DPRINTFSUPPORT -DJAVA_HEAP_SIZE=1310720 loader/classesLoader.c  icecapvm.c  methodinterpreter.c  loader/methodsLoader.c loader/io_allOS.c loader/io_i86.c gc.c natives_allOS.c natives_i86.c rom_heap.c natives_target.c allocation_point.c rom_access.c native_scj.c print.c methods.c -lpthread x86_64_interrupt.s -lrt */
 
 static ExceptionHandler* readExceptionHandlers(unsigned char numExceptionHandlers);
 static unsigned char* readCode(unsigned short codeSize);
 
-unsigned char initMethods(void) {
+unsigned char loadApp(void) {
     unsigned short numberOfMethods;
     int count;
 
@@ -89,7 +90,7 @@ unsigned char initMethods(void) {
     NUMBEROFCONSTANTS_var = readShort();
     printStr("deserializing ");
     printShort(NUMBEROFCONSTANTS_var);
-    printStr(" constants");
+    printStr(" constants ");
     constants = _malloc_(sizeof(ConstantInfo) * NUMBEROFCONSTANTS_var);
 
     if (!constants) {

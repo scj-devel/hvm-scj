@@ -111,7 +111,7 @@ public class CompilationManager {
 
 	public static void main(String args[]) throws Throwable {
 		boolean aotCompile = false;
-		boolean includeJMLMethods = true;
+		boolean includeJMLMethods = false;
 		// String pathSeparator = System.getProperty("path.separator");
 
 		/*System.out.println("Press any key to start");
@@ -172,7 +172,7 @@ public class CompilationManager {
 		// String inputPackage = "javax.realtime.test";
 		// String inputPackage = "javax.safetycritical.test";
 
-		String inputClass = "TestDeterminant";
+		String inputClass = "TestDownload1";
 
 		// String inputClass = "Main2Clock";
 		// String inputClass = "Main2RealtimeClock";

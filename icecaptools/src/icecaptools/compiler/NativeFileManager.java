@@ -10,176 +10,212 @@ import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.Type;
 
 public class NativeFileManager {
-    private StringBuffer sourceFileContent;
-    private StringBuffer headerFileContent;
-    private StringBuffer nativeFileHeader;
-    private StringBuffer nativeFileHostSource;
-    private StringBuffer nativeFileTargetSource;
+	private StringBuffer sourceFileContent;
+	private StringBuffer headerFileContent;
+	private StringBuffer nativeFileHeader;
+	private StringBuffer nativeFileHostSource;
+	private StringBuffer nativeFileTargetSource;
 
-    private ArrayList<String> functions;
-    private boolean functionsSorted;
-    
-    public static final String UserNativeFunctionExtensionPointId = Activator.PLUGIN_ID + ".UserNativeFunction";
-    public static final String UserNativeFunctionExtensionPointElement = "class";
+	private ArrayList<String> nativeFunctions;
+	private boolean functionsSorted;
+	private ArrayList<String> compiledFunctions;
 
-    public NativeFileManager() {
-        sourceFileContent = new StringBuffer();
-        headerFileContent = new StringBuffer();
+	public static final String UserNativeFunctionExtensionPointId = Activator.PLUGIN_ID + ".UserNativeFunction";
+	public static final String UserNativeFunctionExtensionPointElement = "class";
 
-        nativeFileHeader = new StringBuffer();
-        nativeFileHostSource = new StringBuffer();
-        nativeFileTargetSource = new StringBuffer();
+	public NativeFileManager() {
+		sourceFileContent = new StringBuffer();
+		headerFileContent = new StringBuffer();
 
-        nativeFileHeader.append("#ifndef NATIVES_H_\n");
-        nativeFileHeader.append("#define NATIVES_H_\n");
-        nativeFileHeader.append("#include \"ostypes.h\"\n\n");
+		nativeFileHeader = new StringBuffer();
+		nativeFileHostSource = new StringBuffer();
+		nativeFileTargetSource = new StringBuffer();
 
-        nativeFileHeader.append("typedef int16 (*fptr)(int32 *sp);\n\n");
-        nativeFileHeader.append("fptr readNativeFunc(void);\n\n");
-        nativeFileHeader.append("void dumpNativeFunc(int16(*nativeFunc)(int32 *sp), const char* functionName);\n");
+		nativeFileHeader.append("#ifndef NATIVES_H_\n");
+		nativeFileHeader.append("#define NATIVES_H_\n");
+		nativeFileHeader.append("#include \"ostypes.h\"\n\n");
 
-        nativeFileTargetSource.append("#include \"natives.h\"\n\n");
-        nativeFileTargetSource.append("extern unsigned char readByte();\n");
-        nativeFileTargetSource.append("extern void printStr(const char* str);\n");
-        nativeFileTargetSource.append("fptr readNativeFunc(void) {\n");
-        nativeFileTargetSource.append("    unsigned char b = readByte();\n");
-        nativeFileTargetSource.append("    switch (b) {\n");
+		nativeFileHeader.append("typedef int16 (*fptr)(int32 *sp);\n\n");
+		nativeFileHeader.append("fptr readNativeFunc(void);\n\n");
+		nativeFileHeader.append("void dumpNativeFunc(int16(*nativeFunc)(int32 *sp), const char* functionName);\n");
 
-        nativeFileHostSource.append("#include \"natives.h\"\n\n");
-        nativeFileHostSource.append("#include <stdio.h>\n\n");
-        nativeFileHostSource.append("#include <stdlib.h>\n\n");
-        nativeFileHostSource.append("extern void dumpByte(unsigned char b);\n");
-        nativeFileHostSource.append("void dumpNativeFunc(int16(*nativeFunc)(int32 *sp), const char* functionName) {\n");
+		nativeFileTargetSource.append("#include \"natives.h\"\n\n");
+		nativeFileTargetSource.append("extern unsigned char readByte();\n");
+		nativeFileTargetSource.append("extern void printStr(const char* str);\n");
+		nativeFileTargetSource.append("fptr readNativeFunc(void) {\n");
+		nativeFileTargetSource.append("    unsigned char b = readByte();\n");
+		nativeFileTargetSource.append("    switch (b) {\n");
 
-        functions = new ArrayList<String>();
-        functionsSorted = false;
-    }
+		nativeFileHostSource.append("#include \"natives.h\"\n\n");
+		nativeFileHostSource.append("#include <stdio.h>\n\n");
+		nativeFileHostSource.append("#include <stdlib.h>\n\n");
+		nativeFileHostSource.append("extern void dumpByte(unsigned char b);\n");
+		nativeFileHostSource.append("void dumpNativeFunc(int16(*nativeFunc)(int32 *sp), const char* functionName) {\n");
 
-    public void addNativeMethod(int methodNumber, String uniqueMethodId, Method javaMethod, boolean skipMethod) {
-        if (javaMethod.isNative() || skipMethod) {
-        	
-        	
-            sourceFileContent.append("/* " + javaMethod.getName() + "\n");
-            sourceFileContent.append(" * param : " + getParameters(javaMethod) + "\n");
-            sourceFileContent.append(" * return: " + javaMethod.getReturnType().toString() + "\n");
-            sourceFileContent.append(" */\n");
-            if (skipMethod) {
-                sourceFileContent.append("#ifndef EXCLUDESTUB_" + uniqueMethodId.toUpperCase() + "\n");
-                sourceFileContent.append("int16 " + uniqueMethodId + "(int32 *sp)\n");
-                sourceFileContent.append("{\n");
-                sourceFileContent.append("   unimplemented_native_function(" + uniqueMethodId.toUpperCase() + ");\n");
-                sourceFileContent.append("   return -1;\n");
-                sourceFileContent.append("}\n");
-                sourceFileContent.append("#else\n");
-            }
-            sourceFileContent.append("extern int16 " + uniqueMethodId + "(int32 *sp);\n");
-            if (skipMethod) {
-                sourceFileContent.append("#endif\n\n");
-            }
-            functions.add(uniqueMethodId);
+		nativeFunctions = new ArrayList<String>();
+		compiledFunctions = new ArrayList<String>();
+		functionsSorted = false;
+	}
 
-            headerFileContent.append("#define ");
-            headerFileContent.append(uniqueMethodId.toUpperCase());
-            headerFileContent.append(" " + methodNumber);
-            headerFileContent.append("\n");
+	public void addCompiledMethod(int methodNumber, String uniqueMethodId, Method javaMethod, boolean skipMethodHack) {
+		compiledFunctions.add(uniqueMethodId);
+	}
 
+	public void addNativeMethod(int methodNumber, String uniqueMethodId, Method javaMethod, boolean skipMethod) {
+		if (javaMethod.isNative() || skipMethod) {
+			sourceFileContent.append("/* " + javaMethod.getName() + "\n");
+			sourceFileContent.append(" * param : " + getParameters(javaMethod) + "\n");
+			sourceFileContent.append(" * return: " + javaMethod.getReturnType().toString() + "\n");
+			sourceFileContent.append(" */\n");
+			if (skipMethod) {
+				sourceFileContent.append("#ifndef EXCLUDESTUB_" + uniqueMethodId.toUpperCase() + "\n");
+				sourceFileContent.append("int16 " + uniqueMethodId + "(int32 *sp)\n");
+				sourceFileContent.append("{\n");
+				sourceFileContent.append("   unimplemented_native_function(" + uniqueMethodId.toUpperCase() + ");\n");
+				sourceFileContent.append("   return -1;\n");
+				sourceFileContent.append("}\n");
+				sourceFileContent.append("#else\n");
+			}
+			sourceFileContent.append("extern int16 " + uniqueMethodId + "(int32 *sp);\n");
+			if (skipMethod) {
+				sourceFileContent.append("#endif\n\n");
+			}
+			nativeFunctions.add(uniqueMethodId);
 
-        }
-    }
+			headerFileContent.append("#define ");
+			headerFileContent.append(uniqueMethodId.toUpperCase());
+			headerFileContent.append(" " + methodNumber);
+			headerFileContent.append("\n");
+		}
+	}
+
 	public static String getParameters(Method javaMethod) {
-        StringBuffer buffer = new StringBuffer();
-        Type[] arguments = javaMethod.getArgumentTypes();
-        if (arguments != null) {
-            for (int count = 0; count < arguments.length; count++) {
-                buffer.append(arguments[count].toString());
-                if (count < arguments.length - 1) {
-                    buffer.append(", ");
-                }
-            }
-        }
-        return buffer.toString();
-    }
+		StringBuffer buffer = new StringBuffer();
+		Type[] arguments = javaMethod.getArgumentTypes();
+		if (arguments != null) {
+			for (int count = 0; count < arguments.length; count++) {
+				buffer.append(arguments[count].toString());
+				if (count < arguments.length - 1) {
+					buffer.append(", ");
+				}
+			}
+		}
+		return buffer.toString();
+	}
 
-    public String getDeclerations(StringBuffer additionalHeaderFileContent) {
-        additionalHeaderFileContent.append(headerFileContent);
-        return sourceFileContent.toString();
-    }
+	public String getDeclerations(StringBuffer additionalHeaderFileContent) {
+		additionalHeaderFileContent.append(headerFileContent);
+		return sourceFileContent.toString();
+	}
 
-    public String getNativeHeader() {
-        int numCount = 42;
-        ensureArray();
+	public String getNativeHeader() {
+		int numCount = 42;
+		ensureArray();
 
-        Iterator<String> functionsItr = functions.iterator();
-        while (functionsItr.hasNext()) {
-            String uniqueMethodId = functionsItr.next();
-            nativeFileHeader.append("#define ");
-            nativeFileHeader.append(uniqueMethodId.toUpperCase());
-            nativeFileHeader.append("_NUM " + numCount + "\n");
-            nativeFileHeader.append("int16 " + uniqueMethodId + "(int32 *sp);\n\n");
-            numCount++;
-        }
-        nativeFileHeader.append("#endif /* NATIVES_H_ */\n");
-        return nativeFileHeader.toString();
-    }
+		Iterator<String> functionsItr = nativeFunctions.iterator();
+		while (functionsItr.hasNext()) {
+			numCount = addMethodToHeader(numCount, functionsItr);
+		}
+		functionsItr = compiledFunctions.iterator();
+		while (functionsItr.hasNext()) {
+			numCount = addMethodToHeader(numCount, functionsItr);
+		}
+		nativeFileHeader.append("#endif /* NATIVES_H_ */\n");
+		return nativeFileHeader.toString();
+	}
 
-    private void ensureArray() {
-        if (!functionsSorted) {
-            Object[] array = functions.toArray();
-            Arrays.sort(array);
+	private int addMethodToHeader(int numCount, Iterator<String> functionsItr) {
+		String uniqueMethodId = functionsItr.next();
+		nativeFileHeader.append("#define ");
+		nativeFileHeader.append(uniqueMethodId.toUpperCase());
+		nativeFileHeader.append("_NUM " + numCount + "\n");
+		nativeFileHeader.append("int16 " + uniqueMethodId + "(int32 *sp);\n\n");
+		numCount++;
+		return numCount;
+	}
 
-            functions = new ArrayList<String>();
-            for (int i = 0; i < array.length; i++) {
-                functions.add((String) array[i]);
-            }
-            functionsSorted = true;
-        }
-    }
+	private void ensureArray() {
+		if (!functionsSorted) {
+			Object[] array = nativeFunctions.toArray();
+			Arrays.sort(array);
 
-    public String getNativeTargetSource() {
-        ensureArray();
-        Iterator<String> functionsItr = functions.iterator();
+			nativeFunctions = new ArrayList<String>();
+			for (int i = 0; i < array.length; i++) {
+				nativeFunctions.add((String) array[i]);
+			}
+			functionsSorted = true;
+		}
+	}
 
-        while (functionsItr.hasNext()) {
-            String uniqueMethodId = functionsItr.next();
-            nativeFileTargetSource.append("    case " + uniqueMethodId.toUpperCase() + "_NUM:\n");
-            nativeFileTargetSource.append("        return " + uniqueMethodId + ";\n");
-        }
+	public String getNativeTargetSource() {
+		ensureArray();
+		Iterator<String> functionsItr = nativeFunctions.iterator();
 
-        nativeFileTargetSource.append("    }\n");
-        nativeFileTargetSource.append("    printStr(\"Unsupported native function\");\n");
-        nativeFileTargetSource.append("    return 0;\n");
-        nativeFileTargetSource.append("}\n");
-        return nativeFileTargetSource.toString();
-    }
+		while (functionsItr.hasNext()) {
+			handleMethodInTargetFile(functionsItr.next());
+		}
+		functionsItr = compiledFunctions.iterator();
 
-    public String getNativeHostSource() {
-        StringBuffer nativeStubs = new StringBuffer();
-        boolean oneTime = true;
-        ensureArray();
+		while (functionsItr.hasNext()) {
+			handleMethodInTargetFile(functionsItr.next());
+		}
 
-        Iterator<String> functionsItr = functions.iterator();
-        while (functionsItr.hasNext()) {
-            String uniqueMethodId = functionsItr.next();
-            if (oneTime) {
-                nativeFileHostSource.append("    if (nativeFunc == " + uniqueMethodId + ") {\n");
-                oneTime = false;
-            } else {
-                nativeFileHostSource.append("    } else if (nativeFunc == " + uniqueMethodId + ") {\n");
-            }
-            nativeFileHostSource.append("        dumpByte(" + uniqueMethodId.toUpperCase() + "_NUM);\n");
+		nativeFileTargetSource.append("    }\n");
+		nativeFileTargetSource.append("    printStr(\"Unsupported native function\");\n");
+		nativeFileTargetSource.append("    return 0;\n");
+		nativeFileTargetSource.append("}\n");
+		return nativeFileTargetSource.toString();
+	}
 
-            nativeStubs.append("int16 " + uniqueMethodId + "(int32 *sp) {\n");
-            nativeStubs.append("   return -1;\n");
-            nativeStubs.append("}\n\n");
-        }
+	
 
-        nativeFileHostSource.append("    } else {\n");
-        nativeFileHostSource.append("        printf(\"Unsupported native function (%s)\\n\", functionName);\n");
-        nativeFileHostSource.append("        exit(3);\n");
-        nativeFileHostSource.append("    }\n");
-        nativeFileHostSource.append("}\n\n");
+	public String getNativeHostSource() {
+		StringBuffer nativeStubs = new StringBuffer();
+		boolean oneTime = true;
+		ensureArray();
 
-        nativeFileHostSource.append(nativeStubs.toString());
-        return nativeFileHostSource.toString();
-    }
+		Iterator<String> functionsItr = nativeFunctions.iterator();
+		while (functionsItr.hasNext()) {
+			oneTime = handleMethodInHostFile(nativeStubs, oneTime, functionsItr, true);
+		}
+
+		functionsItr = compiledFunctions.iterator();
+		while (functionsItr.hasNext()) {
+			oneTime = handleMethodInHostFile(nativeStubs, oneTime, functionsItr, false);
+		}
+
+		nativeFileHostSource.append("    } else {\n");
+		nativeFileHostSource.append("        printf(\"Unsupported native function (%s)\\n\", functionName);\n");
+		nativeFileHostSource.append("        exit(3);\n");
+		nativeFileHostSource.append("    }\n");
+		nativeFileHostSource.append("}\n\n");
+
+		nativeFileHostSource.append(nativeStubs.toString());
+		return nativeFileHostSource.toString();
+	}
+
+	private void handleMethodInTargetFile(String uniqueMethodId) {
+		nativeFileTargetSource.append("    case " + uniqueMethodId.toUpperCase() + "_NUM:\n");
+		nativeFileTargetSource.append("        return " + uniqueMethodId + ";\n");
+	}
+	
+	private boolean handleMethodInHostFile(StringBuffer nativeStubs, boolean oneTime, Iterator<String> functionsItr,
+			boolean addStub) {
+		String uniqueMethodId = functionsItr.next();
+		if (oneTime) {
+			nativeFileHostSource.append("    if (nativeFunc == " + uniqueMethodId + ") {\n");
+			oneTime = false;
+		} else {
+			nativeFileHostSource.append("    } else if (nativeFunc == " + uniqueMethodId + ") {\n");
+		}
+		nativeFileHostSource.append("        dumpByte(" + uniqueMethodId.toUpperCase() + "_NUM);\n");
+
+		if (addStub) {
+			nativeStubs.append("int16 " + uniqueMethodId + "(int32 *sp) {\n");
+			nativeStubs.append("   return -1;\n");
+			nativeStubs.append("}\n\n");
+		}
+		return oneTime;
+	}
+
 }
