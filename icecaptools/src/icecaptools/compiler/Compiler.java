@@ -330,11 +330,18 @@ public class Compiler {
         this.classMatrix = getClassMatrix(patcher);
         fileSb.append(this.classMatrix.getMatrix());
         fileSb.append("\n");
-        fileSb.append("#endif\n");
-        fileSb.append("const ClassInfo *classes = &_classes[0];\n");
-        fileSb.append("#if defined(INSTANCEOF_OPCODE_USED) || defined(CHECKCAST_OPCODE_USED) || defined(JAVA_LANG_THROWABLE_INIT_) || defined(PUTHWFIELD_OPCODE_USED) || defined(GETHWFIELD_OPCODE_USED)\n");
         fileSb.append("const unsigned char *inheritanceMatrix = &_inheritanceMatrix[0];\n");
+        
+        if (supportLoading)
+        {
+        	 fileSb.append("#else\n");
+        	 fileSb.append("RANGE const uint8 tupac = 0;\n");
+        	 fileSb.append("RANGE static const unsigned char _inheritanceMatrix[1] PROGMEM = { 0 };\n");
+        	 fileSb.append("const unsigned char *inheritanceMatrix = &_inheritanceMatrix[0];\n");
+        }
         fileSb.append("#endif\n");
+        
+        fileSb.append("const ClassInfo *classes = &_classes[0];\n");
 
         if (classFieldsManager.hasClassFields()) {
             fileSb.append("const unsigned char* classData;\n\n");
@@ -344,6 +351,7 @@ public class Compiler {
         }
 
         requieredFields.append("#define CLASSDATASIZE " + classFieldsManager.getClassDataSize() + "\n");
+        requieredFields.append("#define INHERITANCEMATRIXSIZE " + classMatrix.getMatrixSize() + "\n");
         fileSb.append("unsigned char initClasses(void) {\n");
         if (classFieldsManager.hasClassFields()) {
             fileSb.append("   classData = &_classData[0];\n");

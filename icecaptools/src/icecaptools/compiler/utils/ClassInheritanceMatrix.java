@@ -60,4 +60,7 @@ public class ClassInheritanceMatrix {
         return buffer;
     }
 
+	public int getMatrixSize() {
+		return bits.length;
+	}
 }
