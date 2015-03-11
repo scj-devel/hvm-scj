@@ -1186,7 +1186,7 @@ public class Compiler {
         } catch (CharacterCodingException cce) {
             ;
         }
-        return result;
+        return result.replace("*/", "__");
     }
 
     private static int getClassNumber(String className, ClassManager manager, ByteCodePatcher patcher, int catchType) throws Exception {
