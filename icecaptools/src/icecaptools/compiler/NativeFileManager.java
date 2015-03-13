@@ -176,7 +176,7 @@ public class NativeFileManager {
 
 		Iterator<String> functionsItr = nativeFunctions.iterator();
 		while (functionsItr.hasNext()) {
-			oneTime = handleMethodInHostFile(nativeStubs, oneTime, functionsItr, true);
+			oneTime = handleMethodInHostFile(nativeStubs, oneTime, functionsItr, false);
 		}
 
 		functionsItr = compiledFunctions.iterator();

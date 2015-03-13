@@ -4,7 +4,7 @@
 #include "io.h"
 #include "../natives.h"
 
-/* gcc -Wall -pedantic -DPC64 serializer.c ../methods.c ../classes.c ../natives_host.c io_i86.c io_allOS.c */
+/* gcc -Wall -Werror -pedantic -DPC64 serializer.c ../methods.c ../classes.c ../natives_host.c io_i86.c io_allOS.c ../methodinterpreter.c ../natives_allOS.c ../print.c ../gc.c ../allocation_point.c ../natives_i86.c */
 
 #include "../types.h"
 #include "../ostypes.h"
@@ -94,10 +94,12 @@ int main(int argv, char** args) {
 		ConstantInfo *current = &constants[count];
 		printf(".");
 		dumpByte(current->type);
-		dumpInt(current->value);
 		if (current->type == CONSTANT_STRING) {
-			unsigned short length = current->value;
+			unsigned short length;
 			char* str = (char*) current->data;
+			dumpInt(current->value);
+			length = current->value & 0xffff;
+			printf("string [%d][%s]\n", length, str);
 			while (length) {
 				dumpByte(*str++);
 				length--;
@@ -174,6 +176,7 @@ int main(int argv, char** args) {
 
 	printf("serializing class store configuration variables\n");
 	dumpByte(tupac);
+	printf("JAVA_LANG_STRING_var = %d\n", JAVA_LANG_STRING_var);
 	dumpShort(JAVA_LANG_STRING_var);
 	dumpShort(JAVA_LANG_OBJECT_var);
 	dumpShort(JAVA_LANG_INTEGER_var);

@@ -26,7 +26,7 @@
 		 />
 		
 	-->
-	<property name="tests.include" value="TestDownload1.class" />
+	<property name="tests.include" value="TestDeterminant.class" />
 	<property name="tests.exclude" value="TestMiniTests.class, TestArrayList.class, TestCAS.class, TestHashMap.class, TestHashSet.class, TestIntegerCache.class" />
 
 	<condition property="isLinux">
@@ -313,6 +313,12 @@
 			<arg value="../natives_host.c" />
 			<arg value="io_i86.c" />
 			<arg value="io_allOS.c" />
+			<arg value="../methodinterpreter.c" />
+			<arg value="../natives_allOS.c" />
+			<arg value="../print.c" />
+			<arg value="../gc.c" />
+			<arg value="../allocation_point.c" />
+			<arg value="../natives_i86.c" />
 		</exec>
 	</target>
 

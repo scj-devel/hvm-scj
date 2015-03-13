@@ -172,7 +172,7 @@ public class CompilationManager {
 		// String inputPackage = "javax.realtime.test";
 		// String inputPackage = "javax.safetycritical.test";
 
-		String inputClass = "TestDownload1";
+		String inputClass = "TestAllocationArea1";
 
 		// String inputClass = "Main2Clock";
 		// String inputClass = "Main2RealtimeClock";
