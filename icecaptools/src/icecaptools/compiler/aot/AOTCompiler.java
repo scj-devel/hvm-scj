@@ -1983,6 +1983,17 @@ public abstract class AOTCompiler implements SPManipulator {
                 sm.push(Size.INT, "value1");
                 pc++;
                 break;
+            case RawByteCodes.dup2_opcode:
+                localVariables.print("   int32 value1;\n");
+                localVariables.print("   int32 value2;\n");
+                sm.pop("      value1", Size.INT);
+                sm.pop("      value2", Size.INT);
+                sm.push(Size.INT, "value2");
+                sm.push(Size.INT, "value1");
+                sm.push(Size.INT, "value2");
+                sm.push(Size.INT, "value1");
+                pc++;
+                break;
             case RawByteCodes.dup_x1_opcode:
                 localVariables.print("   int32 value1;\n");
                 localVariables.print("   int32 value2;\n");
@@ -2131,7 +2142,6 @@ public abstract class AOTCompiler implements SPManipulator {
             }
             case RawByteCodes.nop_opcode:
             case RawByteCodes.pop2_opcode:
-            case RawByteCodes.dup2_opcode:
             case RawByteCodes.dup2_x1_opcode:
             case RawByteCodes.dup2_x2_opcode:
             case RawByteCodes.wide_opcode:

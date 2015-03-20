@@ -445,13 +445,17 @@ int16 n_java_lang_Class_getPrimitiveClass(int32 *sp) {
  * return: long
  */
 #ifdef N_JAVA_LANG_SYSTEM_CURRENTTIMEMILLIS
-int16 n_java_lang_System_currentTimeMillis(int32 *sp) {
-	sp[0] = 1;
-	sp[1] = 0;
-#ifdef PRINTFSUPPORT
-	printf("unimplemented: java_lang_System_currenttimemillis_j\n");
+#if defined(DEVICES_SYSTEM_CURRENTTIMEMILLIS_USED)
+extern int16 devices_System_currentTimeMillis(int32 *fp);
 #endif
+int16 n_java_lang_System_currentTimeMillis(int32 *sp) {
+#if defined(DEVICES_SYSTEM_CURRENTTIMEMILLIS_USED)
+	return devices_System_currentTimeMillis(sp);
+#else
+	sp[0] = 0;
+	sp[1] = 0;
 	return -1;
+#endif
 }
 #endif
 

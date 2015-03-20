@@ -149,18 +149,12 @@ int run_vm(void) {
 				DEVICES_SYSTEM_INITIALIZESYSTEMCLASS, mainMethodJavaStack);
 				if (execp == -1) {
 #endif
-					{
 						/* Start the VM */
-						const MethodInfo* mainMethod = &methods[mainMethodIndex];
-						unsigned short index = pgm_read_word(
-								&mainMethod->maxLocals);
-						mainMethodJavaStack[index] = 0; /* Set args to null */
 						execp = enterMethodInterpreter(mainMethodIndex,
 								mainMethodJavaStack);
 #if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
 						stop_system_tick();
 #endif
-					}
 #if defined(DEVICES_SYSTEM_INITIALIZESYSTEMCLASS)
 				}
 #endif
