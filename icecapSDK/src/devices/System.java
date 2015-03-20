@@ -8,7 +8,6 @@ import java.io.PrintStream;
 
 import javax.realtime.AbsoluteTime;
 
-import test.HelloWorld;
 import vm.Address;
 import vm.Address32Bit;
 import vm.HardwareObject;
