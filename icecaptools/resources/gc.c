@@ -5,9 +5,10 @@
 #include "rom_access.h"
 #include "allocation_point.h"
 
+#ifdef FLASHSUPPORT
 extern void initROMHeap(void);
 extern Object* gc_allocatepObject(unsigned short dobjectSize, unsigned short pobjectsize);
-extern unsigned char rom_writeable(void);
+#endif
 extern void init_memory_lock(void);
 extern void lock_memory(void);
 extern void unlock_memory(void);

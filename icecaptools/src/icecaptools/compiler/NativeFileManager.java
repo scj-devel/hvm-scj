@@ -19,11 +19,12 @@ public class NativeFileManager {
 	private ArrayList<String> nativeFunctions;
 	private boolean functionsSorted;
 	private ArrayList<String> compiledFunctions;
+	private boolean nUMBEROFCLASSES_varUsed;
 
 	public static final String UserNativeFunctionExtensionPointId = Activator.PLUGIN_ID + ".UserNativeFunction";
 	public static final String UserNativeFunctionExtensionPointElement = "class";
 
-	public NativeFileManager() {
+	public NativeFileManager(boolean nUMBEROFCLASSES_varUsed, int numberOfClasses) {
 		sourceFileContent = new StringBuffer();
 		headerFileContent = new StringBuffer();
 
@@ -38,10 +39,15 @@ public class NativeFileManager {
 		nativeFileHeader.append("typedef int16 (*fptr)(int32 *sp);\n\n");
 		nativeFileHeader.append("fptr readNativeFunc(void);\n\n");
 		nativeFileHeader.append("void dumpNativeFunc(int16(*nativeFunc)(int32 *sp), const char* functionName);\n");
+		nativeFileHeader.append("int16 unknownNativeFunc(int32 *sp);\n");
+		nativeFileHeader.append("#define UNKNOWNNATIVEFUNC 42\n");
 
 		nativeFileTargetSource.append("#include \"natives.h\"\n\n");
 		nativeFileTargetSource.append("extern unsigned char readByte();\n");
 		nativeFileTargetSource.append("extern void printStr(const char* str);\n");
+		if (nUMBEROFCLASSES_varUsed) {
+			nativeFileTargetSource.append("\nRANGE uint16 NUMBEROFCLASSES_var = " + numberOfClasses + ";\n\n");
+        }
 		nativeFileTargetSource.append("fptr readNativeFunc(void) {\n");
 		nativeFileTargetSource.append("    unsigned char b = readByte();\n");
 		nativeFileTargetSource.append("    switch (b) {\n");
@@ -109,7 +115,7 @@ public class NativeFileManager {
 	}
 
 	public String getNativeHeader() {
-		int numCount = 42;
+		int numCount = 43;
 		ensureArray();
 
 		Iterator<String> functionsItr = nativeFunctions.iterator();
@@ -161,13 +167,10 @@ public class NativeFileManager {
 		}
 
 		nativeFileTargetSource.append("    }\n");
-		nativeFileTargetSource.append("    printStr(\"Unsupported native function\");\n");
-		nativeFileTargetSource.append("    return 0;\n");
+		nativeFileTargetSource.append("    return unknownNativeFunc;\n");
 		nativeFileTargetSource.append("}\n");
 		return nativeFileTargetSource.toString();
 	}
-
-	
 
 	public String getNativeHostSource() {
 		StringBuffer nativeStubs = new StringBuffer();
@@ -185,8 +188,7 @@ public class NativeFileManager {
 		}
 
 		nativeFileHostSource.append("    } else {\n");
-		nativeFileHostSource.append("        printf(\"Unsupported native function (%s)\\n\", functionName);\n");
-		nativeFileHostSource.append("        exit(3);\n");
+		nativeFileHostSource.append("        dumpByte(UNKNOWNNATIVEFUNC);\n");
 		nativeFileHostSource.append("    }\n");
 		nativeFileHostSource.append("}\n\n");
 

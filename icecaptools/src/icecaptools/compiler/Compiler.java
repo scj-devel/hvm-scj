@@ -66,7 +66,8 @@ public class Compiler {
     private NativeMethodDetector nativeMethodDetector;
 
     private boolean supportLoading;
-    
+    private ClassFieldsManager classFieldsManager;
+
     public Compiler(IDGenerator idGen, RequiredMethodsManager rmManager, IcecapTool manager, boolean supportLoading) {
         this.supportLoading = supportLoading;
     	this.idGen = idGen;
@@ -98,7 +99,7 @@ public class Compiler {
         RequiredFieldsManager fieldsManager = new RequiredFieldsManager(supportLoading);
         RequiredEntryManager interfacesManager = new RequiredInterfacesManager(supportLoading);
         ReferencesManager referencesManager = new ReferencesManager(foCalc);
-        ClassFieldsManager classFieldsManager = new ClassFieldsManager();
+        classFieldsManager = new ClassFieldsManager();
         StructsManager structsManager = new StructsManager(foCalc, idGen);
 
         HashMap<JavaClass, OffsetPair> objectSize = foCalc.getObjectSizes();
@@ -286,7 +287,6 @@ public class Compiler {
         boolean staticReferenceOffsetsVariableUsed = classFieldsManager.finalizeClassfieldDeclarations(fieldDecl);
 
         systemClassesBuffer.append("#define NUMBEROFCLASSES " + classNumber + "\n");
-
         classNames.stopProgmem();
 
         classesSb.print("};\n");
@@ -549,7 +549,7 @@ public class Compiler {
             e.printStackTrace();
         }
 
-        NativeFileManager nfileManager = new NativeFileManager();
+        NativeFileManager nfileManager = new NativeFileManager(this.classFieldsManager.NUMBEROFCLASSES_varUsed, patcher.getNumberOfClasses());
 
         byte[] currentMethodCode = null;
 
