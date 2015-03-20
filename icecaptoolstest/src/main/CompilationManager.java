@@ -172,7 +172,7 @@ public class CompilationManager {
 		// String inputPackage = "javax.realtime.test";
 		// String inputPackage = "javax.safetycritical.test";
 
-		String inputClass = "TestArrayTraversal";
+		String inputClass = "Main";
 
 		// String inputClass = "Main2Clock";
 		// String inputClass = "Main2RealtimeClock";
@@ -191,7 +191,7 @@ public class CompilationManager {
 
 		// String inputPackage = "jml.test.apr";
 
-		String inputPackage = "test";
+		String inputPackage = "jembench";
 		// String inputClass = "TestSCJBoundedBuffer";
 
 		// String inputPackage = "test.icecapvm.minitests";
@@ -236,7 +236,8 @@ public class CompilationManager {
 
 		String outputFolder = "";
 		//String inputFolder = "/home/skr/workspace/OpenJMLTest/bin:/home/skr/workspace/OpenJMLTest/lib/jmlruntime.jar:/home/skr/git/hvm-scj/icecapSDK/bin";
-		String inputFolder = "/home/skr/git/hvm-scj/icecaptoolstest:/home/skr/git/hvm-scj/icecapSDK/bin";
+		// String inputFolder = "/home/skr/git/hvm-scj/icecaptoolstest:/home/skr/git/hvm-scj/icecapSDK/bin";
+		String inputFolder = "/home/skr/workspace/jembench/bin";
 
 		// String sourceFileName = null;
 		// String inputFolder = "/home/sek/workspace/CDj/bin";
