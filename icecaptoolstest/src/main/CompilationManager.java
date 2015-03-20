@@ -172,7 +172,7 @@ public class CompilationManager {
 		// String inputPackage = "javax.realtime.test";
 		// String inputPackage = "javax.safetycritical.test";
 
-		String inputClass = "TestAllocationArea1";
+		String inputClass = "TestArrayTraversal";
 
 		// String inputClass = "Main2Clock";
 		// String inputClass = "Main2RealtimeClock";
@@ -265,12 +265,13 @@ public class CompilationManager {
 			System.out.println("Using default values\nUsage: CompilationManager " + inputFolder + " " + inputPackage
 					+ " " + inputClass);
 		} else {
-			if (args.length >= 3) {
+			if (args.length >= 4) {
 				inputFolder = args[0];
 				inputPackage = args[1];
 				inputClass = args[2];
-				if (args.length == 4) {
-					if ("-aot".compareTo(args[3]) == 0) {
+				outputFolder = args[3];
+				if (args.length == 5) {
+					if ("-aot".compareTo(args[4]) == 0) {
 						aotCompile = true;
 					}
 				}

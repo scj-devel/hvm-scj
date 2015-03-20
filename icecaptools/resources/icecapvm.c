@@ -143,12 +143,22 @@ int run_vm(void)
     start_system_tick();
 #endif
 
+#if defined(DEVICES_SYSTEM_INITIALIZESYSTEMCLASS)
+    execp = enterMethodInterpreter(DEVICES_SYSTEM_INITIALIZESYSTEMCLASS, mainMethodJavaStack);
+    if (execp == -1) {
+#endif
+
     /* Start the VM */
-    execp = enterMethodInterpreter(MAINMETHODINDEX, mainMethodJavaStack);
+      execp = enterMethodInterpreter(mainMethodIndex, mainMethodJavaStack);
 
 #if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
-    stop_system_tick();
+      stop_system_tick();
 #endif
+
+#if defined(DEVICES_SYSTEM_INITIALIZESYSTEMCLASS)
+    }
+#endif
+
     }
     /* TODO: use executeWithStack instead */
 #if defined(INVOKECLASSINITIALIZERS)

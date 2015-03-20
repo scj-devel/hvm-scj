@@ -10,9 +10,9 @@ extern void printStr(const char* str);
 long heap_base;
 #endif
 
+#ifdef FLASHSUPPORT
 extern const unsigned char pheap[PHEAP_SIZE] PROGMEM;
-
-extern void setClassIndex(Object* obj, unsigned short classIndex);
+#endif
 
 VMMemory* currentMemoryArea;
 

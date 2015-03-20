@@ -219,3 +219,10 @@ static unsigned char* readCode(unsigned short codeSize) {
         return 0;
     }
 }
+
+int16 unknownNativeFunc(int32 *sp)
+{
+	printStr("Unknown native function called\n");
+
+	return -1;
+}
