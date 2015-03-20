@@ -29,8 +29,58 @@ public class System {
 
 	private static class DevicePrintStream extends PrintStream {
 		@Override
-		public void println(String x) {
-			devices.Console.println(x);
+		public void println(String msg) {
+			devices.Console.println(msg);
+		}
+		
+		@Override
+		public void print(String msg) {
+			devices.Console.print(msg);
+		}
+
+		@Override
+		public void print(int i) {
+			devices.Console.print(i);
+		}
+
+		@Override
+		public void println() {
+			devices.Console.println("");
+		}
+
+		@Override
+		public void print(boolean b) {
+			devices.Console.println("print boolean b unimplemented");
+		}
+
+		@Override
+		public void print(char c) {
+			devices.Console.print(c + "");
+		}
+
+		@Override
+		public void print(long l) {
+			devices.Console.println("print long l unimplemented");
+		}
+
+		@Override
+		public void print(float f) {
+			devices.Console.println("print float f unimplemented");
+		}
+
+		@Override
+		public void print(double d) {
+			devices.Console.println("print double d unimplemented");
+		}
+
+		@Override
+		public void print(char[] s) {
+			devices.Console.println("print char[] s unimplemented");
+		}
+
+		@Override
+		public void print(Object obj) {
+			devices.Console.println("print Object obj unimplemented");
 		}
 
 		private static class DummyOutputStream extends OutputStream {
