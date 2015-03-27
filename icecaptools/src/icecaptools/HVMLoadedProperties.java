@@ -59,7 +59,10 @@ public class HVMLoadedProperties extends AbstractHVMProperties {
 
     @Override
     public void setIncludeJMLMethods(boolean includeJMLMethods) {
-        // TODO Auto-generated method stub
-        
     }
+
+	@Override
+	public String getProperty(String key) {
+		return props.getProperty(key);
+	}
 }

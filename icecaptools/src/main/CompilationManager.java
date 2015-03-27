@@ -15,6 +15,7 @@ import icecaptools.compiler.ICompilationRegistry;
 import icecaptools.compiler.NativeMethodDetector;
 import icecaptools.conversion.ConversionConfiguration;
 
+import java.io.File;
 import java.io.FileOutputStream;
 
 import test.icecaptools.compiler.TestConversionConfiguration;
@@ -158,20 +159,20 @@ public class CompilationManager {
 		config.setInputSourceFileName(sourceFileName);
 
 		HVMProperties props = config.getProperties();
-
+		
 		setDefaults(props);
 
-		String propertiesFileName = config.getPropertiesFileName();
+		String cwd = System.getProperty("user.dir");
+		System.out.println("Current working directoy = [" + cwd + "]");
 		
-		if (propertiesFileName != null)
-		{
+		String propertiesFileName = config.getPropertiesFileName();
+
+		if (propertiesFileName != null) {
 			System.out.println("Loaded properties from [" + propertiesFileName + "]");
-		}
-		else
-		{
+		} else {
 			System.out.println("Using default properties");
 		}
-		
+
 		if (args.length < 1) {
 			System.out.println("Using default values\nUsage: CompilationManager " + inputFolder + " " + inputPackage
 					+ " " + inputClass);

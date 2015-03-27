@@ -270,4 +270,8 @@ public class ConversionConfiguration implements IcecapTool {
     public void setNativeMethodDetector(NativeMethodDetector nativeMethodDetector) {
         this.nativeMethodDetector = nativeMethodDetector;
     }
+
+	public String getPropertiesFileName() {
+		return propertyManager.getPropertiesFileName();
+	}
 }
