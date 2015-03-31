@@ -40,16 +40,13 @@ import javax.safetycritical.annotate.SCJAllowed;
  *    are vendor specific, thus might be included in <code>sizes</code>. 
  */
 @SCJAllowed
-public final class StorageParameters {
+public final class StorageParameters extends javax.realtime.MemoryParameters {
+	
 	long totalBackingStore;
 	long[] configurationSizes;
 	int messageLength;
 	int stackTraceLength;
-	long maxMemoryArea;
-	long maxImmortal;
 	long maxMissionMemory;
-
-	public static final long NO_MAX = -1L;
 
 	/**
 	 * 
@@ -61,42 +58,16 @@ public final class StorageParameters {
 	 *   in the array are vendor specific.
 	 *   The array passed in is not stored in the object. <p>
 	 */
-	/*@ 
-	  public normal_behavior
-	    requires totalBackingStore > 0;
-	    requires (sizes != null) ==>  
-	       (\forall int i; 0 <= i && i < sizes.length; sizes[i] >= 0 );   
-	    requires messageLength >= 0;
-	    requires stackTraceLength >= 0;
-	    requires maxMemoryArea >= 0 || maxMemoryArea == StorageParameters.NO_MAX;
-	    requires maxImmortal >= 0   || maxImmortal   == StorageParameters.NO_MAX;
-	    requires maxMissionMemory >= 0;
-	    
-	    ensures getBackingStoreSize() == totalBackingStore;  
-	  also
-	  public exceptional_behaviour
-	    requires (maxMemoryArea != StorageParameters.NO_MAX) && !(maxMemoryArea >= 0) ;
-	    signals (IllegalArgumentException) true;
-	  also
-	  public exceptional_behaviour
-	    requires maxImmortal != StorageParameters.NO_MAX && !(maxImmortal >= 0);
-	    signals (IllegalArgumentException) true;    
-	  @*/
 	@SCJAllowed
 	public StorageParameters(long totalBackingStore, long[] sizes,
 			int messageLength, int stackTraceLength, long maxMemoryArea,
-			long maxImmortal, long maxMissionMemory) {
-		if (maxMemoryArea < -1L)
-			throw new IllegalArgumentException();
-		if (maxImmortal < -1L)
-			throw new IllegalArgumentException();
-
+			long maxImmortal, long maxMissionMemory) 
+	{
+		super (maxMemoryArea, maxImmortal);
 		this.totalBackingStore = totalBackingStore;
 		this.configurationSizes = sizes;
 		this.messageLength = messageLength;
 		this.stackTraceLength = stackTraceLength;
-		this.maxMemoryArea = maxMemoryArea;
-		this.maxImmortal = maxImmortal;
 		this.maxMissionMemory = maxMissionMemory;
 	}
 
@@ -110,43 +81,34 @@ public final class StorageParameters {
 	 *   in the array are vendor specific.
 	 *   The array passed in is not stored in the object. <p>
 	 */
-	/*@ 
-	  public normal_behavior
-	    requires totalBackingStore > 0;
-	    requires (sizes != null) ==>  
-	      (\forall int i; 0 <= i && i < sizes.length; sizes[i] >= 0 );  
-	    requires maxMemoryArea >= 0 || maxMemoryArea == StorageParameters.NO_MAX;
-	    requires maxImmortal >= 0   || maxImmortal   == StorageParameters.NO_MAX;
-	    requires maxMissionMemory >= 0;
-	  
-	    ensures getBackingStoreSize() == totalBackingStore;  
-	  also
-	  public exceptional_behaviour
-	    requires (maxMemoryArea != StorageParameters.NO_MAX) && !(maxMemoryArea >= 0) ;
-	    signals (IllegalArgumentException) true;
-	  also
-	  public exceptional_behaviour
-	    requires maxImmortal != StorageParameters.NO_MAX && !(maxImmortal >= 0);
-	    signals (IllegalArgumentException) true;     
-	@*/
 	@SCJAllowed
 	public StorageParameters(long totalBackingStore, long[] sizes,
-			long maxMemoryArea, long maxImmortal, long maxMissionMemory) {
-		if (maxMemoryArea < -1L)
-			throw new IllegalArgumentException();
-		if (maxImmortal < -1L)
-			throw new IllegalArgumentException();
-
+			long maxMemoryArea, long maxImmortal, long maxMissionMemory) 
+	{
+		super (maxMemoryArea, maxImmortal);
+		
 		this.totalBackingStore = totalBackingStore;
 		this.configurationSizes = sizes;
 		this.messageLength = 0; // or a default value like 128?
 		this.stackTraceLength = 0; // or a default value ?
-		this.maxMemoryArea = maxMemoryArea;
-		this.maxImmortal = maxImmortal;
 		this.maxMissionMemory = maxMissionMemory;
 	}
 
+	long getMaxMemoryArea() {
+		return maxMemoryArea;
+	}
+	
+	long getMaxImmortal() {
+		return maxImmortal;
+	}
+	
+	//used in JML annotation only (not public)
 	long getBackingStoreSize() {
 		return totalBackingStore;
 	}
+	
+//	//used in JML annotation only (not public)
+//	long[] getConfigurationSizes() {
+//		return configurationSizes;
+//	}
 }

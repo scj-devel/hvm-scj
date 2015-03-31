@@ -87,7 +87,7 @@ public class ManagedThread extends NoHeapRealtimeThread implements
 	    
 	    String privateMemoryName = Memory.getNextMemoryName("PvtMem");
 	    
-	    privateMemory = new PrivateMemory((int) storage.maxMemoryArea, 
+	    privateMemory = new PrivateMemory((int) storage.getMaxMemoryArea(), 
 	    								   backingStoreOfThisMemory, 
 	    								   backingStoreProvider,
 	    								   privateMemoryName);
