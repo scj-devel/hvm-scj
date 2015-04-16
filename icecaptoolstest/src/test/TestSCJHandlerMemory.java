@@ -237,7 +237,7 @@ public class TestSCJHandlerMemory {
 	  devices.Console.println("\n********** TestSCJHandlerMemory main.begin ******************");
 	  
 		Memory memory = Memory.getHeapArea();
-		
+		new SmallObject();
 		int x = memory.consumedMemory();
 		new SmallObject();
 		int y = memory.consumedMemory();

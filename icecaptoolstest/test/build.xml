@@ -27,7 +27,7 @@
 		 />
 		
 	-->
-	<property name="tests.include" value="TestArrayTraversal.class" />
+	<property name="tests.include" value="TestSCJThreadMemory.class" />
 	<property name="tests.exclude" value="TestMiniTests.class, TestArrayList.class, TestCAS.class, TestHashMap.class, TestHashSet.class, TestIntegerCache.class" />
 
 	<condition property="isLinux">
