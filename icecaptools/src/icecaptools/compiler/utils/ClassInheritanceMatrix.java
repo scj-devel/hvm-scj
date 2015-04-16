@@ -1,6 +1,5 @@
 package icecaptools.compiler.utils;
 
-import icecaptools.compiler.Compiler;
 import icecaptools.compiler.ConstantGenerator;
 
 public class ClassInheritanceMatrix {

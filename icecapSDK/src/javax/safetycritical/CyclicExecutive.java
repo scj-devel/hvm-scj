@@ -28,7 +28,6 @@ package javax.safetycritical;
 
 import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
-import javax.realtime.PeriodicParameters;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
@@ -163,13 +162,13 @@ public abstract class CyclicExecutive extends Mission {
 	}
 
 	// Used in feasible below
-	static private int find(PeriodicEventHandler[] handlerList,
+	/*static private int find(PeriodicEventHandler[] handlerList,
 			PeriodicEventHandler h) {
 		for (int i = handlerList.length - 1; i >= 0; i--)
 			if (handlerList[i] == h)
 				return i;
 		return -1;
-	}
+	}*/
 
 	// Used in JML annotations
 //	boolean feasible(PeriodicEventHandler[] handlerList, CyclicSchedule schedule) {

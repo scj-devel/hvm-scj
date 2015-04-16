@@ -25,8 +25,6 @@
  *************************************************************************/
 package javax.realtime;
 
-import icecaptools.IcecapCompileMe;
-
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 import javax.scj.util.Priorities;

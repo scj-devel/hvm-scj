@@ -26,7 +26,6 @@
 
 package javax.realtime;
 
-import javax.safetycritical.ManagedMemory;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 

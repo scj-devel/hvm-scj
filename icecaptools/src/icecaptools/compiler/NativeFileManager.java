@@ -19,7 +19,6 @@ public class NativeFileManager {
 	private ArrayList<String> nativeFunctions;
 	private boolean functionsSorted;
 	private ArrayList<String> compiledFunctions;
-	private boolean nUMBEROFCLASSES_varUsed;
 
 	public static final String UserNativeFunctionExtensionPointId = Activator.PLUGIN_ID + ".UserNativeFunction";
 	public static final String UserNativeFunctionExtensionPointElement = "class";

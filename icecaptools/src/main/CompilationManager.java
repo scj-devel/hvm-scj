@@ -15,7 +15,6 @@ import icecaptools.compiler.ICompilationRegistry;
 import icecaptools.compiler.NativeMethodDetector;
 import icecaptools.conversion.ConversionConfiguration;
 
-import java.io.File;
 import java.io.FileOutputStream;
 
 import test.icecaptools.compiler.TestConversionConfiguration;
