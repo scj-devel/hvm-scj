@@ -183,9 +183,13 @@ public class TestAll {
 	private void testIt(String testClass, String inputFolder, File outputFolder, int testNo, File testsDirectory) throws Throwable {
 		ConversionConfiguration config = new TestConversionConfiguration();
 
+		String inputPackage = getInputPackage(testsDirectory);
+		
+		preCompile(inputPackage, testClass);
+		
 		config.setInputSourceFileName(null);
 		config.setClassPath(inputFolder);
-		config.setInputPackage(getInputPackage(testsDirectory));
+		config.setInputPackage(inputPackage);
 		config.setInputClass(testClass);
 		config.setCodeFormatter(new DefaultIcecapCodeFormatter());
 		config.setSourceCodeLinker(new DefaultIcecapSourceCodeLinker());
@@ -225,6 +229,11 @@ public class TestAll {
 				cregistry, outputFolder.toString(), true);
 
 		compileAndExecute(outputFolder, testClass, testNo);
+	}
+
+	protected void preCompile(String inputPackage, String testClass) throws Exception  {
+		// TODO Auto-generated method stub
+		
 	}
 
 	protected String getInputPackage(File testsDirectory) {
