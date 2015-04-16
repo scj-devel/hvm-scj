@@ -114,7 +114,7 @@ public class TestAll {
 					if (includeFileInTest(test)) {
 						if (!skipIt(test)) {
 							System.out.println("------------------ " + test + " ------------------");
-							testIt(test, inputFolder, outputFolder, testNo++);
+							testIt(test, inputFolder, outputFolder, testNo++, testsDirectory);
 						}
 					}
 				}
@@ -180,12 +180,12 @@ public class TestAll {
 		}
 	}
 
-	private void testIt(String testClass, String inputFolder, File outputFolder, int testNo) throws Throwable {
+	private void testIt(String testClass, String inputFolder, File outputFolder, int testNo, File testsDirectory) throws Throwable {
 		ConversionConfiguration config = new TestConversionConfiguration();
 
 		config.setInputSourceFileName(null);
 		config.setClassPath(inputFolder);
-		config.setInputPackage("test");
+		config.setInputPackage(getInputPackage(testsDirectory));
 		config.setInputClass(testClass);
 		config.setCodeFormatter(new DefaultIcecapCodeFormatter());
 		config.setSourceCodeLinker(new DefaultIcecapSourceCodeLinker());
@@ -225,6 +225,10 @@ public class TestAll {
 				cregistry, outputFolder.toString(), true);
 
 		compileAndExecute(outputFolder, testClass, testNo);
+	}
+
+	protected String getInputPackage(File testsDirectory) {
+		return "test";
 	}
 
 	private void compileAndExecute(File outputFolder, String testClass, int testNo) throws Exception {
