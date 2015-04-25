@@ -6,8 +6,8 @@ rm -rf *
 export icecaptools plugin to /home/skr/temp
 
 cd plugins
-unzip icecaptools_2.1.13.jar
-rm icecaptools_2.1.13.jar
+unzip icecaptools_2.1.14.jar
+rm icecaptools_2.1.14.jar
 mkdir temp
 cd temp
 unzip /home/skr/git/hvm-scj/icecaptools/doc/oicecaptools.jar
@@ -15,12 +15,12 @@ rm -rf ../icecaptools
 mv ./icecaptools ..
 cd ..
 rm -rf temp
-zip -r icecaptools_2.1.13.jar .classpath icecaptools icons lib META-INF plugin.xml resources test
+zip -r icecaptools_2.1.14.jar .classpath icecaptools icons lib META-INF plugin.xml resources test
 rm /home/skr/git/hvm-scj/icecaptools/doc/web/resources/icecaptools_*.jar
-cp ./icecaptools_2.1.13.jar /home/skr/git/hvm-scj/icecaptools/doc/web/resources/icecaptools_2.1.13.jar
+cp ./icecaptools_2.1.14.jar /home/skr/git/hvm-scj/icecaptools/doc/web/resources/icecaptools_2.1.14.jar
 rm /home/skr/git/hvm-scj/icecaptools/doc/oicecaptools.jar 
 cd /home/skr/git/hvm-scj/icecaptools/doc/web/resources/
-scp icecaptools_2.1.13.jar root@icelab.dk:/usr/local/apache-tomcat-5.5.26/webapps/ROOT/resources/.
+scp icecaptools_2.1.14.jar root@icelab.dk:/usr/local/apache-tomcat-5.5.26/webapps/ROOT/resources/.
 scp icecapSDK.jar root@icelab.dk:/usr/local/apache-tomcat-5.5.26/webapps/ROOT/resources/.
 cd ..
 scp download.html root@icelab.dk:/usr/local/apache-tomcat-5.5.26/webapps/ROOT/.
