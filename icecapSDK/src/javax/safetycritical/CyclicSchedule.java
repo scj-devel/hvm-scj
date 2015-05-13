@@ -40,14 +40,9 @@ import javax.safetycritical.annotate.SCJAllowed;
  */
 @SCJAllowed
 public final class CyclicSchedule {
+	
 	private Frame[] frames;
-
-	/*@ 
-	  public invariant 
-	    this.getFrames() != null &&
-	    ( \forall int i; 0 <= i && i < this.getFrames().length; this.getFrames()[i] != null );
-	  @*/
-
+	
 	/**
 	 * Constructs a <code>CyclicSchedule</code> by copying the frames array 
 	 * into a private array within the same memory area as this newly 
@@ -56,33 +51,16 @@ public final class CyclicSchedule {
 	 * 
 	 * @param frames is the frame array.
 	 */
-	/*@ 
-	  public behavior
-	    requires frames != null &&
-	      ( \forall int i; 0 <= i && i < frames.length; frames[i] != null );
-	
-	    ensures this.frames != null;
-	    ensures this.frames.length == \old(frames).length;
-	    ensures
-	      (\forall int i; 0 <= i && i < this.frames.length; this.frames[i] == \old(frames)[i]);
-	  @*/
 	public CyclicSchedule(Frame[] frames) {
 		this.frames = new Frame[frames.length];
 		for (int i = 0; i < frames.length; i++)
 			this.frames[i] = frames[i];
-		//this.frames = frames;  // old
 	}
 
 	/**
 	 * A method used by infrastructure to access the frame array
 	 * @return Frame array.
 	 */
-	/*@ 
-	  behavior
-	    requires true;
-	    assignable \nothing;
-	    ensures \result == frames;
-	  @*/
 	Frame[] getFrames() {
 		return frames;
 	}

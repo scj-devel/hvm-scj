@@ -200,10 +200,12 @@ public abstract class MemoryArea extends Object {
 	 * 
 	 * @return the overall remaining backing store size.
 	 */
+	// Not public in SCJ
 	public static int getRemainingMemorySize() {
 		return overAllBackingStore.getRemainingBackingstoreSize();
 	}
 
+	// Not public in SCJ
 	public int getRemainingBackingstoreSize() {
 		int maxEnd = delegate.getBase() + delegate.getSize();
 		MemoryArea current = headOfContainedMemories;

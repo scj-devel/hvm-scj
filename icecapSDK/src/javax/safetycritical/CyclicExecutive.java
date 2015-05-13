@@ -116,19 +116,7 @@ public abstract class CyclicExecutive extends Mission {
 		 * local reference to frames
 		 */
 		final Frame[] frames = schedule.getFrames();
-
-//		class LocalRunnable implements Runnable // Local class
-//		{
-//			PeriodicEventHandler handler;
-//
-//			public void run() {
-//				handler.handleAsyncEvent();
-//			}
-//		}
-//		;
-//
-//		LocalRunnable privateLogic = new LocalRunnable();
-
+		
 		/**
 		 * step is the minor cycle counter
 		 */

@@ -80,7 +80,7 @@ public abstract class ManagedMemory extends MemoryArea {
 			super(sizeOfArea, sizeOfArea, MemoryArea.overAllBackingStore, "Imm");
 		}
 
-		static ImmortalMemory instance() {
+		public static ImmortalMemory instance() {
 			MemoryArea result = MemoryArea.getNamedMemoryArea("Imm");
 			if (result != null)
 			{
@@ -88,15 +88,6 @@ public abstract class ManagedMemory extends MemoryArea {
 			}
 			return null;
 		}
-		
-//		public static javax.realtime.ImmortalMemory instance() {
-//			MemoryArea result = MemoryArea.getNamedMemoryArea("Imm");
-//			if (result != null)
-//			{
-//				return (javax.realtime.ImmortalMemory)result;
-//			}
-//			return null;
-//		}
 	}
 
 	/**
@@ -327,7 +318,7 @@ public abstract class ManagedMemory extends MemoryArea {
 			throw new IllegalStateException("executeInOuterArea: already in ImmortalMemory");		
 		}				
 		
-		ManagedMemory outerMemory = getOuterMemory(currentMem);
+		ManagedMemory outerMemory = getOuterMemory(currentMem);		
 		
 		Memory mem = Memory.switchToArea(outerMemory.getDelegate());
 		logic.run();

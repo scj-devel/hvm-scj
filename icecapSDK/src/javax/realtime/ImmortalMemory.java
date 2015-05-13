@@ -43,18 +43,17 @@ import javax.safetycritical.annotate.SCJAllowed;
 @SCJAllowed(Level.INFRASTRUCTURE)
 public final class ImmortalMemory extends MemoryArea {
 	
-//	private ImmortalMemory() {
-//		super(Const.IMMORTAL_MEM_SIZE, "Immortal");
+//	ImmortalMemory(int sizeOfArea) {
+//		super(sizeOfArea, sizeOfArea, MemoryArea.overAllBackingStore, "Imm");
 //	}
 //
 //	public static ImmortalMemory instance() {
-//		if (head == null) {
-//			new ImmortalMemory();
+//		MemoryArea result = MemoryArea.getNamedMemoryArea("Imm");
+//		if (result != null)
+//		{
+//			return (ImmortalMemory)result;
 //		}
-//		return (ImmortalMemory) head;
+//		return null;
 //	}
 
-//	public static ImmortalMemory instance() {
-//		return ManagedMemory.ImmortalMemory.instance();
-//	}
 }
