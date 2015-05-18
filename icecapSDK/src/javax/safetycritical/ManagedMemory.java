@@ -213,16 +213,6 @@ public abstract class ManagedMemory extends MemoryArea {
 	 *            provides the run method that is to be executed within the
 	 *            inner-nested private memory area.
 	 */
-//	/*@ 
-//	  public static normal_behavior
-//	    requires logic != null;	 
-//	    ensures true;  // not finished
-//	  also
-//	  public static exceptional_behaviour
-//	    requires logic == null; 
-//	    signals (IllegalStateException) true;
-//	  
-//	  @*/
 	@SCJAllowed
 	public static void enterPrivateMemory(int size, Runnable logic) throws IllegalStateException {
 		/**
@@ -371,15 +361,14 @@ public abstract class ManagedMemory extends MemoryArea {
 		return delegate;
 	}
 	
-	
-	// For JML annotations
-	/*@ spec_public @*/ static MemoryArea getCurretAllocationArea()
+	// used for JML annotation only (not public)    
+	static MemoryArea getCurretAllocationArea()
 	{
-		return null;
+		return getCurrentMemoryArea();
 	}
 	
-	// For JML annotations
-	/*@ spec_public @*/  MemoryArea getTopMostArea()
+	// used for JML annotation only (not public)
+	MemoryArea getTopMostArea()
 	{
 		return null;
 	}
