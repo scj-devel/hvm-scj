@@ -6,13 +6,6 @@
 
 #include <stdio.h>
 
-extern const ClassInfo *classes;
-extern const MethodInfo *methods;
-
-extern unsigned char* HVMbase;
-extern uint32 HVMfree;
-extern uint32 HVMsize;
-
 static unsigned char java_stack[JAVA_STACK_SIZE << 2];
 
 int32* get_java_stack_base(int16 size) {
@@ -238,9 +231,9 @@ int32 n_devices_System_lockROM(int32 *sp) {
 
 #ifndef __CYGWIN__
 
+#if defined(N_TEST_TESTCAS_ATOMICREFERENCE_CAS)
 extern void* getPointer(int32 val);
 
-#if defined(N_TEST_TESTCAS_ATOMICREFERENCE_CAS)
 int32 n_test_TestCAS_AtomicReference_cas(int32 *sp) {
     unsigned char* target;
     int offset;

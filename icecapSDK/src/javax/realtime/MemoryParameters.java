@@ -18,14 +18,6 @@ public class MemoryParameters implements Cloneable {
 		this.maxImmortal = maxImmortal;
 	}
 	
-	long getMaxMemoryArea() {
-		return maxMemoryArea;
-	}
-	
-	long getMaxImmortal() {
-		return maxImmortal;
-	}
-	
 	//used in JML annotation only (not public)
 	static long getNO_MAX() {
 		return MemoryParameters.NO_MAX;
