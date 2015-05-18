@@ -120,7 +120,7 @@ public class CollisionDetectorHandler extends PeriodicEventHandler
                 devices.Console.println("Terminating");
                 //Mission.getCurrentMission().requestSequenceTermination();
                 //mission.requestSequenceTermination();
-                mission.getSequencer().requestSequenceTermination();
+                mission.getSequencer().signalTermination();
             }
         } catch (Throwable e) {
             devices.Console.println("CollisionDetectorHandler:Exception thrown by runDetectorInScope: "

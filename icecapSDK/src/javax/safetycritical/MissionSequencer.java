@@ -282,7 +282,7 @@ public abstract class MissionSequencer<MissionType extends Mission>
 	//    //@ also
 	//    //@   requires true;
 	//    //@   ensures ??; // something to add?
-	public final void cleanUp() {
+	public void cleanUp() {
 		super.cleanUp();
 		missionMemory.removeArea();
 	}

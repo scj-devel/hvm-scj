@@ -70,7 +70,7 @@ public class TestSCJPrioritySchedule2 {
 				new Integer(count);
 			}
 			testCount++;
-			missSeq.requestSequenceTermination();
+			missSeq.signalTermination();
 		}
 	}
 

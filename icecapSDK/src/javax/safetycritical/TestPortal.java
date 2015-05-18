@@ -14,4 +14,9 @@ public final class TestPortal {
 	public static ManagedMemory ManagedMemory_getOuterMemory(ManagedMemory m) {
 		return ManagedMemory.getOuterMemory(m);
 	}
+	
+	public static void executeInAreaOf (ManagedMemory mem, Runnable logic) {
+		mem.flag = true;
+		mem.executeInArea(logic);
+	}
 }

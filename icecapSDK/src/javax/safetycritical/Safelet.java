@@ -59,27 +59,15 @@ public interface Safelet<MissionType extends Mission> {
      *   the sequence of <code>Mission</code>s that represent this safety-critical 
      *   application.
      */
-    /*@ 
-	  public behavior
-	    requires true;
-	   
-        ensures \result != null;
-        ensures MemoryArea.getMemoryArea(\result) instanceof ManagedMemory.ImmortalMemory;
-      @*/
-	  @SCJAllowed(Level.SUPPORT) 
-	  @SCJRestricted(Phase.INITIALIZE)
+	@SCJAllowed(Level.SUPPORT) 
+	@SCJRestricted(Phase.INITIALIZE)
 	public MissionSequencer<MissionType> getSequencer();
 
-	  /**
-	   *  @return the amount of immortal memory that must be available for 
-	   *    allocations to be performed by this application.
-	   */
-	  	/*@ 
-		public behavior
-		  requires true;	   
-		    ensures \result > 0;
-		  @*/
-	  @SCJAllowed(Level.SUPPORT)
+    /**
+     *  @return the amount of immortal memory that must be available for 
+     *    allocations to be performed by this application.
+     */
+	@SCJAllowed(Level.SUPPORT)
 	public long immortalMemorySize();
 
 	@SCJAllowed(Level.SUPPORT)
