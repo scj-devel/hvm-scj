@@ -70,7 +70,7 @@ public class TestSCJProcessException {
 			}
 			testCount++;
 			if (count == 3)
-				missSeq.requestSequenceTermination();
+				missSeq.signalTermination();
 		}
 	}
 
