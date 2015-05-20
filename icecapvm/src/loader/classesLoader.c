@@ -6,8 +6,6 @@ static unsigned short* readClassInterfaces(unsigned short length);
 
 extern void printStr(const char* str);
 extern void printShort(unsigned short c);
-extern Object* gc_allocateObject(unsigned short dobjectSize,
-		unsigned short pobjectsize);
 
 /* */
 
