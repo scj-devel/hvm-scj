@@ -16,7 +16,7 @@ public final class TestPortal {
 	}
 	
 	public static void executeInAreaOf (ManagedMemory mem, Runnable logic) {
-		mem.flag = true;
+		ManagedMemory.flag = true;
 		mem.executeInArea(logic);
 	}
 }
