@@ -216,13 +216,16 @@ public class CompilationManagerHSO {
         //String inputPackage = "javax.realtime.test.timeClasses";
         //String inputPackage = "javax.realtime.test.clock";
         //String inputPackage = "javax.realtime.test.memoryArea";
-        String inputPackage = "javax.safetycritical.test.cyclic";
+        //String inputPackage = "javax.safetycritical.test.cyclic";
+        String inputPackage = "javax.safetycritical.test.safelet";        
+        //String inputPackage = "javax.safetycritical.test.priorityScheduling";
         
         //String inputPackage = "javax.realtime.test";
         //String inputPackage = "javax.safetycritical.test";
         
         String inputClass = "AllTests";
         //String inputClass = "TckTestCyclicSchedule3";
+        //String inputClass = "TckTestSafelet1";
         
         //String inputClass = "TckTestMemoryParameters";
         //String inputClass = "TckTestPriorityScheduler";
