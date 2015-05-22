@@ -240,11 +240,6 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	 *         <code>Mission</code>s are to run under the control of this
 	 *         <code>MissionSequencer</code>.
 	 */
-	/*@ 
-	  protected behavior
-	    requires true;
-	    ensures true;      
-	  @*/
 	@SCJAllowed(Level.SUPPORT)
 	protected abstract MissionType getNextMission();
 
