@@ -4,7 +4,7 @@ import icecaptools.IcecapCompileMe;
 import vm.Memory;
 
 @IcecapCompileMe
-public class OSProcess extends Process {
+class OSProcess extends Process {
 
 	public OSProcess(ManagedSchedulable ms) {
 		msObject = ms;

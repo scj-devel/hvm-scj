@@ -94,15 +94,14 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	  requires release == null;
 	  signals (IllegalArgumentException) true;        
 	@*/
-
+	@SCJAllowed(Level.LEVEL_1)
+	@SCJRestricted(Phase.INITIALIZE)
 	public OneShotEventHandler(PriorityParameters priority, HighResolutionTime releaseTime,
 			AperiodicParameters release, StorageParameters storage) {
 		this(priority, releaseTime, release, storage, null);
 	}
-
-	@SCJAllowed(Level.LEVEL_1)
-	@SCJRestricted(Phase.INITIALIZE)
-	public OneShotEventHandler(PriorityParameters priority, HighResolutionTime releaseTime,
+	
+	OneShotEventHandler(PriorityParameters priority, HighResolutionTime releaseTime,
 			AperiodicParameters release, StorageParameters storage, String name) {
 		super(priority, release, storage, name);
 
