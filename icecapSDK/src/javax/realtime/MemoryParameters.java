@@ -21,4 +21,14 @@ public class MemoryParameters implements Cloneable {
 	static long getNO_MAX() {
 		return MemoryParameters.NO_MAX;
 	}
+
+	// used for JML annotation only (not public)
+	long getMaxMemoryArea() {
+		return maxMemoryArea;
+	}
+
+	// used for JML annotation only (not public)
+	long getMaxImmortal() {
+		return maxImmortal;
+	}
 }

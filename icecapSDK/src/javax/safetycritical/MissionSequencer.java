@@ -31,6 +31,7 @@ import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
 import javax.safetycritical.annotate.SCJRestricted;
+import javax.scj.util.Const;
 
 /**
  * A <code>MissionSequencer</code> oversees a sequence of Mission executions. 
@@ -88,16 +89,12 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	 * Constructs a <code>MissionSequencer</code> to run at the priority and
 	 * with the memory resources specified by its parameters.
 	 */
-	//	/*@ 
-	//    also
-	//    public exceptional_behaviour
-	//      requires ??; // not invoked in appropriate phase
-	//      signals (IllegalStateException) true;
-	//      @*/
 	@SCJAllowed
 	@SCJRestricted(Phase.INITIALIZE)
-	public MissionSequencer(PriorityParameters priority, StorageParameters storage, String name) {
-		super(priority, new AperiodicParameters(), storage, name);
+	public MissionSequencer(PriorityParameters priority, StorageParameters storage, String name)
+			throws IllegalStateException {
+		super(priority, new AperiodicParameters(), storage);
+		this.name = name;
 
 		//		devices.Console.println("MissSeq.constr: " + name 
 		//			+ "; maxMissionMemory " + storage.maxMissionMemory 
@@ -112,16 +109,15 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 			if (Launcher.level != 0) {
 				PriorityScheduler.instance().addOuterMostSeq(this);
 			}
-		}
-
-		if (Launcher.level == 2) {
-			isOuterMostSeq = false;
-		}
-
-		if (Launcher.level == 2 && !isOuterMostSeq) {
-			if (Mission.getMission() != null)
+		} else {
+			if (Launcher.level < 2)
+				throw new IllegalStateException("MissSeq not outer-most");
+			else
 				outerSeq = Mission.getMission().currMissSeq;
+
 		}
+
+		isOuterMostSeq = false;
 
 		Services.setCeiling(this, this.priority.getPriority());
 		lock = Monitor.getMonitor(this);
@@ -129,7 +125,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 
 	@SCJAllowed
 	@SCJRestricted(Phase.INITIALIZE)
-	public MissionSequencer(PriorityParameters priority, final StorageParameters storage) {
+	public MissionSequencer(PriorityParameters priority, final StorageParameters storage) throws IllegalStateException {
 		this(priority, storage, "MisMem");
 	}
 
@@ -157,9 +153,6 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	 * This method performs all of the activities that correspond to sequencing
 	 * of <code>Mission</code>s by this <code>MissionSequencer</code>.
 	 */
-	//	//@ also
-	//  //@   requires true;
-	//  //@   ensures ??;	// something to add?
 	@SCJAllowed(Level.INFRASTRUCTURE)
 	public final void handleAsyncEvent() {
 		do {
@@ -268,16 +261,9 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 		vm.ClockInterruptHandler.instance.enable();
 	}
 
-	//    //@ also
-	//    //@   requires true;
-	//    //@   ensures ??; // something to add?
 	public void cleanUp() {
 		super.cleanUp();
 		missionMemory.removeArea();
-	}
-
-	/*@ spec_public @*/MissionMemory getMissionMemory() {
-		return missionMemory;
 	}
 
 	Monitor getLock() {
@@ -286,5 +272,20 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 
 	MissionSequencer<?> getOuterSeq() {
 		return outerSeq;
+	}
+
+	// used for JML annotation only (not public)
+	MissionMemory getMissionMemory() {
+		return missionMemory;
+	}
+
+	// used for JML annotation only (not public)
+	int getLevel() {
+		return Launcher.level;
+	}
+
+	// used for JML annotation only (not public)
+	boolean isOuterMostSeq() {
+		return isOuterMostSeq;
 	}
 }
