@@ -44,28 +44,6 @@ public class CompilationManagerHSO {
 
 		@Override
 		public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
-			// java.lang.CharacterData
-			// java.io.
-			// java.lang.System
-			// java.lang.SecurityManager
-			// java.lang.Terminator
-			// java.lang.Shutdown
-
-			//			if (clazz.startsWith("java.lang.CharacterData")) { // No
-			//	            return true;
-			//	        }
-			//			if (clazz.startsWith("java.lang.System")) { // No
-			//	            return true;
-			//	        }
-			//			if (clazz.startsWith("java.lang.SecurityManager")) {
-			//	            return true;
-			//	        }
-			//			if (clazz.startsWith("java.lang.Terminator")) {
-			//	            return true;
-			//	        }
-			//			if (clazz.startsWith("java.lang.Shutdown")) {
-			//	            return true;
-			//	        }
 			if (clazz.startsWith("sun.")) {
 				if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
 					return false;
