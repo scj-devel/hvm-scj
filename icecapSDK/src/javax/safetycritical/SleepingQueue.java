@@ -160,7 +160,7 @@ class SleepingQueue {
 			return ScjProcess.idleProcess;
 		}
 
-		return (ScjProcess)Launcher.delegate.getProcess(processIdx);
+		return (ScjProcess)Mission.missionBehaviour.getProcess(processIdx);
 	}
 
 	public void remove(ScjProcess obj) {

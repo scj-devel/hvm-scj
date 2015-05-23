@@ -53,8 +53,6 @@ import vm.Memory;
 abstract class Launcher implements Runnable {
 	Safelet<?> app;
 	static int level;
-	static boolean useOS = false;
-	static MissionBehavior delegate = null;
 
 	Launcher(Safelet<?> app, int level) {
 		this(app, level, false);
@@ -63,7 +61,6 @@ abstract class Launcher implements Runnable {
 	Launcher(Safelet<?> app, int level, boolean useOS) {
 		this.app = app;
 		Launcher.level = level;
-		Launcher.useOS = useOS;
 
 		ManagedMemory.allocateBackingStore(Const.OVERALL_BACKING_STORE);
 
@@ -82,25 +79,25 @@ abstract class Launcher implements Runnable {
 		start();
 	}
 
-	protected abstract void start(); 
+	abstract void start(); 
 
-	protected void startLevel0() {
-		delegate = new MissionSinglecoreBehavior();
+	void startLevel0() {
+		Mission.missionBehaviour = new Mission.SinglecoreBehavior();
 		MissionSequencer<?> seq = app.getSequencer();
 		CyclicScheduler.instance().start(seq);
 	}
 
-	protected void startLevel1_2() {
+	void startLevel1_2() {
 		// insert idle process before the mission sequencer.
-		delegate = new MissionSinglecoreBehavior();
+		Mission.missionBehaviour = new Mission.SinglecoreBehavior();
 		PriorityScheduler sch = PriorityScheduler.instance();
 		sch.insertReadyQueue(ScjProcess.createIdleProcess());
 		app.getSequencer();
 		PriorityScheduler.instance().start();
 	}
 
-	protected void startwithOS() {
-		delegate = new MissionMulticoreBehavior();
+	void startwithOS() {
+		Mission.missionBehaviour = new Mission.MulticoreBehavior();
 		Machine.setCurrentScheduler(new MultiprocessorHelpingScheduler());
 		OSProcess.initSpecificID();
 		MissionSequencer<?> outerMostMS = app.getSequencer();
