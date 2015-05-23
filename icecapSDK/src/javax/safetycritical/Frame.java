@@ -65,7 +65,7 @@ public final class Frame {
 	public Frame(RelativeTime duration, PeriodicEventHandler[] handlers) {
 		if (duration == null)
 			throw new IllegalArgumentException();
-		if (duration.getMilliseconds() * 1000000 + duration.getNanoseconds() <= 0)
+		if (duration != null && duration.getMilliseconds() * 1000000 + duration.getNanoseconds() <= 0)
 			throw new IllegalArgumentException();
 		if (handlers == null)
 			throw new IllegalArgumentException();
