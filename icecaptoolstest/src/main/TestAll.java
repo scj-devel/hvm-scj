@@ -98,7 +98,10 @@ public class TestAll {
 
 				ArrayList<String> testlist = new ArrayList<String>();
 				for (int i = 0; i < tests.length; i++) {
-					testlist.add((String) tests[i]);
+					File candidate = new File(testsDirectory.getAbsolutePath() + File.separatorChar + (String) tests[i]);
+					if (candidate.isFile()) {
+						testlist.add((String) tests[i]);
+					}
 				}
 
 				/*
@@ -180,13 +183,14 @@ public class TestAll {
 		}
 	}
 
-	private void testIt(String testClass, String inputFolder, File outputFolder, int testNo, File testsDirectory) throws Throwable {
+	private void testIt(String testClass, String inputFolder, File outputFolder, int testNo, File testsDirectory)
+			throws Throwable {
 		ConversionConfiguration config = new TestConversionConfiguration();
 
 		String inputPackage = getInputPackage(testsDirectory);
-		
+
 		preCompile(inputPackage, testClass);
-		
+
 		config.setInputSourceFileName(null);
 		config.setClassPath(inputFolder);
 		config.setInputPackage(inputPackage);
@@ -231,9 +235,9 @@ public class TestAll {
 		compileAndExecute(outputFolder, testClass, testNo);
 	}
 
-	protected void preCompile(String inputPackage, String testClass) throws Exception  {
+	protected void preCompile(String inputPackage, String testClass) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	protected String getInputPackage(File testsDirectory) {
@@ -310,8 +314,8 @@ public class TestAll {
 		String gccCommand = "gcc -Wall -pedantic -Os -DPC64 -DREF_OFFSET -DPRINTFSUPPORT -DSUPPORTGC -DJAVA_HEAP_SIZE=10240000 -L/usr/lib64 classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c native_scj.c print.c x86_64_interrupt.s -lpthread -lrt -lm -o ";
 
 		/* for 32 bit Linux */
-		 //String gccCommand =
-		 //"gcc -Wall -pedantic -Os -DPC32 -DPRINTFSUPPORT -DSUPPORTGC -DJAVA_HEAP_SIZE=10240000 classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c native_scj.c print.c x86_32_interrupt.s -lpthread -lrt -lm -o ";
+		//String gccCommand =
+		//"gcc -Wall -pedantic -Os -DPC32 -DPRINTFSUPPORT -DSUPPORTGC -DJAVA_HEAP_SIZE=10240000 classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c native_scj.c print.c x86_32_interrupt.s -lpthread -lrt -lm -o ";
 
 		/* for 64 bit Windows using cygwin */
 		// String gccCommand =
