@@ -96,16 +96,14 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	@*/
 	@SCJAllowed(Level.LEVEL_1)
 	@SCJRestricted(Phase.INITIALIZE)
-	public OneShotEventHandler(PriorityParameters priority,
-			HighResolutionTime releaseTime, AperiodicParameters release,
-			StorageParameters storage) {
+	public OneShotEventHandler(PriorityParameters priority, HighResolutionTime releaseTime,
+			AperiodicParameters release, StorageParameters storage) {
 		super(priority, release, storage);
 
 		if (releaseTime == null)
 			this.releaseTime = new RelativeTime(Clock.getRealtimeClock());
 		else if (releaseTime instanceof AbsoluteTime)
-			throw new IllegalArgumentException(
-					"releaseTime of type AbsoluteTime not implemented");
+			throw new IllegalArgumentException("releaseTime of type AbsoluteTime not implemented");
 		else
 			this.releaseTime = releaseTime;
 	}

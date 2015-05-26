@@ -28,7 +28,6 @@ package javax.realtime;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 
-
 /**
  * 
  * 
@@ -44,7 +43,7 @@ import javax.safetycritical.annotate.SCJAllowed;
 // HSO: Not used any more; delete the class
 @SCJAllowed(Level.LEVEL_2)
 public class NoHeapRealtimeThread extends RealtimeThread {
-	
+
 	protected NoHeapRealtimeThread(PriorityParameters priority, Runnable logic) {
 		super(priority, logic);
 	}

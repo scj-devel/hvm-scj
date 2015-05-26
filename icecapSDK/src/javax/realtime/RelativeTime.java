@@ -111,8 +111,7 @@ public class RelativeTime extends HighResolutionTime {
 	 * @return the new object with the added durations.
 	 */
 	public RelativeTime add(long millis, int nanos) {
-		return new RelativeTime(this.millis + millis, this.nanos + nanos,
-				this.clock);
+		return new RelativeTime(this.millis + millis, this.nanos + nanos, this.clock);
 	}
 
 	/**
@@ -129,8 +128,8 @@ public class RelativeTime extends HighResolutionTime {
 		if (this.clock != time.clock)
 			throw new IllegalArgumentException("clock mismatch");
 
-		return new RelativeTime(this.millis + time.getMilliseconds(),
-				this.nanos + time.getNanoseconds(), time.getClock());
+		return new RelativeTime(this.millis + time.getMilliseconds(), this.nanos + time.getNanoseconds(),
+				time.getClock());
 	}
 
 	/**
@@ -194,8 +193,7 @@ public class RelativeTime extends HighResolutionTime {
 		if (this.clock != time.clock)
 			throw new IllegalArgumentException("clock mismatch");
 
-		return new RelativeTime(this.millis - time.getMilliseconds(),
-				this.nanos - time.getNanoseconds(), this.clock);
+		return new RelativeTime(this.millis - time.getMilliseconds(), this.nanos - time.getNanoseconds(), this.clock);
 	}
 
 	/**
@@ -222,11 +220,10 @@ public class RelativeTime extends HighResolutionTime {
 			throw new IllegalArgumentException("clock mismatch");
 
 		if (dest == null) {
-			dest = new RelativeTime(this.millis - time.getMilliseconds(),
-					this.nanos - time.getNanoseconds(), this.clock);
+			dest = new RelativeTime(this.millis - time.getMilliseconds(), this.nanos - time.getNanoseconds(),
+					this.clock);
 		} else {
-			dest.set(this.millis - time.getMilliseconds(),
-					this.nanos - time.getNanoseconds());
+			dest.set(this.millis - time.getMilliseconds(), this.nanos - time.getNanoseconds());
 		}
 		return dest;
 	}

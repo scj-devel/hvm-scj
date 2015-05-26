@@ -40,9 +40,9 @@ import javax.safetycritical.annotate.SCJAllowed;
  */
 @SCJAllowed
 public final class CyclicSchedule {
-	
+
 	private Frame[] frames;
-	
+
 	/**
 	 * Constructs a <code>CyclicSchedule</code> by copying the frames array 
 	 * into a private array within the same memory area as this newly 
@@ -53,13 +53,13 @@ public final class CyclicSchedule {
 	 */
 	public CyclicSchedule(Frame[] frames) throws IllegalArgumentException {
 		if (frames == null)
-			throw new IllegalArgumentException ("frames is null");
+			throw new IllegalArgumentException("frames is null");
 		// frames != null:
 		for (int i = 0; i < frames.length; i++) {
 			if (frames[i] == null)
-				throw new IllegalArgumentException ("a frame element is null");
+				throw new IllegalArgumentException("a frame element is null");
 		}
-		
+
 		this.frames = new Frame[frames.length];
 		for (int i = 0; i < frames.length; i++)
 			this.frames[i] = frames[i];

@@ -62,7 +62,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  */
 @SCJAllowed
 public class PriorityParameters extends SchedulingParameters {
-	
+
 	private int priority;
 
 	/**
@@ -87,14 +87,14 @@ public class PriorityParameters extends SchedulingParameters {
 	public int getPriority() {
 		return priority;
 	}
-	
+
 	public void setPriority(int value) // not public in SCJ; called in javax.safetycritical.Monitor
 	{
 		priority = value;
 	}
-	
+
 	// used for JML annotation only (not public)
-    int getPr() {
+	int getPr() {
 		return priority;
 	}
 }

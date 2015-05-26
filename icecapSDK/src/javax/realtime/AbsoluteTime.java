@@ -142,8 +142,7 @@ public class AbsoluteTime extends HighResolutionTime {
 	 *    normalization of <code>this </code> plus <code>millis</code> and <code>nanos</code>.
 	 */
 	public AbsoluteTime add(long millis, int nanos) {
-		return new AbsoluteTime(this.millis + millis, this.nanos + nanos,
-				this.clock);
+		return new AbsoluteTime(this.millis + millis, this.nanos + nanos, this.clock);
 	}
 
 	/**
@@ -180,15 +179,14 @@ public class AbsoluteTime extends HighResolutionTime {
 	 * 
 	 * @throws IllegalArgumentException if the clock associated with <code>this</code> and the clock associated with the 
 	 * <code>time</code> parameter are different, or when the <code>time</code> parameter is null.
-	 */	
+	 */
 	public AbsoluteTime add(RelativeTime time) {
 		if (time == null)
 			throw new IllegalArgumentException("time is null");
 		if (time.getClock() != getClock())
 			throw new IllegalArgumentException("clock mismatch");
 
-		return new AbsoluteTime(this.millis + time.getMilliseconds(),
-				this.nanos + time.getNanoseconds(), this.clock);
+		return new AbsoluteTime(this.millis + time.getMilliseconds(), this.nanos + time.getNanoseconds(), this.clock);
 	}
 
 	/**
@@ -235,9 +233,8 @@ public class AbsoluteTime extends HighResolutionTime {
 		}
 		if (this.clock != time.clock) {
 			throw new IllegalArgumentException("clock mismatch");
-		}		
-		return new RelativeTime(this.millis - time.getMilliseconds(),
-				this.nanos - time.getNanoseconds(), this.clock);
+		}
+		return new RelativeTime(this.millis - time.getMilliseconds(), this.nanos - time.getNanoseconds(), this.clock);
 	}
 
 	/**
@@ -263,8 +260,7 @@ public class AbsoluteTime extends HighResolutionTime {
 			throw new IllegalArgumentException("clock mismatch");
 
 		if (dest != null) {
-			dest.set(this.millis - time.getMilliseconds(),
-					this.nanos - time.getNanoseconds());
+			dest.set(this.millis - time.getMilliseconds(), this.nanos - time.getNanoseconds());
 		} else {
 			dest = this.subtract(time);
 		}
@@ -294,8 +290,7 @@ public class AbsoluteTime extends HighResolutionTime {
 		if (time.getClock() != getClock())
 			throw new IllegalArgumentException("clock mismatch");
 
-		return new AbsoluteTime(this.millis - time.getMilliseconds(),
-				this.nanos - time.getNanoseconds(), this.clock);
+		return new AbsoluteTime(this.millis - time.getMilliseconds(), this.nanos - time.getNanoseconds(), this.clock);
 	}
 
 	/**
@@ -320,11 +315,10 @@ public class AbsoluteTime extends HighResolutionTime {
 			throw new IllegalArgumentException("clock mismatch");
 
 		if (dest == null) {
-			dest = new AbsoluteTime(this.millis - time.getMilliseconds(),
-					this.nanos - time.getNanoseconds(), this.clock);
+			dest = new AbsoluteTime(this.millis - time.getMilliseconds(), this.nanos - time.getNanoseconds(),
+					this.clock);
 		} else {
-			dest.set(this.millis - time.getMilliseconds(),
-					this.nanos - time.getNanoseconds());
+			dest.set(this.millis - time.getMilliseconds(), this.nanos - time.getNanoseconds());
 		}
 		return dest;
 	}

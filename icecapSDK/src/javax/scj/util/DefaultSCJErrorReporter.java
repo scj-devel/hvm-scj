@@ -15,8 +15,7 @@ public class DefaultSCJErrorReporter implements SCJErrorReporter {
 	@Override
 	public void processOutOfMemoryError(OutOfMemoryError o) {
 		devices.Console.println("No more ImmortalMemory to print error");
-		devices.Console
-				.println("Please increase ImmortalMemory to see full report");
+		devices.Console.println("Please increase ImmortalMemory to see full report");
 	}
 
 	@Override

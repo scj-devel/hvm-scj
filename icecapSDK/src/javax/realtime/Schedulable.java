@@ -39,6 +39,6 @@ import javax.safetycritical.annotate.SCJAllowed;
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
 @SCJAllowed
-public interface Schedulable extends Runnable{
+public interface Schedulable extends Runnable {
 
 }

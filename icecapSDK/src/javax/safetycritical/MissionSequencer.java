@@ -58,9 +58,8 @@ import javax.safetycritical.annotate.SCJRestricted;
  * @scjComment 
  */
 @SCJAllowed
-public abstract class MissionSequencer<MissionType extends Mission> 
-	extends ManagedEventHandler {
-	
+public abstract class MissionSequencer<MissionType extends Mission> extends ManagedEventHandler {
+
 	MissionMemory missionMemory;
 	MissionType currMission;
 
@@ -79,12 +78,11 @@ public abstract class MissionSequencer<MissionType extends Mission>
 	Monitor lock;
 
 	static ScjProcess missSeqProcess = null;
-	
-	static int howManyMissions = -1;  // for testing only
-	
+
+	static int howManyMissions = -1; // for testing only
+
 	// Level2 only: a reference to the nearest outer sequencer
-	MissionSequencer<?> outerSeq = null; 
-	
+	MissionSequencer<?> outerSeq = null;
 
 	/**
 	 * Constructs a <code>MissionSequencer</code> to run at the priority and
@@ -98,67 +96,62 @@ public abstract class MissionSequencer<MissionType extends Mission>
 	//      @*/
 	@SCJAllowed
 	@SCJRestricted(Phase.INITIALIZE)
-	public MissionSequencer(PriorityParameters priority,
-			StorageParameters storage, String name) {
+	public MissionSequencer(PriorityParameters priority, StorageParameters storage, String name) {
 		super(priority, new AperiodicParameters(), storage);
 		this.name = name;
-		
-//		devices.Console.println("MissSeq.constr: " + name 
-//			+ "; maxMissionMemory " + storage.maxMissionMemory 
-//			+ "; backingstore: " + this.privateMemory + "; isOuterMost: " + isOuterMostSeq);
-		missionMemory = 
-			new MissionMemory((int) storage.maxMissionMemory, // mission memory
-					privateMemory, //backingstore of sequencer
-					name);
+
+		//		devices.Console.println("MissSeq.constr: " + name 
+		//			+ "; maxMissionMemory " + storage.maxMissionMemory 
+		//			+ "; backingstore: " + this.privateMemory + "; isOuterMost: " + isOuterMostSeq);
+		missionMemory = new MissionMemory((int) storage.maxMissionMemory, // mission memory
+				privateMemory, //backingstore of sequencer
+				name);
 
 		currState = State.START;
-		
+
 		if (isOuterMostSeq) {
 			if (Launcher.level != 0) {
 				PriorityScheduler.instance().addOuterMostSeq(this);
 			}
 		}
-		
+
 		if (Launcher.level == 2) {
 			isOuterMostSeq = false;
 		}
-		
 
 		if (Launcher.level == 2 && !isOuterMostSeq) {
 			if (Mission.getMission() != null)
 				outerSeq = Mission.getMission().currMissSeq;
 		}
-		
-		Services.setCeiling(this, this.priority.getPriority()); 
+
+		Services.setCeiling(this, this.priority.getPriority());
 		lock = Monitor.getMonitor(this);
 	}
-	
+
 	@SCJAllowed
 	@SCJRestricted(Phase.INITIALIZE)
 	public MissionSequencer(PriorityParameters priority, final StorageParameters storage) {
 		this(priority, storage, "MisMem");
 	}
-	
-	synchronized void seqWait()
-	{
-		while (!currMission.terminationPending() && currMission.msSetForMission.msCount > 0) {
-	    	//devices.Console.println("MS.seqWait msCount:" + currMission.msSetForMission.msCount);
-	    	try {
-    	      wait();
-    	    } catch (InterruptedException e) {
-    	      e.printStackTrace();
-    	    }
-	    }
-	}
 
-	synchronized void seqNotify()
-	{
-		devices.Console.println("MS.seqNotify msCount:" + currMission.msSetForMission.msCount);
-		if (currMission.msSetForMission.msCount  == 0) {
-			  notify();
+	synchronized void seqWait() {
+		while (!currMission.terminationPending() && currMission.msSetForMission.msCount > 0) {
+			//devices.Console.println("MS.seqWait msCount:" + currMission.msSetForMission.msCount);
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
-	
+
+	synchronized void seqNotify() {
+		devices.Console.println("MS.seqNotify msCount:" + currMission.msSetForMission.msCount);
+		if (currMission.msSetForMission.msCount == 0) {
+			notify();
+		}
+	}
+
 	/**
 	 * This method is declared final because the implementation is provided by
 	 * the infrastructure of the SCJ implementation and shall not be overridden. <br>
@@ -176,11 +169,10 @@ public abstract class MissionSequencer<MissionType extends Mission>
 			case State.START:
 				//devices.Console.println("MS.S: " + name);
 				currMission = getNextMission();
-				
+
 				if (currMission != null) {
 					howManyMissions++;
-				}
-				else 
+				} else
 					howManyMissions--;
 
 				if (currMission == null || terminateSeq) {
@@ -202,23 +194,22 @@ public abstract class MissionSequencer<MissionType extends Mission>
 			case State.EXECUTE:
 				//devices.Console.println("MS.E");
 				missionMemory.enterToExecute(currMission);
-				
+
 				// the ms will wait here until it is notified
-				if (Launcher.level > 0) {					
-					seqWait();					
+				if (Launcher.level > 0) {
+					seqWait();
 				} else {
-					while (!currMission.terminationPending() && 
-							currMission.msSetForMission.msCount > 0) {
+					while (!currMission.terminationPending() && currMission.msSetForMission.msCount > 0) {
 						vm.RealtimeClock.awaitNextTick();
 					}
 				}
-				
+
 				currState = State.CLEANUP;
 				break;
 
 			case State.CLEANUP:
 				//devices.Console.println("MS.C: " + name);
-				
+
 				missionMemory.enterToCleanup(currMission);
 				missionMemory.resizeArea(storage.maxMissionMemory);
 
@@ -229,21 +220,20 @@ public abstract class MissionSequencer<MissionType extends Mission>
 			case State.TERMINATE:
 
 				if (Launcher.level == 2) {
-					devices.Console.println("MS.T: " + name + "; #Missions: " + howManyMissions
-							+ "; outerSeq: " + outerSeq); 
-					
-				  vm.ClockInterruptHandler.instance.disable();
-				  if (outerSeq != null)
-					  outerSeq.currMission.msSetForMission.removeMSObject(this);
-				  vm.ClockInterruptHandler.instance.enable();
-				}				  
-				
+					devices.Console.println("MS.T: " + name + "; #Missions: " + howManyMissions + "; outerSeq: "
+							+ outerSeq);
+
+					vm.ClockInterruptHandler.instance.disable();
+					if (outerSeq != null)
+						outerSeq.currMission.msSetForMission.removeMSObject(this);
+					vm.ClockInterruptHandler.instance.enable();
+				}
+
 				currState = State.END;
 			default:
 			}
 		} while (currState < State.END);
-		
-		
+
 	}
 
 	/**
@@ -269,7 +259,7 @@ public abstract class MissionSequencer<MissionType extends Mission>
 	public final void register() {
 		super.register();
 	}
-	
+
 	@Override
 	public void signalTermination() {
 		vm.ClockInterruptHandler.instance.disable();
@@ -290,11 +280,11 @@ public abstract class MissionSequencer<MissionType extends Mission>
 	/*@ spec_public @*/MissionMemory getMissionMemory() {
 		return missionMemory;
 	}
-	
+
 	Monitor getLock() {
 		return lock;
 	}
-	
+
 	MissionSequencer<?> getOuterSeq() {
 		return outerSeq;
 	}

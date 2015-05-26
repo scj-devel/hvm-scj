@@ -60,7 +60,7 @@ public final class Frame {
 	 * 
 	 * @param duration is a <code>RelativeTime</code> object.
 	 * @param handlers is the list of periodic handlers.
-	 */ 
+	 */
 	@SCJAllowed
 	public Frame(RelativeTime duration, PeriodicEventHandler[] handlers) {
 		if (duration == null)
@@ -78,8 +78,7 @@ public final class Frame {
 	 * @return The list of handlers
 	 */
 	// used for JML annotation only (not public)
-	PeriodicEventHandler[] getHandlers() 
-	{
+	PeriodicEventHandler[] getHandlers() {
 		return handlers;
 	}
 
@@ -88,8 +87,7 @@ public final class Frame {
 	 * @return The duration
 	 */
 	// used for JML annotation only (not public)
-	RelativeTime getDuration() 
-	{
+	RelativeTime getDuration() {
 		return duration;
 	}
 }

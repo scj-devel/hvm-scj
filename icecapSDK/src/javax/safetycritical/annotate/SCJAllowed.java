@@ -40,8 +40,7 @@ import java.lang.annotation.Target;
 
 @Documented
 @Retention(RetentionPolicy.CLASS)
-@Target({ ElementType.TYPE, ElementType.FIELD, ElementType.METHOD,
-		ElementType.CONSTRUCTOR })
+@Target({ ElementType.TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR })
 public @interface SCJAllowed {
 	public Level value() default Level.LEVEL_0;
 

@@ -54,17 +54,15 @@ import javax.safetycritical.annotate.SCJAllowed;
  *      <code>interface Comparable</code> <br>
  */
 @SCJAllowed
-public abstract class HighResolutionTime implements
-		Comparable<HighResolutionTime> {
+public abstract class HighResolutionTime implements Comparable<HighResolutionTime> {
 	Clock clock;
 	long millis;
 	int nanos;
-	
+
 	HighResolutionTime(long millis, int nanos, Clock clock) {
 		if (!isNormalized(millis, nanos)) {
-			setNormalized(millis, nanos);			
-		}
-		else {
+			setNormalized(millis, nanos);
+		} else {
 			this.millis = millis;
 			this.nanos = nanos;
 		}
@@ -72,8 +70,7 @@ public abstract class HighResolutionTime implements
 	}
 
 	private boolean isNormalized(long millis, int nanos) {
-		return (millis >= 0L && (0 <= nanos && nanos < 1000000))
-				|| (millis <= 0L && (-1000000 < nanos && nanos <= 0));
+		return (millis >= 0L && (0 <= nanos && nanos < 1000000)) || (millis <= 0L && (-1000000 < nanos && nanos <= 0));
 	}
 
 	/**
@@ -170,12 +167,10 @@ public abstract class HighResolutionTime implements
 		if (time == null)
 			return false;
 
-		return (this.getClass() == time.getClass())
-				&& (this.millis == time.getMilliseconds())
-				&& (this.nanos == time.getNanoseconds())
-				&& (this.clock == time.getClock());
+		return (this.getClass() == time.getClass()) && (this.millis == time.getMilliseconds())
+				&& (this.nanos == time.getNanoseconds()) && (this.clock == time.getClock());
 	}
-	
+
 	public boolean equals(Object object) {
 		HighResolutionTime time = null;
 		if (object instanceof HighResolutionTime)
@@ -189,10 +184,8 @@ public abstract class HighResolutionTime implements
 		if (time == null || object == null)
 			return false;
 
-		return (this.getClass() == time.getClass()) 
-				&& (this.millis == time.getMilliseconds()) 
-				&& (this.nanos == time.getNanoseconds())
-				&& (this.clock == time.getClock());
+		return (this.getClass() == time.getClass()) && (this.millis == time.getMilliseconds())
+				&& (this.nanos == time.getNanoseconds()) && (this.clock == time.getClock());
 	}
 
 	/**
@@ -208,7 +201,7 @@ public abstract class HighResolutionTime implements
 	 * @throws IllegalArgumentException if the <code>time</code> parameter is 
 	 *    not associated with the same clock as <code>this</code>, or when 
 	 *    the <code>time</code> parameter is null.
-	 */	
+	 */
 	public int compareTo(HighResolutionTime time) {
 		if (time == null)
 			throw new IllegalArgumentException();
@@ -238,7 +231,8 @@ public abstract class HighResolutionTime implements
 	/**
 	 * Sets the normalized values of millis and nanos in this. 
 	 */
-	@IcecapCompileMe  // Don't remove this CompileMe annotation
+	@IcecapCompileMe
+	// Don't remove this CompileMe annotation
 	final void setNormalized(final long ms, final int ns) {
 		/*
 		 * Examples:
@@ -262,18 +256,18 @@ public abstract class HighResolutionTime implements
 			nanos -= NANOS_PER_MILLI;
 		}
 	}
-	
-//	public static boolean waitForObject(Object target, HighResolutionTime time) {
-//		return javax.safetycritical.PriorityScheduler.waitForObject(target, time);
-//	}
-	
+
+	//	public static boolean waitForObject(Object target, HighResolutionTime time) {
+	//		return javax.safetycritical.PriorityScheduler.waitForObject(target, time);
+	//	}
+
 	// used for JML annotation only (not public)
-    long getMillis() {
+	long getMillis() {
 		return millis;
 	}
-    
-    // used for JML annotation only (not public)
-    int getNanos() {
+
+	// used for JML annotation only (not public)
+	int getNanos() {
 		return nanos;
 	}
 }

@@ -63,7 +63,7 @@ public class PriorityScheduler extends Scheduler {
 	public int getMinPriority() {
 		return Priorities.MIN_PRIORITY;
 	}
-	
+
 	/**
 	 * 
 	 * @return The normal software real-time priority supported by this
@@ -71,16 +71,16 @@ public class PriorityScheduler extends Scheduler {
 	 */
 	@SCJAllowed(Level.LEVEL_1)
 	public int getNormPriority() {
-		return (Priorities.MIN_PRIORITY + Priorities.MAX_PRIORITY)/2;
+		return (Priorities.MIN_PRIORITY + Priorities.MAX_PRIORITY) / 2;
 	}
-	
+
 	// used for JML annotation only (not public)
-    int getMaxPr() {
+	int getMaxPr() {
 		return Priorities.MAX_PRIORITY;
 	}
-    
-    // used for JML annotation only (not public)
-    int getMinPr() {
+
+	// used for JML annotation only (not public)
+	int getMinPr() {
 		return Priorities.MIN_PRIORITY;
 	}
 

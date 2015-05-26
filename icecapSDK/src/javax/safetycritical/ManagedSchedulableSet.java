@@ -52,8 +52,7 @@ import javax.scj.util.Const;
  */
 @SCJAllowed(Level.INFRASTRUCTURE)
 class ManagedSchedulableSet {
-	ManagedSchedulable[] managedSchObjects = 
-		new ManagedSchedulable[Const.DEFAULT_HANDLER_NUMBER];
+	ManagedSchedulable[] managedSchObjects = new ManagedSchedulable[Const.DEFAULT_HANDLER_NUMBER];
 	int noOfRegistered = 0;
 
 	ScjProcess[] scjProcesses = new ScjProcess[Const.DEFAULT_HANDLER_NUMBER];
@@ -108,12 +107,12 @@ class ManagedSchedulableSet {
 			if (managedSchObjects[i] == ms) {
 				managedSchObjects[i].cleanUp();
 				managedSchObjects[i] = null;
-				
+
 				//PriorityScheduler.instance().pFrame.readyQueue.remove(scjProcesses[i]);
-				
-				PriorityScheduler.instance().pFrame.removeFromQueue (scjProcesses[i]);
+
+				PriorityScheduler.instance().pFrame.removeFromQueue(scjProcesses[i]);
 				//devices.Console.println("MSSet.removeMSObject " + scjProcesses[i].index);
-				
+
 				scjProcesses[i] = null;
 				msCount--;
 			}
@@ -129,11 +128,10 @@ class ManagedSchedulableSet {
 		for (int i = 0; i < noOfRegistered; i++) {
 			if (managedSchObjects[i] instanceof AperiodicEventHandler) {
 				managedSchObjects[i].cleanUp();
-				PriorityScheduler.instance().pFrame.readyQueue
-						.remove(scjProcesses[i]);
+				PriorityScheduler.instance().pFrame.readyQueue.remove(scjProcesses[i]);
 				msCount--;
 			}
-			
+
 			if (msCount == 0)
 				ManagedSchedMethods.getMission(managedSchObjects[i]).getSequencer().seqNotify();
 		}

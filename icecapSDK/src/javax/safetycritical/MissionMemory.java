@@ -48,16 +48,15 @@ import javax.safetycritical.annotate.SCJAllowed;
  */
 @SCJAllowed(Level.INFRASTRUCTURE)
 public final class MissionMemory extends ManagedMemory // HSO: not public
-{	
+{
 	Runnable runInitialize;
 	Runnable runExecute;
 	Runnable runCleanup;
 	Mission m;
 
 	MissionMemory(int size, ManagedMemory backingStoreProvider, String label) {
-		super(size, backingStoreProvider.getRemainingBackingstoreSize(), 
-			  backingStoreProvider, label);
-		
+		super(size, backingStoreProvider.getRemainingBackingstoreSize(), backingStoreProvider, label);
+
 		runInitialize = new Runnable() {
 			public void run() {
 				m.runInitialize();
@@ -87,7 +86,7 @@ public final class MissionMemory extends ManagedMemory // HSO: not public
 
 	void enterToCleanup(final Mission mission) {
 		m = mission;
-		executeInArea(runCleanup);		
+		executeInArea(runCleanup);
 		resetArea();
 	}
 }

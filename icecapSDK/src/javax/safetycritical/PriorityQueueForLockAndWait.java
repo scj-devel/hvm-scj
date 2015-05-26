@@ -13,7 +13,7 @@ class PriorityQueueForLockAndWait {
 		queue = new int[size];
 		tail = -1;
 		queueSize = 0;
-		
+
 		makeEmptyQueue(queue);
 	}
 
@@ -32,7 +32,7 @@ class PriorityQueueForLockAndWait {
 	 */
 	protected void addProcess(Object monitor, ScjProcess process) {
 		vm.ClockInterruptHandler.instance.disable();
-		
+
 		if (tail < queue.length - 1) {
 			tail++;
 			int index = tail;
@@ -41,9 +41,9 @@ class PriorityQueueForLockAndWait {
 				ScjProcess temp = getScjProcess(queue[i]);
 				if (temp == null)
 					throw new IllegalArgumentException("1");
-												
-				if (ManagedSchedMethods.getPriorityParameter(process.getTarget()).getPriority() 
-						> ManagedSchedMethods.getPriorityParameter(temp.getTarget()).getPriority()) {
+
+				if (ManagedSchedMethods.getPriorityParameter(process.getTarget()).getPriority() > ManagedSchedMethods
+						.getPriorityParameter(temp.getTarget()).getPriority()) {
 					index = i;
 					break;
 				}
@@ -75,7 +75,7 @@ class PriorityQueueForLockAndWait {
 	 *            The lock
 	 * @return The process who needs to lock.
 	 */
-	protected /*synchronized*/ ScjProcess getNextProcess(Object monitor) {
+	protected/*synchronized*/ScjProcess getNextProcess(Object monitor) {
 		for (int i = 0; i <= tail; i++) {
 			ScjProcess process = getScjProcess(queue[i]);
 			if (process.monitorLock == monitor) {
@@ -88,12 +88,12 @@ class PriorityQueueForLockAndWait {
 		return null;
 	}
 
-	public /*synchronized*/ void removeProcess(ScjProcess process) {
+	public/*synchronized*/void removeProcess(ScjProcess process) {
 		for (int i = 0; i <= tail; i++) {
 			if (queue[i] == process.index) {
 				reorderSet(i);
 				process.monitorLock = null;
-				
+
 				queueSize--;
 			}
 		}
@@ -128,11 +128,11 @@ class PriorityQueueForLockAndWait {
 	 */
 	public void print() {
 		devices.Console.println("queue size = " + (tail + 1));
-//		for (int i = 0; i <= tail; i++) {
-//			ScjProcess temp = getScjProcess(queue[i]);
-//			if (temp != null)
-//				devices.Console.println(temp.print());
-//		}
+		//		for (int i = 0; i <= tail; i++) {
+		//			ScjProcess temp = getScjProcess(queue[i]);
+		//			if (temp != null)
+		//				devices.Console.println(temp.print());
+		//		}
 
 		for (int i = 0; i < queue.length; i++) {
 			devices.Console.print("[ " + queue[i] + " ] ");

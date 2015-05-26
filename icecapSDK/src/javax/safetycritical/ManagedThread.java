@@ -53,8 +53,7 @@ import vm.Memory;
  *
  */
 @SCJAllowed(Level.LEVEL_2)
-public class ManagedThread extends RealtimeThread implements
-		ManagedSchedulable {
+public class ManagedThread extends RealtimeThread implements ManagedSchedulable {
 
 	PriorityParameters priority;
 	StorageParameters storage;
@@ -62,11 +61,11 @@ public class ManagedThread extends RealtimeThread implements
 	Mission mission = null;
 
 	ManagedMemory privateMemory;
-	
+
 	// used in JML spec. methods
 	boolean isRegistered;
 	boolean isInMissionScope;
-	
+
 	public ManagedThread(PriorityParameters priority, StorageParameters storage) {
 		this(priority, storage, null);
 	}
@@ -74,59 +73,54 @@ public class ManagedThread extends RealtimeThread implements
 	public ManagedThread(PriorityParameters priority, StorageParameters storage, Runnable logic) {
 		super(priority, logic);
 		this.priority = priority;
-		
+
 		if (storage == null)
 			throw new IllegalArgumentException("storage is null");
-		
+
 		this.storage = storage;
 		this.mission = Mission.getMission();
-		
-		int backingStoreOfThisMemory = 
-			mission == null ? 
-				MemoryArea.getRemainingMemorySize() : 
-				(int) this.storage.totalBackingStore;
-	    MemoryArea backingStoreProvider = 
-			mission == null ? MemoryArea.overAllBackingStore : 
-				mission.currMissSeq.missionMemory;
-	    
-	    String privateMemoryName = Memory.getNextMemoryName("PvtMem");
-	    
-	    privateMemory = new PrivateMemory((int) storage.getMaxMemoryArea(), 
-	    								   backingStoreOfThisMemory, 
-	    								   backingStoreProvider,
-	    								   privateMemoryName);
-	    this.isRegistered = false;
-	    this.isInMissionScope = false;
-	}	
-	
+
+		int backingStoreOfThisMemory = mission == null ? MemoryArea.getRemainingMemorySize()
+				: (int) this.storage.totalBackingStore;
+		MemoryArea backingStoreProvider = mission == null ? MemoryArea.overAllBackingStore
+				: mission.currMissSeq.missionMemory;
+
+		String privateMemoryName = Memory.getNextMemoryName("PvtMem");
+
+		privateMemory = new PrivateMemory((int) storage.getMaxMemoryArea(), backingStoreOfThisMemory,
+				backingStoreProvider, privateMemoryName);
+		this.isRegistered = false;
+		this.isInMissionScope = false;
+	}
+
 	Mission getMission() {
 		return mission;
 	}
-	
+
 	@SCJAllowed(Level.INFRASTRUCTURE)
 	@SCJRestricted(Phase.INITIALIZE)
 	public final void register() {
 		ManagedSchedulableSet msSet = Mission.getMission().msSetForMission;
 		msSet.addMS(this);
-		
+
 		isRegistered = true;
 		isInMissionScope = true;
 	}
-	
+
 	@SCJAllowed(Level.SUPPORT)
 	@SCJRestricted(Phase.CLEANUP)
 	public void cleanUp() {
 		privateMemory.removeArea();
 	}
-	
-	public void signalTermination() {		
+
+	public void signalTermination() {
 		//process.state = ScjProcess.State.HANDLED;
 		//devices.Console.println("ManagedThread.signalTermination: process " + process.index); // + "; state " + process.state);
 
-//		ManagedSchedulableSet msSet = Mission.getCurrentMission().msSetForMission;
-//		msSet.removeMSObject(this);
+		//		ManagedSchedulableSet msSet = Mission.getCurrentMission().msSetForMission;
+		//		msSet.removeMSObject(this);
 	}
-	
+
 	/**
 	 * Remove the currently execution schedulable object from the set of 
 	 * runnable schedulable object until time.
@@ -140,22 +134,19 @@ public class ManagedThread extends RealtimeThread implements
 		ScjProcess current = PriorityScheduler.instance().current;
 		// get current time.
 		//AbsoluteTime abs = Clock.getRealtimeClock().getTime(current.next);
-		
-		
+
 		// set the next release time for current process
 		if (time instanceof RelativeTime) {
 			current.next.add((RelativeTime) time, current.next);
 			//current.next = abs.add((RelativeTime) time, abs);
-		} 
-		else if (time instanceof AbsoluteTime) {
+		} else if (time instanceof AbsoluteTime) {
 			current.next = new AbsoluteTime((AbsoluteTime) time);
-		} 
-		else {
+		} else {
 			throw new UnsupportedOperationException();
 		}
 
 		// set state to SLEEPING 
-		current.state = ScjProcess.State.SLEEPING;		
+		current.state = ScjProcess.State.SLEEPING;
 
 		// transfer process; 
 		// PriorityScheduler.move() will call gotoNextState that inserts 

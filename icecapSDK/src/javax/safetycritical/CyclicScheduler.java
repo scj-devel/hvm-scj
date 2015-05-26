@@ -102,7 +102,7 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 	void start(MissionSequencer<?> seq) {
 		this.seq = seq;
 
-		current = ManagedSchedMethods.createScjProcess(seq); 
+		current = ManagedSchedMethods.createScjProcess(seq);
 		processStart();
 	}
 

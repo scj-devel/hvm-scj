@@ -47,26 +47,26 @@ import javax.safetycritical.annotate.SCJRestricted;
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
 @SuppressWarnings("unused")
-@SCJAllowed(Level.SUPPORT) 
+@SCJAllowed(Level.SUPPORT)
 @SCJRestricted(Phase.INITIALIZE)
 public interface Safelet<MissionType extends Mission> {
 	/**
-     * The infrastructure invokes <code>getSequencer</code> to obtain the 
-     * <code>MissionSequencer</code> object that oversees execution of missions 
-     * for this application. The returned sequencer must reside in immortal memory.
-     * 
-     * @return The <code>MissionSequencer</code> responsible for selecting
-     *   the sequence of <code>Mission</code>s that represent this safety-critical 
-     *   application.
-     */
-	@SCJAllowed(Level.SUPPORT) 
+	 * The infrastructure invokes <code>getSequencer</code> to obtain the 
+	 * <code>MissionSequencer</code> object that oversees execution of missions 
+	 * for this application. The returned sequencer must reside in immortal memory.
+	 * 
+	 * @return The <code>MissionSequencer</code> responsible for selecting
+	 *   the sequence of <code>Mission</code>s that represent this safety-critical 
+	 *   application.
+	 */
+	@SCJAllowed(Level.SUPPORT)
 	@SCJRestricted(Phase.INITIALIZE)
 	public MissionSequencer<MissionType> getSequencer();
 
-    /**
-     *  @return the amount of immortal memory that must be available for 
-     *    allocations to be performed by this application.
-     */
+	/**
+	 *  @return the amount of immortal memory that must be available for 
+	 *    allocations to be performed by this application.
+	 */
 	@SCJAllowed(Level.SUPPORT)
 	public long immortalMemorySize();
 

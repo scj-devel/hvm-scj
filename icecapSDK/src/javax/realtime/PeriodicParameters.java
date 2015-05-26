@@ -50,7 +50,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  */
 @SCJAllowed
 public class PeriodicParameters extends ReleaseParameters {
-	
+
 	RelativeTime start;
 	RelativeTime period;
 
@@ -83,25 +83,21 @@ public class PeriodicParameters extends ReleaseParameters {
 	 * @throws IllegalArgumentException if <code>period</code> is null.
 	 */
 	@SCJAllowed(Level.LEVEL_1)
-	public PeriodicParameters(RelativeTime start, RelativeTime period,
-			RelativeTime deadline, AsyncEventHandler missHandler) {
+	public PeriodicParameters(RelativeTime start, RelativeTime period, RelativeTime deadline,
+			AsyncEventHandler missHandler) {
 		super(deadline == null ? period : deadline, missHandler);
 
 		if (start == null)
 			this.start = new RelativeTime();
 		else
 			this.start = new RelativeTime(start);
-		
-		if (period == null || 
-			period.millis < 0 || 
-			(period.millis == 0 && period.nanos == 0) || 
-			start.clock != period.clock)
-				throw new IllegalArgumentException("period is null or not vaild");
-		if (deadline != null && 
-			(deadline.millis < 0 || 
-			  (deadline.millis == 0 && deadline.nanos == 0) || 
-			   period.clock != deadline.clock))
-				throw new IllegalArgumentException("deadline is null or not vaild");
+
+		if (period == null || period.millis < 0 || (period.millis == 0 && period.nanos == 0)
+				|| start.clock != period.clock)
+			throw new IllegalArgumentException("period is null or not vaild");
+		if (deadline != null
+				&& (deadline.millis < 0 || (deadline.millis == 0 && deadline.nanos == 0) || period.clock != deadline.clock))
+			throw new IllegalArgumentException("deadline is null or not vaild");
 
 		this.period = new RelativeTime(period);
 	}
@@ -115,14 +111,14 @@ public class PeriodicParameters extends ReleaseParameters {
 	public RelativeTime getStart() {
 		return start;
 	}
-	
+
 	// used for JML annotation only (not public)
 	RelativeTime period() {
-    	return period;
-    }
-    
-    // used for JML annotation only (not public)
+		return period;
+	}
+
+	// used for JML annotation only (not public)
 	RelativeTime start() {
-    	return start;
-    }
+		return start;
+	}
 }

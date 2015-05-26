@@ -6,16 +6,15 @@ public final class TestPortal {
 		ManagedMemory.allocateBackingStore(totalBackingStore);
 	}
 
-	public static ManagedMemory ManagedMemory_allocateImmortalMemory(
-			int immortalSize) {
+	public static ManagedMemory ManagedMemory_allocateImmortalMemory(int immortalSize) {
 		return new ManagedMemory.ImmortalMemory(immortalSize);
 	}
 
 	public static ManagedMemory ManagedMemory_getOuterMemory(ManagedMemory m) {
 		return ManagedMemory.getOuterMemory(m);
 	}
-	
-	public static void executeInAreaOf (ManagedMemory mem, Runnable logic) {
+
+	public static void executeInAreaOf(ManagedMemory mem, Runnable logic) {
 		ManagedMemory.flag = true;
 		mem.executeInArea(logic);
 	}

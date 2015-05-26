@@ -39,21 +39,21 @@ import icecaptools.IcecapCompileMe;
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
 class RealtimeClock extends Clock {
-//	private static vm.RealtimeClock nativeClock = 
-//		vm.RealtimeClock.getRealtimeClock();
+	//	private static vm.RealtimeClock nativeClock = 
+	//		vm.RealtimeClock.getRealtimeClock();
 
-	static Clock rtClock = new RealtimeClock(); 
+	static Clock rtClock = new RealtimeClock();
 
 	RealtimeClock() {
 		super(true);
-		
-//		int granularity = nativeClock.getGranularity();
-//
-//		long millis = granularity / 1000000;
-//		int nanos = granularity % 1000000;
-//
-//		resolution = new RelativeTime(millis, nanos, rtClock);
-		
+
+		//		int granularity = nativeClock.getGranularity();
+		//
+		//		long millis = granularity / 1000000;
+		//		int nanos = granularity % 1000000;
+		//
+		//		resolution = new RelativeTime(millis, nanos, rtClock);
+
 		resolution.clock = rtClock;
 	}
 
@@ -113,7 +113,7 @@ class RealtimeClock extends Clock {
 		// dest as (1000*x milliSecs, y nanoSecs)
 
 		dest.set(dest.getMilliseconds(), dest.getNanoseconds());
-		dest.clock = Clock.getRealtimeClock(); 
+		dest.clock = Clock.getRealtimeClock();
 
 		return dest;
 	}

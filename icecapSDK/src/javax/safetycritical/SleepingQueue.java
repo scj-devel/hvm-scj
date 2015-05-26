@@ -100,16 +100,12 @@ class SleepingQueue {
 
 		int smallest;
 
-		if (l <= heapSize
-				&& getScjProcess(tree[l]).next
-						.compareTo(getScjProcess(tree[r]).next) < 0)
+		if (l <= heapSize && getScjProcess(tree[l]).next.compareTo(getScjProcess(tree[r]).next) < 0)
 			smallest = l;
 		else
 			smallest = i;
 
-		if (r <= heapSize
-				&& getScjProcess(tree[r]).next
-						.compareTo(getScjProcess(tree[smallest]).next) < 0)
+		if (r <= heapSize && getScjProcess(tree[r]).next.compareTo(getScjProcess(tree[smallest]).next) < 0)
 			smallest = r;
 
 		if (smallest != i) {
@@ -124,8 +120,7 @@ class SleepingQueue {
 
 		heapSize++;
 		int i = heapSize;
-		while (i > 1
-				&& getScjProcess(tree[parent(i)]).next.compareTo(obj.next) > 0) {
+		while (i > 1 && getScjProcess(tree[parent(i)]).next.compareTo(obj.next) > 0) {
 			tree[i] = tree[parent(i)];
 			i = parent(i);
 		}
@@ -152,7 +147,7 @@ class SleepingQueue {
 
 		return min;
 	}
-	
+
 	@IcecapCompileMe
 	private ScjProcess getScjProcess(int processIdx) {
 		if (processIdx == -999) {
@@ -164,12 +159,12 @@ class SleepingQueue {
 		if (processIdx == -1) {
 			return ScjProcess.idleProcess;
 		}
-		
+
 		int missionIndex = processIdx / 20;
 		int scjProcessIndex = processIdx % 20;
 		return Mission.missionSet[missionIndex].msSetForMission.scjProcesses[scjProcessIndex];
 	}
-	
+
 	public void remove(ScjProcess obj) {
 		if (obj == null)
 			return;
@@ -199,7 +194,7 @@ class SleepingQueue {
 			devices.Console.println(getScjProcess(tree[i]).toString());
 			//System.out.println(tree[i].toString());
 		}
-		
+
 		//System.out.println("Count is: " + heapSize);
 	}
 
@@ -207,8 +202,7 @@ class SleepingQueue {
 	public static void main(String[] args) {
 		System.out.println("Main to SleepingQueue begin");
 
-		SleepingQueue queue = new SleepingQueue(
-				Const.DEFAULT_SLEEPING_QUEUE_SIZE);
+		SleepingQueue queue = new SleepingQueue(Const.DEFAULT_SLEEPING_QUEUE_SIZE);
 
 		int n = 5;
 		// int id = 1;

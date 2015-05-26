@@ -52,42 +52,41 @@ public final class Const {
 	public static final int NAN0S_PER_MICRO = 1000;
 	public static final int NANOS_PER_MILLI = 1000 * NAN0S_PER_MICRO;
 
-	/* Memories */	
-	
+	/* Memories */
+
 	// New
-	public static final int OVERALL_BACKING_STORE_DEFAULT = 802*1000;
-	public static final int IDLE_BACKING_STORE_DEFAULT    =   2*1000;
-	public static final int IMMORTAL_MEM_DEFAULT          = 100*1000;
-	public static final int OUTERMOST_SEQ_BACKING_STORE_DEFAULT =
-		OVERALL_BACKING_STORE_DEFAULT - IMMORTAL_MEM_DEFAULT - IDLE_BACKING_STORE_DEFAULT;
-	
-	public static final int MISSION_MEM_DEFAULT           = 200*1000;
-	
-	public static final int PRIVATE_BACKING_STORE_DEFAULT =  40*1000;
-	public static final int PRIVATE_MEM_DEFAULT           =  20*1000;
-	
-	
+	public static final int OVERALL_BACKING_STORE_DEFAULT = 802 * 1000;
+	public static final int IDLE_BACKING_STORE_DEFAULT = 2 * 1000;
+	public static final int IMMORTAL_MEM_DEFAULT = 100 * 1000;
+	public static final int OUTERMOST_SEQ_BACKING_STORE_DEFAULT = OVERALL_BACKING_STORE_DEFAULT - IMMORTAL_MEM_DEFAULT
+			- IDLE_BACKING_STORE_DEFAULT;
+
+	public static final int MISSION_MEM_DEFAULT = 200 * 1000;
+
+	public static final int PRIVATE_BACKING_STORE_DEFAULT = 40 * 1000;
+	public static final int PRIVATE_MEM_DEFAULT = 20 * 1000;
+
 	public static int OVERALL_BACKING_STORE = OVERALL_BACKING_STORE_DEFAULT;
-	public static int IDLE_BACKING_STORE    = IDLE_BACKING_STORE_DEFAULT;
-	public static int IMMORTAL_MEM          = IMMORTAL_MEM_DEFAULT;
+	public static int IDLE_BACKING_STORE = IDLE_BACKING_STORE_DEFAULT;
+	public static int IMMORTAL_MEM = IMMORTAL_MEM_DEFAULT;
 	public static int OUTERMOST_SEQ_BACKING_STORE = OUTERMOST_SEQ_BACKING_STORE_DEFAULT;
-	
-	public static int MISSION_MEM       = MISSION_MEM_DEFAULT;
-	
-	public static int PRIVATE_BACKING_STORE =  PRIVATE_BACKING_STORE_DEFAULT;
-	public static int PRIVATE_MEM =  PRIVATE_MEM_DEFAULT;
-	
+
+	public static int MISSION_MEM = MISSION_MEM_DEFAULT;
+
+	public static int PRIVATE_BACKING_STORE = PRIVATE_BACKING_STORE_DEFAULT;
+	public static int PRIVATE_MEM = PRIVATE_MEM_DEFAULT;
+
 	// Old
 
-//	public static final int BACKING_STORE_SIZE_DEFAULT = 800 * 1000;
-//	public static final int IMMORTAL_MEM_SIZE_DEFAULT = 100 * 1000;
-//	public static final int MISSION_MEM_SIZE_DEFAULT = 200 * 1000;
-//	public static final int PRIVATE_MEM_SIZE_DEFAULT = 40 * 1000;
-//	
-//	public static int BACKING_STORE_SIZE = BACKING_STORE_SIZE_DEFAULT;
-//	public static int IMMORTAL_MEM_SIZE = IMMORTAL_MEM_SIZE_DEFAULT;
-//	public static int MISSION_MEM_SIZE = MISSION_MEM_SIZE_DEFAULT;
-//	public static int PRIVATE_MEM_SIZE = PRIVATE_MEM_SIZE_DEFAULT;
+	//	public static final int BACKING_STORE_SIZE_DEFAULT = 800 * 1000;
+	//	public static final int IMMORTAL_MEM_SIZE_DEFAULT = 100 * 1000;
+	//	public static final int MISSION_MEM_SIZE_DEFAULT = 200 * 1000;
+	//	public static final int PRIVATE_MEM_SIZE_DEFAULT = 40 * 1000;
+	//	
+	//	public static int BACKING_STORE_SIZE = BACKING_STORE_SIZE_DEFAULT;
+	//	public static int IMMORTAL_MEM_SIZE = IMMORTAL_MEM_SIZE_DEFAULT;
+	//	public static int MISSION_MEM_SIZE = MISSION_MEM_SIZE_DEFAULT;
+	//	public static int PRIVATE_MEM_SIZE = PRIVATE_MEM_SIZE_DEFAULT;
 
 	/* Stacks */
 
@@ -124,15 +123,12 @@ public final class Const {
 		reporter = new DefaultSCJErrorReporter();
 	}
 
-	public static final RelativeTime DEFAULT_TIME_INTERVAL = new RelativeTime(
-			1, 0, null); // one millis
+	public static final RelativeTime DEFAULT_TIME_INTERVAL = new RelativeTime(1, 0, null); // one millis
 
-	public static final RelativeTime INFINITE_TIME = new RelativeTime(
-			365 * 24 * 60 * 1000, 0, Clock.getRealtimeClock()); // 365*24*60
-																// secs = 1 year
+	public static final RelativeTime INFINITE_TIME = new RelativeTime(365 * 24 * 60 * 1000, 0, Clock.getRealtimeClock()); // 365*24*60
+																															// secs = 1 year
 
-	public static final RelativeTime SUSPEND_TIME = new RelativeTime(0,
-			100 * 1000, null); // 100 micro_secs
+	public static final RelativeTime SUSPEND_TIME = new RelativeTime(0, 100 * 1000, null); // 100 micro_secs
 
 	public static final boolean TESTING = true;
 
@@ -143,7 +139,7 @@ public final class Const {
 	public static final int PRIVATE_MEM_LEVEL = 4;
 
 	public static final int PRIORITY_SCHEDULING = 1;
-	
+
 	public static int MEMORY_TRACKER_AREA_SIZE = 15000;
 
 }

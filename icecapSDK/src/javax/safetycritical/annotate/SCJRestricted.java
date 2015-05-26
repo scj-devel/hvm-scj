@@ -33,8 +33,7 @@ import java.lang.annotation.Target;
 
 @Documented
 @Retention(RetentionPolicy.CLASS)
-@Target({ ElementType.TYPE, ElementType.FIELD, ElementType.METHOD,
-		ElementType.CONSTRUCTOR })
+@Target({ ElementType.TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR })
 public @interface SCJRestricted {
 	public Phase value() default Phase.ALL;
 }

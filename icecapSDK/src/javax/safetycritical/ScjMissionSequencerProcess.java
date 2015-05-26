@@ -7,12 +7,11 @@ class ScjMissionSequencerProcess extends ScjProcess {
 	ScjMissionSequencerProcess(ManagedSchedulable handler, int[] stack) {
 		super(handler, stack);
 	}
-	
-	protected void gotoNextState(PriorityFrame pFrame)
-	{
+
+	protected void gotoNextState(PriorityFrame pFrame) {
 		if (state == ScjProcess.State.HANDLED) {
 			// missionSequencer terminates
-			if (index == -2) {  // outer sequencer
+			if (index == -2) { // outer sequencer
 				msObject.cleanUp();
 			} else {
 				//devices.Console.println("---- ScjMissionSequencerProcess: " + index + ";target: " + target);
@@ -24,20 +23,17 @@ class ScjMissionSequencerProcess extends ScjProcess {
 			}
 			state = ScjProcess.State.TERMINATED;
 			return;
-		} 
-		else if (state == ScjProcess.State.WAITING) {
+		} else if (state == ScjProcess.State.WAITING) {
 			;
-		}
-		else if (state == ScjProcess.State.REQUIRELOCK) {
+		} else if (state == ScjProcess.State.REQUIRELOCK) {
 			;
-		}
-		else {
+		} else {
 			state = ScjProcess.State.READY;
 			pFrame.readyQueue.insert(this);
 		}
 	}
-	
+
 	void switchToPrivateMemArea() {
-		Memory.switchToArea(((ManagedEventHandler)msObject).privateMemory.getDelegate());
+		Memory.switchToArea(((ManagedEventHandler) msObject).privateMemory.getDelegate());
 	}
 }
