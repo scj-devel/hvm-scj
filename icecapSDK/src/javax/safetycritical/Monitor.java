@@ -42,7 +42,7 @@ final class Monitor extends vm.Monitor {
 		this.ceiling = ceiling;
 		clock = vm.ClockInterruptHandler.instance;
 	}
-	
+
 	public void lock() {
 		clock.disable();
 		ManagedSchedulable msObj = PriorityScheduler.instance().getCurrentProcess().getTarget();
@@ -50,28 +50,26 @@ final class Monitor extends vm.Monitor {
 		if (owner == null) {
 			setOwner(msObj);
 		}
-			
+
 		if (owner == msObj) {
-			synchCounter++;	
-			if (synchCounter == 1) {				
+			synchCounter++;
+			if (synchCounter == 1) {
 				priority = ManagedSchedMethods.getPriorityParameter(msObj).getPriority();
 				ManagedSchedMethods.getPriorityParameter(msObj).setPriority(max(priority, ceiling) + 1);
 			}
 			clock.enable();
-		} 
-		else {
+		} else {
 			// insert the process to in lock queue
 			// process in REQUIRELOCK state
 			ScjProcess process = ManagedSchedMethods.getScjProcess(msObj);
-			process.state = ScjProcess.State.REQUIRELOCK; 
-			PriorityScheduler.instance().
-				addProcessToLockQueue(this, process);
+			process.state = ScjProcess.State.REQUIRELOCK;
+			PriorityScheduler.instance().addProcessToLockQueue(this, process);
 			//devices.Console.println("addProcessToLockQueue: "  + ManagedSchedMethods.getScjProcess(msObj).index);
-			
+
 			// transfer to the process
 			clock.enable();
 			vm.ClockInterruptHandler.instance.yield();
-		}		
+		}
 	}
 
 	@IcecapCompileMe
@@ -79,21 +77,21 @@ final class Monitor extends vm.Monitor {
 	public void unlock() {
 		clock.disable();
 		ManagedSchedulable msObj = PriorityScheduler.instance().getCurrentProcess().getTarget();
-		
+
 		//devices.Console.println(PriorityScheduler.instance().getCurrentProcess().index + " unlocks");
 		if (owner == msObj) {
 			synchCounter--;
-			
+
 			if (synchCounter == 0) {
 				ManagedSchedMethods.getPriorityParameter(msObj).setPriority(priority);
 				// get the next process that needs the lock in lock queue 
 				// and assign the lock to this process.
 				ScjProcess process = PriorityScheduler.instance().getProcessFromLockQueue(this);
 				//if (process != null) devices.Console.println("getProcessFromLockQueue: " + process.index);
-				
-				if (process != null) {					
+
+				if (process != null) {
 					setOwner(process.getTarget());
-					
+
 					synchCounter++;
 					priority = ManagedSchedMethods.getPriorityParameter(msObj).getPriority();
 					ManagedSchedMethods.getPriorityParameter(msObj).setPriority(max(priority, ceiling) + 1);
@@ -101,20 +99,18 @@ final class Monitor extends vm.Monitor {
 					process.state = State.READY;
 					PriorityScheduler.instance().insertReadyQueue(process);
 					//devices.Console.println("insertReadyQueue: " + process.index);
-				} 
-				else {
+				} else {
 					setOwner(null);
 				}
-			}			
-		} 
-		else {
+			}
+		} else {
 			devices.Console.println("    Monitor.unlock: UPS, - not owner");
 			clock.enable();
 			throw new IllegalMonitorStateException("Not owner on exit");
 		}
 		clock.enable();
 	}
-	
+
 	private void setOwner(ManagedSchedulable msObj) {
 		owner = msObj;
 	}
@@ -125,7 +121,7 @@ final class Monitor extends vm.Monitor {
 		else
 			return y;
 	}
-	
+
 	static Monitor getMonitor(Object target) {
 		Object obj = getAttachedMonitor(target);
 		if (obj == null || !(obj instanceof Monitor)) {

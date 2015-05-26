@@ -51,19 +51,19 @@ import javax.safetycritical.annotate.SCJAllowed;
 class PriorityFrame {
 	PriorityQueue readyQueue;
 
-	SleepingQueue sleepingQueue;  // a priority queue ordered by
-								  // ScjProcess.nextActivationTime;
+	SleepingQueue sleepingQueue; // a priority queue ordered by
+									// ScjProcess.nextActivationTime;
 
 	PriorityQueueForLockAndWait waitQueue;
 	PriorityQueueForLockAndWait lockQueue;
-	
+
 	PriorityFrame(int queueSize) {
 		// create the queues ...
 		readyQueue = new PriorityQueue(queueSize);
 		sleepingQueue = new SleepingQueue(queueSize);
-		
+
 		waitQueue = new PriorityQueueForLockAndWait(queueSize);
-		lockQueue = new PriorityQueueForLockAndWait(queueSize);		
+		lockQueue = new PriorityQueueForLockAndWait(queueSize);
 	}
 
 	void addProcess(ScjProcess process) {
@@ -73,10 +73,10 @@ class PriorityFrame {
 			PeriodicEventHandler pevh = (PeriodicEventHandler) process.getTarget();
 			RelativeTime start = ((PeriodicParameters) pevh.release).getStart();
 
-			if (start.getMilliseconds() == 0 && start.getNanoseconds() == 0) {				
+			if (start.getMilliseconds() == 0 && start.getNanoseconds() == 0) {
 				process.state = ScjProcess.State.READY;
 				readyQueue.insert(process);
-			} else {				
+			} else {
 				process.state = ScjProcess.State.SLEEPING;
 				sleepingQueue.insert(process);
 			}
@@ -93,20 +93,19 @@ class PriorityFrame {
 			process.state = ScjProcess.State.BLOCKED;
 		}
 
-		else if (process.getTarget() instanceof OneShotEventHandler) 
-		{
+		else if (process.getTarget() instanceof OneShotEventHandler) {
 			//devices.Console.println("PrFrame.addProcess, oneshot " + process+ ", index " + process.index);
 			process.state = ScjProcess.State.SLEEPING;
-			sleepingQueue.insert(process);			
+			sleepingQueue.insert(process);
 		}
-		
+
 		// if a thread is added, then it is made blocked and waiting 
 		// for the call to start.
 		else if (process.getTarget() instanceof ManagedThread) {
 			//devices.Console.println("PrFrame.addProcess, managedThread " + process+ ", index " + process.index);
 			//if (((ManagedThread) process.getTarget()).isAutoStart()) {
-				process.state = ScjProcess.State.READY;
-				readyQueue.insert(process);
+			process.state = ScjProcess.State.READY;
+			readyQueue.insert(process);
 			//} else {
 			//	process.state = ScjProcess.State.BLOCKED;
 			//}
@@ -121,6 +120,6 @@ class PriorityFrame {
 		readyQueue.remove(scjProcess);
 		sleepingQueue.remove(scjProcess);
 		waitQueue.removeProcess(scjProcess);
-		lockQueue.removeProcess(scjProcess);		
+		lockQueue.removeProcess(scjProcess);
 	}
 }

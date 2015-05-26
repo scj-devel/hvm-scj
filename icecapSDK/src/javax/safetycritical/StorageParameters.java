@@ -41,7 +41,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  */
 @SCJAllowed
 public final class StorageParameters extends javax.realtime.MemoryParameters {
-	
+
 	long totalBackingStore;
 	long[] configurationSizes;
 	int messageLength;
@@ -59,11 +59,9 @@ public final class StorageParameters extends javax.realtime.MemoryParameters {
 	 *   The array passed in is not stored in the object. <p>
 	 */
 	@SCJAllowed
-	public StorageParameters(long totalBackingStore, long[] sizes,
-			int messageLength, int stackTraceLength, long maxMemoryArea,
-			long maxImmortal, long maxMissionMemory) 
-	{
-		super (maxMemoryArea, maxImmortal);
+	public StorageParameters(long totalBackingStore, long[] sizes, int messageLength, int stackTraceLength,
+			long maxMemoryArea, long maxImmortal, long maxMissionMemory) {
+		super(maxMemoryArea, maxImmortal);
 		this.totalBackingStore = totalBackingStore;
 		this.configurationSizes = sizes;
 		this.messageLength = messageLength;
@@ -82,11 +80,10 @@ public final class StorageParameters extends javax.realtime.MemoryParameters {
 	 *   The array passed in is not stored in the object. <p>
 	 */
 	@SCJAllowed
-	public StorageParameters(long totalBackingStore, long[] sizes,
-			long maxMemoryArea, long maxImmortal, long maxMissionMemory) 
-	{
-		super (maxMemoryArea, maxImmortal);
-		
+	public StorageParameters(long totalBackingStore, long[] sizes, long maxMemoryArea, long maxImmortal,
+			long maxMissionMemory) {
+		super(maxMemoryArea, maxImmortal);
+
 		this.totalBackingStore = totalBackingStore;
 		this.configurationSizes = sizes;
 		this.messageLength = 0; // or a default value like 128?
@@ -97,18 +94,18 @@ public final class StorageParameters extends javax.realtime.MemoryParameters {
 	long getMaxMemoryArea() {
 		return maxMemoryArea;
 	}
-	
+
 	long getMaxImmortal() {
 		return maxImmortal;
 	}
-	
+
 	//used in JML annotation only (not public)
 	long getBackingStoreSize() {
 		return totalBackingStore;
 	}
-	
-//	//used in JML annotation only (not public)
-//	long[] getConfigurationSizes() {
-//		return configurationSizes;
-//	}
+
+	//	//used in JML annotation only (not public)
+	//	long[] getConfigurationSizes() {
+	//		return configurationSizes;
+	//	}
 }

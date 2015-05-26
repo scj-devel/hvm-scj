@@ -58,8 +58,7 @@ import javax.safetycritical.annotate.SCJAllowed;
 public final class PrivateMemory extends ManagedMemory // HSO: not public
 {
 	@IcecapCompileMe
-	PrivateMemory(int size, int BackingStoreOfThisMemory, 
-			      MemoryArea backingStoreProvider, String label) {
+	PrivateMemory(int size, int BackingStoreOfThisMemory, MemoryArea backingStoreProvider, String label) {
 		super(size, BackingStoreOfThisMemory, backingStoreProvider, label);
 	}
 

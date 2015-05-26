@@ -100,15 +100,12 @@ class PriorityQueue {
 
 		int largest;
 
-		if (l <= heapSize
-				&& getScjProcess(tree[l]).compareTo(getScjProcess(tree[r])) > 0)
+		if (l <= heapSize && getScjProcess(tree[l]).compareTo(getScjProcess(tree[r])) > 0)
 			largest = l;
 		else
 			largest = i;
 
-		if (r <= heapSize
-				&& getScjProcess(tree[r]).compareTo(
-						getScjProcess(tree[largest])) > 0)
+		if (r <= heapSize && getScjProcess(tree[r]).compareTo(getScjProcess(tree[largest])) > 0)
 			largest = r;
 
 		if (largest != i) {
@@ -155,7 +152,7 @@ class PriorityQueue {
 		if (processIdx == -1) {
 			return ScjProcess.idleProcess;
 		}
-		
+
 		int missionIndex = processIdx / 20;
 		int scjProcessIndex = processIdx % 20;
 		return Mission.missionSet[missionIndex].msSetForMission.scjProcesses[scjProcessIndex];
@@ -186,10 +183,10 @@ class PriorityQueue {
 	 */
 	public void print() {
 		devices.Console.println("readyQueue size = " + heapSize);
-//		for (int i = 1; i <= heapSize; i++) {
-//			devices.Console.println((getScjProcess(tree[i]).toString()));
-//			//System.out.println (tree[i].toString());
-//		}
+		//		for (int i = 1; i <= heapSize; i++) {
+		//			devices.Console.println((getScjProcess(tree[i]).toString()));
+		//			//System.out.println (tree[i].toString());
+		//		}
 		//devices.Console.println("\n");
 		//System.out.println ("Count is: " + heapSize);
 	}
@@ -198,8 +195,7 @@ class PriorityQueue {
 	public static void main(String[] args) {
 		System.out.println("Main to PriorityQueue begin");
 
-		PriorityQueue queue = new PriorityQueue(
-				Const.DEFAULT_PRIORITY_QUEUE_SIZE_DEFAULT);
+		PriorityQueue queue = new PriorityQueue(Const.DEFAULT_PRIORITY_QUEUE_SIZE_DEFAULT);
 
 		int n = 5;
 		@SuppressWarnings("unused")

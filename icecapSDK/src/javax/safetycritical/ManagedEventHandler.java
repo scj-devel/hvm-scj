@@ -86,9 +86,9 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	    requires priority != null;
 	    requires release != null;  
 	
-//	    ensures this.getPriorityParam().getPriority() == priority.getPriority();  
-//	    ensures this.getReleaseParam().getDeadline() == release.getDeadline();
-//	    ensures this.getReleaseParam().getMissHandler() == release.getMissHandler();
+	//	    ensures this.getPriorityParam().getPriority() == priority.getPriority();  
+	//	    ensures this.getReleaseParam().getDeadline() == release.getDeadline();
+	//	    ensures this.getReleaseParam().getMissHandler() == release.getMissHandler();
 	
 	  also
 	  public exceptional_behavior

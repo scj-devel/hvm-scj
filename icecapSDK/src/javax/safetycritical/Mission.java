@@ -55,7 +55,7 @@ public abstract class Mission {
 
 	boolean missionTerminate = false;
 
-	ManagedSchedulableSet msSetForMission; 
+	ManagedSchedulableSet msSetForMission;
 	Phase phaseOfMission;
 
 	protected int missionIndex = -1;
@@ -70,7 +70,7 @@ public abstract class Mission {
 	public Mission(AbsoluteTime start) {
 		// ToDo: implement
 	}
-	
+
 	@SCJAllowed
 	public Mission() {
 	}
@@ -91,20 +91,17 @@ public abstract class Mission {
 	@IcecapCompileMe
 	public static Mission getMission() {
 		Mission mission = null;
-		
+
 		if (Launcher.level == 0 && CyclicScheduler.instance().seq != null) {
 			mission = CyclicScheduler.instance().seq.currMission;
-		} 
-		else if (Launcher.level > 0 && PriorityScheduler.instance().getCurrentProcess() != null) {
-					
+		} else if (Launcher.level > 0 && PriorityScheduler.instance().getCurrentProcess() != null) {
+
 			if (PriorityScheduler.instance().getCurrentProcess().getTarget() instanceof MissionSequencer) {
-				mission = 
-					((MissionSequencer<?>) PriorityScheduler.instance().getCurrentProcess().getTarget()).currMission;
-			} 
-			else {
+				mission = ((MissionSequencer<?>) PriorityScheduler.instance().getCurrentProcess().getTarget()).currMission;
+			} else {
 				mission = ManagedSchedMethods.getMission(PriorityScheduler.instance().getCurrentProcess().getTarget());
 			}
-		} 
+		}
 		return mission;
 	}
 
@@ -172,21 +169,20 @@ public abstract class Mission {
 	 */
 	@SCJAllowed
 	public final boolean requestTermination() {
-		if (missionTerminate == false) {	// called the first time during mission execution	
-		
-		  // terminate all the sequencer's MSObjects that were created by the mission.
+		if (missionTerminate == false) { // called the first time during mission execution	
 
-		  for (int i = 0; i < msSetForMission.noOfRegistered; i++) {
-			if (msSetForMission.managedSchObjects[i] != null) {
-				msSetForMission.managedSchObjects[i].signalTermination();
+			// terminate all the sequencer's MSObjects that were created by the mission.
+
+			for (int i = 0; i < msSetForMission.noOfRegistered; i++) {
+				if (msSetForMission.managedSchObjects[i] != null) {
+					msSetForMission.managedSchObjects[i].signalTermination();
+				}
 			}
-		  }
-		  
-		  missionTerminate = true;
-		  return false;
-		}
-		else
-			return true;  // called more than once: nothing done
+
+			missionTerminate = true;
+			return false;
+		} else
+			return true; // called more than once: nothing done
 	}
 
 	/**
@@ -219,7 +215,7 @@ public abstract class Mission {
 		}
 		missionIndex = addNewMission(this);
 
-		phaseOfMission = Phase.INITIALIZE;  // used by JML ??
+		phaseOfMission = Phase.INITIALIZE; // used by JML ??
 		msSetForMission = new ManagedSchedulableSet();
 		initialize();
 
@@ -237,16 +233,16 @@ public abstract class Mission {
 		phaseOfMission = Phase.EXECUTE;
 		ManagedSchedulableSet msSet = msSetForMission;
 		PriorityFrame frame = PriorityScheduler.instance().pFrame;
-		
+
 		int index = missionIndex * 20;
-		
+
 		for (int i = 0; i < msSet.noOfRegistered; i++) {
-			
+
 			ManagedSchedulable ms = msSet.managedSchObjects[i];
-			
+
 			msSet.scjProcesses[i] = ManagedSchedMethods.createScjProcess(ms);
 			msSet.scjProcesses[i].setIndex(index);
-			index++;			
+			index++;
 			frame.addProcess(msSet.scjProcesses[i]);
 		}
 
@@ -280,8 +276,7 @@ public abstract class Mission {
 		vm.ClockInterruptHandler.instance.enable();
 	}
 
-	protected static ScjProcess getScjProcess(int missionIndex,
-			int scjProcessIndex) {
+	protected static ScjProcess getScjProcess(int missionIndex, int scjProcessIndex) {
 		return missionSet[missionIndex].msSetForMission.scjProcesses[scjProcessIndex];
 	}
 

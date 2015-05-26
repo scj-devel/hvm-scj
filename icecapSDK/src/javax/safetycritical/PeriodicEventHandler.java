@@ -88,8 +88,7 @@ public abstract class PeriodicEventHandler extends ManagedEventHandler {
 	    requires release == null;
 	    signals (IllegalArgumentException) true;         
 	@*/
-	public PeriodicEventHandler(PriorityParameters priority,
-			PeriodicParameters release, StorageParameters storage) {
+	public PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, StorageParameters storage) {
 		super(priority, release, storage);
 	}
 

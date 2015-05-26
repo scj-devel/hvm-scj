@@ -3,43 +3,40 @@ package javax.safetycritical;
 import javax.realtime.PriorityParameters;
 
 final class ManagedSchedMethods {
-	
-	static PriorityParameters getPriorityParameter(ManagedSchedulable target)
-	{
+
+	static PriorityParameters getPriorityParameter(ManagedSchedulable target) {
 		if (target instanceof ManagedEventHandler)
-			return ((ManagedEventHandler)target).priority;
+			return ((ManagedEventHandler) target).priority;
 		else if (target instanceof ManagedThread)
-			return ((ManagedThread)target).priority;
+			return ((ManagedThread) target).priority;
 		else if (target instanceof ManagedLongEventHandler)
-			return ((ManagedLongEventHandler)target).priority;
+			return ((ManagedLongEventHandler) target).priority;
 		else
 			return null;
 	}
 
-	static ScjProcess getScjProcess(ManagedSchedulable target)
-	{
+	static ScjProcess getScjProcess(ManagedSchedulable target) {
 		if (target instanceof ManagedEventHandler)
-			return ((ManagedEventHandler)target).process;
+			return ((ManagedEventHandler) target).process;
 		else if (target instanceof ManagedThread)
-			return ((ManagedThread)target).process;
+			return ((ManagedThread) target).process;
 		else if (target instanceof ManagedLongEventHandler)
-			return ((ManagedLongEventHandler)target).process;
+			return ((ManagedLongEventHandler) target).process;
 		else
 			return null;
 	}
-	
-	static StorageParameters getStorage(ManagedSchedulable target)
-	{
+
+	static StorageParameters getStorage(ManagedSchedulable target) {
 		if (target instanceof ManagedEventHandler)
-			return ((ManagedEventHandler)target).storage;
+			return ((ManagedEventHandler) target).storage;
 		else if (target instanceof ManagedThread)
-			return ((ManagedThread)target).storage;
+			return ((ManagedThread) target).storage;
 		else if (target instanceof ManagedLongEventHandler)
-			return ((ManagedLongEventHandler)target).storage;
+			return ((ManagedLongEventHandler) target).storage;
 		else
 			return null;
 	}
-	
+
 	private static ScjProcess createScjProcess(ManagedSchedulable target, int[] ps) {
 		if (target instanceof PeriodicEventHandler) {
 			return new ScjPeriodicEventHandlerProcess(target, ps);
@@ -55,44 +52,40 @@ final class ManagedSchedMethods {
 			return null;
 		}
 	}
-	
-	static ScjProcess createScjProcess(ManagedSchedulable target)
-	{
-		return createScjProcess(target, new int[(int)getStorage(target).configurationSizes[0]]);
+
+	static ScjProcess createScjProcess(ManagedSchedulable target) {
+		return createScjProcess(target, new int[(int) getStorage(target).configurationSizes[0]]);
 	}
-	
-	static Mission getMission (ManagedSchedulable target)
-	{
+
+	static Mission getMission(ManagedSchedulable target) {
 		if (target instanceof ManagedEventHandler)
-			return ((ManagedEventHandler)target).mission;
+			return ((ManagedEventHandler) target).mission;
 		else if (target instanceof ManagedThread)
-			return ((ManagedThread)target).mission;
+			return ((ManagedThread) target).mission;
 		else if (target instanceof ManagedLongEventHandler)
-			return ((ManagedLongEventHandler)target).mission;
+			return ((ManagedLongEventHandler) target).mission;
 		else
 			return null;
 	}
-	
-	static boolean isRegistered (ManagedSchedulable target)
-	{
+
+	static boolean isRegistered(ManagedSchedulable target) {
 		if (target instanceof ManagedEventHandler)
-			return ((ManagedEventHandler)target).isRegistered;
+			return ((ManagedEventHandler) target).isRegistered;
 		else if (target instanceof ManagedThread)
-			return ((ManagedThread)target).isRegistered;
+			return ((ManagedThread) target).isRegistered;
 		else if (target instanceof ManagedLongEventHandler)
-			return ((ManagedLongEventHandler)target).isRegistered;
+			return ((ManagedLongEventHandler) target).isRegistered;
 		else
 			return false;
 	}
-	
-	static boolean isInMissionScope (ManagedSchedulable target)
-	{
+
+	static boolean isInMissionScope(ManagedSchedulable target) {
 		if (target instanceof ManagedEventHandler)
-			return ((ManagedEventHandler)target).isInMissionScope;
+			return ((ManagedEventHandler) target).isInMissionScope;
 		else if (target instanceof ManagedThread)
-			return ((ManagedThread)target).isInMissionScope;
+			return ((ManagedThread) target).isInMissionScope;
 		else if (target instanceof ManagedLongEventHandler)
-			return ((ManagedLongEventHandler)target).isInMissionScope;
+			return ((ManagedLongEventHandler) target).isInMissionScope;
 		else
 			return false;
 	}

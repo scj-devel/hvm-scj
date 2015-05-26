@@ -78,8 +78,7 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 	@*/
 	@SCJAllowed(Level.LEVEL_1)
 	@SCJRestricted(Phase.INITIALIZE)
-	public AperiodicEventHandler(PriorityParameters priority,
-			AperiodicParameters release, StorageParameters storage) {
+	public AperiodicEventHandler(PriorityParameters priority, AperiodicParameters release, StorageParameters storage) {
 		super(priority, release, storage);
 		if (priority == null || release == null)
 			throw new IllegalArgumentException("null argument");

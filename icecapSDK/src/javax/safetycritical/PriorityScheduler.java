@@ -75,9 +75,9 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 	  @*/
 	@SCJAllowed(Level.LEVEL_1)
 	public static PriorityScheduler instance() {
-//		if (scheduler == null) {
-//			scheduler = new PriorityScheduler();
-//		}
+		//		if (scheduler == null) {
+		//			scheduler = new PriorityScheduler();
+		//		}
 		return scheduler;
 	}
 
@@ -88,8 +88,7 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 
 		this.prioritySchedulerImpl = new PrioritySchedulerImpl();
 
-		vm.ClockInterruptHandler.initialize(this.prioritySchedulerImpl,
-				schedulerStack);
+		vm.ClockInterruptHandler.initialize(this.prioritySchedulerImpl, schedulerStack);
 
 		this.rtClock = Clock.getRealtimeClock();
 		this.now = new AbsoluteTime(this.rtClock);
@@ -99,9 +98,9 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 		rtClock.getResolution(this.timeGrain);
 		scheduler = this;
 	}
-	
-	void addOuterMostSeq(MissionSequencer<?> seq ) {		
-		ScjProcess process = ManagedSchedMethods.createScjProcess(seq); 
+
+	void addOuterMostSeq(MissionSequencer<?> seq) {
+		ScjProcess process = ManagedSchedMethods.createScjProcess(seq);
 		process.index = -2;
 		MissionSequencer.missSeqProcess = process;
 		outerMostSeqProcess = seq.process;
@@ -151,20 +150,19 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 	ScjProcess move() {
 		if (current == ScjProcess.idleProcess) {
 			pFrame.readyQueue.insert(current);
-		} 
-		else {
+		} else {
 			current.gotoNextState(pFrame);
 		}
 
 		// Move processes from sleepingQueue to readyQueue
-		ScjProcess process = pFrame.sleepingQueue.minimum();		
+		ScjProcess process = pFrame.sleepingQueue.minimum();
 		rtClock.getTime(now);
 
 		while (process != null && process.next.compareTo(now) <= 0) {
 			process.state = ScjProcess.State.READY;
 			ScjProcess t = pFrame.sleepingQueue.extractMin();
 			//devices.Console.println("PrSch.move:sleep --> ready: " + t.index);
-			
+
 			pFrame.readyQueue.insert(t);
 			// look at "next" process in sleeping queue with smallest
 			// activationTime
@@ -175,16 +173,14 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 		ScjProcess nextProcess = pFrame.readyQueue.extractMax();
 		nextProcess.state = ScjProcess.State.EXECUTING;
 		current = nextProcess;
-		
-		if ( current == ScjProcess.idleProcess && 
-		     pFrame.sleepingQueue.heapSize == 0
-		     && pFrame.waitQueue.queueSize == 0 && pFrame.lockQueue.queueSize == 0)
-		{
+
+		if (current == ScjProcess.idleProcess && pFrame.sleepingQueue.heapSize == 0 && pFrame.waitQueue.queueSize == 0
+				&& pFrame.lockQueue.queueSize == 0) {
 			current.getTarget().cleanUp();
 			//devices.Console.println("PrioritySch.move: null; missions: " + MissionSequencer.howManyMissions);
 			return null;
 		} else {
-			
+
 			return nextProcess;
 		}
 	}
@@ -213,43 +209,41 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 		return Priorities.MIN_HARDWARE_PRIORITY;
 	}
 
-	
 	void insertReadyQueue(ScjProcess process) {
 		pFrame.readyQueue.insert(process);
 	}
-	
+
 	void addProcessToLockQueue(Object target, ScjProcess process) {
 		pFrame.lockQueue.addProcess(target, process);
 	}
-	
+
 	ScjProcess getProcessFromLockQueue(Object monitor) {
 		return pFrame.lockQueue.getNextProcess(monitor);
 	}
-	
+
 	void wait(Object target) {
 		prioritySchedulerImpl.wait(target);
 	}
-	
+
 	void notify(Object target) {
 		prioritySchedulerImpl.notify(target);
 	}
-	
+
 	void notifyAll(Object target) {
 		prioritySchedulerImpl.notifyAll(target);
 	}
-	
+
 	void moveToNext() {
 		ScjProcess nextProcess = pFrame.readyQueue.extractMax();
 		nextProcess.state = ScjProcess.State.EXECUTING;
 		current = nextProcess;
 		//devices.Console.println("<<< From readyQueue to current: " + nextProcess.index);
 	}
-	
-//	public static boolean waitForObject(Object target, HighResolutionTime time) {
-//		return PrioritySchedulerImpl.waitForObject(target, time);
-//	}
-	
-	
+
+	//	public static boolean waitForObject(Object target, HighResolutionTime time) {
+	//		return PrioritySchedulerImpl.waitForObject(target, time);
+	//	}
+
 	/**
 	 * Print out the contents of the queues.
 	 * For testing only.
@@ -257,8 +251,8 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 	public void printQueues() {
 		vm.ClockInterruptHandler.instance.disable();
 		devices.Console.println("");
-//		devices.Console.println("PriorityScheduler: current process: "
-//				+ current.getTarget() + "; index: " + current.index);
+		//		devices.Console.println("PriorityScheduler: current process: "
+		//				+ current.getTarget() + "; index: " + current.index);
 		//devices.Console.println("----------- ready queue ----------");
 		pFrame.readyQueue.print();
 		//devices.Console.println("----------- sleeping queue ----------");

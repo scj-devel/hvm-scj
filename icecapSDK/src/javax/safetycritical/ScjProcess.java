@@ -71,7 +71,7 @@ class ScjProcess implements Comparable<ScjProcess> {
 	RelativeTime start;
 	RelativeTime period;
 
-	int index = -999;   // The index of the ScjProcesses; used by
+	int index = -999; // The index of the ScjProcesses; used by
 						// PriorityScheduler; -999 is 'no index set'
 
 	Object monitorLock = null;
@@ -79,15 +79,15 @@ class ScjProcess implements Comparable<ScjProcess> {
 	boolean isNotified = false;
 
 	interface State {
-		public final static byte NEW         = 0;
-		public final static byte READY       = 1;
-		public final static byte EXECUTING   = 2;
-		public final static byte BLOCKED     = 3;
-		public final static byte SLEEPING    = 4;
-		public final static byte HANDLED     = 5;
-		public final static byte TERMINATED  = 6;
-		
-		public final static byte WAITING     = 7;
+		public final static byte NEW = 0;
+		public final static byte READY = 1;
+		public final static byte EXECUTING = 2;
+		public final static byte BLOCKED = 3;
+		public final static byte SLEEPING = 4;
+		public final static byte HANDLED = 5;
+		public final static byte TERMINATED = 6;
+
+		public final static byte WAITING = 7;
 		public final static byte REQUIRELOCK = 8;
 	}
 
@@ -112,8 +112,8 @@ class ScjProcess implements Comparable<ScjProcess> {
 		this.process = new vm.Process(new ProcessLogic() {
 			public void run() {
 				try {
-					runLogic (msObject);
-					
+					runLogic(msObject);
+
 				} catch (Exception e) {
 					Const.reporter.processExecutionError(e);
 				} finally {
@@ -128,8 +128,7 @@ class ScjProcess implements Comparable<ScjProcess> {
 			public void catchError(final Throwable t) {
 				exceptionReporter.t = t;
 				try {
-					ImmortalMemory immortal = 
-						ManagedMemory.ImmortalMemory.instance();
+					ImmortalMemory immortal = ManagedMemory.ImmortalMemory.instance();
 					if (immortal != null) {
 						immortal.executeInArea(exceptionReporter);
 					} else {
@@ -145,31 +144,27 @@ class ScjProcess implements Comparable<ScjProcess> {
 
 		rtClock.getTime(this.next);
 
-		setRelease (msObject);
-		
-		setProcess (msObject);
+		setRelease(msObject);
+
+		setProcess(msObject);
 	}
-	
-	private void runLogic (ManagedSchedulable ms)
-	{
+
+	private void runLogic(ManagedSchedulable ms) {
 		if (ms instanceof ManagedEventHandler)
 			((ManagedEventHandler) ms).privateMemory.enter(ms); // execute logic;  
 		else if (ms instanceof ManagedThread)
-			((ManagedThread) ms).privateMemory.enter(ms); 
-		else // (ms is instanceof ManagedLongEventHandler)
-			((ManagedLongEventHandler) ms).privateMemory.enter(ms); 
+			((ManagedThread) ms).privateMemory.enter(ms);
+		else
+			// (ms is instanceof ManagedLongEventHandler)
+			((ManagedLongEventHandler) ms).privateMemory.enter(ms);
 	}
-	
-	private void setRelease (ManagedSchedulable ms)
-	{
+
+	private void setRelease(ManagedSchedulable ms) {
 		if (ms instanceof PeriodicEventHandler) {
-			this.start = ((PeriodicParameters) ((PeriodicEventHandler) ms).release)
-					.getStart();
-			this.period = ((PeriodicParameters) ((PeriodicEventHandler) ms).release)
-					.getPeriod();
+			this.start = ((PeriodicParameters) ((PeriodicEventHandler) ms).release).getStart();
+			this.period = ((PeriodicParameters) ((PeriodicEventHandler) ms).release).getPeriod();
 			next.add(start, next); // next = next + start
-		}
-		else if (ms instanceof OneShotEventHandler) {
+		} else if (ms instanceof OneShotEventHandler) {
 			if (((OneShotEventHandler) ms).releaseTime instanceof RelativeTime) {
 				RelativeTime releaseTime = (RelativeTime) ((OneShotEventHandler) ms).releaseTime;
 				next.add(releaseTime, next); // next = next + releaseTime
@@ -182,18 +177,18 @@ class ScjProcess implements Comparable<ScjProcess> {
 					next.set(releaseTime);
 			}
 		}
-//		else
-//			devices.Console.println("UPS: ScjProcess.setRelease: more cases?");
+		//		else
+		//			devices.Console.println("UPS: ScjProcess.setRelease: more cases?");
 	}
-	
-	private void setProcess (ManagedSchedulable ms)
-	{
+
+	private void setProcess(ManagedSchedulable ms) {
 		if (ms instanceof ManagedEventHandler)
 			((ManagedEventHandler) ms).process = this;
 		else if (ms instanceof ManagedThread)
 			((ManagedThread) ms).process = this;
-		else // (ms is instanceof ManagedLongEventHandler)
-			((ManagedLongEventHandler) ms).process = this; 
+		else
+			// (ms is instanceof ManagedLongEventHandler)
+			((ManagedLongEventHandler) ms).process = this;
 	}
 
 	private static class ExceptionReporter implements Runnable {
@@ -223,20 +218,17 @@ class ScjProcess implements Comparable<ScjProcess> {
 		// HSO: two queues in PriorityFrame: PriorityQueue and SleepingQueue (works)
 		//		return (this.target.priority - process.target.priority)
 
-		if (msObject instanceof ManagedEventHandler
-				&& process.msObject instanceof ManagedEventHandler)
-			return (((ManagedEventHandler) msObject).priority.getPriority() - 
-					((ManagedEventHandler) process.msObject).priority.getPriority());
-		
-		if (msObject instanceof ManagedThread
-				&& process.msObject instanceof ManagedThread)
-			return (((ManagedThread) msObject).priority.getPriority() - 
-					((ManagedThread) process.msObject).priority.getPriority());
-		
-		if (msObject instanceof ManagedLongEventHandler
-				&& process.msObject instanceof ManagedLongEventHandler)
-			return (((ManagedLongEventHandler) msObject).priority.getPriority() - 
-					((ManagedLongEventHandler) process.msObject).priority.getPriority());
+		if (msObject instanceof ManagedEventHandler && process.msObject instanceof ManagedEventHandler)
+			return (((ManagedEventHandler) msObject).priority.getPriority() - ((ManagedEventHandler) process.msObject).priority
+					.getPriority());
+
+		if (msObject instanceof ManagedThread && process.msObject instanceof ManagedThread)
+			return (((ManagedThread) msObject).priority.getPriority() - ((ManagedThread) process.msObject).priority
+					.getPriority());
+
+		if (msObject instanceof ManagedLongEventHandler && process.msObject instanceof ManagedLongEventHandler)
+			return (((ManagedLongEventHandler) msObject).priority.getPriority() - ((ManagedLongEventHandler) process.msObject).priority
+					.getPriority());
 
 		return -999; // HSO: not finished
 
@@ -245,7 +237,7 @@ class ScjProcess implements Comparable<ScjProcess> {
 	ManagedSchedulable getTarget() {
 		return msObject;
 	}
-	
+
 	void setIndex(int index) {
 		this.index = index;
 	}
@@ -268,35 +260,27 @@ class ScjProcess implements Comparable<ScjProcess> {
 	static ScjProcess createIdleProcess() {
 		if (idleProcess == null) {
 
-			PeriodicEventHandler peh = new PeriodicEventHandler(
-							new PriorityParameters(Priorities.MIN_PRIORITY),
-							new PeriodicParameters(
-								new RelativeTime(
-									Clock.getRealtimeClock()), // start (0,0)
-									Const.INFINITE_TIME),      // period
-							new StorageParameters(
-									2*Const.IDLE_BACKING_STORE, 
-									new long[] { Const.IDLE_PROCESS_STACK_SIZE },
-									2*Const.IDLE_BACKING_STORE, 
-									0, 
-									0 
-								)) {
-						public void handleAsyncEvent() {													
-							yield();
-						}
+			PeriodicEventHandler peh = new PeriodicEventHandler(new PriorityParameters(Priorities.MIN_PRIORITY),
+					new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()), // start (0,0)
+							Const.INFINITE_TIME), // period
+					new StorageParameters(2 * Const.IDLE_BACKING_STORE, new long[] { Const.IDLE_PROCESS_STACK_SIZE },
+							2 * Const.IDLE_BACKING_STORE, 0, 0)) {
+				public void handleAsyncEvent() {
+					yield();
+				}
 
-						@IcecapCompileMe
-						private void yield() {
-							while (true) {
-								RealtimeClock.awaitNextTick();	
-							}
-						}
-					}; 
+				@IcecapCompileMe
+				private void yield() {
+					while (true) {
+						RealtimeClock.awaitNextTick();
+					}
+				}
+			};
 
 			ScjProcess process = new ScjProcess(peh, new int[Const.IDLE_PROCESS_STACK_SIZE]);
-			
+
 			process.rtClock.getTime(process.next);
-			process.index = -1;			
+			process.index = -1;
 			idleProcess = process;
 		}
 		return idleProcess;
@@ -309,13 +293,15 @@ class ScjProcess implements Comparable<ScjProcess> {
 	String print() {
 		return ("name: " + this.msObject + " 	index: " + index);
 	}
-	
+
 	protected boolean nextState(PriorityFrame pFrame) {
 		return false;
 	}
-	
+
 	protected void gotoNextState(PriorityFrame pFrame) {
 	}
 
-	void switchToPrivateMemArea() { ; } 	
+	void switchToPrivateMemArea() {
+		;
+	}
 }

@@ -69,7 +69,7 @@ public interface ManagedSchedulable extends Schedulable {
 	 @*/
 	@SCJAllowed(Level.SUPPORT)
 	public void cleanUp();
-	
+
 	/**
 	 * Indicates that the enclosing mission has been instructed to terminate.
 	 */
