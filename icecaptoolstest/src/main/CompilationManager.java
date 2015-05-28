@@ -21,6 +21,8 @@ import test.icecaptools.compiler.TestConversionConfiguration;
 
 public class CompilationManager {
 
+	/* Test commit to test git */
+	
 	private static class JMLCompilationRegistry implements ICompilationRegistry {
 
 		@Override
