@@ -113,7 +113,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 
 	@SCJAllowed
 	@SCJRestricted(Phase.INITIALIZE)
-	public MissionSequencer(PriorityParameters priority, final StorageParameters storage) throws IllegalStateException {
+	public MissionSequencer(PriorityParameters priority, StorageParameters storage) throws IllegalStateException {
 		this(priority, storage, "MisMem");
 	}
 
@@ -227,12 +227,13 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	@SCJAllowed(Level.SUPPORT)
 	protected abstract MissionType getNextMission();
 
-	public final void register() {
-		super.register();
-	}
+//	public final void register() {
+//		super.register();
+//	}
 
 	@Override
-	public void signalTermination() {
+	public final void signalTermination() {
+		super.signalTermination(); 
 		ManagedEventHandler.handlerBehavior.missionSequencerSingleTermination(this);
 	}
 

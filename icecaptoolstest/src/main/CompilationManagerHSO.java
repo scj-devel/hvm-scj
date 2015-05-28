@@ -120,7 +120,7 @@ public class CompilationManagerHSO {
 
         //String inputFolder = "/home/hso/java/SCJ_Workspace/SCJ_HVM/bin";
         
-        // String inputFolder = "/home/hso/java/SCJ_Workspace/icecapSDK/bin";
+        //String inputFolder = "/home/hso/java/SCJ_Workspace/icecapSDK/bin";
         // String inputFolder = "/home/hso/java/SCJ_Workspace/icecaptools/bin";
         //String inputFolder = "/home/hso/java/SCJ_Workspace/icecaptoolstest/bin";
         // String inputFolder = "/home/hso/java/SCJ_Workspace/EmbeddedSDJ/bin";
@@ -131,8 +131,8 @@ public class CompilationManagerHSO {
 
         // For OpenJML test:
         String inputFolder = "/home/hso/java/SCJ_Workspace/OpenJMLTest/bin/" +
-         pathSeparator + "/home/hso/java/SCJ_Workspace/OpenJMLTest/lib/jmlruntime.jar" +
-         pathSeparator + "/home/hso/git/hvm-scj/icecapSDK/bin/";
+          pathSeparator + "/home/hso/java/SCJ_Workspace/OpenJMLTest/lib/jmlruntime.jar" +
+          pathSeparator + "/home/hso/git/hvm-scj/icecapSDK/bin/";
         
         
         String outputFolder = "";
@@ -143,7 +143,7 @@ public class CompilationManagerHSO {
         // String inputPackage = "test.safetycritical.sharedResource1";
         // String inputPackage = "test.safetycritical.boundedbuffer";
         // String inputPackage = "test.safetycritical.sleepingQueue1";
-        // String inputPackage = "test.safetycritical.twoMissions";
+        //String inputPackage = "test.safetycritical.twoMissions";
         // String inputPackage = "test.safetycritical.executeInAreaOf";
          //String inputPackage = "test.safetycritical.enterPrivateMemory";
         // String inputPackage =
@@ -188,22 +188,23 @@ public class CompilationManagerHSO {
         //String inputPackage = "test";
         //String inputClass = "JMLTest1";
         
-        //String inputPackage = "account";       
+        String inputPackage = "account";       
        
         
         //String inputPackage = "javax.realtime.test.timeClasses";
         //String inputPackage = "javax.realtime.test.clock";
         //String inputPackage = "javax.realtime.test.memoryArea";
-        //String inputPackage = "javax.safetycritical.test.cyclic";
         //String inputPackage = "javax.safetycritical.test.safelet";        
         //String inputPackage = "javax.safetycritical.test.priorityScheduling";
+        //String inputPackage = "javax.safetycritical.test.cyclicschedule3";
         
         //String inputPackage = "javax.realtime.test";
-        String inputPackage = "javax.safetycritical.test";
+        //String inputPackage = "javax.safetycritical.test";
         
-        //String inputClass = "AllTests";
+        String inputClass = "AllTests";
         //String inputClass = "TckTestCyclicSchedule3";
-        String inputClass = "TckTestSafelet1";
+        //String inputClass = "TckTestCyclicExecutive1";
+        //String inputClass = "TckTestSafelet22";
         
         //String inputClass = "TckTestMemoryParameters";
         //String inputClass = "TckTestPriorityScheduler";
@@ -211,6 +212,7 @@ public class CompilationManagerHSO {
         //String inputClass = "TckTestPriorityParameters";        
         //String inputClass = "TckTestAbsoluteTime";        
         //String inputClass = "TckTestRelativeTime";
+        //String inputClass = "TckTestReleaseParameters";
         
         //String inputClass = "TckTestStorageParameters";
         //String inputClass = "TckTestFrame2";

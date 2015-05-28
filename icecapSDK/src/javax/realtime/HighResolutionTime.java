@@ -109,6 +109,7 @@ public abstract class HighResolutionTime implements Comparable<HighResolutionTim
 	 *    the <code>time</code> parameter is null.
 	 */
 	public void set(HighResolutionTime time) {
+		
 		if (time == null)
 			throw new IllegalArgumentException("null parameter");
 		if (this.getClass() != time.getClass())

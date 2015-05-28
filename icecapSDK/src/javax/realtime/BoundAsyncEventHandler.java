@@ -40,6 +40,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
 @SCJAllowed
-public class BoundAsyncEventHandler extends AsyncEventHandler implements BoundAbstractAsyncEventHandler {
+public class BoundAsyncEventHandler extends AsyncEventHandler 
+  implements BoundAbstractAsyncEventHandler {
 
 }
