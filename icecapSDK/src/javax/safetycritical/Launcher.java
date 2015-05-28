@@ -83,16 +83,10 @@ public abstract class Launcher implements Runnable {
 	public void run() {
 		app.initializeApplication();
 
-		if (level == 0) {
-			startLevel0();
-		} else {
-			if (!useOS) {
-				startLevel1_2();
-			} else {
-				startwithOS();
-			}
-		}
+		start();
 	}
+
+	protected abstract void start(); 
 
 	protected void startLevel0() {
 		MissionSequencer<?> seq = app.getSequencer();
