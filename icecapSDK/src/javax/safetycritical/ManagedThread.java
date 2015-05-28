@@ -75,7 +75,7 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 		this(priority, storage, logic, null);
 	}
 
-	public ManagedThread(PriorityParameters priority, StorageParameters storage, Runnable logic, String name) {
+	protected ManagedThread(PriorityParameters priority, StorageParameters storage, Runnable logic, String name) {
 		super(priority, logic);
 		this.priority = priority;
 
