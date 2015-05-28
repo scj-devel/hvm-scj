@@ -103,7 +103,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		this(priority, release, storage, null);
 	}
 
-	protected ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, StorageParameters storage,
+	ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, StorageParameters storage,
 			String name) {
 		if (priority == null)
 			throw new IllegalArgumentException("priority is null");
@@ -187,11 +187,11 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		return mission;
 	}
 
-	public void setName(String name) {
+	void setName(String name) {
 		this.name = name;
 	}
 
-	public String getName() {
+	String getName() {
 		return name;
 	}
 

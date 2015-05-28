@@ -75,7 +75,7 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 		this(priority, storage, logic, null);
 	}
 
-	protected ManagedThread(PriorityParameters priority, StorageParameters storage, Runnable logic, String name) {
+	ManagedThread(PriorityParameters priority, StorageParameters storage, Runnable logic, String name) {
 		super(priority, logic);
 		this.priority = priority;
 
@@ -161,11 +161,11 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 		ClockInterruptHandler.instance.yield();
 	}
 
-	public void setName(String name) {
+	void setName(String name) {
 		this.name = name;
 	}
 
-	public String getName() {
+	String getName() {
 		return this.name;
 	}
 }

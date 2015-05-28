@@ -101,7 +101,7 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 		this(priority, releaseTime, release, storage, null);
 	}
 	
-	protected OneShotEventHandler(PriorityParameters priority, HighResolutionTime releaseTime,
+	OneShotEventHandler(PriorityParameters priority, HighResolutionTime releaseTime,
 			AperiodicParameters release, StorageParameters storage, String name) {
 		super(priority, release, storage, name);
 
