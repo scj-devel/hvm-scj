@@ -6,7 +6,7 @@ import javax.realtime.RelativeTime;
 import javax.safetycritical.CyclicExecutive;
 import javax.safetycritical.CyclicSchedule;
 import javax.safetycritical.Frame;
-import javax.safetycritical.Launcher;
+import javax.safetycritical.LaunchLevel0;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
@@ -128,7 +128,7 @@ public class TestSCJLevel0SimpleCyclicExecutive1 extends CyclicExecutive
             0, 
             0);
 	  
-        new Launcher(new TestSCJLevel0SimpleCyclicExecutive1(), 0);
+        new LaunchLevel0(new TestSCJLevel0SimpleCyclicExecutive1());
         args = null;
     }
 }

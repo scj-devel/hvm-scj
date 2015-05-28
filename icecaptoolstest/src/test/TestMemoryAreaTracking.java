@@ -6,7 +6,7 @@ import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.AperiodicEventHandler;
-import javax.safetycritical.Launcher;
+import javax.safetycritical.LaunchLevel1;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
@@ -46,10 +46,8 @@ public class TestMemoryAreaTracking {
 		Light light;
 		MissionSequencer<MyMission> missSeq;
 
-		public MyAperiodicEvh(PriorityParameters priority,
-				AperiodicParameters release,
-				StorageParameters storageParameters, Light light,
-				MissionSequencer<MyMission> missSeq) {
+		public MyAperiodicEvh(PriorityParameters priority, AperiodicParameters release,
+				StorageParameters storageParameters, Light light, MissionSequencer<MyMission> missSeq) {
 			super(priority, release, storageParameters);
 			this.light = light;
 			this.missSeq = missSeq;
@@ -68,10 +66,8 @@ public class TestMemoryAreaTracking {
 
 		int count = 0;
 
-		protected MyPeriodicEvh(PriorityParameters priority,
-				PeriodicParameters periodic,
-				StorageParameters storageParameters, Light light,
-				AperiodicEventHandler aevh) {
+		protected MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodic,
+				StorageParameters storageParameters, Light light, AperiodicEventHandler aevh) {
 			super(priority, periodic, storageParameters);
 			this.light = light;
 			this.aevh = aevh;
@@ -101,16 +97,12 @@ public class TestMemoryAreaTracking {
 			int address = 123456;
 			Light light = new Light(address);
 
-			AperiodicEventHandler aevh = new MyAperiodicEvh(
-					new PriorityParameters(Priorities.PR98),
-					new AperiodicParameters(new RelativeTime(500, 0), null),
-					storageParameters_Handlers, light, missSeq);
+			AperiodicEventHandler aevh = new MyAperiodicEvh(new PriorityParameters(Priorities.PR98),
+					new AperiodicParameters(new RelativeTime(500, 0), null), storageParameters_Handlers, light, missSeq);
 			aevh.register();
 
-			PeriodicEventHandler pevh1 = new MyPeriodicEvh(
-					new PriorityParameters(Priorities.PR97),
-					new PeriodicParameters(new RelativeTime(Clock
-							.getRealtimeClock()), // start
+			PeriodicEventHandler pevh1 = new MyPeriodicEvh(new PriorityParameters(Priorities.PR97),
+					new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()), // start
 							new RelativeTime(2000, 0, Clock.getRealtimeClock())), // period
 					storageParameters_Handlers, light, aevh); // used in pevh.handleAsyncEvent
 			pevh1.register();
@@ -138,8 +130,7 @@ public class TestMemoryAreaTracking {
 			private MyMission mission;
 
 			MySequencer() {
-				super(new PriorityParameters(Priorities.PR95),
-						storageParameters_Sequencer);
+				super(new PriorityParameters(Priorities.PR95), storageParameters_Sequencer);
 
 				mission = new MyMission(this);
 			}
@@ -166,20 +157,17 @@ public class TestMemoryAreaTracking {
 		Const.PRIVATE_MEM = 2 * 1000;
 
 		Const.MEMORY_TRACKER_AREA_SIZE = 30000;
-		
+
 		Memory.startMemoryAreaTracking();
 
-		storageParameters_Sequencer = new StorageParameters(
-				Const.OUTERMOST_SEQ_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM,
-				Const.IMMORTAL_MEM, Const.MISSION_MEM);
+		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
+				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
 
-		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_MEM,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, 0,
-				0);
+		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_MEM, new long[] { Const.HANDLER_STACK_SIZE },
+				Const.PRIVATE_MEM, 0, 0);
 
 		devices.Console.println("\n***** TestSCJSimpleLowMemory begin *****");
-		new Launcher(new MyApp(), 1);
+		new LaunchLevel1(new MyApp());
 		devices.Console.println("\n***** TestSCJSimpleLowMemory end *****");
 
 		Memory.reportMemoryUsage();

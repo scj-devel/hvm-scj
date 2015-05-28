@@ -24,7 +24,7 @@ import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.AperiodicEventHandler;
-import javax.safetycritical.Launcher;
+import javax.safetycritical.LaunchLevel1;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
@@ -75,8 +75,7 @@ public class TestSCJBoundedBuffer {
 		private AperiodicEventHandler aevh;
 		private AperiodicEventHandler aevh1;
 
-		public Producer(PriorityParameters priority, PeriodicParameters periodic, 
-				StorageParameters storageParameters,
+		public Producer(PriorityParameters priority, PeriodicParameters periodic, StorageParameters storageParameters,
 				BoundedBuffer buf, AperiodicEventHandler aevh, AperiodicEventHandler aevh1) {
 			super(priority, periodic, storageParameters);
 			this.buf = buf;
@@ -112,8 +111,7 @@ public class TestSCJBoundedBuffer {
 		private BoundedBuffer buf;
 		private AperiodicEventHandler aevh;
 
-		public Consumer(PriorityParameters priority, PeriodicParameters periodic, 
-				StorageParameters storageParameters,
+		public Consumer(PriorityParameters priority, PeriodicParameters periodic, StorageParameters storageParameters,
 				BoundedBuffer buf, AperiodicEventHandler aevh) {
 			super(priority, periodic, storageParameters);
 			this.buf = buf;
@@ -140,8 +138,7 @@ public class TestSCJBoundedBuffer {
 
 		private AperiodicEventHandler aevh;
 
-		public Display(PriorityParameters priority, PeriodicParameters periodic, 
-				StorageParameters storageParameters,
+		public Display(PriorityParameters priority, PeriodicParameters periodic, StorageParameters storageParameters,
 				BoundedBuffer buf, AperiodicEventHandler aevh) {
 			super(priority, periodic, storageParameters);
 			this.buf = buf;
@@ -279,7 +276,7 @@ public class TestSCJBoundedBuffer {
 	}
 
 	private static class MyApp implements Safelet<MyMission> {
-		
+
 		public MissionSequencer<MyMission> getSequencer() {
 			return new MySequencer();
 		}
@@ -319,15 +316,14 @@ public class TestSCJBoundedBuffer {
 		vm.Process.enableStackAnalysis();
 
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, 
-				Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
+				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
 
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
 				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, 0, 0);
 
 		failed = true;
 		devices.Console.println("\n********** Bounded Buffer main.begin ***********");
-		new Launcher(new MyApp(), 1);
+		new LaunchLevel1(new MyApp());
 		devices.Console.println("********* Bounded Buffer main.end *****************");
 		vm.Process.reportStackUsage();
 		Memory.reportMemoryUsage();

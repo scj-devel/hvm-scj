@@ -4,7 +4,7 @@ import javax.realtime.Clock;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
-import javax.safetycritical.Launcher;
+import javax.safetycritical.LaunchLevel1;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
@@ -88,7 +88,7 @@ public class TestSCJStep0 {
 		Memory.startMemoryAreaTracking();
 		devices.Console
 				.println("\n********** Starting application ***********");
-		new Launcher(new Application(), 1);
+		new LaunchLevel1(new Application());
 		devices.Console.println("********* Application done *****************");
 		Memory.reportMemoryUsage();
 		args = null;

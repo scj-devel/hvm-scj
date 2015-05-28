@@ -6,7 +6,7 @@ import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.AperiodicEventHandler;
-import javax.safetycritical.Launcher;
+import javax.safetycritical.LaunchLevel1;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
@@ -190,7 +190,7 @@ public class TestSCJSimpleLowMemory {
             0);
 	  
         devices.Console.println("\n***** TestSCJSimpleLowMemory begin *****");
-        new Launcher(new MyApp(), 1);
+        new LaunchLevel1(new MyApp());
         devices.Console.println("\n***** TestSCJSimpleLowMemory end *****");
 
         args = null;

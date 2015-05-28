@@ -23,7 +23,7 @@ import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.AperiodicEventHandler;
-import javax.safetycritical.Launcher;
+import javax.safetycritical.LaunchLevel1;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
@@ -37,19 +37,17 @@ import vm.Memory;
 public class TestSCJHandlerMemory {
 	private static int sizeOfSmallObject;
 	private static int sizeOfBiggerObject;
-	
+
 	static boolean fail;
-	
-	private static class SmallObject
-	{
+
+	private static class SmallObject {
 		@SuppressWarnings("unused")
 		int x;
 		@SuppressWarnings("unused")
 		short y;
 	}
-	
-	private static class BiggerObject
-	{
+
+	private static class BiggerObject {
 		@SuppressWarnings("unused")
 		int x;
 		@SuppressWarnings("unused")
@@ -59,131 +57,118 @@ public class TestSCJHandlerMemory {
 	}
 
 	private static class MyPEH1 extends PeriodicEventHandler {
-    private int count = 0;
-    private AperiodicEventHandler myAEH;
+		private int count = 0;
+		private AperiodicEventHandler myAEH;
 
-    public MyPEH1(PriorityParameters priority, PeriodicParameters release, 
-                 StorageParameters storage, AperiodicEventHandler myAEH) {
-      super(priority, release, storage);
-      this.myAEH = myAEH;
-    }
+		public MyPEH1(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
+				AperiodicEventHandler myAEH) {
+			super(priority, release, storage);
+			this.myAEH = myAEH;
+		}
 
-    @Override
-    public void handleAsyncEvent() {
-      devices.Console.println("-- MyPEH1: " + count);
-      count++;
-      doWork();
-      if (count == 3) {
-        myAEH.release();
-      }
-    }
-    
-    void doWork() {
-      int x = 0, y = 0;
-      Memory memory = Memory.getCurrentMemoryArea();
-      
-      devices.Console.println("---- MyPEH1 allocating in: " + memory.getName());
-      
-      y = memory.consumedMemory(); 
-      x = memory.consumedMemory(); 
-      if (x != y)
-      {
-        devices.Console.println("---- MyPEH1 Fail 1");
-        fail = true;
-      }
+		@Override
+		public void handleAsyncEvent() {
+			devices.Console.println("-- MyPEH1: " + count);
+			count++;
+			doWork();
+			if (count == 3) {
+				myAEH.release();
+			}
+		}
 
-      x = memory.consumedMemory();
-      new SmallObject();
-      y = memory.consumedMemory();
-      
-      if (y != x + sizeOfSmallObject)
-      {
-        devices.Console.println("---- MyPEH1 Fail 2, y = " + y + ", x = " + x);
-        fail = true;
-      }
-    }
-  }
-	
+		void doWork() {
+			int x = 0, y = 0;
+			Memory memory = Memory.getCurrentMemoryArea();
+
+			devices.Console.println("---- MyPEH1 allocating in: " + memory.getName());
+
+			y = memory.consumedMemory();
+			x = memory.consumedMemory();
+			if (x != y) {
+				devices.Console.println("---- MyPEH1 Fail 1");
+				fail = true;
+			}
+
+			x = memory.consumedMemory();
+			new SmallObject();
+			y = memory.consumedMemory();
+
+			if (y != x + sizeOfSmallObject) {
+				devices.Console.println("---- MyPEH1 Fail 2, y = " + y + ", x = " + x);
+				fail = true;
+			}
+		}
+	}
+
 	private static class MyPEH2 extends PeriodicEventHandler {
-    private int count = 0;
+		private int count = 0;
 
-    public MyPEH2(PriorityParameters priority, PeriodicParameters release, 
-                 StorageParameters storage) {
-      super(priority, release, storage);
-    }
+		public MyPEH2(PriorityParameters priority, PeriodicParameters release, StorageParameters storage) {
+			super(priority, release, storage);
+		}
 
-    @Override
-    public void handleAsyncEvent() {
-      devices.Console.println("------- MyPEH2: " + count);
-      count++;
-      doWork();
-    }
-    
-    void doWork() {
-      int x = 0, y = 0;
-      Memory memory = Memory.getCurrentMemoryArea();
+		@Override
+		public void handleAsyncEvent() {
+			devices.Console.println("------- MyPEH2: " + count);
+			count++;
+			doWork();
+		}
 
-      devices.Console.println("-------- MyPEH2 allocating in: " + memory.getName());
-      
-      y = memory.consumedMemory();
-      x = memory.consumedMemory(); 
-      if (x != y)
-      {
-        devices.Console.println("-------- MyPEH2 Fail 1");
-        fail = true;
-      }
+		void doWork() {
+			int x = 0, y = 0;
+			Memory memory = Memory.getCurrentMemoryArea();
 
-      x = memory.consumedMemory();
-      new BiggerObject();
-      y = memory.consumedMemory(); 
-      
-      if (y != x + sizeOfBiggerObject) {
-        devices.Console.println("-------- MyPEH2 Fail 2, y = " + y + ", x = " + x);
-        fail = true;
-      }
-    }
-  }
-	
+			devices.Console.println("-------- MyPEH2 allocating in: " + memory.getName());
+
+			y = memory.consumedMemory();
+			x = memory.consumedMemory();
+			if (x != y) {
+				devices.Console.println("-------- MyPEH2 Fail 1");
+				fail = true;
+			}
+
+			x = memory.consumedMemory();
+			new BiggerObject();
+			y = memory.consumedMemory();
+
+			if (y != x + sizeOfBiggerObject) {
+				devices.Console.println("-------- MyPEH2 Fail 2, y = " + y + ", x = " + x);
+				fail = true;
+			}
+		}
+	}
+
 	private static class MyAEH extends AperiodicEventHandler {
-    private Mission m;
+		private Mission m;
 
-    public MyAEH(PriorityParameters priority, AperiodicParameters release, 
-                 StorageParameters storage, Mission m) {
-      super(priority, release, storage);
-      this.m = m;
-    }
+		public MyAEH(PriorityParameters priority, AperiodicParameters release, StorageParameters storage, Mission m) {
+			super(priority, release, storage);
+			this.m = m;
+		}
 
-    @Override
-    public void handleAsyncEvent() {
-      devices.Console.println("-- MyAEH: terminate mission");
-      m.requestTermination();
-    }
-  }
-	
+		@Override
+		public void handleAsyncEvent() {
+			devices.Console.println("-- MyAEH: terminate mission");
+			m.requestTermination();
+		}
+	}
 
 	private static class MyMission extends Mission {
 		public void initialize() {
 			devices.Console.println("** MyMission.initialize");
 
-			AperiodicEventHandler myAEH = 
-	        new MyAEH(new PriorityParameters(10), new AperiodicParameters(new RelativeTime(50, 0,
-	        Clock.getRealtimeClock()), null), storageParameters_Handlers, this);
-	    myAEH.register();
+			AperiodicEventHandler myAEH = new MyAEH(new PriorityParameters(10), new AperiodicParameters(
+					new RelativeTime(50, 0, Clock.getRealtimeClock()), null), storageParameters_Handlers, this);
+			myAEH.register();
 
-	    PeriodicEventHandler myPEH1 = 
-	        new MyPEH1(new PriorityParameters(20), 
-	                  new PeriodicParameters(new RelativeTime(), 
-	                                         new RelativeTime(1000, 0)),
-	        storageParameters_Handlers, myAEH);	    
-	    myPEH1.register();
-	    
-	    PeriodicEventHandler myPEH2 = 
-          new MyPEH2(new PriorityParameters(20), 
-                    new PeriodicParameters(new RelativeTime(), 
-                                           new RelativeTime(1000, 0)),
-          storageParameters_Handlers);     
-      myPEH2.register();
-	   
+			PeriodicEventHandler myPEH1 = new MyPEH1(new PriorityParameters(20), new PeriodicParameters(
+					new RelativeTime(), new RelativeTime(1000, 0)), storageParameters_Handlers, myAEH);
+			myPEH1.register();
+
+			PeriodicEventHandler myPEH2 = new MyPEH2(new PriorityParameters(20), new PeriodicParameters(
+					new RelativeTime(), new RelativeTime(1000, 0)), storageParameters_Handlers);
+			myPEH2.register();
+
 		}
 
 		public long missionMemorySize() {
@@ -235,39 +220,39 @@ public class TestSCJHandlerMemory {
 	public static StorageParameters storageParameters_Handlers;
 
 	public static void main(String[] args) {
-	  
-	  devices.Console.println("\n********** TestSCJHandlerMemory main.begin ******************");
-	  
+
+		devices.Console.println("\n********** TestSCJHandlerMemory main.begin ******************");
+
 		Memory memory = Memory.getHeapArea();
 		new SmallObject();
 		int x = memory.consumedMemory();
 		new SmallObject();
 		int y = memory.consumedMemory();
 		sizeOfSmallObject = y - x;
-		
+
 		x = memory.consumedMemory();
 		new BiggerObject();
 		y = memory.consumedMemory();
 		sizeOfBiggerObject = y - x;
-		
+
 		devices.Console.println("\nsmall object is " + sizeOfSmallObject + " bytes");
 		devices.Console.println("bigger object is " + sizeOfBiggerObject + " bytes \n");
-		
+
 		Const.setDefaultErrorReporter();
 		vm.Memory.startMemoryAreaTracking();
 
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, 2*Const.PRIVATE_MEM, 2*Const.IMMORTAL_MEM, Const.MISSION_MEM);
+				new long[] { Const.HANDLER_STACK_SIZE }, 2 * Const.PRIVATE_MEM, 2 * Const.IMMORTAL_MEM,
+				Const.MISSION_MEM);
 
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
 				new long[] { Const.HANDLER_STACK_SIZE }, 2002, 0, 0);
-		
-		new Launcher(new MyApp(), 1);
-		
+
+		new LaunchLevel1(new MyApp());
+
 		devices.Console.println("********* TestSCJHandlerMemory main.end ********************");
-		
-		if (!fail)
-		{
+
+		if (!fail) {
 			args = null;
 		}
 	}
