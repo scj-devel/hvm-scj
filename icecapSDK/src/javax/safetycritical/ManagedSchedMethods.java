@@ -16,14 +16,15 @@ final class ManagedSchedMethods {
 	}
 
 	static ScjProcess getScjProcess(ManagedSchedulable target) {
+		Process process = null;
 		if (target instanceof ManagedEventHandler)
-			return ((ManagedEventHandler) target).process;
+			process = ((ManagedEventHandler) target).process;
 		else if (target instanceof ManagedThread)
-			return ((ManagedThread) target).process;
+			process = ((ManagedThread) target).process;
 		else if (target instanceof ManagedLongEventHandler)
-			return ((ManagedLongEventHandler) target).process;
-		else
-			return null;
+			process = ((ManagedLongEventHandler) target).process;
+
+		return (ScjProcess) process;
 	}
 
 	static StorageParameters getStorage(ManagedSchedulable target) {

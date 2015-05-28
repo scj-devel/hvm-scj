@@ -59,7 +59,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 	PriorityParameters priority;
 	StorageParameters storage;
-	ScjProcess process;
+	Process process = null;
 	Mission mission = null;
 	
 	ManagedMemory privateMemory;
@@ -100,17 +100,21 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	    signals (IllegalArgumentException) true;        
 	  @*/
 	public ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, StorageParameters storage) {
+		this(priority, release, storage, null);
+	}
+
+	public ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, StorageParameters storage,
+			String name) {
 		if (priority == null)
 			throw new IllegalArgumentException("priority is null");
 		if (release == null)
 			throw new IllegalArgumentException("release is null");
-		this.priority = priority;
-		this.release = release;
-
 		if (storage == null)
 			throw new IllegalArgumentException("storage is null");
-
+		this.priority = priority;
+		this.release = release;
 		this.storage = storage;
+		this.name = name;
 		this.mission = Mission.getMission();
 
 		int backingStoreOfThisMemory;
@@ -181,6 +185,14 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 	Mission getMission() {
 		return mission;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	// Used in JML annotations

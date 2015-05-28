@@ -60,10 +60,8 @@ import vm.RealtimeClock;
  * @scjComment - implementation issue: infrastructure class; not part of the SCJ
  *             specification.
  */
-class ScjProcess implements Comparable<ScjProcess> {
+class ScjProcess extends Process implements Comparable<ScjProcess> {
 	vm.Process process;
-	ManagedSchedulable msObject;
-	int state;
 
 	Clock rtClock;
 	AbsoluteTime next; // next activation time
@@ -71,12 +69,11 @@ class ScjProcess implements Comparable<ScjProcess> {
 	RelativeTime start;
 	RelativeTime period;
 
-	int index = -999; // The index of the ScjProcesses; used by
-						// PriorityScheduler; -999 is 'no index set'
-
 	Object monitorLock = null;
 	AbsoluteTime next_temp = null;
 	boolean isNotified = false;
+
+	private ExceptionReporter exceptionReporter;
 
 	interface State {
 		public final static byte NEW = 0;
@@ -90,8 +87,6 @@ class ScjProcess implements Comparable<ScjProcess> {
 		public final static byte WAITING = 7;
 		public final static byte REQUIRELOCK = 8;
 	}
-
-	private ExceptionReporter exceptionReporter;
 
 	/**
 	 * The constructor initializes a new VM process object
@@ -177,18 +172,8 @@ class ScjProcess implements Comparable<ScjProcess> {
 					next.set(releaseTime);
 			}
 		}
-		//		else
-		//			devices.Console.println("UPS: ScjProcess.setRelease: more cases?");
-	}
-
-	private void setProcess(ManagedSchedulable ms) {
-		if (ms instanceof ManagedEventHandler)
-			((ManagedEventHandler) ms).process = this;
-		else if (ms instanceof ManagedThread)
-			((ManagedThread) ms).process = this;
-		else
-			// (ms is instanceof ManagedLongEventHandler)
-			((ManagedLongEventHandler) ms).process = this;
+		// else
+		// devices.Console.println("UPS: ScjProcess.setRelease: more cases?");
 	}
 
 	private static class ExceptionReporter implements Runnable {

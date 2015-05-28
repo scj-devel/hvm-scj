@@ -18,7 +18,7 @@ public abstract class ManagedLongEventHandler extends BoundAsyncLongEventHandler
 	/**
 	 * Process for use by scheduler
 	 */
-	ScjProcess process;
+	Process process;
 
 	// used in JML spec. methods
 	boolean isRegistered;

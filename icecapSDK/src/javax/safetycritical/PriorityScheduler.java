@@ -103,7 +103,7 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 		ScjProcess process = ManagedSchedMethods.createScjProcess(seq);
 		process.index = -2;
 		MissionSequencer.missSeqProcess = process;
-		outerMostSeqProcess = seq.process;
+		outerMostSeqProcess = (ScjProcess) seq.process;
 		pFrame.addProcess(process);
 	}
 
@@ -131,15 +131,16 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 
 	void release(AperiodicEventHandler handler) {
 		// see AperiodicEventHandler, where release is called
+		ScjProcess process = (ScjProcess) handler.process;
 		vm.ClockInterruptHandler.instance.disable();
-		if (handler.process.state == ScjProcess.State.EXECUTING) {
+		if (process.state == ScjProcess.State.EXECUTING) {
 			; // do nothing, - is already running
 		}
 
-		else if (handler.process.state == ScjProcess.State.BLOCKED) {
-			handler.process.state = ScjProcess.State.READY;
-			handler.process.start();
-			pFrame.readyQueue.insert(handler.process);
+		else if (process.state == ScjProcess.State.BLOCKED) {
+			process.state = ScjProcess.State.READY;
+			process.start();
+			pFrame.readyQueue.insert(process);
 		} else {
 			; // it is already ready
 		}

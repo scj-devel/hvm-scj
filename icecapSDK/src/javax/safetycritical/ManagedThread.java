@@ -57,10 +57,11 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 
 	PriorityParameters priority;
 	StorageParameters storage;
-	ScjProcess process;
+	Process process = null;
 	Mission mission = null;
 
 	ManagedMemory privateMemory;
+	String name;
 
 	// used in JML spec. methods
 	boolean isRegistered;
@@ -71,6 +72,10 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 	}
 
 	public ManagedThread(PriorityParameters priority, StorageParameters storage, Runnable logic) {
+		this(priority, storage, logic, null);
+	}
+
+	public ManagedThread(PriorityParameters priority, StorageParameters storage, Runnable logic, String name) {
 		super(priority, logic);
 		this.priority = priority;
 
@@ -78,6 +83,7 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 			throw new IllegalArgumentException("storage is null");
 
 		this.storage = storage;
+		this.name = name;
 		this.mission = Mission.getMission();
 
 		int backingStoreOfThisMemory = mission == null ? MemoryArea.getRemainingMemorySize()
@@ -153,5 +159,13 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 		// current process (ScjManagedThreadProcess) in sleeping queue. 
 		vm.ClockInterruptHandler.instance.enable();
 		ClockInterruptHandler.instance.yield();
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return this.name;
 	}
 }

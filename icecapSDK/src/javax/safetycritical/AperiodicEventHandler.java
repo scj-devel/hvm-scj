@@ -76,10 +76,16 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 	    requires release == null;
 	    signals (IllegalArgumentException) true;       
 	@*/
+	public AperiodicEventHandler(PriorityParameters priority, AperiodicParameters release,
+			StorageParameters storage) {
+		this(priority, release, storage, null);
+	}
+	
 	@SCJAllowed(Level.LEVEL_1)
 	@SCJRestricted(Phase.INITIALIZE)
-	public AperiodicEventHandler(PriorityParameters priority, AperiodicParameters release, StorageParameters storage) {
-		super(priority, release, storage);
+	public AperiodicEventHandler(PriorityParameters priority, AperiodicParameters release,
+			StorageParameters storage, String name) {
+		super(priority, release, storage, name);
 		if (priority == null || release == null)
 			throw new IllegalArgumentException("null argument");
 	}
@@ -90,7 +96,7 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 		super.register();
 		sch = PriorityScheduler.instance();
 	}
-
+	
 	/**
 	 * Release this aperiodic event handler
 	 */

@@ -97,8 +97,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	@SCJAllowed
 	@SCJRestricted(Phase.INITIALIZE)
 	public MissionSequencer(PriorityParameters priority, StorageParameters storage, String name) {
-		super(priority, new AperiodicParameters(), storage);
-		this.name = name;
+		super(priority, new AperiodicParameters(), storage, name);
 
 		//		devices.Console.println("MissSeq.constr: " + name 
 		//			+ "; maxMissionMemory " + storage.maxMissionMemory 

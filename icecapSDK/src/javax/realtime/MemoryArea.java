@@ -116,7 +116,7 @@ public abstract class MemoryArea extends Object {
 			reservedEnd = base + reservedSize;
 			backingStoreProvider.addContainedMemory(this);
 		} else {
-			System.out.println("   MemoryArea: throw " + label);
+//			System.out.println("   MemoryArea: throw " + label);
 			throw new OutOfMemoryError("thrown from MemoryArea :: constructor : Out of backingstore exception: size: "
 					+ initialSize + " backingStoreSize: " + reservedSize + " base: " + base + " backingStoreEnd: "
 					+ endOfAvailableSpace);
