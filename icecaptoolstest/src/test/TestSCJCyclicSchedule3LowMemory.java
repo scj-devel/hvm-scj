@@ -7,7 +7,7 @@ import javax.realtime.RelativeTime;
 import javax.safetycritical.CyclicExecutive;
 import javax.safetycritical.CyclicSchedule;
 import javax.safetycritical.Frame;
-import javax.safetycritical.Launcher;
+import javax.safetycritical.LaunchLevel0;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
@@ -197,7 +197,7 @@ public class TestSCJCyclicSchedule3LowMemory {
 				500, 0, 0);
 
 		devices.Console.println("\n****** TestSCJCyclicSchedule3LowMemory begin *********");
-		new Launcher(new MyApp(), 0);
+		new LaunchLevel0(new MyApp());
 		devices.Console.println("****** TestSCJCyclicSchedule3LowMemory end *********");
 
 		vm.Process.reportStackUsage();

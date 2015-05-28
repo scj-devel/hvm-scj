@@ -23,7 +23,7 @@ import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.AperiodicEventHandler;
-import javax.safetycritical.Launcher;
+import javax.safetycritical.LaunchLevel1;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
@@ -159,7 +159,7 @@ public class TestSCJMemoryModel1
             0);
 
     devices.Console.println("\n***** TestSCJMemoryModel1 main.begin ******************" );
-    new Launcher(new MyApp(), 1);
+    new LaunchLevel1(new MyApp());
     devices.Console.println("***** TestSCJMemoryModel1 main.end *******************");
     
     args = null;

@@ -7,7 +7,7 @@ import javax.realtime.RelativeTime;
 import javax.safetycritical.CyclicExecutive;
 import javax.safetycritical.CyclicSchedule;
 import javax.safetycritical.Frame;
-import javax.safetycritical.Launcher;
+import javax.safetycritical.LaunchLevel0;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
@@ -143,7 +143,7 @@ public class TestSCJCyclicSchedule4 {
             0);
         
         devices.Console.println("\n****** CyclicSchedule4 main.begin *********");
-        new Launcher(new MyApp(), 0);
+        new LaunchLevel0(new MyApp());
         devices.Console.println("****** CyclicSchedule4 main.end *********");
         args = null;
     }

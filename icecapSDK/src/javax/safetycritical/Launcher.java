@@ -49,7 +49,7 @@ import vm.Memory;
  * 
  * @scjComment - The class is not part of the SCJ specification.
  */
-public class Launcher implements Runnable {
+public abstract class Launcher implements Runnable {
 	Safelet<?> app;
 	static int level;
 	static boolean useOS = false;

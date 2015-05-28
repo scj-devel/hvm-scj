@@ -18,7 +18,7 @@
 package minicdj;
 
 import javax.realtime.PriorityParameters;
-import javax.safetycritical.Launcher;
+import javax.safetycritical.LaunchLevel0;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.Safelet;
@@ -55,7 +55,7 @@ public class MyApp implements Safelet {
 		Utils.debugPrint("Frames: " + Constants.MAX_FRAMES);
 
 		//  executes in heap memory
-		new Launcher(new MyApp(), 0);
+		new LaunchLevel0(new MyApp());
 
 		devices.Console.println("   ****** mini cdj: main.end **************");
 	}

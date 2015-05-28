@@ -4,10 +4,10 @@ import javax.realtime.Clock;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
-import javax.safetycritical.Frame;
 import javax.safetycritical.CyclicExecutive;
 import javax.safetycritical.CyclicSchedule;
-import javax.safetycritical.Launcher;
+import javax.safetycritical.Frame;
+import javax.safetycritical.LaunchLevel0;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
@@ -223,7 +223,7 @@ public class TestSCJCyclicSchedule3 {
             0);
 
         devices.Console.println("\n****** Cyc 3 main.begin *********");
-        new Launcher(new MyApp(), 0);
+        new LaunchLevel0(new MyApp());
         devices.Console.println("****** Cyc 3 main.end *********");
         
         args = null;

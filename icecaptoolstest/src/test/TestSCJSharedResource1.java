@@ -19,7 +19,7 @@ import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.AperiodicEventHandler;
-import javax.safetycritical.Launcher;
+import javax.safetycritical.LaunchLevel1;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
@@ -256,7 +256,7 @@ public class TestSCJSharedResource1 {
         
         devices.Console.println("\n********** Shared Resource 1 begin ***********");
         // executes in heap memory
-        new Launcher(new MyApp(), 1);
+        new LaunchLevel1(new MyApp());
         devices.Console.println("********* Shared Resource 1 end ***********");
 
         if (!failed) {

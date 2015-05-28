@@ -19,7 +19,7 @@ package test;
 
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
-import javax.safetycritical.Launcher;
+import javax.safetycritical.LaunchLevel2;
 import javax.safetycritical.ManagedThread;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
@@ -33,19 +33,17 @@ import vm.Memory;
 public class TestSCJThreadMemory {
 	private static int sizeOfSmallObject;
 	private static int sizeOfBiggerObject;
-	
+
 	static boolean fail;
-	
-	private static class SmallObject
-	{
+
+	private static class SmallObject {
 		@SuppressWarnings("unused")
 		int x;
 		@SuppressWarnings("unused")
 		short y;
 	}
-	
-	private static class BiggerObject
-	{
+
+	private static class BiggerObject {
 		@SuppressWarnings("unused")
 		int x;
 		@SuppressWarnings("unused")
@@ -72,24 +70,22 @@ public class TestSCJThreadMemory {
 		void doWork() {
 			int x = 0, y = 0;
 			Memory memory = Memory.getCurrentMemoryArea();
-			
+
 			devices.Console.println("Thread 1 allocating in: " + memory.getName());
-			
-			y = memory.consumedMemory(); 
-			
+
+			y = memory.consumedMemory();
+
 			while (count < 5) {
-				x = memory.consumedMemory(); 
-				if (x != y)
-				{
+				x = memory.consumedMemory();
+				if (x != y) {
 					devices.Console.println("T1 Fail 1");
 					fail = true;
 				}
 
 				new SmallObject();
 
-				y = memory.consumedMemory(); 
-				if (y != x + sizeOfSmallObject)
-				{
+				y = memory.consumedMemory();
+				if (y != x + sizeOfSmallObject) {
 					devices.Console.println("T1 Fail 2, y = " + y + ", x = " + x);
 					fail = true;
 				}
@@ -97,12 +93,13 @@ public class TestSCJThreadMemory {
 				delay();
 			}
 		}
+
 		private void delay() {
 			try {
 				ManagedThread.sleep(delayTime);
 			} catch (InterruptedException e) {
 			}
-		} 
+		}
 	}
 
 	private static class Thread2 extends ManagedThread {
@@ -126,20 +123,19 @@ public class TestSCJThreadMemory {
 			Memory memory = Memory.getCurrentMemoryArea();
 
 			devices.Console.println("Thread 2 allocating in: " + memory.getName());
-			
-			y = memory.consumedMemory(); 
-			
+
+			y = memory.consumedMemory();
+
 			while (count < 5) {
-				x = memory.consumedMemory(); 
-				if (x != y)
-				{
+				x = memory.consumedMemory();
+				if (x != y) {
 					devices.Console.println("T2 Fail 1");
 					fail = true;
 				}
 
 				new BiggerObject();
 
-				y = memory.consumedMemory(); 
+				y = memory.consumedMemory();
 				if (y != x + sizeOfBiggerObject) {
 					devices.Console.println("T2 Fail 2, y = " + y + ", x = " + x);
 					fail = true;
@@ -224,15 +220,15 @@ public class TestSCJThreadMemory {
 		new SmallObject();
 		int y = memory.consumedMemory();
 		sizeOfSmallObject = y - x;
-		
+
 		x = memory.consumedMemory();
 		new BiggerObject();
 		y = memory.consumedMemory();
 		sizeOfBiggerObject = y - x;
-		
+
 		devices.Console.println("small object is " + sizeOfSmallObject + " bytes");
 		devices.Console.println("bigger object is " + sizeOfBiggerObject + " bytes");
-		
+
 		Const.setDefaultErrorReporter();
 		vm.Memory.startMemoryAreaTracking();
 
@@ -243,10 +239,9 @@ public class TestSCJThreadMemory {
 				new long[] { Const.HANDLER_STACK_SIZE }, 2002, 0, 0);
 
 		devices.Console.println("\n********** TestSCJThreadMemory main.begin ******************");
-		new Launcher(new MyApp(), 2);
+		new LaunchLevel2(new MyApp());
 		devices.Console.println("********* TestSCJThreadMemory main.end ********************");
-		if (!fail)
-		{
+		if (!fail) {
 			args = null;
 		}
 	}

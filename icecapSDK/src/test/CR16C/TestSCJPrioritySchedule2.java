@@ -6,7 +6,7 @@ import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.AperiodicEventHandler;
-import javax.safetycritical.Launcher;
+import javax.safetycritical.LaunchLevel1;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
@@ -167,7 +167,7 @@ public class TestSCJPrioritySchedule2 {
 		// devices.Console.writer = new CR16ConsoleWriter();
 		devices.Console.println("\n********** main.begin ******************");
 		// executes in heap memory
-		new Launcher(new MyApp(), 1);
+		new LaunchLevel1(new MyApp());
 		devices.Console.println("********* main.end ************************");
 		if (testCount == 1) {
 			devices.Console.println("SUCCESS");
