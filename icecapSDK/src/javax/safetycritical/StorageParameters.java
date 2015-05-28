@@ -91,11 +91,11 @@ public final class StorageParameters extends javax.realtime.MemoryParameters {
 		this.maxMissionMemory = maxMissionMemory;
 	}
 
-	long getMaxMemoryArea() {
+	long getMaximalMemoryArea() {
 		return maxMemoryArea;
 	}
 
-	long getMaxImmortal() {
+	long getMaximalImmortal() {
 		return maxImmortal;
 	}
 

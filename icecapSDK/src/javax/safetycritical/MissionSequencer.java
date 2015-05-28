@@ -31,7 +31,6 @@ import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
 import javax.safetycritical.annotate.SCJRestricted;
-import javax.scj.util.Const;
 
 /**
  * A <code>MissionSequencer</code> oversees a sequence of Mission executions. 
@@ -84,6 +83,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 
 	// Level2 only: a reference to the nearest outer sequencer
 	MissionSequencer<?> outerSeq = null;
+	static MissionSequencer<?> outerMostSeq = null; // for multiprocessor only
 
 	/**
 	 * Constructs a <code>MissionSequencer</code> to run at the priority and
@@ -106,6 +106,8 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 		currState = State.START;
 
 		if (isOuterMostSeq) {
+			outerMostSeq = this;
+
 			if (Launcher.level != 0) {
 				PriorityScheduler.instance().addOuterMostSeq(this);
 			}

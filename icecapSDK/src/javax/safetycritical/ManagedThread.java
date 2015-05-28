@@ -75,7 +75,7 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 		this(priority, storage, logic, null);
 	}
 
-	public ManagedThread(PriorityParameters priority, StorageParameters storage, Runnable logic, String name) {
+	protected ManagedThread(PriorityParameters priority, StorageParameters storage, Runnable logic, String name) {
 		super(priority, logic);
 		this.priority = priority;
 
@@ -93,7 +93,7 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 
 		String privateMemoryName = Memory.getNextMemoryName("PvtMem");
 
-		privateMemory = new PrivateMemory((int) storage.getMaxMemoryArea(), backingStoreOfThisMemory,
+		privateMemory = new PrivateMemory((int) storage.getMaximalMemoryArea(), backingStoreOfThisMemory,
 				backingStoreProvider, privateMemoryName);
 		this.isRegistered = false;
 		this.isInMissionScope = false;

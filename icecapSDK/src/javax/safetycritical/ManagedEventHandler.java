@@ -103,7 +103,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		this(priority, release, storage, null);
 	}
 
-	public ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, StorageParameters storage,
+	protected ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, StorageParameters storage,
 			String name) {
 		if (priority == null)
 			throw new IllegalArgumentException("priority is null");
@@ -130,7 +130,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 		String privateMemoryName = Memory.getNextMemoryName("PvtMem");		
 		
-		privateMemory = new PrivateMemory((int) this.storage.getMaxMemoryArea(),
+		privateMemory = new PrivateMemory((int) this.storage.getMaximalMemoryArea(),
 		           backingStoreOfThisMemory,
 	               backingStoreProvider, 
 	               privateMemoryName);	

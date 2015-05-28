@@ -52,10 +52,21 @@ import vm.Memory;
 public class Launcher implements Runnable {
 	Safelet<?> app;
 	static int level;
+	static boolean useOS = false;
+	static MissionHelper helper = null;
 
 	public Launcher(Safelet<?> app, int level) {
+		this(app, level, false);
+	}
+
+	public Launcher(Safelet<?> app, int level, boolean useOS) {
+		if (level < 0 || level > 2 || app == null) {
+			throw new IllegalArgumentException();
+		}
+
 		this.app = app;
 		Launcher.level = level;
+		Launcher.useOS = useOS;
 
 		ManagedMemory.allocateBackingStore(Const.OVERALL_BACKING_STORE);
 
@@ -70,11 +81,16 @@ public class Launcher implements Runnable {
 	}
 
 	public void run() {
+		app.initializeApplication();
 
 		if (level == 0) {
 			startLevel0();
 		} else {
-			startLevel1_2();
+			if (!useOS) {
+				startLevel1_2();
+			} else {
+				startwithOS();
+			}
 		}
 	}
 
@@ -89,5 +105,14 @@ public class Launcher implements Runnable {
 		sch.insertReadyQueue(ScjProcess.createIdleProcess());
 		app.getSequencer();
 		PriorityScheduler.instance().start();
+	}
+
+	protected void startwithOS() {
+		//		Machine.setCurrentScheduler(new MultiprocessorHelpingScheduler());
+		//		OSProcess.initSpecificID();
+		helper = new MissionHelper();
+		MissionSequencer<?> outerMostMS = app.getSequencer();
+		outerMostMS.privateMemory.enter(outerMostMS);
+		outerMostMS.cleanUp();
 	}
 }
