@@ -53,4 +53,8 @@ public abstract class ManagedLongEventHandler extends BoundAsyncLongEventHandler
 	ManagedMemory getCurrentMemory() {
 		return privateMemory;
 	}
+	
+	public PriorityParameters getPriorityParam() {
+		return priority;
+	}
 }

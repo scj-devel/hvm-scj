@@ -113,5 +113,13 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 	public final void release() {
 		sch.release(this);
 	}
+	
+	synchronized void waitForNextRelease() {
+		
+	}
+	
+	synchronized void fireNextRelease() {
+		
+	}
 
 }

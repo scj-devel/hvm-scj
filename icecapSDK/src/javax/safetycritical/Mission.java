@@ -32,7 +32,6 @@ import javax.realtime.AbsoluteTime;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
-import javax.scj.util.Const;
 
 /**
  * An SCJ application is comprised of one or more <code>Mission</code> objects.
@@ -59,12 +58,7 @@ public abstract class Mission {
 	Phase phaseOfMission;
 
 	protected int missionIndex = -1;
-
-	static volatile Mission[] missionSet = null;
-
 	boolean isMissionSetInitByThis = false;
-
-	static volatile boolean isMissionSetInit = false;
 
 	@SCJAllowed
 	public Mission(AbsoluteTime start) {
@@ -169,20 +163,7 @@ public abstract class Mission {
 	 */
 	@SCJAllowed
 	public final boolean requestTermination() {
-		if (missionTerminate == false) { // called the first time during mission execution	
-
-			// terminate all the sequencer's MSObjects that were created by the mission.
-
-			for (int i = 0; i < msSetForMission.noOfRegistered; i++) {
-				if (msSetForMission.managedSchObjects[i] != null) {
-					msSetForMission.managedSchObjects[i].signalTermination();
-				}
-			}
-
-			missionTerminate = true;
-			return false;
-		} else
-			return true; // called more than once: nothing done
+		return Launcher.delegate.requestTermination(this);
 	}
 
 	/**
@@ -195,31 +176,8 @@ public abstract class Mission {
 		return missionTerminate;
 	}
 
-	static synchronized int addNewMission(Mission mission) {
-		for (int i = 0; i < missionSet.length; i++) {
-			if (missionSet[i] == null) {
-				missionSet[i] = mission;
-				return i;
-			}
-		}
-		throw new IndexOutOfBoundsException("Mission set: too small");
-	}
-
 	void runInitialize() {
-		vm.ClockInterruptHandler.instance.disable();
-
-		if (missionSet == null || isMissionSetInit == false) {
-			missionSet = new Mission[Const.DEFAULT_HANDLER_NUMBER];
-			isMissionSetInitByThis = true;
-			isMissionSetInit = true;
-		}
-		missionIndex = addNewMission(this);
-
-		phaseOfMission = Phase.INITIALIZE; // used by JML ??
-		msSetForMission = new ManagedSchedulableSet();
-		initialize();
-
-		vm.ClockInterruptHandler.instance.enable();
+		Launcher.delegate.runInitialize(this);
 	}
 
 	void runExecute()
@@ -228,25 +186,7 @@ public abstract class Mission {
 	//  For cyclic schedule execution, this method is overwritten in 
 	//  the subclass CyclicExecutive. 
 	{
-		vm.ClockInterruptHandler.instance.disable();
-
-		phaseOfMission = Phase.EXECUTE;
-		ManagedSchedulableSet msSet = msSetForMission;
-		PriorityFrame frame = PriorityScheduler.instance().pFrame;
-
-		int index = missionIndex * 20;
-
-		for (int i = 0; i < msSet.noOfRegistered; i++) {
-
-			ManagedSchedulable ms = msSet.managedSchObjects[i];
-
-			msSet.scjProcesses[i] = ManagedSchedMethods.createScjProcess(ms);
-			msSet.scjProcesses[i].setIndex(index);
-			index++;
-			frame.addProcess(msSet.scjProcesses[i]);
-		}
-
-		vm.ClockInterruptHandler.instance.enable();
+		Launcher.delegate.runExecute(this);
 	}
 
 	void runCleanup(MissionMemory missMem)
@@ -255,29 +195,7 @@ public abstract class Mission {
 	//  For cyclic schedule execution, this method is overwritten in 
 	//  the subclass CyclicExecutive. 
 	{
-		phaseOfMission = Phase.CLEANUP;
-		// wait until (all handlers in mission have terminated)			
-		while (msSetForMission.msCount > 0) {
-			vm.RealtimeClock.awaitNextTick();
-		}
-
-		vm.ClockInterruptHandler.instance.disable();
-		for (int i = 0; i < msSetForMission.noOfRegistered; i++) {
-			msSetForMission.scjProcesses[i] = null;
-			msSetForMission.managedSchObjects[i] = null;
-		}
-
-		missionSet[missionIndex] = null;
-		if (isMissionSetInitByThis == true) {
-			isMissionSetInit = false;
-		}
-		cleanUp();
-		missMem.resetArea();
-		vm.ClockInterruptHandler.instance.enable();
-	}
-
-	protected static ScjProcess getScjProcess(int missionIndex, int scjProcessIndex) {
-		return missionSet[missionIndex].msSetForMission.scjProcesses[scjProcessIndex];
+		Launcher.delegate.runCleanup(this, missMem);
 	}
 
 	// used for JML annotation only (not public)

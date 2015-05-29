@@ -160,6 +160,10 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 		vm.ClockInterruptHandler.instance.enable();
 		ClockInterruptHandler.instance.yield();
 	}
+	
+	PriorityParameters getPriorityParam() {
+		return priority;
+	}
 
 	void setName(String name) {
 		this.name = name;
@@ -168,4 +172,6 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 	String getName() {
 		return this.name;
 	}
+	
+	
 }

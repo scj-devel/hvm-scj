@@ -62,6 +62,8 @@ import javax.safetycritical.annotate.SCJRestricted;
 @SCJAllowed(Level.LEVEL_1)
 public abstract class OneShotEventHandler extends ManagedEventHandler {
 	HighResolutionTime releaseTime;
+	boolean deschedulePending = false;
+	int state = 0;
 
 	/**
 	 * Constructs a one-shot event handler.
@@ -136,6 +138,21 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	@SCJRestricted(Phase.INITIALIZE)
 	public final void register() {
 		super.register();
+	}
+	
+	long getStart() {
+		return releaseTime.getNanoseconds() + releaseTime.getMilliseconds() * 1000000;
+	}
+	
+	public void scheduleNextReleaseTime(HighResolutionTime time) {
+		
+	}
+	
+	synchronized void waitForNextRelease() {
+		
+	}
+	
+	synchronized void fireNextRelease() {
 	}
 
 }

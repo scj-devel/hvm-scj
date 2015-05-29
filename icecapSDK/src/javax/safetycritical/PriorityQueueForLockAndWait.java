@@ -118,9 +118,7 @@ class PriorityQueueForLockAndWait {
 			return ScjProcess.idleProcess;
 		}
 
-		int missionIndex = processIdx / 20;
-		int scjProcessIndex = processIdx % 20;
-		return Mission.getScjProcess(missionIndex, scjProcessIndex);
+		return (ScjProcess)Launcher.delegate.getProcess(processIdx);
 	}
 
 	/**

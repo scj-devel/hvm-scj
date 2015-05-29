@@ -34,6 +34,7 @@ package javax.safetycritical;
 import javax.realtime.MemoryArea;
 import javax.scj.util.Const;
 
+import vm.Machine;
 import vm.Memory;
 
 /**
@@ -53,7 +54,7 @@ abstract class Launcher implements Runnable {
 	Safelet<?> app;
 	static int level;
 	static boolean useOS = false;
-	static MissionHelper helper = null;
+	static MissionBehavior delegate = null;
 
 	Launcher(Safelet<?> app, int level) {
 		this(app, level, false);
@@ -84,12 +85,14 @@ abstract class Launcher implements Runnable {
 	protected abstract void start(); 
 
 	protected void startLevel0() {
+		delegate = new MissionSinglecoreBehavior();
 		MissionSequencer<?> seq = app.getSequencer();
 		CyclicScheduler.instance().start(seq);
 	}
 
 	protected void startLevel1_2() {
 		// insert idle process before the mission sequencer.
+		delegate = new MissionSinglecoreBehavior();
 		PriorityScheduler sch = PriorityScheduler.instance();
 		sch.insertReadyQueue(ScjProcess.createIdleProcess());
 		app.getSequencer();
@@ -97,9 +100,9 @@ abstract class Launcher implements Runnable {
 	}
 
 	protected void startwithOS() {
-		//		Machine.setCurrentScheduler(new MultiprocessorHelpingScheduler());
-		//		OSProcess.initSpecificID();
-		helper = new MissionHelper();
+		delegate = new MissionMulticoreBehavior();
+		Machine.setCurrentScheduler(new MultiprocessorHelpingScheduler());
+		OSProcess.initSpecificID();
 		MissionSequencer<?> outerMostMS = app.getSequencer();
 		outerMostMS.privateMemory.enter(outerMostMS);
 		outerMostMS.cleanUp();

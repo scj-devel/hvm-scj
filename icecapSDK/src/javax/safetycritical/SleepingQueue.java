@@ -160,9 +160,7 @@ class SleepingQueue {
 			return ScjProcess.idleProcess;
 		}
 
-		int missionIndex = processIdx / 20;
-		int scjProcessIndex = processIdx % 20;
-		return Mission.missionSet[missionIndex].msSetForMission.scjProcesses[scjProcessIndex];
+		return (ScjProcess)Launcher.delegate.getProcess(processIdx);
 	}
 
 	public void remove(ScjProcess obj) {

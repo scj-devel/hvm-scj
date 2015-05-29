@@ -67,6 +67,7 @@ class ManagedSchedulableSet {
 	 * Mission.runCleanup is waiting until msCount == 0
 	 */
 	int msCount;
+	int activeCount; // only for multiprocessor
 
 	ManagedSchedulableSet() {
 	}

@@ -59,6 +59,8 @@ import javax.safetycritical.annotate.SCJAllowed;
  */
 @SCJAllowed
 public abstract class PeriodicEventHandler extends ManagedEventHandler {
+	PeriodicParameters releaseP;
+	
 	/** 
 	 * Constructs a periodic event handler.
 	 * 
@@ -96,9 +98,20 @@ public abstract class PeriodicEventHandler extends ManagedEventHandler {
 	PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
 			String name) {
 		super(priority, release, storage, name);
+		releaseP = release;
 	}
 
 	public final void register() {
 		super.register();
+	}
+	
+	long getStart() {
+		return releaseP.getStart().getNanoseconds() + releaseP.getStart().getMilliseconds()
+				* 1000000;
+	}
+
+	long getPeriod() {
+		return releaseP.getPeriod().getNanoseconds() + releaseP.getPeriod().getMilliseconds()
+				* 1000000;
 	}
 }
