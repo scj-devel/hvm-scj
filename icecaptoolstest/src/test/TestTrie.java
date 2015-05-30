@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestTrie {
 
     private static class TextString  {
@@ -98,9 +100,7 @@ public class TestTrie {
      */
     public static void main(String[] args) {
         boolean failed = test();
-        if (!failed) {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 
     private static boolean test() {

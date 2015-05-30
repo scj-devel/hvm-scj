@@ -26,6 +26,7 @@
 package javax.realtime;
 
 import icecaptools.IcecapCompileMe;
+import util.StringUtil;
 
 import javax.safetycritical.annotate.SCJAllowed;
 
@@ -205,11 +206,11 @@ public abstract class HighResolutionTime implements Comparable<HighResolutionTim
 	 */
 	public int compareTo(HighResolutionTime time) {
 		if (time == null)
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("time is null");		
 		if (this.getClass() != time.getClass())
-			throw new ClassCastException();
+			throw new ClassCastException("class mismatch");		
 		if (this.clock != time.getClock())
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("clock mismatch");
 
 		if (this.millis < time.getMilliseconds())
 			return -1;
@@ -224,7 +225,10 @@ public abstract class HighResolutionTime implements Comparable<HighResolutionTim
 	}
 
 	public String toString() {
-		return ("(ms,ns) = (" + millis + ", " + nanos + ")");
+		StringBuffer buf = StringUtil.constructStringBuffer("(ms,ns) = (", (int) millis);
+		buf.append(StringUtil.constructString(", ", nanos));
+		buf.append(")");
+		return buf.toString();
 	}
 
 	static final int NANOS_PER_MILLI = 1000000;
@@ -271,4 +275,5 @@ public abstract class HighResolutionTime implements Comparable<HighResolutionTim
 	int getNanos() {
 		return nanos;
 	}
+	
 }

@@ -1,15 +1,14 @@
 package test;
 
+import vm.VMTest;
+
 public class ANTTestArray1 {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        boolean failure = test();
-        if (!failure) {
-            args = null;
-        }
+    	VMTest.markResult(test());
     }
 
     public static boolean test() {

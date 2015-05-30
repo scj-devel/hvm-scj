@@ -1,17 +1,18 @@
 package icecaptools.launching;
 
-import icecaptools.IcecapProgressMonitor;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+
+import icecaptools.IcecapProgressMonitor;
 
 public class ShellCommand {
 
@@ -23,8 +24,13 @@ public class ShellCommand {
 		super();
 	}
 
-	public static int executeCommand(String command, OutputStream consoleOutputStream, boolean doExecute,
-			String workingDirectoryPath, String[] envp, int timeout, IcecapProgressMonitor monitor) {
+	public static int executeCommand(String command, PrintStream consoleOutputStream, boolean doExecute, String workingDirectoryPath,
+			String[] envp, int compilationTimeout, IcecapProgressMonitor monitor) {
+		return executeCommand(command, consoleOutputStream, null, doExecute, workingDirectoryPath, envp, compilationTimeout, monitor);
+	}
+	
+	public static int executeCommand(String command, OutputStream consoleOutputStream, InputStream consoleInputStream,
+			boolean doExecute, String workingDirectoryPath, String[] envp, int timeout, IcecapProgressMonitor monitor) {
 		return executeIt(null, command, consoleOutputStream, null, doExecute, workingDirectoryPath, envp, timeout,
 				monitor);
 	}
@@ -32,8 +38,8 @@ public class ShellCommand {
 	public static int executeCommand(String[] commands, OutputStream consoleOutputStream,
 			InputStream consoleInputStream, boolean doExecute, String workingDirectoryPath, String[] envp, int timeout,
 			IcecapProgressMonitor monitor) {
-		return executeIt(commands, null, consoleOutputStream, consoleInputStream, doExecute, workingDirectoryPath,
-				envp, timeout, monitor);
+		return executeIt(commands, null, consoleOutputStream, consoleInputStream, doExecute, workingDirectoryPath, envp,
+				timeout, monitor);
 	}
 
 	private static int executeIt(String[] commands, String command, OutputStream consoleOutputStream,
@@ -127,21 +133,15 @@ public class ShellCommand {
 			for (String str : envp) {
 				writer.println(str);
 			}
-		}
-		else
-		{
+		} else {
 			writer.println("envp is null, using default environment");
-			if (map != null)
-			{
+			if (map != null) {
 				Iterator<String> keys = map.keySet().iterator();
-				while (keys.hasNext())
-				{
+				while (keys.hasNext()) {
 					String nextKey = keys.next();
 					writer.println(nextKey + " = " + map.get(nextKey));
 				}
-			}
-			else
-			{
+			} else {
 				writer.println("default environment is null");
 			}
 		}
@@ -259,4 +259,6 @@ public class ShellCommand {
 			}
 		}
 	}
+
+	
 }

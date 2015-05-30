@@ -1,6 +1,8 @@
 #include "../../../include/common/include/bitsdef.h"
+#if 0
 #include "../../../include/common/include/map_480_gcc.h"
 #include "../../../include/mac/startup/include/interrupts.h"
+#endif
 #include "ostypes.h"
 #include "types.h"
 #include "methods.h"
@@ -8,16 +10,14 @@
 #define Px_1_SET 0x02
 #define Px_1_RESET 0x02
 
+#if 0
 static void delay(int time);
+#endif
 
 unsigned char cstack[0x400] __attribute__ ((section (".data")));
 unsigned char istack[0x100] __attribute__ ((section (".data")));
-unsigned char java_stack[JAVA_STACK_SIZE << 2] __attribute__ ((section (".data")));
 
-int32* get_java_stack_base(int16 size) {
-    return (int32*) &java_stack[0];
-}
-
+#if 0
 void blink(int time) {
     SET_FREEZE_REG |= FRZ_WDOG;
 
@@ -31,13 +31,13 @@ void blink(int time) {
         delay(time);
     }
 }
-
 static void delay(int time) {
     volatile int i;
     for (i = 0; i < time; i++) {
         /* asm("nop"); */
     }
 }
+#endif
 
 #ifdef USE_ROM_IMAGE
 #else
@@ -48,12 +48,14 @@ unsigned char rom_writeable(void) {
 unsigned char pheap[PHEAP_SIZE] PROGMEM;
 #endif
 
+#if 0
 static void handleUARTTXInterrupt(void);
 static void handleTimer1Interrupt(void);
+#endif
 
-void printStr(const char* str);
-
+#if 0
 void initNatives(void) {
+
     SET_FREEZE_REG |= FRZ_WDOG;
 
     init_interrupt_handling();
@@ -72,7 +74,7 @@ void initNatives(void) {
     __set_PSR_I_bit();
     __enable_interrupt();
 }
-
+#endif
 unsigned long strlen(const char *STR) {
     int count = 0;
     while (*STR++) {
@@ -115,20 +117,16 @@ void initSegmentsServ(void) {
     ;
 }
 
+#if 0
 void PrintStatus(UByte StatusMessageLevel, char *msg) {
     ;
 }
-
-void mark_error(void) {
-}
-
-void mark_success(void) {
-}
+#endif
 
 int32 isrMethodStack[50];
-
+#if 0
 extern int16 vm_InterruptDispatcher_interrupt(int32 *fp);
-
+#if 0
 static void handleUARTTXInterrupt(void) {
 #if defined(VM_INTERRUPTDISPATCHER_INTERRUPT)
     if (VM_INTERRUPTDISPATCHER_INTERRUPT != -1) {
@@ -146,8 +144,12 @@ static void handleTimer1Interrupt(void) {
     }
 #endif
 }
+#endif
+#endif
 
 
+
+#if 0
 void sendbyte(unsigned char byte) {
     UART_RX_TX_REG = byte;
     UART_CTRL_REG |= 0x2;
@@ -156,6 +158,7 @@ void sendbyte(unsigned char byte) {
         ;
     }
 }
+#endif
 
 #if 0
 static void InitSystem(void) {

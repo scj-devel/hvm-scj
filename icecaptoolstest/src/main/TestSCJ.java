@@ -1,6 +1,7 @@
 package main;
 
 
+
 /*
  * To run the automated tests make sure that gcc is installed and can be 
  * started from a normal command prompt.
@@ -16,12 +17,14 @@ package main;
  */
 public class TestSCJ extends TestAll {
 
-	public static void main(String[] args) throws Throwable {
+	public static void main(String[] args) throws Throwable  {
 		new TestSCJ().performTest();
 	}
 
 	protected boolean includeFileInTest(String test) {
-		return test.endsWith(".java") && test.startsWith("TestSCJ");
+		return test.endsWith(".java") && test.startsWith("TestSCJSingle");  // TestSCJSingleRawMemory_IOPort1  TestSCJSingleRawMemory_MemoryMapped1  TestPrintStream TestHardWareObjectForByte
 	}
 
 }
+
+

@@ -1,9 +1,12 @@
 package test;
 
 import vm.ClockInterruptHandler;
+import vm.MachineFactory;
 import vm.Monitor;
+import vm.POSIX64BitMachineFactory;
 import vm.Process;
 import vm.Scheduler;
+import vm.VMTest;
 
 public class TestWaitNotify {
 
@@ -103,12 +106,14 @@ public class TestWaitNotify {
 
         private Process currentProcess;
         private SharedResource sr;
+		private MachineFactory mFactory;
 
-        public ProcessScheduler(Process putter, Process taker, Process mainProcess, SharedResource sr) {
+        public ProcessScheduler(Process putter, Process taker, Process mainProcess, SharedResource sr, MachineFactory mFactory) {
             this.putter = putter;
             this.taker = taker;
             this.mainProcess = mainProcess;
             this.sr = sr;
+            this.mFactory = mFactory;
             putter.initialize();
             taker.initialize();
             currentProcess = null;
@@ -169,33 +174,35 @@ public class TestWaitNotify {
 
         @Override
         public void notifyAll(Object target) {
-            // TODO Auto-generated method stub
-            
         }
+
+		@Override
+		public void terminated() {
+			mFactory.stopSystemTick();
+		}
     }
 
     public static void main(String[] args) {
-        SharedResource sr = new SharedResource();
+    	new POSIX64BitMachineFactory();
+    	SharedResource sr = new SharedResource();
         Process putter = new vm.Process(new Putter(sr), new int[1024]);
         Taker takerLogic = new Taker(sr);
         Process taker = new vm.Process(takerLogic, new int[1024]);
 
+        MachineFactory mFactory = new POSIX64BitMachineFactory();
         int[] sequencerStack = new int[1024];
         Process mainProcess = new vm.Process(null, null);
-        Scheduler scheduler = new ProcessScheduler(putter, taker, mainProcess, sr);
+        Scheduler scheduler = new ProcessScheduler(putter, taker, mainProcess, sr, mFactory);
 
         vm.ClockInterruptHandler.initialize(scheduler, sequencerStack);
         vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
 
-        clockHandler.register();
-        clockHandler.enable();
-        clockHandler.startClockHandler(mainProcess);
-        clockHandler.yield();
+        clockHandler.startClockHandler(mainProcess, mFactory);
 
         devices.Console.println("finished");
         if (!takerLogic.isError()) {
-            args = null;
+        	VMTest.markResult(false);
         }
-        args = null;
+        // VMTest.markResult(false);
     }
 }

@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestInvokeDynamic6 {
 
 	private static void print(String str)
@@ -28,6 +30,6 @@ public class TestInvokeDynamic6 {
 		
 		action.doIt();
 		
-		args = null;
+		VMTest.markResult(false);
 	}
 }

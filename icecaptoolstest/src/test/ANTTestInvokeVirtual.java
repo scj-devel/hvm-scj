@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class ANTTestInvokeVirtual {
 
@@ -17,9 +18,7 @@ public class ANTTestInvokeVirtual {
      */
     public static void main(String[] args) {
         boolean failure = test(new TempClass());
-        if (!failure) {
-            args = null;
-        }
+        VMTest.markResult(failure);
     }
 
     @IcecapCompileMe

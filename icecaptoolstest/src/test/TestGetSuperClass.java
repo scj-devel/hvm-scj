@@ -1,5 +1,6 @@
 package test;
 
+import vm.VMTest;
 
 public class TestGetSuperClass {
 
@@ -25,7 +26,7 @@ public class TestGetSuperClass {
                cl = cl.getSuperclass();
                if (cl == Object.class)
                {
-                   args = null;
+                   VMTest.markResult(false);
                }
            }
        }

@@ -3,14 +3,13 @@ package test;
 import reflect.HeapAccessor;
 import reflect.ObjectInfo;
 import vm.Address32Bit;
+import vm.VMTest;
 
 public class TestArrayTraversal2 {
 
     public static void main(String[] args) {
         boolean failed = test();
-        if (!failed) {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 
     private static class ArrayOverlay extends HeapAccessor {

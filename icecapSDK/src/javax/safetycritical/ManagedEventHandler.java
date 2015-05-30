@@ -25,12 +25,10 @@
  *************************************************************************/
 package javax.safetycritical;
 
-import javax.realtime.AbsoluteTime;
 import javax.realtime.BoundAsyncEventHandler;
-import javax.realtime.HighResolutionTime;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
-import javax.realtime.RelativeTime;
 import javax.realtime.ReleaseParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
@@ -61,6 +59,8 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 	PriorityParameters priority;
 	StorageParameters storage;
+	ConfigurationParameters config;
+	
 	Process process = null;
 	Mission mission = null;
 	
@@ -86,13 +86,15 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	 * @param release  specifies the release parameters.
 	 * @param storage  specifies the non-null maximum storage demands for this event handler.
 	 * 
-	 * @throws <code>IllegalArgumentException</code> if priority or release parameters are null.
+	 * @throws <code>IllegalArgumentException</code> if priority or release or storage parameters are null.
 	 */
-	/*public*/ ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, StorageParameters storage) {
-		this(priority, release, storage, null);
+	ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, 
+		StorageParameters storage, ConfigurationParameters config) {
+		this(priority, release, storage, config, null);
 	}
 
-	ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, StorageParameters storage,
+	ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, 
+			StorageParameters storage, ConfigurationParameters config,
 			String name) {
 		if (priority == null)
 			throw new IllegalArgumentException("priority is null");
@@ -103,6 +105,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		this.priority = priority;
 		this.release = release;
 		this.storage = storage;
+		this.config = config;
 		this.name = name;
 		this.mission = Mission.getMission();
 
@@ -110,7 +113,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 		if (mission == null && this instanceof MissionSequencer) {
 			backingStoreOfThisMemory = MemoryArea.getRemainingMemorySize();
-			currentMemory = ManagedMemory.ImmortalMemory.instance();
+			currentMemory = ImmortalMemory.instance();
 		} else {
 			backingStoreOfThisMemory = (int) this.storage.totalBackingStore;
 			if(mission !=null){
@@ -164,12 +167,6 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		return name;
 	}
 
-//	@SCJAllowed(Level.LEVEL_1)
-//	public AbsoluteTime getLastReleaseTime() {
-//		// ToDo: implementation
-//		return null;
-//	}
-
 	Mission getMission() {
 		return mission;
 	}
@@ -178,14 +175,8 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		this.name = name;
 	}
 	
-	// used for JML annotation only (not public)
 	PriorityParameters getPriorityParam() {
 		return priority;
-	}
-
-	// used for JML annotation only (not public)
-	ReleaseParameters getReleaseParam() {
-		return release;
 	}
 	
 	void setCurrentMemory(ManagedMemory current) {
@@ -200,190 +191,4 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		return set;
 	}
 	
-
-	static abstract class HandlerBehavior {
-
-		abstract void aperiodicHandlerRelease(AperiodicEventHandler handler);
-
-		abstract boolean oneshotHandlerDeschedule(OneShotEventHandler handler);
-
-		abstract void oneshotHandlerScheduleNextReleaseTime(OneShotEventHandler handler, HighResolutionTime time);
-
-		abstract void initMissionSequencer(MissionSequencer<?> handler);
-
-		abstract void cleanOuterMissionSequencer(MissionSequencer<?> handler);
-
-		abstract void missionSequencerSingleTermination(MissionSequencer<?> handler);
-
-		abstract void missionSequencerExecutePhase(MissionSequencer<?> handler);
-
-	}
-
-	static final class MulticoreBehavior extends HandlerBehavior {
-
-		@Override
-		void aperiodicHandlerRelease(AperiodicEventHandler handler) {
-			handler.fireNextRelease();
-			handler.isReleased = true;
-		}
-
-		@Override
-		boolean oneshotHandlerDeschedule(OneShotEventHandler handler) {
-			if (handler.process.executable.startTimer_c > 0 || handler.state == 0) {
-				handler.deschedulePending = true;
-				OSProcess.setTimerfd(handler.process.executable.startTimer_c, 0);
-				return false;
-			} else {
-				return true;
-			}
-		}
-
-		@Override
-		void oneshotHandlerScheduleNextReleaseTime(OneShotEventHandler handler, HighResolutionTime time) {
-			if (time == null)
-				handler.deschedule();
-			else {
-				if (time instanceof AbsoluteTime) {
-					handler.releaseTime = new RelativeTime(0, 0);
-				} else if (time instanceof RelativeTime) {
-					if (handler.releaseTime.getMilliseconds() < 0
-							|| (handler.releaseTime.getMilliseconds() == 0 && handler.releaseTime.getNanoseconds() < 0))
-						throw new IllegalArgumentException("release time < 0");
-					handler.releaseTime = time;
-				} else {
-					throw new IllegalArgumentException("wrong time form");
-				}
-
-				if (handler.state == 0) {
-					OSProcess.setTimerfd(handler.process.executable.startTimer_c, handler.getStart());
-				}
-				if (handler.state == 2) {
-					OSProcess.setTimerfd(handler.process.executable.startTimer_c, handler.getStart());
-					handler.fireNextRelease();
-				}
-			}
-
-		}
-
-		@Override
-		void initMissionSequencer(MissionSequencer<?> handler) {
-			if (MissionSequencer.isOuterMostSeq) {
-
-				MissionSequencer.outerMostSeq = handler;
-				MissionSequencer.isOuterMostSeq = false;
-
-				OSProcess.setOuterMostMissionSequencer(handler.priority.getPriority());
-				handler.set = Launcher.level == 1 ? findAffinitySetForLevel1()
-						: AffinitySet.AFFINITY_SET[0];
-			}
-
-		}
-		
-		private AffinitySet findAffinitySetForLevel1() {
-			int processor = OSProcess.getCurrentCPUID();
-			for (int i = 0; i < AffinitySet.AFFINITY_SET.length; i++) {
-				if (AffinitySet.AFFINITY_SET[i].processorSet[0] == processor) {
-					return AffinitySet.AFFINITY_SET[i];
-				}
-			}
-			throw new NullPointerException();
-		}
-
-		@Override
-		void cleanOuterMissionSequencer(MissionSequencer<?> handler) {
-
-		}
-
-		@Override
-		void missionSequencerSingleTermination(MissionSequencer<?> handler) {
-			handler.terminateSeq = true;
-			handler.currMission.requestTermination();
-		}
-
-		@Override
-		void missionSequencerExecutePhase(MissionSequencer<?> handler) {
-			handler.missionMemory.enterToExecute(handler.currMission);
-		}
-	}
-
-	static final class SinglecoreBehavior extends HandlerBehavior {
-
-		@Override
-		void aperiodicHandlerRelease(AperiodicEventHandler handler) {
-			PriorityScheduler.instance().release(handler);
-		}
-
-		@Override
-		boolean oneshotHandlerDeschedule(OneShotEventHandler handler) {
-			ManagedSchedulableSet hs = Mission.getMission().msSetForMission;
-
-			if (hs.contains(handler)) {
-				hs.removeMSObject(handler);
-				return true;
-			} else
-				return false;
-
-		}
-
-		@Override
-		void oneshotHandlerScheduleNextReleaseTime(OneShotEventHandler handler, HighResolutionTime time) {
-			// to be implement
-		}
-
-		@Override
-		void initMissionSequencer(MissionSequencer<?> handler) {
-			if (MissionSequencer.isOuterMostSeq) {
-				MissionSequencer.outerMostSeq = handler;
-				if (Launcher.level != 0) {
-					PriorityScheduler.instance().addOuterMostSeq(handler);
-				}
-			} else {
-				if (Launcher.level < 2)
-					throw new IllegalStateException("MissSeq not outer-most");
-				else
-					handler.outerSeq = Mission.getMission().currMissSeq;
-
-			}
-			MissionSequencer.isOuterMostSeq = false;
-			handler.lock = Monitor.getMonitor(handler);
-		}
-
-		@Override
-		void cleanOuterMissionSequencer(MissionSequencer<?> handler) {
-			if (Launcher.level == 2) {
-				devices.Console.println("MS.T: " + handler.name + "; #Missions: " + MissionSequencer.howManyMissions
-						+ "; outerSeq: " + handler.outerSeq);
-
-				vm.ClockInterruptHandler.instance.disable();
-				if (handler.outerSeq != null)
-					handler.outerSeq.currMission.msSetForMission.removeMSObject(handler);
-				vm.ClockInterruptHandler.instance.enable();
-			}
-		}
-
-		@Override
-		void missionSequencerSingleTermination(MissionSequencer<?> handler) {
-			vm.ClockInterruptHandler.instance.disable();
-			devices.Console.println("------ MS.signalTermination: " + handler.name);
-			handler.terminateSeq = true;
-			handler.currMission.requestTermination();
-			vm.ClockInterruptHandler.instance.enable();
-		}
-
-		@Override
-		void missionSequencerExecutePhase(MissionSequencer<?> handler) {
-			handler.missionMemory.enterToExecute(handler.currMission);
-
-			// the ms will wait here until it is notified
-			if (Launcher.level > 0) {
-				handler.seqWait();
-			} else {
-				while (!handler.currMission.terminationPending() && handler.currMission.msSetForMission.msCount > 0) {
-					vm.RealtimeClock.awaitNextTick();
-				}
-			}
-
-			
-		}
-	}
 }

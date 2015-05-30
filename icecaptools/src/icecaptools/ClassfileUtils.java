@@ -32,11 +32,11 @@ public class ClassfileUtils {
     public static int getSizeOfType(Type t) throws Exception {
         if (t == Type.BOOLEAN) {
             return 1;
-        } else if (t == Type.BYTE) {
+        } else if (t == Type.BYTE || t == Type.CHAR) {
             return 8;
         } else if (t == Type.SHORT) {
             return 16;
-        } else if (t == Type.CHAR || t == Type.INT || t == Type.FLOAT || t == Type.OBJECT || t.getType() == 13 /*
+        } else if (t == Type.INT || t == Type.FLOAT || t == Type.OBJECT || t.getType() == 13 /*
                                                                                                                 * array
                                                                                                                 * types
                                                                                                                 */|| t == Type.CLASS || t == Type.STRING || t == Type.STRINGBUFFER || t == Type.THROWABLE || t.getType() == 14) {

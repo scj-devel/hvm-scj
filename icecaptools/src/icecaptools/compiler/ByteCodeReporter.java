@@ -6,7 +6,8 @@ public class ByteCodeReporter {
 
     public static String reportUsedByteCodes(AnalysisObserver observer) {
         StringBuffer defines = new StringBuffer();
-
+        int bytecodecount = 0;
+        
         for (int i = 0; i < 255; i++) {
             String name = getName(i);
             if (name != null) {
@@ -15,9 +16,18 @@ public class ByteCodeReporter {
                     defines.append(getName(i).toUpperCase());
                     defines.append("_used ".toUpperCase());
                     defines.append("\n");
+                    bytecodecount++;
                 }
             }
         }
+        
+        for (int i = 0; i < 255; i++) {
+        	if (observer.isBytecodeUsed(i)) {
+        		bytecodecount++;
+            }
+        }
+        
+        defines.append("/* " + bytecodecount + " different bytecodes used */\n");
 
         return defines.toString();
     }
@@ -640,6 +650,9 @@ public class ByteCodeReporter {
             break;
         case 0xcd:
             name = "newflasharray_opcode";
+            break;
+        case 0xba:
+            name = "invokedynamic_opcode";
             break;
         }
         return name;

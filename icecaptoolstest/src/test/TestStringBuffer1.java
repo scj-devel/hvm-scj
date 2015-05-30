@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestStringBuffer1 {
     /*
      * private static class AbstractStringBuilder { protected char[] value1;
@@ -17,10 +19,10 @@ public class TestStringBuffer1 {
      * }
      */
     public static void main(String args[]) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
-	public static String[] test(String args[]) {
+	public static boolean test() {
 		StringBuffer buffer = new StringBuffer();
         buffer.append('H');
         buffer.append('e');
@@ -35,8 +37,8 @@ public class TestStringBuffer1 {
         buffer.append('!');
         
         if (buffer.length() == 11) {
-            return null;
+            return false;
         }
-        return args;
+        return true;
 	}
 }

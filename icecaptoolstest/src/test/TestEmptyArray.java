@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestEmptyArray {
 
     /**
@@ -10,7 +12,7 @@ public class TestEmptyArray {
         byte[] arr2 = new byte[0];
         if (arr1.length == 0) {
             if (arr2.length == 0) {
-                args = null;
+            	VMTest.markResult(false);
             }
         }
     }

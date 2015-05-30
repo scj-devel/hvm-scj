@@ -1,6 +1,7 @@
 package test;
 
 import thread.Thread;
+import vm.VMTest;
 import thread.Semaphore;
 
 public class TestSemaphore1 {
@@ -72,7 +73,7 @@ public class TestSemaphore1 {
         
         if (succeeded)
         {
-            args = null;
+        	VMTest.markResult(false);
         }
     }
 }

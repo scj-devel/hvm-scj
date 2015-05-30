@@ -43,7 +43,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  * @author Anders P. Ravn, Aalborg University, 
  * <A HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
  * Hans S&oslash;ndergaard, VIA University College, Denmark, 
- * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
+ * <A HREF="mailto:hso@via.dk">hso@via.dk</A>
  * 
  * @scjComment 
  */
@@ -76,15 +76,9 @@ public abstract class ReleaseParameters implements Cloneable {
 		ReleaseParameters clone = (ReleaseParameters) super.clone();
 		return clone;
 	}
-
-	// Used in JML annotations; also used in JML annotations in CyclicExecutive
-	RelativeTime getDeadline() {
-		return deadline;
-	}
-
-	// Used in JML annotations
-	AsyncEventHandler getMissHandler() //  /*@ spec_public @*/
-	{
-		return missHandler;
-	}
+	
 }
+
+
+
+

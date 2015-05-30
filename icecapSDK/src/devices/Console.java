@@ -1,50 +1,50 @@
 package devices;
 
+import util.StringUtil;
+
 public class Console {
 
-	private static final int DEFAULT_LENGTH = 512;  //256; //128; // HSO: June 2014
 	private static byte[] bytes;
 
-	static {
-		bytes = new byte[DEFAULT_LENGTH + 1];
-	}
-
 	public static Writer writer;
-	
-	static
-	{
-		writer = new X86Writer();
-	}
 
 	public static void println(String string) {
 		println(string, true);
 	}
 
 	private static void println(String string, boolean addNewLine) {
-		short length = (short) string.length();
-		if (addNewLine) {
-			length++;
-		}
-		getBytes(string, addNewLine);
+		short length = getBytes(string, addNewLine);
 		writer.write(bytes, length);
 	}
 
-	private static byte[] getBytes(String string, boolean addNewLine) {
-		int index = 0;
-		int length = string.length();
+	private static short getBytes(String string, boolean addNewLine) {
+		short index = 0;
+		short length = (short) string.length();
 
-		while ((index < length) && (index < DEFAULT_LENGTH - 1)) {
+		if (writer == null) {
+			writer = new DefaultWriter();
+		}
+
+		short maxLineLength = writer.getMaxLineLength();
+		
+		if (bytes == null) {
+			bytes = new byte[maxLineLength + 1];
+		}
+
+		while ((index < length) && (index < maxLineLength - 1)) {
 			bytes[index] = (byte) string.charAt(index);
 			index++;
 		}
+
 		if (addNewLine) {
 			bytes[index] = '\n';
+			index++;
 		}
-		return bytes;
+		return (short) index;
 	}
 
 	public static void print(long l) {
-		print("" + l);
+		print(StringUtil.constructString("", (int) l));
 	}
 
 	public static void print(String space) {
@@ -52,8 +52,6 @@ public class Console {
 	}
 
 	public static void println(int i) {
-		println("" + i);
-
+		println(StringUtil.constructString("", i));
 	}
-
 }

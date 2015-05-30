@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestStaticFieldTypes {
     static class StaticTypes{
         private static boolean boolVal = false;
@@ -40,10 +42,10 @@ public class TestStaticFieldTypes {
     }
 
     public static void main(String[] args) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		StaticTypes.setBoolVal(true);
         StaticTypes.setbVal((byte)255);
         StaticTypes.setsVal((short)65535);
@@ -57,8 +59,8 @@ public class TestStaticFieldTypes {
            StaticTypes.getlVal() == (long)0xCAFEBABECAFED00DL
             )
         {
-            return null;
+            return false;
         }
-        return args;
+        return true;
 	}
 }

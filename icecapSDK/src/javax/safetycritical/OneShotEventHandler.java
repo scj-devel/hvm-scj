@@ -28,6 +28,7 @@ package javax.safetycritical;
 import javax.realtime.AbsoluteTime;
 import javax.realtime.AperiodicParameters;
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.HighResolutionTime;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -83,29 +84,16 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	 * 
 	 *
 	 */
-	/*@ 
-	public normal_behavior
-	  requires priority != null && release  != null;
-	  ensures true; 
-	also
-	public exceptional_behavior
-	  requires priority == null;
-	  signals (IllegalArgumentException) true;
-	also
-	public exceptional_behavior
-	  requires release == null;
-	  signals (IllegalArgumentException) true;        
-	@*/
 	@SCJAllowed(Level.LEVEL_1)
 	@SCJRestricted(Phase.INITIALIZE)
 	public OneShotEventHandler(PriorityParameters priority, HighResolutionTime releaseTime,
-			AperiodicParameters release, StorageParameters storage) {
-		this(priority, releaseTime, release, storage, null);
+			AperiodicParameters release, StorageParameters storage, ConfigurationParameters config) {
+		this(priority, releaseTime, release, storage, config, null);
 	}
 	
 	OneShotEventHandler(PriorityParameters priority, HighResolutionTime releaseTime,
-			AperiodicParameters release, StorageParameters storage, String name) {
-		super(priority, release, storage, name);
+			AperiodicParameters release, StorageParameters storage, ConfigurationParameters config, String name) {
+		super(priority, release, storage, config, name);
 
 		if (releaseTime == null)
 			this.releaseTime = new RelativeTime(Clock.getRealtimeClock());

@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestLMul {
 
     public static void main(String[] args) {
@@ -16,7 +18,7 @@ public class TestLMul {
                 return;
             }
         }
-        args = null;
+        VMTest.markResult(false);
     }
 
     private static long lmul(int mx, int lx, int my, int ly) {

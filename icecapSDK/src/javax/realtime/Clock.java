@@ -60,7 +60,7 @@ import javax.safetycritical.annotate.SCJAllowed;
 @SCJAllowed
 public abstract class Clock {
 
-	protected static vm.RealtimeClock nativeClock = vm.RealtimeClock.getRealtimeClock();
+	protected static vm.RealtimeClock nativeClockInstance;
 
 	// The nominal interval between ticks.
 	protected RelativeTime resolution;
@@ -79,7 +79,7 @@ public abstract class Clock {
 	protected Clock(boolean active) {
 		this.active = active;
 
-		int granularity = nativeClock.getGranularity();
+		int granularity = nativeClock().getGranularity();
 
 		long millis = granularity / 1000000;
 		int nanos = granularity % 1000000;
@@ -87,6 +87,14 @@ public abstract class Clock {
 		resolution = new RelativeTime(millis, nanos);
 	}
 
+	protected vm.RealtimeClock nativeClock()
+	{
+		if (nativeClockInstance == null)
+		{
+			nativeClockInstance = vm.RealtimeClock.getRealtimeClock();
+		}
+		return nativeClockInstance;
+	}
 	/**
 	 * Returns the relative time of the offset of the epoch of this clock 
 	 * from the Epoch of the <code>RealtimeClock</code>.

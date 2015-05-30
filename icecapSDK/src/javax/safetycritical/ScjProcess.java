@@ -33,13 +33,14 @@
 package javax.safetycritical;
 
 import icecaptools.IcecapCompileMe;
+import util.StringUtil;
 
 import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
-import javax.safetycritical.ManagedMemory.ImmortalMemory;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -123,7 +124,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 			public void catchError(final Throwable t) {
 				exceptionReporter.t = t;
 				try {
-					ImmortalMemory immortal = ManagedMemory.ImmortalMemory.instance();
+					ImmortalMemory immortal = ImmortalMemory.instance();
 					if (immortal != null) {
 						immortal.executeInArea(exceptionReporter);
 					} else {
@@ -185,7 +186,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 	}
 
 	public String toString() {
-		return ("ScjProcess:" + msObject + " index: " + index);
+		return StringUtil.constructString("ScjProcess:" + msObject + " index: ", index);
 	}
 
 	/**
@@ -244,20 +245,26 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 	 */
 	static ScjProcess createIdleProcess() {
 		if (idleProcess == null) {
-
+			RelativeTime INFINITE_TIME = new RelativeTime(365 * 24 * 60 * 1000, 0, Clock.getRealtimeClock());
+			
 			PeriodicEventHandler peh = new PeriodicEventHandler(new PriorityParameters(Priorities.MIN_PRIORITY),
 					new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()), // start (0,0)
-							Const.INFINITE_TIME), // period
-					new StorageParameters(2 * Const.IDLE_BACKING_STORE, new long[] { Const.IDLE_PROCESS_STACK_SIZE },
-							2 * Const.IDLE_BACKING_STORE, 0, 0)) {
-				public void handleAsyncEvent() {
-					yield();
+							INFINITE_TIME), // period
+//					new StorageParameters(2 * Const.IDLE_BACKING_STORE, new long[] { Const.IDLE_PROCESS_STACK_SIZE },
+//							2 * Const.IDLE_BACKING_STORE, 0, 0)
+					new StorageParameters(2 * Const.IDLE_BACKING_STORE, 
+							2 * Const.IDLE_BACKING_STORE, 0, 0),
+					new ConfigurationParameters (null, -1, -1, new long[] { Const.IDLE_PROCESS_STACK_SIZE })
+					) 
+				{
+					public void handleAsyncEvent() {
+						yield();
 				}
 
 				@IcecapCompileMe
 				private void yield() {
 					while (true) {
-						RealtimeClock.awaitNextTick();
+						RealtimeClock.waitForNextTick();
 					}
 				}
 			};
@@ -276,7 +283,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 	}
 
 	String print() {
-		return ("name: " + this.msObject + " 	index: " + index);
+		return StringUtil.constructString("name: " + this.msObject + " 	index: ", index);
 	}
 
 	protected boolean nextState(PriorityFrame pFrame) {

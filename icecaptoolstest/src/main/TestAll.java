@@ -1,20 +1,5 @@
 package main;
 
-import icecaptools.CompilationSequence;
-import icecaptools.IcecapProgressMonitor;
-import icecaptools.MethodOrFieldDesc;
-import icecaptools.TestResourceManager;
-import icecaptools.compiler.CodeDetector;
-import icecaptools.compiler.DefaultIcecapCodeFormatter;
-import icecaptools.compiler.DefaultIcecapProgressMonitor;
-import icecaptools.compiler.DefaultIcecapSourceCodeLinker;
-import icecaptools.compiler.DefaultMethodObserver;
-import icecaptools.compiler.ICompilationRegistry;
-import icecaptools.compiler.NativeMethodDetector;
-import icecaptools.compiler.TestCompilationRegistry;
-import icecaptools.conversion.ConversionConfiguration;
-import icecaptools.launching.ShellCommand;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -22,7 +7,20 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+import icecaptools.CompilationSequence;
+import icecaptools.IcecapProgressMonitor;
+import icecaptools.TestResourceManager;
+import icecaptools.compiler.CodeDetector;
+import icecaptools.compiler.DefaultIcecapCodeFormatter;
+import icecaptools.compiler.DefaultIcecapProgressMonitor;
+import icecaptools.compiler.DefaultIcecapSourceCodeLinker;
+import icecaptools.compiler.DefaultMethodObserver;
+import icecaptools.compiler.NativeMethodDetector;
+import icecaptools.compiler.TestCompilationRegistry;
+import icecaptools.conversion.ConversionConfiguration;
+import icecaptools.launching.ShellCommand;
 import test.icecaptools.compiler.TestConversionConfiguration;
+import util.ICompilationRegistry;
 
 /*
  * To run the automated tests make sure that gcc is installed and can be 
@@ -98,7 +96,8 @@ public class TestAll {
 
 				ArrayList<String> testlist = new ArrayList<String>();
 				for (int i = 0; i < tests.length; i++) {
-					File candidate = new File(testsDirectory.getAbsolutePath() + File.separatorChar + (String) tests[i]);
+					File candidate = new File(
+							testsDirectory.getAbsolutePath() + File.separatorChar + (String) tests[i]);
 					if (candidate.isFile()) {
 						testlist.add((String) tests[i]);
 					}
@@ -146,14 +145,13 @@ public class TestAll {
 	}
 
 	protected boolean includeFileInTest(String test) {
-		return test.endsWith(".java");
+		return test.endsWith(".java"); // && (!test.contains("TestTCPConnection"));
 	}
 
 	private static String[] skippedClasses = { "TestSCJWaitAndNotify2.java", "TestSCJLevel2Thread0.java",
-			"TestSCJStep0.java",
-			/* "TestCalculator.java",
-			 "TestNewFloat.java",
-			 */"TestLong.java", "TestMiniTests.java", "TestCAS.java" };
+			"TestSCJStep0.java", /* "TestCalculator.java",
+									 "TestNewFloat.java",
+									 */"TestLong.java", "TestMiniTests.java", "TestCAS.java" };
 
 	// private static String[] skippedClasses = { /*"TestStackScan1.java",
 	// "TestReflectClasses2.java", "TestObjectTraversal.java", */
@@ -175,11 +173,24 @@ public class TestAll {
 	private static class CompileAllRegistry extends TestCompilationRegistry {
 
 		@Override
-		public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-			if (mdesc.getName().contains("main")) {
-				return false;
+		public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
+			boolean b = super.isMethodCompiled(clazz, targetMethodName, targetMethodSignature);
+			boolean result = false;
+
+			if (didICareHuh()) {
+				result = b;
+			} else if (targetMethodName.contains("main")) {
+				result = b;
+			} else if (clazz.contains("InvokeDynamic")) {
+				result = b;
+			} else if (clazz.contains("Thread")) {
+				result = b;
+			} else if (clazz.contains("Float")) {
+				result = b;
+			} else {
+				result = true;
 			}
-			return true;
+			return result;
 		}
 	}
 
@@ -228,9 +239,9 @@ public class TestAll {
 		// cregistry = new CompileAllRegistry();
 
 		CompilationSequence sequencer = new CompilationSequence();
-
+		config.setOutputFolder(outputFolder.toString());
 		sequencer.startCompilation(System.out, new DefaultMethodObserver(), config, new DefaultIcecapProgressMonitor(),
-				cregistry, outputFolder.toString(), true);
+				cregistry, true);
 
 		compileAndExecute(outputFolder, testClass, testNo);
 	}
@@ -247,7 +258,7 @@ public class TestAll {
 	private void compileAndExecute(File outputFolder, String testClass, int testNo) throws Exception {
 		String exe = "a" + testNo + ".exe";
 		String prefix = "sudo ";
-		String gccCommand = getGCCCommand() + exe;
+		String gccCommand = getGCCCommand(testClass) + exe;
 
 		/* Patmos, fails at TestCVar1.java */
 		// prefix = "pasim ";
@@ -309,9 +320,9 @@ public class TestAll {
 		}
 	}
 
-	protected String getGCCCommand() {
+	protected String getGCCCommand(String testClass) {
 		/* for 64 bit Linux */
-		String gccCommand = "gcc -Wall -pedantic -Os -DPC64 -DREF_OFFSET -DPRINTFSUPPORT -DSUPPORTGC -DJAVA_HEAP_SIZE=10240000 -L/usr/lib64 classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c native_scj.c print.c x86_64_interrupt.s -lpthread -lrt -lm -o ";
+		String gccCommand = "gcc -Wall -pedantic -Os -DPC64" + getPackedAttribute(testClass) + " -DREF_OFFSET -DPRINTFSUPPORT -DSUPPORTGC -DJAVA_HEAP_SIZE=10240000 -L/usr/lib64 classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c native_scj.c print.c x86_64_interrupt.s -lpthread -lrt -lm -o ";
 
 		/* for 32 bit Linux */
 		//String gccCommand =
@@ -331,6 +342,18 @@ public class TestAll {
 
 		// prefix = "pasim ";
 		return gccCommand;
+	}
+
+	private String getPackedAttribute(String testClass) {
+		if (testClass.contains("TestGC1"))
+		{
+			return " -DPACKED=";
+		}
+		else
+		{
+			return "";
+		}
+		
 	}
 
 	private static void deleteIfExists(File outputFolder, String name) throws Exception {

@@ -2,6 +2,7 @@ package test;
 
 import icecaptools.IcecapCompileMe;
 import icecaptools.IcecapVolatile;
+import vm.VMTest;
 
 public class TestJavaLangThread3 extends Thread {
 
@@ -14,9 +15,7 @@ public class TestJavaLangThread3 extends Thread {
      */
     public static void main(String[] args) {
         boolean failure = test();
-        if (!failure) {
-            args = null;
-        }
+        VMTest.markResult(failure);
     }
     
     

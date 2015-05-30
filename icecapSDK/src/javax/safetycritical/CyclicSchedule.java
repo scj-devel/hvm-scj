@@ -51,7 +51,11 @@ public final class CyclicSchedule {
 	 * 
 	 * @param frames is the frame array.
 	 */
-	public CyclicSchedule(Frame[] frames) throws IllegalArgumentException {
+	public CyclicSchedule(Frame[] frames) 
+			throws IllegalArgumentException, IllegalStateException {
+		
+		if (Launcher.level != 0) 
+			throw new IllegalStateException("level is not 0");
 		if (frames == null)
 			throw new IllegalArgumentException("frames is null");
 		// frames != null:

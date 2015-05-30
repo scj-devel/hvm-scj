@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class AOTTestInvokeSpecial5 {
 
@@ -23,11 +24,11 @@ public class AOTTestInvokeSpecial5 {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
     @IcecapCompileMe
-    private static String[] test(String[] args) {
+    private static boolean test() {
         try
         {
             foo(42);
@@ -38,11 +39,11 @@ public class AOTTestInvokeSpecial5 {
                {
                    if (ex.getX() == 43)
                    {
-                       return null;
+                       return false;
                    }
                }
         }
-        return args;
+        return true;
     }
 
     private static void foo(int i) throws MyException {

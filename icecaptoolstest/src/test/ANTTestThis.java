@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class ANTTestThis {
 
@@ -31,9 +32,11 @@ public class ANTTestThis {
      */
     public static void main(String[] args) {
         ANTTestThis obj = new ANTTestThis();
+        boolean failure = true;
         if (obj.bar())
         {
-            args = null;
+        	failure = false;
         }
+        VMTest.markResult(failure);
     }
 }

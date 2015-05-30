@@ -1,15 +1,13 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class TestDownload1 {
 
 	public static void main(String[] args) {
 		int sum = test1() + test2();
-		if (sum == 42)
-		{
-			args = null;
-		}
+		VMTest.markResult(sum != 42);
 	}
 
 	@IcecapCompileMe

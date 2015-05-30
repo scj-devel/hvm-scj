@@ -26,9 +26,6 @@
 
 package javax.scj.util;
 
-import javax.realtime.Clock;
-import javax.realtime.RelativeTime;
-
 /**
  * Utility class with constants.
  * 
@@ -54,7 +51,6 @@ public final class Const {
 
 	/* Memories */
 
-	// New
 	public static final int OVERALL_BACKING_STORE_DEFAULT = 802 * 1000;
 	public static final int IDLE_BACKING_STORE_DEFAULT = 2 * 1000;
 	public static final int IMMORTAL_MEM_DEFAULT = 100 * 1000;
@@ -76,29 +72,19 @@ public final class Const {
 	public static int PRIVATE_BACKING_STORE = PRIVATE_BACKING_STORE_DEFAULT;
 	public static int PRIVATE_MEM = PRIVATE_MEM_DEFAULT;
 
-	// Old
-
-	//	public static final int BACKING_STORE_SIZE_DEFAULT = 800 * 1000;
-	//	public static final int IMMORTAL_MEM_SIZE_DEFAULT = 100 * 1000;
-	//	public static final int MISSION_MEM_SIZE_DEFAULT = 200 * 1000;
-	//	public static final int PRIVATE_MEM_SIZE_DEFAULT = 40 * 1000;
-	//	
-	//	public static int BACKING_STORE_SIZE = BACKING_STORE_SIZE_DEFAULT;
-	//	public static int IMMORTAL_MEM_SIZE = IMMORTAL_MEM_SIZE_DEFAULT;
-	//	public static int MISSION_MEM_SIZE = MISSION_MEM_SIZE_DEFAULT;
-	//	public static int PRIVATE_MEM_SIZE = PRIVATE_MEM_SIZE_DEFAULT;
-
 	/* Stacks */
 
 	public static final int STACK_UNIT = 1024; // 256
 
 	public static final int PRIORITY_SCHEDULER_STACK_SIZE_DEFAULT = 1 * STACK_UNIT; // 2*1024
+	public static final int CYCLIC_SCHEDULER_STACK_SIZE_DEFAULT = 2 * STACK_UNIT;;
 	public static final int IDLE_PROCESS_STACK_SIZE_DEFAULT = STACK_UNIT; // 1*256;
 	public static final int HANDLER_STACK_SIZE_DEFAULT = 2 * STACK_UNIT; // 2*1024
 
 	public static int PRIORITY_SCHEDULER_STACK_SIZE = PRIORITY_SCHEDULER_STACK_SIZE_DEFAULT; // 2*1024
 	public static int IDLE_PROCESS_STACK_SIZE = IDLE_PROCESS_STACK_SIZE_DEFAULT;
 	public static int HANDLER_STACK_SIZE = HANDLER_STACK_SIZE_DEFAULT; // 2*1024
+	public static int CYCLIC_SCHEDULER_STACK_SIZE = CYCLIC_SCHEDULER_STACK_SIZE_DEFAULT;
 
 	/* Queues */
 
@@ -113,6 +99,12 @@ public final class Const {
 	public static int DEFAULT_PRIORITY_QUEUE_SIZE = DEFAULT_PRIORITY_QUEUE_SIZE_DEFAULT;
 	public static int DEFAULT_SLEEPING_QUEUE_SIZE = DEFAULT_PRIORITY_QUEUE_SIZE_DEFAULT;
 
+	/* IO */
+	
+	public static final int DEFAULT_CONNECTION_FACTORY_NUMBER = 10; 
+	
+	/* Other constants */
+	
 	public static SCJErrorReporter reporter;
 
 	static {
@@ -123,12 +115,17 @@ public final class Const {
 		reporter = new DefaultSCJErrorReporter();
 	}
 
+	/* Dont re-add these definitions. They get loaded even though the program never use them.
+	 * 
+	 * This leaks dependencies and memory.
+	 *
 	public static final RelativeTime DEFAULT_TIME_INTERVAL = new RelativeTime(1, 0, null); // one millis
 
 	public static final RelativeTime INFINITE_TIME = new RelativeTime(365 * 24 * 60 * 1000, 0, Clock.getRealtimeClock()); // 365*24*60
 																															// secs = 1 year
 
 	public static final RelativeTime SUSPEND_TIME = new RelativeTime(0, 100 * 1000, null); // 100 micro_secs
+	*/
 
 	public static final boolean TESTING = true;
 
@@ -139,7 +136,6 @@ public final class Const {
 	public static final int PRIVATE_MEM_LEVEL = 4;
 
 	public static final int PRIORITY_SCHEDULING = 1;
-
 	public static int MEMORY_TRACKER_AREA_SIZE = 15000;
 
 }

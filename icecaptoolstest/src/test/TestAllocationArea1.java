@@ -1,6 +1,7 @@
 package test;
 
 import vm.Memory;
+import vm.VMTest;
 
 public class TestAllocationArea1 {
 
@@ -11,14 +12,14 @@ public class TestAllocationArea1 {
      */
     public static void main(String[] args) {
         boolean failed = test();
-        if (!failed) {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 
     public static boolean test() {
         Memory mainArea = Memory.getHeapArea();
 
+        devices.Console.println("TestAllocationArea1");
+        
         int start = Memory.allocateInHeap(SCRATCHPADSTORESIZE).getBase();
 
         Memory scratchPadStore = new Memory(start, SCRATCHPADSTORESIZE, "scratchPadStore");

@@ -50,6 +50,8 @@ public interface AnalysisObserver extends MethodObserver {
     void classInitializerUsed(String className);
 
     Iterator<String> getUsedClassInitializers();
+    
+    int getNumberOfUsedClassInitializers();
 
     void registerCFunc(String className, String name, String signature, IcecapCFunc cfunc);
 

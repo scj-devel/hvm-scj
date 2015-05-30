@@ -1,12 +1,14 @@
 package test;
 
+import vm.VMTest;
+
 public class TestArrayOfLongs {
     public static void main(String args[])
     {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-    public static String[] test(String args[]) {
+    public static boolean test() {
         long[] array = new long[2];
         array[0] = 0x1122334455667788L;
         array[1] = 0x1122334455667788L;
@@ -15,9 +17,9 @@ public class TestArrayOfLongs {
         {
             if (array[1] == 0x1122334455667788L)
             {
-                return null;
+                return false;
             }
         }
-        return args;
+        return true;
     }
 }

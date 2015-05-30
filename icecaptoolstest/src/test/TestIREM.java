@@ -1,11 +1,13 @@
 package test;
 
+import vm.VMTest;
+
 public class TestIREM {
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-    private static String[] test(String[] args) {
+    private static boolean test() {
         int x = 13;
         int y = 3;
         x = x % y;
@@ -17,9 +19,9 @@ public class TestIREM {
             try {
                 x = x % 0;
             } catch (ArithmeticException ex) {
-                return null;
+                return false;
             }
         }
-        return args;
+        return true;
     }
 }

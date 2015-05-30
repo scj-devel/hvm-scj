@@ -140,7 +140,7 @@ public abstract class CyclicExecutive extends Mission {
 
 	private void waitForNextFrame(RelativeTime duration) {
 		next.add(duration, next);
-		vm.RealtimeClock.delayNativeUntil(next);
+		vm.RealtimeClock.delayUntilTime(next);
 	}
 
 	// Used in feasible below

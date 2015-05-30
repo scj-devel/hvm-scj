@@ -4,8 +4,6 @@ import javax.scj.util.Const;
 
 import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
-import devices.CR16C.KT4585.CR16CInterruptDispatcher;
-import devices.i86.I86InterruptDispatcher;
 
 /* Add setScheduler(Scheduler sch)  */
 public class ClockInterruptHandler implements InterruptHandler, ProcessLogic {
@@ -68,15 +66,6 @@ public class ClockInterruptHandler implements InterruptHandler, ProcessLogic {
 
 	@IcecapCompileMe
 	public static void initialize(Scheduler scheduler, int[] stack) {
-		switch (Machine.architecture) {
-		case Machine.X86_64:
-		case Machine.X86_32:
-			I86InterruptDispatcher.init();
-			break;
-		case Machine.CR16_C:
-			CR16CInterruptDispatcher.init();
-			break;
-		}
 		instance = new ClockInterruptHandler(scheduler, stack);
 	}
 
@@ -90,8 +79,13 @@ public class ClockInterruptHandler implements InterruptHandler, ProcessLogic {
 				.registerHandler(this, InterruptDispatcher.HVM_CLOCK);
 	}
 
-	public void startClockHandler(Process process) {
+	public void startClockHandler(Process process, MachineFactory mFactory) {
+		mFactory.initInterrupts();
+		register();
+		enable();
 		this.currentProcess = process;
+		mFactory.startSystemTick();
+		yield();
 	}
 
 	public void setScheduler(Scheduler sch) {
@@ -103,6 +97,5 @@ public class ClockInterruptHandler implements InterruptHandler, ProcessLogic {
 			Monitor.wait(null);
 			Monitor.notifyAll(null);
 		}
-		Machine.setCurrentScheduler(sch);
 	}
 }

@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestTableSwitch {
     private static final int CONSTANT_Class = 7;
     private static final int CONSTANT_Fieldref = 9;
@@ -14,10 +16,10 @@ public class TestTableSwitch {
     private static final int CONSTANT_Utf8 = 1;
 
     public static void main(String[] args) throws Exception {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) throws Exception {
+	public static boolean test() throws Exception {
 		byte tag = CONSTANT_Utf8;
         switch (tag) {
         case CONSTANT_Class:
@@ -57,7 +59,7 @@ public class TestTableSwitch {
                 case CONSTANT_NameAndType:
                     throw new Exception("CONSTANT_NameAndType unimplemented");
                 }
-                return null;
+                return false;
             }
         default:
             throw new Exception("Unexpected tag: " + tag);

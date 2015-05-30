@@ -2,6 +2,7 @@ package test;
 
 import icecaptools.IcecapCompileMe;
 import thread.Thread;
+import vm.VMTest;
 
 public class TestThread2 {
     private static class Counter
@@ -63,7 +64,7 @@ public class TestThread2 {
         }
 
         if (counter.getCount() == 42000) {
-            args = null;
+        	VMTest.markResult(false);
         }
 
         devices.Console.println("got count = " + counter.getCount());

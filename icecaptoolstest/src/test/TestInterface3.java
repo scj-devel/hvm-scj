@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class TestInterface3 {
 
@@ -28,7 +29,7 @@ public class TestInterface3 {
 
     public static void main(String[] args) {
         if (!test()) {
-            args = null;
+            VMTest.markResult(false);
         }
     }
 

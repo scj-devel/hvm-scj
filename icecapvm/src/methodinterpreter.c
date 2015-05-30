@@ -17,7 +17,10 @@
 extern ClassInfo *classes;
 extern MethodInfo *methods;
 extern ConstantInfo *constants;
+
+#if defined(PUTSTATIC_OPCODE_USED) || defined(GETSTATIC_OPCODE_USED)
 extern unsigned char *classData;
+#endif
 
 extern Object* getClass(unsigned short classIndex);
 
@@ -48,7 +51,7 @@ unsigned char getElementSize(unsigned short classIndex);
 int32 imul(int32 a, int32 b) _NOINLINE_;
 #endif
 
-#if (defined(PC64) || defined(PC32) || defined(CR16C)) && defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
+#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
 extern int16 yieldToScheduler(int32 *sp);
 #endif
 
@@ -112,7 +115,7 @@ void handleLongOperator(unsigned char code, int32* sp) _NOINLINE_;
 static void handleLNEG(int32* sp) _NOINLINE_;
 #endif
 
-#if defined(NEW_OPCODE_USED)
+#if defined(NEW_OPCODE_USED) || defined(INVOKEDYNAMIC_OPCODE_USED)
 static unsigned char handleNew(int32* sp, unsigned char *method_code) _NOINLINE_;
 #endif
 
@@ -183,8 +186,13 @@ signed char handleCloneOnArray(int32* sp)
 _NOINLINE_;
 #endif
 void handleLSHL(int32* sp) _NOINLINE_;
+
+#if defined(LSHR_OPCODE_USED) || defined(LUSHR_OPCODE_USED)
 void handleLSHR(int32* sp) _NOINLINE_;
+#endif
+#if defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED) || defined(N_VM_REALTIMECLOCK_DELAYNATIVEUNTIL)
 unsigned char handleLMULLDIVLREM(int32* sp, unsigned char code) _NOINLINE_;
+#endif
 static int32* pushStackFrame(unsigned short maxLocals,
 		unsigned short currentMethodNumber, unsigned short pc, int32* fp,
 		int32* sp);
@@ -680,7 +688,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			unsigned char branchbyte2 = pgm_read_byte(method_code + 2);
 			signed short int offset = (signed short int) ((branchbyte1 << 8)
 					| branchbyte2);
-#if (defined(PC64) || defined(PC32) || defined(CR16C)) && defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
+#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
 			if (offset <= 0) {
 				yieldToScheduler(sp);
 			}
@@ -1388,7 +1396,16 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 				continue;
 			}
 #endif
-
+#if defined(D2I_OPCODE_USED)
+			case D2I_OPCODE: {
+				double d = *(double*) (sp - 2);
+				sp -= 2;
+				*(int32*) sp = (int32) d;
+				sp += 1;
+				method_code++;
+				continue;
+			}
+#endif
 #if defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED)
 		case LREM_OPCODE:
 		case LDIV_OPCODE:
@@ -1731,7 +1748,7 @@ static void lshl(uint32* xmsb, uint32* xlsb, unsigned char value) {
 }
 #endif
 
-#if defined(LSHR_OPCODE_USED) || defined(LUSHR_OPCODE_USED) || defined(HANDLELSHR_USED) || defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED) || defined(N_VM_REALTIMECLOCK_GETNATIVERESOLUTION) || defined(N_VM_REALTIMECLOCK_GETNATIVETIME)
+#if defined(LSHR_OPCODE_USED) || defined(LUSHR_OPCODE_USED) || defined(HANDLELSHR_USED) || defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED) || defined(N_VM_REALTIMECLOCK_GETNATIVERESOLUTION) || defined(N_VM_REALTIMECLOCK_GETNATIVETIME) || defined(N_VM_REALTIMECLOCK_DELAYNATIVEUNTIL)
 static void lshr(uint32* msi, uint32* lsi, unsigned char value) {
 	unsigned int carry;
 	if (value > 31) {
@@ -1861,8 +1878,8 @@ unsigned char* createArrayFromElementSize(unsigned short classIndex,
 
 #if defined(IREM_OPCODE_USED) || defined(IDIV_OPCODE_USED) || defined(IDIV_USED) || defined(IMOD_USED)
 int32 idiv(int32 x, int32 y) {
-	int result = 0;
-	unsigned int k, sum;
+	int32 result = 0;
+	uint32 k, sum;
 	unsigned char isMinus;
 
 	if (x < 0) {
@@ -2193,7 +2210,7 @@ extern int16 vm_Monitor_getDefaultMonitor(int32 *sp);
 unsigned char handleNewClassIndex(int32* sp, unsigned short classIndex) {
 	unsigned short dobjectSize, pobjectSize;
 	Object* object;
-	unsigned char hasLock = classes[classIndex].hasLock;
+	unsigned char hasLock = pgm_read_byte(&classes[classIndex].hasLock);
 
 	dobjectSize = pgm_read_word(&classes[classIndex].dobjectSize) >> 3;
 	pobjectSize = pgm_read_word(&classes[classIndex].pobjectSize) >> 3;
@@ -2270,7 +2287,7 @@ static unsigned char handleMultianewarray(int32* sp, unsigned char *method_code)
 }
 #endif
 
-#if defined(NEW_OPCODE_USED)
+#if defined(NEW_OPCODE_USED) || defined(INVOKEDYNAMIC_OPCODE_USED)
 static unsigned char handleNew(int32* sp, unsigned char *method_code) {
 	unsigned short classIndex;
 
@@ -3023,7 +3040,7 @@ unsigned char handleLDCWithIndex(int32* sp, unsigned short index) {
 }
 #endif
 
-#if defined(N_VM_REALTIMECLOCK_GETNATIVERESOLUTION) || defined(N_VM_REALTIMECLOCK_GETNATIVETIME) || defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED)
+#if defined(N_VM_REALTIMECLOCK_GETNATIVERESOLUTION) || defined(N_VM_REALTIMECLOCK_GETNATIVETIME) || defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED) || defined(N_VM_REALTIMECLOCK_DELAYNATIVEUNTIL)
 static unsigned char sign(int32* msb, int32* lsb, signed char s) {
 	if (*msb < 0) {
 		neg((uint32*) msb, (uint32*) lsb);
@@ -3132,7 +3149,7 @@ void handleLSHR(int32* sp) {
 }
 #endif
 
-#if defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED) || defined(N_VM_REALTIMECLOCK_GETNATIVERESOLUTION) || defined(N_VM_REALTIMECLOCK_GETNATIVETIME)
+#if defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED) || defined(N_VM_REALTIMECLOCK_GETNATIVERESOLUTION) || defined(N_VM_REALTIMECLOCK_GETNATIVETIME) || defined(N_VM_REALTIMECLOCK_DELAYNATIVEUNTIL)
 int32 lmul32(int32* sp, uint32 xmsb, uint32 xlsb, uint32 ymsb, uint32 ylsb) {
 	uint32 rmsb = 0, rlsb = 0;
 

@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestMultiArray2 {
 
     /**
@@ -11,7 +13,7 @@ public class TestMultiArray2 {
         failed |= test2();
 
         if (!failed) {
-            args = null;
+        	VMTest.markResult(false);
             //System.out.println ("Not failed");
             devices.Console.println ("Not failed");
         }

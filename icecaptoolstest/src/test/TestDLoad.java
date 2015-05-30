@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestDLoad {
 
     /**
@@ -7,10 +9,7 @@ public class TestDLoad {
      */
     public static void main(String[] args) {
         boolean failed = test();
-        if (!failed)
-        {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 
     @SuppressWarnings("unused")

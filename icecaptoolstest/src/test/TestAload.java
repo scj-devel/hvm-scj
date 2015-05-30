@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestAload {
 
     private static class A
@@ -10,18 +12,19 @@ public class TestAload {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
     @SuppressWarnings("unused")
-    public static String[] test(String[] args) {
+    public static boolean test() {
         int x, y, z, a, b, c;
         A object = new A();
         A object1 = object;
+        
         if (object1 == object)
         {
-            return null;
+            return false;
         }
-        return args;
+        return true;
     }
 }

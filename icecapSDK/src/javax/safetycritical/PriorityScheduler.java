@@ -26,6 +26,7 @@
 package javax.safetycritical;
 
 import icecaptools.IcecapCompileMe;
+import vm.MachineFactory;
 
 import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
@@ -59,7 +60,7 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 	RelativeTime timeGrain;
 	AbsoluteTime now;
 
-	private static PriorityScheduler scheduler = new PriorityScheduler();
+	private static PriorityScheduler scheduler; 
 
 	ScjProcess outerMostSeqProcess = null;
 
@@ -75,9 +76,12 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 	  @*/
 	@SCJAllowed(Level.LEVEL_1)
 	public static PriorityScheduler instance() {
-		//		if (scheduler == null) {
-		//			scheduler = new PriorityScheduler();
-		//		}
+		/* Do not remove lines below to change initialization of the 
+		 * PriorityScheduler. This will break a lot of tests.
+		 */
+		if (scheduler == null) {
+			scheduler = new PriorityScheduler();
+		}
 		return scheduler;
 	}
 
@@ -107,26 +111,13 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 		pFrame.addProcess(process);
 	}
 
-	private vm.Process mainProcess;
-
-	private void processStart() {
-		vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
-		mainProcess = new vm.Process(null, null);
-
-		clockHandler.register();
-		clockHandler.enable();
-		clockHandler.startClockHandler(mainProcess);
-		clockHandler.yield();
+    void stop(vm.Process current) {
+		terminateScheduler(current);
 	}
 
-	@IcecapCompileMe
-	void stop(vm.Process current) {
-		current.transferTo(mainProcess);
-	}
-
-	void start() {
+	void start(MachineFactory mFactory) {
 		current = pFrame.readyQueue.extractMax();
-		processStart();
+		startScheduler(mFactory);
 	}
 
 	void release(AperiodicEventHandler handler) {

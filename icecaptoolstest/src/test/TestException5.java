@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestException5 {
 
     private static class TestRunner {
@@ -38,7 +40,7 @@ public class TestException5 {
         tr.runBare();
         if (tr.x == 43)
         {
-            args = null;
+            VMTest.markResult(false);
         }
     }
 }

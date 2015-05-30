@@ -8,7 +8,7 @@
 #ifndef OSTYPES_H_
 #define OSTYPES_H_
 
-#define MS_10 10000000
+#define MS_10 1000000
 
 /*x86*/
 

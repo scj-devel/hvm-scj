@@ -3,6 +3,8 @@ package test;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import vm.VMTest;
+
 public class TestReflectMethod1 {
 
     private static class A
@@ -28,7 +30,7 @@ public class TestReflectMethod1 {
         Method m = cl.getMethod("foo", types);
         Integer x = (Integer) m.invoke(b, new Integer(32));
         if (x == b.foo(32)) {
-            args = null;
+        	VMTest.markResult(false);
         }
     }
 }

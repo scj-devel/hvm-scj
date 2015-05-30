@@ -42,10 +42,9 @@ import javax.safetycritical.annotate.SCJAllowed;
 @SCJAllowed
 public final class StorageParameters extends javax.realtime.MemoryParameters {
 
+	private static final long serialVersionUID = 123456789987654101L;
+	
 	long totalBackingStore;
-	long[] configurationSizes;
-	int messageLength;
-	int stackTraceLength;
 	long maxMissionMemory;
 
 	/**
@@ -59,35 +58,11 @@ public final class StorageParameters extends javax.realtime.MemoryParameters {
 	 *   The array passed in is not stored in the object. <p>
 	 */
 	@SCJAllowed
-	public StorageParameters(long totalBackingStore, long[] sizes, int messageLength, int stackTraceLength,
-			long maxMemoryArea, long maxImmortal, long maxMissionMemory) {
-		super(maxMemoryArea, maxImmortal);
-		this.totalBackingStore = totalBackingStore;
-		this.configurationSizes = sizes;
-		this.messageLength = messageLength;
-		this.stackTraceLength = stackTraceLength;
-		this.maxMissionMemory = maxMissionMemory;
-	}
-
-	/**
-	 * 
-	 * @param totalBackingStore size of the backing store reservation for 
-	 *   worst-case scope usage by the associated <code> ManagedSchedulable</code> object, in bytes
-	 * 
-	 * @param sizes is an array of parameters for configuring VM resources 
-	 *   such as native stack or java stack size. The meanings of the entries
-	 *   in the array are vendor specific.
-	 *   The array passed in is not stored in the object. <p>
-	 */
-	@SCJAllowed
-	public StorageParameters(long totalBackingStore, long[] sizes, long maxMemoryArea, long maxImmortal,
+	public StorageParameters(long totalBackingStore, long maxMemoryArea, long maxImmortal,
 			long maxMissionMemory) {
 		super(maxMemoryArea, maxImmortal);
 
 		this.totalBackingStore = totalBackingStore;
-		this.configurationSizes = sizes;
-		this.messageLength = 0; // or a default value like 128?
-		this.stackTraceLength = 0; // or a default value ?
 		this.maxMissionMemory = maxMissionMemory;
 	}
 
@@ -103,9 +78,13 @@ public final class StorageParameters extends javax.realtime.MemoryParameters {
 	long getBackingStoreSize() {
 		return totalBackingStore;
 	}
+	
+	//used in JML annotation only (not public)
+	long getMaxMissionMemory() {
+		return maxMissionMemory;
+	}
 
-	//	//used in JML annotation only (not public)
-	//	long[] getConfigurationSizes() {
-	//		return configurationSizes;
-	//	}
 }
+
+
+

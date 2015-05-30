@@ -7,8 +7,8 @@
 uint32 heap[JAVA_HEAP_SIZE >> 2];
 #ifdef REF_OFFSET
 extern void printStr(const char* str);
-long heap_base;
 #endif
+long heap_base;
 
 #ifdef FLASHSUPPORT
 extern const unsigned char pheap[PHEAP_SIZE] PROGMEM;
@@ -55,6 +55,7 @@ void initDefaultRAMAllocationPoint() {
 		for (;;);
 	}
 #else
+	heap_base = 0;
 	currentMemoryArea->base = (uint32) (pointer) &heap[0]; /* base */
 #endif
 	currentMemoryArea->size = JAVA_HEAP_SIZE; /* size */
@@ -82,6 +83,19 @@ void initDefaultRAMAllocationPoint() {
 int16 n_vm_HVMHeap_getHeapStart(int32 *sp)
 {
 	sp[0] = (int32)(pointer)HEAP_UNREF(&heap[0], pointer);
+	return -1;
+}
+#endif
+
+#if defined(N_VM_MEMORY_GETHEAPBASE)
+/* getHeapStart
+ * param :
+ * return: int
+ */
+int16 n_vm_Memory_getHeapBase(int32 *sp)
+{
+	sp[1] = heap_base;
+	sp[0] = heap_base >> 32;
 	return -1;
 }
 #endif

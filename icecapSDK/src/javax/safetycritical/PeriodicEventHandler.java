@@ -25,8 +25,10 @@
  *************************************************************************/
 package javax.safetycritical;
 
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
+
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
@@ -47,18 +49,11 @@ import javax.safetycritical.annotate.SCJAllowed;
  *         HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
  *         Hans S&oslash;ndergaard, VIA University College, Denmark, <A
  *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
- * 
- * @scjComment 
- *   - SCJ issue: One constructor only. <br>
- *   - SCJ issue: SCJ Draft says: constructor: param storage -> It must not be <code>null</code>. <br>
- *       An <code>IllegalArgumentException</code> is thrown if storage is null.
- *       But <code>ManagedEventHandler</code> does not require an 
- *       <code>IllegalArgumentException</code> thrown if storage is null.
- *       It only specifies: a non-null maximum storage. This can be satisfied by implementing:
- *       if storage parameter is null, a default value is given. <br>
+ *
  */
 @SCJAllowed
 public abstract class PeriodicEventHandler extends ManagedEventHandler {
+	
 	PeriodicParameters releaseP;
 	
 	/** 
@@ -77,13 +72,15 @@ public abstract class PeriodicEventHandler extends ManagedEventHandler {
 	 * 
 	 * @throws IllegalArgumentException if priority, release or storage is null.
 	 */
-	public PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, StorageParameters storage) {
-		this(priority, release, storage, null);
+	public PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, 
+			StorageParameters storage, ConfigurationParameters config) {
+		this(priority, release, storage, config, null);
 	}
 
-	PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
+	public PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, 
+			StorageParameters storage, ConfigurationParameters config,
 			String name) {
-		super(priority, release, storage, name);
+		super(priority, release, storage, config, name);
 		releaseP = release;
 	}
 
@@ -100,4 +97,7 @@ public abstract class PeriodicEventHandler extends ManagedEventHandler {
 		return releaseP.getPeriod().getNanoseconds() + releaseP.getPeriod().getMilliseconds()
 				* 1000000;
 	}
+	
 }
+
+

@@ -2,6 +2,8 @@ package test;
 
 import java.util.ArrayList;
 
+import vm.VMTest;
+
 public class TestInvokeVirtual1 {
 
     private abstract static class Polygon {
@@ -52,10 +54,10 @@ public class TestInvokeVirtual1 {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-    public static String[] test(String[] args) {
+    public static boolean test() {
         ArrayList<Polygon> figures = new ArrayList<Polygon>();
         figures.add(new Square(2));
         figures.add(new Rectangle(2, 3));
@@ -66,10 +68,9 @@ public class TestInvokeVirtual1 {
             sum += polygon.area();
         }
         if (sum == 37) {
-            return null;
+            return false;
         } else {
-            return args;
+            return true;
         }
     }
-
 }

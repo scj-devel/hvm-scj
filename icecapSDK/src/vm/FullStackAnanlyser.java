@@ -1,5 +1,8 @@
 package vm;
 
+import icecaptools.IcecapCompileMe;
+import util.StringUtil;
+
 public class FullStackAnanlyser implements StackAnalyser {
 
 	private int numberOfStacksCreated;
@@ -12,10 +15,16 @@ public class FullStackAnanlyser implements StackAnalyser {
 
 	@Override
 	public void addStack(int[] stack) {
+		addStack(stack, true);
+	}
+
+	private void addStack(int[] stack, boolean clear) {
 		if (stack != null) {
 			if (numberOfStacksCreated < stacks.length) {
-				for (short index = 0; index < stack.length; index++) {
-					stack[index] = index;
+				if (clear) {
+					for (short index = 0; index < stack.length; index++) {
+						stack[index] = index;
+					}
 				}
 				stacks[numberOfStacksCreated++] = stack;
 			}
@@ -27,18 +36,27 @@ public class FullStackAnanlyser implements StackAnalyser {
 		Memory.executeInTrackingArea(new Runnable() {
 
 			@Override
+			@IcecapCompileMe
 			public void run() {
-				devices.Console.println("Created " + numberOfStacksCreated + " stacks");
+				int[] mainStack = get_java_stack_array();
+				addStack(mainStack, false);
+				devices.Console.print(StringUtil.constructString("Created ", numberOfStacksCreated));
+				devices.Console.println(" stacks");
 				for (byte index = 0; index < stacks.length; index++) {
-					if (stacks[index] != null)
-					{
+					if (stacks[index] != null) {
 						analyseStack(stacks[index]);
-						devices.Console.println("stack " + index + "[" + best_start_of_unused_area + ", " + best_end_of_unused_area + "][" + stacks[index].length + "]");
+						devices.Console.print(StringUtil.constructString("stack ", index));
+						devices.Console.print(StringUtil.constructString("[", best_start_of_unused_area));
+						devices.Console.print(StringUtil.constructString(", ", best_end_of_unused_area));
+						devices.Console.print(StringUtil.constructString("][", stacks[index].length));
+						devices.Console.println("]");
 					}
 				}
 			}
 		});
 	}
+
+	private static native int[] get_java_stack_array();
 
 	private static final int USEDSTACKCELL = 10;
 	private static final int UNUSEDSTACKCELL = 11;

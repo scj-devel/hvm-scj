@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 // import devices.Console;
 
 public class TestLong1 extends TestLong {
@@ -8,10 +10,10 @@ public class TestLong1 extends TestLong {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+       VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		long x = 1;
         for (int i = 0; i < 31; i++) {
             x = x << 1;
@@ -25,10 +27,10 @@ public class TestLong1 extends TestLong {
         if (x == 17179869184L) {
             return testlmul32();
         }
-        return args;
+        return true;
 	}
 
-    public static String[] testlmul32() {
+    public static boolean testlmul32() {
         long[][] operands = { { 0x100000000L, 0xFFFFL }, { 0x100000000L, 0x2 }, { 0x1FFFFFFFFL, 0x3 }, { 0xFFFFFFFFL, 0xFFFFFFFFL }, { 0xFFFFFFFFL, 0x00000003 }, { 0xFFFFFFFFL, 0x00000002 }, { 0x00000001, 0xFFFFFFFFL },
                 { 0xFFFFFFFFL, 0x00000001 }, { 0, 0 }, { 1, 1 }, { -10, 10 },
                 { 10, 0 } };
@@ -65,7 +67,7 @@ public class TestLong1 extends TestLong {
                 return failed();
             }
         }
-        return null;
+        return false;
     }
 
     public static long lmul32(long x, long y) {

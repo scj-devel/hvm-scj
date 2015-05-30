@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestAppendFloat {
 
     /**
@@ -7,9 +9,7 @@ public class TestAppendFloat {
      */
     public static void main(String[] args) {
         boolean failed = test(0.42f);
-        if (!failed) {
-            args = null;
-        }
+       VMTest.markResult(failed);
     }
 
     public static boolean test(float x) {

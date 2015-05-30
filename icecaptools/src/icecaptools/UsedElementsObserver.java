@@ -291,4 +291,9 @@ public class UsedElementsObserver implements AnalysisObserver {
 	public int numberOfUsedMethods() {
 		return usedMethodDescriptors.size();
 	}
+
+	@Override
+	public int getNumberOfUsedClassInitializers() {
+		return this.classInitializationSequence.size();
+	}
 }

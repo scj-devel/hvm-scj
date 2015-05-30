@@ -36,6 +36,8 @@ import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 import javax.scj.util.Const;
 
+import util.StringUtil;
+
 /**
  * This collection class of handlers is created in mission memory and used 
  * by the mission.
@@ -147,6 +149,8 @@ class ManagedSchedulableSet {
 	}
 
 	public String toString() {
-		return "Mission: " + noOfRegistered + " handlers";
+		StringBuffer buf = StringUtil.constructStringBuffer("Mission: ", noOfRegistered);
+		buf.append(" handlers");
+		return buf.toString();
 	}
 }

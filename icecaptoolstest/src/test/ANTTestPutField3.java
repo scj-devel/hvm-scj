@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class ANTTestPutField3 {
 
@@ -16,9 +17,7 @@ public class ANTTestPutField3 {
         a.f = 10;
         boolean failure = test(a);
 
-        if (!failure) {
-            args = null;
-        }
+        VMTest.markResult(failure);
     }
 
     @IcecapCompileMe

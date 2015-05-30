@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestArrayOfInterfaces {
 
     private interface Interface {
@@ -24,10 +26,7 @@ public class TestArrayOfInterfaces {
      */
     public static void main(String[] args) {
         boolean failure = test();
-        if (!failure)
-        {
-            args = null;
-        }
+        VMTest.markResult(failure);
         
     }
 

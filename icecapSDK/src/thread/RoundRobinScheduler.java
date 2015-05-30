@@ -1,6 +1,8 @@
 package thread;
 
+import vm.MachineFactory;
 import vm.Monitor;
+import vm.POSIX64BitMachineFactory;
 import vm.Process;
 import vm.Scheduler;
 
@@ -9,30 +11,35 @@ public class RoundRobinScheduler extends ThreadManager implements Scheduler {
 	private static final int DEFAULT_SEQUENCER_STACK_SIZE = 1024;
 
 	private boolean started;
-	
+
 	private int index;
 
 	private vm.ClockInterruptHandler clockHandler;
 
 	private Thread thr;
-	
-	public RoundRobinScheduler() {
+
+	private MachineFactory mFactory;
+
+	public RoundRobinScheduler(MachineFactory mFactory) {
 		super();
-		started = false;		
+		started = false;
 		index = 0;
+		this.mFactory = mFactory;
 	}
 
+	public RoundRobinScheduler() {
+		this(new POSIX64BitMachineFactory());
+	}
+	
 	@Override
 	public Process getNextProcess() {
 		while (true) {
 			thr = threads.get(index);
 			index++;
-			if (index >= threads.size())
-			{
+			if (index >= threads.size()) {
 				index = 0;
 			}
-			if (thr.state != Thread.FINISHED)
-			{
+			if (thr.state != Thread.FINISHED) {
 				return thr.p;
 			}
 		}
@@ -48,11 +55,10 @@ public class RoundRobinScheduler extends ThreadManager implements Scheduler {
 			Thread mainThread = new Thread(new vm.Process(null, null));
 			mainThread.state = Thread.RUNNING;
 			threads.add(mainThread);
-			clockHandler.register();
-			clockHandler.startClockHandler(mainThread.p);
+			
 			started = true;
-			clockHandler.enable();
-			clockHandler.yield();
+
+			clockHandler.startClockHandler(mainThread.p, mFactory);
 		}
 	}
 
@@ -89,16 +95,21 @@ public class RoundRobinScheduler extends ThreadManager implements Scheduler {
 
 	@Override
 	public void notify(Object target) {
-		
+
 	}
-	
+
 	@Override
 	public void notifyAll(Object target) {
-		
+
 	}
+
 	@Override
 	public Monitor getDefaultMonitor() {
 		return null;
 	}
 
+	@Override
+	public void terminated() {
+		mFactory.stopSystemTick();
+	}
 }

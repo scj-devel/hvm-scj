@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class TestAnnotator1 {
 
@@ -8,12 +9,12 @@ public class TestAnnotator1 {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-    private static String[] test(String[] args) {
+    private static boolean test() {
         quicksort(10, 10);
-        return null;
+        return false;
     }
 
     @IcecapCompileMe

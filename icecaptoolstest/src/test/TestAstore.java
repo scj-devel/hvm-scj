@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestAstore {
 
     private static class A
@@ -10,18 +12,17 @@ public class TestAstore {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
     @SuppressWarnings("unused")
-    public static String[] test(String[] args) {
+    public static boolean test() {
         int x, y, z, a, b, c;
         A object = new A();
         if (object != null)
         {
-            return null;
+            return false;
         }
-        return args;
+        return true;
     }
-
 }

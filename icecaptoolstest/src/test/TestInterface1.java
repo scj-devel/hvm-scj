@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestInterface1 {
 
     private interface Interface1 {
@@ -79,10 +81,10 @@ public class TestInterface1 {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		Interface1 a = new A();
         Interface1 b = new B();
         Interface2 b2 = (B) b;
@@ -93,8 +95,8 @@ public class TestInterface1 {
         int x = a.bar() + b.bar() + b2.baz() + c.bar() + c2.baz() + c3.baf() + ((Interface4)c).caf();
 
         if (x == 152) {
-           return null;
+           return false;
         }
-        return args;
+        return true;
 	}
 }

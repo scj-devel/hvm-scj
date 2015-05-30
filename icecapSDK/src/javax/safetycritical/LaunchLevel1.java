@@ -1,21 +1,19 @@
 package javax.safetycritical;
 
+import vm.MachineFactory;
 
-public final class LaunchLevel1 extends Launcher {
+public final class LaunchLevel1 extends LaunchSingleCore {
+
+	public LaunchLevel1(Safelet<?> app, MachineFactory mFactory) {
+		super(app, 1, mFactory);
+	}
 
 	public LaunchLevel1(Safelet<?> app) {
 		super(app, 1);
-		
-		Mission.missionBehaviour = new Mission.SinglecoreBehavior();
-		ManagedEventHandler.handlerBehavior = new ManagedEventHandler.SinglecoreBehavior();
-		Services.servicesBehavior = new Services.SinglecoreBehavior();
-		ManagedMemory.memoryBehavior = new ManagedMemory.SinglecoreBehavior();
-		
-		createImmortalMemory();
 	}
-	
+
 	@Override
-	void start() {
+	protected void start() {
 		startLevel1_2();
 	}
 }

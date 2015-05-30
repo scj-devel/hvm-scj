@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestInterface2 {
 
     private interface ISuper
@@ -29,19 +31,18 @@ public class TestInterface2 {
      * @param args
      */
     public static void main(String[] args) {
-       args = test(args);
-
+    	VMTest.markResult(test());
     }
 
-    public static String[] test(String[] args) {
+    public static boolean test() {
         ISub sub = new Sub();
         if (sub.foo() == 42)
         {
-            return null;
+            return false;
         }
         else
         {
-            return args;
+            return true;
         }
     }
 }

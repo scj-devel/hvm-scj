@@ -1,16 +1,17 @@
 package test;
 
+import vm.VMTest;
 
 public class TestTrackHeap {
 
     public static void main(String args[])
     {
         //Memory.startMemoryAreaTracking();
-        args = test(args);
+    	VMTest.markResult(test());
         //Memory.reportMemoryUsage();
     }
 
-	public static String[] test(String args[]) {
-		return null;
+	public static boolean test() {
+		return false;
 	}
 }

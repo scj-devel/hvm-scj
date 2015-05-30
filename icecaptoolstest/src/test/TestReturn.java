@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestReturn {
 
 	public void returnVoid(int n){
@@ -80,6 +82,6 @@ public class TestReturn {
 			return;
 		}
 
-		args = null;
+		VMTest.markResult(false);
 	}
 }

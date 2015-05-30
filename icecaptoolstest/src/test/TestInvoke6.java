@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestInvoke6 {
 
     private abstract static class SuperSuperClass {
@@ -23,16 +25,16 @@ public class TestInvoke6 {
     }
 
     public static void main(String[] args) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		SuperClass instanse = new SubClass();
         if (instanse.foo() == 42) {
             if (instanse.bar() == 41) {
-                return null;
+                return false;
             }
         }
-        return args;
+        return true;
 	}
 }

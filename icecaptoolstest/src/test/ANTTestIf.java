@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class ANTTestIf {
 
@@ -11,9 +12,7 @@ public class ANTTestIf {
         boolean failure = test1(true);
         failure |= test2(true);
         failure |= test3(true);
-        if (!failure) {
-            args = null;
-        }
+        VMTest.markResult(failure);
     }
 
     @IcecapCompileMe

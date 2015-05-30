@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestInvokeDynamic4 {
 
 	private static void print(String str)
@@ -48,6 +50,6 @@ public class TestInvokeDynamic4 {
 		
 		actionExecutor(TestInvokeDynamic4::doItNow);
 		
-		args = null;
+		VMTest.markResult(false);
 	}
 }

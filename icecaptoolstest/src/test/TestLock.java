@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestLock {
 
     Object lock;
@@ -20,6 +22,6 @@ public class TestLock {
      */
     public static void main(String[] args) {
         new TestLock().hey();
-        args = null;
+        VMTest.markResult(false);
     }
 }

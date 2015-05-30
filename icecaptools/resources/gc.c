@@ -43,6 +43,9 @@ static Object* gc_allocatepdObject(uint32 objectSize, unsigned char* store, uint
 extern int16 vm_Memory_updateMaxUsed(int32 *fp, int32 m);
 #endif
 Object* gc_allocateObject(uint32 dobjectSize, uint32 pobjectsize) {
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+    VMMemory * current;
+#endif
     if (pobjectsize == 0) {
         Object* obj;
         uint32 top;
@@ -50,7 +53,7 @@ Object* gc_allocateObject(uint32 dobjectSize, uint32 pobjectsize) {
 
     /*Behaviours for multicore version*/
 	#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
-        VMMemory * current = pthread_getspecific(key);
+        current = pthread_getspecific(key);
         top = HEAP_REF(current, VMMemory* )->free;
 
         obj = gc_allocatepdObject(dobjectSize + sizeof(Object), (unsigned char*) (pointer) HEAP_REF(current, VMMemory* )->base, &top, HEAP_REF(current, VMMemory* )->size, 1);

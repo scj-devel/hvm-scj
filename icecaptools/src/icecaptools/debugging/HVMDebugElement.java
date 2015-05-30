@@ -18,7 +18,8 @@ public abstract class HVMDebugElement extends PlatformObject implements IDebugEl
         this.target = target;
     }
     
-    public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
+    @SuppressWarnings("unchecked")
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
         if (adapter == IDebugElement.class) {
             return this;
         }

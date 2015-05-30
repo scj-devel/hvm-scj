@@ -1,21 +1,23 @@
 package test;
 
+import vm.VMTest;
+
 public class TestLong3 {
 
     public static void main(String args[])
     {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-    public static String[] test(String args[]) {
+    public static boolean test() {
         long r = getLong();
         if (r == 0x0123456789ABCDEFL)
         {
-            return null;
+            return false;
         }
         else
         {
-            return args;
+            return true;
         }
     }
 

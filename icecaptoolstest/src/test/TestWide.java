@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestWide {
 	private static final int XXX = 479;
 
@@ -12,7 +14,7 @@ public class TestWide {
 		x = x + XXX;
 
 		if (x == XXX) {
-			args = null;
+			VMTest.markResult(false);
 		}
 	}
 }

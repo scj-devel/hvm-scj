@@ -1,6 +1,7 @@
 package javax.safetycritical;
 
 import javax.realtime.PriorityParameters;
+import javax.realtime.ConfigurationParameters;
 
 final class ManagedSchedMethods {
 
@@ -37,6 +38,17 @@ final class ManagedSchedMethods {
 		else
 			return null;
 	}
+	
+	static ConfigurationParameters getConfig(ManagedSchedulable target) {
+		if (target instanceof ManagedEventHandler)
+			return ((ManagedEventHandler) target).config;
+		else if (target instanceof ManagedThread)
+			return ((ManagedThread) target).config;
+		else if (target instanceof ManagedLongEventHandler)
+			return ((ManagedLongEventHandler) target).config;
+		else
+			return null;
+	}
 
 	private static ScjProcess createScjProcess(ManagedSchedulable target, int[] ps) {
 		if (target instanceof PeriodicEventHandler) {
@@ -55,7 +67,8 @@ final class ManagedSchedMethods {
 	}
 
 	static ScjProcess createScjProcess(ManagedSchedulable target) {
-		return createScjProcess(target, new int[(int) getStorage(target).configurationSizes[0]]);
+		//return createScjProcess(target, new int[(int) getStorage(target).configurationSizes[0]]);
+		return createScjProcess(target, new int[(int) (getConfig(target)).getSizes()[0]]);
 	}
 
 	static Mission getMission(ManagedSchedulable target) {

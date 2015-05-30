@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCFunc;
+import vm.VMTest;
 
 public class TestISR1 {
 
@@ -20,7 +21,7 @@ public class TestISR1 {
 			callFoo();
 			if (x == 42)
 			{
-				args = null;
+				VMTest.markResult(false);
 			}
 		}
 	}

@@ -1,5 +1,4 @@
 #define _GNU_SOURCE
-#include <sched.h>
 
 #include "types.h"
 #include "methods.h"
@@ -76,7 +75,7 @@ unsigned char SUPPORTGC_var = 0;
 #endif
 
 #ifdef AVR
-#if defined(VM_CLOCKINTERRUPTHANDLER_INTERRUPT)
+#if defined(VM_PROCESS_EXECUTEWITHSTACK)
 uint8 workingRegister1;
 uint8 workingRegister2;
 uint8 workingRegister3;
@@ -184,7 +183,7 @@ int16 n_java_lang_String_init_(int32 *sp) {
 		bytes = bytes + 4;
 
 		for (count = 0; count < nb; count++) {
-			*((int32 *) (HEAP_REF(charArrayObject, unsigned char *) + sizeof(Object) + 2) + count) = *(HEAP_REF(bytes, unsigned char*) + count + offset);
+			*((uint8 *) (HEAP_REF(charArrayObject, unsigned char *) + sizeof(Object) + 2) + count) = *(HEAP_REF(bytes, unsigned char*) + count + offset);
 		}
 
 		*(sp + 1) = (int32) (pointer) charArrayObject;
@@ -227,7 +226,7 @@ int16 n_java_lang_Class_getName0(int32 *sp) {
  * param : byte[]
  * return: void
  */
-#ifdef N_DEVICES_X86WRITER_NWRITE
+#ifdef N_DEVICES_DEFAULTWRITER_NWRITE
 static void print_to_stdout(unsigned char* src, unsigned char* buffer,
 		int32 buffersize, int32 nb) {
 	int32 count;
@@ -251,7 +250,7 @@ static void print_to_stdout(unsigned char* src, unsigned char* buffer,
 	}
 }
 
-int16 n_devices_X86Writer_nwrite(int32 *sp) {
+int16 n_devices_DefaultWriter_nwrite(int32 *sp) {
 	unsigned char buffer[16];
 	unsigned char* src;
 	int32 length;
@@ -408,9 +407,9 @@ static char* getCString(unsigned char* strObj) {
 	string_value = string_value + sizeof(Object) + 2 + (string_offset << 2);
 	while (count < string_count) {
 		int32 value;
-		getField(HEAP_REF(string_value, unsigned char*), 32, &value);
+		getField(HEAP_REF(string_value, unsigned char*), 8, &value);
 		buffer[count++] = (unsigned char) value;
-		string_value += 4;
+		string_value += 1;
 	}
 
 	buffer[count] = '\0';
@@ -638,7 +637,7 @@ Object* createStringObject(int32 size, const char* data, int32* sp) {
 	if (charArrayObject != 0) {
 
 		for (count = 0; count < size; count++) {
-			*((int32 *) (HEAP_REF(charArrayObject, unsigned char *)
+			*((uint8 *) (HEAP_REF(charArrayObject, unsigned char *)
 							+ sizeof(Object) + 2) + count) = pgm_read_byte(
 					data + count);
 		}
@@ -874,6 +873,7 @@ int16 n_java_lang_Thread_toString(int32 *sp) {
 #include <errno.h>
 #include <string.h>
 #include <pthread.h>
+#include <sched.h>
 
 pthread_key_t key_schedulable_object;
 
@@ -892,12 +892,13 @@ int16 n_javax_safetycritical_OSProcess_getMaxPriority(int32 *sp){
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETAFFINITY)
 int16 n_javax_safetycritical_OSProcess_setAffinity(int32 *sp){
- 	int size = sp[0]+1;
+	int i;
+	int size = sp[0]+1;
  	int *p = HEAP_REF((int* ) (pointer ) sp[1], int*);
 
  	cpu_set_t cs;
  	CPU_ZERO(&cs);
- 	int i = 1;
+ 	i = 1;
  	for(; i<size;i++){
  		CPU_SET(p[i], &cs);
  	}
@@ -912,11 +913,12 @@ int16 n_javax_safetycritical_OSProcess_setAffinity(int32 *sp){
 int16 n_javax_safetycritical_OSProcess_setOMMSAffinitySet(int32 *sp){
  	int level = sp[0];
  	if(level != 2){
+ 		int ret;
  		int processor = sched_getcpu();
  		cpu_set_t cs;
  		CPU_ZERO(&cs);
  		CPU_SET(processor, &cs);
- 		int ret = pthread_setaffinity_np(pthread_self(), sizeof(cs), &cs);
+ 		ret = pthread_setaffinity_np(pthread_self(), sizeof(cs), &cs);
  		if( ret != 0 ){
  			printf("pthread_setaffinity_np ret: %d. \n",ret);
         	return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
@@ -939,6 +941,7 @@ int16 n_javax_safetycritical_OSProcess_isProcessorInSet(int32 *sp){
 #endif
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETALLCPUCOUNT)
+#include <sys/sysinfo.h>
 int16 n_javax_safetycritical_OSProcess_getAllCPUCount(int32 *sp){
  	sp[0] = get_nprocs_conf();
     return -1;
@@ -964,7 +967,7 @@ int16 n_javax_safetycritical_OSProcess_getCurrentCPUID(int32 *sp){
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETTHREADID)
 int16 n_javax_safetycritical_OSProcess_getThreadID(int32 *sp){
-	int id = (int) pthread_getspecific(key_schedulable_object);
+	int id = (int)(pointer) pthread_getspecific(key_schedulable_object);
 	sp[0] = id;
     return -1;
 }
@@ -992,14 +995,17 @@ int16 n_javax_safetycritical_OSProcess_testCancel_c(int32 *sp){
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETTIMERFD)
 int16 n_javax_safetycritical_OSProcess_setTimerfd(int32 *sp){
+	long long start_time;
+	unsigned int ns;
+	unsigned int sec;
+	struct itimerspec itval;
+	int ret;
+
 	if(sp[0] < 1){
 		return -1;
 	}
 
-	long long start_time  =  (long long) sp[1] << 32 | sp[2];
-	unsigned int ns;
-	unsigned int sec;
-	struct itimerspec itval;
+	start_time  =  (long long) sp[1] << 32 | sp[2];
 
 	sec = start_time / 1000000000;
 	ns = start_time % 1000000000;
@@ -1012,7 +1018,7 @@ int16 n_javax_safetycritical_OSProcess_setTimerfd(int32 *sp){
 	itval.it_value.tv_sec = sec;
 	itval.it_value.tv_nsec = ns;
 
-	int ret = timerfd_settime(sp[0], 0, &itval, NULL);
+	ret = timerfd_settime(sp[0], 0, &itval, NULL);
     if(ret != 0 && errno != EBADF){
         printf("timer set errno: %d. file: %d.\n",errno, sp[0]);
         return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
@@ -1024,7 +1030,7 @@ int16 n_javax_safetycritical_OSProcess_setTimerfd(int32 *sp){
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETMEMORYAREA )
 int16 n_javax_safetycritical_OSProcess_setMemoryArea(int32 *sp){
     VMMemory* currMem;
-    currMem = (int32)(*(sp + 0));
+    currMem = (VMMemory*)(pointer)(*(sp + 0));
 	pthread_setspecific(key, currMem);
 	return -1;
 }
@@ -1445,7 +1451,9 @@ int16 n_test_TestCVar1_getLVar(int32 *sp)
 pointer stackPointer = 0;
 
 #if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED) && defined(VM_INTERRUPTDISPATCHER_INTERRUPT_USED)
+#if defined(JAVA_LANG_THROWABLE_INIT_)
 extern void handleException(unsigned short classIndex);
+#endif
 #endif
 
 #if defined(VM_PROCESS_EXECUTEWITHSTACK)
@@ -1573,11 +1581,16 @@ int16 yieldToScheduler(int32 *sp) {
 			if (scopeCount == 0) {
 #endif
 #if defined(VM_INTERRUPTDISPATCHER_INTERRUPT_USED)
+#if defined(JAVA_LANG_THROWABLE_INIT_)
 				int16 excep;
-				excep = vm_InterruptDispatcher_interrupt(sp, HVM_CLOCK);
+				excep = 
+#endif
+				vm_InterruptDispatcher_interrupt(sp, HVM_CLOCK);
+#if defined(JAVA_LANG_THROWABLE_INIT_)
 				if (excep >= 0) {
 					handleException(excep);
 				}
+#endif
 #endif
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS)
 			}
@@ -1868,17 +1881,17 @@ extern const char* getClassName(unsigned short classIndex);
 extern const char* getMethodName(unsigned short methodIndex);
 
 void reportStackTraceIntro(unsigned short classIndex) {
-	printROMStr("Exception in thread \"\" ");
+	printStr("Exception in thread \"\" ");
 	printROMStr(getClassName(classIndex));
-	printROMStr("\n");
+	printStr("\n");
 }
 
 void reportStackTraceElement(unsigned short methodIndex, unsigned short pc) {
-	printROMStr("   at ");
+	printStr("   at ");
 	printROMStr(getMethodName(methodIndex));
-	printROMStr("(:");
+	printStr("(:");
 	printShort(pc);
-	printROMStr(")\n");
+	printStr(")\n");
 }
 #endif
 
@@ -2484,3 +2497,41 @@ void unimplemented(int16 mid) {
 		printROMStr("\n");
 	}
 }
+
+extern void setClassIndex(Object* obj, unsigned short classIndex);
+
+#if defined(TEST_TESTNATIVEFIELD_SUBCLASS_TESTFIELD_USED)
+int8 superByte;
+#endif
+
+static unsigned char java_stack[(JAVA_STACK_SIZE << 2) + sizeof(Object) + sizeof(uint16)];
+
+int32* get_java_stack_base(int16 size) {
+	Object* stackAsArray = (Object*)&java_stack[0];
+	int32* intStack;
+	uint16 length = JAVA_STACK_SIZE;
+	uint16 index;
+#if defined(_I)
+	setClassIndex((Object*) stackAsArray, _I);
+#else
+	setClassIndex((Object*) stackAsArray, -1);
+#endif
+
+	*(uint16 *) ((unsigned char*)stackAsArray + sizeof(Object)) = length;
+	intStack = (int32*) &java_stack[4];
+
+	for (index = 0; index < length; index++)
+	{
+		intStack[index] = index;
+	}
+
+	return intStack;
+}
+
+#if defined(N_VM_FULLSTACKANANLYSER_GET_JAVA_STACK_ARRAY)
+int16 n_vm_FullStackAnanlyser_get_java_stack_array(int32 *sp)
+{
+	sp[0] = (int32)(pointer)&java_stack[0];
+	return -1;
+}
+#endif

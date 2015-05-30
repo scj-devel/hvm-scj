@@ -79,4 +79,8 @@ public class JavaLangThreadScheduler implements Scheduler {
 	protected static Monitor getSCJMultiprocessorMonitor(int ceiling){
 			return new JavaLangThreadMonitor(ceiling);
 	}
+
+	@Override
+	public void terminated() {
+	}
 }

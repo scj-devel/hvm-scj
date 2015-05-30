@@ -69,4 +69,13 @@ public class CR16CRealtimeClock extends vm.RealtimeClock implements InterruptHan
 	@Override
 	public void disable() {
 	}
+
+	@Override
+	public void delayUntil(AbsoluteTime time) {
+	}
+
+	@Override
+	public void awaitTick() {
+		
+	}
 }

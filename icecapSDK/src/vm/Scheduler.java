@@ -11,5 +11,5 @@ public interface Scheduler {
 
 	public Monitor getDefaultMonitor();
 
-	/* TODO: void terminated(); */
+	void terminated(); 
 }

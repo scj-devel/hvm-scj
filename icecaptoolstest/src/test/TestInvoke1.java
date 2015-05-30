@@ -1,18 +1,19 @@
 package test;
 
+import vm.VMTest;
 
 public class TestInvoke1 {
     @SuppressWarnings("unused")
     private int field;
 
     public static void main(String args[]) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-	public static String[] test(String args[]) {
+	public static boolean test() {
 		TestInvoke1 test = new TestInvoke1();
         test.foo();
-        return null;
+        return false;
 	}
 
     private void foo() {

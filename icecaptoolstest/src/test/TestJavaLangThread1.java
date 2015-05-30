@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestJavaLangThread1 {
 
     private static int count;
@@ -40,7 +42,7 @@ public class TestJavaLangThread1 {
         }
 
         if (count != 420000) {
-            args = null;
+        	VMTest.markResult(false);
         }
 
         devices.Console.println("got count = " + count);

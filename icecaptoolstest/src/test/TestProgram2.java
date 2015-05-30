@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestProgram2 {
     public static char[] randomString(int len) {
         char[] string = new char[len];
@@ -25,10 +27,10 @@ public class TestProgram2 {
     }
 
     public static void main(String[] args) {
-        args = test(args);
+    	 VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		char[] string = new char[2];
         int i = 0;
         while (i < 1) {
@@ -38,6 +40,6 @@ public class TestProgram2 {
             //System.out.println(reverseString(string));
             ++i;
         }
-        return null;
+        return false;
 	}
 }

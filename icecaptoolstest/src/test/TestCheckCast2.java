@@ -1,6 +1,7 @@
 package test;
 
 import test.icecaptools.minitests.Super;
+import vm.VMTest;
 
 
 public class TestCheckCast2 extends Super {
@@ -9,20 +10,20 @@ public class TestCheckCast2 extends Super {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
     @SuppressWarnings("unused")
-    public static String[] test(String[] args) {
+    public static boolean test() {
         Object test = new TestCheckCast2();
         Super sup;
 
         try {
             sup = (Super) test;
-            return null;
+            return false;
         } catch (ClassCastException ex) {
             ;
         }
-        return args;
+        return true;
     }
 }

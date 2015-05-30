@@ -4,6 +4,7 @@ import reflect.ObjectInfo;
 import util.ReferenceIterator;
 import vm.HVMHeap;
 import vm.Heap;
+import vm.VMTest;
 
 public class TestArrayTraversal {
 
@@ -22,9 +23,7 @@ public class TestArrayTraversal {
         Heap heap = HVMHeap.getHeap();
         boolean failed = test1(heap);
         failed |= test2(heap);
-        if (!failed) {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 
     public static boolean test2(Heap heap) {

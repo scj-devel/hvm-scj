@@ -26,6 +26,7 @@
 package javax.safetycritical;
 
 import javax.realtime.AperiodicParameters;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PriorityParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
@@ -92,30 +93,33 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	 */
 	@SCJAllowed
 	@SCJRestricted(Phase.INITIALIZE)
-	public MissionSequencer(PriorityParameters priority, StorageParameters storage, String name)
+	public MissionSequencer(PriorityParameters priority, StorageParameters storage, 
+			ConfigurationParameters config, String name)
 			throws IllegalStateException {
-		super(priority, new AperiodicParameters(), storage);
+		super(priority, new AperiodicParameters(), storage, config);
 		this.name = name;
 
-		//		devices.Console.println("MissSeq.constr: " + name 
-		//			+ "; maxMissionMemory " + storage.maxMissionMemory 
-		//			+ "; backingstore: " + this.privateMemory + "; isOuterMost: " + isOuterMostSeq);
+//		System.out.println("MissSeq.constr: " + name 
+//			+ "; maxMissionMemory " + storage.maxMissionMemory 
+//			+ "; backingstore: " + this.privateMemory + "; isOuterMost: " + isOuterMostSeq);
+		
 		missionMemory = new MissionMemory((int) storage.maxMissionMemory, // mission memory
 				privateMemory, //backingstore of sequencer
 				name);
-
+		
 		currState = State.START;
 		
 		if(Launcher.level != 0)
 			Services.setCeiling(this, this.priority.getPriority());
-		
 		ManagedEventHandler.handlerBehavior.initMissionSequencer(this);
+		//System.out.println("MissSeq.constr");
 	}
 
 	@SCJAllowed
 	@SCJRestricted(Phase.INITIALIZE)
-	public MissionSequencer(PriorityParameters priority, StorageParameters storage) throws IllegalStateException {
-		this(priority, storage, "MisMem");
+	public MissionSequencer(PriorityParameters priority, StorageParameters storage,
+			ConfigurationParameters config) throws IllegalStateException {
+		this(priority, storage, config, "MisMem");
 	}
 
 	synchronized void seqWait() {
@@ -262,7 +266,14 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 		return isOuterMostSeq;
 	}
 	
+	// used for JML annotation only (not public)
+	Phase getPhase() {
+		return null;
+	}
+	
 	Monitor getLock() {
 		return lock;
 	}
 }
+
+

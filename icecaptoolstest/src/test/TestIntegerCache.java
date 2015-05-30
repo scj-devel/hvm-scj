@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestIntegerCache {
 
     private static final Integer integer = 1;
@@ -10,7 +12,7 @@ public class TestIntegerCache {
     public static void main(String[] args) {
         if (integer == 1)
         {
-            args = null;
+            VMTest.markResult(false);
         }
     }
 }

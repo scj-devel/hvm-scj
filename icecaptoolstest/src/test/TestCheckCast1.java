@@ -1,13 +1,15 @@
 package test;
 
+import vm.VMTest;
+
 public class TestCheckCast1 {
 
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
     @SuppressWarnings("unused")
-    public static String[] test(String[] args) {
+    public static boolean test() {
         TestIf1 testIf1 = new TestIf1();
         Object testIf2 = new TestIf2();
 
@@ -17,8 +19,8 @@ public class TestCheckCast1 {
 
         } catch (ClassCastException ex) {
             
-            return null;
+            return false;
         }
-        return args;
+        return true;
     }
 }

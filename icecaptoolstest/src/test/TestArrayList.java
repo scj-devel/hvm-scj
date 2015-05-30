@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import devices.Console;
+import vm.VMTest;
 
 public class TestArrayList {
 
@@ -12,10 +13,10 @@ public class TestArrayList {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-    public static String[] test(String[] args) {
+    public static boolean test() {
         ArrayList<String> list = new ArrayList<String>();
 
         list.add("hej");
@@ -40,15 +41,15 @@ public class TestArrayList {
                 next = sortedNames.next();
                 if (previous != null) {
                     if (previous.compareTo(next) > 0) {
-                        return args;
+                        return true;
                     }
                 }
                 Console.println(next);
                 previous = next;
 
             }
-            return null;
+            return false;
         }
-        return args;
+        return true;
     }
 }

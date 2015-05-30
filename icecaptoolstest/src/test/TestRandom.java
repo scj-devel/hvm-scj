@@ -1,6 +1,7 @@
 package test;
 
 import util.Random;
+import vm.VMTest;
 
 public class TestRandom {
 
@@ -10,9 +11,7 @@ public class TestRandom {
     public static void main(String[] args) {
         boolean failed = test();
         {
-            if (!failed) {
-                args = null;
-            }
+        	VMTest.markResult(failed);
         }
     }
 

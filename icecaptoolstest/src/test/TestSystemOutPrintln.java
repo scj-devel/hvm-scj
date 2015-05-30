@@ -1,13 +1,14 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class TestSystemOutPrintln {
 
 	public static void main(String args[])
 	{
 		test();
-		args = null;
+		VMTest.markResult(false);
 	}
 
 	@IcecapCompileMe

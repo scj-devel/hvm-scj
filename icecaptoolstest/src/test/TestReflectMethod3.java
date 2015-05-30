@@ -3,6 +3,8 @@ package test;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import vm.VMTest;
+
 public class TestReflectMethod3 {
 
     private static class MyException extends Exception {
@@ -40,7 +42,7 @@ public class TestReflectMethod3 {
             } catch (InvocationTargetException ite) {
                 MyException me2 = (MyException) ite.getTargetException();
                 if (me2.x == 42) {
-                    args = null;
+                	VMTest.markResult(false);
                 }
             }
         }

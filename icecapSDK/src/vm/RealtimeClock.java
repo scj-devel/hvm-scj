@@ -1,10 +1,8 @@
 package vm;
 
-import icecaptools.IcecapCompileMe;
-
 import javax.realtime.AbsoluteTime;
 
-import devices.CR16C.KT4585.CR16CRealtimeClock;
+import icecaptools.IcecapCompileMe;
 
 public abstract class RealtimeClock {
 	private static RealtimeClock instance;
@@ -17,13 +15,7 @@ public abstract class RealtimeClock {
 		if (instance != null) {
 			return instance;
 		} else {
-			switch (Machine.architecture) {
-			case Machine.CR16_C:
-				instance = new CR16CRealtimeClock();
-				break;
-			default:
-				instance = new DefaultRealtimeClock();
-			}
+			instance = Machine.getMachineFactory().getRealtimeClock();
 			return getRealtimeClock();
 		}
 	}
@@ -32,7 +24,11 @@ public abstract class RealtimeClock {
 
 	abstract public void getCurrentTime(AbsoluteTime now);
 
-	private static class DefaultRealtimeClock extends RealtimeClock {
+	abstract public void delayUntil(AbsoluteTime time);
+	
+	abstract public void awaitTick();
+	
+	public static class DefaultRealtimeClock extends RealtimeClock {
 		@Override
 		public int getGranularity() {
 			return getNativeResolution();
@@ -42,6 +38,16 @@ public abstract class RealtimeClock {
 		public void getCurrentTime(AbsoluteTime now) {
 			getNativeTime(now); 
 			/* 'now' may not be normalized */ 
+		}
+
+		@Override
+		public void delayUntil(AbsoluteTime time) {
+			delayNativeUntil(time);
+		}
+
+		@Override
+		public void awaitTick() {
+			awaitNextTick();
 		}
 	}
 
@@ -69,11 +75,21 @@ public abstract class RealtimeClock {
 	 * @param time
 	 *            is the absolut time
 	 */
-	public static native void delayNativeUntil(AbsoluteTime time);
-
+	public static void delayUntilTime(AbsoluteTime time)
+	{
+		getRealtimeClock().delayUntil(time);
+	}
+	
+	private static native void delayNativeUntil(AbsoluteTime time);
+	
 	/**
 	 * Delay until next system tick 
 	 * 
 	 */
-	public static native void awaitNextTick();
+	public static void waitForNextTick()
+	{
+		getRealtimeClock().awaitTick();
+	}
+	
+	private static native void awaitNextTick();
 }

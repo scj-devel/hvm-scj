@@ -1,15 +1,17 @@
 package test;
 
+import vm.VMTest;
+
 public class TestStringBuffer2 {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		StringBuffer strBuffer = new StringBuffer();
         strBuffer.append('H');
         strBuffer.append('e');
@@ -22,11 +24,11 @@ public class TestStringBuffer2 {
             if (strBuffer.length() == 11) {
                 if (!strBuffer.toString().equals("HelloWorld")) {
                     if (strBuffer.toString().equals("HelloWorld!")) {
-                       return null;
+                       return false;
                     }
                 }
             }
         }
-        return args;
+        return true;
 	}
 }

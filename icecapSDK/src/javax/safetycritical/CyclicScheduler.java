@@ -25,12 +25,12 @@
  *************************************************************************/
 package javax.safetycritical;
 
-import icecaptools.IcecapCompileMe;
-
 import javax.realtime.Scheduler;
 import javax.safetycritical.MissionSequencer.State;
 import javax.scj.util.Const;
 
+import icecaptools.IcecapCompileMe;
+import vm.MachineFactory;
 import vm.Monitor;
 import vm.Process;
 
@@ -65,7 +65,7 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 	}
 
 	private CyclicScheduler() {
-		int[] sequencerStack = new int[Const.HANDLER_STACK_SIZE_DEFAULT];
+		int[] sequencerStack = new int[Const.CYCLIC_SCHEDULER_STACK_SIZE];
 
 		vm.ClockInterruptHandler.initialize(this, sequencerStack);
 	}
@@ -76,34 +76,22 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 		if (scjProcess.getTarget() instanceof MissionSequencer<?>
 				&& ((MissionSequencer<?>) (scjProcess.getTarget())).currState == State.END) {
 			scjProcess.getTarget().cleanUp();
-			CyclicScheduler.instance().stop(scjProcess.process);
+			stop(scjProcess.process);
 		}
 
 		return scjProcess.process;
 	}
 
-	private vm.Process mainProcess;
-
-	private void processStart() {
-		vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
-		mainProcess = new vm.Process(null, null);
-
-		clockHandler.register();
-		clockHandler.enable();
-		clockHandler.startClockHandler(mainProcess);
-		clockHandler.yield();
-	}
-
 	@IcecapCompileMe
 	void stop(vm.Process current) {
-		current.transferTo(mainProcess);
+		terminated();
+		terminateScheduler(current);
 	}
 
-	void start(MissionSequencer<?> seq) {
+	void start(MissionSequencer<?> seq, MachineFactory mFactory) {
 		this.seq = seq;
-
 		current = ManagedSchedMethods.createScjProcess(seq);
-		processStart();
+		startScheduler(mFactory);
 	}
 
 	ScjProcess getCurrentProcess() {
@@ -123,6 +111,10 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 
 	public Monitor getDefaultMonitor() {
 		return null;
+	}
+
+	@Override
+	public void terminated() {
 	}
 
 }

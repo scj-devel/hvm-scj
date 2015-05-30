@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class ANTTestArrayLength {
 
@@ -8,10 +9,7 @@ public class ANTTestArrayLength {
      * @param args
      */
     public static void main(String[] args) {
-        boolean failure = test();
-        if (!failure) {
-            args = null;
-        }
+    	VMTest.markResult(test());
     }
 
     @IcecapCompileMe
