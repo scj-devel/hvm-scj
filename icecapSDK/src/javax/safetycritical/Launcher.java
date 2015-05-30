@@ -54,7 +54,7 @@ abstract class Launcher implements Runnable {
 	Safelet<?> app;
 	static int level;
 	static boolean useOS = false;
-	static MissionBehavior delegate = null;
+	static Mission.MissionBehavior delegate = null;
 
 	Launcher(Safelet<?> app, int level) {
 		this(app, level, false);
@@ -85,14 +85,14 @@ abstract class Launcher implements Runnable {
 	protected abstract void start(); 
 
 	protected void startLevel0() {
-		delegate = new MissionSinglecoreBehavior();
+		delegate = new Mission.MissionSinglecoreBehavior();
 		MissionSequencer<?> seq = app.getSequencer();
 		CyclicScheduler.instance().start(seq);
 	}
 
 	protected void startLevel1_2() {
 		// insert idle process before the mission sequencer.
-		delegate = new MissionSinglecoreBehavior();
+		delegate = new Mission.MissionSinglecoreBehavior();
 		PriorityScheduler sch = PriorityScheduler.instance();
 		sch.insertReadyQueue(ScjProcess.createIdleProcess());
 		app.getSequencer();
@@ -100,7 +100,7 @@ abstract class Launcher implements Runnable {
 	}
 
 	protected void startwithOS() {
-		delegate = new MissionMulticoreBehavior();
+		delegate = new Mission.MissionMulticoreBehavior();
 		Machine.setCurrentScheduler(new MultiprocessorHelpingScheduler());
 		OSProcess.initSpecificID();
 		MissionSequencer<?> outerMostMS = app.getSequencer();
