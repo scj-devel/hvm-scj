@@ -37,5 +37,11 @@ public class ObjectList {
 			Object n = elements[next++];
 			return n;
 		}
+
+		
+		public void remove() {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 }
