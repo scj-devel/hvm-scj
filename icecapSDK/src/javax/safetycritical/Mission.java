@@ -279,15 +279,12 @@ public abstract class Mission {
 
 				for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {
 					if (mission.msSetForMission.managedSchObjects[i] != null) {
-						if (Launcher.useOS) {
-							if (mission.msSetForMission.managedSchObjects[i] instanceof AperiodicEventHandler) {
-								((AperiodicEventHandler) mission.msSetForMission.managedSchObjects[i])
-										.fireNextRelease();
-							}
-							if (mission.msSetForMission.managedSchObjects[i] instanceof OneShotEventHandler) {
-								((OneShotEventHandler) mission.msSetForMission.managedSchObjects[i]).deschedule();
-								((OneShotEventHandler) mission.msSetForMission.managedSchObjects[i]).fireNextRelease();
-							}
+						if (mission.msSetForMission.managedSchObjects[i] instanceof AperiodicEventHandler) {
+							((AperiodicEventHandler) mission.msSetForMission.managedSchObjects[i]).fireNextRelease();
+						}
+						if (mission.msSetForMission.managedSchObjects[i] instanceof OneShotEventHandler) {
+							((OneShotEventHandler) mission.msSetForMission.managedSchObjects[i]).deschedule();
+							((OneShotEventHandler) mission.msSetForMission.managedSchObjects[i]).fireNextRelease();
 						}
 						mission.msSetForMission.managedSchObjects[i].signalTermination();
 					}

@@ -53,7 +53,6 @@ import vm.Memory;
 abstract class Launcher implements Runnable {
 	Safelet<?> app;
 	static int level;
-	static boolean useOS = false;
 
 	Launcher(Safelet<?> app, int level) {
 		this(app, level, false);
@@ -62,7 +61,6 @@ abstract class Launcher implements Runnable {
 	Launcher(Safelet<?> app, int level, boolean useOS) {
 		this.app = app;
 		Launcher.level = level;
-		Launcher.useOS = useOS;
 
 		ManagedMemory.allocateBackingStore(Const.OVERALL_BACKING_STORE);
 
