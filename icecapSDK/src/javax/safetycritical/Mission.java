@@ -56,6 +56,11 @@ public abstract class Mission {
 
 	boolean missionTerminate = false;
 
+	private static Mission[] missionSet = null;
+	private static boolean isMissionSetInit = false;
+
+	static MissionBehavior delegate;
+
 	ManagedSchedulableSet msSetForMission;
 	Phase phaseOfMission;
 
@@ -165,7 +170,7 @@ public abstract class Mission {
 	 */
 	@SCJAllowed
 	public final boolean requestTermination() {
-		return Launcher.delegate.requestTermination(this);
+		return delegate.requestTermination(this);
 	}
 
 	/**
@@ -179,7 +184,7 @@ public abstract class Mission {
 	}
 
 	void runInitialize() {
-		Launcher.delegate.runInitialize(this);
+		delegate.runInitialize(this);
 	}
 
 	void runExecute()
@@ -188,7 +193,7 @@ public abstract class Mission {
 	//  For cyclic schedule execution, this method is overwritten in 
 	//  the subclass CyclicExecutive. 
 	{
-		Launcher.delegate.runExecute(this);
+		delegate.runExecute(this);
 	}
 
 	void runCleanup(MissionMemory missMem)
@@ -197,7 +202,7 @@ public abstract class Mission {
 	//  For cyclic schedule execution, this method is overwritten in 
 	//  the subclass CyclicExecutive. 
 	{
-		Launcher.delegate.runCleanup(this, missMem);
+		delegate.runCleanup(this, missMem);
 	}
 
 	// used for JML annotation only (not public)
@@ -222,32 +227,29 @@ public abstract class Mission {
 
 	static abstract class MissionBehavior {
 
-		Mission[] missionSet = null;
-		boolean isMissionSetInit = false;
+		abstract Mission getMission();
 
-		protected abstract Mission getMission();
+		abstract boolean requestTermination(Mission mission);
 
-		protected abstract boolean requestTermination(Mission mission);
+		abstract void runInitialize(Mission mission);
 
-		protected abstract void runInitialize(Mission mission);
+		abstract void runExecute(Mission mission);
 
-		protected abstract void runExecute(Mission mission);
+		abstract void runCleanup(Mission mission, MissionMemory missMem);
 
-		protected abstract void runCleanup(Mission mission, MissionMemory missMem);
+		abstract Process getProcess(int index);
 
-		protected abstract Process getProcess(int index);
-
-		protected abstract ManagedSchedulable getManageSched(int index);
+		abstract ManagedSchedulable getManageSched(int index);
 	}
-	
-	static class MissionMulticoreBehavior extends MissionBehavior {
 
-		protected MissionMulticoreBehavior() {
+	static final class MissionMulticoreBehavior extends MissionBehavior {
+
+		MissionMulticoreBehavior() {
 			Services.setCeiling(this, Priorities.SEQUENCER_PRIORITY);
 		}
 
 		@Override
-		protected Mission getMission() {
+		Mission getMission() {
 			Mission m = null;
 
 			ManagedSchedulable ms = Services.currentManagedSchedulable();
@@ -267,7 +269,7 @@ public abstract class Mission {
 		}
 
 		@Override
-		protected boolean requestTermination(Mission mission) {
+		boolean requestTermination(Mission mission) {
 			if (mission.missionTerminate == false) { // called the first time during mission
 				// execution
 
@@ -279,7 +281,8 @@ public abstract class Mission {
 					if (mission.msSetForMission.managedSchObjects[i] != null) {
 						if (Launcher.useOS) {
 							if (mission.msSetForMission.managedSchObjects[i] instanceof AperiodicEventHandler) {
-								((AperiodicEventHandler) mission.msSetForMission.managedSchObjects[i]).fireNextRelease();
+								((AperiodicEventHandler) mission.msSetForMission.managedSchObjects[i])
+										.fireNextRelease();
 							}
 							if (mission.msSetForMission.managedSchObjects[i] instanceof OneShotEventHandler) {
 								((OneShotEventHandler) mission.msSetForMission.managedSchObjects[i]).deschedule();
@@ -312,7 +315,7 @@ public abstract class Mission {
 		}
 
 		@Override
-		protected void runInitialize(Mission mission) {
+		void runInitialize(Mission mission) {
 			mission.phaseOfMission = Phase.INITIALIZE;
 			mission.missionIndex = addNewMission(mission);
 			mission.msSetForMission = new ManagedSchedulableSet();
@@ -320,7 +323,7 @@ public abstract class Mission {
 		}
 
 		@Override
-		protected void runExecute(Mission mission) {
+		void runExecute(Mission mission) {
 			mission.phaseOfMission = Phase.EXECUTE;
 			ManagedSchedulableSet msSet = mission.msSetForMission;
 
@@ -349,7 +352,7 @@ public abstract class Mission {
 		}
 
 		@Override
-		protected void runCleanup(Mission mission, MissionMemory missMem) {
+		void runCleanup(Mission mission, MissionMemory missMem) {
 			mission.phaseOfMission = Phase.CLEANUP;
 
 			if (mission.msSetForMission.activeCount > 0) {
@@ -373,7 +376,7 @@ public abstract class Mission {
 		}
 
 		@Override
-		protected Process getProcess(int index) {
+		Process getProcess(int index) {
 			ManagedSchedulable ms = getManageSched(index);
 
 			if (ms instanceof ManagedEventHandler)
@@ -384,7 +387,7 @@ public abstract class Mission {
 		}
 
 		@Override
-		protected ManagedSchedulable getManageSched(int index) {
+		ManagedSchedulable getManageSched(int index) {
 			if (index == -99)
 				return null;
 			if (index == -11)
@@ -396,10 +399,10 @@ public abstract class Mission {
 		}
 	}
 
-	static class MissionSinglecoreBehavior extends MissionBehavior {
+	static final class MissionSinglecoreBehavior extends MissionBehavior {
 
 		@Override
-		protected Mission getMission() {
+		Mission getMission() {
 			Mission mission = null;
 
 			if (Launcher.level == 0 && CyclicScheduler.instance().seq != null) {
@@ -409,14 +412,15 @@ public abstract class Mission {
 				if (PriorityScheduler.instance().getCurrentProcess().getTarget() instanceof MissionSequencer) {
 					mission = ((MissionSequencer<?>) PriorityScheduler.instance().getCurrentProcess().getTarget()).currMission;
 				} else {
-					mission = ManagedSchedMethods.getMission(PriorityScheduler.instance().getCurrentProcess().getTarget());
+					mission = ManagedSchedMethods.getMission(PriorityScheduler.instance().getCurrentProcess()
+							.getTarget());
 				}
 			}
 			return mission;
 		}
 
 		@Override
-		protected boolean requestTermination(Mission mission) {
+		boolean requestTermination(Mission mission) {
 			if (mission.missionTerminate == false) { // called the first time during mission execution	
 
 				// terminate all the sequencer's MSObjects that were created by the mission.
@@ -444,7 +448,7 @@ public abstract class Mission {
 		}
 
 		@Override
-		protected void runInitialize(Mission mission) {
+		void runInitialize(Mission mission) {
 			vm.ClockInterruptHandler.instance.disable();
 
 			if (missionSet == null || isMissionSetInit == false) {
@@ -462,7 +466,7 @@ public abstract class Mission {
 		}
 
 		@Override
-		protected void runExecute(Mission mission) {
+		void runExecute(Mission mission) {
 			vm.ClockInterruptHandler.instance.disable();
 
 			mission.phaseOfMission = Phase.EXECUTE;
@@ -486,7 +490,7 @@ public abstract class Mission {
 		}
 
 		@Override
-		protected void runCleanup(Mission mission, MissionMemory missMem) {
+		void runCleanup(Mission mission, MissionMemory missMem) {
 			mission.phaseOfMission = Phase.CLEANUP;
 			// wait until (all handlers in mission have terminated)			
 			while (mission.msSetForMission.msCount > 0) {
@@ -509,14 +513,14 @@ public abstract class Mission {
 		}
 
 		@Override
-		protected Process getProcess(int index) {
+		Process getProcess(int index) {
 			int missionIndex = index / 20;
 			int scjProcessIndex = index % 20;
 			return missionSet[missionIndex].msSetForMission.scjProcesses[scjProcessIndex];
 		}
 
 		@Override
-		protected ManagedSchedulable getManageSched(int index) {
+		ManagedSchedulable getManageSched(int index) {
 			return getProcess(index).msObject;
 		}
 
