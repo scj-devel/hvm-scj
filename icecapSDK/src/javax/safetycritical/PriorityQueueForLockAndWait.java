@@ -118,7 +118,7 @@ class PriorityQueueForLockAndWait {
 			return ScjProcess.idleProcess;
 		}
 
-		return (ScjProcess)Mission.delegate.getProcess(processIdx);
+		return (ScjProcess)Mission.missionBehaviour.getProcess(processIdx);
 	}
 
 	/**

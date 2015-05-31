@@ -59,7 +59,7 @@ public abstract class Mission {
 	private static Mission[] missionSet = null;
 	private static boolean isMissionSetInit = false;
 
-	static MissionBehavior delegate;
+	static MissionBehavior missionBehaviour;
 
 	ManagedSchedulableSet msSetForMission;
 	Phase phaseOfMission;
@@ -170,7 +170,7 @@ public abstract class Mission {
 	 */
 	@SCJAllowed
 	public final boolean requestTermination() {
-		return delegate.requestTermination(this);
+		return missionBehaviour.requestTermination(this);
 	}
 
 	/**
@@ -184,7 +184,7 @@ public abstract class Mission {
 	}
 
 	void runInitialize() {
-		delegate.runInitialize(this);
+		missionBehaviour.runInitialize(this);
 	}
 
 	void runExecute()
@@ -193,7 +193,7 @@ public abstract class Mission {
 	//  For cyclic schedule execution, this method is overwritten in 
 	//  the subclass CyclicExecutive. 
 	{
-		delegate.runExecute(this);
+		missionBehaviour.runExecute(this);
 	}
 
 	void runCleanup(MissionMemory missMem)
@@ -202,7 +202,7 @@ public abstract class Mission {
 	//  For cyclic schedule execution, this method is overwritten in 
 	//  the subclass CyclicExecutive. 
 	{
-		delegate.runCleanup(this, missMem);
+		missionBehaviour.runCleanup(this, missMem);
 	}
 
 	// used for JML annotation only (not public)
@@ -242,9 +242,9 @@ public abstract class Mission {
 		abstract ManagedSchedulable getManageSched(int index);
 	}
 
-	static final class MissionMulticoreBehavior extends MissionBehavior {
+	static final class MulticoreBehavior extends MissionBehavior {
 
-		MissionMulticoreBehavior() {
+		MulticoreBehavior() {
 			Services.setCeiling(this, Priorities.SEQUENCER_PRIORITY);
 		}
 
@@ -399,7 +399,7 @@ public abstract class Mission {
 		}
 	}
 
-	static final class MissionSinglecoreBehavior extends MissionBehavior {
+	static final class SinglecoreBehavior extends MissionBehavior {
 
 		@Override
 		Mission getMission() {

@@ -153,7 +153,7 @@ class PriorityQueue {
 			return ScjProcess.idleProcess;
 		}
 
-		return (ScjProcess)Mission.delegate.getProcess(processIdx);
+		return (ScjProcess)Mission.missionBehaviour.getProcess(processIdx);
 	}
 
 	public void remove(ScjProcess obj) {

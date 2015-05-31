@@ -84,14 +84,14 @@ abstract class Launcher implements Runnable {
 	abstract void start(); 
 
 	void startLevel0() {
-		Mission.delegate = new Mission.MissionSinglecoreBehavior();
+		Mission.missionBehaviour = new Mission.SinglecoreBehavior();
 		MissionSequencer<?> seq = app.getSequencer();
 		CyclicScheduler.instance().start(seq);
 	}
 
 	void startLevel1_2() {
 		// insert idle process before the mission sequencer.
-		Mission.delegate = new Mission.MissionSinglecoreBehavior();
+		Mission.missionBehaviour = new Mission.SinglecoreBehavior();
 		PriorityScheduler sch = PriorityScheduler.instance();
 		sch.insertReadyQueue(ScjProcess.createIdleProcess());
 		app.getSequencer();
@@ -99,7 +99,7 @@ abstract class Launcher implements Runnable {
 	}
 
 	void startwithOS() {
-		Mission.delegate = new Mission.MissionMulticoreBehavior();
+		Mission.missionBehaviour = new Mission.MulticoreBehavior();
 		Machine.setCurrentScheduler(new MultiprocessorHelpingScheduler());
 		OSProcess.initSpecificID();
 		MissionSequencer<?> outerMostMS = app.getSequencer();
