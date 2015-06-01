@@ -335,8 +335,6 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		void initMissionSequencer(MissionSequencer<?> handler) {
 			if (MissionSequencer.isOuterMostSeq) {
 				MissionSequencer.outerMostSeq = handler;
-				MissionSequencer.isOuterMostSeq = false;
-
 				if (Launcher.level != 0) {
 					PriorityScheduler.instance().addOuterMostSeq(handler);
 				}
@@ -347,7 +345,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 					handler.outerSeq = Mission.getMission().currMissSeq;
 
 			}
-
+			MissionSequencer.isOuterMostSeq = false;
 		}
 
 		@Override
@@ -370,7 +368,6 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 			handler.terminateSeq = true;
 			handler.currMission.requestTermination();
 			vm.ClockInterruptHandler.instance.enable();
-
 		}
 
 		@Override
@@ -379,15 +376,14 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 			// the ms will wait here until it is notified
 			if (Launcher.level > 0) {
-				handler.mission.currMissSeq.seqWait();
+				handler.seqWait();
 			} else {
-				while (!handler.mission.terminationPending() && handler.mission.msSetForMission.msCount > 0) {
+				while (!handler.currMission.terminationPending() && handler.currMission.msSetForMission.msCount > 0) {
 					vm.RealtimeClock.awaitNextTick();
 				}
 			}
 
-			handler.currState = State.CLEANUP;
+			
 		}
-
 	}
 }

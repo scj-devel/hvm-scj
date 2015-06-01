@@ -105,9 +105,8 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 
 		currState = State.START;
 
-		if (isOuterMostSeq) {
-			outerMostSeq = this;
-
+		if (MissionSequencer.isOuterMostSeq) {
+			MissionSequencer.outerMostSeq = this;
 			if (Launcher.level != 0) {
 				PriorityScheduler.instance().addOuterMostSeq(this);
 			}
@@ -115,11 +114,12 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 			if (Launcher.level < 2)
 				throw new IllegalStateException("MissSeq not outer-most");
 			else
-				outerSeq = Mission.getMission().currMissSeq;
+				this.outerSeq = Mission.getMission().currMissSeq;
 
 		}
-
-		isOuterMostSeq = false;
+		MissionSequencer.isOuterMostSeq = false;
+		
+		//ManagedEventHandler.handlerBehavior.initMissionSequencer(this);
 
 		Services.setCeiling(this, this.priority.getPriority());
 		lock = Monitor.getMonitor(this);
