@@ -104,6 +104,12 @@ public abstract class Mission {
 			}
 		}
 		return mission;
+		
+		/* The above should be 
+		 * return missionBehaviour.getMission();
+		 * 
+		 * But this doen't work. TODO
+		 */
 	}
 
 	@SCJAllowed
@@ -295,7 +301,7 @@ public abstract class Mission {
 				return true; // called more than once: nothing done
 		}
 
-		synchronized int addNewMission(Mission mission) {
+		int addNewMission(Mission mission) {
 			if (missionSet == null || isMissionSetInit == false) {
 				missionSet = new Mission[Const.DEFAULT_HANDLER_NUMBER];
 				isMissionSetInit = true;
@@ -489,10 +495,11 @@ public abstract class Mission {
 		@Override
 		void runCleanup(Mission mission, MissionMemory missMem) {
 			mission.phaseOfMission = Phase.CLEANUP;
-			// wait until (all handlers in mission have terminated)			
-			while (mission.msSetForMission.msCount > 0) {
-				vm.RealtimeClock.awaitNextTick();
-			}
+			// wait until (all handlers in mission have terminated)	
+
+			//			while (mission.msSetForMission.msCount > 0) {
+			//				vm.RealtimeClock.awaitNextTick();
+			//			}
 
 			vm.ClockInterruptHandler.instance.disable();
 			for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {

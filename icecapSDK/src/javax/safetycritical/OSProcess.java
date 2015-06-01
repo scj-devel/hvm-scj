@@ -22,7 +22,7 @@ class OSProcess extends Process {
 	}
 
 	private void runLogic(ManagedSchedulable ms) {
-		ManagedSchedOSExecutor.executeManagedSchedulable(ms);
+		ManagedSchedMethodsMulticore.executeManagedSchedulable(ms);
 	}
 
 	class ThreadInfo {

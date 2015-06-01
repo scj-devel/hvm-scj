@@ -27,9 +27,12 @@ package javax.safetycritical;
 
 import javax.realtime.AbsoluteTime;
 import javax.realtime.BoundAsyncEventHandler;
+import javax.realtime.HighResolutionTime;
 import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
+import javax.realtime.RelativeTime;
 import javax.realtime.ReleaseParameters;
+import javax.safetycritical.MissionSequencer.State;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
@@ -71,6 +74,8 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	// used in JML spec. methods
 	boolean isRegistered;
 	boolean isInMissionScope;
+
+	static HandlerBehavior handlerBehavior = null;
 
 	/**
 	 * Constructs an event handler.
@@ -203,5 +208,186 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	// Used in JML annotations
 	/*@ spec_public @*/ReleaseParameters getReleaseParam() {
 		return release;
+	}
+
+	static abstract class HandlerBehavior {
+
+		abstract void aperiodicHandlerRelease(AperiodicEventHandler handler);
+
+		abstract boolean oneshotHandlerDeschedule(OneShotEventHandler handler);
+
+		abstract void oneshotHandlerScheduleNextReleaseTime(OneShotEventHandler handler, HighResolutionTime time);
+
+		abstract void initMissionSequencer(MissionSequencer<?> handler);
+
+		abstract void cleanOuterMissionSequencer(MissionSequencer<?> handler);
+
+		abstract void missionSequencerSingleTermination(MissionSequencer<?> handler);
+
+		abstract void missionSequencerExecutePhase(MissionSequencer<?> handler);
+
+	}
+
+	static final class MulticoreBehavior extends HandlerBehavior {
+
+		@Override
+		void aperiodicHandlerRelease(AperiodicEventHandler handler) {
+			handler.fireNextRelease();
+			handler.isReleased = true;
+		}
+
+		@Override
+		boolean oneshotHandlerDeschedule(OneShotEventHandler handler) {
+			if (handler.process.executable.startTimer_c > 0 || handler.state == 0) {
+				handler.deschedulePending = true;
+				OSProcess.setTimerfd(handler.process.executable.startTimer_c, 0);
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		@Override
+		void oneshotHandlerScheduleNextReleaseTime(OneShotEventHandler handler, HighResolutionTime time) {
+			if (time == null)
+				handler.deschedule();
+			else {
+				if (time instanceof AbsoluteTime) {
+					handler.releaseTime = new RelativeTime(0, 0);
+				} else if (time instanceof RelativeTime) {
+					if (handler.releaseTime.getMilliseconds() < 0
+							|| (handler.releaseTime.getMilliseconds() == 0 && handler.releaseTime.getNanoseconds() < 0))
+						throw new IllegalArgumentException("release time < 0");
+					handler.releaseTime = time;
+				} else {
+					throw new IllegalArgumentException("wrong time form");
+				}
+
+				if (handler.state == 0) {
+					OSProcess.setTimerfd(handler.process.executable.startTimer_c, handler.getStart());
+				}
+				if (handler.state == 2) {
+					OSProcess.setTimerfd(handler.process.executable.startTimer_c, handler.getStart());
+					handler.fireNextRelease();
+				}
+			}
+
+		}
+
+		@Override
+		void initMissionSequencer(MissionSequencer<?> handler) {
+			if (MissionSequencer.isOuterMostSeq) {
+
+				MissionSequencer.outerMostSeq = handler;
+				MissionSequencer.isOuterMostSeq = false;
+
+				OSProcess.setOuterMostMissionSequencer(handler.priority.getPriority());
+
+			}
+
+		}
+
+		@Override
+		void cleanOuterMissionSequencer(MissionSequencer<?> handler) {
+
+		}
+
+		@Override
+		void missionSequencerSingleTermination(MissionSequencer<?> handler) {
+			handler.terminateSeq = true;
+			handler.currMission.requestTermination();
+		}
+
+		@Override
+		void missionSequencerExecutePhase(MissionSequencer<?> handler) {
+			handler.missionMemory.enterToExecute(handler.currMission);
+
+			handler.currState = State.CLEANUP;
+
+		}
+	}
+
+	static final class SinglecoreBehavior extends HandlerBehavior {
+
+		@Override
+		void aperiodicHandlerRelease(AperiodicEventHandler handler) {
+			PriorityScheduler.instance().release(handler);
+		}
+
+		@Override
+		boolean oneshotHandlerDeschedule(OneShotEventHandler handler) {
+			ManagedSchedulableSet hs = Mission.getMission().msSetForMission;
+
+			if (hs.contains(handler)) {
+				hs.removeMSObject(handler);
+				return true;
+			} else
+				return false;
+
+		}
+
+		@Override
+		void oneshotHandlerScheduleNextReleaseTime(OneShotEventHandler handler, HighResolutionTime time) {
+			// to be implement
+		}
+
+		@Override
+		void initMissionSequencer(MissionSequencer<?> handler) {
+			if (MissionSequencer.isOuterMostSeq) {
+				MissionSequencer.outerMostSeq = handler;
+				MissionSequencer.isOuterMostSeq = false;
+
+				if (Launcher.level != 0) {
+					PriorityScheduler.instance().addOuterMostSeq(handler);
+				}
+			} else {
+				if (Launcher.level < 2)
+					throw new IllegalStateException("MissSeq not outer-most");
+				else
+					handler.outerSeq = Mission.getMission().currMissSeq;
+
+			}
+
+		}
+
+		@Override
+		void cleanOuterMissionSequencer(MissionSequencer<?> handler) {
+			if (Launcher.level == 2) {
+				devices.Console.println("MS.T: " + handler.name + "; #Missions: " + MissionSequencer.howManyMissions
+						+ "; outerSeq: " + handler.outerSeq);
+
+				vm.ClockInterruptHandler.instance.disable();
+				if (handler.outerSeq != null)
+					handler.outerSeq.currMission.msSetForMission.removeMSObject(handler);
+				vm.ClockInterruptHandler.instance.enable();
+			}
+		}
+
+		@Override
+		void missionSequencerSingleTermination(MissionSequencer<?> handler) {
+			vm.ClockInterruptHandler.instance.disable();
+			devices.Console.println("------ MS.signalTermination: " + handler.name);
+			handler.terminateSeq = true;
+			handler.currMission.requestTermination();
+			vm.ClockInterruptHandler.instance.enable();
+
+		}
+
+		@Override
+		void missionSequencerExecutePhase(MissionSequencer<?> handler) {
+			handler.missionMemory.enterToExecute(handler.currMission);
+
+			// the ms will wait here until it is notified
+			if (Launcher.level > 0) {
+				handler.mission.currMissSeq.seqWait();
+			} else {
+				while (!handler.mission.terminationPending() && handler.mission.msSetForMission.msCount > 0) {
+					vm.RealtimeClock.awaitNextTick();
+				}
+			}
+
+			handler.currState = State.CLEANUP;
+		}
+
 	}
 }

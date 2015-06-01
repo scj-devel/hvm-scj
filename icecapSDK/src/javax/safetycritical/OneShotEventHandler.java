@@ -113,6 +113,9 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 			throw new IllegalArgumentException("releaseTime of type AbsoluteTime not implemented");
 		else
 			this.releaseTime = releaseTime;
+		
+		if(Launcher.useOS)
+			Services.setCeiling(this, this.priority.getPriority());
 	}
 
 	/**
@@ -121,13 +124,7 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	 */
 	@SCJAllowed(Level.LEVEL_1)
 	public boolean deschedule() {
-		ManagedSchedulableSet hs = Mission.getMission().msSetForMission;
-
-		if (hs.contains(this)) {
-			hs.removeMSObject(this);
-			return true;
-		} else
-			return false;
+		return ManagedEventHandler.handlerBehavior.oneshotHandlerDeschedule(this);
 	}
 
 	public final void cleanUp() {
@@ -145,14 +142,36 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	}
 	
 	public void scheduleNextReleaseTime(HighResolutionTime time) {
-		
+		ManagedEventHandler.handlerBehavior.oneshotHandlerScheduleNextReleaseTime(this, time);
 	}
 	
 	synchronized void waitForNextRelease() {
-		
+		//		if (mission.terminationPending()) {
+		//			mission.currMissSeq.decrementActiveCount();
+		//			OSProcess.requestTermination_c(osProcess.executable);
+		//			OSProcess.testCancel_c();
+		//		}
+
+		try {
+			if (!this.mission.terminationPending())
+				wait();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		if (mission.terminationPending()) {
+			mission.currMissSeq.seqNotify();
+			OSProcess.requestTermination_c(process.executable);
+			//			OSProcess.testCancel_c();
+		}
 	}
-	
+
 	synchronized void fireNextRelease() {
+		notify();
+	}
+
+	int getTimerfd() {
+		return this.process.executable.startTimer_c;
 	}
 
 }

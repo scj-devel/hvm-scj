@@ -52,7 +52,8 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 	/**
 	  * The scheduler that releases the handler.
 	*/
-	private PriorityScheduler sch;
+	
+	boolean isReleased = false;
 
 	/**
 	 * Constructs an aperiodic event handler that can be explicitly released.
@@ -88,13 +89,15 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 		super(priority, release, storage, name);
 		if (priority == null || release == null)
 			throw new IllegalArgumentException("null argument");
+		
+		if(Launcher.useOS)
+			Services.setCeiling(this, this.priority.getPriority());
 	}
 
 	@SCJAllowed(Level.INFRASTRUCTURE)
 	@SCJRestricted(Phase.INITIALIZE)
 	public final void register() {
 		super.register();
-		sch = PriorityScheduler.instance();
 	}
 	
 	/**
@@ -111,15 +114,35 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 	  @*/
 	@SCJAllowed
 	public final void release() {
-		sch.release(this);
+		ManagedEventHandler.handlerBehavior.aperiodicHandlerRelease(this);
+	}
+	
+	boolean isReleased() {
+		return isReleased;
 	}
 	
 	synchronized void waitForNextRelease() {
-		
+		//		if (mission.terminationPending()) {
+		//			mission.currMissSeq.decrementActiveCount();
+		//			OSProcess.requestTermination_c(osProcess.executable);
+		//			OSProcess.testCancel_c();
+		//		}
+
+		try {
+			if (!mission.terminationPending())
+				wait();
+		} catch (InterruptedException e) {
+		}
+
+		if (mission.terminationPending()) {
+			mission.currMissSeq.seqNotify();
+			OSProcess.requestTermination_c(process.executable);
+			//			OSProcess.testCancel_c();
+		}
 	}
-	
+
 	synchronized void fireNextRelease() {
-		
+		notify();
 	}
 
 }

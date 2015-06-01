@@ -85,6 +85,9 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 		this.storage = storage;
 		this.name = name;
 		this.mission = Mission.getMission();
+		
+		if (mission == null)
+			throw new IllegalArgumentException("mission is null");
 
 		int backingStoreOfThisMemory = mission == null ? MemoryArea.getRemainingMemorySize()
 				: (int) this.storage.totalBackingStore;

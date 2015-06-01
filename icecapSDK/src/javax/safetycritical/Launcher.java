@@ -53,14 +53,20 @@ import vm.Memory;
 abstract class Launcher implements Runnable {
 	Safelet<?> app;
 	static int level;
+	static boolean useOS = false;
 
 	Launcher(Safelet<?> app, int level) {
 		this(app, level, false);
 	}
 
 	Launcher(Safelet<?> app, int level, boolean useOS) {
+		if (level < 0 || level > 2 || app == null) {
+			throw new IllegalArgumentException();
+		}
+		
 		this.app = app;
 		Launcher.level = level;
+		Launcher.useOS = useOS;
 
 		ManagedMemory.allocateBackingStore(Const.OVERALL_BACKING_STORE);
 
@@ -83,6 +89,8 @@ abstract class Launcher implements Runnable {
 
 	void startLevel0() {
 		Mission.missionBehaviour = new Mission.SinglecoreBehavior();
+		ManagedEventHandler.handlerBehavior = new ManagedEventHandler.SinglecoreBehavior();
+		Services.servicesBehavior = new Services.SinglecoreBehavior();
 		MissionSequencer<?> seq = app.getSequencer();
 		CyclicScheduler.instance().start(seq);
 	}
@@ -90,6 +98,8 @@ abstract class Launcher implements Runnable {
 	void startLevel1_2() {
 		// insert idle process before the mission sequencer.
 		Mission.missionBehaviour = new Mission.SinglecoreBehavior();
+		ManagedEventHandler.handlerBehavior = new ManagedEventHandler.SinglecoreBehavior();
+		Services.servicesBehavior = new Services.SinglecoreBehavior();
 		PriorityScheduler sch = PriorityScheduler.instance();
 		sch.insertReadyQueue(ScjProcess.createIdleProcess());
 		app.getSequencer();
@@ -98,6 +108,8 @@ abstract class Launcher implements Runnable {
 
 	void startwithOS() {
 		Mission.missionBehaviour = new Mission.MulticoreBehavior();
+		ManagedEventHandler.handlerBehavior = new ManagedEventHandler.MulticoreBehavior();
+		Services.servicesBehavior = new Services.MulticoreBehavior();
 		Machine.setCurrentScheduler(new MultiprocessorHelpingScheduler());
 		OSProcess.initSpecificID();
 		MissionSequencer<?> outerMostMS = app.getSequencer();

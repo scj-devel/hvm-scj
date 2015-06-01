@@ -43,6 +43,8 @@ import javax.safetycritical.annotate.SCJAllowed;
 @SCJAllowed
 public class Services {
 
+	static ServicesBehavior servicesBehavior = null;
+
 	@SCJAllowed
 	public static void captureBackTrace(Throwable association) {
 		// not implemented
@@ -55,10 +57,7 @@ public class Services {
 	@SCJAllowed
 	public static ManagedSchedulable currentManagedSchedulable() {
 		// not tested
-		if (Launcher.level == 0)
-			return CyclicScheduler.instance().seq;
-		else
-			return PriorityScheduler.instance().current.getTarget();
+		return servicesBehavior.currentManagedSchedulable();
 	}
 
 	//	@SCJAllowed
@@ -72,14 +71,19 @@ public class Services {
 
 	@SCJAllowed(Level.LEVEL_1)
 	public static int getDefaultCeiling() {
-		return PriorityScheduler.instance().getMaxPriority();
+		return servicesBehavior.getDefaultCeiling();
 	}
 
 	@SCJAllowed(Level.LEVEL_1)
 	public static void setCeiling(Object target, int ceiling) {
 		Monitor monitor = new Monitor(ceiling);
 		monitor.attach(target);
-		//devices.Console.println("Services.setCeiling");
+		
+		/* The above should be
+		 * servicesBehavior.setCeiling(target, ceiling);
+		 * 
+		 *  But that doen't work. TODO
+		 */
 	}
 
 	@SCJAllowed(Level.LEVEL_0)
@@ -97,5 +101,61 @@ public class Services {
 		{
 			clock.getTime(time);
 		}
+	}
+
+	// helping classes for multicore and singlecore version.
+	static abstract class ServicesBehavior {
+
+		abstract ManagedSchedulable currentManagedSchedulable();
+
+		abstract int getDefaultCeiling();
+
+		abstract void setCeiling(Object target, int ceiling);
+
+	}
+
+	static final class MulticoreBehavior extends ServicesBehavior {
+
+		@Override
+		ManagedSchedulable currentManagedSchedulable() {
+			return Mission.missionBehaviour.getManageSched(OSProcess.getThreadID());
+		}
+
+		@Override
+		int getDefaultCeiling() {
+			// to be implemented.
+			return 0;
+		}
+
+		@Override
+		void setCeiling(Object target, int ceiling) {
+			vm.Monitor monitor = MultiprocessorHelpingScheduler.getMultiprocessorMonitor(ceiling);
+			monitor.attach(target);
+		}
+
+	}
+
+	static final class SinglecoreBehavior extends ServicesBehavior {
+
+		@Override
+		ManagedSchedulable currentManagedSchedulable() {
+			if (Launcher.level == 0)
+				return CyclicScheduler.instance().seq;
+			else
+				return PriorityScheduler.instance().current.getTarget();
+		}
+
+		@Override
+		int getDefaultCeiling() {
+			return PriorityScheduler.instance().getMaxPriority();
+		}
+
+		@Override
+		void setCeiling(Object target, int ceiling) {
+			Monitor monitor = new Monitor(ceiling);
+			monitor.attach(target);
+			//devices.Console.println("Services.setCeiling");
+		}
+
 	}
 }
