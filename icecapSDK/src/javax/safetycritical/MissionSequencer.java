@@ -105,21 +105,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 
 		currState = State.START;
 
-		if (MissionSequencer.isOuterMostSeq) {
-			MissionSequencer.outerMostSeq = this;
-			if (Launcher.level != 0) {
-				PriorityScheduler.instance().addOuterMostSeq(this);
-			}
-		} else {
-			if (Launcher.level < 2)
-				throw new IllegalStateException("MissSeq not outer-most");
-			else
-				this.outerSeq = Mission.getMission().currMissSeq;
-
-		}
-		MissionSequencer.isOuterMostSeq = false;
-		
-		//ManagedEventHandler.handlerBehavior.initMissionSequencer(this);
+		ManagedEventHandler.handlerBehavior.initMissionSequencer(this);
 
 		Services.setCeiling(this, this.priority.getPriority());
 		lock = Monitor.getMonitor(this);
@@ -132,20 +118,36 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	}
 
 	synchronized void seqWait() {
-		while (!currMission.terminationPending() && currMission.msSetForMission.msCount > 0) {
-			//devices.Console.println("MS.seqWait msCount:" + currMission.msSetForMission.msCount);
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		if (!Launcher.useOS) {
+			while (!currMission.terminationPending() && currMission.msSetForMission.msCount > 0) {
+				//devices.Console.println("MS.seqWait msCount:" + currMission.msSetForMission.msCount);
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		} else {
+			while (currMission.msSetForMission.activeCount > 0) {
+				try {
+					wait();
+				} catch (InterruptedException e) {
+				}
 			}
 		}
 	}
 
 	synchronized void seqNotify() {
-		devices.Console.println("MS.seqNotify msCount:" + currMission.msSetForMission.msCount);
-		if (currMission.msSetForMission.msCount == 0) {
-			notify();
+		if (!Launcher.useOS) {
+			devices.Console.println("MS.seqNotify msCount:" + currMission.msSetForMission.msCount);
+			if (currMission.msSetForMission.msCount == 0) {
+				notify();
+			}
+		} else {
+			currMission.msSetForMission.activeCount--;
+			if (currMission.msSetForMission.activeCount == 0) {
+				notify();
+			}
 		}
 	}
 
@@ -187,17 +189,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 
 			case State.EXECUTE:
 				//devices.Console.println("MS.E");
-				missionMemory.enterToExecute(currMission);
-
-				// the ms will wait here until it is notified
-				if (Launcher.level > 0) {
-					seqWait();
-				} else {
-					while (!currMission.terminationPending() && currMission.msSetForMission.msCount > 0) {
-						vm.RealtimeClock.awaitNextTick();
-					}
-				}
-
+				ManagedEventHandler.handlerBehavior.missionSequencerExecutePhase(this);
 				currState = State.CLEANUP;
 				break;
 
@@ -212,17 +204,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 				break;
 
 			case State.TERMINATE:
-
-				if (Launcher.level == 2) {
-					devices.Console.println("MS.T: " + name + "; #Missions: " + howManyMissions + "; outerSeq: "
-							+ outerSeq);
-
-					vm.ClockInterruptHandler.instance.disable();
-					if (outerSeq != null)
-						outerSeq.currMission.msSetForMission.removeMSObject(this);
-					vm.ClockInterruptHandler.instance.enable();
-				}
-
+				ManagedEventHandler.handlerBehavior.cleanOuterMissionSequencer(this);
 				currState = State.END;
 			default:
 			}
@@ -251,11 +233,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 
 	@Override
 	public void signalTermination() {
-		vm.ClockInterruptHandler.instance.disable();
-		devices.Console.println("------ MS.signalTermination: " + name);
-		terminateSeq = true;
-		currMission.requestTermination();
-		vm.ClockInterruptHandler.instance.enable();
+		ManagedEventHandler.handlerBehavior.missionSequencerSingleTermination(this);
 	}
 
 	public void cleanUp() {
