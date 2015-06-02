@@ -71,6 +71,8 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 	String name;
 	
+	AffinitySet set = null;
+	
 	// used in JML spec. methods
 	boolean isRegistered;
 	boolean isInMissionScope;
@@ -129,8 +131,11 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 			currentMemory = ManagedMemory.ImmortalMemory.instance();
 		} else {
 			backingStoreOfThisMemory = (int) this.storage.totalBackingStore;
-			if(mission !=null)
+			if(mission !=null){
 				this.currentMemory = mission.currMissSeq.missionMemory;
+				this.set = mission.currMissSeq.set;
+			}
+				
 		}
 
 		MemoryArea backingStoreProvider = (mission == null) ? 
@@ -221,6 +226,9 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		return currentMemory;
 	}
 	
+	AffinitySet getAffinitySet() {
+		return set;
+	}
 	
 
 	static abstract class HandlerBehavior {
@@ -295,9 +303,20 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 				MissionSequencer.isOuterMostSeq = false;
 
 				OSProcess.setOuterMostMissionSequencer(handler.priority.getPriority());
-
+				handler.set = Launcher.level == 1 ? findAffinitySetForLevel1()
+						: AffinitySet.AFFINITY_SET[0];
 			}
 
+		}
+		
+		private AffinitySet findAffinitySetForLevel1() {
+			int processor = OSProcess.getCurrentCPUID();
+			for (int i = 0; i < AffinitySet.AFFINITY_SET.length; i++) {
+				if (AffinitySet.AFFINITY_SET[i].processorSet[0] == processor) {
+					return AffinitySet.AFFINITY_SET[i];
+				}
+			}
+			throw new NullPointerException();
 		}
 
 		@Override

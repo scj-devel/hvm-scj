@@ -56,11 +56,12 @@ class OSProcess extends Process {
 			this.process = process;
 			info = setThreadInfo(process.msObject);
 
-//			if (process.msObject instanceof ManagedEventHandler) {
-//				processors = ((ManagedEventHandler) process.msObject).set.processorSet;
-//			} else {
-//				processors = ((ManagedThread) process.msObject).set.processorSet;
-//			}
+			if (process.msObject instanceof ManagedEventHandler) {
+				processors = ((ManagedEventHandler) process.msObject).set.processorSet;
+			} else {
+				processors = ((ManagedThread) process.msObject).set.processorSet;
+			}
+			
 			sizeOfProcessor = processors.length;
 		}
 
