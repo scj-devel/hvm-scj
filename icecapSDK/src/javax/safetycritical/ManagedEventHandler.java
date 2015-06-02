@@ -32,7 +32,6 @@ import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.realtime.ReleaseParameters;
-import javax.safetycritical.MissionSequencer.State;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
@@ -66,6 +65,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	Mission mission = null;
 	
 	ManagedMemory privateMemory;
+	ManagedMemory currentMemory;	// for multicore only
 	
 	ReleaseParameters release;
 
@@ -126,8 +126,11 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 		if (mission == null && this instanceof MissionSequencer) {
 			backingStoreOfThisMemory = MemoryArea.getRemainingMemorySize();
+			currentMemory = ManagedMemory.ImmortalMemory.instance();
 		} else {
 			backingStoreOfThisMemory = (int) this.storage.totalBackingStore;
+			if(mission !=null)
+				this.currentMemory = mission.currMissSeq.missionMemory;
 		}
 
 		MemoryArea backingStoreProvider = (mission == null) ? 
@@ -209,6 +212,16 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	/*@ spec_public @*/ReleaseParameters getReleaseParam() {
 		return release;
 	}
+	
+	void setCurrentMemory(ManagedMemory current) {
+		this.currentMemory = current;
+	}
+
+	ManagedMemory getCurrentMemory() {
+		return currentMemory;
+	}
+	
+	
 
 	static abstract class HandlerBehavior {
 
@@ -301,9 +314,6 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		@Override
 		void missionSequencerExecutePhase(MissionSequencer<?> handler) {
 			handler.missionMemory.enterToExecute(handler.currMission);
-
-			handler.currState = State.CLEANUP;
-
 		}
 	}
 

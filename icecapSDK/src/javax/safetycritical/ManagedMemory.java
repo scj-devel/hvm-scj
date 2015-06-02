@@ -48,6 +48,7 @@ import vm.Memory;
 public abstract class ManagedMemory extends MemoryArea {
 
 	static boolean flag = true;
+	static MemoryBehavior memoryBehavior = null;
 
 	/**
 	 * statically allocated Exception prevents memory area reference mismatches.
@@ -116,30 +117,7 @@ public abstract class ManagedMemory extends MemoryArea {
 	@SCJAllowed(Level.INFRASTRUCTURE)
 	@IcecapCompileMe
 	void enter(Runnable logic) throws IllegalArgumentException {
-		if (logic == null || !(logic instanceof ManagedSchedulable))
-			throw new IllegalArgumentException();
-
-		ManagedSchedulable ms = (ManagedSchedulable) logic;
-
-		if (ms instanceof ManagedEventHandler) {
-			ManagedEventHandler mevh = (ManagedEventHandler) ms;
-			Memory mem = Memory.switchToArea(mevh.privateMemory.delegate);
-			logic.run();
-			Memory.switchToArea(mem);
-			mevh.privateMemory.delegate.reset(0);
-		} else if (ms instanceof ManagedThread) {
-			devices.Console.println("ManagedMemory.enter: managedThred should work");
-			ManagedThread mth = (ManagedThread) ms;
-			Memory mem = Memory.switchToArea(mth.privateMemory.delegate);
-			logic.run();
-			Memory.switchToArea(mem);
-			mth.privateMemory.delegate.reset(0);
-		} else {
-			// (ms is instanceof ManagedLongEventHandler)
-			devices.Console.println("ManagedMemory.enter: UPS ManagedLongEventHandler not implemented");
-			//ManagedLongEventHandler mevh = (ManagedLongEventHandler) ms;
-			// finish this ...
-		}
+		memoryBehavior.enter(logic,this);
 	}
 
 	/**
@@ -154,24 +132,7 @@ public abstract class ManagedMemory extends MemoryArea {
 	 */
 	@SCJAllowed
 	void executeInArea(Runnable logic) throws IllegalArgumentException {
-		if (logic == null)
-			throw new IllegalArgumentException("executeInArea: logic is null");
-
-		if (flag) {
-			flag = false;
-			Memory currentMem = vm.Memory.getHeapArea();
-			Memory.switchToArea(this.delegate);
-			logic.run();
-			Memory.switchToArea(currentMem);
-		} else {
-			ScjProcess currProcess = getCurrentProcess();
-			if (currProcess == null)
-				throw new IllegalArgumentException("executeInArea: process is null");
-
-			Memory mem = Memory.switchToArea(this.delegate);
-			logic.run();
-			Memory.switchToArea(mem);
-		}
+		memoryBehavior.executeInArea(logic, this);
 	}
 
 	static final ManagedMemory getOuterMemory(MemoryArea mem) {
@@ -208,22 +169,7 @@ public abstract class ManagedMemory extends MemoryArea {
 	 */
 	@SCJAllowed
 	public static void enterPrivateMemory(int size, Runnable logic) throws IllegalStateException {
-		/**
-		 * prevMemory is the memory area at entry; prevFree is the free pointer
-		 * before allocation of the private memory. If the current free has
-		 * changed after running the logic, there has been allocation in the
-		 * outer area, and the private memory cannot be released.
-		 */
-		if (logic == null)
-			throw exception;
-
-		vm.ClockInterruptHandler.instance.disable(); // atomic operation ??
-
-		ManagedSchedulable ms = getCurrentProcess().getTarget();
-		//devices.Console.println("enterPrivateMemory by " + getCurrentProcess().index);
-		runEnterPrivateMemory(ms, size, logic);
-
-		vm.ClockInterruptHandler.instance.enable();
+		memoryBehavior.enterPrivateMemory(size, logic);
 	}
 
 	private static void runEnterPrivateMemory(ManagedSchedulable ms, int size, Runnable logic) {
@@ -243,6 +189,41 @@ public abstract class ManagedMemory extends MemoryArea {
 
 		inner.removeArea();
 	}
+	
+	private static void runEnterPrivateMemoryMulticore(ManagedSchedulable ms, int size, Runnable logic) {
+		ManagedMemory prev = getMemory(ms);
+		devices.Console.println("enterPrivateMemory: prev " + prev);
+		long prevFree = prev.memoryConsumed();
+
+		InnerPrivateMemory inner = new InnerPrivateMemory(size,
+				prev.getRemainingBackingstoreSize(), prev, "InnerPrvMem");
+		inner.prev = prev;
+
+		ManagedMemory outer;
+
+		if (ms instanceof ManagedEventHandler) {
+			outer = ((ManagedEventHandler) ms).getCurrentMemory();
+			((ManagedEventHandler) ms).setCurrentMemory(inner);
+		} else {
+			outer = ((ManagedThread) ms).getCurrentMemory();
+			((ManagedThread) ms).setCurrentMemory(inner);
+		}
+
+		OSProcess.setMemoryArea(inner.delegate);
+		logic.run();
+		OSProcess.setMemoryArea(outer.delegate);
+
+		if (prev.memoryConsumed() != prevFree)
+			prev.resetArea(prevFree);
+
+		inner.removeArea();
+
+		if (ms instanceof ManagedEventHandler) {
+			((ManagedEventHandler) ms).setCurrentMemory(outer);
+		} else {
+			((ManagedThread) ms).setCurrentMemory(outer);
+		}
+	}
 
 	private static ManagedMemory getMemory(ManagedSchedulable ms) {
 		if (ms instanceof ManagedEventHandler) {
@@ -260,45 +241,12 @@ public abstract class ManagedMemory extends MemoryArea {
 
 	@SCJAllowed
 	public static void executeInAreaOf(Object obj, Runnable logic) {
-		if (obj == null || logic == null)
-			throw exception;
-
-		vm.ClockInterruptHandler.instance.disable(); // atomic operation ??
-
-		ManagedMemory memAreaOfObject = (ManagedMemory) MemoryArea.getMemoryArea(obj);
-		//devices.Console.println("executeInAreaOf: memAreaOfObject: " + memAreaOfObject);
-
-		Memory mem = Memory.switchToArea(memAreaOfObject.getDelegate());
-		logic.run();
-		Memory.switchToArea(mem);
-
-		vm.ClockInterruptHandler.instance.enable(); // atomic operation ??
+		memoryBehavior.executeInAreaOf(obj, logic);
 	}
 
 	@SCJAllowed
 	public static void executeInOuterArea(Runnable logic) {
-		if (logic == null)
-			throw exception;
-
-		vm.ClockInterruptHandler.instance.disable(); // atomic operation ??
-
-		MemoryArea currentMem = MemoryArea.getCurrentMemoryArea();
-		//devices.Console.println("executeInOuterArea: currentMem: " + currentMem);
-
-		if (currentMem instanceof ManagedMemory.ImmortalMemory) {
-			devices.Console.println("executeInOuterArea: already in ImmortalMemory");
-
-			vm.ClockInterruptHandler.instance.enable(); // atomic operation ??
-			throw new IllegalStateException("executeInOuterArea: already in ImmortalMemory");
-		}
-
-		ManagedMemory outerMemory = getOuterMemory(currentMem);
-
-		Memory mem = Memory.switchToArea(outerMemory.getDelegate());
-		logic.run();
-		Memory.switchToArea(mem);
-
-		vm.ClockInterruptHandler.instance.enable(); // atomic operation ??
+		memoryBehavior.executeInOuterArea(logic);
 	}
 
 	/**
@@ -358,4 +306,281 @@ public abstract class ManagedMemory extends MemoryArea {
 		return null;
 	}
 
+	static abstract class MemoryBehavior{
+		abstract void enter(Runnable logic, ManagedMemory memory) throws IllegalArgumentException;
+		
+		abstract void executeInArea(Runnable logic, ManagedMemory memory) throws IllegalArgumentException;
+		
+		abstract void enterPrivateMemory(int size, Runnable logic) throws IllegalStateException;
+		
+		abstract void executeInAreaOf(Object obj, Runnable logic);
+		
+		abstract void executeInOuterArea(Runnable logic);	
+	}
+	
+	static final class MulticoreBehavior extends MemoryBehavior{
+
+		@Override
+		void enter(Runnable logic, ManagedMemory memory) throws IllegalArgumentException {
+			if (logic == null || !(logic instanceof ManagedSchedulable))
+				throw new IllegalArgumentException();
+			ManagedSchedulable ms = (ManagedSchedulable) logic;
+
+			ManagedMemory outer;
+
+			if (ms instanceof ManagedEventHandler) {
+				outer = ((ManagedEventHandler) ms).currentMemory;
+				((ManagedEventHandler) ms).currentMemory = memory;
+			} else {
+				outer = ((ManagedThread) ms).currentMemory;
+				((ManagedThread) ms).currentMemory = memory;
+			}
+
+			OSProcess.setMemoryArea(memory.delegate);
+			logic.run();
+			OSProcess.setMemoryArea(outer.delegate);
+			memory.delegate.reset(0);
+
+			if (ms instanceof ManagedEventHandler) {
+				((ManagedEventHandler) ms).currentMemory = outer;
+			} else {
+				((ManagedThread) ms).currentMemory = outer;
+			}
+		}
+
+		@Override
+		void executeInArea(Runnable logic, ManagedMemory memory) throws IllegalArgumentException {
+			if (logic == null)
+				throw new IllegalArgumentException("executeInArea: logic is null");
+
+			if (flag) {
+				flag = false;
+				Memory currentMem = vm.Memory.getHeapArea();
+
+				OSProcess.setMemoryArea(memory.delegate);
+				logic.run();
+				OSProcess.setMemoryArea(currentMem);
+
+			} else {
+				ManagedMemory outer;
+
+				ManagedSchedulable ms = Services.currentManagedSchedulable();
+				if (ms instanceof ManagedEventHandler) {
+					outer = ((ManagedEventHandler) ms).getCurrentMemory();
+					((ManagedEventHandler) ms).setCurrentMemory(memory);
+				} else {
+					outer = ((ManagedThread) ms).getCurrentMemory();
+					((ManagedThread) ms).setCurrentMemory(memory);
+				}
+
+				OSProcess.setMemoryArea(memory.delegate);
+				logic.run();
+				OSProcess.setMemoryArea(outer.delegate);
+
+				if (ms instanceof ManagedEventHandler) {
+					((ManagedEventHandler) ms).setCurrentMemory(outer);
+				} else {
+					((ManagedThread) ms).setCurrentMemory(outer);
+				}
+
+			}
+		}
+
+		@Override
+		void enterPrivateMemory(int size, Runnable logic) throws IllegalStateException {
+			if (logic == null)
+				throw exception;
+
+			ManagedSchedulable ms = Services.currentManagedSchedulable();
+			devices.Console.println("enterPrivateMemory");
+			runEnterPrivateMemoryMulticore(ms, size, logic);
+		}
+
+		@Override
+		void executeInAreaOf(Object obj, Runnable logic) {
+			if (obj == null || logic == null)
+				throw exception;
+
+			ManagedMemory outer;
+			ManagedMemory memAreaOfObject = (ManagedMemory) MemoryArea.getMemoryArea(obj);
+
+			ManagedSchedulable ms = Services.currentManagedSchedulable();
+			if (ms instanceof ManagedEventHandler) {
+				outer = ((ManagedEventHandler) ms).getCurrentMemory();
+				((ManagedEventHandler) ms).setCurrentMemory(memAreaOfObject);
+			} else {
+				outer = ((ManagedThread) ms).getCurrentMemory();
+				((ManagedThread) ms).setCurrentMemory(memAreaOfObject);
+			}
+
+			OSProcess.setMemoryArea(memAreaOfObject.delegate);
+			logic.run();
+			OSProcess.setMemoryArea(outer.delegate);
+
+			if (ms instanceof ManagedEventHandler) {
+				((ManagedEventHandler) ms).setCurrentMemory(outer);
+			} else {
+				((ManagedThread) ms).setCurrentMemory(outer);
+			}
+		}
+
+		@Override
+		void executeInOuterArea(Runnable logic) {
+			if (logic == null)
+				throw exception;
+
+			ManagedSchedulable ms = Services.currentManagedSchedulable();
+
+			ManagedMemory currentMem;
+			if (ms instanceof ManagedEventHandler) {
+				ManagedEventHandler handler = ((ManagedEventHandler) ms);
+				currentMem = handler.getCurrentMemory();
+			} else {
+				ManagedThread handler = ((ManagedThread) ms);
+				currentMem = handler.getCurrentMemory();
+			}
+			devices.Console.println("executeInOuterArea: currentMem: " + currentMem);
+
+			if (currentMem instanceof ManagedMemory.ImmortalMemory) {
+				devices.Console.println("executeInOuterArea: already in ImmortalMemory");
+				throw new IllegalStateException("executeInOuterArea: already in ImmortalMemory");
+			}
+
+			ManagedMemory outerMemory = getOuterMemory(currentMem);
+
+			if (ms instanceof ManagedEventHandler) {
+				((ManagedEventHandler) ms).setCurrentMemory(outerMemory);
+			} else {
+				((ManagedThread) ms).setCurrentMemory(outerMemory);
+			}
+
+			OSProcess.setMemoryArea(outerMemory.delegate);
+			logic.run();
+			OSProcess.setMemoryArea(currentMem.delegate);
+
+			if (ms instanceof ManagedEventHandler) {
+				((ManagedEventHandler) ms).setCurrentMemory(currentMem);
+			} else {
+				((ManagedThread) ms).setCurrentMemory(currentMem);
+			}
+		}
+		
+	}
+	
+	static final class SinglecoreBehavior extends MemoryBehavior{
+
+		@Override
+		void enter(Runnable logic, ManagedMemory memory) throws IllegalArgumentException {
+			if (logic == null || !(logic instanceof ManagedSchedulable))
+				throw new IllegalArgumentException();
+
+			ManagedSchedulable ms = (ManagedSchedulable) logic;
+
+			if (ms instanceof ManagedEventHandler) {
+				ManagedEventHandler mevh = (ManagedEventHandler) ms;
+				Memory mem = Memory.switchToArea(mevh.privateMemory.delegate);
+				logic.run();
+				Memory.switchToArea(mem);
+				mevh.privateMemory.delegate.reset(0);
+			} else if (ms instanceof ManagedThread) {
+				devices.Console.println("ManagedMemory.enter: managedThred should work");
+				ManagedThread mth = (ManagedThread) ms;
+				Memory mem = Memory.switchToArea(mth.privateMemory.delegate);
+				logic.run();
+				Memory.switchToArea(mem);
+				mth.privateMemory.delegate.reset(0);
+			} else {
+				// (ms is instanceof ManagedLongEventHandler)
+				devices.Console.println("ManagedMemory.enter: UPS ManagedLongEventHandler not implemented");
+				//ManagedLongEventHandler mevh = (ManagedLongEventHandler) ms;
+				// finish this ...
+			}
+		}
+
+		@Override
+		void executeInArea(Runnable logic, ManagedMemory memory) throws IllegalArgumentException {
+			if (logic == null)
+				throw new IllegalArgumentException("executeInArea: logic is null");
+
+			if (flag) {
+				flag = false;
+				Memory currentMem = vm.Memory.getHeapArea();
+				Memory.switchToArea(memory.delegate);
+				logic.run();
+				Memory.switchToArea(currentMem);
+			} else {
+				ScjProcess currProcess = getCurrentProcess();
+				if (currProcess == null)
+					throw new IllegalArgumentException("executeInArea: process is null");
+
+				Memory mem = Memory.switchToArea(memory.delegate);
+				logic.run();
+				Memory.switchToArea(mem);
+			}
+		}
+
+		@Override
+		void enterPrivateMemory(int size, Runnable logic) throws IllegalStateException {
+			/**
+			 * prevMemory is the memory area at entry; prevFree is the free pointer
+			 * before allocation of the private memory. If the current free has
+			 * changed after running the logic, there has been allocation in the
+			 * outer area, and the private memory cannot be released.
+			 */
+			if (logic == null)
+				throw exception;
+
+			vm.ClockInterruptHandler.instance.disable(); // atomic operation ??
+
+			ManagedSchedulable ms = getCurrentProcess().getTarget();
+			//devices.Console.println("enterPrivateMemory by " + getCurrentProcess().index);
+			runEnterPrivateMemory(ms, size, logic);
+
+			vm.ClockInterruptHandler.instance.enable();
+		}
+
+		@Override
+		void executeInAreaOf(Object obj, Runnable logic) {
+			if (obj == null || logic == null)
+				throw exception;
+
+			vm.ClockInterruptHandler.instance.disable(); // atomic operation ??
+
+			ManagedMemory memAreaOfObject = (ManagedMemory) MemoryArea.getMemoryArea(obj);
+			//devices.Console.println("executeInAreaOf: memAreaOfObject: " + memAreaOfObject);
+
+			Memory mem = Memory.switchToArea(memAreaOfObject.getDelegate());
+			logic.run();
+			Memory.switchToArea(mem);
+
+			vm.ClockInterruptHandler.instance.enable(); // atomic operation ??
+		}
+
+		@Override
+		void executeInOuterArea(Runnable logic) {
+			if (logic == null)
+				throw exception;
+
+			vm.ClockInterruptHandler.instance.disable(); // atomic operation ??
+
+			MemoryArea currentMem = MemoryArea.getCurrentMemoryArea();
+			//devices.Console.println("executeInOuterArea: currentMem: " + currentMem);
+
+			if (currentMem instanceof ManagedMemory.ImmortalMemory) {
+				devices.Console.println("executeInOuterArea: already in ImmortalMemory");
+
+				vm.ClockInterruptHandler.instance.enable(); // atomic operation ??
+				throw new IllegalStateException("executeInOuterArea: already in ImmortalMemory");
+			}
+
+			ManagedMemory outerMemory = getOuterMemory(currentMem);
+
+			Memory mem = Memory.switchToArea(outerMemory.getDelegate());
+			logic.run();
+			Memory.switchToArea(mem);
+
+			vm.ClockInterruptHandler.instance.enable(); // atomic operation ??
+		}
+		
+	}
 }

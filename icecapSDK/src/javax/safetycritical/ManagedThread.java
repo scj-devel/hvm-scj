@@ -61,6 +61,8 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 	Mission mission = null;
 
 	ManagedMemory privateMemory;
+	ManagedMemory currentMemory;	//for multicore only
+	
 	String name;
 
 	// used in JML spec. methods
@@ -98,6 +100,9 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 
 		privateMemory = new PrivateMemory((int) storage.getMaximalMemoryArea(), backingStoreOfThisMemory,
 				backingStoreProvider, privateMemoryName);
+		
+		this.currentMemory = mission.currMissSeq.missionMemory;
+		
 		this.isRegistered = false;
 		this.isInMissionScope = false;
 	}
@@ -176,5 +181,13 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 		return this.name;
 	}
 	
+
+	void setCurrentMemory(ManagedMemory current) {
+		this.currentMemory = current;
+	}
+
+	ManagedMemory getCurrentMemory() {
+		return currentMemory;
+	}
 	
 }

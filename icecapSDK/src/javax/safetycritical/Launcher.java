@@ -74,10 +74,6 @@ abstract class Launcher implements Runnable {
 			new PrivateMemory(Const.MEMORY_TRACKER_AREA_SIZE, Const.MEMORY_TRACKER_AREA_SIZE,
 					MemoryArea.overAllBackingStore, "MemTrk");
 		}
-
-		ManagedMemory immortalMem = new ManagedMemory.ImmortalMemory(2 * Const.IMMORTAL_MEM);
-		immortalMem.executeInArea(this);
-		//immortalMem.removeArea();
 	}
 
 	public void run() {
@@ -85,31 +81,28 @@ abstract class Launcher implements Runnable {
 		start();
 	}
 
+	void createImmortalMemory(){
+		ManagedMemory immortalMem = new ManagedMemory.ImmortalMemory(2 * Const.IMMORTAL_MEM);
+		immortalMem.executeInArea(this);
+		//immortalMem.removeArea();
+	}
+	
 	abstract void start(); 
-
+	
 	void startLevel0() {
-		Mission.missionBehaviour = new Mission.SinglecoreBehavior();
-		ManagedEventHandler.handlerBehavior = new ManagedEventHandler.SinglecoreBehavior();
-		Services.servicesBehavior = new Services.SinglecoreBehavior();
 		MissionSequencer<?> seq = app.getSequencer();
 		CyclicScheduler.instance().start(seq);
 	}
-
+	
 	void startLevel1_2() {
 		// insert idle process before the mission sequencer.
-		Mission.missionBehaviour = new Mission.SinglecoreBehavior();
-		ManagedEventHandler.handlerBehavior = new ManagedEventHandler.SinglecoreBehavior();
-		Services.servicesBehavior = new Services.SinglecoreBehavior();
 		PriorityScheduler sch = PriorityScheduler.instance();
 		sch.insertReadyQueue(ScjProcess.createIdleProcess());
 		app.getSequencer();
 		PriorityScheduler.instance().start();
 	}
-
+	
 	void startwithOS() {
-		Mission.missionBehaviour = new Mission.MulticoreBehavior();
-		ManagedEventHandler.handlerBehavior = new ManagedEventHandler.MulticoreBehavior();
-		Services.servicesBehavior = new Services.MulticoreBehavior();
 		Machine.setCurrentScheduler(new MultiprocessorHelpingScheduler());
 		OSProcess.initSpecificID();
 		MissionSequencer<?> outerMostMS = app.getSequencer();
