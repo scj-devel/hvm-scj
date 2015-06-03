@@ -257,6 +257,11 @@ int32 n_test_TestCAS_AtomicReference_cas(int32 *sp) {
 
 #if defined(N_THREAD_JAVALANGTHREADSCHEDULER_JAVALANGTHREADMONITOR_INITIALIZEMUTEX)
 #include <pthread.h>
+
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+#include <errno.h>
+#endif
+
 int16 n_thread_JavaLangThreadScheduler_JavaLangThreadMonitor_initializeMutex(int32 *sp) {
     struct _thread_JavaLangThreadScheduler_JavaLangThreadMonitor_c* monitor = HEAP_REF((struct _thread_JavaLangThreadScheduler_JavaLangThreadMonitor_c* )(pointer )sp[0], struct _thread_JavaLangThreadScheduler_JavaLangThreadMonitor_c*);
 
@@ -264,9 +269,36 @@ int16 n_thread_JavaLangThreadScheduler_JavaLangThreadMonitor_initializeMutex(int
 
     pthread_cond_t *cond = (pthread_cond_t *) gc_allocateObject(sizeof(pthread_cond_t) - sizeof(Object), 0);
 
-    pthread_mutex_init((pthread_mutex_t *) HEAP_REF(mutex, pthread_mutex_t *), 0);
+    /*Behaviours for multicore version*/
+	#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+    	pthread_mutexattr_t mattr;
+        pthread_mutexattr_init(&mattr);
 
-    pthread_cond_init((pthread_cond_t *) HEAP_REF(cond, pthread_cond_t *), 0);
+        int ret = pthread_mutexattr_settype(&mattr, PTHREAD_MUTEX_ERRORCHECK);
+        if(ret != 0){
+            printf("pthread_mutexattr_settype error %d\n", ret);
+        }
+
+        ret = pthread_mutexattr_setprioceiling(&mattr, (uint32)sp[1]);
+        if(ret != 0){
+            printf("pthread_mutexattr_setprioceiling error %d\n", ret);
+        }
+
+        if(pthread_mutex_init((pthread_mutex_t *) HEAP_REF(mutex, pthread_mutex_t *), &mattr) != 0){
+			printf("initmutex errno: %d.\n",errno);
+			return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+		}
+
+		if(pthread_cond_init((pthread_cond_t *) HEAP_REF(cond, pthread_cond_t *), 0)!= 0){
+			printf("initcond errno: %d.\n",errno);
+			return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+		}
+	#else
+		pthread_mutex_init((pthread_mutex_t *) HEAP_REF(mutex, pthread_mutex_t *), 0);
+
+		pthread_cond_init((pthread_cond_t *) HEAP_REF(cond, pthread_cond_t *), 0);
+	#endif
+
 
     monitor->mutex_f = (uint32) (pointer) mutex;
     monitor->conditionVariable_f = (uint32) (pointer) cond;
