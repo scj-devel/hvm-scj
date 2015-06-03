@@ -11,10 +11,13 @@ public class JavaLangThreadScheduler implements Scheduler {
 		private int conditionVariable;
 
 		JavaLangThreadMonitor() {
-			initializeMutex(0);
+			initializeMutex(-99);
 		}
 		
 		JavaLangThreadMonitor(int ceiling) {
+			if(ceiling <= 0)
+				throw new IllegalArgumentException();
+			
 			initializeMutex(ceiling);
 		}
 
@@ -71,6 +74,6 @@ public class JavaLangThreadScheduler implements Scheduler {
 	}
 	
 	protected static Monitor getSCJMultiprocessorMonitor(int ceiling){
-		return new JavaLangThreadMonitor(ceiling);
+			return new JavaLangThreadMonitor(ceiling);
 	}
 }
