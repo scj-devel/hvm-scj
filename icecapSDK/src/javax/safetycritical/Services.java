@@ -76,16 +76,7 @@ public class Services {
 
 	@SCJAllowed(Level.LEVEL_1)
 	public static void setCeiling(Object target, int ceiling) {
-//		Monitor monitor = new Monitor(ceiling);
-//		monitor.attach(target);
-		
 		servicesBehavior.setCeiling(target, ceiling);
-		
-		/* The above should be
-		 * servicesBehavior.setCeiling(target, ceiling);
-		 * 
-		 *  But that doen't work. TODO
-		 */
 	}
 	
 	public static AffinitySet[] getSchedulingAllocationDomains() {
@@ -187,7 +178,7 @@ public class Services {
 
 		@Override
 		String getNameOfCurrentMemoryArea() {
-			return null;
+			return vm.Memory.getCurrentMemoryArea().getName();
 		}
 
 	}
