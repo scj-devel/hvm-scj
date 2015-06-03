@@ -76,14 +76,20 @@ public class Services {
 
 	@SCJAllowed(Level.LEVEL_1)
 	public static void setCeiling(Object target, int ceiling) {
-		Monitor monitor = new Monitor(ceiling);
-		monitor.attach(target);
+//		Monitor monitor = new Monitor(ceiling);
+//		monitor.attach(target);
+		
+		servicesBehavior.setCeiling(target, ceiling);
 		
 		/* The above should be
 		 * servicesBehavior.setCeiling(target, ceiling);
 		 * 
 		 *  But that doen't work. TODO
 		 */
+	}
+	
+	public static AffinitySet[] getSchedulingAllocationDomains() {
+		return AffinitySet.AFFINITY_SET;
 	}
 
 	@SCJAllowed(Level.LEVEL_0)
@@ -102,6 +108,21 @@ public class Services {
 			clock.getTime(time);
 		}
 	}
+	
+	
+	// for testing only
+	public static int getCurrentCPUID(){
+		return OSProcess.getCurrentCPUID();
+	}
+	
+	public static int getAvailableCPUCount(){
+		return OSProcess.getAvailableCPUCount();
+	}
+	
+	public static String getNameOfCurrentMemoryArea() {
+		return servicesBehavior.getNameOfCurrentMemoryArea();
+	}
+	
 
 	// helping classes for multicore and singlecore version.
 	static abstract class ServicesBehavior {
@@ -111,6 +132,8 @@ public class Services {
 		abstract int getDefaultCeiling();
 
 		abstract void setCeiling(Object target, int ceiling);
+		
+		abstract String getNameOfCurrentMemoryArea(); 
 
 	}
 
@@ -131,6 +154,11 @@ public class Services {
 		void setCeiling(Object target, int ceiling) {
 			vm.Monitor monitor = MultiprocessorHelpingScheduler.getMultiprocessorMonitor(ceiling);
 			monitor.attach(target);
+		}
+
+		@Override
+		String getNameOfCurrentMemoryArea() {
+			return OSProcess.getCurrentMemoryArea().getName();
 		}
 
 	}
@@ -157,5 +185,12 @@ public class Services {
 			//devices.Console.println("Services.setCeiling");
 		}
 
+		@Override
+		String getNameOfCurrentMemoryArea() {
+			return null;
+		}
+
 	}
+	
+	
 }

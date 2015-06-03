@@ -91,19 +91,20 @@ public abstract class Mission {
 	@SCJAllowed
 	@IcecapCompileMe
 	public static Mission getMission() {
-		Mission mission = null;
-
-		if (Launcher.level == 0 && CyclicScheduler.instance().seq != null) {
-			mission = CyclicScheduler.instance().seq.currMission;
-		} else if (Launcher.level > 0 && PriorityScheduler.instance().getCurrentProcess() != null) {
-
-			if (PriorityScheduler.instance().getCurrentProcess().getTarget() instanceof MissionSequencer) {
-				mission = ((MissionSequencer<?>) PriorityScheduler.instance().getCurrentProcess().getTarget()).currMission;
-			} else {
-				mission = ManagedSchedMethods.getMission(PriorityScheduler.instance().getCurrentProcess().getTarget());
-			}
-		}
-		return mission;
+//		Mission mission = null;
+//
+//		if (Launcher.level == 0 && CyclicScheduler.instance().seq != null) {
+//			mission = CyclicScheduler.instance().seq.currMission;
+//		} else if (Launcher.level > 0 && PriorityScheduler.instance().getCurrentProcess() != null) {
+//
+//			if (PriorityScheduler.instance().getCurrentProcess().getTarget() instanceof MissionSequencer) {
+//				mission = ((MissionSequencer<?>) PriorityScheduler.instance().getCurrentProcess().getTarget()).currMission;
+//			} else {
+//				mission = ManagedSchedMethods.getMission(PriorityScheduler.instance().getCurrentProcess().getTarget());
+//			}
+//		}
+//		return mission;
+		return missionBehaviour.getMission();
 		
 		/* The above should be 
 		 * return missionBehaviour.getMission();

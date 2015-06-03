@@ -172,59 +172,6 @@ public abstract class ManagedMemory extends MemoryArea {
 		memoryBehavior.enterPrivateMemory(size, logic);
 	}
 
-	private static void runEnterPrivateMemory(ManagedSchedulable ms, int size, Runnable logic) {
-		ManagedMemory prev = getMemory(ms);
-		long prevFree = prev.memoryConsumed();
-
-		InnerPrivateMemory inner = new InnerPrivateMemory(size, prev.getRemainingBackingstoreSize(), prev,
-				"InnerPrvMem");
-		inner.prev = prev;
-
-		Memory mem = Memory.switchToArea(inner.delegate);
-		logic.run();
-		Memory.switchToArea(mem);
-
-		if (prev.memoryConsumed() != prevFree)
-			prev.resetArea(prevFree);
-
-		inner.removeArea();
-	}
-	
-	private static void runEnterPrivateMemoryMulticore(ManagedSchedulable ms, int size, Runnable logic) {
-		ManagedMemory prev = getMemory(ms);
-		devices.Console.println("enterPrivateMemory: prev " + prev);
-		long prevFree = prev.memoryConsumed();
-
-		InnerPrivateMemory inner = new InnerPrivateMemory(size,
-				prev.getRemainingBackingstoreSize(), prev, "InnerPrvMem");
-		inner.prev = prev;
-
-		ManagedMemory outer;
-
-		if (ms instanceof ManagedEventHandler) {
-			outer = ((ManagedEventHandler) ms).getCurrentMemory();
-			((ManagedEventHandler) ms).setCurrentMemory(inner);
-		} else {
-			outer = ((ManagedThread) ms).getCurrentMemory();
-			((ManagedThread) ms).setCurrentMemory(inner);
-		}
-
-		OSProcess.setMemoryArea(inner.delegate);
-		logic.run();
-		OSProcess.setMemoryArea(outer.delegate);
-
-		if (prev.memoryConsumed() != prevFree)
-			prev.resetArea(prevFree);
-
-		inner.removeArea();
-
-		if (ms instanceof ManagedEventHandler) {
-			((ManagedEventHandler) ms).setCurrentMemory(outer);
-		} else {
-			((ManagedThread) ms).setCurrentMemory(outer);
-		}
-	}
-
 	private static ManagedMemory getMemory(ManagedSchedulable ms) {
 		if (ms instanceof ManagedEventHandler) {
 			ManagedEventHandler mevh = (ManagedEventHandler) ms;
@@ -283,13 +230,6 @@ public abstract class ManagedMemory extends MemoryArea {
 	void resizeArea(long newSize) {
 		this.resizeMemArea(newSize);
 
-	}
-
-	static ScjProcess getCurrentProcess() {
-		if (Launcher.level != 0)
-			return PriorityScheduler.instance().getCurrentProcess();
-		else
-			return CyclicScheduler.instance().getCurrentProcess();
 	}
 
 	protected Memory getDelegate() {
@@ -395,6 +335,41 @@ public abstract class ManagedMemory extends MemoryArea {
 			devices.Console.println("enterPrivateMemory");
 			runEnterPrivateMemoryMulticore(ms, size, logic);
 		}
+		
+		void runEnterPrivateMemoryMulticore(ManagedSchedulable ms, int size, Runnable logic) {
+			ManagedMemory prev = getMemory(ms);
+			devices.Console.println("enterPrivateMemory: prev " + prev);
+			long prevFree = prev.memoryConsumed();
+
+			InnerPrivateMemory inner = new InnerPrivateMemory(size,
+					prev.getRemainingBackingstoreSize(), prev, "InnerPrvMem");
+			inner.prev = prev;
+
+			ManagedMemory outer;
+
+			if (ms instanceof ManagedEventHandler) {
+				outer = ((ManagedEventHandler) ms).getCurrentMemory();
+				((ManagedEventHandler) ms).setCurrentMemory(inner);
+			} else {
+				outer = ((ManagedThread) ms).getCurrentMemory();
+				((ManagedThread) ms).setCurrentMemory(inner);
+			}
+
+			OSProcess.setMemoryArea(inner.delegate);
+			logic.run();
+			OSProcess.setMemoryArea(outer.delegate);
+
+			if (prev.memoryConsumed() != prevFree)
+				prev.resetArea(prevFree);
+
+			inner.removeArea();
+
+			if (ms instanceof ManagedEventHandler) {
+				((ManagedEventHandler) ms).setCurrentMemory(outer);
+			} else {
+				((ManagedThread) ms).setCurrentMemory(outer);
+			}
+		}
 
 		@Override
 		void executeInAreaOf(Object obj, Runnable logic) {
@@ -496,6 +471,13 @@ public abstract class ManagedMemory extends MemoryArea {
 				// finish this ...
 			}
 		}
+		
+		ScjProcess getCurrentProcess() {
+			if (Launcher.level != 0)
+				return PriorityScheduler.instance().getCurrentProcess();
+			else
+				return CyclicScheduler.instance().getCurrentProcess();
+		}
 
 		@Override
 		void executeInArea(Runnable logic, ManagedMemory memory) throws IllegalArgumentException {
@@ -537,6 +519,24 @@ public abstract class ManagedMemory extends MemoryArea {
 			runEnterPrivateMemory(ms, size, logic);
 
 			vm.ClockInterruptHandler.instance.enable();
+		}
+		
+		 void runEnterPrivateMemory(ManagedSchedulable ms, int size, Runnable logic) {
+			ManagedMemory prev = getMemory(ms);
+			long prevFree = prev.memoryConsumed();
+
+			InnerPrivateMemory inner = new InnerPrivateMemory(size, prev.getRemainingBackingstoreSize(), prev,
+					"InnerPrvMem");
+			inner.prev = prev;
+
+			Memory mem = Memory.switchToArea(inner.delegate);
+			logic.run();
+			Memory.switchToArea(mem);
+
+			if (prev.memoryConsumed() != prevFree)
+				prev.resetArea(prevFree);
+
+			inner.removeArea();
 		}
 
 		@Override

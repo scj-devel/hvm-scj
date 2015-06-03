@@ -49,10 +49,6 @@ import javax.safetycritical.annotate.SCJRestricted;
  */
 @SCJAllowed(Level.LEVEL_1)
 public abstract class AperiodicEventHandler extends ManagedEventHandler {
-	/**
-	  * The scheduler that releases the handler.
-	*/
-	
 	boolean isReleased = false;
 
 	/**
