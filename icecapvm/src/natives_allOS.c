@@ -1,3 +1,9 @@
+
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+#define _GNU_SOURCE	/*for MACROs of CPU_SET*/
+#include <sched.h>
+#endif
+
 #include "types.h"
 #include "methods.h"
 #include "classes.h"
@@ -542,14 +548,30 @@ int16 n_java_lang_Class_getSuperclass(int32 *sp) {
 #endif
 
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(GETCLASS_USED)
+
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+#include <stdlib.h>
+#include <pthread.h>
+#endif
+
 static VMMemory* current = 0;
 static uint8 scopeCount = 0;
+
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+extern pthread_key_t key;
+#endif
 
 static void pushDefaultArea(void) {
 	if (heapArea != 0) {
 		if (scopeCount == 0) {
-			current = currentMemoryArea;
-			currentMemoryArea = heapArea;
+			#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+				current = pthread_getspecific(key);
+			    pthread_setspecific(key, heapArea);
+			#else
+				current = currentMemoryArea;
+				currentMemoryArea = heapArea;
+			#endif
+
 		}
 		scopeCount++;
 	}
@@ -558,7 +580,12 @@ static void pushDefaultArea(void) {
 static void popDefaultArea(void) {
 	if (heapArea != 0) {
 		if (scopeCount == 1) {
-			currentMemoryArea = current;
+			#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+			 	pthread_setspecific(key, current);
+			#else
+			    currentMemoryArea = current;
+			#endif
+
 		}
 		scopeCount--;
 	}
@@ -1391,7 +1418,13 @@ int16 n_devices_System_resetMemory(int32 *sp) {
 	head = 0;
 #endif
 	initGC();
-	HEAP_REF(currentMemoryArea,VMMemory*)->free = JAVA_STACK_SIZE;
+
+	#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+		HEAP_REF(pthread_getspecific(key),VMMemory*)->free = JAVA_STACK_SIZE;
+	#else
+        HEAP_REF(currentMemoryArea,VMMemory*)->free = JAVA_STACK_SIZE;
+	#endif
+
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED)
 	initializeConstants(sp);
 #endif

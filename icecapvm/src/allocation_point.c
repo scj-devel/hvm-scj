@@ -22,7 +22,21 @@ uint32 java_heap_size = JAVA_HEAP_SIZE;
 
 extern VMMemory* heapArea;
 
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+#include <stdlib.h>
+#include <pthread.h>
+#endif
+
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+pthread_key_t key;
+#endif
+
 void initDefaultRAMAllocationPoint() {
+	/*Behaviours for multicore version*/
+	#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+	pthread_key_create(&key, NULL);
+	#endif
+
 	currentMemoryArea = (VMMemory*) &heap[0];
 
 #ifdef REF_OFFSET
@@ -49,6 +63,11 @@ void initDefaultRAMAllocationPoint() {
 	*(Object*) currentMemoryArea = VM_MEMORY_var;
 
 	heapArea = currentMemoryArea = HEAP_UNREF(currentMemoryArea, VMMemory*);
+
+	/*Behaviours for multicore version*/
+	#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+	pthread_setspecific(key, currentMemoryArea);
+	#endif
 }
 
 #ifdef PRINTFSUPPORT
