@@ -75,7 +75,6 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	int currState;
 	boolean terminateSeq = false;
 	static volatile boolean isOuterMostSeq = true;
-	Monitor lock;
 
 	static ScjProcess missSeqProcess = null;
 
@@ -108,7 +107,6 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 		ManagedEventHandler.handlerBehavior.initMissionSequencer(this);
 
 		Services.setCeiling(this, this.priority.getPriority());
-		lock = Monitor.getMonitor(this);
 	}
 
 	@SCJAllowed
@@ -239,10 +237,6 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	public void cleanUp() {
 		super.cleanUp();
 		missionMemory.removeArea();
-	}
-
-	Monitor getLock() {
-		return lock;
 	}
 
 	MissionSequencer<?> getOuterSeq() {

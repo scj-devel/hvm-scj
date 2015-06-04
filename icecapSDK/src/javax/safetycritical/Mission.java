@@ -302,7 +302,7 @@ public abstract class Mission {
 				return true; // called more than once: nothing done
 		}
 
-		int addNewMission(Mission mission) {
+		synchronized int addNewMission(Mission mission) {
 			if (missionSet == null || isMissionSetInit == false) {
 				missionSet = new Mission[Const.DEFAULT_HANDLER_NUMBER];
 				isMissionSetInit = true;
