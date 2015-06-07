@@ -375,6 +375,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 			}
 			MissionSequencer.isOuterMostSeq = false;
+			handler.lock = Monitor.getMonitor(handler);
 		}
 
 		@Override
