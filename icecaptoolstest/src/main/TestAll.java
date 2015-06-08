@@ -246,7 +246,7 @@ public class TestAll {
 
 	private void compileAndExecute(File outputFolder, String testClass, int testNo) throws Exception {
 		String exe = "a" + testNo + ".exe";
-		String prefix = "";
+		String prefix = "sudo ";
 		String gccCommand = getGCCCommand() + exe;
 
 		/* Patmos, fails at TestCVar1.java */
