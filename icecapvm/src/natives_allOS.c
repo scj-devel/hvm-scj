@@ -1,8 +1,5 @@
-
-#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
-#define _GNU_SOURCE	/*for MACROs of CPU_SET*/
+#define _GNU_SOURCE
 #include <sched.h>
-#endif
 
 #include "types.h"
 #include "methods.h"
@@ -864,6 +861,410 @@ int16 n_java_lang_Thread_toString(int32 *sp) {
 }
 #endif
 
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/time.h>
+#include <sys/timerfd.h>
+#include <errno.h>
+#include <string.h>
+#include <pthread.h>
+
+pthread_key_t key_schedulable_object;
+
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETAFFINITY)
+int16 n_javax_safetycritical_OSProcess_setAffinity(int32 *sp){
+ 	int size = sp[0]+1;
+ 	int *p = HEAP_REF((int* ) (pointer ) sp[1], int*);
+
+ 	cpu_set_t cs;
+ 	CPU_ZERO(&cs);
+ 	int i = 1;
+ 	for(; i<size;i++){
+ 		CPU_SET(p[i], &cs);
+ 	}
+ 	pthread_setaffinity_np(pthread_self(), sizeof(cs), &cs);
+
+ 	printf("p[0-4]: %d, %d, %d, %d, %d\n", p[0], p[1], p[2], p[3], p[4]);
+    return -1;
+}
+#endif
+
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETOMMSAFFINITYSET)
+int16 n_javax_safetycritical_OSProcess_setOMMSAffinitySet(int32 *sp){
+ 	int level = sp[0];
+ 	if(level != 2){
+ 		int processor = sched_getcpu();
+ 		cpu_set_t cs;
+ 		CPU_ZERO(&cs);
+ 		CPU_SET(processor, &cs);
+ 		int ret = pthread_setaffinity_np(pthread_self(), sizeof(cs), &cs);
+ 		if( ret != 0 ){
+ 			printf("pthread_setaffinity_np ret: %d. \n",ret);
+        	return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+ 		}
+ 	}
+    return -1;
+}
+#endif
+
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_ISPROCESSORINSET)
+int16 n_javax_safetycritical_OSProcess_isProcessorInSet(int32 *sp){
+ 	int processor = sp[0];
+ 	cpu_set_t cs;
+ 	CPU_ZERO(&cs);
+ 	pthread_getaffinity_np(pthread_self(), sizeof(cs), &cs);
+
+ 	sp[0] = CPU_ISSET(processor, &cs);
+    return -1;
+}
+#endif
+
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETALLCPUCOUNT)
+int16 n_javax_safetycritical_OSProcess_getAllCPUCount(int32 *sp){
+ 	sp[0] = get_nprocs_conf();
+    return -1;
+}
+#endif
+
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETAVAILABLECPUCOUNT)
+int16 n_javax_safetycritical_OSProcess_getAvailableCPUCount(int32 *sp){
+	cpu_set_t cs;
+ 	CPU_ZERO(&cs);
+ 	pthread_getaffinity_np(pthread_self(), sizeof(cs), &cs);
+ 	sp[0] = CPU_COUNT(&cs);
+    return -1;
+}
+#endif
+
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETCURRENTCPUID)
+int16 n_javax_safetycritical_OSProcess_getCurrentCPUID(int32 *sp){
+	sp[0] = sched_getcpu();
+    return -1;
+}
+#endif
+
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETTHREADID)
+int16 n_javax_safetycritical_OSProcess_getThreadID(int32 *sp){
+	int id = (int) pthread_getspecific(key_schedulable_object);
+	sp[0] = id;
+    return -1;
+}
+#endif
+
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_REQUESTTERMINATION_C)
+int16 n_javax_safetycritical_OSProcess_requestTermination_c(int32 *sp){
+	struct _java_lang_Thread_c* thread = HEAP_REF((struct _java_lang_Thread_c* ) (pointer ) sp[0], struct _java_lang_Thread_c*);
+    pthread_t *thr = HEAP_REF((pthread_t *)(pointer)thread->name_f, pthread_t *);
+    int ret = pthread_cancel(*thr);
+    if ( ret != 0 ){
+        printf("pcancel errno: %d. ret: %d. \n",errno,ret);
+        return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+    }
+    return -1;
+}
+#endif
+
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_TESTCANCEL_C)
+int16 n_javax_safetycritical_OSProcess_testCancel_c(int32 *sp){
+    pthread_testcancel();
+    return -1;
+}
+#endif
+
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETTIMERFD)
+int16 n_javax_safetycritical_OSProcess_setTimerfd(int32 *sp){
+	if(sp[0] < 1){
+		return -1;
+	}
+
+	long long start_time  =  (long long) sp[1] << 32 | sp[2];
+	unsigned int ns;
+	unsigned int sec;
+	struct itimerspec itval;
+
+	sec = start_time / 1000000000;
+	ns = start_time % 1000000000;
+	if(ns == 0 && sec == 0){
+		ns++;
+	}
+
+	itval.it_interval.tv_sec = sec;
+	itval.it_interval.tv_nsec = ns;
+	itval.it_value.tv_sec = sec;
+	itval.it_value.tv_nsec = ns;
+
+	int ret = timerfd_settime(sp[0], 0, &itval, NULL);
+    if(ret != 0 && errno != EBADF){
+        printf("timer set errno: %d. file: %d.\n",errno, sp[0]);
+        return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+    }
+    return -1;
+}
+#endif
+
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETMEMORYAREA )
+int16 n_javax_safetycritical_OSProcess_setMemoryArea(int32 *sp){
+    VMMemory* currMem;
+    currMem = (int32)(*(sp + 0));
+	pthread_setspecific(key, currMem);
+	return -1;
+}
+#endif
+
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETCURRENTMEMORYAREA)
+int16 n_javax_safetycritical_OSProcess_getCurrentMemoryArea(int32 *sp){
+	int32 *currentMemory = (int32 *) pthread_getspecific(key);
+    sp[0] = currentMemory;
+	return -1;
+}
+#endif
+
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETOUTERMOSTMISSIONSEQUENCER)
+int16 n_javax_safetycritical_OSProcess_setOuterMostMissionSequencer(int32 *sp)
+{
+	pthread_setspecific(key_schedulable_object, -11);
+    int policyformain = SCHED_FIFO;
+    struct sched_param parammain;
+    parammain.sched_priority = sp[0];
+
+    if ( pthread_setschedparam(pthread_self(), policyformain, &parammain) != 0 ){
+        printf("psetmain errno: %d.\n",errno);
+        return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+    }
+
+    return -1;
+}
+#endif
+
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_INITSPECIFICID)
+int16 n_javax_safetycritical_OSProcess_initSpecificID(int32 *sp)
+{
+	pthread_key_create(&key_schedulable_object, NULL);
+	pthread_setspecific(key_schedulable_object, -99);
+    return -1;
+}
+#endif
+
+/*Periodic Parameters*/
+struct periodic_info {
+    int timer_fd;
+};
+
+/*Initialize Periodic Parameters*/
+int make_periodic(long period, struct periodic_info *info) {
+	int ret;
+	unsigned int ns;
+	unsigned int sec;
+	int fd;
+	struct itimerspec itval;
+
+	/* Create the timer */
+	fd = timerfd_create(CLOCK_MONOTONIC, 0);
+
+	info->timer_fd = fd;
+	if (fd == -1){
+        printf("timercreate errno: %d.\n",errno);
+		return fd;
+	}
+
+	/* Make the timer periodic */
+	sec = period / 1000000000;
+	ns = period % 1000000000;
+	itval.it_interval.tv_sec = sec;
+	itval.it_interval.tv_nsec = ns;
+	itval.it_value.tv_sec = sec;
+	itval.it_value.tv_nsec = ns;
+	ret = timerfd_settime(fd, 0, &itval, NULL);
+    if(ret != 0){
+        printf("timer set errno: %d. ret: %d.\n",errno, ret);
+    }
+
+	return ret;
+}
+
+/*Make thread wait for the given period*/
+void wait_period(struct periodic_info *info) {
+	long long missed;
+	int ret;
+
+	/* Wait for the next timer event. If we have missed any the
+	 number is written to "missed" */
+	ret = read(info->timer_fd, &missed, sizeof(missed));
+	if (ret == -1) {
+		printf("read errno: %d. fd: %d.\n",errno,info->timer_fd);
+	}
+}
+
+/*Thread args, holds the info of a thread*/
+struct thread_args {
+    int isPeriodic;
+    long long start;
+    long long period;
+    Object* target;
+    VMMemory* memory;
+    int id;
+    struct _javax_safetycritical_OSProcess_MyThread_c* thread;
+};
+
+/*close open file for timer*/
+void open_file_cleanup_handler(void *arg) {
+	int *fd = (int*)arg;
+	if ( close(*fd) != 0 ){
+        printf("close errno: %d.\n",errno);
+    }
+}
+
+extern int16 thread_ThreadUtils_dispatchRunnable(int32 *fp);
+void scj_multicore_thread_executor(void* arg){
+		/*get thread args*/
+	struct thread_args* args = (struct thread_args*) arg;
+
+	/*set thread current memory area : should be a mission memory*/
+	if ( pthread_setspecific(key,args->memory) != 0 ){
+        printf("getspec errno: %d.\n",errno);
+    }
+
+    /*set thread id*/
+    pthread_setspecific(key_schedulable_object, args->id);
+
+    /*create thread stack*/
+	int32 *threadJavaStack = HEAP_REF((int32 *) gc_allocateObject(/*16384*/8*1024, 0), int32 *);
+	threadJavaStack[0] = (int32) (pointer) args->target;
+
+    /*Periodic Event Handler*/
+	if(args->isPeriodic == 99){
+		struct periodic_info info;
+		struct periodic_info startInfo;
+		int started = 1;
+
+		if(args->start > 0){
+			if(make_periodic(args->start, &startInfo) != 0){
+				printf("make_periodic start errno: %d. fd: %d.\n",errno);
+			}
+		}
+
+		if(make_periodic(args->period, &info) != 0){
+			printf("make_periodic period errno: %d. fd: %d.\n",errno);
+		}
+
+		pthread_cleanup_push(open_file_cleanup_handler, &info.timer_fd);
+		while (1) {
+			if(args->start>0 && started){
+				wait_period(&startInfo);
+				started = 0;
+				close(startInfo.timer_fd);
+			}
+    		thread_ThreadUtils_dispatchRunnable(threadJavaStack);
+			wait_period(&info);
+		}
+		pthread_cleanup_pop(1);
+	}
+	/*OneShot Event handler*/
+	else if(args->isPeriodic == 98){
+		struct periodic_info startInfo;
+		struct itimerspec old_value;
+		make_periodic(args->start, &startInfo);
+		args->thread->startTimer_c_f = startInfo.timer_fd;
+
+		pthread_cleanup_push(open_file_cleanup_handler, &startInfo.timer_fd);
+        while(1){
+        	timerfd_gettime(startInfo.timer_fd, &old_value);
+        	if(old_value.it_value.tv_sec != 0 || old_value.it_value.tv_nsec != 0){
+				wait_period(&startInfo);
+        	}
+
+            pthread_testcancel();
+            thread_ThreadUtils_dispatchRunnable(threadJavaStack);
+            pthread_testcancel();
+        }
+        pthread_cleanup_pop(1);
+	}
+	/*Aperiodic Event handler*/
+	else if (args->isPeriodic == 97){
+        while(1){
+            thread_ThreadUtils_dispatchRunnable(threadJavaStack);
+            pthread_testcancel();
+        }
+    }
+    /*Mission Sequencer and Managed Thread*/
+    else{
+    	thread_ThreadUtils_dispatchRunnable(threadJavaStack);
+	}
+}
+
+static void *startThread(void* arg);
+void scj_multicore_thread_starter(int32 *sp){
+	/*Get scj thread and its info object*/
+	struct _javax_safetycritical_OSProcess_MyThread_c* thread = HEAP_REF((struct _javax_safetycritical_OSProcess_MyThread_c* ) (pointer ) sp[0], struct _javax_safetycritical_OSProcess_MyThread_c*);
+	struct _javax_safetycritical_OSProcess_ThreadInfo_c* threadInfo = HEAP_REF((struct _javax_safetycritical_OSProcess_ThreadInfo_c* ) (pointer ) thread->info_f, struct _javax_safetycritical_OSProcess_ThreadInfo_c*);
+
+	/*set thread args info*/
+	struct thread_args* args = HEAP_REF((struct thread_args*) gc_allocateObject(sizeof(struct thread_args), 0), struct thread_args*);
+	args->target = (Object*) (pointer) thread->target_f;
+	args->id = thread->id_f;
+	args->thread = thread;
+	args->isPeriodic = threadInfo->isPeriodic_f;
+	args->start = (long long) threadInfo->lsbstart_f << 32 | threadInfo->start_f;
+	args->period = (long long) threadInfo->lsbperiod_f << 32 | threadInfo->period_f;
+	args->memory = pthread_getspecific(key);
+
+	/*get thread priority*/
+	int priority = threadInfo->priority_f;
+
+	/*Set thread attrs*/
+	int policy = SCHED_FIFO;
+	struct sched_param param;
+	param.sched_priority = priority;
+	pthread_attr_t t1_attr;
+	pthread_attr_init(&t1_attr);
+
+	/*Set scheduling policy*/
+	if ( pthread_attr_setschedpolicy(&t1_attr, policy) != 0 ) {
+		printf("psetpolicy errno: %d.\n",errno);
+		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+	}
+
+	/*set thread priority*/
+	if ( pthread_attr_setschedparam(&t1_attr, &param) != 0 ){
+		printf("psetschparam errno: %d.\n",errno);
+		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+	}
+
+	/*set pthread inheritance attribute*/
+	if ( pthread_attr_setinheritsched(&t1_attr, PTHREAD_EXPLICIT_SCHED) != 0 ){
+		printf("psetinherit errno: %d.\n",errno);
+		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+	}
+
+	/*set affinity*/
+	cpu_set_t cs;
+	CPU_ZERO(&cs);
+	int *p = HEAP_REF((int* ) (pointer ) thread->processors_f, int*);
+	int size = thread->sizeOfProcessor_f + 1;
+	int i = 1;
+	for(;i<size; i++){
+		CPU_SET(p[i], &cs);
+	}
+	int ret = pthread_attr_setaffinity_np(&t1_attr, sizeof(cs), &cs);
+	if(ret != 0){
+		printf("pthread_attr_setaffinity_np errno: %d.\n",ret);
+		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+	}
+
+	/*Start thread*/
+	pthread_t *thr = (pthread_t *) gc_allocateObject(sizeof(pthread_t), 0);
+	thread->name_f = (uint32) (pointer) thr; /* hack: store the thread data in the object at some unused spot */
+
+	if (pthread_create(HEAP_REF(thr, pthread_t *), &t1_attr, startThread, (void*)args) != 0) {
+		printf("pcreate errno: %d.\n",errno);
+		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+	}
+}
+
+#endif
+
 #if defined(N_JAVA_LANG_THREAD_START)
 #include <pthread.h>
 
@@ -880,23 +1281,32 @@ int16 n_java_lang_Thread_join(int32 *sp) {
 
 extern int16 thread_ThreadUtils_dispatchRunnable(int32 *fp);
 static void *startThread(void* arg) {
-	int32 *threadJavaStack = HEAP_REF((int32 *) gc_allocateObject(16384, 0), int32 *);
-	threadJavaStack[0] = (int32) (pointer) arg;
-	thread_ThreadUtils_dispatchRunnable(threadJavaStack);
+	#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+		scj_multicore_thread_executor(arg);
+	#else
+		int32 *threadJavaStack = HEAP_REF((int32 *) gc_allocateObject(16384, 0), int32 *);
+		threadJavaStack[0] = (int32) (pointer) arg;
+		thread_ThreadUtils_dispatchRunnable(threadJavaStack);
+	#endif
+
 	return 0;
 }
 
 int16 n_java_lang_Thread_start(int32 *sp) {
-	struct _java_lang_Thread_c* thread = HEAP_REF((struct _java_lang_Thread_c* ) (pointer ) sp[0], struct _java_lang_Thread_c*);
-	Object* target = (Object*) (pointer) thread->target_f;
-	pthread_t *thr = (pthread_t *) gc_allocateObject(sizeof(pthread_t), 0);
+	#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+		scj_multicore_thread_starter(sp);
+	#else
+		struct _java_lang_Thread_c* thread = HEAP_REF((struct _java_lang_Thread_c* ) (pointer ) sp[0], struct _java_lang_Thread_c*);
+		Object* target = (Object*) (pointer) thread->target_f;
+		pthread_t *thr = (pthread_t *) gc_allocateObject(sizeof(pthread_t), 0);
 
-	thread->name_f = (uint32) (pointer) thr; /* hack: store the thread data in the object at some unused spot */
+		thread->name_f = (uint32) (pointer) thr; /* hack: store the thread data in the object at some unused spot */
 
-	if (pthread_create(HEAP_REF(thr, pthread_t *), 0, startThread, target) != 0) {
+		if (pthread_create(HEAP_REF(thr, pthread_t *), 0, startThread, target) != 0) {
+			return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+		}
+	#endif
 
-		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
-	}
 	return -1;
 }
 #endif

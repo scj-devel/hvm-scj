@@ -75,7 +75,6 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	int currState;
 	boolean terminateSeq = false;
 	static volatile boolean isOuterMostSeq = true;
-	Monitor lock;
 
 	static ScjProcess missSeqProcess = null;
 
@@ -84,6 +83,8 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	// Level2 only: a reference to the nearest outer sequencer
 	MissionSequencer<?> outerSeq = null;
 	static MissionSequencer<?> outerMostSeq = null; // for multiprocessor only
+	
+	Monitor lock;
 
 	/**
 	 * Constructs a <code>MissionSequencer</code> to run at the priority and
@@ -104,11 +105,9 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 				name);
 
 		currState = State.START;
-
-		ManagedEventHandler.handlerBehavior.initMissionSequencer(this);
-
+		
 		Services.setCeiling(this, this.priority.getPriority());
-		lock = Monitor.getMonitor(this);
+		ManagedEventHandler.handlerBehavior.initMissionSequencer(this);
 	}
 
 	@SCJAllowed
@@ -241,10 +240,6 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 		missionMemory.removeArea();
 	}
 
-	Monitor getLock() {
-		return lock;
-	}
-
 	MissionSequencer<?> getOuterSeq() {
 		return outerSeq;
 	}
@@ -262,5 +257,9 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	// used for JML annotation only (not public)
 	boolean isOuterMostSeq() {
 		return isOuterMostSeq;
+	}
+	
+	Monitor getLock() {
+		return lock;
 	}
 }
