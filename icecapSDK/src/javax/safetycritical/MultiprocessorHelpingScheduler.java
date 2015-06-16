@@ -7,7 +7,8 @@ class MultiprocessorHelpingScheduler extends JavaLangThreadScheduler{
 	
 	@Override
 	public Monitor getDefaultMonitor() {
-		return null;
+		devices.Console.println("default: " + Services.getDefaultCeiling());
+		return getSCJMultiprocessorMonitor(Services.getDefaultCeiling());
 	}
 	
 	protected static Monitor getMultiprocessorMonitor(int ceiling){

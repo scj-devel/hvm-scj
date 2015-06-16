@@ -873,6 +873,19 @@ int16 n_java_lang_Thread_toString(int32 *sp) {
 
 pthread_key_t key_schedulable_object;
 
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETMAXPRIORITY)
+int16 n_javax_safetycritical_OSProcess_getMaxPriority(int32 *sp){
+	int max_priority = sched_get_priority_max(SCHED_FIFO);
+
+	if(max_priority < 0){
+		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+	}
+
+	sp[0] = max_priority;
+	return -1;
+}
+#endif
+
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETAFFINITY)
 int16 n_javax_safetycritical_OSProcess_setAffinity(int32 *sp){
  	int size = sp[0]+1;

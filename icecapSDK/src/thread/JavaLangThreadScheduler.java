@@ -9,8 +9,10 @@ public class JavaLangThreadScheduler implements Scheduler {
 	private static class JavaLangThreadMonitor extends vm.Monitor {
 		private int mutex;
 		private int conditionVariable;
+		private int ceiling;
 
 		JavaLangThreadMonitor() {
+			ceiling = -99;
 			initializeMutex(-99);
 		}
 		
@@ -18,6 +20,7 @@ public class JavaLangThreadScheduler implements Scheduler {
 			if(ceiling <= 0)
 				throw new IllegalArgumentException();
 			
+			this.ceiling = ceiling;
 			initializeMutex(ceiling);
 		}
 

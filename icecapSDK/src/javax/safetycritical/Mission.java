@@ -33,7 +33,6 @@ import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
 import javax.scj.util.Const;
-import javax.scj.util.Priorities;
 
 /**
  * An SCJ application is comprised of one or more <code>Mission</code> objects.
@@ -233,7 +232,7 @@ public abstract class Mission {
 	static final class MulticoreBehavior extends MissionBehavior {
 
 		MulticoreBehavior() {
-			Services.setCeiling(this, Priorities.SEQUENCER_PRIORITY);
+			Services.setCeiling(this, Services.getDefaultCeiling());
 		}
 
 		@Override
