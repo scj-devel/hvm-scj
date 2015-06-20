@@ -34,7 +34,11 @@ extern void printROMStr(const char* str);
 extern void printShort(unsigned short c);
 extern unsigned short getClassIndex(Object* obj);
 extern void setClassIndex(Object* obj, unsigned short classIndex);
+
+#if defined(N_JAVA_LANG_CLASS_NEWINSTANCE) || defined(JAVA_LANG_THROWABLE_INIT_)
 extern unsigned char handleNewClassIndex(int32* sp, unsigned short classIndex);
+#endif
+
 extern int16 enterMethodInterpreter(unsigned short methodNumber, int32* sp);
 
 #if defined(N_JAVA_LANG_CLASS_NEWINSTANCE) || defined(N_JAVA_LANG_THREAD_START) || (defined(JAVA_LANG_THROWABLE_INIT_) &&  defined(PRE_INITIALIZE_EXCEPTIONS)) || defined(N_JAVA_LANG_CLASS_GETMETHOD)
