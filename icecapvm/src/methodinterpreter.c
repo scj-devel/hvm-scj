@@ -20,9 +20,12 @@ extern ConstantInfo *constants;
 extern unsigned char *classData;
 
 extern Object* getClass(unsigned short classIndex);
+
+#if defined(JAVA_LANG_THROWABLE_INIT_)
 extern void reportStackTraceElement(unsigned short methodIndex,
 		unsigned short pc);
 extern void reportStackTraceIntro(unsigned short classIndex);
+#endif
 
 #if defined(PUTHWFIELD_OPCODE_USED)
 extern void writeLongToIO(pointer address, unsigned short offset, int32 msb, int32 lsb);
@@ -117,8 +120,10 @@ static unsigned char handleNew(int32* sp, unsigned char *method_code) _NOINLINE_
 static unsigned char handleMultianewarray(int32* sp, unsigned char *method_code) _NOINLINE_;
 #endif
 
+#if defined(JAVA_LANG_THROWABLE_INIT_)
 unsigned short handleAthrow(const MethodInfo* method, unsigned short classIndex,
 		unsigned short pc) _NOINLINE_;
+#endif
 
 #if defined(PUTFIELD_OPCODE_USED)
 static unsigned char handlePutField(unsigned char* method_code, int32* sp) _NOINLINE_;

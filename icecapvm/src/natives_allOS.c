@@ -34,7 +34,11 @@ extern void printROMStr(const char* str);
 extern void printShort(unsigned short c);
 extern unsigned short getClassIndex(Object* obj);
 extern void setClassIndex(Object* obj, unsigned short classIndex);
+
+#if defined(N_JAVA_LANG_CLASS_NEWINSTANCE) || defined(JAVA_LANG_THROWABLE_INIT_)
 extern unsigned char handleNewClassIndex(int32* sp, unsigned short classIndex);
+#endif
+
 extern int16 enterMethodInterpreter(unsigned short methodNumber, int32* sp);
 
 #if defined(N_JAVA_LANG_CLASS_NEWINSTANCE) || defined(N_JAVA_LANG_THREAD_START) || (defined(JAVA_LANG_THROWABLE_INIT_) &&  defined(PRE_INITIALIZE_EXCEPTIONS)) || defined(N_JAVA_LANG_CLASS_GETMETHOD)
@@ -872,6 +876,19 @@ int16 n_java_lang_Thread_toString(int32 *sp) {
 #include <pthread.h>
 
 pthread_key_t key_schedulable_object;
+
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETMAXPRIORITY)
+int16 n_javax_safetycritical_OSProcess_getMaxPriority(int32 *sp){
+	int max_priority = sched_get_priority_max(SCHED_FIFO);
+
+	if(max_priority < 0){
+		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+	}
+
+	sp[0] = max_priority;
+	return -1;
+}
+#endif
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETAFFINITY)
 int16 n_javax_safetycritical_OSProcess_setAffinity(int32 *sp){

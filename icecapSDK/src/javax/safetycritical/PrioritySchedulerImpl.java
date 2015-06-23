@@ -111,7 +111,9 @@ final class PrioritySchedulerImpl implements vm.Scheduler {
 	}
 
 	public Monitor getDefaultMonitor() {
-		return null;
+//		devices.Console.println("default null");
+//		return null;
+		return new Monitor(Services.getDefaultCeiling());
 	}
 
 	//	public static boolean waitForObject(Object target, HighResolutionTime time) {

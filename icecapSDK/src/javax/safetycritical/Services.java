@@ -137,8 +137,7 @@ public class Services {
 
 		@Override
 		int getDefaultCeiling() {
-			// to be implemented.
-			return 0;
+			return OSProcess.getMaxPriority();
 		}
 
 		@Override
