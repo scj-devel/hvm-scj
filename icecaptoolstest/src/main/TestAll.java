@@ -146,7 +146,7 @@ public class TestAll {
 	}
 
 	protected boolean includeFileInTest(String test) {
-		return test.endsWith("TestSCJManagedMemory.java");
+		return test.endsWith(".java");
 	}
 
 	private static String[] skippedClasses = { "TestSCJWaitAndNotify2.java", "TestSCJLevel2Thread0.java",
