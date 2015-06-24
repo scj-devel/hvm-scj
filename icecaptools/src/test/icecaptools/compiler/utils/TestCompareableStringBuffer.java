@@ -1,14 +1,15 @@
 package test.icecaptools.compiler.utils;
 
+import icecaptools.compiler.utils.CompareableStringBuffer;
+
 import java.util.HashSet;
 
 import org.junit.Assert;
+import org.junit.Test;
 
-import icecaptools.compiler.utils.CompareableStringBuffer;
-import junit.framework.TestCase;
+public class TestCompareableStringBuffer {
 
-public class TestCompareableStringBuffer extends TestCase {
-
+	@Test
     public void testCompareableStringBuffer() {
         CompareableStringBuffer buffer1 = new CompareableStringBuffer();
         buffer1.append("abba");

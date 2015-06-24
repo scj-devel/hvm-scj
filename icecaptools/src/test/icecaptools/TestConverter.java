@@ -1,19 +1,21 @@
 package test.icecaptools;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import icecaptools.AnalysisObserver;
 import icecaptools.DefaultObserver;
 import icecaptools.MethodOrFieldDesc;
 import icecaptools.compiler.DefaultMethodObserver;
 import icecaptools.compiler.VirtualTable;
 import icecaptools.conversion.Converter;
-import junit.framework.TestCase;
 
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.util.ClassPath;
 import org.apache.bcel.util.SyntheticRepository;
+import org.junit.Test;
 
-public class TestConverter extends TestCase {
+public class TestConverter  {
 
     public static class TestObserver extends  DefaultObserver {
         @Override
@@ -27,6 +29,7 @@ public class TestConverter extends TestCase {
         }
     }
 
+    @Test
     public void testCreateVTable() throws Exception {
         Converter converter = new Converter(System.out, new DefaultMethodObserver(), new DefaultCompilationRegistry(), false);
         ClassPath classPath = new ClassPath("C:\\home\\workspace\\icecaptools\\bin");
@@ -54,6 +57,7 @@ public class TestConverter extends TestCase {
         assertEquals(index1, index2);
     }
 
+    @Test
     public void testBug1() {
         ClassPath classPath = new ClassPath("C:\\home\\workspace\\icecaptools\\bin");
 
@@ -74,6 +78,7 @@ public class TestConverter extends TestCase {
         }
     }
 
+    @Test
     public void testBug2() {
         // java.util.ResourceBundle: getClassContext
         ClassPath classPath = new ClassPath("C:\\home\\workspace\\icecaptools\\bin");

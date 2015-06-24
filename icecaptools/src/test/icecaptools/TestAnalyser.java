@@ -1,12 +1,14 @@
 package test.icecaptools;
 
+import static org.junit.Assert.*;
+
 import java.util.HashSet;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
+public class TestAnalyser {
 
-public class TestAnalyser extends TestCase {
-
+	@Test
     public void testHashSet() throws Exception {
         HashSet<String> set = new HashSet<String>();
         

@@ -8,17 +8,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import junit.framework.TestCase;
-
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.util.ClassPath;
 import org.apache.bcel.util.SyntheticRepository;
 import org.junit.Assert;
+import org.junit.Test;
 
-public class TestStackAnalyser extends TestCase {
+public class TestStackAnalyser  {
 
+	@Test
     public void testStackUsage1() {
         Method javaMethod;
 
@@ -56,6 +56,7 @@ public class TestStackAnalyser extends TestCase {
         }
     }
 
+	@Test
     public void testStackUsage2() {
         Method javaMethod;
 
@@ -93,6 +94,7 @@ public class TestStackAnalyser extends TestCase {
         }
     }
 
+	@Test
     public void testAll() {
         File file = new File(".");
         String location = null;

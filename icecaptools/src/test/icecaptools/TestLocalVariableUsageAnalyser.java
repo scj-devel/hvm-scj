@@ -7,7 +7,6 @@ import icecaptools.LocalVariableUsageAnalyser;
 import icecaptools.MethodEntryPoints;
 import icecaptools.compiler.DefaultMethodObserver;
 import icecaptools.conversion.Converter;
-import junit.framework.TestCase;
 
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.JavaClass;
@@ -15,9 +14,11 @@ import org.apache.bcel.classfile.Method;
 import org.apache.bcel.util.ClassPath;
 import org.apache.bcel.util.SyntheticRepository;
 import org.junit.Assert;
+import org.junit.Test;
 
-public class TestLocalVariableUsageAnalyser extends TestCase {
+public class TestLocalVariableUsageAnalyser  {
 
+	@Test
     public void testSimple() {
 
         JavaClass clazz;

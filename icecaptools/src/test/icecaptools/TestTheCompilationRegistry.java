@@ -1,13 +1,14 @@
 package test.icecaptools;
 
-import org.junit.Assert;
-
 import icecaptools.MethodOrFieldDesc;
 import icecaptools.compiler.CompilationRegistry;
-import junit.framework.TestCase;
 
-public class TestTheCompilationRegistry extends TestCase {
+import org.junit.Assert;
+import org.junit.Test;
 
+public class TestTheCompilationRegistry  {
+
+	@Test
     public void testSimple() {
         CompilationRegistry creg = new CompilationRegistry();
 
@@ -39,6 +40,7 @@ public class TestTheCompilationRegistry extends TestCase {
         Assert.assertFalse(creg.isMethodCompiled(m5));
     }
 
+	@Test
     public void testEmptyRegistry() {
 
         CompilationRegistry creg = new CompilationRegistry();

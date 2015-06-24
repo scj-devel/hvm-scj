@@ -7,22 +7,21 @@ import icecaptools.RawByteCodes.Raw_aaload;
 import icecaptools.stackanalyser.AbstractStack;
 import icecaptools.stackanalyser.AbstractStack.StackCell;
 import icecaptools.stackanalyser.ArrayRefType;
-import icecaptools.stackanalyser.StackReferencesAnalyser;
 import icecaptools.stackanalyser.NonRefType;
 import icecaptools.stackanalyser.RefType;
 import icecaptools.stackanalyser.RefType.RefState;
+import icecaptools.stackanalyser.StackReferencesAnalyser;
 import icecaptools.stackanalyser.UnknownType;
 
 import java.util.Iterator;
-
-import junit.framework.TestCase;
 
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.junit.Assert;
+import org.junit.Test;
 
-public class TestMethodAnalyser extends TestCase {
+public class TestMethodAnalyser  {
 
     public static class TestManager implements ClassManager {
 
@@ -37,6 +36,7 @@ public class TestMethodAnalyser extends TestCase {
         }
     }
 
+    @Test
     public void testMergeStackCell() {
         StackCell src = new StackCell();
         Assert.assertNotNull(src.content);
@@ -165,6 +165,7 @@ public class TestMethodAnalyser extends TestCase {
         }
     }
 
+    @Test
     public void testCopyStackCell() {
         StackCell src = new StackCell();
         Assert.assertNotNull(src.content);
@@ -221,6 +222,7 @@ public class TestMethodAnalyser extends TestCase {
         Assert.assertTrue(count == 1);
     }
 
+    @Test
     // ANTTestInvokeSpecial
     public void testReferenceAnalyserInvokeSpecial() {
         JavaClass clazz;
@@ -286,6 +288,7 @@ public class TestMethodAnalyser extends TestCase {
         Assert.assertTrue(didIt == 2);
     }
 
+    @Test
     public void testReferenceAnalyserArrayAccess1() {
         JavaClass clazz;
         int didIt = 0;
@@ -313,6 +316,7 @@ public class TestMethodAnalyser extends TestCase {
         Assert.assertTrue(didIt == 1);
     }
     
+    @Test
     public void testReferenceAnalyserArrayAccess2() {
         JavaClass clazz;
         int didIt = 0;
@@ -346,7 +350,7 @@ public class TestMethodAnalyser extends TestCase {
         Assert.assertTrue(didIt == 1);
     }
 
-    
+    @Test
     public void testReferenceAnalyserArraySimple() {
         JavaClass clazz;
         int didIt = 0;
@@ -380,6 +384,7 @@ public class TestMethodAnalyser extends TestCase {
         Assert.assertTrue(didIt == 1);
     }
 
+    @Test
     public void testReferenceAnalyserArraySimple1() {
         JavaClass clazz;
         int didIt = 0;
@@ -419,6 +424,7 @@ public class TestMethodAnalyser extends TestCase {
         Assert.assertTrue(didIt == 1);
     }
     
+    @Test
     public void testReferenceAnalyserIf() {
         JavaClass clazz;
         int didIt = 0;
@@ -471,6 +477,7 @@ public class TestMethodAnalyser extends TestCase {
         Assert.assertTrue(didIt == 2);
     }
 
+    @Test
     public void testReferenceAnalyserIf1() {
         JavaClass clazz;
         int didIt = 0;
@@ -516,6 +523,7 @@ public class TestMethodAnalyser extends TestCase {
         Assert.assertTrue(didIt == 1);
     }
 
+    @Test
     public void testReferenceAnalyserSimple() {
         JavaClass clazz;
         boolean didIt = false;
@@ -560,7 +568,8 @@ public class TestMethodAnalyser extends TestCase {
 
         Assert.assertTrue(didIt);
     }
-
+    
+    @Test
     public void testReferenceAnalyserArrayLength() {
         JavaClass clazz;
         boolean didIt = false;
@@ -604,6 +613,7 @@ public class TestMethodAnalyser extends TestCase {
         Assert.assertTrue(didIt);
     }
 
+    @Test
     public void testMethodAnalyser1() {
 
         try {
@@ -623,6 +633,7 @@ public class TestMethodAnalyser extends TestCase {
         }
     }
 
+    @Test
     public void testReferenceAnalyserInvokeSimple() {
         JavaClass clazz;
         boolean didIt = false;
@@ -683,6 +694,7 @@ public class TestMethodAnalyser extends TestCase {
         Assert.assertTrue(didIt);
     }
 
+    @Test
     public void testReferenceAnalyserPutGetField() {
         JavaClass clazz;
         boolean didIt = false;
@@ -742,6 +754,7 @@ public class TestMethodAnalyser extends TestCase {
         Assert.assertTrue(didIt);
     }
 
+    @Test
     public void testReferenceAnalyserThis() {
         JavaClass clazz;
         int didIt = 0;
@@ -815,6 +828,7 @@ public class TestMethodAnalyser extends TestCase {
         Assert.assertTrue(didIt == 2);
     }
 
+    @Test
     public void testMethodAnalyser2() {
 
         try {

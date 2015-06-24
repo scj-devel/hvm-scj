@@ -6,13 +6,13 @@ import icecaptools.conversion.ConversionConfiguration;
 import java.io.File;
 import java.util.StringTokenizer;
 
-import junit.framework.TestCase;
-
 import org.eclipse.core.runtime.Path;
 import org.junit.Assert;
+import org.junit.Test;
 
-public class TestReadProperties extends TestCase {
+public class TestReadProperties  {
 
+	@Test
     public void testReadBasicProperties() throws Exception {
 
         String inputFolder = "";

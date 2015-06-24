@@ -1,10 +1,16 @@
 package test.icecaptools;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
 import icecaptools.NewList;
-import junit.framework.TestCase;
 
-public class TestNewList extends TestCase {
+public class TestNewList  {
 
+	@Test
     public void testNewList() throws Exception {
         NewList newList1 = new NewList("java.lang.String;java.lang.Object");
         String actual = newList1.toString();

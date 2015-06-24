@@ -1,11 +1,13 @@
 package test.icecaptools.compiler.utils;
 
-import unitTest.Assert;
 import icecaptools.compiler.utils.ClassInheritanceMatrix;
-import junit.framework.TestCase;
 
-public class TestClassInheritanceMatrix extends TestCase {
+import org.junit.Assert;
+import org.junit.Test;
 
+public class TestClassInheritanceMatrix  {
+
+	@Test
     public void testSimple() {
         ClassInheritanceMatrix matrix = new ClassInheritanceMatrix(10);
 
@@ -38,6 +40,7 @@ public class TestClassInheritanceMatrix extends TestCase {
         }
     }
 
+	@Test
     public void testSimple1() {
         ClassInheritanceMatrix matrix = new ClassInheritanceMatrix(105);
 
@@ -46,6 +49,7 @@ public class TestClassInheritanceMatrix extends TestCase {
         Assert.assertTrue(matrix.getInherits(0, 7));
     }
 
+	@Test
     public void testAll1() {
         ClassInheritanceMatrix matrix = new ClassInheritanceMatrix(105);
 
@@ -71,6 +75,7 @@ public class TestClassInheritanceMatrix extends TestCase {
         }
     }
 
+	@Test
     public void testAll2() {
         ClassInheritanceMatrix matrix = new ClassInheritanceMatrix(105);
 
