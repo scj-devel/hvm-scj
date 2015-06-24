@@ -5,6 +5,11 @@
 #include "rom_access.h"
 #include "allocation_point.h"
 
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+#include <stdlib.h>
+#include <pthread.h>
+#endif
+
 #ifdef FLASHSUPPORT
 extern void initROMHeap(void);
 extern Object* gc_allocatepObject(unsigned short dobjectSize, unsigned short pobjectsize);
@@ -14,6 +19,12 @@ extern void lock_memory(void);
 extern void unlock_memory(void);
 
 extern VMMemory* currentMemoryArea;
+
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+#include <stdlib.h>
+#include <pthread.h>
+extern pthread_key_t key;
+#endif
 
 void initGC(void) {
     init_memory_lock();
@@ -36,10 +47,24 @@ Object* gc_allocateObject(uint32 dobjectSize, uint32 pobjectsize) {
         Object* obj;
         uint32 top;
         lock_memory();
+
+    /*Behaviours for multicore version*/
+	#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+        VMMemory * current = pthread_getspecific(key);
+        top = HEAP_REF(current, VMMemory* )->free;
+
+        obj = gc_allocatepdObject(dobjectSize + sizeof(Object), (unsigned char*) (pointer) HEAP_REF(current, VMMemory* )->base, &top, HEAP_REF(current, VMMemory* )->size, 1);
+
+        HEAP_REF(current, VMMemory* )->free = top;
+        pthread_setspecific(key,current);
+
+	#else
         top = HEAP_REF(currentMemoryArea, VMMemory* )->free;
         obj = gc_allocatepdObject(dobjectSize + sizeof(Object), (unsigned char*) (pointer) HEAP_REF(currentMemoryArea, VMMemory* )->base, &top, HEAP_REF(currentMemoryArea, VMMemory* )->size, 1);
 
         HEAP_REF(currentMemoryArea, VMMemory* )->free = top;
+	#endif
+
 #if defined(VM_MEMORY_UPDATEMAXUSED_USED)
         vm_Memory_updateMaxUsed(0, (int32)(pointer)currentMemoryArea);
 #endif

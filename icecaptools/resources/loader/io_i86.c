@@ -68,6 +68,7 @@ unsigned char readByte() {
 			return buf[0];
 		}
 	}
+	return -1;
 }
 
 void* _malloc_(int size) {
