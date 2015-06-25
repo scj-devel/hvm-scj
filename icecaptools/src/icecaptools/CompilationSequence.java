@@ -463,6 +463,7 @@ public class CompilationSequence {
 			}
 			throw new Exception("Compilation failed - check logs in console");
 		}
+		out.println("Dependency extent: classes[" + usedElementsObserver.numberOfUsedClasses() + "], methods[" + usedElementsObserver.numberOfUsedMethods() + "]");
 		Repository.clearCache();
 	}
 

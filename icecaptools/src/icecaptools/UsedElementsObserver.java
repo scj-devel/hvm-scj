@@ -283,4 +283,12 @@ public class UsedElementsObserver implements AnalysisObserver {
             return next.getValue();
         }
     }
+
+	public int numberOfUsedClasses() {
+		return usedClasses.size();
+	}
+
+	public int numberOfUsedMethods() {
+		return usedMethodDescriptors.size();
+	}
 }
