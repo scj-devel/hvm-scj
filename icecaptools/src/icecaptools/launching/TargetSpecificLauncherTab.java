@@ -75,7 +75,7 @@ public abstract class TargetSpecificLauncherTab extends CommonLauncherTab {
         formData.top = new FormAttachment(0, 10);
         heapSize.setLayoutData(formData);
 
-        heapSizeText = new Spinner(heapSizeGroup, SWT.READ_ONLY | SWT.BORDER);
+        heapSizeText = new Spinner(heapSizeGroup, SWT.BORDER);
         heapSizeText.setMaximum(getHeapSizeMaximum());
         formData = new FormData();
         formData.left = new FormAttachment(heapSize, 5);

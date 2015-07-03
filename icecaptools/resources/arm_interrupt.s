@@ -31,5 +31,8 @@ get_stack_pointer:
 	.global	set_stack_pointer
 	.type	set_stack_pointer, %function	
 set_stack_pointer:
+	ldr	r0, .L0
+	ldr     r0, [r0, #0]
 	mov	sp, r0
 	bx 	lr
+	
