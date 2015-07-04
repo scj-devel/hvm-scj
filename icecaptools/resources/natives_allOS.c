@@ -1070,7 +1070,7 @@ struct periodic_info {
 };
 
 /*Initialize Periodic Parameters*/
-int make_periodic(long period, struct periodic_info *info) {
+int make_periodic(long long period, struct periodic_info *info) {
 	int ret;
 	unsigned int ns;
 	unsigned int sec;

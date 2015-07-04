@@ -274,12 +274,12 @@ int16 n_thread_JavaLangThreadScheduler_JavaLangThreadMonitor_initializeMutex(int
     	pthread_mutexattr_t mattr;
         pthread_mutexattr_init(&mattr);
 
-        int ret = pthread_mutexattr_settype(&mattr, PTHREAD_MUTEX_ERRORCHECK);
+        /*int ret = pthread_mutexattr_settype(&mattr, PTHREAD_MUTEX_ERRORCHECK);
         if(ret != 0){
             printf("pthread_mutexattr_settype error %d\n", ret);
-        }
+        }*/
 
-        ret = pthread_mutexattr_setprioceiling(&mattr, (uint32)sp[1]);
+        int ret = pthread_mutexattr_setprioceiling(&mattr, (uint32)sp[1]);
         if(ret != 0){
             printf("pthread_mutexattr_setprioceiling error %d\n", ret);
         }
