@@ -878,7 +878,7 @@ int16 n_java_lang_Thread_toString(int32 *sp) {
 #include <arpa/inet.h>
 #include <netdb.h>
 
-#define SERVERPORT 4950 // the port users will be connecting to
+#define SERVERPORT 4950 /* the port users will be connecting to */
 
 struct sockaddr_in their_addr;
 int boradcast_socket_fd;
