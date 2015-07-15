@@ -865,6 +865,199 @@ int16 n_java_lang_Thread_toString(int32 *sp) {
 }
 #endif
 
+#if defined(N_JAVAX_SAFETYCRITICAL_EV3SUPPORT_CREATEBROADCASTSOCKET)
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+
+#define SERVERPORT 4950 // the port users will be connecting to
+
+struct sockaddr_in their_addr;
+int boradcast_socket_fd;
+
+int16 n_javax_safetycritical_EV3Support_createBroadcastSocket(int32 *sp){
+	int size = sp[0]+1;
+	int *p = HEAP_REF((int* ) (pointer ) sp[1], int*);
+	char *addr = HEAP_REF((char*) gc_allocateObject(sizeof(char), size), char*);
+
+	int index = 0;
+	for(; index< size-1; index++){
+		char a = p[index+1];
+		addr[index] = a;
+	}
+	addr[index] = '\0';
+
+	printf("%s\n",addr);
+
+	int sockfd;
+	struct hostent *he;
+	int broadcast = 1;
+
+	if ((he=gethostbyname(addr)) == NULL) {  // get the host info
+		perror("gethostbyname");
+	}
+
+	if ((boradcast_socket_fd = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
+		perror("socket");
+	}
+
+	// this call is what allows broadcast packets to be sent:
+	if (setsockopt(boradcast_socket_fd, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof broadcast) == -1) {
+		perror("setsockopt (SO_BROADCAST)");
+	}
+
+  	their_addr.sin_family = AF_INET;	 // host byte order
+	their_addr.sin_port = htons(SERVERPORT); // short, network byte order
+	their_addr.sin_addr = *((struct in_addr *)he->h_addr);
+	memset(their_addr.sin_zero, '\0', sizeof their_addr.sin_zero);
+
+ 	return -1;
+}
+
+int16 n_javax_safetycritical_EV3Support_sendBroadcastMsg(int32 *sp){
+	int size = sp[0]+1;
+	int *p = HEAP_REF((int* ) (pointer ) sp[1], int*);
+	char *msg = HEAP_REF((char*) gc_allocateObject(sizeof(char), size), char*);
+
+	int index = 0;
+	for(; index< size-1; index++){
+		char a = p[index+1];
+		msg[index] = a;
+	}
+	msg[index] = '\0';
+
+	printf(msg);
+	printf("\n");
+
+
+	int numbytes;
+
+  	if ((numbytes=sendto(boradcast_socket_fd, msg, strlen(msg), 0,
+			 (struct sockaddr *)&their_addr, sizeof their_addr)) == -1) {
+		perror("sendto");
+		exit(1);
+	}
+
+	printf("sent %d bytes to %s\n", numbytes, inet_ntoa(their_addr.sin_addr));
+	return -1;
+}
+
+int16 n_javax_safetycritical_EV3Support_closeUDPBroadcastSocket(int32 *sp){
+	close(boradcast_socket_fd);
+	return -1;
+}
+
+#endif
+
+#if defined(N_JAVAX_SAFETYCRITICAL_EV3SUPPORT_INITRECEIVERSOCKET)
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+
+#define MYPORT 4950 // the port users will be connecting to
+#define MAXBUFLEN 100
+
+int receiver_socket_fd;
+
+// get sockaddr, IPv4 or IPv6:
+void *get_in_addr(struct sockaddr *sa)
+{
+    if (sa->sa_family == AF_INET) {
+        return &(((struct sockaddr_in*)sa)->sin_addr);
+    }
+
+    return &(((struct sockaddr_in6*)sa)->sin6_addr);
+}
+
+int16 n_javax_safetycritical_EV3Support_initReceiverSocket(int32 *sp){
+    struct addrinfo hints, *servinfo, *p;
+    int rv;
+    printf("%s\n", "here");
+
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_UNSPEC; // set to AF_INET to force IPv4
+    hints.ai_socktype = SOCK_DGRAM;
+    hints.ai_flags = AI_PASSIVE; // use my IP
+
+    if ((rv = getaddrinfo(NULL, MYPORT, &hints, &servinfo)) != 0) {
+        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+    }
+
+    	// loop through all the results and bind to the first we can
+    for(p = servinfo; p != NULL; p = p->ai_next) {
+        if ((receiver_socket_fd = socket(p->ai_family, p->ai_socktype,
+                p->ai_protocol)) == -1) {
+            printf("listener: socket. errno: %d", errno);
+            continue;
+        }
+
+        if (bind(receiver_socket_fd, p->ai_addr, p->ai_addrlen) == -1) {
+            close(receiver_socket_fd);
+            printf("listener: bind. errno: %d", errno);
+            continue;
+        }
+
+        break;
+    }
+
+    if (p == NULL) {
+        fprintf(stderr, "listener: failed to bind socket\n");
+    }
+
+     freeaddrinfo(servinfo);
+
+    printf("listener: waiting to recvfrom...\n");
+	return -1;
+}
+
+
+
+int16 n_javax_safetycritical_EV3Support_receiveMsg(int32 *sp){
+	struct sockaddr_storage addr;
+	int numbytes;
+	char buf[MAXBUFLEN];
+	char s[INET6_ADDRSTRLEN];
+
+	socklen_t addr_len = sizeof addr;
+    if ((numbytes = recvfrom(receiver_socket_fd, buf, MAXBUFLEN-1 , 0,
+        (struct sockaddr *)&addr, &addr_len)) == -1) {
+        perror("recvfrom");
+    }
+
+    printf("listener: got packet from %s\n",
+        inet_ntop(addr.ss_family,
+            get_in_addr((struct sockaddr *)&addr),
+            s, sizeof s));
+    printf("listener: packet is %d bytes long\n", numbytes);
+    buf[numbytes] = '\0';
+    printf("listener: packet contains \"%s\"\n", buf);
+
+    return -1;
+}
+
+int16 n_javax_safetycritical_EV3Support_closeReceiverSocket(int32 *sp){
+	close(receiver_socket_fd);
+	return -1;
+}
+
+#endif
+
 #if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
 
 #include <stdlib.h>
