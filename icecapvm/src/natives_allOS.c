@@ -986,69 +986,71 @@ void *get_in_addr(struct sockaddr *sa)
 }
 
 int16 n_javax_safetycritical_EV3Support_initReceiverSocket(int32 *sp){
-    struct addrinfo hints, *servinfo, *p;
-    int rv;
-    printf("%s\n", "here");
+	struct addrinfo hints, *servinfo, *p;
+	    int rv;
 
-    memset(&hints, 0, sizeof hints);
-    hints.ai_family = AF_UNSPEC; // set to AF_INET to force IPv4
-    hints.ai_socktype = SOCK_DGRAM;
-    hints.ai_flags = AI_PASSIVE; // use my IP
+	    memset(&hints, 0, sizeof hints);
+	    hints.ai_family = AF_UNSPEC; // set to AF_INET to force IPv4
+	    hints.ai_socktype = SOCK_DGRAM;
+	    hints.ai_flags = AI_PASSIVE; // use my IP
 
-    if ((rv = getaddrinfo(NULL, MYPORT, &hints, &servinfo)) != 0) {
-        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
-    }
+	    if ((rv = getaddrinfo(NULL, "4950", &hints, &servinfo)) != 0) {
+	        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+	    }
 
-    	// loop through all the results and bind to the first we can
-    for(p = servinfo; p != NULL; p = p->ai_next) {
-        if ((receiver_socket_fd = socket(p->ai_family, p->ai_socktype,
-                p->ai_protocol)) == -1) {
-            printf("listener: socket. errno: %d", errno);
-            continue;
-        }
+	    	// loop through all the results and bind to the first we can
+	    for(p = servinfo; p != NULL; p = p->ai_next) {
+	        if ((receiver_socket_fd = socket(p->ai_family, p->ai_socktype,
+	                p->ai_protocol)) == -1) {
+	            printf("listener: socket. errno: %d", errno);
+	            continue;
+	        }
 
-        if (bind(receiver_socket_fd, p->ai_addr, p->ai_addrlen) == -1) {
-            close(receiver_socket_fd);
-            printf("listener: bind. errno: %d", errno);
-            continue;
-        }
+	        if (bind(receiver_socket_fd, p->ai_addr, p->ai_addrlen) == -1) {
+	            close(receiver_socket_fd);
+	            printf("listener: bind. errno: %d", errno);
+	            continue;
+	        }
 
-        break;
-    }
+	        break;
+	    }
 
-    if (p == NULL) {
-        fprintf(stderr, "listener: failed to bind socket\n");
-    }
+	    if (p == NULL) {
+	        fprintf(stderr, "listener: failed to bind socket\n");
+	    }
 
-     freeaddrinfo(servinfo);
+	     freeaddrinfo(servinfo);
 
-    printf("listener: waiting to recvfrom...\n");
-	return -1;
+	     printf("%s\n", "receiver created");
+
+		return -1;
 }
 
 
 
 int16 n_javax_safetycritical_EV3Support_receiveMsg(int32 *sp){
 	struct sockaddr_storage addr;
-	int numbytes;
-	char buf[MAXBUFLEN];
-	char s[INET6_ADDRSTRLEN];
+		int numbytes;
+		char buf[MAXBUFLEN];
+		char s[INET6_ADDRSTRLEN];
 
-	socklen_t addr_len = sizeof addr;
-    if ((numbytes = recvfrom(receiver_socket_fd, buf, MAXBUFLEN-1 , 0,
-        (struct sockaddr *)&addr, &addr_len)) == -1) {
-        perror("recvfrom");
-    }
+		printf("listener: waiting to recvfrom...\n");
 
-    printf("listener: got packet from %s\n",
-        inet_ntop(addr.ss_family,
-            get_in_addr((struct sockaddr *)&addr),
-            s, sizeof s));
-    printf("listener: packet is %d bytes long\n", numbytes);
-    buf[numbytes] = '\0';
-    printf("listener: packet contains \"%s\"\n", buf);
+		socklen_t addr_len = sizeof addr;
+	    if ((numbytes = recvfrom(receiver_socket_fd, buf, MAXBUFLEN-1 , 0,
+	        (struct sockaddr *)&addr, &addr_len)) == -1) {
+	        perror("recvfrom");
+	    }
 
-    return -1;
+	    printf("listener: got packet from %s\n",
+	        inet_ntop(addr.ss_family,
+	            get_in_addr((struct sockaddr *)&addr),
+	            s, sizeof s));
+	    printf("listener: packet is %d bytes long\n", numbytes);
+	    buf[numbytes] = '\0';
+	    printf("listener: packet contains \"%s\"\n", buf);
+
+	    return -1;
 }
 
 int16 n_javax_safetycritical_EV3Support_closeReceiverSocket(int32 *sp){
