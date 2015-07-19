@@ -6,6 +6,7 @@ public class TCPIPCommunication {
 	private static int[] info = new int[DEFAULT_LENGTH];
 	private static int[] broadcastMsg = new int [121];
 	private static int[] pinPointMsg = new int [121];
+	private static String[] msgReceived = new String[2];
 
 	public static void createSender(String ip){
 		createBroadcastSender(ip.length(), phraseMsg(ip));
@@ -26,12 +27,35 @@ public class TCPIPCommunication {
 	
 	public static native void createReceiver();
 	
-	public static String[] receiveMsg(){
-		String[] info = new String[2];
-		String message = "";
-		String ip = "";
+	public static String[] receiveMsg(ManagedSchedulable ms){
+		ManagedMemory memory = null;
+		long free = 0;
+		
+		if(ms != null){
+			if(ms instanceof ManagedEventHandler){
+				memory = ((ManagedEventHandler)ms).privateMemory;
+			}
+			else{
+				memory = ((ManagedThread)ms).privateMemory;
+			}
+		}
 		
 		receiveMsg(broadcastMsg);
+		
+		if(memory != null)
+			free = memory.memoryConsumed();
+		
+		processMsg();
+		
+		if(memory != null)
+			memory.resetArea(free);
+		
+		return msgReceived;
+	}
+	
+	private static void processMsg(){
+		String message = "";
+		String ip = "";
 		
 		int i=0;
 		for(; i<broadcastMsg.length;i++){
@@ -39,23 +63,22 @@ public class TCPIPCommunication {
 			if(a == '\0'){
 				break;
 			}
-			message = message + a + "";
+			message = message + a;
 		}
+		
 		
 		i++;
 		for(int j=i; j<broadcastMsg.length;j++){
 			char a = (char) broadcastMsg[j];
-			//devices.Console.println(a+"");
 			if(a == '\0'){
 				break;
 			}
-			ip = ip + a + "";
+			ip = ip + a;
 		}
 		
-		info[0] = ip;
-		info[1] = message;
+		msgReceived[0] = ip;
+		msgReceived[1] = message;
 		
-		return info;
 	}
 	
 	private static native void receiveMsg(int[] msg);
