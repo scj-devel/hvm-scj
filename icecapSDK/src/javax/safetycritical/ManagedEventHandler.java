@@ -230,7 +230,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		return set;
 	}
 	
-	public ManagedMemory getMemory(){
+	ManagedMemory getMemory(){
 		return this.privateMemory;
 	}
 	

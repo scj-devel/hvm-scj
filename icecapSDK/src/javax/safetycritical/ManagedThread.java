@@ -196,7 +196,7 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 		return this.set;
 	}
 	
-	public ManagedMemory getMemory(){
+	ManagedMemory getMemory(){
 		return this.privateMemory;
 	}
 	

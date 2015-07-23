@@ -215,7 +215,7 @@ public abstract class ManagedMemory extends MemoryArea {
 	 * @param newFree
 	 *            the number.
 	 */
-	public void resetArea(long newFree) {
+	void resetArea(long newFree) {
 		this.delegate.reset((int) newFree);
 	}
 
