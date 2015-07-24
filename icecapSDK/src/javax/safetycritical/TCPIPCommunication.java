@@ -103,5 +103,5 @@ public class TCPIPCommunication {
 	}
 	
 	private static native void sendOneMessage(int iplen, int[] ip, int msglen);
-	
+
 }
