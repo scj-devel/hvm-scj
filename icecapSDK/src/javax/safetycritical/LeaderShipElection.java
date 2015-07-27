@@ -17,7 +17,6 @@ public class LeaderShipElection {
 	private static int count = -1;
 
 	public static void electLeader() {
-
 		if (count != -1) {
 			printMyNeighbors();
 			setState();
@@ -110,7 +109,7 @@ public class LeaderShipElection {
 
 				neighbors[count] = temp;
 				increaseCount();
-				//devices.Console.println("got one message");
+				// devices.Console.println("got one message");
 			}
 		} else if (state.charAt(0) == '*' && state.charAt(1) == 'A') {
 			if (getNeighborId(state.substring(5)) != id) {
