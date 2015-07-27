@@ -27,6 +27,38 @@ public class LeaderShipElection {
 		devices.Console.println("ask");
 
 	}
+	
+	public static void collect(ManagedSchedulable ms, String ip, String state) {
+
+		ManagedMemory memory = null;
+
+		if (ms != null) {
+			if (ms instanceof ManagedEventHandler) {
+				memory = ((ManagedEventHandler) ms).privateMemory;
+			} else {
+				memory = ((ManagedThread) ms).privateMemory;
+			}
+		}
+
+		if (memory != null && count == 0)
+			memory.resetArea(0);
+
+		if (state.charAt(0) == '*' && state.charAt(1) == 'R') {
+			String temp = state.substring(7);
+			if (getNeighborId(temp) != id) {
+
+				neighbors[count] = temp;
+				increaseCount();
+				// devices.Console.println("got one message");
+			}
+		} else if (state.charAt(0) == '*' && state.charAt(1) == 'A') {
+			if (getNeighborId(state.substring(5)) != id) {
+				TCPIPCommunication.sendPinpointMessage(ip, replyStateToNeighbors());
+				devices.Console.println("----reply:  " + replyStateToNeighbors() + " to: " + ip);
+			}
+		}
+
+	}
 
 	private static String sendStateToNeighbors() {
 		String msg = "*" + "ASK" + "*" + state + "*" + id + "*" + petition;
@@ -84,38 +116,6 @@ public class LeaderShipElection {
 		case Claim.LEADER:
 			devices.Console.println("State is leader: " + count);
 			break;
-		}
-
-	}
-
-	public static void collect(ManagedSchedulable ms, String ip, String state) {
-
-		ManagedMemory memory = null;
-
-		if (ms != null) {
-			if (ms instanceof ManagedEventHandler) {
-				memory = ((ManagedEventHandler) ms).privateMemory;
-			} else {
-				memory = ((ManagedThread) ms).privateMemory;
-			}
-		}
-
-		if (memory != null && count == 0)
-			memory.resetArea(0);
-
-		if (state.charAt(0) == '*' && state.charAt(1) == 'R') {
-			String temp = state.substring(7);
-			if (getNeighborId(temp) != id) {
-
-				neighbors[count] = temp;
-				increaseCount();
-				// devices.Console.println("got one message");
-			}
-		} else if (state.charAt(0) == '*' && state.charAt(1) == 'A') {
-			if (getNeighborId(state.substring(5)) != id) {
-				TCPIPCommunication.sendPinpointMessage(ip, replyStateToNeighbors());
-				devices.Console.println("----reply:  " + replyStateToNeighbors() + " to: " + ip);
-			}
 		}
 
 	}
