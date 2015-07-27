@@ -15,24 +15,6 @@ public class LeaderShipElection {
 	private static int NUMBER_OF_ROBOT = 100;
 	private static String[] neighbors = new String[NUMBER_OF_ROBOT];
 	private static int count = -1;
-//	Counter counter = new Counter();
-//	
-//	
-//	class Counter{
-//		int count = -1; 
-//		
-//		synchronized public void resetCounter(){
-//			count = 0;
-//		}
-//		
-//		synchronized void incrementCounter(){
-//			count++;
-//		}
-//		
-//		int getCounter(){
-//			return count;
-//		}
-//	}
 
 	public static void electLeader() {
 
@@ -64,7 +46,7 @@ public class LeaderShipElection {
 		case Claim.UNDECIDED:
 			if (numberOfLeaders() == 1) {
 				state = Claim.FOLLOWER;
-			} else if (numberOfLeaders() == 0 && hasHighestPetition() == 0) {
+			} else if (numberOfLeaders() == 0 && hasHighestPetition() == 1) {
 				state = Claim.LEADER;
 			} else {
 				state = Claim.FOLLOWER;
@@ -128,11 +110,12 @@ public class LeaderShipElection {
 
 				neighbors[count] = temp;
 				increaseCount();
-
+				//devices.Console.println("got one message");
 			}
 		} else if (state.charAt(0) == '*' && state.charAt(1) == 'A') {
 			if (getNeighborId(state.substring(5)) != id) {
 				TCPIPCommunication.sendPinpointMessage(ip, replyStateToNeighbors());
+				devices.Console.println("----reply:  " + replyStateToNeighbors() + " to: " + ip);
 			}
 		}
 
