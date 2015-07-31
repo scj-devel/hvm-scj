@@ -264,4 +264,8 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	Monitor getLock() {
 		return lock;
 	}
+	
+	public long MissionMemoryBackingStore(){
+		return missionMemory.getRemainingBackingstoreSize();
+	}
 }

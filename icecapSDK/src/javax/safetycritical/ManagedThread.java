@@ -116,7 +116,7 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 	@SCJAllowed(Level.INFRASTRUCTURE)
 	@SCJRestricted(Phase.INITIALIZE)
 	public final void register() {
-		ManagedSchedulableSet msSet = Mission.getMission().msSetForMission;
+		ManagedSchedulableSet msSet = mission.msSetForMission;
 		msSet.addMS(this);
 
 		isRegistered = true;

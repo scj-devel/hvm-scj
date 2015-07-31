@@ -1,6 +1,6 @@
 package javax.safetycritical;
 
-public class TCPIPCommunication {
+public class UDPCommunication {
 	
 	private static final int DEFAULT_LENGTH = 100;  //256; //128; // HSO: June 2014
 	private static int[] info = new int[DEFAULT_LENGTH];
@@ -132,7 +132,7 @@ public class TCPIPCommunication {
 		return info;
 	}
 	
-	public static void sendPinpointMessage(String ip, String msg){
+	public static void sendPinPointMessage(String ip, String msg){
 //		devices.Console.println("send \"" + msg + "\" to " + ip);
 		String copy = ip + msg + "";
 		sendOneMessage(ip.length(), phraseMsg(copy),msg.length());

@@ -8,28 +8,79 @@ public class LeaderShipElection {
 		public final static byte UNDECIDED = 2;
 	}
 
-	private static byte state = Claim.UNDECIDED;
-	private static int petition = 0;
-	private static int id = 0;
+	byte state = Claim.UNDECIDED;
+	int petition = 0;
+	int id = 0;
 
-	private static int NUMBER_OF_ROBOT = 100;
-	private static String[] neighbors = new String[NUMBER_OF_ROBOT];
-	private static int count = -1;
+	Neighbor neighbor;
+	RobotInfoStore robotStore;
 
-	public static void electLeader() {
-		if (count != -1) {
+	private static String[] neighbors = new String[4];
+	private static int time = 0;
+	protected int motorCount = 0;
+
+	PrivateMemory mem1;
+	PrivateMemory mem22;
+	PrivateMemory mem55;
+	PrivateMemory mem84;
+
+	String robotInfo = null;
+
+	public LeaderShipElection(Mission mission, String networkName, StorageParameters storage) {
+		initLeadershipElection(mission, networkName, storage);
+		neighbors[0] = "2*1*1*0";
+		neighbors[1] = "2*22*22*0";
+		neighbors[2] = "2*55*55*0";
+		neighbors[3] = "2*84*84*0";
+
+		neighbor = new Neighbor();
+		robotStore = new RobotInfoStore();
+	}
+
+	void initLeadershipElection(Mission mission, String networkName, StorageParameters storage) {
+		String ip = UDPCommunication.getIPAddress(null, networkName);
+
+		String lastDigit = "";
+		int countDot = 0;
+		int i = 0;
+		for (; i < ip.length(); i++) {
+			if (ip.charAt(i) == '.') {
+				countDot++;
+			}
+			if (countDot == 3) {
+				i++;
+				break;
+			}
+		}
+
+		for (int j = i; j < ip.length(); j++) {
+			lastDigit = lastDigit + ip.charAt(j);
+		}
+
+		id = convert(lastDigit);
+		devices.Console.println("ID: " + id);
+		petition = id;
+
+		mem1 = new PrivateMemory((int) storage.getMaximalMemoryArea(), (int) storage.totalBackingStore,
+				mission.currMissSeq.missionMemory, "mem_robot1");
+		mem22 = new PrivateMemory((int) storage.getMaximalMemoryArea(), (int) storage.totalBackingStore,
+				mission.currMissSeq.missionMemory, "mem_robot22");
+		mem55 = new PrivateMemory((int) storage.getMaximalMemoryArea(), (int) storage.totalBackingStore,
+				mission.currMissSeq.missionMemory, "mem_robot55");
+		mem84 = new PrivateMemory((int) storage.getMaximalMemoryArea(), (int) storage.totalBackingStore,
+				mission.currMissSeq.missionMemory, "mem_robot84");
+
+	}
+
+	public void electLeader() {
+		if (time != 0) {
 			printMyNeighbors();
 			setState();
 		}
-		resetBuffer();
-
-		TCPIPCommunication.sendBroadcastMsg(LeaderShipElection.sendStateToNeighbors());
-		devices.Console.println("ask");
-
+		neighbor.increaseTime();
 	}
-	
-	public static void collect(ManagedSchedulable ms, String ip, String state) {
 
+	public void collect(ManagedSchedulable ms, String state) {
 		ManagedMemory memory = null;
 
 		if (ms != null) {
@@ -40,39 +91,92 @@ public class LeaderShipElection {
 			}
 		}
 
-		if (memory != null && count == 0)
+		if (memory != null)
 			memory.resetArea(0);
 
-		if (state.charAt(0) == '*' && state.charAt(1) == 'R') {
-			String temp = state.substring(7);
-			if (getNeighborId(temp) != id) {
+		neighbor.setNeighbor(state);
+	}
 
-				neighbors[count] = temp;
-				increaseCount();
-				// devices.Console.println("got one message");
-			}
-		} else if (state.charAt(0) == '*' && state.charAt(1) == 'A') {
-			if (getNeighborId(state.substring(5)) != id) {
-				TCPIPCommunication.sendPinpointMessage(ip, replyStateToNeighbors());
-				devices.Console.println("----reply:  " + replyStateToNeighbors() + " to: " + ip);
+	public void sendStateToNeighbors() {
+		String msg = state + "*" + id + "*" + petition;
+		UDPCommunication.sendBroadcastMsg(msg);
+	}
+
+	public void clearLeaderElection() {
+		mem1.removeArea();
+		mem22.removeArea();
+		mem55.removeArea();
+		mem84.removeArea();
+	}
+
+	private class Neighbor {
+
+		Neighbor() {
+			Services.setCeiling(this, 20);
+		}
+
+		synchronized void setNeighbor(String state) {
+			robotInfo = state;
+			switch (state.charAt(2)) {
+			case '1':
+				mem1.resetArea();
+				mem1.executeInArea(robotStore);
+				break;
+			case '2':
+				mem22.resetArea();
+				mem22.executeInArea(robotStore);
+				break;
+			case '5':
+				mem55.resetArea();
+				mem55.executeInArea(robotStore);
+				break;
+			case '8':
+				mem84.resetArea();
+				mem84.executeInArea(robotStore);
+				break;
+			default:
+				devices.Console.println("unidentified device:" + state.charAt(2) + "." + " state: " + state);
+				break;
 			}
 		}
 
+		synchronized String getNeighbor(int index) {
+			return neighbors[index];
+		}
+
+		synchronized void increaseTime() {
+			time++;
+		}
 	}
 
-	private static String sendStateToNeighbors() {
-		String msg = "*" + "ASK" + "*" + state + "*" + id + "*" + petition;
-		return msg;
+	class RobotInfoStore implements Runnable {
+
+		@Override
+		public void run() {
+			String state = robotInfo + "*" + time;
+
+			switch (state.charAt(2)) {
+			case '1':
+				neighbors[0] = state;
+				break;
+			case '2':
+				neighbors[1] = state;
+				break;
+			case '5':
+				neighbors[2] = state;
+				break;
+			case '8':
+				neighbors[3] = state;
+				break;
+			default:
+				devices.Console.println("unidentified device: " + id);
+				throw new IllegalArgumentException();
+			}
+
+		}
 	}
 
-	private static String replyStateToNeighbors() {
-		String msg = "*" + "REPLY" + "*" + state + "*" + id + "*" + petition;
-		return msg;
-	}
-
-	private static void setState() {
-		// devices.Console.println("State: " + state + " leaders: " +
-		// numberOfLeaders() /*+ " high: " + hasHighestPetition()*/);
+	void setState() {
 		switch (state) {
 		case Claim.UNDECIDED:
 			if (numberOfLeaders() == 1) {
@@ -108,35 +212,30 @@ public class LeaderShipElection {
 
 		switch (state) {
 		case Claim.UNDECIDED:
-			devices.Console.println("State is undecide: " + count);
+			devices.Console.println("undecide");
 			break;
 		case Claim.FOLLOWER:
-			devices.Console.println("State is follower: " + count);
+			devices.Console.println("follower");
 			break;
 		case Claim.LEADER:
-			devices.Console.println("State is leader: " + count);
+			devices.Console.println("leader");
 			break;
 		}
-
 	}
 
-	synchronized private static void resetBuffer() {
-		count = 0;
-	}
-
-	synchronized private static void increaseCount() {
-		count++;
-	}
-
-	private static int hasHighestPetition() {
+	int hasHighestPetition() {
 		int hasHighestPetition = 0;
 		int equal = -1;
 
-		for (int i = 0; i < count; i++) {
-			if (getNeighborPetition(neighbors[i]) > petition) {
+		for (int i = 0; i < 4; i++) {
+			if (getNeighborTime(neighbor.getNeighbor(i)) < time || getNeighborId(neighbor.getNeighbor(i)) == id) {
+				continue;
+			}
+
+			if (getNeighborPetition(neighbor.getNeighbor(i)) > petition) {
 				hasHighestPetition = -1;
 				break;
-			} else if (getNeighborPetition(neighbors[i]) == petition) {
+			} else if (getNeighborPetition(neighbor.getNeighbor(i)) == petition) {
 				equal = 0;
 			}
 		}
@@ -152,11 +251,14 @@ public class LeaderShipElection {
 		}
 	}
 
-	private static boolean hasHighestID() {
+	boolean hasHighestID() {
 		boolean hasHighestID = true;
 
-		for (int i = 0; i < count; i++) {
-			if (getNeighborId(neighbors[i]) > petition) {
+		for (int i = 0; i < 4; i++) {
+			if (getNeighborTime(neighbor.getNeighbor(i)) < time || getNeighborId(neighbor.getNeighbor(i)) == id) {
+				continue;
+			}
+			if (getNeighborId(neighbor.getNeighbor(i)) > petition) {
 				hasHighestID = false;
 				break;
 			}
@@ -165,8 +267,22 @@ public class LeaderShipElection {
 		return hasHighestID;
 	}
 
-	private static int getNeighborId(String info) {
-		// devices.Console.println("info: " + info);
+	int numberOfLeaders() {
+		int number_of_leaders = 0;
+
+		for (int i = 0; i < 4; i++) {
+			if (getNeighborTime(neighbor.getNeighbor(i)) < time || getNeighborId(neighbor.getNeighbor(i)) == id) {
+				continue;
+			}
+			String state = neighbor.getNeighbor(i).charAt(0) + "";
+			if (convert(state) == Claim.LEADER)
+				number_of_leaders++;
+		}
+
+		return number_of_leaders;
+	}
+
+	int getNeighborId(String info) {
 		int id = -1;
 		int first_index = -1, second_index = -1;
 
@@ -184,48 +300,56 @@ public class LeaderShipElection {
 				break;
 			}
 		}
-		// devices.Console.println("id:" + info.substring(first_index + 1,
-		// second_index) + ".");
 		id = convert(info.substring(first_index + 1, second_index));
-		// devices.Console.println("neighor id: " + id + ";");
-
-		// int id = convert(info.substring(2));
-		// devices.Console.println("N_id: " + id);
 		return id;
 	}
 
-	private static int getNeighborPetition(String info) {
-		int petition = 0;
+	int getNeighborPetition(String info) {
+		int petition = -1;
+		int count = 0;
+		int first_index = -1, second_index = -1;
 
 		int i = 0;
 		for (; i < info.length(); i++) {
 			if (info.charAt(i) == '*') {
-				petition++;
-				if (petition == 2) {
+				count++;
+				if (count == 2) {
+					first_index = i;
 					break;
 				}
 			}
 		}
 		i++;
-		// devices.Console.println("petition: " + info.substring(i));
-		petition = convert(info.substring(i));
-		// devices.Console.println("petition: " + petition);
+		for (; i < info.length(); i++) {
+			if (info.charAt(i) == '*') {
+				second_index = i;
+				break;
+			}
+		}
+		petition = convert(info.substring(first_index + 1, second_index));
 		return petition;
 	}
 
-	private static int numberOfLeaders() {
-		int number_of_leaders = 0;
+	int getNeighborTime(String info) {
+		int time = -1;
+		int count = 0;
 
-		for (int i = 0; i < count; i++) {
-			String state = neighbors[i].charAt(0) + "";
-			if (convert(state) == Claim.LEADER)
-				number_of_leaders++;
+		int i = 0;
+		for (; i < info.length(); i++) {
+			if (info.charAt(i) == '*') {
+				count++;
+				if (count == 3) {
+					break;
+				}
+			}
 		}
+		i++;
 
-		return number_of_leaders;
+		time = convert(info.substring(i));
+		return time;
 	}
 
-	private static int convert(String s) {
+	int convert(String s) {
 		if (s == null || s.length() == 0) {
 			return -1;
 		}
@@ -254,44 +378,20 @@ public class LeaderShipElection {
 		return ret;
 	}
 
-	public static int getId() {
+	public int getId() {
 		return id;
 	}
 
-	public static int getState() {
+	public int getState() {
 		return state;
 	}
 
-	public static void generateIDAndPetition(String networkName) {
-		String ip = TCPIPCommunication.getIPAddress(null, networkName);
-
-		String lastDigit = "";
-		int countDot = 0;
-		int i = 0;
-		for (; i < ip.length(); i++) {
-			if (ip.charAt(i) == '.') {
-				countDot++;
-			}
-			if (countDot == 3) {
-				i++;
-				break;
-			}
+	public void printMyNeighbors() {
+		devices.Console.println("---------------" + time);
+		for (int i = 0; i < 4; i++) {
+			devices.Console.println(">" + neighbor.getNeighbor(i));
 		}
-
-		for (int j = i; j < ip.length(); j++) {
-			lastDigit = lastDigit + ip.charAt(j);
-		}
-
-		LeaderShipElection.id = convert(lastDigit);
-		devices.Console.println("ID: " + id);
-		LeaderShipElection.petition = LeaderShipElection.id;
-	}
-
-	public static void printMyNeighbors() {
-		devices.Console.println("--------------------------" + count);
-		for (int i = 0; i < count; i++) {
-			devices.Console.println(">>>" + neighbors[i]);
-		}
+		devices.Console.println("---------------");
 	}
 
 }
