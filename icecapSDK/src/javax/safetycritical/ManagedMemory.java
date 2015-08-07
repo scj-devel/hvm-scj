@@ -332,14 +332,15 @@ public abstract class ManagedMemory extends MemoryArea {
 				throw exception;
 
 			ManagedSchedulable ms = Services.currentManagedSchedulable();
-			devices.Console.println("enterPrivateMemory");
+//			devices.Console.println("enterPrivateMemory");
 			runEnterPrivateMemoryMulticore(ms, size, logic);
 		}
 		
 		void runEnterPrivateMemoryMulticore(ManagedSchedulable ms, int size, Runnable logic) {
 			ManagedMemory prev = getMemory(ms);
-			devices.Console.println("enterPrivateMemory: prev " + prev);
+			
 			long prevFree = prev.memoryConsumed();
+//			devices.Console.println("enterPrivateMemory: prev " + prev);
 
 			InnerPrivateMemory inner = new InnerPrivateMemory(size,
 					prev.getRemainingBackingstoreSize(), prev, "InnerPrvMem");
