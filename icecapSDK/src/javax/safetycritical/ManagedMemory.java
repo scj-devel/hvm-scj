@@ -237,12 +237,16 @@ public abstract class ManagedMemory extends MemoryArea {
 	}
 
 	// used for JML annotation only (not public)    
-	static MemoryArea getCurretAllocationArea() {
+	static long getCurrentRemainingArea() {
+		return getCurrentMemoryArea().memoryRemaining();
+	}
+	// used for JML annotation only (not public)    
+	static MemoryArea getCurrentAllocationArea() {
 		return getCurrentMemoryArea();
 	}
 
 	// used for JML annotation only (not public)
-	MemoryArea getTopMostArea() {
+	static MemoryArea getTopMostArea() {
 		return null;
 	}
 

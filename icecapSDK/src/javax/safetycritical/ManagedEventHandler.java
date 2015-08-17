@@ -88,25 +88,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	 * 
 	 * @throws <code>IllegalArgumentException</code> if priority or release parameters are null.
 	 */
-	/*@ 
-	  public normal_behavior      
-	    requires priority != null;
-	    requires release != null;  
-	
-	//	    ensures this.getPriorityParam().getPriority() == priority.getPriority();  
-	//	    ensures this.getReleaseParam().getDeadline() == release.getDeadline();
-	//	    ensures this.getReleaseParam().getMissHandler() == release.getMissHandler();
-	
-	  also
-	  public exceptional_behavior
-	    requires priority == null;
-	    signals (IllegalArgumentException) true;
-	  also
-	  public exceptional_behavior
-	    requires release == null;
-	    signals (IllegalArgumentException) true;        
-	  @*/
-	public ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, StorageParameters storage) {
+	/*public*/ ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, StorageParameters storage) {
 		this(priority, release, storage, null);
 	}
 
@@ -152,18 +134,8 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		this.isInMissionScope = false;
 	}
 
-	/*@ 
-	  public behavior
-	    requires true;
-	 
-//	    ensures javax.realtime.Clock.getRealtimeClock().getTime().compareTo(
-//	              getLastReleaseTime().add(release.getDeadline())) <= 0;
-	  @*/
 	public abstract void handleAsyncEvent();
 
-	//	//@ also
-	//  //@   requires true;
-	//  //@   ensures ??;	// something to add?
 	@SCJAllowed(Level.SUPPORT)
 	@SCJRestricted(Phase.CLEANUP)
 	public void cleanUp() {
@@ -173,9 +145,6 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	/**
 	 * Registers this event handler with the current mission.
 	 */
-	//	//@ also
-	//  //@   requires true;
-	//  //@   ensures ??;	// something to add?
 	@SCJAllowed(Level.INFRASTRUCTURE)
 	@SCJRestricted(Phase.INITIALIZE)
 	public void register() {
@@ -188,13 +157,18 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 	@SCJAllowed(Level.SUPPORT)
 	public void signalTermination() {
+		// ToDo: implementation
 	}
 
-	@SCJAllowed(Level.LEVEL_1)
-	public AbsoluteTime getLastReleaseTime() {
-		// ToDo: implementation
-		return null;
+	public String getName() {
+		return name;
 	}
+
+//	@SCJAllowed(Level.LEVEL_1)
+//	public AbsoluteTime getLastReleaseTime() {
+//		// ToDo: implementation
+//		return null;
+//	}
 
 	Mission getMission() {
 		return mission;
@@ -203,18 +177,14 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	void setName(String name) {
 		this.name = name;
 	}
-
-	String getName() {
-		return name;
-	}
-
-	// Used in JML annotations
-	/*@ spec_public @*/PriorityParameters getPriorityParam() {
+	
+	// used for JML annotation only (not public)
+	PriorityParameters getPriorityParam() {
 		return priority;
 	}
 
-	// Used in JML annotations
-	/*@ spec_public @*/ReleaseParameters getReleaseParam() {
+	// used for JML annotation only (not public)
+	ReleaseParameters getReleaseParam() {
 		return release;
 	}
 	

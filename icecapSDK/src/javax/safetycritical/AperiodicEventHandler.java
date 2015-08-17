@@ -60,19 +60,6 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 	 * 
 	 * @throws <code>IllegalArgumentException</code> if <code>priority</code> or <code> release</code> is null.
 	 */
-	/*@ 
-	  public normal_behavior
-	    requires priority != null && release  != null; 
-	    ensures true; 
-	  also
-	  public exceptional_behavior
-	    requires priority == null;
-	    signals (IllegalArgumentException) true;
-	  also
-	  public exceptional_behavior
-	    requires release == null;
-	    signals (IllegalArgumentException) true;       
-	@*/
 	public AperiodicEventHandler(PriorityParameters priority, AperiodicParameters release,
 			StorageParameters storage) {
 		this(priority, release, storage, null);
@@ -99,15 +86,6 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 	/**
 	 * Release this aperiodic event handler
 	 */
-	/*@ 
-	  public behavior
-	//      requires MissionSequencer.getPhase() == Phase.EXECUTE;
-	    requires Mission.getMission().isRegistered(this);      
-	  
-	//      ensures MissionSequencer.getPhase() == Phase.EXECUTE;
-	    ensures Mission.getMission().isRegistered(this);
-	//      ensures PriorityScheduler.activated(this);      
-	  @*/
 	@SCJAllowed
 	public final void release() {
 		ManagedEventHandler.handlerBehavior.aperiodicHandlerRelease(this);
