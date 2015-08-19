@@ -185,6 +185,27 @@ public abstract class ManagedMemory extends MemoryArea {
 			return mlevh.privateMemory;
 		}
 	}
+	
+	static void cleanUpMemoryArea(ManagedSchedulable ms){
+		ManagedEventHandler handler = null;
+		ManagedThread thread = null;
+		
+		if(ms instanceof ManagedEventHandler){
+			handler = (ManagedEventHandler)ms;
+			handler.privateMemory.removeArea();
+			
+			if(ms instanceof MissionSequencer<?>){
+				MissionSequencer<?> seq = (MissionSequencer<?>)ms;
+				seq.missionMemory.removeArea();
+			}
+		}
+		else{
+			thread = (ManagedThread)ms;
+			thread.privateMemory.removeArea();
+		}
+		
+		
+	}
 
 	@SCJAllowed
 	public static void executeInAreaOf(Object obj, Runnable logic) {

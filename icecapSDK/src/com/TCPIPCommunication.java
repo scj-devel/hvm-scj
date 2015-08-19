@@ -5,8 +5,6 @@ public class TCPIPCommunication extends Network {
 	
 	public static native int createTCPIPSender();
 	
-	public static native int setReceiverTimeout(int fd, int sec);
-	
 	public static int connectSender(int fd, String ip){
 		return connect(ip.length(), phraseMsg(ip), fd);
 	}
@@ -24,7 +22,7 @@ public class TCPIPCommunication extends Network {
 	
 	
 	
-	public static native int createTCPIPReceiver();
+	public static native int createTCPIPReceiver(int timeout);
 	
 	public static int[] listenForConnection(int fd, int queueLen){
 		listenForConnection(fd, queueLen, peerInfo);
