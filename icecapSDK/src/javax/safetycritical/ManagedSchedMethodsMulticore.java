@@ -19,12 +19,24 @@ public class ManagedSchedMethodsMulticore {
 	}
 
 	private static void runPeriodicHandler(PeriodicEventHandler handler) {
-		handler.privateMemory.enter(handler);
+		handler.state = 1;
+		
 		if (handler.mission.terminationPending()) {
 			handler.mission.currMissSeq.seqNotify();
 			OSProcess.requestTermination_c(handler.process.executable);
 			OSProcess.testCancel_c();
 		}
+		else{
+			handler.privateMemory.enter(handler);
+		}
+		
+		if (handler.mission.terminationPending()) {
+			handler.mission.currMissSeq.seqNotify();
+			OSProcess.requestTermination_c(handler.process.executable);
+			OSProcess.testCancel_c();
+		}
+		
+		handler.state = 0;
 	}
 
 	private static void runAperiodicEventHandler(AperiodicEventHandler handler) {

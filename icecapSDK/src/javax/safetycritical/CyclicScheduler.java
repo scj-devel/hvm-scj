@@ -76,6 +76,7 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 		if (scjProcess.getTarget() instanceof MissionSequencer<?>
 				&& ((MissionSequencer<?>) (scjProcess.getTarget())).currState == State.END) {
 			scjProcess.getTarget().cleanUp();
+			ManagedMemory.cleanUpMemoryArea(scjProcess.getTarget());
 			CyclicScheduler.instance().stop(scjProcess.process);
 		}
 

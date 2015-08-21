@@ -177,7 +177,8 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 
 		if (current == ScjProcess.idleProcess && pFrame.sleepingQueue.heapSize == 0 && pFrame.waitQueue.queueSize == 0
 				&& pFrame.lockQueue.queueSize == 0) {
-			current.getTarget().cleanUp();
+//			current.getTarget().cleanUp();
+			ManagedMemory.cleanUpMemoryArea(current.getTarget());
 			//devices.Console.println("PrioritySch.move: null; missions: " + MissionSequencer.howManyMissions);
 			return null;
 		} else {

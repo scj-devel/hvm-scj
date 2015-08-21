@@ -167,7 +167,6 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	@SCJAllowed(Level.SUPPORT)
 	@SCJRestricted(Phase.CLEANUP)
 	public void cleanUp() {
-		privateMemory.removeArea();
 	}
 
 	/**
@@ -238,6 +237,8 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	static abstract class HandlerBehavior {
 
 		abstract void aperiodicHandlerRelease(AperiodicEventHandler handler);
+		
+		abstract void periodicHandlerDeschedule(PeriodicEventHandler handler);
 
 		abstract boolean oneshotHandlerDeschedule(OneShotEventHandler handler);
 
@@ -259,6 +260,18 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		void aperiodicHandlerRelease(AperiodicEventHandler handler) {
 			handler.fireNextRelease();
 			handler.isReleased = true;
+		}
+
+		@Override
+		void periodicHandlerDeschedule(PeriodicEventHandler handler) {
+			if(handler.state == 0){
+				if(handler.process.executable.startTimer_c > 0){
+					OSProcess.setTimerfd(handler.process.executable.startTimer_c, 0);
+				}
+				if(handler.process.executable.period_c > 0){
+					OSProcess.setTimerfd(handler.process.executable.period_c, 0);
+				}
+			}
 		}
 
 		@Override
@@ -418,6 +431,10 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 			}
 
 			
+		}
+
+		@Override
+		void periodicHandlerDeschedule(PeriodicEventHandler handler) {
 		}
 	}
 }

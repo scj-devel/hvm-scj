@@ -56,4 +56,6 @@ public class TCPIPCommunication extends Network {
 
 		return message;
 	}
+	
+	public static native void shutdown(int fd);
 }

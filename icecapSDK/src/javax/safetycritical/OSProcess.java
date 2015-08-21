@@ -47,6 +47,7 @@ class OSProcess extends Process {
 		OSProcess process;
 		ThreadInfo info;
 		int startTimer_c = -99;
+		int period_c = -99;
 		int id = -99;
 		int[] processors;
 		int sizeOfProcessor;

@@ -97,6 +97,7 @@ class ManagedSchedulableSet {
 	{
 		for (int i = noOfRegistered; i > 0; i--) {
 			managedSchObjects[i - 1].cleanUp();
+			ManagedMemory.cleanUpMemoryArea(managedSchObjects[i -1]);
 			managedSchObjects[i - 1] = null;
 			msCount--;
 		}
@@ -107,6 +108,7 @@ class ManagedSchedulableSet {
 		for (int i = 0; i < noOfRegistered; i++) {
 			if (managedSchObjects[i] == ms) {
 				managedSchObjects[i].cleanUp();
+				ManagedMemory.cleanUpMemoryArea(managedSchObjects[i]);
 				managedSchObjects[i] = null;
 
 				//PriorityScheduler.instance().pFrame.readyQueue.remove(scjProcesses[i]);
@@ -129,6 +131,7 @@ class ManagedSchedulableSet {
 		for (int i = 0; i < noOfRegistered; i++) {
 			if (managedSchObjects[i] instanceof AperiodicEventHandler) {
 				managedSchObjects[i].cleanUp();
+				ManagedMemory.cleanUpMemoryArea(managedSchObjects[i]);
 				PriorityScheduler.instance().pFrame.readyQueue.remove(scjProcesses[i]);
 				msCount--;
 			}

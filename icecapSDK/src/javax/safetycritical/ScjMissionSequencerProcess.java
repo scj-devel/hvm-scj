@@ -13,11 +13,13 @@ class ScjMissionSequencerProcess extends ScjProcess {
 			// missionSequencer terminates
 			if (index == -2) { // outer sequencer
 				msObject.cleanUp();
+				ManagedMemory.cleanUpMemoryArea(msObject);
 			} else {
 				//devices.Console.println("---- ScjMissionSequencerProcess: " + index + ";target: " + target);
 				Mission m = Mission.getMission();
 				if (m != null) {
 					msObject.cleanUp();
+					ManagedMemory.cleanUpMemoryArea(msObject);
 					Mission.getMission().msSetForMission.removeMSObject(msObject);
 				}
 			}

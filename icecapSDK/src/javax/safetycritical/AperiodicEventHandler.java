@@ -110,7 +110,8 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 	  @*/
 	@SCJAllowed
 	public final void release() {
-		ManagedEventHandler.handlerBehavior.aperiodicHandlerRelease(this);
+		if(!this.mission.terminationPending())
+			ManagedEventHandler.handlerBehavior.aperiodicHandlerRelease(this);
 	}
 	
 	boolean isReleased() {

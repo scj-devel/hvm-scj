@@ -126,7 +126,6 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 	@SCJAllowed(Level.SUPPORT)
 	@SCJRestricted(Phase.CLEANUP)
 	public void cleanUp() {
-		privateMemory.removeArea();
 	}
 
 	public void signalTermination() {

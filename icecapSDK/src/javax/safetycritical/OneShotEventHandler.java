@@ -127,10 +127,6 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 		return ManagedEventHandler.handlerBehavior.oneshotHandlerDeschedule(this);
 	}
 
-	public final void cleanUp() {
-		super.cleanUp();
-	}
-
 	@SCJAllowed(Level.INFRASTRUCTURE)
 	@SCJRestricted(Phase.INITIALIZE)
 	public final void register() {
@@ -142,7 +138,8 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	}
 	
 	public void scheduleNextReleaseTime(HighResolutionTime time) {
-		ManagedEventHandler.handlerBehavior.oneshotHandlerScheduleNextReleaseTime(this, time);
+		if(!this.mission.terminationPending())
+			ManagedEventHandler.handlerBehavior.oneshotHandlerScheduleNextReleaseTime(this, time);
 	}
 	
 	synchronized void waitForNextRelease() {

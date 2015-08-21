@@ -273,6 +273,9 @@ public abstract class Mission {
 							((OneShotEventHandler) mission.msSetForMission.managedSchObjects[i]).deschedule();
 							((OneShotEventHandler) mission.msSetForMission.managedSchObjects[i]).fireNextRelease();
 						}
+						if (mission.msSetForMission.managedSchObjects[i] instanceof PeriodicEventHandler) {
+							((PeriodicEventHandler) mission.msSetForMission.managedSchObjects[i]).deschedule();
+						}
 						mission.msSetForMission.managedSchObjects[i].signalTermination();
 					}
 				}
@@ -346,6 +349,8 @@ public abstract class Mission {
 
 			for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {
 				mission.msSetForMission.managedSchObjects[i].cleanUp();
+				ManagedMemory.cleanUpMemoryArea(mission.msSetForMission.managedSchObjects[i]);
+				
 				mission.msSetForMission.managedSchObjects[i] = null;
 				mission.msSetForMission.msCount--;
 			}

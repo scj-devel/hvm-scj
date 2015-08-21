@@ -112,6 +112,7 @@ abstract class Launcher implements Runnable {
 		MissionSequencer<?> outerMostMS = app.getSequencer();
 		outerMostMS.privateMemory.enter(outerMostMS);
 		outerMostMS.cleanUp();
+		ManagedMemory.cleanUpMemoryArea(outerMostMS);
 	}
 	
 	private void initAffinfitySetsMulticore() {

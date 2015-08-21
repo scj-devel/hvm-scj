@@ -164,7 +164,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 			// the main actions of the sequencer governed by currState
 			switch (currState) {
 			case State.START:
-				//devices.Console.println("MS.S: " + name);
+//				devices.Console.println("MS.S: " + name);
 				currMission = getNextMission();
 
 				if (currMission != null) {
@@ -182,20 +182,20 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 				break;
 
 			case State.INITIALIZE:
-				//devices.Console.println("MS.I: " + name);
+//				devices.Console.println("MS.I: " + name);
 				currMission.setMissionSeq(this);
 				missionMemory.enterToInitialize(currMission);
 				currState = State.EXECUTE;
 				break;
 
 			case State.EXECUTE:
-				//devices.Console.println("MS.E");
+//				devices.Console.println("MS.E" + name);
 				ManagedEventHandler.handlerBehavior.missionSequencerExecutePhase(this);
 				currState = State.CLEANUP;
 				break;
 
 			case State.CLEANUP:
-				//devices.Console.println("MS.C: " + name);
+//				devices.Console.println("MS.C: " + name);
 
 				missionMemory.enterToCleanup(currMission);
 				missionMemory.resizeArea(storage.maxMissionMemory);
@@ -235,11 +235,6 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	@Override
 	public void signalTermination() {
 		ManagedEventHandler.handlerBehavior.missionSequencerSingleTermination(this);
-	}
-
-	public void cleanUp() {
-		super.cleanUp();
-		missionMemory.removeArea();
 	}
 
 	MissionSequencer<?> getOuterSeq() {
