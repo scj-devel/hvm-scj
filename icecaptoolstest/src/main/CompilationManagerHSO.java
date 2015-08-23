@@ -130,8 +130,8 @@ public class CompilationManagerHSO {
         // pathSeparator + "/home/hso/java/SCJ_Workspace/JML/jml4c.jar";
 
         // For OpenJML test:
-        String inputFolder = "/home/hso/java/SCJ_Workspace/OpenJMLTest/bin/" +
-          pathSeparator + "/home/hso/java/SCJ_Workspace/OpenJMLTest/lib/jmlruntime.jar" +
+        String inputFolder = "/home/hso/workspace/OpenJMLTest/bin/" +
+          pathSeparator + "/home/hso/workspace/OpenJMLTest/lib/jmlruntime.jar" +
           pathSeparator + "/home/hso/git/hvm-scj/icecapSDK/bin/";
         
         
@@ -188,7 +188,7 @@ public class CompilationManagerHSO {
         //String inputPackage = "test";
         //String inputClass = "JMLTest1";
         
-        String inputPackage = "account";       
+        //String inputPackage = "account";       
        
         
         //String inputPackage = "javax.realtime.test.timeClasses";
@@ -199,9 +199,9 @@ public class CompilationManagerHSO {
         //String inputPackage = "javax.safetycritical.test.cyclicschedule3";
         
         //String inputPackage = "javax.realtime.test";
-        //String inputPackage = "javax.safetycritical.test";
+        String inputPackage = "javax.safetycritical.test";
         
-        String inputClass = "AllTests";
+        //String inputClass = "AllTests";
         //String inputClass = "TckTestCyclicSchedule3";
         //String inputClass = "TckTestCyclicExecutive1";
         //String inputClass = "TckTestSafelet22";
@@ -209,12 +209,13 @@ public class CompilationManagerHSO {
         //String inputClass = "TckTestMemoryParameters";
         //String inputClass = "TckTestPriorityScheduler";
         //String inputClass = "TckTestAperiodicParameters";
-        //String inputClass = "TckTestPriorityParameters";        
+        //String inputClass = "TckTestPriorityParameters";   
+        //String inputClass = "TckTestHighResolutionTime";
         //String inputClass = "TckTestAbsoluteTime";        
         //String inputClass = "TckTestRelativeTime";
         //String inputClass = "TckTestReleaseParameters";
         
-        //String inputClass = "TckTestStorageParameters";
+        String inputClass = "TckTestStorageParameters";
         //String inputClass = "TckTestFrame2";
         //String inputClass = "TckTestCyclicSchedule0";
         
