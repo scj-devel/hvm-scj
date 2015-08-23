@@ -1,6 +1,5 @@
 package leadershipElection;
 
-
 import com.Network;
 
 public class LeaderShipElection {
@@ -61,13 +60,47 @@ public class LeaderShipElection {
 		}
 		increaseTime();
 	}
+	
+	public void reset(){
+		state = Claim.UNDECIDED;
+		petition--;
+		time = 0;
+		for (int i = 0; i < robot_ids.length; i++) {
+			robots[robot_ids[i]] = new Robot(state, robot_ids[i], robot_ids[i], time);
+		}
+		
+		
+	}
 
 	synchronized public void collect(String msg) {
+		int countStar = 0;
+		for (int i = msg.length() - 1; i >= 0; i--) {
+			if (msg.charAt(i) == '*') {
+				countStar++;
+			}
+		}
+		if (msg.charAt(1) != '*' || countStar != 2) {
+			devices.Console.println("received: " + msg);
+			int star = 0;
+			for (int i = msg.length() - 1; i >= 0; i--) {
+				if (msg.charAt(i) == '*') {
+					star++;
+					if (star == 2) {
+						star = i;
+						break;
+					}
+
+				}
+			}
+			msg = msg.substring(star - 1);
+			devices.Console.println("pharsed: " + msg);
+		}
+
 		int state = msg.charAt(0) - '0';
 		int id = -1;
 		int petition = -1;
-		
-		int i=0;
+
+		int i = 0;
 		int first_index = -1, second_index = -1;
 		for (; i < msg.length(); i++) {
 			if (msg.charAt(i) == '*') {
@@ -82,16 +115,16 @@ public class LeaderShipElection {
 				break;
 			}
 		}
-		
+
 		id = convert(msg.substring(first_index + 1, second_index));
 		petition = convert(msg.substring(second_index + 1));
-		
+
 		robots[id].state = state;
 		robots[id].id = id;
 		robots[id].petition = petition;
 		robots[id].time = time;
 	}
-	
+
 	synchronized Robot getRobot(int index) {
 		return robots[index];
 	}
@@ -117,12 +150,12 @@ public class LeaderShipElection {
 			this.petition = petition;
 			this.time = time;
 		}
-		
+
 		@Override
 		public String toString() {
 			return state + "*" + id + "*" + petition + "*" + time;
 		}
-		
+
 	}
 
 	private void setState() {
@@ -232,7 +265,6 @@ public class LeaderShipElection {
 
 		return number_of_leaders;
 	}
-
 
 	static int convert(String s) {
 		if (s == null || s.length() == 0) {
