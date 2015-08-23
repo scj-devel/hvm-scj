@@ -865,7 +865,7 @@ int16 n_java_lang_Thread_toString(int32 *sp) {
 }
 #endif
 
-#if defined(N_JAVAX_SAFETYCRITICAL_EV3SUPPORT_CREATEBROADCASTSOCKET)
+#if defined(N_COM_UDPCOMMUNICATION_CREATEBROADCASTSENDER)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -883,10 +883,10 @@ int16 n_java_lang_Thread_toString(int32 *sp) {
 struct sockaddr_in their_addr;
 int boradcast_socket_fd;
 
-int16 n_javax_safetycritical_EV3Support_createBroadcastSocket(int32 *sp){
+int16 n_com_UDPCommunication_createBroadcastSender(int32 *sp){
 	int size = sp[0]+1;
 	int *p = HEAP_REF((int* ) (pointer ) sp[1], int*);
-	char *addr = HEAP_REF((char*) gc_allocateObject(sizeof(char), size), char*);
+	char *addr = HEAP_REF((char*) gc_allocateObject(sizeof(char), 0), char*);
 
 	int index = 0;
 	for(; index< size-1; index++){
@@ -895,37 +895,38 @@ int16 n_javax_safetycritical_EV3Support_createBroadcastSocket(int32 *sp){
 	}
 	addr[index] = '\0';
 
-	printf("%s\n",addr);
 
 	int sockfd;
 	struct hostent *he;
 	int broadcast = 1;
 
-	if ((he=gethostbyname(addr)) == NULL) {  // get the host info
+	if ((he=gethostbyname(addr)) == NULL) {
 		perror("gethostbyname");
+		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
 	}
 
 	if ((boradcast_socket_fd = socket(AF_INET, SOCK_DGRAM, 0)) == -1) {
 		perror("socket");
+		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
 	}
 
-	// this call is what allows broadcast packets to be sent:
 	if (setsockopt(boradcast_socket_fd, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof broadcast) == -1) {
 		perror("setsockopt (SO_BROADCAST)");
+		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
 	}
 
-  	their_addr.sin_family = AF_INET;	 // host byte order
-	their_addr.sin_port = htons(SERVERPORT); // short, network byte order
+  	their_addr.sin_family = AF_INET;	 /*host byte order*/
+	their_addr.sin_port = htons(SERVERPORT);  /*short, network byte order*/
 	their_addr.sin_addr = *((struct in_addr *)he->h_addr);
 	memset(their_addr.sin_zero, '\0', sizeof their_addr.sin_zero);
 
  	return -1;
 }
 
-int16 n_javax_safetycritical_EV3Support_sendBroadcastMsg(int32 *sp){
+int16 n_com_UDPCommunication_sendBroadcastMsg(int32 *sp){
 	int size = sp[0]+1;
 	int *p = HEAP_REF((int* ) (pointer ) sp[1], int*);
-	char *msg = HEAP_REF((char*) gc_allocateObject(sizeof(char), size), char*);
+	char *msg = HEAP_REF((char*) gc_allocateObject(sizeof(char), 0), char*);
 
 	int index = 0;
 	for(; index< size-1; index++){
@@ -934,8 +935,8 @@ int16 n_javax_safetycritical_EV3Support_sendBroadcastMsg(int32 *sp){
 	}
 	msg[index] = '\0';
 
-	printf(msg);
-	printf("\n");
+	/*printf(msg);
+	printf("\n");*/
 
 
 	int numbytes;
@@ -943,21 +944,21 @@ int16 n_javax_safetycritical_EV3Support_sendBroadcastMsg(int32 *sp){
   	if ((numbytes=sendto(boradcast_socket_fd, msg, strlen(msg), 0,
 			 (struct sockaddr *)&their_addr, sizeof their_addr)) == -1) {
 		perror("sendto");
-		exit(1);
+		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
 	}
 
-	printf("sent %d bytes to %s\n", numbytes, inet_ntoa(their_addr.sin_addr));
+	/*printf("sent %d bytes to %s\n", numbytes, inet_ntoa(their_addr.sin_addr));*/
 	return -1;
 }
 
-int16 n_javax_safetycritical_EV3Support_closeUDPBroadcastSocket(int32 *sp){
+int16 n_com_UDPCommunication_closeBroadcastSender(int32 *sp){
 	close(boradcast_socket_fd);
 	return -1;
 }
 
 #endif
 
-#if defined(N_JAVAX_SAFETYCRITICAL_EV3SUPPORT_INITRECEIVERSOCKET)
+#if defined(N_COM_UDPCOMMUNICATION_CREATERECEIVER)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -970,12 +971,12 @@ int16 n_javax_safetycritical_EV3Support_closeUDPBroadcastSocket(int32 *sp){
 #include <arpa/inet.h>
 #include <netdb.h>
 
-#define MYPORT 4950 // the port users will be connecting to
-#define MAXBUFLEN 100
+#define MYPORT 4950
+#define MAXBUFLEN 120
 
 int receiver_socket_fd;
 
-// get sockaddr, IPv4 or IPv6:
+
 void *get_in_addr(struct sockaddr *sa)
 {
     if (sa->sa_family == AF_INET) {
@@ -985,80 +986,477 @@ void *get_in_addr(struct sockaddr *sa)
     return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-int16 n_javax_safetycritical_EV3Support_initReceiverSocket(int32 *sp){
+int16 n_com_UDPCommunication_createReceiver(int32 *sp){
 	struct addrinfo hints, *servinfo, *p;
-	    int rv;
+    int rv;
 
-	    memset(&hints, 0, sizeof hints);
-	    hints.ai_family = AF_UNSPEC; // set to AF_INET to force IPv4
-	    hints.ai_socktype = SOCK_DGRAM;
-	    hints.ai_flags = AI_PASSIVE; // use my IP
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_DGRAM;
+    hints.ai_flags = AI_PASSIVE;
 
-	    if ((rv = getaddrinfo(NULL, "4950", &hints, &servinfo)) != 0) {
-	        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
-	    }
+    if ((rv = getaddrinfo(NULL, "4950", &hints, &servinfo)) != 0) {
+        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+        return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+    }
 
-	    	// loop through all the results and bind to the first we can
-	    for(p = servinfo; p != NULL; p = p->ai_next) {
-	        if ((receiver_socket_fd = socket(p->ai_family, p->ai_socktype,
-	                p->ai_protocol)) == -1) {
-	            printf("listener: socket. errno: %d", errno);
-	            continue;
-	        }
+    for(p = servinfo; p != NULL; p = p->ai_next) {
+        if ((receiver_socket_fd = socket(p->ai_family, p->ai_socktype,
+                p->ai_protocol)) == -1) {
+            printf("listener: socket");
+            continue;
+        }
 
-	        if (bind(receiver_socket_fd, p->ai_addr, p->ai_addrlen) == -1) {
-	            close(receiver_socket_fd);
-	            printf("listener: bind. errno: %d", errno);
-	            continue;
-	        }
+        if (bind(receiver_socket_fd, p->ai_addr, p->ai_addrlen) == -1) {
+            close(receiver_socket_fd);
+            printf("listener: bind");
+            continue;
+        }
 
-	        break;
-	    }
+        break;
+    }
 
-	    if (p == NULL) {
-	        fprintf(stderr, "listener: failed to bind socket\n");
-	    }
+    if (p == NULL) {
+        fprintf(stderr, "listener: failed to bind socket\n");
+        return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+    }
 
-	     freeaddrinfo(servinfo);
+     freeaddrinfo(servinfo);
 
-	     printf("%s\n", "receiver created");
+     /*printf("%s\n", "receiver created");*/
 
-		return -1;
+	return -1;
 }
 
 
 
-int16 n_javax_safetycritical_EV3Support_receiveMsg(int32 *sp){
+int16 n_com_UDPCommunication_receiveMsg_(int32 *sp){
 	struct sockaddr_storage addr;
-		int numbytes;
-		char buf[MAXBUFLEN];
-		char s[INET6_ADDRSTRLEN];
+	int numbytes;
+	char buf[MAXBUFLEN];
+	char s[INET6_ADDRSTRLEN];
 
-		printf("listener: waiting to recvfrom...\n");
+	int *p = HEAP_REF((int* ) (pointer ) sp[0], int*);
 
-		socklen_t addr_len = sizeof addr;
-	    if ((numbytes = recvfrom(receiver_socket_fd, buf, MAXBUFLEN-1 , 0,
-	        (struct sockaddr *)&addr, &addr_len)) == -1) {
-	        perror("recvfrom");
-	    }
+	/*printf("listener: waiting to recvfrom...\n");*/
 
-	    printf("listener: got packet from %s\n",
-	        inet_ntop(addr.ss_family,
-	            get_in_addr((struct sockaddr *)&addr),
-	            s, sizeof s));
-	    printf("listener: packet is %d bytes long\n", numbytes);
-	    buf[numbytes] = '\0';
-	    printf("listener: packet contains \"%s\"\n", buf);
+	socklen_t addr_len = sizeof addr;
+    if ((numbytes = recvfrom(receiver_socket_fd, buf, MAXBUFLEN-1 , 0,
+        (struct sockaddr *)&addr, &addr_len)) == -1) {
+        perror("recvfrom");
+    	return -1;
+    }
 
-	    return -1;
+    /*printf("listener: got packet from %s\n",
+        inet_ntop(addr.ss_family, get_in_addr((struct sockaddr *)&addr), s, sizeof s));*/
+    /*printf("listener: packet is %d bytes long\n", numbytes);*/
+    buf[numbytes] = '\0';
+    /*printf("listener: packet contains \"%s\"\n", buf);*/
+
+	int i=0;
+    for(; i<MAXBUFLEN; i++){
+    	p[i+1] = buf[i];
+    	if(buf[i] == '\0'){
+    		break;
+    	}
+    }
+    i++;
+    i++;
+
+    char* ippp = inet_ntop(addr.ss_family, get_in_addr((struct sockaddr *)&addr), s, sizeof s);
+
+    int j=0;
+    for(;j<INET6_ADDRSTRLEN;j++){
+    	p[i] = ippp[j];
+    	i++;
+    	if(ippp[j] == '\0'){
+    		break;
+    	}
+    }
+
+    return -1;
 }
 
-int16 n_javax_safetycritical_EV3Support_closeReceiverSocket(int32 *sp){
+int16 n_com_UDPCommunication_closeReceiver(int32 *sp){
 	close(receiver_socket_fd);
 	return -1;
 }
 
 #endif
+
+#if defined(N_COM_NETWORK_GETIPADDRESS_)
+
+#include <stdio.h>
+#include <sys/types.h>
+#include <ifaddrs.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <arpa/inet.h>
+
+int16 n_com_Network_getIPAddress_(int32 *sp){
+	int *p = HEAP_REF((int* ) (pointer ) sp[0], int*);
+
+	int size = sp[2]+1;
+	int *p1 = HEAP_REF((int* ) (pointer ) sp[1], int*);
+	char *msg = HEAP_REF((char*) gc_allocateObject(sizeof(char), 0), char*);
+
+	int index = 0;
+	for(; index< size-1; index++){
+		char a = p1[index+1];
+		msg[index] = a;
+	}
+	msg[index] = '\0';
+
+
+	struct ifaddrs * ifAddrStruct=NULL;
+    struct ifaddrs * ifa=NULL;
+    void * tmpAddrPtr=NULL;
+
+    getifaddrs(&ifAddrStruct);
+
+    for (ifa = ifAddrStruct; ifa != NULL; ifa = ifa->ifa_next) {
+        if (!ifa->ifa_addr) {
+            continue;
+        }
+        if (ifa->ifa_addr->sa_family == AF_INET) {
+            if(strcmp(ifa->ifa_name,msg) == 0){
+            	tmpAddrPtr=&((struct sockaddr_in *)ifa->ifa_addr)->sin_addr;
+            	break;
+            }
+        }
+    }
+
+    char addressBuffer[INET_ADDRSTRLEN];
+    char* ippp = inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
+
+    int j=0;
+    for(;j<INET_ADDRSTRLEN;j++){
+    	p[j+1] = ippp[j];
+    	if(ippp[j] == '\0'){
+    		break;
+    	}
+    }
+
+    freeifaddrs(ifAddrStruct);
+
+    return -1;
+}
+
+#endif
+
+
+#if defined(N_COM_UDPCOMMUNICATION_SENDONEMESSAGE)
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+
+#define PINPOINTPORT "4950"
+
+int16 n_com_UDPCommunication_sendOneMessage(int32 *sp){
+	int sockfd;
+    struct addrinfo hints, *servinfo, *p;
+    int rv;
+    int numbytes;
+
+
+	int ipsize = sp[0]+1;
+	int *ip = HEAP_REF((int* ) (pointer ) sp[1], int*);
+	char *addr = HEAP_REF((char*) gc_allocateObject(sizeof(char), 0), char*);
+
+	int ipindex = 0;
+	for(; ipindex< ipsize-1; ipindex++){
+		char a = ip[ipindex+1];
+		addr[ipindex] = a;
+	}
+	addr[ipindex] = '\0';
+
+	memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_DGRAM;
+
+    if ((rv = getaddrinfo(addr, PINPOINTPORT, &hints, &servinfo)) != 0) {
+        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+        return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+    }
+
+    for(p = servinfo; p != NULL; p = p->ai_next) {
+        if ((sockfd = socket(p->ai_family, p->ai_socktype,
+                p->ai_protocol)) == -1) {
+            perror("talker: socket");
+            continue;
+        }
+
+        break;
+    }
+
+	if (p == NULL) {
+        fprintf(stderr, "talker: failed to bind socket\n");
+        return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+    }
+
+
+    int msgsize = ipsize + sp[2];
+	char *msg = HEAP_REF((char*) gc_allocateObject(sizeof(char), 0), char*);
+
+
+	int index = 0;
+	for(; ipindex< msgsize-1; ipindex++){
+		char a = ip[ipindex+1];
+		msg[index] = a;
+		index++;
+	}
+	msg[index] = '\0';
+
+	if ((numbytes = sendto(sockfd, msg, strlen(msg), 0,
+             p->ai_addr, p->ai_addrlen)) == -1) {
+        perror("talker: sendto");
+        return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+    }
+
+    freeaddrinfo(servinfo);
+    close(sockfd);
+	return -1;
+}
+
+#endif
+
+#if defined(N_COM_TCPIPCOMMUNICATION_CREATETCPIPSENDER)
+
+#include <stdio.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <errno.h>
+
+int16 n_com_TCPIPCommunication_createTCPIPSender(int32 *sp){
+	int socket_fd;
+
+    socket_fd = socket(AF_INET , SOCK_STREAM , 0);
+    if (socket_fd == -1)
+    {
+        printf("Could not create socket\n");
+        return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+    }
+
+    sp[0] = socket_fd;
+
+	return -1;
+}
+
+int16 n_com_TCPIPCommunication_connect(int32 *sp){
+	int size = sp[0]+1;
+	int *p = HEAP_REF((int* ) (pointer ) sp[1], int*);
+	int socket_fd = sp[2];
+	char *addr = HEAP_REF((char*) gc_allocateObject(sizeof(char), 0), char*);
+
+	int index = 0;
+	for(; index< size-1; index++){
+		char a = p[index+1];
+		addr[index] = a;
+	}
+	addr[index] = '\0';
+
+	struct sockaddr_in server;
+	server.sin_addr.s_addr = inet_addr(addr);
+    server.sin_family = AF_INET;
+    server.sin_port = htons( 4950 );
+
+   	int result = connect(socket_fd , (struct sockaddr *)&server , sizeof(server));
+
+   /*	if(result < 0){
+   		printf("%d\n", errno);
+   	}*/
+
+    sp[0] = result;
+	return -1;
+}
+
+int16 n_com_TCPIPCommunication_send(int32 *sp){
+
+	int size = sp[0]+1;
+	int *p = HEAP_REF((int* ) (pointer ) sp[1], int*);
+	int socket_fd = sp[2];
+	char *msg = HEAP_REF((char*) gc_allocateObject(sizeof(char), 0), char*);
+
+	int index = 0;
+	for(; index< size-1; index++){
+		char a = p[index+1];
+		msg[index] = a;
+	}
+	msg[index] = '\0';
+
+	int send_len = send(socket_fd , msg , strlen(msg) , MSG_NOSIGNAL);
+	/*if(send_len<0){
+		printf("%d\n", errno);
+	}*/
+
+	sp[0] = send_len;
+	return -1;
+}
+
+int16 n_com_TCPIPCommunication_closeSender(int32 *sp){
+	int socket_fd = sp[0];
+	close(socket_fd);
+	return -1;
+}
+
+#endif
+
+#if defined(N_COM_TCPIPCOMMUNICATION_CREATETCPIPRECEIVER)
+#include <stdio.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <errno.h>
+
+void *get_in_addr(struct sockaddr *sa)
+{
+    if (sa->sa_family == AF_INET) {
+        return &(((struct sockaddr_in*)sa)->sin_addr);
+    }
+
+    return &(((struct sockaddr_in6*)sa)->sin6_addr);
+}
+
+int16 n_com_TCPIPCommunication_createTCPIPReceiver(int32 *sp){
+	int second = sp[0];
+	int socket_fd;
+	struct sockaddr_in server;
+	int iSetOption = 1;
+
+	socket_fd = socket(AF_INET , SOCK_STREAM , 0);
+
+	/*Prepare the sockaddr_in structure*/
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = INADDR_ANY;
+    server.sin_port = htons( 4950 );
+
+	if (setsockopt (socket_fd, SOL_SOCKET, SO_REUSEADDR, (char*)&iSetOption,
+                sizeof(iSetOption)) < 0){
+    		error("setsockopt failed\n");
+    		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, 		JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+   	}
+
+    if( bind(socket_fd,(struct sockaddr *)&server , sizeof(server)) < 0)
+    {
+        printf("bind failed\n");
+        return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+    }
+
+   	/*if(second !=0 ){
+   		struct timeval timeout;
+    	timeout.tv_sec = second;
+    	timeout.tv_usec = 0;
+
+   		if (setsockopt (socket_fd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,
+                sizeof(timeout)) < 0){
+    		error("setsockopt failed\n");
+    		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+    	}
+   	}*/
+
+   	sp[0] = socket_fd;
+	return -1;
+}
+
+int16 n_com_TCPIPCommunication_listenForConnection_(int32 *sp){
+	int socket_fd = sp[0];
+	int queue_len = sp[1];
+	int *p = HEAP_REF((int* ) (pointer ) sp[2], int*);
+	struct sockaddr_in client;
+	int c = sizeof(struct sockaddr_in);
+	char s[INET6_ADDRSTRLEN];
+
+	listen(socket_fd , queue_len);
+	int new_socket = accept(socket_fd, (struct sockaddr *)&client, (socklen_t*)&c);
+
+
+	char* ippp = inet_ntop(client.sin_family, get_in_addr((struct sockaddr *)&client), s, sizeof s);
+
+    int i=0;
+    int count = 0;
+
+    for(;i<INET6_ADDRSTRLEN;i++){
+    	if(ippp[i] == '.'){
+    		count++;
+    	}
+    	if(count == 3){
+    		break;
+    	}
+    }
+    i++;
+    count = 0;
+    int *ids = HEAP_REF((int*) gc_allocateObject(sizeof(int), 0), int*);
+
+    for(;i<INET6_ADDRSTRLEN;i++){
+    	if(ippp[i] =='\0'){
+    		break;
+    	}
+    	ids[count] = ippp[i];
+    	count++;
+    }
+
+    i=0;
+    int id = 0;
+    for(;i<count;i++){
+    	char c = ids[i];
+    	int tmp = c - '0';
+    	id *= 10;
+		id += tmp;
+    }
+
+    p[1] = new_socket;
+    p[2] = id;
+
+	return -1;
+}
+
+int16 n_com_TCPIPCommunication_receiveMsg_(int32 *sp){
+	int *p = HEAP_REF((int* ) (pointer ) sp[0], int*);
+	int socket_fd = sp[1];
+	char buf[120];
+
+	int receive_len = recv(socket_fd , buf , 120 , 0);
+
+	if(receive_len == -1)
+    {
+        perror("recv failed");
+        return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+    }
+
+	buf[receive_len] = '\0';
+
+	int i=0;
+    for(; i<120; i++){
+    	p[i+1] = buf[i];
+    	if(buf[i] == '\0'){
+    		break;
+    	}
+    }
+
+    sp[0] = receive_len;
+
+	return -1;
+}
+
+int16 n_com_TCPIPCommunication_closeReceiver(int32 *sp){
+	int socket_fd = sp[0];
+	/*if(shutdown(socket_fd, SHUT_RDWR) != 0){
+		printf("shut down failed %d", errno);
+	}*/
+	close(socket_fd);
+	return -1;
+}
+
+#endif
+
 
 #if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
 
@@ -1357,9 +1755,15 @@ void scj_multicore_thread_executor(void* arg){
 			}
 		}
 
+		/*args->thread->startTimer_c_f = startInfo.timer_fd;
+		/*printf("c start fd: %d\n", startInfo.timer_fd);*/
+
 		if(make_periodic(args->period, &info) != 0){
 			printf("make_periodic period errno: %d. fd: %d.\n",errno);
 		}
+
+		/*args->thread->period_c_f = info.timer_fd;
+		/*printf("c period fd: %d\n", info.timer_fd);*/
 
 		pthread_cleanup_push(open_file_cleanup_handler, &info.timer_fd);
 		while (1) {
