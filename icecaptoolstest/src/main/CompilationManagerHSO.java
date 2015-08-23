@@ -206,6 +206,7 @@ public class CompilationManagerHSO {
         //String inputClass = "TckTestCyclicExecutive1";
         //String inputClass = "TckTestSafelet22";
         
+        /* --- TCKs of javax.realtime.test --- : */
         //String inputClass = "TckTestMemoryParameters";
         //String inputClass = "TckTestPriorityScheduler";
         //String inputClass = "TckTestAperiodicParameters";
@@ -215,6 +216,7 @@ public class CompilationManagerHSO {
         //String inputClass = "TckTestRelativeTime";
         //String inputClass = "TckTestReleaseParameters";
         
+        /* --- TCKs of javax.safetycritical.test --- : */
         String inputClass = "TckTestStorageParameters";
         //String inputClass = "TckTestFrame2";
         //String inputClass = "TckTestCyclicSchedule0";
