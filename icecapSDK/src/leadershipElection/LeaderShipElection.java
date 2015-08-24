@@ -61,7 +61,7 @@ public class LeaderShipElection {
 		increaseTime();
 	}
 	
-	public void reset(){
+	synchronized public void reset(){
 		state = Claim.UNDECIDED;
 		petition--;
 		time = 0;
