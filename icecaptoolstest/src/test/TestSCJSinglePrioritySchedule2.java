@@ -15,7 +15,7 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
-public class TestSCJProcessException {
+public class TestSCJSinglePrioritySchedule2 {
 	private static int testCount;
 	static {
 		testCount = 0;
@@ -26,8 +26,10 @@ public class TestSCJProcessException {
 		AperiodicEventHandler aevh;
 		int count = 0;
 
-		protected MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodic,
-				StorageParameters storageParameters, int n, AperiodicEventHandler aevh) {
+		protected MyPeriodicEvh(PriorityParameters priority,
+				PeriodicParameters periodic,
+				StorageParameters storageParameters, int n,
+				AperiodicEventHandler aevh) {
 			super(priority, periodic, storageParameters);
 			this.n = n;
 			this.aevh = aevh;
@@ -35,17 +37,13 @@ public class TestSCJProcessException {
 
 		public void handleAsyncEvent() {
 			count++;
-			devices.Console.println("----------Running periodic handler: " + count);
+			devices.Console.println("----------Running periodic handler: "+count);
 			for (int i = 0; i < n; i++) {
 				new Integer(count);
 			}
 			if (count % 3 == 2 && n == 2) {
+				devices.Console.println("#############Releasing aperiodic event handler");
 				aevh.release();
-				/*devices.Console.println("#############Throwing exception");
-				while (true) {
-					count = count / n;
-					n = n - 1;
-				}*/
 			}
 		}
 	}
@@ -55,8 +53,10 @@ public class TestSCJProcessException {
 		MissionSequencer<MyMission> missSeq;
 		int count = 0;
 
-		public MyAperiodicEvh(PriorityParameters priority, AperiodicParameters release,
-				StorageParameters storageParameters, int n, MissionSequencer<MyMission> missSeq) {
+		public MyAperiodicEvh(PriorityParameters priority,
+				AperiodicParameters release,
+				StorageParameters storageParameters, int n,
+				MissionSequencer<MyMission> missSeq) {
 			super(priority, release, storageParameters);
 			this.n = n;
 			this.missSeq = missSeq;
@@ -64,7 +64,7 @@ public class TestSCJProcessException {
 
 		public void handleAsyncEvent() {
 			count++;
-			devices.Console.println("*****Running aperiodic handler: " + count);
+			devices.Console.println("*****Running aperiodic handler: "+count);
 			for (int i = 0; i < n; i++) {
 				new Integer(count);
 			}
@@ -82,14 +82,17 @@ public class TestSCJProcessException {
 		}
 
 		public void initialize() {
-			AperiodicEventHandler aevh = new MyAperiodicEvh(new PriorityParameters(Priorities.PR98),
+			AperiodicEventHandler aevh = new MyAperiodicEvh(
+					new PriorityParameters(Priorities.PR98),
 					new AperiodicParameters(),
 					//new AperiodicParameters(new RelativeTime(50, 0, Clock
-					//.getRealtimeClock()), null),
+							//.getRealtimeClock()), null),
 					storageParameters_Handlers, 1, missSeq);
 			aevh.register();
-			PeriodicEventHandler pevh1 = new MyPeriodicEvh(new PriorityParameters(Priorities.PR97),
-					new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()), // start
+			PeriodicEventHandler pevh1 = new MyPeriodicEvh(
+					new PriorityParameters(Priorities.PR97),
+					new PeriodicParameters(new RelativeTime(Clock
+							.getRealtimeClock()), // start
 							new RelativeTime(200, 0, Clock.getRealtimeClock())), // period
 					storageParameters_Handlers, 2, aevh); // used in
 															// pevh.handleAsyncEvent
@@ -117,7 +120,8 @@ public class TestSCJProcessException {
 			private MyMission mission;
 
 			MySequencer() {
-				super(new PriorityParameters(Priorities.PR95), storageParameters_Sequencer);
+				super(new PriorityParameters(Priorities.PR95),
+						storageParameters_Sequencer);
 				mission = new MyMission(this);
 			}
 
@@ -145,13 +149,18 @@ public class TestSCJProcessException {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
-		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, 0, 0);
+		storageParameters_Sequencer = new StorageParameters(
+				Const.OUTERMOST_SEQ_BACKING_STORE,
+				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM,
+				Const.IMMORTAL_MEM, Const.MISSION_MEM);
+		storageParameters_Handlers = new StorageParameters(
+				Const.PRIVATE_BACKING_STORE,
+				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, 0,
+				0);
 		devices.Console.println("***** TestSCJPrioritySchedule2 begin *****");
 		new LaunchLevel1(new MyApp());
-		devices.Console.println("***** TestSCJPrioritySchedule2 end *****");
+		devices.Console
+				.println("***** TestSCJPrioritySchedule2 end *****");
 		if (testCount == 3) {
 			args = null;
 		}

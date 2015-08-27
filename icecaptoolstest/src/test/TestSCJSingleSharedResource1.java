@@ -29,7 +29,7 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
-public class TestSCJSharedResource1 {
+public class TestSCJSingleSharedResource1 {
     static boolean failed;
 
     private static class MyPeriodicEvh extends PeriodicEventHandler {

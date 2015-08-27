@@ -30,7 +30,7 @@ import javax.scj.util.Priorities;
 
 import vm.Memory;
 
-public class TestSCJThreadMemory {
+public class TestSCJSingleThreadMemory {
 	private static int sizeOfSmallObject;
 	private static int sizeOfBiggerObject;
 

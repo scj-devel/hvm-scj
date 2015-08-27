@@ -194,32 +194,37 @@ public class CompilationManagerHSO {
         //String inputPackage = "javax.realtime.test.timeClasses";
         //String inputPackage = "javax.realtime.test.clock";
         //String inputPackage = "javax.realtime.test.memoryArea";
+        //String inputPackage = "javax.realtime.test.priorityScheduler";
+        
         //String inputPackage = "javax.safetycritical.test.safelet";        
         //String inputPackage = "javax.safetycritical.test.priorityScheduling";
         //String inputPackage = "javax.safetycritical.test.cyclicschedule3";
+        
         
         //String inputPackage = "javax.realtime.test";
         String inputPackage = "javax.safetycritical.test";
         
         //String inputClass = "AllTests";
-        //String inputClass = "TckTestCyclicSchedule3";
-        //String inputClass = "TckTestCyclicExecutive1";
-        //String inputClass = "TckTestSafelet22";
-        
+  
         /* --- TCKs of javax.realtime.test --- : */
         //String inputClass = "TckTestMemoryParameters";
-        //String inputClass = "TckTestPriorityScheduler";
+        //String inputClass = "TckTestReleaseParameters";
+        //String inputClass = "TckTestPeriodicParameters";
         //String inputClass = "TckTestAperiodicParameters";
+        //String inputClass = "TckTestPriorityScheduler";        
         //String inputClass = "TckTestPriorityParameters";   
         //String inputClass = "TckTestHighResolutionTime";
         //String inputClass = "TckTestAbsoluteTime";        
         //String inputClass = "TckTestRelativeTime";
-        //String inputClass = "TckTestReleaseParameters";
         
         /* --- TCKs of javax.safetycritical.test --- : */
-        String inputClass = "TckTestStorageParameters";
-        //String inputClass = "TckTestFrame2";
+        //String inputClass = "TckTestStorageParameters";
+        //String inputClass = "TckTestCyclicExecutive1";
+        String inputClass = "TckTestFrame1";
         //String inputClass = "TckTestCyclicSchedule0";
+        //String inputClass = "TckTestCyclicSchedule3";
+        //String inputClass = "TckTestCyclicExecutive1";
+        //String inputClass = "TckTestSafelet22";
         
         /* OpenJML tests end */
 

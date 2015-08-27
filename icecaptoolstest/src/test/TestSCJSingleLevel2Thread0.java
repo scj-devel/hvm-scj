@@ -28,7 +28,7 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
-public class TestSCJLevel2Thread0 {
+public class TestSCJSingleLevel2Thread0 {
 	private static boolean testResult;
 
 	static {

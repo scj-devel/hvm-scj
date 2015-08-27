@@ -20,7 +20,7 @@ import javax.scj.util.Priorities;
 
 import vm.Memory;
 
-public class TestSCJManagedMemory {
+public class TestSCJSingleManagedMemory {
 	private static int sizeOfSmallObject;
 	private static int sizeOfBiggerObject;
 

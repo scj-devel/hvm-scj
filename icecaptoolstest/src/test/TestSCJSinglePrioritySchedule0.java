@@ -16,7 +16,7 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 @SuppressWarnings("rawtypes")
-public class TestSCJPrioritySchedule0 {
+public class TestSCJSinglePrioritySchedule0 {
 
     private static int testCount;
 

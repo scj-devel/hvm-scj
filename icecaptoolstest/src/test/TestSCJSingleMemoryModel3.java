@@ -15,7 +15,7 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
-public class TestSCJMemoryModel3 {
+public class TestSCJSingleMemoryModel3 {
 
 	private static class TopMission2 extends Mission {
 		protected void initialize() {

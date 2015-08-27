@@ -16,7 +16,7 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 @SuppressWarnings("rawtypes")
-public class TestSCJTwoMissions {
+public class TestSCJSingleTwoMissions {
 
     private static class MyPeriodicEvh extends PeriodicEventHandler {
         int n;

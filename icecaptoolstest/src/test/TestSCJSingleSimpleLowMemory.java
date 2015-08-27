@@ -18,7 +18,7 @@ import javax.scj.util.Priorities;
 import vm.Address32Bit;
 import vm.HardwareObject;
 
-public class TestSCJSimpleLowMemory {
+public class TestSCJSingleSimpleLowMemory {
 
     private static class Light extends HardwareObject {
 

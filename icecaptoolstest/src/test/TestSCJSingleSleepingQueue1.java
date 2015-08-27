@@ -33,7 +33,7 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 @SuppressWarnings("rawtypes")
-public class TestSCJSleepingQueue1 {
+public class TestSCJSingleSleepingQueue1 {
     private static class MyAperiodicEvh extends AperiodicEventHandler {
         Mission mission;
 

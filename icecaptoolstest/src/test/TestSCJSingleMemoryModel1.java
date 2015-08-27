@@ -32,7 +32,7 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
-public class TestSCJMemoryModel1
+public class TestSCJSingleMemoryModel1
 {  
   private static class MyPEH extends PeriodicEventHandler {
     private int count = 0;
