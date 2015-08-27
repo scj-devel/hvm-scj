@@ -17,8 +17,10 @@
 
 package test.ev3;
 
+import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.safetycritical.LaunchMulticore;
+import javax.safetycritical.ManagedMemory;
 import javax.safetycritical.ManagedThread;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
@@ -33,38 +35,38 @@ import com.UDPCommunication;
 import devices.ev3.Motor;
 import devices.ev3.MotorPort;
 import devices.ev3.MotorPort.MotorPortID;
-import icecaptools.IcecapCompileMe;
 
 public class TestEV3TCPIPFollower {
 	static Motor m1;
 	static Motor m2;
 	static Motor[] motor = new Motor[2];
+	static EV3Support actor;
 
+	private static class Executor implements Runnable{
+
+		@Override
+		public void run() {
+			String[] msg = UDPCommunication.receiveMsg();
+			devices.Console.println("received: " + msg[1]);
+			actor.getCommand(msg[1]);
+		}
+		
+	}
+	
 	private static class MyThd extends ManagedThread {
-
-		public MyThd(PriorityParameters priority, StorageParameters storage, Mission m) {
-			super(priority, storage);
+		Executor executor;
+		public MyThd(PriorityParameters priority, PeriodicParameters release, StorageParameters storage, Mission m) {
+			super(priority,  storageParameters_Handlers2);
 			UDPCommunication.createReceiver();
+			
+			executor = new Executor();
 		}
 
 		@Override
-		@IcecapCompileMe
 		public void run() {
 			for(;;){
-				//long free = getMemory().memoryConsumed();
-
-				String[] msg = UDPCommunication.receiveMsg();
-				
-				//long free1 = getMemory().memoryConsumed();
-				
-				EV3Support.action(msg[1], motor);
-				
-				//long free2 = getMemory().memoryConsumed();
-				
-//				if(free != free1 || free1 != free2){
-//					devices.Console.println("free: " + free + " free1: " + free1 + " free2: " + free2);
-//				}
-				
+				ManagedMemory.enterPrivateMemory(5000, executor);
+				actor.action();
 			}
 		}
 	}
@@ -73,16 +75,9 @@ public class TestEV3TCPIPFollower {
 
 		@Override
 		protected void initialize() {
-			MotorPort port = new MotorPort(MotorPortID.B);
-			m1 = new Motor(port);
+			
 
-			MotorPort port1 = new MotorPort(MotorPortID.C);
-			m2 = new Motor(port1);
-
-			motor[0] = m2;
-			motor[1] = m1;
-
-			MyThd myPEH1 = new MyThd(new PriorityParameters(2), storageParameters_Handlers, this);
+			MyThd myPEH1 = new MyThd(new PriorityParameters(2), null, storageParameters_Handlers2, this);
 			myPEH1.register();
 
 		}
@@ -129,17 +124,27 @@ public class TestEV3TCPIPFollower {
 
 		@Override
 		public void initializeApplication() {
+			MotorPort port = new MotorPort(MotorPortID.B);
+			m1 = new Motor(port);
+
+			MotorPort port1 = new MotorPort(MotorPortID.C);
+			m2 = new Motor(port1);
+
+			motor[0] = m2;
+			motor[1] = m1;
+			
+			actor = new EV3Support(motor);
 		}
 	}
 
 	static StorageParameters storageParameters_Sequencer;
-	static StorageParameters storageParameters_Handlers;
+	static StorageParameters storageParameters_Handlers2;
 
 	public static void main(String[] args) {
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
 				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
 
-		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
+		storageParameters_Handlers2 = new StorageParameters(Const.PRIVATE_BACKING_STORE * 5,
 				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM * 2, 0, 0);
 
 		devices.Console.println("\n***** test multicore wait and notify main.begin *****");

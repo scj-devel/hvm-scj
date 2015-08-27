@@ -22,6 +22,7 @@ import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.LaunchMulticore;
+import javax.safetycritical.ManagedMemory;
 import javax.safetycritical.ManagedThread;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
@@ -43,20 +44,33 @@ public class TestEV3TCPIPCommander {
 	static Motor m1;
 	static Motor m2;
 	static Motor[] motor = new Motor[2];
+	static EV3Support actor;
+	
+	private static class Executor implements Runnable{
 
+		@Override
+		public void run() {
+			String[] msg = UDPCommunication.receiveMsg();
+			devices.Console.println("received: " + msg[1]);
+			actor.getCommand(msg[1]);
+		}
+		
+	}
+	
 	private static class MyThd extends ManagedThread {
-
-		public MyThd(PriorityParameters priority, StorageParameters storage, Mission m) {
-			super(priority, storage);
+		Executor executor;
+		public MyThd(PriorityParameters priority, PeriodicParameters release, StorageParameters storage, Mission m) {
+			super(priority,  storageParameters_Handlers2);
 			UDPCommunication.createReceiver();
+			
+			executor = new Executor();
 		}
 
 		@Override
-		@IcecapCompileMe
 		public void run() {
-			for (;;) {
-				String[] msg = UDPCommunication.receiveMsg();
-				EV3Support.action(msg[1], motor);
+			for(;;){
+				ManagedMemory.enterPrivateMemory(5000, executor);
+				actor.action();
 			}
 		}
 	}
@@ -77,63 +91,57 @@ public class TestEV3TCPIPCommander {
 			giveCommand(count);
 			if (count == 12)
 				count = 0;
-
-			// if(count == 12){
-			// devices.Console.println("commander exit");
-			// TCPIPCommunication.closeBroadcastSender();
-			// m.requestTermination();
-			// }
 		}
 
 		private void giveCommand(int count) {
 			switch (count) {
 			case 1:
 				devices.Console.println("forward");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('F', 10, 0));
+				UDPCommunication.sendBroadcastMsg(actor.generateCommand('F', 10, 0));
 				break;
 			case 2:
 				devices.Console.println("backward");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('B', 10, 0));
+				UDPCommunication.sendBroadcastMsg(actor.generateCommand('B', 10, 0));
 				break;
 			case 3:
 				devices.Console.println("forward");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('F', 10, 0));
+				UDPCommunication.sendBroadcastMsg(actor.generateCommand('F', 10, 0));
 				break;
 			case 4:
 				devices.Console.println("move faster");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('C', 20, 0));
+				UDPCommunication.sendBroadcastMsg(actor.generateCommand('C', 20, 0));
 				break;
 			case 5:
 				devices.Console.println("park");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('P', 0));
+				UDPCommunication.sendBroadcastMsg(actor.generateCommand('P', 0));
 				break;
 			case 6:
 				devices.Console.println("start");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('S', 0));
+				UDPCommunication.sendBroadcastMsg(actor.generateCommand('S', 0));
 				break;
 			case 7:
 				devices.Console.println("move slower");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('C', 10, 0));
+				UDPCommunication.sendBroadcastMsg(actor.generateCommand('C', 10, 0));
 				break;
 			case 8:
 				devices.Console.println("park");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('P', 0));
+				UDPCommunication.sendBroadcastMsg(actor.generateCommand('P', 0));
 				break;
 			case 9:
 				devices.Console.println("turn left");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('L', 10, 1));
+				UDPCommunication.sendBroadcastMsg(actor.generateCommand('L', 10, 1, 0));
 				break;
 			case 10:
 				devices.Console.println("turn right");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('R', 10, 1));
+				UDPCommunication.sendBroadcastMsg(actor.generateCommand('R', 10, 1, 0));
 				break;
 			case 11:
 				devices.Console.println("forward");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('F', 10));
+				UDPCommunication.sendBroadcastMsg(actor.generateCommand('F', 10, 0));
 				break;
 			case 12:
 				devices.Console.println("park");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('P', 0));
+				UDPCommunication.sendBroadcastMsg(actor.generateCommand('P', 0));
 				break;
 			default:
 				;
@@ -147,21 +155,17 @@ public class TestEV3TCPIPCommander {
 		@Override
 		protected void initialize() {
 
-			MotorPort port = new MotorPort(MotorPortID.B);
-			m1 = new Motor(port);
+			
 
-			MotorPort port1 = new MotorPort(MotorPortID.C);
-			m2 = new Motor(port1);
-
-			motor[0] = m2;
-			motor[1] = m1;
-
-			MyThd thd = new MyThd(new PriorityParameters(2), storageParameters_Handlers, this);
+			MyThd thd = new MyThd(new PriorityParameters(20),
+					new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()),
+							new RelativeTime(10, 0, Clock.getRealtimeClock())),
+					storageParameters_Handlers, this);
 			thd.register();
 
 			MyPEH1 myPEH1 = new MyPEH1(new PriorityParameters(2),
 					new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()),
-							new RelativeTime(1000, 0, Clock.getRealtimeClock())),
+							new RelativeTime(2000, 0, Clock.getRealtimeClock())),
 					storageParameters_Handlers, this);
 			myPEH1.register();
 
@@ -209,17 +213,31 @@ public class TestEV3TCPIPCommander {
 
 		@Override
 		public void initializeApplication() {
+			MotorPort port = new MotorPort(MotorPortID.B);
+			m1 = new Motor(port);
+
+			MotorPort port1 = new MotorPort(MotorPortID.C);
+			m2 = new Motor(port1);
+
+			motor[0] = m2;
+			motor[1] = m1;
+			
+			actor = new EV3Support(motor);
 		}
 	}
 
 	static StorageParameters storageParameters_Sequencer;
 	static StorageParameters storageParameters_Handlers;
+	static StorageParameters storageParameters_Handlers2;
 
 	public static void main(String[] args) {
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
 				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
 
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
+				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM * 2, 0, 0);
+		
+		storageParameters_Handlers2 = new StorageParameters(Const.PRIVATE_BACKING_STORE * 5,
 				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM * 2, 0, 0);
 
 		devices.Console.println("\n***** test multicore wait and notify main.begin *****");
