@@ -16,7 +16,7 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
-public class TestSCJWaitAndNotifyAll1 {
+public class TestSCJSingleWaitAndNotify2 {
 
 	private static class SharedResource {
 		int count = 0;
@@ -47,7 +47,7 @@ public class TestSCJWaitAndNotifyAll1 {
 			if (count > 0) {
 				devices.Console.println("    before notify 2");
 				count--; 
-				notifyAll(); 
+				notify(); 
 				devices.Console.println("    after notify 2");
 			}
 		}
@@ -60,7 +60,7 @@ public class TestSCJWaitAndNotifyAll1 {
 
 			SharedResource shared = new SharedResource();
 
-			MyPEH0 myPEH0 = new MyPEH0(new PriorityParameters(12),
+			MyPEH0 myPEH0 = new MyPEH0(new PriorityParameters(15),
 					new PeriodicParameters(new RelativeTime(Clock
 							.getRealtimeClock()), new RelativeTime(500, 0,
 							Clock.getRealtimeClock())),
@@ -81,7 +81,7 @@ public class TestSCJWaitAndNotifyAll1 {
 					storageParameters_Handlers, shared);
 			myPEH2.register();
 
-			Services.setCeiling(shared, 12);
+			Services.setCeiling(shared, 15);
 		}
 
 		@Override
@@ -114,7 +114,7 @@ public class TestSCJWaitAndNotifyAll1 {
 				cnt++;
 				devices.Console.println("      PEH0 end \n");
 
-				if (cnt == 4) {
+				if (cnt >= 4) {
 					m.requestTermination();
 					devices.Console.println("			Mission T");
 				}
@@ -122,9 +122,6 @@ public class TestSCJWaitAndNotifyAll1 {
 		}
 
 		private class MyPEH1 extends PeriodicEventHandler {
-			@SuppressWarnings("unused")
-			private int cnt = 0;
-
 			SharedResource shared;
 
 			@IcecapCompileMe
@@ -142,14 +139,11 @@ public class TestSCJWaitAndNotifyAll1 {
 
 				shared.wait1ForGo();
 
-				cnt++;
 				devices.Console.println("      PEH1 end \n");
 			}
 		}
 
 		private class MyPEH2 extends PeriodicEventHandler {
-			@SuppressWarnings("unused")
-			private int cnt = 0;
 
 			SharedResource shared;
 
@@ -166,7 +160,6 @@ public class TestSCJWaitAndNotifyAll1 {
 
 				shared.go();
 
-				cnt++;
 				devices.Console.println("			PEH2 end \n");
 			}
 		}
@@ -229,9 +222,10 @@ public class TestSCJWaitAndNotifyAll1 {
 				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, 0,
 				0);
 
-		devices.Console.println("\n***** TestSCJWaitAndNotifyAll1 main.begin *****");
+		devices.Console
+				.println("\n***** TestSCJWaitAndNotify2 main.begin *****");
 		new LaunchLevel1(new MyApp());
-		devices.Console.println("***** TestSCJWaitAndNotifyAll1 main.end *****");
+		devices.Console.println("***** TestSCJWaitAndNotify2 main.end *****");
 		args = null;
 	}
 

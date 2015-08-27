@@ -16,12 +16,12 @@ package main;
  */
 public class TestSCJ extends TestAll {
 
-	public static void main(String[] args) throws Throwable {
+	public static void main(String[] args) throws Throwable  {
 		new TestSCJ().performTest();
 	}
 
 	protected boolean includeFileInTest(String test) {
-		return test.endsWith(".java") && test.startsWith("TestSCJ");
+		return test.endsWith(".java") && test.startsWith("TestSCJSingle");
 	}
 
 }
