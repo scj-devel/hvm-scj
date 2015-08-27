@@ -196,7 +196,7 @@ public class TCPIPLeaderElectionSequential {
 					actor.followAction();
 					devices.Console.println("robot stoped");
 				}
-
+				devices.Console.println("elector exit");
 				return;
 			}
 

@@ -18,7 +18,6 @@
 package test.ev3;
 
 import javax.realtime.PriorityParameters;
-import javax.safetycritical.EV3Support;
 import javax.safetycritical.LaunchMulticore;
 import javax.safetycritical.ManagedThread;
 import javax.safetycritical.Mission;
@@ -28,6 +27,7 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
+import com.EV3Support;
 import com.UDPCommunication;
 
 import devices.ev3.Motor;
@@ -57,7 +57,7 @@ public class TestEV3TCPIPFollower {
 				
 				//long free1 = getMemory().memoryConsumed();
 				
-				EV3Support.action(this, msg[1], motor);
+				EV3Support.action(msg[1], motor);
 				
 				//long free2 = getMemory().memoryConsumed();
 				

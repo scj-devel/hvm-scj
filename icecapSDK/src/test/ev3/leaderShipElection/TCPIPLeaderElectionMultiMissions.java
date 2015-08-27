@@ -198,13 +198,21 @@ public class TCPIPLeaderElectionMultiMissions {
 
 	private static class Elector extends PeriodicEventHandler {
 
+		Mission m;
+		
 		public Elector(PriorityParameters priority, PeriodicParameters release, StorageParameters storage, Mission m) {
 			super(priority, release, storage);
+			this.m = m;
 		}
 
 		@Override
 		@IcecapCompileMe
 		public void handleAsyncEvent() {
+			if(!m.terminationPending()){
+				devices.Console.println("elector exit");
+				return;
+			}
+				
 			leaderElector.electLeader();
 		}
 

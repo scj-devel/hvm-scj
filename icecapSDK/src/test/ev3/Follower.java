@@ -1,7 +1,6 @@
 package test.ev3;
 
-import javax.safetycritical.EV3Support;
-
+import com.EV3Support;
 import com.UDPCommunication;
 
 import devices.ev3.Motor;
@@ -25,7 +24,7 @@ public class Follower {
 		for(;;){
 			String[] msg = UDPCommunication.receiveMsg();
 			devices.Console.println("got message: " + msg[1] + " from: " + msg[0]);
-			EV3Support.action(null, msg[1], motor);
+			EV3Support.action(msg[1], motor);
 		}
 		
 	}

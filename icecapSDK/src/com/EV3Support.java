@@ -1,11 +1,10 @@
-package javax.safetycritical;
+package com;
 
+import devices.ev3.EV3;
 import devices.ev3.Motor;
 import devices.ev3.Motor.Direction;
 
 public class EV3Support {
-	
-	private static int [] speedAndLeftMotor = new int[2];
 	
 	interface Command {
 		public final static char FORWARD = 'F';
@@ -17,48 +16,30 @@ public class EV3Support {
 		public final static char CHANGESPEED = 'C';
 	}
 	
-	public static void action(ManagedSchedulable ms, String msg, Motor[] m){
-		
+	public static void action(String msg, Motor[] m){
 		char command = msg.charAt(0);
+		int duration = -1;
 		int speed = -1;
 		int left_side_motor_num = -1;
-		
-		ManagedMemory memory = null;
-		long free = 0;
-		
-		if(ms != null){
-			if(ms instanceof ManagedEventHandler){
-				memory = ((ManagedEventHandler)ms).privateMemory;
-			}
-			else{
-				memory = ((ManagedThread)ms).privateMemory;
-			}
-		}
-		
-		if(memory != null)
-			free = memory.memoryConsumed();
-		
 		
 		if(command == Command.START || command == Command.STOP){
 			;
 		}else{
-			int[] generated = getSpeedAndLeftMotors(msg.substring(2));
-			speed = generated[0];
-			left_side_motor_num = generated[1];
+			int[] generated = getCommandInfo(msg.substring(2));
+			duration = generated[0];
+			speed = generated[1];
+			left_side_motor_num = generated[2];
 		}
 		
-		if(command != Command.START && command != Command.STOP && speed == -1){
-			devices.Console.println("wrong command, do not specify speed");
-			return;
-		}
+//		if(command != Command.START && command != Command.STOP && speed == -1){
+//			devices.Console.println("wrong command, do not specify speed");
+//			return;
+//		}
 		
 		if((command == Command.TURNLEFT || command == Command.TURNRIGHT ) && left_side_motor_num == -1){
-			devices.Console.println("wrong command, do not number of left side motors");
+			devices.Console.println("wrong command, do not specify the number of left side motors");
 			return;
 		}
-		
-		if(memory != null)
-			memory.resetArea(free);
 		
 		switch (command){
 		case Command.FORWARD:
@@ -133,35 +114,51 @@ public class EV3Support {
 			break;
 			
 		default:
-			devices.Console.println("do not chatting... time is money!");
+			devices.Console.println("undefined command!");
 			break;
+		}
+		
+		if(duration > 0){
+			EV3.sleep(duration * 1000);
+			for(int i=0; i<m.length; i++){
+				m[i].stop();
+			}
 		}
 	}
 	
-	public static String generateCommand(char command, int speed, int numOfLeftMotors){
-		String com = command + "|" + speed + "|" + numOfLeftMotors;
+	public static String generateCommand(char command, int speed, int numOfLeftMotors, int duration){
+		String com = command + "|" + speed + "|" + numOfLeftMotors + "|" + duration;
 		return com;
 	}
 	
-	public static String generateCommand(char command, int speed){
-		String com = command + "|" + speed;
+	public static String generateCommand(char command, int speed, int duration){
+		String com = command + "|" + speed + "|" + duration;
 		return com;
 	}
 	
-	public static String generateCommand(char command){
-		String com = command + "";
+	public static String generateCommand(char command, int duration){
+		String com = command + "|" + duration;
 		return com;
 	}
 	
-	private static int[] getSpeedAndLeftMotors(String info){
-		
-		String speed = "", letfMotor = "";
+	private static int[] getCommandInfo(String info){
+		int[] commandInfo = new int[3];
+		String speed = "", letfMotor = "", duration = "";
 		
 		int i=0;
 		for(; i<info.length(); i++){
 			if(info.charAt(i) == '|')
 				break;
+			duration  = duration + info.charAt(i) + "";
+			
+		}
+		
+		i++;
+		for(; i<info.length(); i++){
+			if(info.charAt(i) == '|')
+				break;
 			speed  = speed + info.charAt(i) + "";
+			
 		}
 		
 		i++;
@@ -169,10 +166,10 @@ public class EV3Support {
 			letfMotor  = letfMotor + info.charAt(i) + "";
 		}
 		
-		speedAndLeftMotor[0] = convert(speed);
-		speedAndLeftMotor[1] = convert(letfMotor);
-		
-		return speedAndLeftMotor;
+		commandInfo[0] = convert(duration);
+		commandInfo[1] = convert(speed);
+		commandInfo[2] = convert(letfMotor);
+		return commandInfo;
 	}
 	
 	private static int convert(String s){

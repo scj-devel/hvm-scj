@@ -21,7 +21,6 @@ import javax.realtime.Clock;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
-import javax.safetycritical.EV3Support;
 import javax.safetycritical.LaunchMulticore;
 import javax.safetycritical.ManagedThread;
 import javax.safetycritical.Mission;
@@ -32,6 +31,7 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
+import com.EV3Support;
 import com.UDPCommunication;
 
 import devices.ev3.Motor;
@@ -43,8 +43,7 @@ public class TestEV3TCPIPCommander {
 	static Motor m1;
 	static Motor m2;
 	static Motor[] motor = new Motor[2];
-	
-	
+
 	private static class MyThd extends ManagedThread {
 
 		public MyThd(PriorityParameters priority, StorageParameters storage, Mission m) {
@@ -55,21 +54,9 @@ public class TestEV3TCPIPCommander {
 		@Override
 		@IcecapCompileMe
 		public void run() {
-			for(;;){
-				//long free = getMemory().memoryConsumed();
-
+			for (;;) {
 				String[] msg = UDPCommunication.receiveMsg();
-				
-				//long free1 = getMemory().memoryConsumed();
-				
-				EV3Support.action(this, msg[1], motor);
-				
-				//long free2 = getMemory().memoryConsumed();
-				
-//				if(free != free1 || free1 != free2){
-//					devices.Console.println("free: " + free + " free1: " + free1 + " free2: " + free2);
-//				}
-				
+				EV3Support.action(msg[1], motor);
 			}
 		}
 	}
@@ -86,51 +73,51 @@ public class TestEV3TCPIPCommander {
 		@IcecapCompileMe
 		public void handleAsyncEvent() {
 
-			count ++;
+			count++;
 			giveCommand(count);
-			if(count == 12)
+			if (count == 12)
 				count = 0;
-			
-//			if(count == 12){
-//				devices.Console.println("commander exit");
-//				TCPIPCommunication.closeBroadcastSender();
-//				m.requestTermination();
-//			}
+
+			// if(count == 12){
+			// devices.Console.println("commander exit");
+			// TCPIPCommunication.closeBroadcastSender();
+			// m.requestTermination();
+			// }
 		}
-		
-		private void giveCommand(int count){
-			switch(count){
+
+		private void giveCommand(int count) {
+			switch (count) {
 			case 1:
 				devices.Console.println("forward");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('F', 10));
+				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('F', 10, 0));
 				break;
 			case 2:
 				devices.Console.println("backward");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('B', 10));
+				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('B', 10, 0));
 				break;
 			case 3:
 				devices.Console.println("forward");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('F', 10));
+				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('F', 10, 0));
 				break;
 			case 4:
 				devices.Console.println("move faster");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('C',20));
+				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('C', 20, 0));
 				break;
 			case 5:
 				devices.Console.println("park");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('P'));
+				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('P', 0));
 				break;
 			case 6:
 				devices.Console.println("start");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('S'));
+				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('S', 0));
 				break;
 			case 7:
 				devices.Console.println("move slower");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('C',10));
+				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('C', 10, 0));
 				break;
 			case 8:
 				devices.Console.println("park");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('P'));
+				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('P', 0));
 				break;
 			case 9:
 				devices.Console.println("turn left");
@@ -146,12 +133,12 @@ public class TestEV3TCPIPCommander {
 				break;
 			case 12:
 				devices.Console.println("park");
-				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('P'));
+				UDPCommunication.sendBroadcastMsg(EV3Support.generateCommand('P', 0));
 				break;
 			default:
 				;
 			}
-			
+
 		}
 	}
 
@@ -159,7 +146,7 @@ public class TestEV3TCPIPCommander {
 
 		@Override
 		protected void initialize() {
-			
+
 			MotorPort port = new MotorPort(MotorPortID.B);
 			m1 = new Motor(port);
 
@@ -168,7 +155,7 @@ public class TestEV3TCPIPCommander {
 
 			motor[0] = m2;
 			motor[1] = m1;
-			
+
 			MyThd thd = new MyThd(new PriorityParameters(2), storageParameters_Handlers, this);
 			thd.register();
 
@@ -177,7 +164,7 @@ public class TestEV3TCPIPCommander {
 							new RelativeTime(1000, 0, Clock.getRealtimeClock())),
 					storageParameters_Handlers, this);
 			myPEH1.register();
-			
+
 		}
 
 		@Override
@@ -233,7 +220,7 @@ public class TestEV3TCPIPCommander {
 				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
 
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM*2, 0, 0);
+				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM * 2, 0, 0);
 
 		devices.Console.println("\n***** test multicore wait and notify main.begin *****");
 		new LaunchMulticore(new MyApp(), 2);
