@@ -3,17 +3,17 @@ package test;
 import icecaptools.IcecapCompileMe;
 
 
-public class TestSCJClock {
+public class TestSCJSingleClock {
 
     private static boolean error;
 
-    public TestSCJClock() {
+    public TestSCJSingleClock() {
     }
 
     public static void main(String[] args) {
         devices.Console.println("\n********** TestSCJClock main.begin ******************");
 
-        TestSCJClock app = new TestSCJClock();
+        TestSCJSingleClock app = new TestSCJSingleClock();
         app.run();
 
         devices.Console.println("\n********** TestSCJClock main.end ******************");

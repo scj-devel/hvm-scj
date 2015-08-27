@@ -36,7 +36,7 @@ import javax.scj.util.Priorities;
 
 import vm.Memory;
 
-public class TestSCJBoundedBuffer {
+public class TestSCJSingleBoundedBuffer {
 	static boolean failed;
 
 	private static class MyAperiodicEvh extends AperiodicEventHandler {

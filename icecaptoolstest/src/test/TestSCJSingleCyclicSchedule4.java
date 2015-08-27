@@ -16,7 +16,7 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
-public class TestSCJCyclicSchedule4 {
+public class TestSCJSingleCyclicSchedule4 {
 
     public static class MyCyclicSchedule {
     	

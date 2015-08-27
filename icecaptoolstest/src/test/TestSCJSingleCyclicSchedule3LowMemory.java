@@ -18,7 +18,7 @@ import javax.scj.util.Priorities;
 
 import vm.Memory;
 
-public class TestSCJCyclicSchedule3LowMemory {
+public class TestSCJSingleCyclicSchedule3LowMemory {
 	private static class MyCyclicSchedule {
 		static CyclicSchedule generate0(CyclicExecutive cyclicExec, PeriodicEventHandler[] handlers) {
 			Frame[] frames = new Frame[2];

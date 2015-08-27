@@ -14,7 +14,7 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
-public class TestSCJLevel0SimpleCyclicExecutive1 extends CyclicExecutive 
+public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive 
 	implements Safelet<CyclicExecutive> {
 
     private static MissionSequencer<CyclicExecutive> sequencer;
@@ -97,7 +97,7 @@ public class TestSCJLevel0SimpleCyclicExecutive1 extends CyclicExecutive
 
             @Override
             protected CyclicExecutive getNextMission() {
-                return new TestSCJLevel0SimpleCyclicExecutive1();
+                return new TestSCJSingleLevel0SimpleCyclicExecutive1();
             }
         };
 		return sequencer;
@@ -128,7 +128,7 @@ public class TestSCJLevel0SimpleCyclicExecutive1 extends CyclicExecutive
             0, 
             0);
 	  
-        new LaunchLevel0(new TestSCJLevel0SimpleCyclicExecutive1());
+        new LaunchLevel0(new TestSCJSingleLevel0SimpleCyclicExecutive1());
         args = null;
     }
 }

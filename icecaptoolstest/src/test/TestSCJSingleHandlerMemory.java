@@ -34,7 +34,7 @@ import javax.scj.util.Priorities;
 
 import vm.Memory;
 
-public class TestSCJHandlerMemory {
+public class TestSCJSingleHandlerMemory {
 	private static int sizeOfSmallObject;
 	private static int sizeOfBiggerObject;
 

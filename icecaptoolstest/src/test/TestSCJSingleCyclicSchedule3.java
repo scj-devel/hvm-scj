@@ -17,7 +17,7 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 @SuppressWarnings("rawtypes") 
-public class TestSCJCyclicSchedule3 {
+public class TestSCJSingleCyclicSchedule3 {
 
     private static class MyCyclicSchedule {
         static CyclicSchedule generate0(CyclicExecutive cyclicExec, PeriodicEventHandler[] handlers) {
