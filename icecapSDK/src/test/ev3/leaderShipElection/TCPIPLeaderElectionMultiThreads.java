@@ -33,7 +33,7 @@ public class TCPIPLeaderElectionMultiThreads {
 	
 	static Motor motor_1;
 	static Motor motor_2;
-	static Motor motor_3;
+	static Motor[] motors= new Motor[2];
 
 	static LeaderShipElection leaderElector;
 
@@ -222,13 +222,13 @@ public class TCPIPLeaderElectionMultiThreads {
 			if (leaderElector.getState() == LeaderShipElection.Claim.LEADER) {
 				if (!isLeaderAlready) {
 					isLeaderAlready = true;
-					actor.leaderAction();
+					actor.standardLeaderAction();
 				}
 			}
 			else{
 				if (isLeaderAlready) {
 					isLeaderAlready = false;
-					actor.followAction();
+					actor.standardFollowAction();
 				}
 			}
 		}
@@ -294,7 +294,7 @@ public class TCPIPLeaderElectionMultiThreads {
 			if (count == 1) {
 				if(isLeaderAlready){
 					isLeaderAlready = false;
-					actor.followAction();
+					actor.standardFollowAction();
 				}	
 				devices.Console.println("robot stoped");
 				TCPIPCommunication.closeReceiver(receiver_fd);
@@ -326,8 +326,8 @@ public class TCPIPLeaderElectionMultiThreads {
 			MotorPort port1 = new MotorPort(MotorPortID.C);
 			motor_2 = new Motor(port1);
 			
-			MotorPort port2 = new MotorPort(MotorPortID.A);
-			motor_3 = new Motor(port2);
+			motors[0] = motor_1;
+			motors[1] = motor_2;
 			
 			button_back = new Button(Button.ButtonID.BACK);
 
@@ -339,7 +339,7 @@ public class TCPIPLeaderElectionMultiThreads {
 			host_ip = Network.getIPAddress(networkName);
 			
 			leaderElector = new LeaderShipElection(networkName, ids);
-			actor = new LeaderShipRobotActor(motor_1, motor_2, motor_3, host_ip, ips[1]);
+			actor = new LeaderShipRobotActor(motors, leaderElector,false);
 		}
 	}
 

@@ -33,8 +33,7 @@ public class TCPIPLeaderElectionMultiMissions {
 
 	static Motor motor_1;
 	static Motor motor_2;
-	static Motor motor_3;
-
+	static Motor[] motors= new Motor[2];
 	static LeaderShipElection leaderElector;
 
 	static String host_ip = null;
@@ -226,7 +225,7 @@ public class TCPIPLeaderElectionMultiMissions {
 		public RobotActor(PriorityParameters priority, StorageParameters storage, Mission m) {
 			super(priority, storage, "InnerSeq 3nd");
 			this.m = m;
-			actor = new LeaderShipRobotActor(motor_1, motor_2, motor_3, host_ip, ips[1]);
+			actor = new LeaderShipRobotActor(motors, leaderElector,false);
 		}
 
 		@Override
@@ -234,7 +233,7 @@ public class TCPIPLeaderElectionMultiMissions {
 			if (m.terminationPending()) {
 				if (isLeaderAlready) {
 					isLeaderAlready = false;
-					actor.followAction();
+					actor.standardFollowAction();
 				}
 				devices.Console.println("robot stoped");
 				return null;
@@ -278,7 +277,7 @@ public class TCPIPLeaderElectionMultiMissions {
 
 					if (!isLeaderAlready) {
 						isLeaderAlready = true;
-						actor.leaderAction();
+						actor.standardLeaderAction();
 					}
 				}
 			}
@@ -317,7 +316,7 @@ public class TCPIPLeaderElectionMultiMissions {
 
 					if (isLeaderAlready) {
 						isLeaderAlready = false;
-						actor.followAction();
+						actor.standardFollowAction();
 					}
 				}
 			}
@@ -408,8 +407,8 @@ public class TCPIPLeaderElectionMultiMissions {
 			MotorPort port1 = new MotorPort(MotorPortID.C);
 			motor_2 = new Motor(port1);
 
-			MotorPort port2 = new MotorPort(MotorPortID.A);
-			motor_3 = new Motor(port2);
+			motors[0] = motor_1;
+			motors[1] = motor_2;
 			
 			back_button = new Button(Button.ButtonID.BACK);
 			

@@ -1,71 +1,131 @@
 package test.ev3.leaderShipElection;
 
+import javax.safetycritical.ManagedMemory;
+
+import com.EV3Support;
+import com.UDPCommunication;
+
 import devices.ev3.EV3;
 import devices.ev3.Motor;
 import devices.ev3.Motor.Direction;
+import leadershipElection.LeaderShipElection;
 
 public class LeaderShipRobotActor {
-	
-	private Motor motor_1;
-	private Motor motor_2;
-	private Motor motor_3;
-	private String specialRobot;
-	private String robotIp;
-	
-	public LeaderShipRobotActor(Motor motor_1, Motor motor_2, Motor motor_3, String robotIp, String specialRobot){
-		this.motor_1 = motor_1;
-		this.motor_2 = motor_2;
-		this.motor_3 = motor_3;
-		this.specialRobot = specialRobot;
-		this.robotIp = robotIp;
-	}
-	
-	public void leaderAction(){
-		motor_1.setPower((byte) 50);
-		motor_2.setPower((byte) 50);
-		motor_3.setPower((byte) 100);
 
-		if (robotIp.equals(specialRobot)) {
-			motor_1.setDirection(Direction.BACKWARD);
-			motor_2.setDirection(Direction.BACKWARD);
-		} else {
-			motor_1.setDirection(Direction.FORWARD);
-			motor_2.setDirection(Direction.FORWARD);
+	private static final String broadcast_addr = "10.42.0.255";
+	private int commandCount = 0;
+
+	private Motor[] motors;
+	private EV3Support actor;
+	private Executor executor;
+	private LeaderShipElection elector;
+
+	public LeaderShipRobotActor(Motor[] motors, LeaderShipElection elector, boolean isUDPRequired) {
+		this.motors = motors;
+		this.elector = elector;
+
+		actor = new EV3Support(this.motors);
+		executor = new Executor();
+
+		if (isUDPRequired) {
+			UDPCommunication.createSender(broadcast_addr);
+			UDPCommunication.createReceiver();
+		}
+	}
+
+	public void standardLeaderAction() {
+		for (int i = 0; i < motors.length; i++) {
+			motors[i].setPower((byte) 50);
+			motors[i].setDirection(Direction.FORWARD);
+			motors[i].start();
+
+			EV3.sleep(1000);
+
+			motors[i].stop();
+		}
+	}
+
+	public void standardFollowAction() {
+		for (int i = 0; i < motors.length; i++) {
+			motors[i].setPower((byte) 50);
+			motors[i].setDirection(Direction.BACKWARD);
+			motors[i].start();
+
+			EV3.sleep(1000);
+
+			motors[i].stop();
+		}
+	}
+
+	private void commandRoutine(int count) {
+		switch (count) {
+		case 1:
+			devices.Console.println("forward");
+			UDPCommunication.sendBroadcastMsg(actor.generateCommand('F', 50, 1));
+			break;
+		case 2:
+			devices.Console.println("backward");
+			UDPCommunication.sendBroadcastMsg(actor.generateCommand('B', 50, 1));
+			break;
+		case 3:
+			devices.Console.println("forward");
+			UDPCommunication.sendBroadcastMsg(actor.generateCommand('F', 50, 1));
+			break;
+		case 4:
+			devices.Console.println("move faster");
+			UDPCommunication.sendBroadcastMsg(actor.generateCommand('C', 100, 1));
+			break;
+		case 5:
+			devices.Console.println("start");
+			UDPCommunication.sendBroadcastMsg(actor.generateCommand('S', 1));
+			break;
+		case 6:
+			devices.Console.println("move slower");
+			UDPCommunication.sendBroadcastMsg(actor.generateCommand('C', 50, 1));
+			break;
+		case 7:
+			devices.Console.println("turn left");
+			UDPCommunication.sendBroadcastMsg(actor.generateCommand('L', 50, 1, 1));
+			break;
+		case 8:
+			devices.Console.println("turn right");
+			UDPCommunication.sendBroadcastMsg(actor.generateCommand('R', 50, 1, 1));
+			break;
+		case 9:
+			devices.Console.println("forward");
+			UDPCommunication.sendBroadcastMsg(actor.generateCommand('F', 50, 1));
+			break;
+		default:
+			;
 		}
 
-		motor_1.start();
-		motor_2.start();
-
-		EV3.sleep(1000);
-
-		motor_1.stop();
-		motor_2.stop();
-
-		motor_3.setDirection(Direction.FORWARD);
-		motor_3.start();
 	}
-	
-	public void followAction(){
-		motor_3.stop();
 
-		motor_1.setPower((byte) 50);
-		motor_2.setPower((byte) 50);
+	public void communicationBasedLeaderActor(int sender_fd) {
+		commandCount++;
+		commandRoutine(commandCount);
+		if (commandCount == 12)
+			commandCount = 0;
+	}
 
-		if (robotIp.equals(specialRobot)) {
-			motor_1.setDirection(Direction.FORWARD);
-			motor_2.setDirection(Direction.FORWARD);
-		} else {
-			motor_1.setDirection(Direction.BACKWARD);
-			motor_2.setDirection(Direction.BACKWARD);
+	public void communicationBasedFollowerActor() {
+		ManagedMemory.enterPrivateMemory(5000, executor);
+		if (elector.getState() == LeaderShipElection.Claim.FOLLOWER)
+			actor.action();
+	}
+
+	private class Executor implements Runnable {
+		@Override
+		public void run() {
+			String[] msg = null;
+			if (elector.getState() == LeaderShipElection.Claim.FOLLOWER)
+				msg = UDPCommunication.receiveMsg();
+			//devices.Console.println("received: " + msg[1]);
+			
+			if (elector.getState() == LeaderShipElection.Claim.FOLLOWER)
+				actor.getCommand(msg[1]);
 		}
 
-		motor_1.start();
-		motor_2.start();
-
-		EV3.sleep(1000);
-
-		motor_1.stop();
-		motor_2.stop();
 	}
 
 }
