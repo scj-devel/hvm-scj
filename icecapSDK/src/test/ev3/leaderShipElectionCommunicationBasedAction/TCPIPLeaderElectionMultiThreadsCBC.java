@@ -30,7 +30,7 @@ import icecaptools.IcecapCompileMe;
 import leadershipElection.LeaderShipElection;
 import test.ev3.leaderShipElectionStandardAction.LeaderShipRobotActor;
 
-public class TCPIPLeaderElectionMultiThreadsCB {
+public class TCPIPLeaderElectionMultiThreadsCBC {
 	static String[] ips = { "10.42.0.22", "10.42.0.55", "10.42.0.84" };
 	static String networkName = "wlan0";
 
@@ -271,7 +271,7 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 
 			if (leaderElector.getState() == LeaderShipElection.Claim.LEADER) {
 				
-				actor.communicationBasedLeaderActor(3);
+				actor.communicationBasedLeaderActor(6);
 			}
 
 		}

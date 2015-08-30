@@ -66,6 +66,8 @@ public class LeaderShipRobotActor {
 	private void commandRoutine(int count) {
 		switch (count) {
 		case 1:
+			devices.Console.println("forward");
+
 			ManagedMemory.executeInOuterArea(new Runnable() {
 
 				@Override
@@ -84,9 +86,10 @@ public class LeaderShipRobotActor {
 			});
 
 			UDPCommunication.sendBroadcastMsg(actor.generateCommand('F', 50, 1));
-			devices.Console.println("forward");
+
 			break;
 		case 2:
+			devices.Console.println("backward");
 
 			ManagedMemory.executeInOuterArea(new Runnable() {
 
@@ -106,61 +109,114 @@ public class LeaderShipRobotActor {
 			});
 
 			UDPCommunication.sendBroadcastMsg(actor.generateCommand('B', 50, 1));
-			devices.Console.println("backward");
+
 			break;
-		// case 3:
-		// for (int i = 0; i < motors.length; i++) {
-		// motors[i].setPower((byte) 50);
-		// motors[i].setDirection(Direction.FORWARD);
-		// motors[i].start();
-		// }
-		//
-		// EV3.sleep(1000);
-		// for (int i = 0; i < motors.length; i++) {
-		// motors[i].stop();
-		// }
-		//
-		// UDPCommunication.sendBroadcastMsg(actor.generateCommand('F', 50, 1));
-		// devices.Console.println("forward");
-		// break;
-		// case 4:
-		// devices.Console.println("move faster");
-		// UDPCommunication.sendBroadcastMsg(actor.generateCommand('C', 100,
-		// 1));
-		// break;
-		// case 5:
-		// devices.Console.println("start");
-		// UDPCommunication.sendBroadcastMsg(actor.generateCommand('S', 1));
-		// break;
-		// case 6:
-		// devices.Console.println("move slower");
-		// UDPCommunication.sendBroadcastMsg(actor.generateCommand('C', 50, 1));
-		// break;
-		// case 7:
-		// devices.Console.println("turn left");
-		// UDPCommunication.sendBroadcastMsg(actor.generateCommand('L', 50, 1,
-		// 1));
-		// break;
-		// case 8:
-		// devices.Console.println("turn right");
-		// UDPCommunication.sendBroadcastMsg(actor.generateCommand('R', 50, 1,
-		// 1));
-		// break;
-		// case 9:
-		// devices.Console.println("forward");
-		// UDPCommunication.sendBroadcastMsg(actor.generateCommand('F', 50, 1));
-		// break;
-		// case 10:
-		// devices.Console.println("park");
-		// UDPCommunication.sendBroadcastMsg(actor.generateCommand('P', 0));
-		// break;
+		case 3:
+			devices.Console.println("forward");
+
+			ManagedMemory.executeInOuterArea(new Runnable() {
+
+				@Override
+				public void run() {
+					for (int i = 0; i < motors.length; i++) {
+						motors[i].setPower((byte) 50);
+						motors[i].setDirection(Direction.FORWARD);
+						motors[i].start();
+					}
+
+					EV3.sleep(1000);
+					for (int i = 0; i < motors.length; i++) {
+						motors[i].stop();
+					}
+				}
+			});
+
+			UDPCommunication.sendBroadcastMsg(actor.generateCommand('F', 50, 1));
+
+			break;
+		case 4:
+			devices.Console.println("turn left");
+
+			ManagedMemory.executeInOuterArea(new Runnable() {
+
+				@Override
+				public void run() {
+
+					motors[0].setPower((byte) 50);
+					motors[0].setDirection(Direction.FORWARD);
+					
+					motors[1].setPower((byte) 50);
+					motors[1].setDirection(Direction.BACKWARD);
+					
+					motors[0].start();
+					motors[1].start();
+
+					EV3.sleep(1000);
+
+					for (int i = 0; i < motors.length; i++) {
+						motors[i].stop();
+					}
+				}
+			});
+
+			UDPCommunication.sendBroadcastMsg(actor.generateCommand('L', 50, 1, 1));
+			break;
+		case 5:
+			devices.Console.println("turn right");
+			
+			ManagedMemory.executeInOuterArea(new Runnable() {
+
+				@Override
+				public void run() {
+
+					motors[0].setPower((byte) 50);
+					motors[0].setDirection(Direction.BACKWARD);
+					
+					motors[1].setPower((byte) 50);
+					motors[1].setDirection(Direction.FORWARD);
+					
+					motors[0].start();
+					motors[1].start();
+
+					EV3.sleep(1000);
+
+					for (int i = 0; i < motors.length; i++) {
+						motors[i].stop();
+					}
+				}
+			});
+			
+			UDPCommunication.sendBroadcastMsg(actor.generateCommand('R', 50, 1, 1));
+			break;
+		case 6:
+			devices.Console.println("forward");
+			
+			ManagedMemory.executeInOuterArea(new Runnable() {
+
+				@Override
+				public void run() {
+					for (int i = 0; i < motors.length; i++) {
+						motors[i].setPower((byte) 50);
+						motors[i].setDirection(Direction.FORWARD);
+						motors[i].start();
+					}
+
+					EV3.sleep(2000);
+					for (int i = 0; i < motors.length; i++) {
+						motors[i].stop();
+					}
+				}
+			});
+			
+			UDPCommunication.sendBroadcastMsg(actor.generateCommand('F', 50, 2));
+			break;
 		default:
 			;
 		}
 
 	}
 
-	public void communicationBasedLeaderActor() {
+	public void communicationBasedLeaderActor(int commandsCount) {
 		// ManagedMemory.enterPrivateMemory(5000, leader_executor);
 		MotorPort port = new MotorPort(MotorPortID.B);
 		Motor motor_1 = new Motor(port);
@@ -173,20 +229,20 @@ public class LeaderShipRobotActor {
 
 		commandRoutine(commandCount);
 
-		 if (!clockwise)
-		 commandCount++;
-		 else
-		 commandCount--;
-		
-		 if (commandCount == 3) {
-		 clockwise = true;
-		 commandCount--;
-		 }
-		
-		 if (commandCount == 0) {
-		 clockwise = false;
-		 commandCount++;
-		 }
+		if (!clockwise)
+			commandCount++;
+		else
+			commandCount--;
+
+		if (commandCount == commandsCount) {
+			clockwise = true;
+			commandCount--;
+		}
+
+		if (commandCount == 0) {
+			clockwise = false;
+			commandCount++;
+		}
 
 	}
 
@@ -220,7 +276,6 @@ public class LeaderShipRobotActor {
 			if (elector.getState() == LeaderShipElection.Claim.FOLLOWER)
 				actor.getCommand(msg[1]);
 		}
-
 	}
 
 }
