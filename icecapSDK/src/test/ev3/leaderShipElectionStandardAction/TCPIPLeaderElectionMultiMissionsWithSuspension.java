@@ -1,4 +1,4 @@
-package test.ev3.leaderShipElection;
+package test.ev3.leaderShipElectionStandardAction;
 
 import javax.realtime.AperiodicParameters;
 import javax.realtime.Clock;
@@ -51,6 +51,7 @@ public class TCPIPLeaderElectionMultiMissionsWithSuspension {
 
 	static Mission top_level_mission;
 	static boolean isElectionStarted = false;
+	static LeaderShipRobotActor actor; 
 
 	private static class Listener extends ManagedThread {
 		Mission m;
@@ -231,12 +232,12 @@ public class TCPIPLeaderElectionMultiMissionsWithSuspension {
 	private static class RobotActor extends MissionSequencer<Mission> {
 		Mission m;
 		static boolean isLeaderActorStated = false;
-		static LeaderShipRobotActor actor; 
+		
 
 		public RobotActor(PriorityParameters priority, StorageParameters storage, Mission m) {
 			super(priority, storage, "InnerSeq 3nd");
 			this.m = m;
-			actor = new LeaderShipRobotActor(motors, leaderElector,false);
+			
 		}
 
 		@Override
@@ -542,7 +543,7 @@ public class TCPIPLeaderElectionMultiMissionsWithSuspension {
 			host_ip = Network.getIPAddress(networkName);
 
 			leaderElector = new LeaderShipElection(networkName, ids);
-
+			actor = new LeaderShipRobotActor(motors, leaderElector,false);
 		}
 	}
 	

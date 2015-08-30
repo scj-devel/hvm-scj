@@ -61,8 +61,8 @@ public class EV3Support {
 
 		switch (command) {
 		case Command.FORWARD:
-			 devices.Console.println("get command: forward with speed: " +
-			 speed);
+//			 devices.Console.println("get command: forward with speed: " +
+//			 speed);
 			for (int i = 0; i < motors.length; i++) {
 				motors[i].setPower((byte) speed);
 				motors[i].setDirection(Direction.FORWARD);
@@ -71,8 +71,8 @@ public class EV3Support {
 			break;
 
 		case Command.BACKFORD:
-			 devices.Console.println("get command: backforward with speed: " +
-			 speed);
+//			 devices.Console.println("get command: backforward with speed: " +
+//			 speed);
 			for (int i = 0; i < motors.length; i++) {
 				motors[i].setPower((byte) speed);
 				motors[i].setDirection(Direction.BACKWARD);
@@ -81,30 +81,30 @@ public class EV3Support {
 			break;
 
 		case Command.START:
-			 devices.Console.println("get command: start");
+//			 devices.Console.println("get command: start");
 			for (int i = 0; i < motors.length; i++) {
 				motors[i].start();
 			}
 			break;
 
 		case Command.STOP:
-			 devices.Console.println("get command: stop");
+//			 devices.Console.println("get command: stop");
 			for (int i = 0; i < motors.length; i++) {
 				motors[i].stop();
 			}
 			break;
 
 		case Command.CHANGESPEED:
-			 devices.Console.println("get command: change speed to: " +
-			 speed);
+//			 devices.Console.println("get command: change speed to: " +
+//			 speed);
 			for (int i = 0; i < motors.length; i++) {
 				motors[i].setPower((byte) speed);
 			}
 			break;
 
 		case Command.TURNLEFT:
-			 devices.Console.println("get command: turn left with speed: " +
-			 speed);
+//			 devices.Console.println("get command: turn left with speed: " +
+//			 speed);
 			for (int i = 0; i < motors.length; i++) {
 				motors[i].setPower((byte) speed);
 
@@ -119,8 +119,8 @@ public class EV3Support {
 			break;
 
 		case Command.TURNRIGHT:
-			 devices.Console.println("get command: turn right with speed: " +
-			 speed);
+//			 devices.Console.println("get command: turn right with speed: " +
+//			 speed);
 			for (int i = 0; i < motors.length; i++) {
 				motors[i].setPower((byte) speed);
 
@@ -135,7 +135,7 @@ public class EV3Support {
 			break;
 
 		default:
-			devices.Console.println("undefined command!");
+			devices.Console.println("undefined command!: " + command);
 			break;
 		}
 
@@ -233,7 +233,7 @@ public class EV3Support {
 			}
 
 			if (c - '0' < 0 || c - '0' > 10) {
-				devices.Console.println("wrong command: should be int here");
+				devices.Console.println("wrong command: should be int here: " +s);
 				throw new IllegalArgumentException();
 			}
 

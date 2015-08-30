@@ -1,9 +1,11 @@
-package test.ev3.leaderShipElection;
+package test.ev3.leaderShipElectionStandardAction;
 
+import javax.realtime.AperiodicParameters;
 import javax.realtime.Clock;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
+import javax.safetycritical.AperiodicEventHandler;
 import javax.safetycritical.LaunchMulticore;
 import javax.safetycritical.ManagedMemory;
 import javax.safetycritical.ManagedThread;
@@ -17,6 +19,7 @@ import javax.scj.util.Priorities;
 
 import com.Network;
 import com.TCPIPCommunication;
+import com.UDPCommunication;
 
 import devices.ev3.Button;
 import devices.ev3.Motor;
@@ -25,33 +28,35 @@ import devices.ev3.MotorPort.MotorPortID;
 import icecaptools.IcecapCompileMe;
 import leadershipElection.LeaderShipElection;
 
-public class TCPIPLeaderElectionSequential {
+public class TCPIPLeaderElectionMultiThreads {
 	static String[] ips = { "10.42.0.22", "10.42.0.55", "10.42.0.84" };
 	static String networkName = "wlan0";
 
 	static Motor motor_1;
 	static Motor motor_2;
-	static Motor[] motors= new Motor[2];
-	static Button button_back;
+	static Motor[] motors = new Motor[2];
+
+	static LeaderShipElection leaderElector;
 
 	static String host_ip = null;
-	static LeaderShipElection leaderElector;
-	static int orentionControl = 0;
-
+	static Receiver[] receivers;
 	static int[] ids;
-	static Connector[] connectors = new Connector[LeaderShipElection.MAX_ROBOTS];
-	static Receiver[] receivers = new Receiver[LeaderShipElection.MAX_ROBOTS];
 	static int receiver_fd = -1;
+
+	static ListenerExecutor listener_executor;
+	static boolean isLeaderAlready = false;
+
+	static Button button_back;
+	static LeaderShipRobotActor actor;
+	static boolean isUDPRequired = false;
 
 	private static class Listener extends ManagedThread {
 		Mission m;
-		ListenerExecutor listener_executor;
 
 		public Listener(PriorityParameters priority, StorageParameters storage, Mission m) {
 			super(priority, storage);
 			this.m = m;
 			receiver_fd = TCPIPCommunication.createTCPIPReceiver(0);
-			this.listener_executor = new ListenerExecutor(receiver_fd);
 		}
 
 		@Override
@@ -67,61 +72,85 @@ public class TCPIPLeaderElectionSequential {
 	}
 
 	private static class ListenerExecutor implements Runnable {
-		int receiver_fd = -1;
+		Mission m;
 
-		public ListenerExecutor(int receiver_fd) {
-			this.receiver_fd = receiver_fd;
+		public ListenerExecutor(Mission m) {
+			this.m = m;
 		}
 
 		@Override
 		public void run() {
 			int[] peerInfo;
 			peerInfo = TCPIPCommunication.listenForConnection(receiver_fd, 10);
-			receivers[peerInfo[1]].neighbor_fd = peerInfo[0];
-			receivers[peerInfo[1]].isConnected = true;
-			devices.Console.println("receiver " + peerInfo[1] + " started");
+			devices.Console.println("accept connection: " + peerInfo[1]);
+
+			if (!m.terminationPending()) {
+				receivers[peerInfo[1]].executor.newfd = peerInfo[0];
+				receivers[peerInfo[1]].executor.loseConnection = false;
+				receivers[peerInfo[1]].release();
+			}
+		}
+
+	}
+
+	private static class Receiver extends AperiodicEventHandler {
+		Mission m;
+		ReceiverExecutor executor;
+		int id;
+
+		public Receiver(PriorityParameters priority, AperiodicParameters release, StorageParameters storage, Mission m,
+				ReceiverExecutor executor, int id) {
+			super(priority, release, storage);
+			this.m = m;
+			this.executor = executor;
+			this.id = id;
+		}
+
+		@Override
+		public void handleAsyncEvent() {
+			while (!m.terminationPending()) {
+				ManagedMemory.enterPrivateMemory(2000, executor);
+				if (executor.loseConnection)
+					break;
+			}
+
+			devices.Console.println("receiver " + id + "closed");
 		}
 	}
 
-	private static class Receiver {
-		boolean isConnected = false;
-		int neighbor_fd = -1;
+	private static class ReceiverExecutor implements Runnable {
 		Mission m;
-		int id = -1;
+		int newfd;
+		boolean loseConnection = false;
 
-		public Receiver(int id, Mission m) {
-			this.id = id;
+		public ReceiverExecutor(Mission m) {
 			this.m = m;
 		}
 
-		void receiveMsg() {
-			if (isConnected) {
-				String msg = TCPIPCommunication.receiveMsg(neighbor_fd);
-				if (msg.length() == 0) {
-					isConnected = false;
-					devices.Console.println("receiver " + id + " closed");
-					return;
-				}
-
-				if (!m.terminationPending())
-					leaderElector.collect(msg);
+		@Override
+		public void run() {
+			String msg = TCPIPCommunication.receiveMsg(newfd);
+			if (msg.length() == 0) {
+				loseConnection = true;
 			}
 
+			if (!m.terminationPending() && msg.length() != 0)
+				leaderElector.collect(msg);
 		}
-
 	}
 
-	private static class Connector extends PeriodicEventHandler {
+	private static class Sender extends PeriodicEventHandler {
+		Mission m;
 		String neighbor_ip;
 		int fd;
 		boolean isConnected = false;
-		Mission m;
 
-		public Connector(PriorityParameters priority, PeriodicParameters release, StorageParameters storage, Mission m,
+		public Sender(PriorityParameters priority, PeriodicParameters release, StorageParameters storage, Mission m,
 				String ip) {
 			super(priority, release, storage);
-			this.neighbor_ip = ip;
 			this.m = m;
+			this.neighbor_ip = ip;
+
 		}
 
 		@Override
@@ -132,97 +161,84 @@ public class TCPIPLeaderElectionSequential {
 
 				int result = TCPIPCommunication.connectSender(fd, neighbor_ip);
 				if (result == 0) {
-					devices.Console.println("connect to: " + neighbor_ip);
 					isConnected = true;
 				} else {
 					isConnected = false;
 				}
 			}
 
-			if (m.terminationPending()) {
-				TCPIPCommunication.closeSender(fd);
-				return;
-			}
-		}
-
-		synchronized void sendState() {
 			if (isConnected) {
 				int result = TCPIPCommunication.sendMsg(fd, leaderElector.StateToNeighbors());
+
 				if (result == -1) {
 					isConnected = false;
 					TCPIPCommunication.closeSender(fd);
-					devices.Console.println(neighbor_ip + " disconnected");
 				}
+			} else {
+				TCPIPCommunication.closeSender(fd);
+			}
+
+			if (button_back.isPressed() || m.terminationPending()) {
+				m.requestTermination();
+				TCPIPCommunication.closeSender(fd);
+
+				int close = TCPIPCommunication.createTCPIPSender();
+				TCPIPCommunication.connectSender(close, host_ip);
+				TCPIPCommunication.closeSender(close);
+
+				if (isUDPRequired)
+					UDPCommunication.sendPinPointMessage(host_ip, "finish");
+
+				devices.Console.println("sender closed");
+
 			}
 		}
-
-		// synchronized void sendCommand(int commandNo) {
-		// if (isConnected) {
-		// int result = TCPIPCommunication.sendMsg(fd,
-		// leaderElector.StateToNeighbors());
-		// if (result == -1) {
-		// isConnected = false;
-		// TCPIPCommunication.closeSender(fd);
-		// devices.Console.println(neighbor_ip + " disconnected");
-		// }
-		// }
-		// }
 
 	}
 
 	private static class Elector extends PeriodicEventHandler {
-		// private boolean isElectionStarted = false;
-		static boolean isLeaderAlready = false;
 		Mission m;
-		LeaderShipRobotActor actor;
 
 		public Elector(PriorityParameters priority, PeriodicParameters release, StorageParameters storage, Mission m) {
 			super(priority, release, storage);
 			this.m = m;
-			actor = new LeaderShipRobotActor(motors, leaderElector,false);
 		}
 
 		@Override
 		@IcecapCompileMe
 		public void handleAsyncEvent() {
-			if (button_back.isPressed()) {
-				m.requestTermination();
-				int close = TCPIPCommunication.createTCPIPSender();
-				TCPIPCommunication.connectSender(close, Network.getIPAddress(networkName));
-				TCPIPCommunication.closeSender(close);
-
-				if (isLeaderAlready) {
-					isLeaderAlready = false;
-					actor.standardFollowAction();
-					devices.Console.println("robot stoped");
-				}
+			if (m.terminationPending()) {
 				devices.Console.println("elector exit");
 				return;
 			}
 
-			// if (!isElectionStarted) {
-			// leaderElector.electLeader();
-			// isElectionStarted = true;
-			// } else {
-			for (int i = 0; i < ips.length; i++) {
-				connectors[ids[i]].sendState();
-			}
-			for (int i = 0; i < ips.length; i++) {
-				receivers[ids[i]].receiveMsg();
-			}
-
 			leaderElector.electLeader();
-			action();
-			// }
+		}
+	}
+
+	private static class RobotActor extends PeriodicEventHandler {
+		Mission m;
+
+		public RobotActor(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
+				Mission m) {
+			super(priority, release, storage);
+			this.m = m;
 		}
 
-		void action() {
+		@Override
+		@IcecapCompileMe
+		public void handleAsyncEvent() {
+			if (m.terminationPending()) {
+				devices.Console.println("actor exit");
+				return;
+			}
+
 			if (leaderElector.getState() == LeaderShipElection.Claim.LEADER) {
 				if (!isLeaderAlready) {
 					isLeaderAlready = true;
 					actor.standardLeaderAction();
 				}
-			} else {
+			} else if (leaderElector.getState() == LeaderShipElection.Claim.FOLLOWER) {
 				if (isLeaderAlready) {
 					isLeaderAlready = false;
 					actor.standardFollowAction();
@@ -235,25 +251,39 @@ public class TCPIPLeaderElectionSequential {
 
 		@Override
 		protected void initialize() {
-			Listener listener = new Listener(new PriorityParameters(5), storageParameters_Listeners, this);
+			receivers = new Receiver[LeaderShipElection.MAX_ROBOTS];
+			for (int i = 0; i < ips.length; i++) {
+				receivers[ids[i]] = new Receiver(new PriorityParameters(5), new AperiodicParameters(null, null),
+						storageParameters_Listeners_Receivers, this, new ReceiverExecutor(this), ids[i]);
+				receivers[ids[i]].register();
+
+			}
+
+			Listener listener = new Listener(new PriorityParameters(5), storageParameters_Listeners_Receivers, this);
 			listener.register();
 
-			for (int i = 0; i < ips.length; i++) {
-				connectors[ids[i]] = new Connector(new PriorityParameters(6),
-						new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()),
-								new RelativeTime(500, 0, Clock.getRealtimeClock())),
-						storageParameters_Handlers, this, ips[i]);
-				connectors[ids[i]].register();
+			listener_executor = new ListenerExecutor(this);
 
-				receivers[ids[i]] = new Receiver(ids[i], this);
+			Sender[] senders = new Sender[ips.length];
+			for (int i = 0; i < senders.length; i++) {
+				senders[i] = new Sender(new PriorityParameters(6),
+						new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()),
+								new RelativeTime(1000, 0, Clock.getRealtimeClock())),
+						storageParameters_Handlers, this, ips[i]);
+				senders[i].register();
 			}
 
 			Elector elector = new Elector(new PriorityParameters(7),
 					new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()),
-							new RelativeTime(2000, 0, Clock.getRealtimeClock())),
+							new RelativeTime(5000, 0, Clock.getRealtimeClock())),
 					storageParameters_Handlers, this);
 			elector.register();
 
+			RobotActor actor = new RobotActor(new PriorityParameters(12),
+					new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()),
+							new RelativeTime(1000, 0, Clock.getRealtimeClock())),
+					storageParameters_Handlers, this);
+			actor.register();
 		}
 
 		@Override
@@ -275,6 +305,11 @@ public class TCPIPLeaderElectionSequential {
 		@Override
 		protected Mission getNextMission() {
 			if (count == 1) {
+				// if(isLeaderAlready){
+				// isLeaderAlready = false;
+				// actor.standardFollowAction();
+				// }
+				devices.Console.println("robot stoped");
 				TCPIPCommunication.closeReceiver(receiver_fd);
 				return null;
 			} else {
@@ -288,7 +323,6 @@ public class TCPIPLeaderElectionSequential {
 
 		@Override
 		public MissionSequencer<Mission> getSequencer() {
-
 			return new MySequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY), storageParameters_Sequencer);
 		}
 
@@ -310,35 +344,36 @@ public class TCPIPLeaderElectionSequential {
 
 			button_back = new Button(Button.ButtonID.BACK);
 
-			host_ip = Network.getIPAddress(networkName);
-
 			ids = new int[ips.length];
 			for (int i = 0; i < ips.length; i++) {
 				ids[i] = LeaderShipElection.generateID(ips[i]);
 			}
 
+			host_ip = Network.getIPAddress(networkName);
+
 			leaderElector = new LeaderShipElection(networkName, ids);
+			actor = new LeaderShipRobotActor(motors, leaderElector, isUDPRequired);
 		}
 	}
 
 	static StorageParameters storageParameters_Sequencer;
 	static StorageParameters storageParameters_Handlers;
-	static StorageParameters storageParameters_Listeners;
+	static StorageParameters storageParameters_Listeners_Receivers;
 
 	public static void main(String[] args) {
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
 				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
 
-		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
+		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE / 2,
+				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM / 2, 0, 0);
+
+		storageParameters_Listeners_Receivers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
 				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, 0, 0);
 
-		storageParameters_Listeners = new StorageParameters(Const.PRIVATE_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, 0, 0);
-
-		devices.Console.println("\n***** test leadership demo TCP Sequential.begin *****");
+		devices.Console.println("\n***** test leadership demo .begin *****");
 		new LaunchMulticore(new MyApp(), 2);
 
-		devices.Console.println("***** test leadership demo TCP Sequential.end *****");
+		devices.Console.println("***** test leadership demo.end *****");
 
 	}
 }

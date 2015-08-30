@@ -436,7 +436,7 @@ public abstract class ManagedMemory extends MemoryArea {
 				ManagedThread handler = ((ManagedThread) ms);
 				currentMem = handler.getCurrentMemory();
 			}
-			devices.Console.println("executeInOuterArea: currentMem: " + currentMem);
+//			devices.Console.println("executeInOuterArea: currentMem: " + currentMem);
 
 			if (currentMem instanceof ManagedMemory.ImmortalMemory) {
 				devices.Console.println("executeInOuterArea: already in ImmortalMemory");

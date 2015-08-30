@@ -76,7 +76,8 @@ public class TestEV3TCPIPCommander {
 	}
 
 	private static class MyPEH1 extends PeriodicEventHandler {
-		int count = 0;
+		int count = 1;
+		boolean clockwise = false;
 
 		public MyPEH1(PriorityParameters priority, PeriodicParameters release, StorageParameters storage, Mission m) {
 			super(priority, release, storage);
@@ -86,11 +87,24 @@ public class TestEV3TCPIPCommander {
 		@Override
 		@IcecapCompileMe
 		public void handleAsyncEvent() {
-
-			count++;
 			giveCommand(count);
-			if (count == 12)
-				count = 0;
+			
+			if(!clockwise)
+				count++;
+			else
+				count--;
+			
+			
+			if (count == 10){
+				clockwise = true;
+				count--;
+			}
+			
+			if(count == 0){
+				clockwise = false;
+				count++;
+			}
+				
 		}
 
 		private void giveCommand(int count) {
