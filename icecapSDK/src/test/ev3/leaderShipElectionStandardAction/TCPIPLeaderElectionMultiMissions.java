@@ -207,7 +207,7 @@ public class TCPIPLeaderElectionMultiMissions {
 		@Override
 		@IcecapCompileMe
 		public void handleAsyncEvent() {
-			if(!m.terminationPending()){
+			if(m.terminationPending()){
 				devices.Console.println("elector exit");
 				return;
 			}

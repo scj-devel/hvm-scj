@@ -173,26 +173,20 @@ public class LeaderShipRobotActor {
 
 		commandRoutine(commandCount);
 
-		if (commandCount == 1) {
-			commandCount = 2;
-		} else {
-			commandCount = 1;
-		}
-
-		// if (!clockwise)
-		// commandCount++;
-		// else
-		// commandCount--;
-		//
-		// if (commandCount == 3) {
-		// clockwise = true;
-		// commandCount--;
-		// }
-		//
-		// if (commandCount == 0) {
-		// clockwise = false;
-		// commandCount++;
-		// }
+		 if (!clockwise)
+		 commandCount++;
+		 else
+		 commandCount--;
+		
+		 if (commandCount == 3) {
+		 clockwise = true;
+		 commandCount--;
+		 }
+		
+		 if (commandCount == 0) {
+		 clockwise = false;
+		 commandCount++;
+		 }
 
 	}
 
