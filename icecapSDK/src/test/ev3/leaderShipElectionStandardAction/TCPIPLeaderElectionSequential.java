@@ -159,7 +159,6 @@ public class TCPIPLeaderElectionSequential {
 	}
 
 	private static class Elector extends PeriodicEventHandler {
-		// private boolean isElectionStarted = false;
 		static boolean amIaLeader = false;
 		Mission m;
 		LeaderShipRobotActor actor;
