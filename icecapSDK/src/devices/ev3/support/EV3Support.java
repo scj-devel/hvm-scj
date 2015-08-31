@@ -1,4 +1,4 @@
-package com;
+package devices.ev3.support;
 
 import devices.ev3.EV3;
 import devices.ev3.Motor;

@@ -29,12 +29,12 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
-import com.EV3Support;
 import com.UDPCommunication;
 
 import devices.ev3.Motor;
 import devices.ev3.MotorPort;
 import devices.ev3.MotorPort.MotorPortID;
+import devices.ev3.support.EV3Support;
 
 public class TestEV3TCPIPFollower {
 	static Motor m1;

@@ -31,7 +31,7 @@ public class TCPIPLeaderElectionSequential {
 
 	static Motor motor_1;
 	static Motor motor_2;
-	static Motor[] motors= new Motor[2];
+	static Motor[] motors = new Motor[2];
 	static Button button_back;
 
 	static String host_ip = null;
@@ -127,6 +127,11 @@ public class TCPIPLeaderElectionSequential {
 		@Override
 		@IcecapCompileMe
 		public void handleAsyncEvent() {
+			if (m.terminationPending()) {
+				TCPIPCommunication.closeSender(fd);
+				return;
+			}
+			
 			if (!isConnected) {
 				fd = TCPIPCommunication.createTCPIPSender();
 
@@ -139,10 +144,6 @@ public class TCPIPLeaderElectionSequential {
 				}
 			}
 
-			if (m.terminationPending()) {
-				TCPIPCommunication.closeSender(fd);
-				return;
-			}
 		}
 
 		synchronized void sendState() {
@@ -155,31 +156,18 @@ public class TCPIPLeaderElectionSequential {
 				}
 			}
 		}
-
-		// synchronized void sendCommand(int commandNo) {
-		// if (isConnected) {
-		// int result = TCPIPCommunication.sendMsg(fd,
-		// leaderElector.StateToNeighbors());
-		// if (result == -1) {
-		// isConnected = false;
-		// TCPIPCommunication.closeSender(fd);
-		// devices.Console.println(neighbor_ip + " disconnected");
-		// }
-		// }
-		// }
-
 	}
 
 	private static class Elector extends PeriodicEventHandler {
 		// private boolean isElectionStarted = false;
-		static boolean isLeaderAlready = false;
+		static boolean amIaLeader = false;
 		Mission m;
 		LeaderShipRobotActor actor;
 
 		public Elector(PriorityParameters priority, PeriodicParameters release, StorageParameters storage, Mission m) {
 			super(priority, release, storage);
 			this.m = m;
-			actor = new LeaderShipRobotActor(motors, leaderElector,false);
+			actor = new LeaderShipRobotActor(motors, leaderElector, false);
 		}
 
 		@Override
@@ -191,8 +179,7 @@ public class TCPIPLeaderElectionSequential {
 				TCPIPCommunication.connectSender(close, Network.getIPAddress(networkName));
 				TCPIPCommunication.closeSender(close);
 
-				if (isLeaderAlready) {
-					isLeaderAlready = false;
+				if (amIaLeader) {
 					actor.standardFollowAction();
 					devices.Console.println("robot stoped");
 				}
@@ -200,10 +187,6 @@ public class TCPIPLeaderElectionSequential {
 				return;
 			}
 
-			// if (!isElectionStarted) {
-			// leaderElector.electLeader();
-			// isElectionStarted = true;
-			// } else {
 			for (int i = 0; i < ips.length; i++) {
 				connectors[ids[i]].sendState();
 			}
@@ -213,19 +196,19 @@ public class TCPIPLeaderElectionSequential {
 
 			leaderElector.electLeader();
 			action();
-			// }
+			
 		}
 
 		void action() {
 			if (leaderElector.getState() == LeaderShipElection.Claim.LEADER) {
-				if (!isLeaderAlready) {
-					isLeaderAlready = true;
+				if (!amIaLeader) {
 					actor.standardLeaderAction();
+					amIaLeader = true;
 				}
 			} else {
-				if (isLeaderAlready) {
-					isLeaderAlready = false;
+				if (amIaLeader) {
 					actor.standardFollowAction();
+					amIaLeader = false;
 				}
 			}
 		}

@@ -2,7 +2,6 @@ package test.ev3.leaderShipElectionStandardAction;
 
 import javax.safetycritical.ManagedMemory;
 
-import com.EV3Support;
 import com.UDPCommunication;
 
 import devices.ev3.EV3;
@@ -10,6 +9,7 @@ import devices.ev3.Motor;
 import devices.ev3.MotorPort;
 import devices.ev3.Motor.Direction;
 import devices.ev3.MotorPort.MotorPortID;
+import devices.ev3.support.EV3Support;
 import leadershipElection.LeaderShipElection;
 
 public class LeaderShipRobotActor {
@@ -44,9 +44,11 @@ public class LeaderShipRobotActor {
 			motors[i].setPower((byte) 50);
 			motors[i].setDirection(Direction.FORWARD);
 			motors[i].start();
-
-			EV3.sleep(1000);
-
+		}
+		
+		EV3.sleep(1000);
+		
+		for (int i = 0; i < motors.length; i++) {
 			motors[i].stop();
 		}
 	}
@@ -56,9 +58,11 @@ public class LeaderShipRobotActor {
 			motors[i].setPower((byte) 50);
 			motors[i].setDirection(Direction.BACKWARD);
 			motors[i].start();
+		}
 
-			EV3.sleep(1000);
-
+		EV3.sleep(1000);
+		
+		for (int i = 0; i < motors.length; i++) {
 			motors[i].stop();
 		}
 	}

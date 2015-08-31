@@ -32,12 +32,12 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
-import com.EV3Support;
 import com.UDPCommunication;
 
 import devices.ev3.Motor;
 import devices.ev3.MotorPort;
 import devices.ev3.MotorPort.MotorPortID;
+import devices.ev3.support.EV3Support;
 import icecaptools.IcecapCompileMe;
 
 public class TestEV3TCPIPCommander {
