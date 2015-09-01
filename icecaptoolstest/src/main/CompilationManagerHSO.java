@@ -118,12 +118,12 @@ public class CompilationManagerHSO {
 
         String sourceFileName = null;
 
-        //String inputFolder = "/home/hso/java/SCJ_Workspace/SCJ_HVM/bin";
+        //String inputFolder = "/home/hso/workspace/SCJ_HVM/bin";
         
-        //String inputFolder = "/home/hso/java/SCJ_Workspace/icecapSDK/bin";
-        // String inputFolder = "/home/hso/java/SCJ_Workspace/icecaptools/bin";
-        //String inputFolder = "/home/hso/java/SCJ_Workspace/icecaptoolstest/bin";
-        // String inputFolder = "/home/hso/java/SCJ_Workspace/EmbeddedSDJ/bin";
+        //String inputFolder = "/home/hso/workspace/icecapSDK/bin";
+        // String inputFolder = "/home/hso/workspace/icecaptools/bin";
+        //String inputFolder = "/home/hso/workspace/icecaptoolstest/bin";
+        // String inputFolder = "/home/hso/workspace/EmbeddedSDJ/bin";
 
         // For JML test  with jml4c:
         //String inputFolder = "/home/hso/java/SCJ_Workspace/SCJJMLTest/bin/" +
@@ -179,6 +179,12 @@ public class CompilationManagerHSO {
          
          //String inputPackage = "test.safetycritical.waitAndNotifyTest2";
          //String inputClass = "MySCJ";
+        
+//        String inputPackage = "test.safetycritical.cyclicschedule1";
+//        String inputClass = "MyApp";
+        
+         //String inputPackage = "test.safetycritical.SPlevel2";
+         //String inputClass = "TestSPLevel2";
          
          
          /* Level 1-2 tests  end */
@@ -196,13 +202,13 @@ public class CompilationManagerHSO {
         //String inputPackage = "javax.realtime.test.memoryArea";
         //String inputPackage = "javax.realtime.test.priorityScheduler";
         
-        //String inputPackage = "javax.safetycritical.test.safelet";        
+        //String inputPackage = "javax.safetycritical.test.safelet1";        
         //String inputPackage = "javax.safetycritical.test.priorityScheduling";
-        //String inputPackage = "javax.safetycritical.test.cyclicschedule3";
+        String inputPackage = "javax.safetycritical.test.cyclicschedule1";
         
         
         //String inputPackage = "javax.realtime.test";
-        String inputPackage = "javax.safetycritical.test";
+        //String inputPackage = "javax.safetycritical.test";
         
         //String inputClass = "AllTests";
   
@@ -220,10 +226,10 @@ public class CompilationManagerHSO {
         /* --- TCKs of javax.safetycritical.test --- : */
         //String inputClass = "TckTestStorageParameters";
         //String inputClass = "TckTestCyclicExecutive1";
-        String inputClass = "TckTestFrame1";
-        //String inputClass = "TckTestCyclicSchedule0";
+        //String inputClass = "TckTestFrame1";
+        String inputClass = "TckTestCyclicSchedule1";  //    SafeletStub
         //String inputClass = "TckTestCyclicSchedule3";
-        //String inputClass = "TckTestCyclicExecutive1";
+        //String inputClass = "TckTestSafelet1";
         //String inputClass = "TckTestSafelet22";
         
         /* OpenJML tests end */
