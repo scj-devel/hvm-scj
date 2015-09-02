@@ -88,7 +88,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	 * 
 	 * @throws <code>IllegalArgumentException</code> if priority or release parameters are null.
 	 */
-	/*public*/ ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, StorageParameters storage) {
+	ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, StorageParameters storage) {
 		this(priority, release, storage, null);
 	}
 
@@ -163,12 +163,6 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	public String getName() {
 		return name;
 	}
-
-//	@SCJAllowed(Level.LEVEL_1)
-//	public AbsoluteTime getLastReleaseTime() {
-//		// ToDo: implementation
-//		return null;
-//	}
 
 	Mission getMission() {
 		return mission;

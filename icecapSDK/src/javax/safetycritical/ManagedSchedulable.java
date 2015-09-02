@@ -46,27 +46,12 @@ public interface ManagedSchedulable extends Schedulable {
 	/**
 	 * Registers this schedulable object with the current mission.
 	 */
-	/*@ 
-	public behavior
-	  requires Mission.getMission().getPhase() == Phase.INITIALIZE;
-	    requires Mission.getMission().inMissionScope(this);
-	  requires !Mission.getMission().isRegistered(this); 
-	   
-	    ensures Mission.getMission().isRegistered(this);
-	  @*/
 	@SCJRestricted(Phase.INITIALIZE)
 	public void register();
 
 	/**
 	 * Runs end-of-mission clean up associated with this schedulable object.
 	 */
-	/*@ 
-	public behavior
-	  requires Mission.getMission().getPhase() == Phase.CLEANUP;    
-	  requires Mission.getMission().isRegistered(this);
-	   
-	  ensures !Mission.getMission().isRegistered(this);
-	 @*/
 	@SCJAllowed(Level.SUPPORT)
 	public void cleanUp();
 
