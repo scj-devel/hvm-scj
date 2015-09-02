@@ -7,7 +7,7 @@ public final class LaunchLevel2 extends Launcher {
 		super(app, 2);
 		
 		Mission.missionBehaviour = new Mission.SinglecoreBehavior();
-		ManagedEventHandler.handlerBehavior = new ManagedEventHandler.SinglecoreBehavior();
+		ManagedEventHandler.handlerBehavior = new SinglecoreBehavior();
 		Services.servicesBehavior = new Services.SinglecoreBehavior();
 		ManagedMemory.memoryBehavior = new ManagedMemory.SinglecoreBehavior();
 		
