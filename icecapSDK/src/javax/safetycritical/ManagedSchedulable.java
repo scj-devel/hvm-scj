@@ -61,3 +61,4 @@ public interface ManagedSchedulable extends Schedulable {
 	@SCJAllowed(Level.SUPPORT)
 	public void signalTermination();
 }
+
