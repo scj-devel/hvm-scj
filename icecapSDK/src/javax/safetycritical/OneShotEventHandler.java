@@ -83,19 +83,6 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	 * 
 	 *
 	 */
-	/*@ 
-	public normal_behavior
-	  requires priority != null && release  != null;
-	  ensures true; 
-	also
-	public exceptional_behavior
-	  requires priority == null;
-	  signals (IllegalArgumentException) true;
-	also
-	public exceptional_behavior
-	  requires release == null;
-	  signals (IllegalArgumentException) true;        
-	@*/
 	@SCJAllowed(Level.LEVEL_1)
 	@SCJRestricted(Phase.INITIALIZE)
 	public OneShotEventHandler(PriorityParameters priority, HighResolutionTime releaseTime,

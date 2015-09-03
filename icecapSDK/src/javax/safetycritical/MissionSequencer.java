@@ -262,7 +262,14 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 		return isOuterMostSeq;
 	}
 	
+	// used for JML annotation only (not public)
+	Phase getPhase() {
+		return null;
+	}
+	
 	Monitor getLock() {
 		return lock;
 	}
 }
+
+

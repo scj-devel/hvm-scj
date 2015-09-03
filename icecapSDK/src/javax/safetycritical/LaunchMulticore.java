@@ -8,7 +8,7 @@ public final class LaunchMulticore extends Launcher {
 		
 		Services.servicesBehavior = new Services.MulticoreBehavior();
 		Mission.missionBehaviour = new Mission.MulticoreBehavior();
-		ManagedEventHandler.handlerBehavior = new ManagedEventHandler.MulticoreBehavior();
+		ManagedEventHandler.handlerBehavior = new MulticoreBehavior();
 		ManagedMemory.memoryBehavior = new ManagedMemory.MulticoreBehavior();
 		
 		createImmortalMemory();

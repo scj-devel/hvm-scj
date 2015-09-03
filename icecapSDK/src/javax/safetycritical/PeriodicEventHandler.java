@@ -27,6 +27,7 @@ package javax.safetycritical;
 
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
+import javax.realtime.ReleaseParameters;
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
@@ -81,7 +82,7 @@ public abstract class PeriodicEventHandler extends ManagedEventHandler {
 		this(priority, release, storage, null);
 	}
 
-	PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
+	public PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
 			String name) {
 		super(priority, release, storage, name);
 		releaseP = release;
@@ -101,3 +102,5 @@ public abstract class PeriodicEventHandler extends ManagedEventHandler {
 				* 1000000;
 	}
 }
+
+

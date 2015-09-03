@@ -892,12 +892,13 @@ int16 n_javax_safetycritical_OSProcess_getMaxPriority(int32 *sp){
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETAFFINITY)
 int16 n_javax_safetycritical_OSProcess_setAffinity(int32 *sp){
- 	int size = sp[0]+1;
+	int i;
+	int size = sp[0]+1;
  	int *p = HEAP_REF((int* ) (pointer ) sp[1], int*);
 
  	cpu_set_t cs;
  	CPU_ZERO(&cs);
- 	int i = 1;
+ 	i = 1;
  	for(; i<size;i++){
  		CPU_SET(p[i], &cs);
  	}
@@ -912,11 +913,12 @@ int16 n_javax_safetycritical_OSProcess_setAffinity(int32 *sp){
 int16 n_javax_safetycritical_OSProcess_setOMMSAffinitySet(int32 *sp){
  	int level = sp[0];
  	if(level != 2){
+ 		int ret;
  		int processor = sched_getcpu();
  		cpu_set_t cs;
  		CPU_ZERO(&cs);
  		CPU_SET(processor, &cs);
- 		int ret = pthread_setaffinity_np(pthread_self(), sizeof(cs), &cs);
+ 		ret = pthread_setaffinity_np(pthread_self(), sizeof(cs), &cs);
  		if( ret != 0 ){
  			printf("pthread_setaffinity_np ret: %d. \n",ret);
         	return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
@@ -939,6 +941,7 @@ int16 n_javax_safetycritical_OSProcess_isProcessorInSet(int32 *sp){
 #endif
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETALLCPUCOUNT)
+#include <sys/sysinfo.h>
 int16 n_javax_safetycritical_OSProcess_getAllCPUCount(int32 *sp){
  	sp[0] = get_nprocs_conf();
     return -1;
@@ -964,7 +967,7 @@ int16 n_javax_safetycritical_OSProcess_getCurrentCPUID(int32 *sp){
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETTHREADID)
 int16 n_javax_safetycritical_OSProcess_getThreadID(int32 *sp){
-	int id = (int) pthread_getspecific(key_schedulable_object);
+	int id = (int)(pointer) pthread_getspecific(key_schedulable_object);
 	sp[0] = id;
     return -1;
 }
@@ -992,14 +995,17 @@ int16 n_javax_safetycritical_OSProcess_testCancel_c(int32 *sp){
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETTIMERFD)
 int16 n_javax_safetycritical_OSProcess_setTimerfd(int32 *sp){
+	long long start_time;
+	unsigned int ns;
+	unsigned int sec;
+	struct itimerspec itval;
+	int ret;
+
 	if(sp[0] < 1){
 		return -1;
 	}
 
-	long long start_time  =  (long long) sp[1] << 32 | sp[2];
-	unsigned int ns;
-	unsigned int sec;
-	struct itimerspec itval;
+	start_time  =  (long long) sp[1] << 32 | sp[2];
 
 	sec = start_time / 1000000000;
 	ns = start_time % 1000000000;
@@ -1012,7 +1018,7 @@ int16 n_javax_safetycritical_OSProcess_setTimerfd(int32 *sp){
 	itval.it_value.tv_sec = sec;
 	itval.it_value.tv_nsec = ns;
 
-	int ret = timerfd_settime(sp[0], 0, &itval, NULL);
+	ret = timerfd_settime(sp[0], 0, &itval, NULL);
     if(ret != 0 && errno != EBADF){
         printf("timer set errno: %d. file: %d.\n",errno, sp[0]);
         return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
@@ -1024,7 +1030,7 @@ int16 n_javax_safetycritical_OSProcess_setTimerfd(int32 *sp){
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETMEMORYAREA )
 int16 n_javax_safetycritical_OSProcess_setMemoryArea(int32 *sp){
     VMMemory* currMem;
-    currMem = (int32)(*(sp + 0));
+    currMem = (VMMemory*)(pointer)(*(sp + 0));
 	pthread_setspecific(key, currMem);
 	return -1;
 }
