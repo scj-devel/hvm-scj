@@ -112,9 +112,7 @@ public class TCPIPLeaderElectionSequentialCB {
 				if (!m.terminationPending())
 					leaderElector.collect(msg);
 			}
-
 		}
-
 	}
 
 	private static class Connector extends PeriodicEventHandler {
@@ -161,19 +159,6 @@ public class TCPIPLeaderElectionSequentialCB {
 				}
 			}
 		}
-
-		// synchronized void sendCommand(int commandNo) {
-		// if (isConnected) {
-		// int result = TCPIPCommunication.sendMsg(fd,
-		// leaderElector.StateToNeighbors());
-		// if (result == -1) {
-		// isConnected = false;
-		// TCPIPCommunication.closeSender(fd);
-		// devices.Console.println(neighbor_ip + " disconnected");
-		// }
-		// }
-		// }
-
 	}
 
 	private static class Elector extends PeriodicEventHandler {
@@ -204,11 +189,7 @@ public class TCPIPLeaderElectionSequentialCB {
 				devices.Console.println("elector exit");
 				return;
 			}
-
-			// if (!isElectionStarted) {
-			// leaderElector.electLeader();
-			// isElectionStarted = true;
-			// } else {
+			
 			for (int i = 0; i < ips.length; i++) {
 				connectors[ids[i]].sendState();
 			}
@@ -224,7 +205,6 @@ public class TCPIPLeaderElectionSequentialCB {
 				UDPCommunication.sendPinPointMessage(host_ip, "leader");
 
 			leaderAction();
-			// }
 		}
 
 		void leaderAction() {

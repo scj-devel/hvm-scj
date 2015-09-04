@@ -21,7 +21,6 @@ public class LeaderShipRobotActor {
 	private Motor[] motors;
 	private EV3Support actor;
 	private FollowerExecutor follower_executor;
-	// private LeaderExecutor leader_executor;
 	private LeaderShipElection elector;
 	String currentCommand = null;
 
@@ -31,7 +30,6 @@ public class LeaderShipRobotActor {
 
 		actor = new EV3Support(this.motors);
 		follower_executor = new FollowerExecutor();
-		// leader_executor = new LeaderExecutor();
 
 		if (isUDPRequired) {
 			UDPCommunication.createSender(broadcast_addr);
@@ -45,9 +43,9 @@ public class LeaderShipRobotActor {
 			motors[i].setDirection(Direction.FORWARD);
 			motors[i].start();
 		}
-		
+
 		EV3.sleep(1000);
-		
+
 		for (int i = 0; i < motors.length; i++) {
 			motors[i].stop();
 		}
@@ -55,13 +53,14 @@ public class LeaderShipRobotActor {
 
 	public void standardFollowAction() {
 		for (int i = 0; i < motors.length; i++) {
+
 			motors[i].setPower((byte) 50);
 			motors[i].setDirection(Direction.BACKWARD);
 			motors[i].start();
 		}
 
 		EV3.sleep(1000);
-		
+
 		for (int i = 0; i < motors.length; i++) {
 			motors[i].stop();
 		}
@@ -148,10 +147,10 @@ public class LeaderShipRobotActor {
 
 					motors[0].setPower((byte) 50);
 					motors[0].setDirection(Direction.FORWARD);
-					
+
 					motors[1].setPower((byte) 50);
 					motors[1].setDirection(Direction.BACKWARD);
-					
+
 					motors[0].start();
 					motors[1].start();
 
@@ -167,7 +166,7 @@ public class LeaderShipRobotActor {
 			break;
 		case 5:
 			devices.Console.println("turn right");
-			
+
 			ManagedMemory.executeInOuterArea(new Runnable() {
 
 				@Override
@@ -175,10 +174,10 @@ public class LeaderShipRobotActor {
 
 					motors[0].setPower((byte) 50);
 					motors[0].setDirection(Direction.BACKWARD);
-					
+
 					motors[1].setPower((byte) 50);
 					motors[1].setDirection(Direction.FORWARD);
-					
+
 					motors[0].start();
 					motors[1].start();
 
@@ -189,12 +188,12 @@ public class LeaderShipRobotActor {
 					}
 				}
 			});
-			
+
 			UDPCommunication.sendBroadcastMsg(actor.generateCommand('R', 50, 1, 1));
 			break;
 		case 6:
 			devices.Console.println("forward");
-			
+
 			ManagedMemory.executeInOuterArea(new Runnable() {
 
 				@Override
@@ -211,7 +210,7 @@ public class LeaderShipRobotActor {
 					}
 				}
 			});
-			
+
 			UDPCommunication.sendBroadcastMsg(actor.generateCommand('F', 50, 2));
 			break;
 		default:
@@ -221,7 +220,6 @@ public class LeaderShipRobotActor {
 	}
 
 	public void communicationBasedLeaderActor(int commandsCount) {
-		// ManagedMemory.enterPrivateMemory(5000, leader_executor);
 		MotorPort port = new MotorPort(MotorPortID.B);
 		Motor motor_1 = new Motor(port);
 
@@ -256,15 +254,6 @@ public class LeaderShipRobotActor {
 				|| !follower_executor.msg[1].equals("leader"))
 			actor.action();
 	}
-
-	// private class LeaderExecutor implements Runnable {
-	//
-	// @Override
-	// public void run() {
-	// commandRoutine(commandCount);
-	// }
-	//
-	// }
 
 	private class FollowerExecutor implements Runnable {
 		String[] msg = null;

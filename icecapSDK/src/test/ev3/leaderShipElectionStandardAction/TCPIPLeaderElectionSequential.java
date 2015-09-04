@@ -36,12 +36,12 @@ public class TCPIPLeaderElectionSequential {
 
 	static String host_ip = null;
 	static LeaderShipElection leaderElector;
-	static int orentionControl = 0;
 
 	static int[] ids;
 	static Connector[] connectors = new Connector[LeaderShipElection.MAX_ROBOTS];
 	static Receiver[] receivers = new Receiver[LeaderShipElection.MAX_ROBOTS];
 	static int receiver_fd = -1;
+	static boolean amIaLeader = false;
 
 	private static class Listener extends ManagedThread {
 		Mission m;
@@ -131,7 +131,7 @@ public class TCPIPLeaderElectionSequential {
 				TCPIPCommunication.closeSender(fd);
 				return;
 			}
-			
+
 			if (!isConnected) {
 				fd = TCPIPCommunication.createTCPIPSender();
 
@@ -159,8 +159,8 @@ public class TCPIPLeaderElectionSequential {
 	}
 
 	private static class Elector extends PeriodicEventHandler {
-		static boolean amIaLeader = false;
 		Mission m;
+
 		LeaderShipRobotActor actor;
 
 		public Elector(PriorityParameters priority, PeriodicParameters release, StorageParameters storage, Mission m) {
@@ -174,14 +174,11 @@ public class TCPIPLeaderElectionSequential {
 		public void handleAsyncEvent() {
 			if (button_back.isPressed()) {
 				m.requestTermination();
+
 				int close = TCPIPCommunication.createTCPIPSender();
 				TCPIPCommunication.connectSender(close, Network.getIPAddress(networkName));
 				TCPIPCommunication.closeSender(close);
 
-				if (amIaLeader) {
-					actor.standardFollowAction();
-					devices.Console.println("robot stoped");
-				}
 				devices.Console.println("elector exit");
 				return;
 			}
@@ -194,19 +191,22 @@ public class TCPIPLeaderElectionSequential {
 			}
 
 			leaderElector.electLeader();
+
 			action();
-			
+
 		}
 
 		void action() {
 			if (leaderElector.getState() == LeaderShipElection.Claim.LEADER) {
 				if (!amIaLeader) {
 					actor.standardLeaderAction();
+					devices.Console.println("set to leader");
 					amIaLeader = true;
 				}
 			} else {
 				if (amIaLeader) {
 					actor.standardFollowAction();
+					devices.Console.println("set to follower");
 					amIaLeader = false;
 				}
 			}
@@ -300,6 +300,7 @@ public class TCPIPLeaderElectionSequential {
 			}
 
 			leaderElector = new LeaderShipElection(networkName, ids);
+
 		}
 	}
 

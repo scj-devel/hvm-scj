@@ -109,9 +109,9 @@ public class EV3Support {
 				motors[i].setPower((byte) speed);
 
 				if (i < left_side_motor_num) {
-					motors[i].setDirection(Direction.BACKWARD);
-				} else {
 					motors[i].setDirection(Direction.FORWARD);
+				} else {
+					motors[i].setDirection(Direction.BACKWARD);
 				}
 
 				motors[i].start();
@@ -125,9 +125,9 @@ public class EV3Support {
 				motors[i].setPower((byte) speed);
 
 				if (i < left_side_motor_num) {
-					motors[i].setDirection(Direction.FORWARD);
-				} else {
 					motors[i].setDirection(Direction.BACKWARD);
+				} else {
+					motors[i].setDirection(Direction.FORWARD);
 				}
 
 				motors[i].start();

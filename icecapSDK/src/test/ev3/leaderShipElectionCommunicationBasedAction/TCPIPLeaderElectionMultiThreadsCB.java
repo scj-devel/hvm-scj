@@ -246,9 +246,7 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 					EV3.sleep(1000);
 				}
 			}
-
 			devices.Console.println("follower actor exit");
-
 		}
 	}
 
@@ -270,8 +268,7 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 			}
 
 			if (leaderElector.getState() == LeaderShipElection.Claim.LEADER) {
-				
-				actor.communicationBasedLeaderActor(3);
+				actor.communicationBasedLeaderActor(6);
 			}
 
 		}
@@ -298,7 +295,7 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 			for (int i = 0; i < senders.length; i++) {
 				senders[i] = new Sender(new PriorityParameters(6),
 						new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()),
-								new RelativeTime(1000, 0, Clock.getRealtimeClock())),
+								new RelativeTime(1500, 0, Clock.getRealtimeClock())),
 						storageParameters_Handlers, this, ips[i]);
 				senders[i].register();
 			}
@@ -315,7 +312,7 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 
 			LeaderActor leaderActor = new LeaderActor(new PriorityParameters(20),
 					new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()),
-							new RelativeTime(5000, 0, Clock.getRealtimeClock())),
+							new RelativeTime(6000, 0, Clock.getRealtimeClock())),
 					storageParameters_Handlers, this);
 			leaderActor.register();
 			

@@ -44,7 +44,7 @@ public class TCPIPLeaderElectionMultiThreads {
 	static int receiver_fd = -1;
 
 	static ListenerExecutor listener_executor;
-	static boolean isLeaderAlready = false;
+	static boolean amILeader = false;
 
 	static Button button_back;
 	static LeaderShipRobotActor actor;
@@ -234,13 +234,13 @@ public class TCPIPLeaderElectionMultiThreads {
 			}
 
 			if (leaderElector.getState() == LeaderShipElection.Claim.LEADER) {
-				if (!isLeaderAlready) {
-					isLeaderAlready = true;
+				if (!amILeader) {
+					amILeader = true;
 					actor.standardLeaderAction();
 				}
 			} else if (leaderElector.getState() == LeaderShipElection.Claim.FOLLOWER) {
-				if (isLeaderAlready) {
-					isLeaderAlready = false;
+				if (amILeader) {
+					amILeader = false;
 					actor.standardFollowAction();
 				}
 			}
@@ -305,10 +305,6 @@ public class TCPIPLeaderElectionMultiThreads {
 		@Override
 		protected Mission getNextMission() {
 			if (count == 1) {
-				// if(isLeaderAlready){
-				// isLeaderAlready = false;
-				// actor.standardFollowAction();
-				// }
 				devices.Console.println("robot stoped");
 				TCPIPCommunication.closeReceiver(receiver_fd);
 				return null;
