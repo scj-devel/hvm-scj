@@ -72,21 +72,6 @@ public abstract class ManagedMemory extends MemoryArea {
 		MemoryArea.overAllBackingStore = new BackingStore(Memory.allocateInHeap(size));
 	}
 
-	public static class ImmortalMemory extends ManagedMemory // HSO: not public
-	{
-		ImmortalMemory(int sizeOfArea) {
-			super(sizeOfArea, sizeOfArea, MemoryArea.overAllBackingStore, "Imm");
-		}
-
-		public static ImmortalMemory instance() {
-			MemoryArea result = MemoryArea.getNamedMemoryArea("Imm");
-			if (result != null) {
-				return (ImmortalMemory) result;
-			}
-			return null;
-		}
-	}
-
 	/**
 	 * @param size  is the number of free bytes in the memory area
 	 */
@@ -420,7 +405,7 @@ public abstract class ManagedMemory extends MemoryArea {
 			}
 			devices.Console.println("executeInOuterArea: currentMem: " + currentMem);
 
-			if (currentMem instanceof ManagedMemory.ImmortalMemory) {
+			if (currentMem instanceof ImmortalMemory) {
 				devices.Console.println("executeInOuterArea: already in ImmortalMemory");
 				throw new IllegalStateException("executeInOuterArea: already in ImmortalMemory");
 			}
@@ -570,7 +555,7 @@ public abstract class ManagedMemory extends MemoryArea {
 			MemoryArea currentMem = MemoryArea.getCurrentMemoryArea();
 			//devices.Console.println("executeInOuterArea: currentMem: " + currentMem);
 
-			if (currentMem instanceof ManagedMemory.ImmortalMemory) {
+			if (currentMem instanceof ImmortalMemory) {
 				devices.Console.println("executeInOuterArea: already in ImmortalMemory");
 
 				vm.ClockInterruptHandler.instance.enable(); // atomic operation ??

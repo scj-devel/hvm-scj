@@ -7,7 +7,7 @@ public final class TestPortal {
 	}
 
 	public static ManagedMemory ManagedMemory_allocateImmortalMemory(int immortalSize) {
-		return new ManagedMemory.ImmortalMemory(immortalSize);
+		return new ImmortalMemory(immortalSize);
 	}
 
 	public static ManagedMemory ManagedMemory_getOuterMemory(ManagedMemory m) {

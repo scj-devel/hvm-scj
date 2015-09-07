@@ -97,19 +97,21 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 		super(priority, new AperiodicParameters(), storage);
 		this.name = name;
 
-		//		devices.Console.println("MissSeq.constr: " + name 
-		//			+ "; maxMissionMemory " + storage.maxMissionMemory 
-		//			+ "; backingstore: " + this.privateMemory + "; isOuterMost: " + isOuterMostSeq);
+//		System.out.println("MissSeq.constr: " + name 
+//			+ "; maxMissionMemory " + storage.maxMissionMemory 
+//			+ "; backingstore: " + this.privateMemory + "; isOuterMost: " + isOuterMostSeq);
+		
 		missionMemory = new MissionMemory((int) storage.maxMissionMemory, // mission memory
 				privateMemory, //backingstore of sequencer
 				name);
-
+		
 		currState = State.START;
 		
 		if(Launcher.level != 0)
 			Services.setCeiling(this, this.priority.getPriority());
-		
+		System.out.println("MissSeq.constr: 2");
 		ManagedEventHandler.handlerBehavior.initMissionSequencer(this);
+		System.out.println("MissSeq.constr: 3");
 	}
 
 	@SCJAllowed

@@ -2,6 +2,7 @@ package javax.safetycritical;
 
 import javax.realtime.HighResolutionTime;
 
+
 final class SinglecoreBehavior extends HandlerBehavior {
 	@Override
 	void aperiodicHandlerRelease(AperiodicEventHandler handler) {
@@ -29,8 +30,10 @@ final class SinglecoreBehavior extends HandlerBehavior {
 	void initMissionSequencer(MissionSequencer<?> handler) {
 		if (MissionSequencer.isOuterMostSeq) {
 			MissionSequencer.outerMostSeq = handler;
+			System.out.println("SinglecoreBehavior.initMissionSequencer 1");
 			if (Launcher.level != 0) {
 				PriorityScheduler.instance().addOuterMostSeq(handler);
+				System.out.println("SinglecoreBehavior.initMissionSequencer 2");
 			}
 		} else {
 			if (Launcher.level < 2)
@@ -41,6 +44,7 @@ final class SinglecoreBehavior extends HandlerBehavior {
 		}
 		MissionSequencer.isOuterMostSeq = false;
 		handler.lock = Monitor.getMonitor(handler);
+		System.out.println("SinglecoreBehavior.initMissionSequencer 3");
 	}
 
 	@Override

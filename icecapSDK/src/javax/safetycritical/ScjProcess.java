@@ -39,7 +39,6 @@ import javax.realtime.Clock;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
-import javax.safetycritical.ManagedMemory.ImmortalMemory;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -123,7 +122,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 			public void catchError(final Throwable t) {
 				exceptionReporter.t = t;
 				try {
-					ImmortalMemory immortal = ManagedMemory.ImmortalMemory.instance();
+					ImmortalMemory immortal = ImmortalMemory.instance();
 					if (immortal != null) {
 						immortal.executeInArea(exceptionReporter);
 					} else {
