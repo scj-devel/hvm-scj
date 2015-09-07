@@ -31,8 +31,8 @@ import leadershipElection.LeaderShipElection;
 import test.ev3.leaderShipElectionStandardAction.LeaderShipRobotActor;
 
 public class TCPIPLeaderElectionMultiThreadsCB {
-	static String[] ips = { "10.42.0.22", "10.42.0.55", "10.42.0.84" };
-	static String networkName = "wlan0";
+	static String[] ips = { "10.42.0.22", "10.42.0.55", "10.42.0.84" };		// ip address of all the robots
+	static String networkName = "wlan0";	// the network name
 
 	static Motor motor_1;
 	static Motor motor_2;
@@ -40,17 +40,18 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 
 	static LeaderShipElection leaderElector;
 
-	static String host_ip = null;
+	static String host_ip = null;	//the ip address of local robot
 	static Receiver[] receivers;
-	static int[] ids;
+	static int[] ids;	// ids of all the robot, last two digits of its ip address
 	static int receiver_fd = -1;
 
 	static ListenerExecutor listener_executor;
 
 	static Button button_back;
 	static LeaderShipRobotActor actor;
-	static boolean isUDPRequired = true;
+	static boolean isUDPRequired = true;	// used for EV3 command sending and receiving
 
+	// listen and accept connections
 	private static class Listener extends ManagedThread {
 		Mission m;
 
@@ -72,6 +73,7 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 		}
 	}
 
+	// the body of Listener
 	private static class ListenerExecutor implements Runnable {
 		Mission m;
 
@@ -94,6 +96,7 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 
 	}
 
+	// receive states from the connected robot
 	private static class Receiver extends AperiodicEventHandler {
 		Mission m;
 		ReceiverExecutor executor;
@@ -119,6 +122,7 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 		}
 	}
 
+	// the body of Receiver
 	private static class ReceiverExecutor implements Runnable {
 		Mission m;
 		int newfd;
@@ -140,6 +144,7 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 		}
 	}
 
+	// try to connect to remote robots and then sends the current state to them
 	private static class Sender extends PeriodicEventHandler {
 		Mission m;
 		String neighbor_ip;
@@ -157,6 +162,7 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 		@Override
 		@IcecapCompileMe
 		public void handleAsyncEvent() {
+			// if the remote robot is not connected, try to connect.
 			if (!isConnected) {
 				fd = TCPIPCommunication.createTCPIPSender();
 
@@ -168,6 +174,7 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 				}
 			}
 
+			//once connected, try to send the state.
 			if (isConnected) {
 				int result = TCPIPCommunication.sendMsg(fd, leaderElector.StateToNeighbors());
 
@@ -179,6 +186,7 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 				TCPIPCommunication.closeSender(fd);
 			}
 
+			//if the back button of the EV3 brick is pressed, the program will terminate.
 			if (button_back.isPressed() || m.terminationPending()) {
 				m.requestTermination();
 				TCPIPCommunication.closeSender(fd);
@@ -200,6 +208,7 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 
 	}
 
+	// used to decide the right leader 
 	private static class Elector extends PeriodicEventHandler {
 		Mission m;
 		int lastState = LeaderShipElection.Claim.UNDECIDED;
@@ -227,6 +236,7 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 		}
 	}
 
+	// used to receive EV3 commands and execute it if the current state is follower
 	private static class Follower extends ManagedThread {
 		Mission m;
 
@@ -250,6 +260,7 @@ public class TCPIPLeaderElectionMultiThreadsCB {
 		}
 	}
 
+	// leader action
 	private static class LeaderActor extends PeriodicEventHandler {
 		Mission m;
 

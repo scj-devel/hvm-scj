@@ -260,7 +260,7 @@ public class TCPIPLeaderElectionSequentialCB {
 
 			Elector elector = new Elector(new PriorityParameters(7),
 					new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()),
-							new RelativeTime(3000, 0, Clock.getRealtimeClock())),
+							new RelativeTime(3500, 0, Clock.getRealtimeClock())),
 					storageParameters_Handlers, this);
 			elector.register();
 
