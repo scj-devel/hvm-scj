@@ -18,7 +18,12 @@ public class LeaderShipElection {
 
 	private Robot[] robots;
 	private int[] robot_ids;
-
+	
+	/**
+	 * create a leader ship elector
+	 * @param networkName the name of the current network
+	 * @param ids the array of ids of all the robots
+	 */
 	public LeaderShipElection(String networkName, int[] ids) {
 		this.id = generateID(Network.getIPAddress(networkName));
 		petition = id;
@@ -33,6 +38,11 @@ public class LeaderShipElection {
 
 	}
 
+	/**
+	 * generate the id of a robot based on its ip address
+	 * @param ip the current ip address of the robot
+	 * @return the generated id
+	 */
 	public static int generateID(String ip) {
 		String lastDigit = "";
 		int countDot = 0;
@@ -53,6 +63,9 @@ public class LeaderShipElection {
 		return convert(lastDigit);
 	}
 
+	/**
+	 * decide the state of the robot
+	 */
 	public void electLeader() {
 		if (time != 0) {
 			printMyNeighbors();
@@ -61,6 +74,9 @@ public class LeaderShipElection {
 		increaseTime();
 	}
 	
+	/**
+	 * this method should be called when the robot went offline but recovered later.
+	 */
 	synchronized public void reset(){
 		state = Claim.UNDECIDED;
 		petition--;
@@ -72,6 +88,10 @@ public class LeaderShipElection {
 		
 	}
 
+	/**
+	 * collect the state information of remote robot
+	 * @param msg the information sent from remote robot
+	 */
 	synchronized public void collect(String msg) {
 		int countStar = 0;
 		for (int i = msg.length() - 1; i >= 0; i--) {
@@ -295,10 +315,17 @@ public class LeaderShipElection {
 		return ret;
 	}
 
+	/**
+	 * get the current state of the local robot
+	 * @return	the current state
+	 */
 	public int getState() {
 		return state;
 	}
 
+	/**
+	 * print out the current states of all the robots
+	 */
 	public void printMyNeighbors() {
 		devices.Console.println("---------------" + time);
 		for (int i = 0; i < robot_ids.length; i++) {

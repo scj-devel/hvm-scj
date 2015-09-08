@@ -5,6 +5,11 @@ public class Network {
 	static final int IP_ADDRESS_LENGTH = 21;
 	static final int MESSAGE_LENGTH_DEFAULT = 100;  //256; //128; // HSO: June 2014
 	
+	/**
+	 * get the IP address of the local machine by the given network name
+	 * @param networkName the name of the currnet network
+	 * @return The ip address.
+	 */
 	public static String getIPAddress(String networkName){
 		String ip = "";
 		int[] ip_address = new int[IP_ADDRESS_LENGTH];
