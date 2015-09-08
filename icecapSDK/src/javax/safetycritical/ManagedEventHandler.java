@@ -110,7 +110,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 		if (mission == null && this instanceof MissionSequencer) {
 			backingStoreOfThisMemory = MemoryArea.getRemainingMemorySize();
-			currentMemory = ManagedMemory.ImmortalMemory.instance();
+			currentMemory = ImmortalMemory.instance();
 		} else {
 			backingStoreOfThisMemory = (int) this.storage.totalBackingStore;
 			if(mission !=null){

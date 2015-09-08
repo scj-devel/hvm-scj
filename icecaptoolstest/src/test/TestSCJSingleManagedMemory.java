@@ -4,6 +4,7 @@ import javax.realtime.MemoryArea;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
+import javax.safetycritical.ImmortalMemory;
 import javax.safetycritical.InnerPrivateMemory;
 import javax.safetycritical.LaunchLevel2;
 import javax.safetycritical.ManagedMemory;
@@ -78,7 +79,7 @@ public class TestSCJSingleManagedMemory {
 			devices.Console.println("---- area 1 is " + Memory.getCurrentMemoryArea() + "\n");
 
 			memRecord[1] = MemoryArea.getMemoryArea(seq);
-			if (!(MemoryArea.getMemoryArea(seq) instanceof ManagedMemory.ImmortalMemory))
+			if (!(MemoryArea.getMemoryArea(seq) instanceof ImmortalMemory))
 				errors++;
 
 			return seq;
@@ -103,7 +104,7 @@ public class TestSCJSingleManagedMemory {
 
 			devices.Console.println("---- area 0 is " + MemoryArea.getMemoryArea(mission) + "\n");
 			memRecord[0] = MemoryArea.getMemoryArea(mission);
-			if (!(MemoryArea.getMemoryArea(mission) instanceof ManagedMemory.ImmortalMemory))
+			if (!(MemoryArea.getMemoryArea(mission) instanceof ImmortalMemory))
 				errors++;
 		}
 
@@ -137,7 +138,7 @@ public class TestSCJSingleManagedMemory {
 					+ TestPortal.ManagedMemory_getOuterMemory((ManagedMemory) MemoryArea.getMemoryArea(obj)) + "\n");
 
 			memRecord[3] = TestPortal.ManagedMemory_getOuterMemory((ManagedMemory) MemoryArea.getMemoryArea(obj));
-			if (!(TestPortal.ManagedMemory_getOuterMemory((ManagedMemory) MemoryArea.getMemoryArea(obj)) instanceof ManagedMemory.ImmortalMemory))
+			if (!(TestPortal.ManagedMemory_getOuterMemory((ManagedMemory) MemoryArea.getMemoryArea(obj)) instanceof ImmortalMemory))
 				errors++;
 
 			// missSeq is in immortal
@@ -149,7 +150,7 @@ public class TestSCJSingleManagedMemory {
 
 					devices.Console.println("---- area 4 is " + MemoryArea.getMemoryArea(obj) + "\n");
 					memRecord[4] = MemoryArea.getMemoryArea(obj);
-					if (!(MemoryArea.getMemoryArea(obj) instanceof ManagedMemory.ImmortalMemory))
+					if (!(MemoryArea.getMemoryArea(obj) instanceof ImmortalMemory))
 						errors++;
 				}
 			});
@@ -259,7 +260,7 @@ public class TestSCJSingleManagedMemory {
 
 					devices.Console.println("---- area 10  is " + MemoryArea.getMemoryArea(obj) + "\n");
 					memRecord[10] = MemoryArea.getMemoryArea(obj);
-					if (!(MemoryArea.getMemoryArea(obj) instanceof ManagedMemory.ImmortalMemory))
+					if (!(MemoryArea.getMemoryArea(obj) instanceof ImmortalMemory))
 						errors++;
 				}
 			});
