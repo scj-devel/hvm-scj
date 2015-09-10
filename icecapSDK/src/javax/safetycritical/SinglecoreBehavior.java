@@ -43,7 +43,8 @@ final class SinglecoreBehavior extends HandlerBehavior {
 
 		}
 		MissionSequencer.isOuterMostSeq = false;
-		handler.lock = Monitor.getMonitor(handler);
+		/* Line below commented out - since cyclic sheduling tests fail */
+		// handler.lock = Monitor.getMonitor(handler);
 		System.out.println("SinglecoreBehavior.initMissionSequencer 3");
 	}
 
