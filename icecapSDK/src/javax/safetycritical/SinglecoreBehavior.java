@@ -73,7 +73,7 @@ final class SinglecoreBehavior extends HandlerBehavior {
 	@Override
 	void missionSequencerExecutePhase(MissionSequencer<?> handler) {
 		handler.missionMemory.enterToExecute(handler.currMission);
-
+		System.out.println("SinglecoreBehavior.missionSequencerExecutePhase");
 		// the ms will wait here until it is notified
 		if (Launcher.level > 0) {
 			handler.seqWait();

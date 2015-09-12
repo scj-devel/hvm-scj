@@ -1,7 +1,11 @@
 package javax.realtime;
 
-public class MemoryParameters implements Cloneable {
+import java.io.Serializable;
 
+public class MemoryParameters implements Cloneable, Serializable {
+
+	private static final long serialVersionUID = 123456789987654321L;
+	
 	protected long maxMemoryArea;
 	protected long maxImmortal;
 
@@ -15,6 +19,10 @@ public class MemoryParameters implements Cloneable {
 
 		this.maxMemoryArea = maxMemoryArea;
 		this.maxImmortal = maxImmortal;
+	}
+	
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	//used in JML annotation only (not public)

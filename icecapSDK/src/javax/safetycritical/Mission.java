@@ -408,12 +408,12 @@ public abstract class Mission {
 			if (mission.missionTerminate == false) { // called the first time during mission execution	
 
 				// terminate all the sequencer's MSObjects that were created by the mission.
-
 				for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {
 					if (mission.msSetForMission.managedSchObjects[i] != null) {
 						mission.msSetForMission.managedSchObjects[i].signalTermination();
 					}
 				}
+				System.out.println("Mission:SinglecoreBehavior.requestTermination");
 
 				mission.missionTerminate = true;
 				return false;
