@@ -8,7 +8,7 @@ public class ImmortalMemory extends ManagedMemory {  // HSO: not public
 		super(sizeOfArea, sizeOfArea, MemoryArea.overAllBackingStore, "Imm");
 	}
 
-	public static ImmortalMemory instance() {
+	/*public*/ static ImmortalMemory instance() {
 		MemoryArea result = MemoryArea.getNamedMemoryArea("Imm");
 		if (result != null) {
 			return (ImmortalMemory) result;

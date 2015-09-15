@@ -6,14 +6,11 @@ public final class LaunchLevel2 extends Launcher {
 	public LaunchLevel2(Safelet<?> app) {
 		super(app, 2);
 		
-		Mission.missionBehaviour = new Mission.SinglecoreBehavior();
-		ManagedEventHandler.handlerBehavior = new SinglecoreBehavior();
-		Services.servicesBehavior = new Services.SinglecoreBehavior();
-		ManagedMemory.memoryBehavior = new ManagedMemory.SinglecoreBehavior();
+		initSingleCoreBehaviour();
 		
 		createImmortalMemory();
 	}
-
+	
 	@Override
 	void start() {
 		startLevel1_2();

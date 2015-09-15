@@ -51,7 +51,7 @@ import vm.Memory;
  * 
  * @scjComment - The class is not part of the SCJ specification.
  */
-abstract class Launcher implements Runnable {
+public abstract class Launcher implements Runnable {
 	Safelet<?> app;
 	static int level;
 	static boolean useOS = false;
@@ -71,7 +71,21 @@ abstract class Launcher implements Runnable {
 
 		
 	}
-
+	
+	public static void initSingleCoreBehaviour() {
+		Mission.missionBehaviour = new Mission.SinglecoreBehavior();
+		ManagedEventHandler.handlerBehavior = new SinglecoreBehavior();
+		Services.servicesBehavior = new Services.SinglecoreBehavior();
+		ManagedMemory.memoryBehavior = new ManagedMemory.SinglecoreBehavior();
+	}
+	
+	public static void initMultiCoreBehaviour() {
+		Services.servicesBehavior = new Services.MulticoreBehavior();
+		Mission.missionBehaviour = new Mission.MulticoreBehavior();
+		ManagedEventHandler.handlerBehavior = new MulticoreBehavior();
+		ManagedMemory.memoryBehavior = new ManagedMemory.MulticoreBehavior();
+	}
+	
 	public void run() {
 		app.initializeApplication();
 		start();

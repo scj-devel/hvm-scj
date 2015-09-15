@@ -42,6 +42,8 @@ import javax.safetycritical.annotate.SCJAllowed;
 @SCJAllowed
 public final class StorageParameters extends javax.realtime.MemoryParameters {
 
+	private static final long serialVersionUID = 123456789987654101L;
+	
 	long totalBackingStore;
 	long[] configurationSizes;
 	int messageLength;
