@@ -1,6 +1,7 @@
 package test;
 
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -45,7 +46,7 @@ public class TestSCJSingleCyclicSchedule3Tick
         		PeriodicParameters periodicParameters, 
         		StorageParameters storageParameters,
                 Mission mission) {
-            super(priority, periodicParameters, storageParameters);
+            super(priority, periodicParameters, storageParameters,configParameters);
             this.mission = mission;
         }
 
@@ -97,7 +98,7 @@ public class TestSCJSingleCyclicSchedule3Tick
 
             MySequencer() {
                 super(new PriorityParameters(Priorities.PR95), 
-                		storageParameters_Sequencer); 
+                		storageParameters_Sequencer, configParameters); 
                                                                                                                                                               // memory
                                                                                                                                                               // size
                 missions = new Mission[1];
@@ -118,7 +119,7 @@ public class TestSCJSingleCyclicSchedule3Tick
 
     public static StorageParameters storageParameters_Sequencer;
     public static StorageParameters storageParameters_Handlers;
-    
+    public static ConfigurationParameters configParameters;
 
     public static void main(String[] args) {
         Const.OUTERMOST_SEQ_BACKING_STORE = 32 * 1000;
@@ -129,7 +130,6 @@ public class TestSCJSingleCyclicSchedule3Tick
   	  storageParameters_Sequencer = 
           new StorageParameters(
               Const.OUTERMOST_SEQ_BACKING_STORE,
-              new long[] { Const.HANDLER_STACK_SIZE },
               Const.PRIVATE_MEM, 
               Const.IMMORTAL_MEM, 
               Const.MISSION_MEM);
@@ -137,10 +137,11 @@ public class TestSCJSingleCyclicSchedule3Tick
   	  storageParameters_Handlers = 
           new StorageParameters(
           	Const.PRIVATE_MEM, 
-              new long[] { Const.HANDLER_STACK_SIZE },
               Const.PRIVATE_MEM, 
               0, 
               0);
+  	  
+  	  configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
           
         devices.Console.println("\n****** TestSCJCyclicSchedule3Tick begin *********" );        
         new LaunchLevel0(new MyApp());

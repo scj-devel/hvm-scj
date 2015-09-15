@@ -2,6 +2,7 @@ package test;
 
 import javax.realtime.AperiodicParameters;
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -20,9 +21,11 @@ import javax.scj.util.Const;
 
 
 public class TestSCJMPApevhAndOneShotAndThread implements Safelet<Mission> {
-	public static StorageParameters storageParameters_Sequencer;
-	public static StorageParameters storageParameters_Handlers;
-	public static StorageParameters storageParameters_InnerSequencer;
+	static StorageParameters storageParameters_Sequencer;
+	static StorageParameters storageParameters_Handlers;
+	static StorageParameters storageParameters_InnerSequencer;
+	static ConfigurationParameters configParameters;
+	
 	public static Mission m;
 	MissionSequencer<Mission> ms;
 	public static AffinitySet[] sets;
@@ -46,7 +49,7 @@ public class TestSCJMPApevhAndOneShotAndThread implements Safelet<Mission> {
 			pevh.register();
 
 			one = new OneShotEventHandler(new PriorityParameters(10), new RelativeTime(0, 0),
-					new AperiodicParameters(), TestSCJMPApevhAndOneShotAndThread.storageParameters_Handlers) {
+					new AperiodicParameters(), storageParameters_Handlers, configParameters) {
 
 				@Override
 				public void handleAsyncEvent() {
@@ -56,7 +59,7 @@ public class TestSCJMPApevhAndOneShotAndThread implements Safelet<Mission> {
 			AffinitySet.setProcessorAffinity(sets[3], one);
 			one.register();
 			
-			ManagedThread thread = new ManagedThread(new PriorityParameters(50), storageParameters_Handlers){
+			ManagedThread thread = new ManagedThread(new PriorityParameters(50), storageParameters_Handlers, configParameters){
 				@Override
 				public void run() {
 					devices.Console.println("Managed Thread Running...");
@@ -77,7 +80,7 @@ public class TestSCJMPApevhAndOneShotAndThread implements Safelet<Mission> {
 
 			public MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodicParameters,
 					StorageParameters storage, Mission m, AperiodicEventHandler han) {
-				super(priority, periodicParameters, storage);
+				super(priority, periodicParameters, storage, configParameters);
 				this.han = han;
 			}
 
@@ -94,7 +97,7 @@ public class TestSCJMPApevhAndOneShotAndThread implements Safelet<Mission> {
 
 			public MyAperiodicEvh(PriorityParameters priority, AperiodicParameters release,
 					StorageParameters storage) {
-				super(priority, release, storage);
+				super(priority, release, storage, configParameters);
 			}
 
 			@Override
@@ -127,7 +130,7 @@ public class TestSCJMPApevhAndOneShotAndThread implements Safelet<Mission> {
 		int count = 0;
 
 		MySequencer() {
-			super(new PriorityParameters(12), storageParameters_Sequencer, "outer-ms");
+			super(new PriorityParameters(12), storageParameters_Sequencer, configParameters, "outer-ms");
 			m = new TenThread();
 		}
 
@@ -145,15 +148,17 @@ public class TestSCJMPApevhAndOneShotAndThread implements Safelet<Mission> {
 	
 	public static void main(String[] args) {
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, Const.IMMORTAL_MEM - 30 * 1000,
+				Const.PRIVATE_MEM, Const.IMMORTAL_MEM - 30 * 1000,
 				Const.MISSION_MEM /*- 150 * 1000*/);
 
-		storageParameters_Handlers = new StorageParameters(0, new long[] { Const.HANDLER_STACK_SIZE },
+		storageParameters_Handlers = new StorageParameters(0, 
 				Const.PRIVATE_MEM - 10 * 1000, 0, 0);
 
 		storageParameters_InnerSequencer = new StorageParameters(Const.PRIVATE_BACKING_STORE * 3 + Const.MISSION_MEM
-				- 150 * 1000, new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, 0,
+				- 150 * 1000, Const.PRIVATE_MEM, 0,
 				Const.MISSION_MEM_DEFAULT - 150 * 1000);
+
+		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n***** test multicore aperiodic handler and thread main.begin ************");
 		new LaunchMulticore(new TestSCJMPApevhAndOneShotAndThread(), 1);

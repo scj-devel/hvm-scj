@@ -32,6 +32,7 @@ import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.realtime.ReleaseParameters;
+import javax.realtime.ConfigurationParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
@@ -61,6 +62,8 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 	PriorityParameters priority;
 	StorageParameters storage;
+	ConfigurationParameters config;
+	
 	Process process = null;
 	Mission mission = null;
 	
@@ -88,11 +91,13 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	 * 
 	 * @throws <code>IllegalArgumentException</code> if priority or release parameters are null.
 	 */
-	ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, StorageParameters storage) {
-		this(priority, release, storage, null);
+	ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, 
+		StorageParameters storage, ConfigurationParameters config) {
+		this(priority, release, storage, config, null);
 	}
 
-	ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, StorageParameters storage,
+	ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, 
+			StorageParameters storage, ConfigurationParameters config,
 			String name) {
 		if (priority == null)
 			throw new IllegalArgumentException("priority is null");
@@ -103,6 +108,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		this.priority = priority;
 		this.release = release;
 		this.storage = storage;
+		this.config = config;
 		this.name = name;
 		this.mission = Mission.getMission();
 

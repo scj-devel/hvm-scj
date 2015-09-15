@@ -25,6 +25,7 @@
  *************************************************************************/
 package javax.safetycritical;
 
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.ReleaseParameters;
@@ -78,13 +79,15 @@ public abstract class PeriodicEventHandler extends ManagedEventHandler {
 	 * 
 	 * @throws IllegalArgumentException if priority, release or storage is null.
 	 */
-	public PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, StorageParameters storage) {
-		this(priority, release, storage, null);
+	public PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, 
+			StorageParameters storage, ConfigurationParameters config) {
+		this(priority, release, storage, config, null);
 	}
 
-	public PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
+	public PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, 
+			StorageParameters storage, ConfigurationParameters config,
 			String name) {
-		super(priority, release, storage, name);
+		super(priority, release, storage, config, name);
 		releaseP = release;
 	}
 

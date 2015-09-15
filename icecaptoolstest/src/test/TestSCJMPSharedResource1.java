@@ -14,6 +14,7 @@ package test;
  *************************************************************************/
 
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -44,7 +45,7 @@ public class TestSCJMPSharedResource1 {
         		StorageParameters storageParameters, 
                 int n, 
                 Resource res, Mission mission, MissionSequencer<?> missSeq) {
-            super(priority, periodic, storageParameters);
+            super(priority, periodic, storageParameters, configParameters);
             this.n = n;
             this.res = res;
             this.mission = mission;
@@ -165,7 +166,7 @@ public class TestSCJMPSharedResource1 {
 
             MySequencer() {
                 super(new PriorityParameters(Priorities.PR95), 
-                		storageParameters_Sequencer);                                                                                                         // size
+                		storageParameters_Sequencer, configParameters);                                                                                                         // size
 
                 this.mission = new MyMission(this);
                 this.howManyTimes = 0;
@@ -182,14 +183,14 @@ public class TestSCJMPSharedResource1 {
         }
     }
 
-    public static StorageParameters storageParameters_Sequencer;
-	public static StorageParameters storageParameters_Handlers;
+    static StorageParameters storageParameters_Sequencer;
+	static StorageParameters storageParameters_Handlers;
+	static ConfigurationParameters configParameters;
   
 	public static void main(String[] args) {
 	  storageParameters_Sequencer = 
         new StorageParameters(
             Const.OUTERMOST_SEQ_BACKING_STORE,
-            new long[] { Const.HANDLER_STACK_SIZE },
             Const.PRIVATE_MEM, 
             Const.IMMORTAL_MEM, 
             Const.MISSION_MEM);
@@ -197,11 +198,12 @@ public class TestSCJMPSharedResource1 {
 	  storageParameters_Handlers = 
         new StorageParameters(
             Const.PRIVATE_BACKING_STORE, 
-            new long[] { Const.HANDLER_STACK_SIZE },
             Const.PRIVATE_MEM, 
             0, 
             0);
 	  
+	  configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+
         failed = true;
         
         devices.Console.println("\n********** test multicore shared resource main.begin ***********");

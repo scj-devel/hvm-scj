@@ -1,6 +1,7 @@
 package test;
 
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -24,7 +25,8 @@ public class TestSCJStep0 {
 		public Counter(PriorityParameters priority,
 				PeriodicParameters periodicParameters,
 				StorageParameters storage, Mission owner) {
-			super(priority, periodicParameters, storage);
+			super(priority, periodicParameters, storage, 
+				  new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE }));
 			this.count = 0;
 			this.owner = owner;
 		}
@@ -62,7 +64,9 @@ public class TestSCJStep0 {
 		private Mission1 mission;
 
 		TopLevelSequencer() {
-			super(new PriorityParameters(Priorities.PR94), new StorageParameters(0, null, 0, 0, 0));
+			super(new PriorityParameters(Priorities.PR94), 
+				  new StorageParameters(0, 0, 0, 0),
+				  new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE }));
 			this.mission = new Mission1();
 		}
 

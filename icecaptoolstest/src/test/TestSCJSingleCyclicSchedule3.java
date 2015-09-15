@@ -1,6 +1,7 @@
 package test;
 
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -48,7 +49,7 @@ public class TestSCJSingleCyclicSchedule3 {
         protected MyPeriodicEvh1(PriorityParameters priority, PeriodicParameters periodic, 
                 StorageParameters storageParameters,
                 int n, MissionSequencer missSeq) {
-            super(priority, periodic, storageParameters);
+            super(priority, periodic, storageParameters, configParameters);
             this.n = n;
         }
 
@@ -66,7 +67,7 @@ public class TestSCJSingleCyclicSchedule3 {
         public MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodicParameters, 
                 StorageParameters storageParameters,                                                    
                 Mission mission) {
-            super(priority, periodicParameters, storageParameters);
+            super(priority, periodicParameters, storageParameters, configParameters);
             this.mission = mission;
         }
 
@@ -173,9 +174,8 @@ public class TestSCJSingleCyclicSchedule3 {
 
             MySequencer() {
                 super(new PriorityParameters(Priorities.PR95), 
-                		storageParameters_Sequencer); 
-                                                                                                                                                     // memory
-                                                                                                                                                     // size
+                		storageParameters_Sequencer, configParameters);
+                
                 missions = new Mission[2];
                 missions[0] = new MyMission0(this);
                 missions[1] = new MyMission1(this);
@@ -203,13 +203,14 @@ public class TestSCJSingleCyclicSchedule3 {
 
     public static StorageParameters storageParameters_Sequencer;
 	public static StorageParameters storageParameters_Handlers;
+	public static ConfigurationParameters configParameters;
   
 	public static void main(String[] args) {
 		Const.setDefaultErrorReporter();
 	  storageParameters_Sequencer = 
         new StorageParameters(
             Const.OUTERMOST_SEQ_BACKING_STORE,
-            new long[] { Const.HANDLER_STACK_SIZE },
+            /*new long[] { Const.HANDLER_STACK_SIZE },*/
             Const.PRIVATE_MEM, 
             Const.IMMORTAL_MEM, 
             Const.MISSION_MEM);
@@ -217,10 +218,11 @@ public class TestSCJSingleCyclicSchedule3 {
 	  storageParameters_Handlers = 
         new StorageParameters(
             Const.PRIVATE_BACKING_STORE, 
-            new long[] { Const.HANDLER_STACK_SIZE },
+            /*new long[] { Const.HANDLER_STACK_SIZE },*/
             Const.PRIVATE_MEM, 
             0, 
-            0);
+            0); 
+	  configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
         devices.Console.println("\n****** Cyc 3 main.begin *********");
         new LaunchLevel0(new MyApp());

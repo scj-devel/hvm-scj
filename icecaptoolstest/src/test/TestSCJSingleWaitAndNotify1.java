@@ -20,6 +20,7 @@ package test;
 import icecaptools.IcecapCompileMe;
 
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -69,7 +70,7 @@ public class TestSCJSingleWaitAndNotify1 {
 		@IcecapCompileMe
 		public MyPEH1(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
 				SharedResource shared, Mission m) {
-			super(priority, release, storage);
+			super(priority, release, storage, configParameters);
 			this.m = m;
 			this.shared = shared;
 		}
@@ -98,7 +99,7 @@ public class TestSCJSingleWaitAndNotify1 {
 
 		public MyPEH2(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
 				SharedResource shared) {
-			super(priority, release, storage);
+			super(priority, release, storage, configParameters);
 			this.shared = shared;
 		}
 
@@ -145,7 +146,7 @@ public class TestSCJSingleWaitAndNotify1 {
 		private int count = 0;
 
 		public MySequencer(PriorityParameters priority, StorageParameters storage) {
-			super(priority, storage);
+			super(priority, storage, configParameters);
 			mission = new MyMission();
 		}
 
@@ -181,13 +182,16 @@ public class TestSCJSingleWaitAndNotify1 {
 
 	static StorageParameters storageParameters_Sequencer;
 	static StorageParameters storageParameters_Handlers;
+	static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
+				Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
 
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, 0, 0);
+				Const.PRIVATE_MEM, 0, 0);
+		
+		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n***** TestSCJWaitAndNotify1 main.begin *****");
 		new LaunchLevel2(new MyApp());

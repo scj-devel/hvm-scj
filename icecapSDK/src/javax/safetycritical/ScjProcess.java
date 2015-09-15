@@ -36,6 +36,7 @@ import icecaptools.IcecapCompileMe;
 
 import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -247,10 +248,15 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 			PeriodicEventHandler peh = new PeriodicEventHandler(new PriorityParameters(Priorities.MIN_PRIORITY),
 					new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()), // start (0,0)
 							Const.INFINITE_TIME), // period
-					new StorageParameters(2 * Const.IDLE_BACKING_STORE, new long[] { Const.IDLE_PROCESS_STACK_SIZE },
-							2 * Const.IDLE_BACKING_STORE, 0, 0)) {
-				public void handleAsyncEvent() {
-					yield();
+//					new StorageParameters(2 * Const.IDLE_BACKING_STORE, new long[] { Const.IDLE_PROCESS_STACK_SIZE },
+//							2 * Const.IDLE_BACKING_STORE, 0, 0)
+					new StorageParameters(2 * Const.IDLE_BACKING_STORE, 
+							2 * Const.IDLE_BACKING_STORE, 0, 0),
+					new ConfigurationParameters (null, -1, -1, new long[] { Const.IDLE_PROCESS_STACK_SIZE })
+					) 
+				{
+					public void handleAsyncEvent() {
+						yield();
 				}
 
 				@IcecapCompileMe

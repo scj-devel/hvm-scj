@@ -17,6 +17,7 @@
 
 package test;
 
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.LaunchLevel2;
@@ -58,7 +59,7 @@ public class TestSCJSingleThreadMemory {
 		private RelativeTime delayTime;
 
 		public Thread1(PriorityParameters priority, StorageParameters storage) {
-			super(priority, storage);
+			super(priority, storage, configParameters);
 			this.delayTime = new RelativeTime(100, 0);
 		}
 
@@ -109,7 +110,7 @@ public class TestSCJSingleThreadMemory {
 		private int count;
 
 		public Thread2(PriorityParameters priority, StorageParameters storage) {
-			super(priority, storage);
+			super(priority, storage, configParameters);
 			this.delayTime = new RelativeTime(100, 0);
 		}
 
@@ -175,7 +176,8 @@ public class TestSCJSingleThreadMemory {
 		private int count = -1;
 
 		MySequencer() {
-			super(new PriorityParameters(Priorities.SEQUENCER_PRIORITY), storageParameters_Sequencer);
+			super(new PriorityParameters(Priorities.SEQUENCER_PRIORITY), 
+				storageParameters_Sequencer, configParameters);
 
 			mission = new MyMission();
 		}
@@ -209,9 +211,10 @@ public class TestSCJSingleThreadMemory {
 
 	}
 
-	public static StorageParameters storageParameters_Sequencer;
+	static StorageParameters storageParameters_Sequencer;
+	static StorageParameters storageParameters_Handlers;
+	static ConfigurationParameters configParameters;
 
-	public static StorageParameters storageParameters_Handlers;
 
 	public static void main(String[] args) {
 		Memory memory = Memory.getHeapArea();
@@ -233,10 +236,12 @@ public class TestSCJSingleThreadMemory {
 		vm.Memory.startMemoryAreaTracking();
 
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
+				Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
 
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, 2002, 0, 0);
+				2002, 0, 0);
+		
+		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n********** TestSCJThreadMemory main.begin ******************");
 		new LaunchLevel2(new MyApp());

@@ -58,6 +58,10 @@ public class ConfigurationParameters {
 		this.stackTraceLength = stackTraceLength;
 		this.sizes = sizes;
 	}
+	
+	public long[] getSizes()  {  // HSO: added
+		return sizes;
+	}
 
 }
 

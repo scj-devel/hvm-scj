@@ -19,6 +19,7 @@ package test;
 
 import javax.realtime.AperiodicParameters;
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -40,7 +41,7 @@ public class TestSCJSingleMemoryModel1
 
     public MyPEH(PriorityParameters priority, PeriodicParameters release, 
                  StorageParameters storage, AperiodicEventHandler myAEH) {
-      super(priority, release, storage);
+      super(priority, release, storage, configParameters);
       this.myAEH = myAEH;
     }
 
@@ -59,7 +60,7 @@ public class TestSCJSingleMemoryModel1
 
     public MyAEH(PriorityParameters priority, AperiodicParameters release, 
                  StorageParameters storage, Mission m) {
-      super(priority, release, storage);
+      super(priority, release, storage, configParameters);
       this.m = m;
     }
 
@@ -97,7 +98,7 @@ public class TestSCJSingleMemoryModel1
     private Mission mission;
 
     public MySequencer(PriorityParameters priority, StorageParameters storage) {
-      super(priority, storage, "MySeq");
+      super(priority, storage, configParameters, "MySeq");
       // initialize missions here
       mission = new MyMission();
     }
@@ -139,24 +140,25 @@ public class TestSCJSingleMemoryModel1
   
   static StorageParameters storageParameters_Sequencer;
   static StorageParameters storageParameters_Handlers;
+  static ConfigurationParameters configParameters;
   
   public static void main(String[] args) 
   {   
     storageParameters_Sequencer = 
         new StorageParameters(
             Const.OUTERMOST_SEQ_BACKING_STORE,
-            new long[] { Const.HANDLER_STACK_SIZE },
             Const.PRIVATE_MEM, 
             Const.IMMORTAL_MEM, 
             Const.MISSION_MEM);
     
     storageParameters_Handlers = 
         new StorageParameters(
-            Const.PRIVATE_BACKING_STORE, 
-            new long[] { Const.HANDLER_STACK_SIZE },
+            Const.PRIVATE_BACKING_STORE,
             Const.PRIVATE_MEM, 
             0, 
             0);
+    
+    configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
     devices.Console.println("\n***** TestSCJMemoryModel1 main.begin ******************" );
     new LaunchLevel1(new MyApp());

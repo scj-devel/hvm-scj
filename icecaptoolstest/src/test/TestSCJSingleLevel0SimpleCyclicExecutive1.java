@@ -1,5 +1,6 @@
 package test;
 
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -27,7 +28,7 @@ public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive
         public MyPEH(String nm, RelativeTime start, RelativeTime period) {
             super(new PriorityParameters(priority), 
             	  new PeriodicParameters(start, period), 
-            	  storageParameters_Handlers);
+            	  storageParameters_Handlers, configParameters);
         }
 
         @Override
@@ -93,7 +94,8 @@ public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive
     public MissionSequencer<CyclicExecutive> getSequencer() {
 	    sequencer = new MissionSequencer<CyclicExecutive>(
 	    				new PriorityParameters(Priorities.SEQUENCER_PRIORITY), 
-	    				storageParameters_Sequencer) {
+	    				storageParameters_Sequencer,
+	    				configParameters) {
 
             @Override
             protected CyclicExecutive getNextMission() {
@@ -110,12 +112,12 @@ public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive
 
     public static StorageParameters storageParameters_Sequencer;
 	public static StorageParameters storageParameters_Handlers;
-  
+	public static ConfigurationParameters configParameters;
+	
 	public static void main(String[] args) {
 	  storageParameters_Sequencer = 
         new StorageParameters(
             Const.OUTERMOST_SEQ_BACKING_STORE,
-            new long[] { Const.HANDLER_STACK_SIZE },
             Const.PRIVATE_MEM, 
             Const.IMMORTAL_MEM, 
             Const.MISSION_MEM);
@@ -123,11 +125,12 @@ public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive
 	  storageParameters_Handlers = 
         new StorageParameters(
             Const.PRIVATE_BACKING_STORE, 
-            new long[] { Const.HANDLER_STACK_SIZE },
             Const.PRIVATE_MEM, 
             0, 
             0);
 	  
+	  configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+
         new LaunchLevel0(new TestSCJSingleLevel0SimpleCyclicExecutive1());
         args = null;
     }

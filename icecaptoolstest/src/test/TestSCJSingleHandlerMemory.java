@@ -19,6 +19,7 @@ package test;
 
 import javax.realtime.AperiodicParameters;
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -62,7 +63,7 @@ public class TestSCJSingleHandlerMemory {
 
 		public MyPEH1(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
 				AperiodicEventHandler myAEH) {
-			super(priority, release, storage);
+			super(priority, release, storage, configParameters);
 			this.myAEH = myAEH;
 		}
 
@@ -104,7 +105,7 @@ public class TestSCJSingleHandlerMemory {
 		private int count = 0;
 
 		public MyPEH2(PriorityParameters priority, PeriodicParameters release, StorageParameters storage) {
-			super(priority, release, storage);
+			super(priority, release, storage, configParameters);
 		}
 
 		@Override
@@ -142,7 +143,7 @@ public class TestSCJSingleHandlerMemory {
 		private Mission m;
 
 		public MyAEH(PriorityParameters priority, AperiodicParameters release, StorageParameters storage, Mission m) {
-			super(priority, release, storage);
+			super(priority, release, storage, configParameters);
 			this.m = m;
 		}
 
@@ -183,7 +184,8 @@ public class TestSCJSingleHandlerMemory {
 		private int count = -1;
 
 		MySequencer() {
-			super(new PriorityParameters(Priorities.SEQUENCER_PRIORITY), storageParameters_Sequencer);
+			super(new PriorityParameters(Priorities.SEQUENCER_PRIORITY), 
+					storageParameters_Sequencer, configParameters);
 
 			mission = new MyMission();
 		}
@@ -218,6 +220,7 @@ public class TestSCJSingleHandlerMemory {
 
 	public static StorageParameters storageParameters_Sequencer;
 	public static StorageParameters storageParameters_Handlers;
+	public static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
 
@@ -242,11 +245,13 @@ public class TestSCJSingleHandlerMemory {
 		vm.Memory.startMemoryAreaTracking();
 
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, 2 * Const.PRIVATE_MEM, 2 * Const.IMMORTAL_MEM,
+				2 * Const.PRIVATE_MEM, 2 * Const.IMMORTAL_MEM,
 				Const.MISSION_MEM);
 
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, 2002, 0, 0);
+				2002, 0, 0);
+		
+		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		new LaunchLevel1(new MyApp());
 

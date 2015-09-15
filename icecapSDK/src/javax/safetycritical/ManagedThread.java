@@ -32,6 +32,7 @@ import javax.realtime.MemoryArea;
 import javax.realtime.RealtimeThread;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
+import javax.realtime.ConfigurationParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
@@ -57,6 +58,8 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 
 	PriorityParameters priority;
 	StorageParameters storage;
+	ConfigurationParameters config;
+	
 	Process process = null;
 	Mission mission = null;
 
@@ -70,15 +73,18 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 	boolean isRegistered;
 	boolean isInMissionScope;
 
-	public ManagedThread(PriorityParameters priority, StorageParameters storage) {
-		this(priority, storage, null);
+	public ManagedThread(PriorityParameters priority, StorageParameters storage,
+			ConfigurationParameters config) { 
+		this(priority, storage, config, null);
 	}
 
-	public ManagedThread(PriorityParameters priority, StorageParameters storage, Runnable logic) {
-		this(priority, storage, logic, null);
+	public ManagedThread(PriorityParameters priority, StorageParameters storage, 
+			ConfigurationParameters config, Runnable logic) {
+		this(priority, storage, config, logic, null);
 	}
 
-	ManagedThread(PriorityParameters priority, StorageParameters storage, Runnable logic, String name) {
+	ManagedThread(PriorityParameters priority, StorageParameters storage, 
+			ConfigurationParameters config, Runnable logic, String name) {
 		super(priority, logic);
 		this.priority = priority;
 
@@ -86,6 +92,7 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 			throw new IllegalArgumentException("storage is null");
 
 		this.storage = storage;
+		this.config = config;
 		this.name = name;
 		this.mission = Mission.getMission();
 		

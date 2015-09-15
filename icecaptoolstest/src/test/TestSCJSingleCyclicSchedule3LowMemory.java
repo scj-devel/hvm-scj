@@ -1,6 +1,7 @@
 package test;
 
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -62,7 +63,7 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 	private static class MyPeriodicEvh1 extends PeriodicEventHandler {
 		protected MyPeriodicEvh1(PriorityParameters priority, PeriodicParameters periodic,
 				StorageParameters storageParameters) {
-			super(priority, periodic, storageParameters);
+			super(priority, periodic, storageParameters, configParameters);
 		}
 
 		public void handleAsyncEvent() {
@@ -77,7 +78,7 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 
 		public MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodicParameters,
 				StorageParameters storageParameters, Mission mission) {
-			super(priority, periodicParameters, storageParameters);
+			super(priority, periodicParameters, storageParameters, configParameters);
 			this.mission = mission;
 		}
 
@@ -155,7 +156,7 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 			private Mission miss;
 
 			MySequencer() {
-				super(new PriorityParameters(Priorities.PR95), storageParameters_Sequencer);
+				super(new PriorityParameters(Priorities.PR95), storageParameters_Sequencer, configParameters);
 				missions = new Mission[2];
 				missions[0] = new MyMission0();
 				missions[1] = new MyMission1();
@@ -180,6 +181,7 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 
 	public static StorageParameters storageParameters_Sequencer;
 	public static StorageParameters storageParameters_Handlers;
+	public static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
 //		Const.MEMORY_TRACKER_AREA_SIZE = 30000;
@@ -191,10 +193,11 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 //		Const.HANDLER_STACK_SIZE = 1024;
 		
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, 1000, Const.IMMORTAL_MEM, Const.MISSION_MEM);
+				1000, Const.IMMORTAL_MEM, Const.MISSION_MEM);
 
-		storageParameters_Handlers = new StorageParameters(500, new long[] { Const.HANDLER_STACK_SIZE },
-				500, 0, 0);
+		storageParameters_Handlers = new StorageParameters(500, 500, 0, 0);
+		
+		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n****** TestSCJCyclicSchedule3LowMemory begin *********");
 		new LaunchLevel0(new MyApp());

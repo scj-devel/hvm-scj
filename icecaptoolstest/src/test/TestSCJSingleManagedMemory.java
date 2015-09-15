@@ -1,5 +1,6 @@
 package test;
 
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.MemoryArea;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
@@ -97,7 +98,8 @@ public class TestSCJSingleManagedMemory {
 		private MissionStub mission;
 
 		SequencerStub() {
-			super(new PriorityParameters(Priorities.PR95), storageParameters_Sequencer);
+			super(new PriorityParameters(Priorities.PR95), 
+					storageParameters_Sequencer, configParameters);
 			mission = new MissionStub(this);
 
 			Work.doWork("0 SequencerStub");
@@ -225,7 +227,7 @@ public class TestSCJSingleManagedMemory {
 
 		protected PeriodicEvhStub(PriorityParameters priority, PeriodicParameters periodic, StorageParameters storage,
 				MissionSequencer<MissionStub> missSeq) {
-			super(priority, periodic, storage);
+			super(priority, periodic, storage, configParameters);
 			this.missSeq = missSeq;
 		}
 
@@ -321,6 +323,7 @@ public class TestSCJSingleManagedMemory {
 
 	static StorageParameters storageParameters_Sequencer;
 	static StorageParameters storageParameters_Handlers;
+    static ConfigurationParameters configParameters;
 
 	static void printMemRecords() {
 		for (int i = 0; i < RECORDSIZE; i++) {
@@ -350,11 +353,13 @@ public class TestSCJSingleManagedMemory {
 		//    vm.Memory.startMemoryAreaTracking();
 
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				new long[] { 2 * Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM + 3, Const.IMMORTAL_MEM,
+				Const.PRIVATE_MEM + 3, Const.IMMORTAL_MEM,
 				Const.MISSION_MEM);
 
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE + 4,
-				new long[] { 2 * Const.HANDLER_STACK_SIZE }, 15002, 0, 0);
+				15002, 0, 0);
+
+		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { 2*Const.HANDLER_STACK_SIZE });
 
 		new LaunchLevel2(new SafeletStub());
 

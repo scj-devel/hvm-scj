@@ -1,6 +1,7 @@
 package javax.safetycritical;
 
 import javax.realtime.BoundAsyncLongEventHandler;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.ReleaseParameters;
 
@@ -12,6 +13,7 @@ public abstract class ManagedLongEventHandler extends BoundAsyncLongEventHandler
 	String name;
 
 	StorageParameters storage;
+	ConfigurationParameters config;
 	Mission mission = null;
 
 	ManagedMemory privateMemory;
