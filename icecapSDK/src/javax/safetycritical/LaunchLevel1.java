@@ -8,8 +8,9 @@ public final class LaunchLevel1 extends Launcher {
 		
 		Mission.missionBehaviour = new SinglecoreMissionBehavior();
 		ManagedEventHandler.handlerBehavior = new SinglecoreHandlerBehavior();
-		Services.servicesBehavior = new Services.SinglecoreBehavior();
+		Services.servicesBehavior = new SinglecoreServicesBehavior();
 		ManagedMemory.memoryBehavior = new SinglecoreMemoryBehavior();
+		
 		
 		createImmortalMemory();
 	}
