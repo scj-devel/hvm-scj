@@ -50,7 +50,7 @@ import javax.scj.util.Const;
  * @scjComment 
  */
 @SCJAllowed
-public abstract class Mission {
+public abstract class Mission/*<MissionType extends Mission>*/ {
 	MissionSequencer<?> currMissSeq;
 
 	boolean missionTerminate = false;
@@ -89,7 +89,7 @@ public abstract class Mission {
 
 	@SCJAllowed
 	@IcecapCompileMe
-	public static Mission getMission() {
+	public static Mission/*<MissionType>*/ getMission() {
 		return missionBehaviour.getMission();
 	}
 

@@ -28,7 +28,7 @@ package javax.safetycritical;
 import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
-import javax.realtime.ReleaseParameters;
+
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
