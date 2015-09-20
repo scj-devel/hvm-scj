@@ -4,7 +4,7 @@ import javax.realtime.AbsoluteTime;
 import javax.realtime.HighResolutionTime;
 import javax.realtime.RelativeTime;
 
-final class MulticoreBehavior extends HandlerBehavior {
+final class MulticoreHandlerBehavior extends HandlerBehavior {
 	@Override
 	void aperiodicHandlerRelease(AperiodicEventHandler handler) {
 		handler.fireNextRelease();
