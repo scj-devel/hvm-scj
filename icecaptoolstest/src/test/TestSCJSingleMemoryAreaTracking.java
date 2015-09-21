@@ -2,6 +2,7 @@ package test;
 
 import javax.realtime.AperiodicParameters;
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -19,7 +20,7 @@ import vm.Address32Bit;
 import vm.HardwareObject;
 import vm.Memory;
 
-public class TestMemoryAreaTracking {
+public class TestSCJSingleMemoryAreaTracking {
 	private static class Light extends HardwareObject {
 
 		public Light(int address) {
@@ -48,7 +49,7 @@ public class TestMemoryAreaTracking {
 
 		public MyAperiodicEvh(PriorityParameters priority, AperiodicParameters release,
 				StorageParameters storageParameters, Light light, MissionSequencer<MyMission> missSeq) {
-			super(priority, release, storageParameters);
+			super(priority, release, storageParameters, configParameters);
 			this.light = light;
 			this.missSeq = missSeq;
 		}
@@ -68,7 +69,7 @@ public class TestMemoryAreaTracking {
 
 		protected MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodic,
 				StorageParameters storageParameters, Light light, AperiodicEventHandler aevh) {
-			super(priority, periodic, storageParameters);
+			super(priority, periodic, storageParameters, configParameters);
 			this.light = light;
 			this.aevh = aevh;
 		}
@@ -130,7 +131,8 @@ public class TestMemoryAreaTracking {
 			private MyMission mission;
 
 			MySequencer() {
-				super(new PriorityParameters(Priorities.PR95), storageParameters_Sequencer);
+				super(new PriorityParameters(Priorities.PR95), 
+						storageParameters_Sequencer, configParameters);
 
 				mission = new MyMission(this);
 			}
@@ -147,8 +149,9 @@ public class TestMemoryAreaTracking {
 		}
 	}
 
-	public static StorageParameters storageParameters_Sequencer;
-	public static StorageParameters storageParameters_Handlers;
+	static StorageParameters storageParameters_Sequencer;
+	static StorageParameters storageParameters_Handlers;
+	static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
 		Const.OUTERMOST_SEQ_BACKING_STORE = 140 * 1000;
@@ -161,14 +164,16 @@ public class TestMemoryAreaTracking {
 		Memory.startMemoryAreaTracking();
 
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
+				Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
 
-		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_MEM, new long[] { Const.HANDLER_STACK_SIZE },
+		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_MEM,
 				Const.PRIVATE_MEM, 0, 0);
 
-		devices.Console.println("\n***** TestSCJSimpleLowMemory begin *****");
+		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+
+		devices.Console.println("\n***** TestSCJSingleMemoryAreaTracking begin *****");
 		new LaunchLevel1(new MyApp());
-		devices.Console.println("\n***** TestSCJSimpleLowMemory end *****");
+		devices.Console.println("\n***** TestSCJSingleMemoryAreaTracking end *****");
 
 		Memory.reportMemoryUsage();
 		args = null;

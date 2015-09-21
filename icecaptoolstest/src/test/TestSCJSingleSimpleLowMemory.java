@@ -2,6 +2,7 @@ package test;
 
 import javax.realtime.AperiodicParameters;
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -52,7 +53,7 @@ public class TestSCJSingleSimpleLowMemory {
         		StorageParameters storageParameters,
                 Light light, 
                 MissionSequencer<MyMission> missSeq) {
-            super(priority, release, storageParameters);
+            super(priority, release, storageParameters, configParameters);
             this.light = light;
             this.missSeq = missSeq;
         }
@@ -76,7 +77,7 @@ public class TestSCJSingleSimpleLowMemory {
         		StorageParameters storageParameters,
                 Light light, 
                 AperiodicEventHandler aevh) {
-            super(priority, periodic, storageParameters);
+            super(priority, periodic, storageParameters, configParameters);
             this.light = light;
             this.aevh = aevh;
         }
@@ -147,7 +148,7 @@ public class TestSCJSingleSimpleLowMemory {
 
             MySequencer() {
                 super(new PriorityParameters(Priorities.PR95), 
-                		storageParameters_Sequencer); 
+                		storageParameters_Sequencer, configParameters); 
 
                 mission = new MyMission(this);
             }
@@ -164,8 +165,9 @@ public class TestSCJSingleSimpleLowMemory {
         }
     }
 
-    public static StorageParameters storageParameters_Sequencer;
-	public static StorageParameters storageParameters_Handlers;
+    static StorageParameters storageParameters_Sequencer;
+	static StorageParameters storageParameters_Handlers;
+	static ConfigurationParameters configParameters;
 	
     public static void main(String[] args) {
         Const.OUTERMOST_SEQ_BACKING_STORE = 140 * 1000;
@@ -176,7 +178,6 @@ public class TestSCJSingleSimpleLowMemory {
 	  storageParameters_Sequencer = 
         new StorageParameters(
             Const.OUTERMOST_SEQ_BACKING_STORE,
-            new long[] { Const.HANDLER_STACK_SIZE },
             Const.PRIVATE_MEM, 
             Const.IMMORTAL_MEM, 
             Const.MISSION_MEM);
@@ -184,11 +185,12 @@ public class TestSCJSingleSimpleLowMemory {
 	  storageParameters_Handlers = 
         new StorageParameters(
         		Const.PRIVATE_MEM, 
-            new long[] { Const.HANDLER_STACK_SIZE },
             Const.PRIVATE_MEM, 
             0, 
             0);
 	  
+	  configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+
         devices.Console.println("\n***** TestSCJSimpleLowMemory begin *****");
         new LaunchLevel1(new MyApp());
         devices.Console.println("\n***** TestSCJSimpleLowMemory end *****");

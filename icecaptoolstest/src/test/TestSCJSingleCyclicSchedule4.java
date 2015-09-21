@@ -1,6 +1,7 @@
 package test;
 
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -47,7 +48,7 @@ public class TestSCJSingleCyclicSchedule4 {
                 PeriodicParameters periodic, 
                 StorageParameters storageParameters,                
                 int n) {
-            super(priority, periodic, storageParameters);
+            super(priority, periodic, storageParameters, configParameters);
             this.n = n;
         }
 
@@ -92,7 +93,7 @@ public class TestSCJSingleCyclicSchedule4 {
 
         public MySequencer() {
             super(new PriorityParameters(Priorities.PR95), // lowest priority
-            	  storageParameters_Sequencer);                                                                            // size
+            	  storageParameters_Sequencer, configParameters);                                                                            // size
 
             mission = new MyMission();
         }
@@ -124,24 +125,25 @@ public class TestSCJSingleCyclicSchedule4 {
 
     public static StorageParameters storageParameters_Sequencer;
 	public static StorageParameters storageParameters_Handlers;
-  
+	public static ConfigurationParameters configParameters;
+	
 	public static void main(String[] args) {
 	  storageParameters_Sequencer = 
         new StorageParameters(
             Const.OUTERMOST_SEQ_BACKING_STORE,
-            new long[] { Const.HANDLER_STACK_SIZE },
             Const.PRIVATE_MEM, 
             Const.IMMORTAL_MEM, 
             Const.MISSION_MEM);
 	  
 	  storageParameters_Handlers = 
         new StorageParameters(
-            Const.PRIVATE_BACKING_STORE, 
-            new long[] { Const.HANDLER_STACK_SIZE },
+            Const.PRIVATE_BACKING_STORE,
             Const.PRIVATE_MEM, 
             0, 
             0);
-        
+	  
+	  configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+
         devices.Console.println("\n****** CyclicSchedule4 main.begin *********");
         new LaunchLevel0(new MyApp());
         devices.Console.println("****** CyclicSchedule4 main.end *********");

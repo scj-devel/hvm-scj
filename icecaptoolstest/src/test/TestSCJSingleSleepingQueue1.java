@@ -19,6 +19,7 @@ package test;
 
 import javax.realtime.AperiodicParameters;
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -42,7 +43,7 @@ public class TestSCJSingleSleepingQueue1 {
         		AperiodicParameters release, 
         		StorageParameters storageParameters, 
                 Mission m) {
-            super(priority, release, storageParameters);
+            super(priority, release, storageParameters, configParameters);
             this.mission = m;
         }
 
@@ -60,7 +61,7 @@ public class TestSCJSingleSleepingQueue1 {
         		PeriodicParameters periodicParameters, 
         		StorageParameters storageParameters, 
                 AperiodicEventHandler aevh) {
-            super(priority, periodicParameters, storageParameters);
+            super(priority, periodicParameters, storageParameters, configParameters);
             this.aevh = aevh;
         }
 
@@ -81,7 +82,7 @@ public class TestSCJSingleSleepingQueue1 {
         		PeriodicParameters periodicParameters, 
         		StorageParameters storageParameters) 
         {
-            super(priority, periodicParameters, storageParameters);
+            super(priority, periodicParameters, storageParameters, configParameters);
         }
 
         public void handleAsyncEvent() {
@@ -163,7 +164,7 @@ public class TestSCJSingleSleepingQueue1 {
 
             MySequencer() {
                 super(new PriorityParameters(Priorities.PR95), 
-                	  storageParameters_Sequencer); 
+                	  storageParameters_Sequencer, configParameters); 
                 missions = new Mission[2];
                 missions[0] = new MyMission0();
                 missions[1] = new MyMission1();
@@ -189,14 +190,14 @@ public class TestSCJSingleSleepingQueue1 {
         }
     }
 
-    public static StorageParameters storageParameters_Sequencer;
-	public static StorageParameters storageParameters_Handlers;
+    static StorageParameters storageParameters_Sequencer;
+	static StorageParameters storageParameters_Handlers;
+	static ConfigurationParameters configParameters;
   
 	public static void main(String[] args) {
 	  storageParameters_Sequencer = 
         new StorageParameters(
             Const.OUTERMOST_SEQ_BACKING_STORE,
-            new long[] { Const.HANDLER_STACK_SIZE },
             Const.PRIVATE_MEM, 
             Const.IMMORTAL_MEM, 
             Const.MISSION_MEM);
@@ -204,11 +205,12 @@ public class TestSCJSingleSleepingQueue1 {
 	  storageParameters_Handlers = 
         new StorageParameters(
             Const.PRIVATE_BACKING_STORE, 
-            new long[] { Const.HANDLER_STACK_SIZE },
             Const.PRIVATE_MEM, 
             0, 
             0);
-      
+	  
+	  configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+
         devices.Console.println("\n***** Sleeping queue begin ************");
         // executes in heap memory
         new LaunchLevel1(new MyApp());

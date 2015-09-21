@@ -2,6 +2,7 @@ package test.CR16C;
 
 import javax.realtime.AperiodicParameters;
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -32,8 +33,8 @@ public class TestSCJPrioritySchedule2 {
 		protected MyPeriodicEvh(PriorityParameters priority,
 				PeriodicParameters periodic, long memSize, int n,
 				AperiodicEventHandler aevh) {
-			super(priority, periodic, new StorageParameters(memSize,
-					new long[] { 256 }, 0, 0, 0));
+			super(priority, periodic, new StorageParameters(memSize, 0, 0, 0), 
+				  new ConfigurationParameters (null, -1, -1, new long[] { 256 }));
 			this.n = n;
 			this.aevh = aevh;
 		}
@@ -57,8 +58,8 @@ public class TestSCJPrioritySchedule2 {
 		public MyAperiodicEvh(PriorityParameters priority,
 				AperiodicParameters release, long memSize, int n,
 				MissionSequencer<MyMission> missSeq) {
-			super(priority, release, new StorageParameters(memSize,
-					new long[] { 256 }, 0, 0, 0));
+			super(priority, release, new StorageParameters(memSize, 0, 0, 0), 
+				  new ConfigurationParameters (null, -1, -1, new long[] { 256 }));
 			this.n = n;
 			this.missSeq = missSeq;
 		}
@@ -123,7 +124,8 @@ public class TestSCJPrioritySchedule2 {
 			MySequencer() {
 				super(
 						new PriorityParameters(Priorities.PR95),
-						new StorageParameters(3072, new long[] { 768 }, 0, 0, 0)); // mission
+						new StorageParameters(3072, 0, 0, 0),
+						new ConfigurationParameters (null, -1, -1, new long[] { 768 })); // mission
 				mission = new MyMission(this);
 			}
 

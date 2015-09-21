@@ -73,17 +73,17 @@ public abstract class Launcher implements Runnable {
 	}
 	
 	public static void initSingleCoreBehaviour() {
-		Mission.missionBehaviour = new Mission.SinglecoreBehavior();
-		ManagedEventHandler.handlerBehavior = new SinglecoreBehavior();
-		Services.servicesBehavior = new Services.SinglecoreBehavior();
-		ManagedMemory.memoryBehavior = new ManagedMemory.SinglecoreBehavior();
+		Mission.missionBehaviour = new SinglecoreMissionBehavior();
+		ManagedEventHandler.handlerBehavior = new SinglecoreHandlerBehavior();
+		Services.servicesBehavior = new SinglecoreServicesBehavior();
+		ManagedMemory.memoryBehavior = new SinglecoreMemoryBehavior();
 	}
 	
 	public static void initMultiCoreBehaviour() {
-		Services.servicesBehavior = new Services.MulticoreBehavior();
-		Mission.missionBehaviour = new Mission.MulticoreBehavior();
-		ManagedEventHandler.handlerBehavior = new MulticoreBehavior();
-		ManagedMemory.memoryBehavior = new ManagedMemory.MulticoreBehavior();
+		Services.servicesBehavior = new MulticoreServicesBehavior();
+		Mission.missionBehaviour = new MulticoreMissionBehavior();
+		ManagedEventHandler.handlerBehavior = new MulticoreHandlerBehavior();
+		ManagedMemory.memoryBehavior = new MulticoreMemoryBehavior();
 	}
 	
 	public void run() {

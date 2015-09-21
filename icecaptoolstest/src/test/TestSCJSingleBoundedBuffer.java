@@ -20,6 +20,7 @@ package test;
 
 import javax.realtime.AperiodicParameters;
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -43,7 +44,7 @@ public class TestSCJSingleBoundedBuffer {
 
 		public MyAperiodicEvh(PriorityParameters priority, AperiodicParameters release,
 				StorageParameters storageParameters) {
-			super(priority, release, storageParameters);
+			super(priority, release, storageParameters, configParameters);
 		}
 
 		public void handleAsyncEvent() {
@@ -57,7 +58,7 @@ public class TestSCJSingleBoundedBuffer {
 
 		public MyAperiodicEvh1(PriorityParameters priority, AperiodicParameters release,
 				StorageParameters storageParameters) {
-			super(priority, release, storageParameters);
+			super(priority, release, storageParameters, configParameters);
 		}
 
 		public void handleAsyncEvent() {
@@ -77,7 +78,7 @@ public class TestSCJSingleBoundedBuffer {
 
 		public Producer(PriorityParameters priority, PeriodicParameters periodic, StorageParameters storageParameters,
 				BoundedBuffer buf, AperiodicEventHandler aevh, AperiodicEventHandler aevh1) {
-			super(priority, periodic, storageParameters);
+			super(priority, periodic, storageParameters, configParameters);
 			this.buf = buf;
 			this.aevh = aevh;
 			this.aevh1 = aevh1;
@@ -113,7 +114,7 @@ public class TestSCJSingleBoundedBuffer {
 
 		public Consumer(PriorityParameters priority, PeriodicParameters periodic, StorageParameters storageParameters,
 				BoundedBuffer buf, AperiodicEventHandler aevh) {
-			super(priority, periodic, storageParameters);
+			super(priority, periodic, storageParameters, configParameters);
 			this.buf = buf;
 			this.aevh = aevh;
 		}
@@ -140,7 +141,7 @@ public class TestSCJSingleBoundedBuffer {
 
 		public Display(PriorityParameters priority, PeriodicParameters periodic, StorageParameters storageParameters,
 				BoundedBuffer buf, AperiodicEventHandler aevh) {
-			super(priority, periodic, storageParameters);
+			super(priority, periodic, storageParameters, configParameters);
 			this.buf = buf;
 			this.aevh = aevh;
 		}
@@ -292,7 +293,7 @@ public class TestSCJSingleBoundedBuffer {
 			private MyMission mission;
 
 			MySequencer() {
-				super(new PriorityParameters(Priorities.PR94), storageParameters_Sequencer);
+				super(new PriorityParameters(Priorities.PR94), storageParameters_Sequencer, configParameters);
 				this.mission = new MyMission();
 			}
 
@@ -307,19 +308,22 @@ public class TestSCJSingleBoundedBuffer {
 		}
 	}
 
-	public static StorageParameters storageParameters_Sequencer;
-	public static StorageParameters storageParameters_Handlers;
+	static StorageParameters storageParameters_Sequencer;
+	static StorageParameters storageParameters_Handlers;
+	static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
 		Const.MEMORY_TRACKER_AREA_SIZE = 30000;
 		Memory.startMemoryAreaTracking();
 		vm.Process.enableStackAnalysis();
-
+		
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
+				 Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
 
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, 0, 0);
+				 Const.PRIVATE_MEM, 0, 0);
+		
+		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		failed = true;
 		devices.Console.println("\n********** Bounded Buffer main.begin ***********");

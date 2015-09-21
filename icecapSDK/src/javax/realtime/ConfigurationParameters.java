@@ -58,6 +58,20 @@ public class ConfigurationParameters {
 		this.stackTraceLength = stackTraceLength;
 		this.sizes = sizes;
 	}
+	
+	public long[] getSizes()  {  // HSO: added
+		return sizes;
+	}
+	
+	// used for JML annotation only (not public)
+	int getMessageLength() {
+		return messageLength;
+	}
+	
+	// used for JML annotation only (not public)
+	int getStackTraceLength() {
+		return stackTraceLength;
+	}
 
 }
 

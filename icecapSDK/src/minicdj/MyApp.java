@@ -17,6 +17,7 @@
 
 package minicdj;
 
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PriorityParameters;
 import javax.safetycritical.LaunchLevel0;
 import javax.safetycritical.Mission;
@@ -66,7 +67,8 @@ public class MyApp implements Safelet {
 		MySequencer() {
 			super(
 					new PriorityParameters(Priorities.PR99),
-					new StorageParameters(Const.PRIVATE_MEM, null, 0, 0, 0));
+					new StorageParameters(Const.PRIVATE_MEM, 0, 0, 0),
+					new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE }));
 
 			devices.Console
 					.println("---- MySequencer.constructor: super finished");

@@ -1,6 +1,7 @@
 package test;
 
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -13,7 +14,7 @@ import javax.safetycritical.Services;
 import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 
-public class TestSCJMultiProcessorMemory {
+public class TestSCJMPMemory {
 	public static MissionSequencer<MyMission0> ms;
 
 	private static class MyPeriodicEvh extends PeriodicEventHandler {
@@ -22,7 +23,7 @@ public class TestSCJMultiProcessorMemory {
 
 		public MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodicParameters,
 				StorageParameters storage, Mission m, String name) {
-			super(priority, periodicParameters, storage);
+			super(priority, periodicParameters, storage, configParameters);
 			this.m = m;
 		}
 
@@ -44,7 +45,7 @@ public class TestSCJMultiProcessorMemory {
 
 		public MyPeriodicEvh1(PriorityParameters priority, PeriodicParameters periodicParameters,
 				StorageParameters storage, String name) {
-			super(priority, periodicParameters, storage);
+			super(priority, periodicParameters, storage, configParameters);
 		}
 
 		public void handleAsyncEvent() {
@@ -101,7 +102,7 @@ public class TestSCJMultiProcessorMemory {
 			int count = 0;
 
 			MySequencer() {
-				super(new PriorityParameters(12), storageParameters_Sequencer, "outer-ms");
+				super(new PriorityParameters(12), storageParameters_Sequencer, configParameters, "outer-ms");
 				m = new MyMission0();
 			}
 
@@ -123,21 +124,24 @@ public class TestSCJMultiProcessorMemory {
 		}
 	}
 
-	public static StorageParameters storageParameters_Sequencer;
-	public static StorageParameters storageParameters_Handlers;
-	public static StorageParameters storageParameters_InnerSequencer;
+	static StorageParameters storageParameters_Sequencer;
+	static StorageParameters storageParameters_Handlers;
+	static StorageParameters storageParameters_InnerSequencer;
+	static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, Const.IMMORTAL_MEM,
+				Const.PRIVATE_MEM, Const.IMMORTAL_MEM,
 				Const.MISSION_MEM);
 
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
-				new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, 0, 0);
+				Const.PRIVATE_MEM, 0, 0);
 
 		storageParameters_InnerSequencer = new StorageParameters(Const.PRIVATE_BACKING_STORE * 3
-				+ Const.MISSION_MEM, new long[] { Const.HANDLER_STACK_SIZE }, Const.PRIVATE_MEM, 0,
+				+ Const.MISSION_MEM, Const.PRIVATE_MEM, 0,
 				Const.MISSION_MEM_DEFAULT);
+
+		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n***** test multicore memory management main.begin ************");
 		new LaunchMulticore(new MyApp(), 1);

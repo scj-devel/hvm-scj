@@ -26,6 +26,7 @@
 package javax.safetycritical;
 
 import javax.realtime.AperiodicParameters;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PriorityParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
@@ -92,9 +93,10 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	 */
 	@SCJAllowed
 	@SCJRestricted(Phase.INITIALIZE)
-	public MissionSequencer(PriorityParameters priority, StorageParameters storage, String name)
+	public MissionSequencer(PriorityParameters priority, StorageParameters storage, 
+			ConfigurationParameters config, String name)
 			throws IllegalStateException {
-		super(priority, new AperiodicParameters(), storage);
+		super(priority, new AperiodicParameters(), storage, config);
 		this.name = name;
 
 //		System.out.println("MissSeq.constr: " + name 
@@ -116,8 +118,9 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 
 	@SCJAllowed
 	@SCJRestricted(Phase.INITIALIZE)
-	public MissionSequencer(PriorityParameters priority, StorageParameters storage) throws IllegalStateException {
-		this(priority, storage, "MisMem");
+	public MissionSequencer(PriorityParameters priority, StorageParameters storage,
+			ConfigurationParameters config) throws IllegalStateException {
+		this(priority, storage, config, "MisMem");
 	}
 
 	synchronized void seqWait() {

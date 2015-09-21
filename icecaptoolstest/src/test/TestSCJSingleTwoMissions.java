@@ -2,6 +2,7 @@ package test;
 
 import javax.realtime.AperiodicParameters;
 import javax.realtime.Clock;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -27,7 +28,7 @@ public class TestSCJSingleTwoMissions {
         		             PeriodicParameters periodicParameters, 
         		             StorageParameters storage,                                                     
         		             int n, AperiodicEventHandler aevh) {
-            super(priority, periodicParameters, storage);
+            super(priority, periodicParameters, storage, configParameters);
             this.n = n;
             this.aevh = aevh;
         }
@@ -55,7 +56,7 @@ public class TestSCJSingleTwoMissions {
         		 			  AperiodicParameters release, 
         		 			  StorageParameters storage,                                                                                                       
         		 			  int n, Mission m) {
-            super(priority, release, storage);
+            super(priority, release, storage, configParameters);
             this.n = n;
             this.mission = m;
         }
@@ -142,7 +143,7 @@ public class TestSCJSingleTwoMissions {
 
             MySequencer() {
                 super(new PriorityParameters(Priorities.PR95), 
-                		storageParameters_Sequencer);                                                                                                        // memory
+                		storageParameters_Sequencer, configParameters);                                                                                                        // memory
                                                                                                                                                               // size
                 mission = new Mission[2];
                 mission[0] = new MyMission0();
@@ -164,14 +165,14 @@ public class TestSCJSingleTwoMissions {
         }
     }
 
-    public static StorageParameters storageParameters_Sequencer;
-	public static StorageParameters storageParameters_Handlers;
+    static StorageParameters storageParameters_Sequencer;
+	static StorageParameters storageParameters_Handlers;
+	static ConfigurationParameters configParameters;
   
 	public static void main(String[] args) {
 	  storageParameters_Sequencer = 
         new StorageParameters(
             Const.OUTERMOST_SEQ_BACKING_STORE,
-            new long[] { Const.HANDLER_STACK_SIZE },
             Const.PRIVATE_MEM, 
             Const.IMMORTAL_MEM, 
             Const.MISSION_MEM);
@@ -179,11 +180,11 @@ public class TestSCJSingleTwoMissions {
 	  storageParameters_Handlers = 
         new StorageParameters(
             Const.PRIVATE_BACKING_STORE, 
-            new long[] { Const.HANDLER_STACK_SIZE },
             Const.PRIVATE_MEM, 
             0, 
             0);
-	  
+	  configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+ 
       devices.Console.println("\n***** Two Missions main.begin ************");
       new LaunchLevel1(new MyApp());
       devices.Console.println("***** Two Missions main.end **************");
