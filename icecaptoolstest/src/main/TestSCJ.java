@@ -1,5 +1,7 @@
 package main;
 
+import test.TestSCJSingleCyclicExecutiveLinearMissSeq1;
+
 
 /*
  * To run the automated tests make sure that gcc is installed and can be 
