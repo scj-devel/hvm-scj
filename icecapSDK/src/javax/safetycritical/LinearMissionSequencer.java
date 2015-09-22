@@ -43,6 +43,10 @@ import javax.safetycritical.annotate.SCJAllowed;
  *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
 public class LinearMissionSequencer<MissionType extends Mission> extends MissionSequencer<MissionType> {
+	
+	boolean repeat;
+	MissionType[] missions;
+	int active = 0;
 
 	@SCJAllowed
 	public LinearMissionSequencer(PriorityParameters priority, StorageParameters storage, 
@@ -53,8 +57,11 @@ public class LinearMissionSequencer<MissionType extends Mission> extends Mission
 			throws IllegalArgumentException, IllegalStateException {
 		
 		super(priority, storage, config, name);
+		this.repeat = repeat;		
+		this.missions = (MissionType[])new Object[1];
+		missions[0] = mission;
 		
-		// ToDo
+		// ToDo: exceptions: not finished; but the Draft is unclear, scj139.pdf from AP
 	}
 	
 	@SCJAllowed
@@ -76,8 +83,12 @@ public class LinearMissionSequencer<MissionType extends Mission> extends Mission
 			throws IllegalArgumentException, IllegalStateException {
 		
 		super(priority, storage, config, name);
+		this.repeat = repeat;
+		this.missions = (MissionType[])new Object[missions.length];
+		for (int i = 0; i < missions.length; i++)
+			this.missions[i] = missions[i];
 		
-		// ToDo
+		// ToDo: exceptions: not finished; but the Draft is unclear, scj139.pdf from AP
 	}
 	
 	@SCJAllowed
@@ -87,14 +98,18 @@ public class LinearMissionSequencer<MissionType extends Mission> extends Mission
 			MissionType[] missions)
 			throws IllegalArgumentException, IllegalStateException {
 		
-		this(priority, storage, config, repeat, missions, "LinearMS");
-		
+		this(priority, storage, config, repeat, missions, "LinearMSs");		
 	}
 	
 	@SCJAllowed(Level.SUPPORT)
-	protected final MissionType getNextMission() {
-		// ToDo
-		return null;
+	protected final MissionType getNextMission() { 
+		if (repeat) {
+			MissionType miss = missions[active];
+            active = (active + 1) % missions.length;
+            return miss;
+		}
+		else
+			return null;
 	}
 }
 

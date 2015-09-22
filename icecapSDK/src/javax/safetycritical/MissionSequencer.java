@@ -111,9 +111,8 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 		
 		if(Launcher.level != 0)
 			Services.setCeiling(this, this.priority.getPriority());
-		System.out.println("MissSeq.constr: 2");
 		ManagedEventHandler.handlerBehavior.initMissionSequencer(this);
-		System.out.println("MissSeq.constr: 3");
+		System.out.println("MissSeq.constr");
 	}
 
 	@SCJAllowed

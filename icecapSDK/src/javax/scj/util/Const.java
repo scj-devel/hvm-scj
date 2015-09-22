@@ -76,18 +76,6 @@ public final class Const {
 	public static int PRIVATE_BACKING_STORE = PRIVATE_BACKING_STORE_DEFAULT;
 	public static int PRIVATE_MEM = PRIVATE_MEM_DEFAULT;
 
-	// Old
-
-	//	public static final int BACKING_STORE_SIZE_DEFAULT = 800 * 1000;
-	//	public static final int IMMORTAL_MEM_SIZE_DEFAULT = 100 * 1000;
-	//	public static final int MISSION_MEM_SIZE_DEFAULT = 200 * 1000;
-	//	public static final int PRIVATE_MEM_SIZE_DEFAULT = 40 * 1000;
-	//	
-	//	public static int BACKING_STORE_SIZE = BACKING_STORE_SIZE_DEFAULT;
-	//	public static int IMMORTAL_MEM_SIZE = IMMORTAL_MEM_SIZE_DEFAULT;
-	//	public static int MISSION_MEM_SIZE = MISSION_MEM_SIZE_DEFAULT;
-	//	public static int PRIVATE_MEM_SIZE = PRIVATE_MEM_SIZE_DEFAULT;
-
 	/* Stacks */
 
 	public static final int STACK_UNIT = 1024; // 256

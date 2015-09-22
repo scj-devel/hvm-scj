@@ -203,13 +203,13 @@ public class CompilationManagerHSO {
         //String inputPackage = "javax.realtime.test.priorityScheduler";
         
         //String inputPackage = "javax.safetycritical.test.safelet1"; 
-        String inputPackage = "javax.safetycritical.test.safelet22"; 
+        //String inputPackage = "javax.safetycritical.test.safelet22"; 
         //String inputPackage = "javax.safetycritical.test.priorityScheduling";
         //String inputPackage = "javax.safetycritical.test.cyclicschedule1";
         //String inputPackage = "javax.safetycritical.test.cyclicexecutive1";
         
         
-        //String inputPackage = "javax.realtime.test";
+        String inputPackage = "javax.realtime.test";
         //String inputPackage = "javax.safetycritical.test";
         
         //String inputClass = "AllTests";
@@ -217,6 +217,7 @@ public class CompilationManagerHSO {
        
         /* --- TCKs of javax.realtime.test --- : */
         //String inputClass = "TckTestMemoryParameters";
+        String inputClass = "TckTestConfigurationParameters";
         //String inputClass = "TckTestReleaseParameters";
         //String inputClass = "TckTestPeriodicParameters";
         //String inputClass = "TckTestAperiodicParameters";
@@ -233,7 +234,7 @@ public class CompilationManagerHSO {
         //String inputClass = "TckTestCyclicSchedule1";  //            SafeletStub
         //String inputClass = "TckTestCyclicSchedule3";
         //String inputClass = "TckTestSafelet1";
-        String inputClass = "TckTestSafelet22";   //           SafeletStub22
+        //String inputClass = "TckTestSafelet22";   //           SafeletStub22
         
         //String inputClass = "TckTestPreemptiveScheduling1";
         
