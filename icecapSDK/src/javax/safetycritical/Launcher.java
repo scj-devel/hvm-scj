@@ -67,19 +67,17 @@ public abstract class Launcher implements Runnable {
 		
 		this.app = app;
 		Launcher.level = level;
-		Launcher.useOS = useOS;
-
-		
+		Launcher.useOS = useOS;		
 	}
 	
-	public static void initSingleCoreBehaviour() {
+	static void initSingleCoreBehaviour() {
 		Mission.missionBehaviour = new SinglecoreMissionBehavior();
 		ManagedEventHandler.handlerBehavior = new SinglecoreHandlerBehavior();
 		Services.servicesBehavior = new SinglecoreServicesBehavior();
 		ManagedMemory.memoryBehavior = new SinglecoreMemoryBehavior();
 	}
 	
-	public static void initMultiCoreBehaviour() {
+	static void initMultiCoreBehaviour() {
 		Services.servicesBehavior = new MulticoreServicesBehavior();
 		Mission.missionBehaviour = new MulticoreMissionBehavior();
 		ManagedEventHandler.handlerBehavior = new MulticoreHandlerBehavior();

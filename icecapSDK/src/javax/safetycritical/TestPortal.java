@@ -3,7 +3,12 @@ package javax.safetycritical;
 public final class TestPortal {
 
 	public static void ManagedMemory_allocateBackingStore(int totalBackingStore) {
-		ManagedMemory.allocateBackingStore(totalBackingStore);
+		ManagedMemory.allocateBackingStore(totalBackingStore);		
+	}
+	
+	public static void singleCoreSetup (int totalBackingStore) {
+		Launcher.initSingleCoreBehaviour();
+		ManagedMemory.allocateBackingStore(totalBackingStore);		
 	}
 
 	public static ManagedMemory ManagedMemory_allocateImmortalMemory(int immortalSize) {
