@@ -143,8 +143,8 @@ public class TestSCJSingleTwoMissions {
 
             MySequencer() {
                 super(new PriorityParameters(Priorities.PR95), 
-                		storageParameters_Sequencer, configParameters);                                                                                                        // memory
-                                                                                                                                                              // size
+                		storageParameters_Sequencer, configParameters); 
+                
                 mission = new Mission[2];
                 mission[0] = new MyMission0();
                 mission[1] = new MyMission1();
