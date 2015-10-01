@@ -103,6 +103,5 @@ public class ClockInterruptHandler implements InterruptHandler, ProcessLogic {
 			Monitor.wait(null);
 			Monitor.notifyAll(null);
 		}
-		Machine.setCurrentScheduler(sch);
 	}
 }

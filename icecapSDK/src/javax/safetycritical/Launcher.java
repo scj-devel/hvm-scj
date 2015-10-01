@@ -106,12 +106,19 @@ public abstract class Launcher implements Runnable {
 	
 	void startLevel0() {
 		MissionSequencer<?> seq = app.getSequencer();
-		CyclicScheduler.instance().start(seq);
+		CyclicScheduler sch = CyclicScheduler.instance();
+		
+		Machine.setCurrentScheduler(sch);
+		
+		sch.start(seq);
 	}
 	
 	void startLevel1_2() {
 		// insert idle process before the mission sequencer.
 		PriorityScheduler sch = PriorityScheduler.instance();
+
+		Machine.setCurrentScheduler(sch.prioritySchedulerImpl);
+		
 		sch.insertReadyQueue(ScjProcess.createIdleProcess());
 		app.getSequencer();
 		PriorityScheduler.instance().start();
@@ -119,7 +126,9 @@ public abstract class Launcher implements Runnable {
 	
 	void startwithOS() {
 		initAffinfitySetsMulticore();
+
 		Machine.setCurrentScheduler(new MultiprocessorHelpingScheduler());
+		
 		OSProcess.initSpecificID();
 		MissionSequencer<?> outerMostMS = app.getSequencer();
 		outerMostMS.privateMemory.enter(outerMostMS);
