@@ -59,7 +59,7 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 	RelativeTime timeGrain;
 	AbsoluteTime now;
 
-	private static PriorityScheduler scheduler = new PriorityScheduler();
+	private static PriorityScheduler scheduler; 
 
 	ScjProcess outerMostSeqProcess = null;
 
@@ -75,9 +75,12 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 	  @*/
 	@SCJAllowed(Level.LEVEL_1)
 	public static PriorityScheduler instance() {
-		//		if (scheduler == null) {
-		//			scheduler = new PriorityScheduler();
-		//		}
+		/* Do not remove lines below to change initialization of the 
+		 * PriorityScheduler. This will break a lot of tests.
+		 */
+		if (scheduler == null) {
+			scheduler = new PriorityScheduler();
+		}
 		return scheduler;
 	}
 
