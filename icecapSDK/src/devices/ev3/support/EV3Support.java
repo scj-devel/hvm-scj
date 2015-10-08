@@ -23,19 +23,11 @@ public class EV3Support {
 		public final static char CHANGESPEED = 'C';
 	}
 	
-	/**
-	 * Create the EV3 commander
-	 * @param m The motors of the robot
-	 */
 	public EV3Support(Motor[] m){
 		commandInfo = new int[3];
 		motors = m;
 	}
 	
-	/**
-	 * get a command form the leader
-	 * @param msg the command that sent from the leader
-	 */
 	public void getCommand(String msg){
 		command = msg.charAt(0);
 
@@ -65,9 +57,6 @@ public class EV3Support {
 		}
 	}
 
-	/**
-	 * take the action based on the command that just got
-	 */
 	public void action() {
 
 		switch (command) {
@@ -158,37 +147,16 @@ public class EV3Support {
 		}
 	}
 
-	/**
-	 * Generate a EV3 command 
-	 * @param command the action of the robot
-	 * @param speed the speed of the robot
-	 * @param numOfLeftMotors the number of left motors of the robot
-	 * @param duration the duration of this command
-	 * @return a String that carries all the information of the command
-	 */
 	public String generateCommand(char command, int speed, int numOfLeftMotors, int duration) {
 		String com = command + "|" + speed + "|" + numOfLeftMotors + "|" + duration;
 		return com;
 	}
-	
-	/**
-	 * Generate a EV3 command 
-	 * @param command the action of the robot
-	 * @param speed the speed of the robot
-	 * @param duration the duration of this command
-	 * @return a String that carries all the information of the command
-	 */
+
 	public String generateCommand(char command, int speed, int duration) {
 		String com = command + "|" + speed + "|" + duration;
 		return com;
 	}
 
-	/**
-	 * Generate a EV3 command 
-	 * @param command the action of the robot
-	 * @param duration the duration of this command
-	 * @return a String that carries all the information of the command
-	 */
 	public String generateCommand(char command, int duration) {
 		String com = command + "|" + duration;
 		return com;
