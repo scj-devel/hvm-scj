@@ -7,13 +7,12 @@ import javax.microedition.io.ConsoleConnection;
 
 public class TestPrintStream {
 	
-	 public static void main(String[] args) {
-	       
+	 public static void main(String[] args) {	       
 	       
 		 	test_PrintStream();
 		 	
 	        args = null; 
-	    }
+	 }
 	 
 	 static String str = "HSO works";
 	 
@@ -32,10 +31,10 @@ public class TestPrintStream {
 		 PrintStream printStr = new PrintStream (out);
 		 
 		 printStr.println(str);
+		 printStr.println(123);
+		 printStr.println('a');		 
 		 
 		 printStr.close();
-		 
-		 //devices.Console.println(str);
 	 }
 
 }

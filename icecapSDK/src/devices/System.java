@@ -29,7 +29,7 @@ public class System {
 
 	public static native void resetMemory();
 
-	private static class DevicePrintStream extends PrintStream {
+	/*private*/ public static class DevicePrintStream extends PrintStream {
 		@Override
 		public void println(String msg) {
 			devices.Console.println(msg);

@@ -5,11 +5,14 @@ import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class ConsoleConnection implements StreamConnection {
+import devices.System;
 
+public class ConsoleConnection implements StreamConnection {
+	
 	public ConsoleConnection(String name)
 			throws javax.microedition.io.ConnectionNotFoundException {
 		
+		System.initializeSystemClass();
 	}
 	
 	@Override
@@ -38,8 +41,7 @@ public class ConsoleConnection implements StreamConnection {
 
 	@Override
 	public OutputStream openOutputStream() {
-		// TODO Auto-generated method stub
-		return null;
+		return new System.DevicePrintStream();
 	}
 
 }

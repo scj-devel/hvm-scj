@@ -4,11 +4,15 @@ import java.io.OutputStream;
 
 import javax.safetycritical.annotate.SCJAllowed;
 
+import devices.System.DevicePrintStream;
+
 public class PrintStream extends OutputStream {
 
+	DevicePrintStream out;
+	
 	@SCJAllowed
 	public PrintStream(OutputStream out) {
-		
+		this.out = (DevicePrintStream)out;
 	}
 	
 	public boolean checkError( ) {
@@ -24,7 +28,7 @@ public class PrintStream extends OutputStream {
 	}
 	
 	public void print(int i) {
-		devices.Console.print(i);
+		out.print(i);
 	}
 	
 	public void print(char [] s) {
@@ -36,7 +40,7 @@ public class PrintStream extends OutputStream {
 	}
 	
 	public void print(String s) {
-		devices.Console.print(s);
+		out.print(s);
 	}
 	
 	public void print(long l) {
@@ -44,7 +48,7 @@ public class PrintStream extends OutputStream {
 	}
 	
 	public void print(char c) {
-		devices.Console.print(c + "");
+		out.print(c + "");
 	}
 	
 	public void print(boolean b) {
@@ -70,7 +74,7 @@ public class PrintStream extends OutputStream {
 	}
 	
 	public void println(String s) {
-		devices.Console.println(s);
+		out.println(s);
 	}
 	
 	public void println(Object x) {
@@ -82,7 +86,7 @@ public class PrintStream extends OutputStream {
 	}
 	
 	public void println( ) {
-		devices.Console.println("");
+		out.println("");
 	}
 	
 	protected void setError( ) {
