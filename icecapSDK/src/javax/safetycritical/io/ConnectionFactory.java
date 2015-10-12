@@ -2,8 +2,10 @@ package javax.safetycritical.io;
 
 public abstract class ConnectionFactory {
 	
+	private String  name;
+	
 	protected ConnectionFactory(String name) {
-		
+		this.name = name;
 	}
 
 	public abstract javax.microedition.io.Connection create(String url)
@@ -11,7 +13,8 @@ public abstract class ConnectionFactory {
 			javax.microedition.io.ConnectionNotFoundException;
 	
 	public boolean equals(Object other) {
-		return false;
+		return other instanceof ConnectionFactory &&
+				name.equals(((ConnectionFactory)other).name);
 	}
 	
 	public static javax.safetycritical.io.ConnectionFactory getRegistered(
@@ -19,7 +22,7 @@ public abstract class ConnectionFactory {
 		return null;
 	}
 	
-	public final java.lang.String getServiceName( ) {
+	public final String getServiceName( ) {
 		return null;
 	}
 	

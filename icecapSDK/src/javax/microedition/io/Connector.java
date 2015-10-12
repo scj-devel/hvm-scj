@@ -11,7 +11,7 @@ public class Connector {
 	public static final int WRITE = 2;
 	
 	@SCJAllowed
-	public static final int READ_WRITE = (READ|WRITE);
+	public static final int READ_WRITE = 3;
 	
 	// No instantiation of class Connector
 	private Connector() {
