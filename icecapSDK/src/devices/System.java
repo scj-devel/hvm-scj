@@ -52,7 +52,10 @@ public class System {
 
 		@Override
 		public void print(boolean b) {
-			devices.Console.println("print boolean b unimplemented");
+			if (b)
+				devices.Console.print("true"); 
+			else
+				devices.Console.print("false");
 		}
 
 		@Override
@@ -62,7 +65,7 @@ public class System {
 
 		@Override
 		public void print(long l) {
-			devices.Console.println("print long l unimplemented");
+			devices.Console.print(l);
 		}
 
 		@Override
@@ -82,7 +85,11 @@ public class System {
 
 		@Override
 		public void print(Object obj) {
-			devices.Console.println("print Object obj unimplemented");
+			//devices.Console.println("print Object obj unimplemented");
+			if (obj == null)
+				devices.Console.print("null");
+			else
+				devices.Console.print(obj.toString());
 		}
 
 		private static class DummyOutputStream extends OutputStream {

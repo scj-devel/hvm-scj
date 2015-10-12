@@ -31,12 +31,13 @@ public class PrintStream extends OutputStream {
 		out.print(i);
 	}
 	
-	public void print(char [] s) {
-		
+	public void print(char[] s) {
+		for (int i = 0; i < s.length; i++)
+			print(s[i]);
 	}
 	
 	public void print(Object obj) {
-		
+		out.print(obj);
 	}
 	
 	public void print(String s) {
@@ -44,7 +45,7 @@ public class PrintStream extends OutputStream {
 	}
 	
 	public void print(long l) {
-		
+		out.print(l);
 	}
 	
 	public void print(char c) {
@@ -52,11 +53,12 @@ public class PrintStream extends OutputStream {
 	}
 	
 	public void print(boolean b) {
-		
+		out.print(b);
 	}
 	
-	public void println(boolean x) {
-		
+	public void println(boolean b) {
+		print(b);
+		println();		
 	}
 	
 	public void println(char c) {
@@ -69,20 +71,23 @@ public class PrintStream extends OutputStream {
 		println();
 	}
 	
-	public void println(char [] x) {
-		
+	public void println(char[] s) {
+		print(s);
+		println();
 	}
 	
 	public void println(String s) {
 		out.println(s);
 	}
 	
-	public void println(Object x) {
-		
+	public void println(Object obj) {
+		print(obj);
+		println();
 	}
 	
-	public void println(long x) {
-		
+	public void println(long l) {
+		print(l);
+		println();
 	}
 	
 	public void println( ) {
