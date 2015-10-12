@@ -32,8 +32,7 @@ public class PrintStream extends OutputStream {
 	}
 	
 	public void print(char[] s) {
-		for (int i = 0; i < s.length; i++)
-			print(s[i]);
+		out.print(s);
 	}
 	
 	public void print(Object obj) {
@@ -49,7 +48,7 @@ public class PrintStream extends OutputStream {
 	}
 	
 	public void print(char c) {
-		out.print(c + "");
+		out.print(c);
 	}
 	
 	public void print(boolean b) {
@@ -99,11 +98,11 @@ public class PrintStream extends OutputStream {
 	}
 	
 	public void write(byte [] buf, int off, int len) {
-		
+		out.write(buf, off, len);	
 	}
 	
 	public void write(int b) {
-		
+		out.write(b);
 	}
 
 }

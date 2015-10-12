@@ -47,7 +47,16 @@ public class TestPrintStream {
 			 printStr.println(obj);
 			 
 			 Item item = new Item("AAA", 111);
-			 printStr.println(item);		 
+			 printStr.println(item);
+			 
+			 byte bt = 3;
+			 printStr.write(bt);
+			 printStr.println();
+			 
+			 
+			 byte[] bytes = {70, 71, 72, 73, 74};
+			 printStr.write (bytes, 1, 3);
+			 printStr.println();
 			 
 			 printStr.close();
 			 

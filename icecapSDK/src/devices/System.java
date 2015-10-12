@@ -80,18 +80,29 @@ public class System {
 
 		@Override
 		public void print(char[] s) {
-			devices.Console.println("print char[] s unimplemented");
+			for (int i = 0; i < s.length; i++)
+				print(s[i]);
 		}
 
 		@Override
 		public void print(Object obj) {
-			//devices.Console.println("print Object obj unimplemented");
 			if (obj == null)
 				devices.Console.print("null");
 			else
 				devices.Console.print(obj.toString());
 		}
+		
+		@Override
+		public void write(int b) {
+			devices.Console.print(b);
+		}
 
+		@Override
+		public void write(byte[] buf, int off, int len) {
+			for (int i = off; i < off + len; i++)
+				devices.Console.print(buf[i]);
+		}
+		
 		private static class DummyOutputStream extends OutputStream {
 
 			@Override
