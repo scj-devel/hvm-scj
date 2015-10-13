@@ -15,14 +15,13 @@ public class TestPrintStream {
 	          args = null; 
 	 }
 	 
-	 static String str = "HSO works";
+	 static String str = "HSO: it works";
 	 
 	 static int test_PrintStream() {
 		 
 		 ConsoleConnection console = null;
 		 try {
-			  console = new ConsoleConnection("");
-		 
+			  console = new ConsoleConnection("");		 
 		 
 			 OutputStream out = console.openOutputStream();
 			 

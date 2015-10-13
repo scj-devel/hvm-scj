@@ -9,14 +9,17 @@ import devices.System.DevicePrintStream;
 public class PrintStream extends OutputStream {
 
 	DevicePrintStream out;
+	boolean errorState;
 	
 	@SCJAllowed
 	public PrintStream(OutputStream out) {
 		this.out = (DevicePrintStream)out;
+		this.errorState = false;
 	}
 	
 	public boolean checkError( ) {
-		return false;
+		flush();
+		return errorState;
 	}
 	
 	public void close( ) {
@@ -94,7 +97,7 @@ public class PrintStream extends OutputStream {
 	}
 	
 	protected void setError( ) {
-		
+		errorState = true;
 	}
 	
 	public void write(byte [] buf, int off, int len) {
