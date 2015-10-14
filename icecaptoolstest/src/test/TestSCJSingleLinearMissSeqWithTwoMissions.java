@@ -7,7 +7,6 @@ import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.AperiodicEventHandler;
-import javax.safetycritical.CyclicExecutive;
 import javax.safetycritical.LaunchLevel1;
 import javax.safetycritical.LinearMissionSequencer;
 import javax.safetycritical.Mission;
@@ -18,7 +17,6 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
-@SuppressWarnings("rawtypes")
 public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet<Mission> {
 
     private static class MyPeriodicEvh extends PeriodicEventHandler {
