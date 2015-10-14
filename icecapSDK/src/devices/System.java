@@ -29,7 +29,7 @@ public class System {
 
 	public static native void resetMemory();
 
-	private static class DevicePrintStream extends PrintStream {
+	/*private*/ public static class DevicePrintStream extends PrintStream {
 		@Override
 		public void println(String msg) {
 			devices.Console.println(msg);
@@ -52,7 +52,10 @@ public class System {
 
 		@Override
 		public void print(boolean b) {
-			devices.Console.println("print boolean b unimplemented");
+			if (b)
+				devices.Console.print("true"); 
+			else
+				devices.Console.print("false");
 		}
 
 		@Override
@@ -62,7 +65,7 @@ public class System {
 
 		@Override
 		public void print(long l) {
-			devices.Console.println("print long l unimplemented");
+			devices.Console.print(l);
 		}
 
 		@Override
@@ -77,14 +80,29 @@ public class System {
 
 		@Override
 		public void print(char[] s) {
-			devices.Console.println("print char[] s unimplemented");
+			for (int i = 0; i < s.length; i++)
+				print(s[i]);
 		}
 
 		@Override
 		public void print(Object obj) {
-			devices.Console.println("print Object obj unimplemented");
+			if (obj == null)
+				devices.Console.print("null");
+			else
+				devices.Console.print(obj.toString());
+		}
+		
+		@Override
+		public void write(int b) {
+			devices.Console.print(b);
 		}
 
+		@Override
+		public void write(byte[] buf, int off, int len) {
+			for (int i = off; i < off + len; i++)
+				devices.Console.print(buf[i]);
+		}
+		
 		private static class DummyOutputStream extends OutputStream {
 
 			@Override
