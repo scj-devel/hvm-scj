@@ -1,5 +1,7 @@
 package javax.microedition.io;
 
+import java.io.IOException;
+
 import javax.safetycritical.annotate.SCJAllowed;
 
 public class Connector {
@@ -19,7 +21,7 @@ public class Connector {
 	
 	public static javax.microedition.io.Connection open(String name)
 			throws java.io.IOException {
-		return null;
+		return open(name, READ_WRITE);
 	}
 	
 	public static javax.microedition.io.Connection open(String name, int mode)
@@ -29,22 +31,47 @@ public class Connector {
 	
 	public static java.io.DataInputStream openDataInputStream(String name)
 			throws java.io.IOException {
-		return null;
+		InputConnection con = null;
+        try {
+            con = (InputConnection)Connector.open(name, Connector.READ);
+        } catch (ClassCastException e) {
+            throw new IOException(e.toString());
+        }
+
+        try {
+            return con.openDataInputStream();
+        } finally {
+            con.close();
+        }
 	}
 	
 	public static java.io.DataOutputStream openDataOutputStream(String name)
 			throws java.io.IOException {
-		return null;
+		
+		OutputConnection con = null;
+        try {
+            con = (OutputConnection)Connector.open(name, Connector.WRITE);
+        } catch (ClassCastException e) {
+            throw new IOException(e.toString());
+        }
+
+        try {
+            return con.openDataOutputStream();
+        } finally {
+            con.close();
+        }
 	}
 	
 	public static java.io.InputStream openInputStream(String name)
 			throws java.io.IOException {
-		return null;
+		
+		return openDataInputStream(name);
 	}
 	
 	public static java.io.OutputStream openOutputStream(String name)
 			throws java.io.IOException {
-		return null;
+		
+		return openDataOutputStream(name);
 	}
 }
 

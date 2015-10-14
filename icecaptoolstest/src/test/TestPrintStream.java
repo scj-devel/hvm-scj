@@ -48,9 +48,18 @@ public class TestPrintStream {
 			 Item item = new Item("AAA", 111);
 			 printStr.println(item);
 			 
-			 byte bt = 3;
+			 byte bt = 0;
 			 printStr.write(bt);
 			 printStr.println();
+			 
+			 printStr.write(256);
+			 printStr.println();
+			 printStr.println("Cannot print 256; prints '?' which is 63");
+			 
+			 printStr.write(-1);
+			 printStr.println();
+			 printStr.println("Cannot print -1; prints '?' which is 63");
+			 
 			 
 			 
 			 byte[] bytes = {70, 71, 72, 73, 74};
