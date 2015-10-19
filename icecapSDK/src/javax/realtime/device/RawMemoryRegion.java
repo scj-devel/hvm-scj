@@ -16,10 +16,8 @@ public class RawMemoryRegion
 {
   private String name;
 		
-	//public static final RawMemoryRegion MEMORY_MAPPED_REGION;
-	
-  public static final String MEMORY_MAPPED_REGION  = "MEMORY_MAPPED_REGION";
-  public static final String IO_PORT_MAPPED_REGION = "IO_PORT_MAPPED_REGION";
+//  public static final String MEMORY_MAPPED_REGION  = "MEMORY_MAPPED_REGION";
+//  public static final String IO_PORT_MAPPED_REGION = "IO_PORT_MAPPED_REGION";
 	
   public RawMemoryRegion(String name) {
 	  this.name = name;

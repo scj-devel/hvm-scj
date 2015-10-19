@@ -13,7 +13,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  */
 @SCJAllowed
 public interface RawMemoryRegionFactory {
-
+	
 	public RawByte createRawByte(long base, int count, int stride) 
 			throws java.lang.SecurityException,
 			javax.realtime.OffsetOutOfBoundsException, 
