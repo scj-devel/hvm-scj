@@ -15,17 +15,20 @@ import javax.safetycritical.annotate.SCJAllowed;
 public class RawMemoryFactory {
 	
 	public static final RawMemoryRegion MEMORY_MAPPED_REGION  = 
-			new Raw_MemoryMappedRegion_Default("MEMORY_MAPPED_REGION");
+			new RawMemoryMappedRegion_Default("MEMORY_MAPPED_REGION");
 	
 	public static final RawMemoryRegion IO_PORT_MAPPED_REGION = 
-			new Raw_MemoryMappedRegion_Default("IO_PORT_MAPPED_REGION");
+			new RawMemoryMappedRegion_Default("IO_PORT_MAPPED_REGION");
+	
+	static final RawMemoryFactory defaultFactory = new RawMemoryFactory_Default();
+	
 	
 	public RawMemoryFactory() {
 		
 	}
 	
 	public static RawMemoryFactory getDefaultFactory() {
-		return null;
+		return defaultFactory;
 	}
 	
 	public void register(RawMemoryRegionFactory factory) 
@@ -36,9 +39,9 @@ public class RawMemoryFactory {
 	
 	public void deregister(RawMemoryRegionFactory factory) 
 			throws DeregistrationException
-		{
+	{
 			
-		}
+	}
 	
 	public static RawByte createRawByte(RawMemoryRegion region, long base, int count, int stride) 
 			throws java.lang.SecurityException,
@@ -47,25 +50,50 @@ public class RawMemoryFactory {
 			javax.realtime.UnsupportedPhysicalMemoryException, 
 			javax.realtime.MemoryTypeConflictException
 	{
+		RawByte rawBytes = null;
 		
-		return null;
+		try {
+			rawBytes = region.createRawByte(base, count, stride);
+		}
+		catch (Exception e) {
+			
+		}
+		
+		return rawBytes;
 	}
 	
 	
-	private static class Raw_MemoryMappedRegion_Default extends RawMemoryRegion { 
+	private static class RawMemoryMappedRegion_Default extends RawMemoryRegion { 
 		
-		Raw_MemoryMappedRegion_Default(String name) {
+		RawMemoryMappedRegion_Default(String name) {
+			super(name);
+		}
+		
+		public RawByte createRawByte(long base, int count, int stride) 
+				throws java.lang.SecurityException,
+				javax.realtime.OffsetOutOfBoundsException, 
+				javax.realtime.SizeOutOfBoundsException,
+				javax.realtime.UnsupportedPhysicalMemoryException, 
+				javax.realtime.MemoryTypeConflictException
+	  {
+		  return new RawByteHW(base, count, stride);
+	  }
+		
+	}
+	
+	private static class RawIOPortMappedRegion_Default extends RawMemoryRegion { 
+		
+		RawIOPortMappedRegion_Default(String name) {
 			super(name);
 		}
 		
 	}
 	
-	private static class Raw_IOPortMappedRegion_Default extends RawMemoryRegion { 
+	private static class RawMemoryFactory_Default extends RawMemoryFactory {
 		
-		Raw_IOPortMappedRegion_Default(String name) {
-			super(name);
+		RawMemoryFactory_Default() {			
+			super();
 		}
-		
 	}
 
 }
