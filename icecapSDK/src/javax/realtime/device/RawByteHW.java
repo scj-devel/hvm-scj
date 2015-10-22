@@ -5,23 +5,43 @@ import javax.realtime.OffsetOutOfBoundsException;
 import vm.Address32Bit;
 import vm.HardwareObject;
 
-class RawByteHW implements RawByte {
-	
-	long base; 
+public class RawByteHW implements RawByte {
+
+	long base;
 	int count;
 	int stride;
-	
-	HardwareObject hwObj;
 
-	RawByteHW(long base, int count, int stride) {
-		
+	private static class ByteHWObject extends HardwareObject {
+
+		byte current;
+
+		ByteHWObject(long base, int count, int stride) {
+
+			super(new Address32Bit((int)base));
+			
+		}
+
+		void add(int i) {
+			address.add(i);
+		}
+
+		void sub(int i) {
+			address.sub(i);
+		}
+
+	}
+
+	ByteHWObject byteHWObj;
+
+	public RawByteHW(long base, int count, int stride) {
+
 		this.base = base;
 		this.count = count;
-		this.stride = stride;	
-		
-		this.hwObj = new HardwareObject(new Address32Bit((int)base));
+		this.stride = stride;
+
+		this.byteHWObj = new ByteHWObject(base, count, stride);
 	}
-	
+
 	@Override
 	public int get(int offset, byte[] values)
 			throws OffsetOutOfBoundsException, NullPointerException {
@@ -39,14 +59,17 @@ class RawByteHW implements RawByte {
 
 	@Override
 	public byte getByte(int offset) throws OffsetOutOfBoundsException {
-		// TODO Auto-generated method stub
-		return 0;
+		byteHWObj.add(offset * stride);
+		byte b = byteHWObj.current;
+		byteHWObj.sub(offset * stride);
+		return b;
 	}
 
 	@Override
 	public byte getByte() {
-		// TODO Auto-generated method stub
-		return 0;
+		System.out.println("RawByteHW.getByte: " + byteHWObj);
+		
+		return byteHWObj.current;
 	}
 
 	@Override
@@ -58,10 +81,11 @@ class RawByteHW implements RawByte {
 	@Override
 	public int getSize() {
 		// TODO Auto-generated method stub
-		return 0;
+		return count * stride;
 	}
+
 	public int getStride() {
-		
+
 		return stride;
 	}
 
@@ -83,15 +107,14 @@ class RawByteHW implements RawByte {
 	@Override
 	public void setByte(int offset, byte value)
 			throws OffsetOutOfBoundsException {
-		// TODO Auto-generated method stub
-
+		byteHWObj.add(offset * stride);
+		byteHWObj.current = value;
+		byteHWObj.sub(offset * stride);
 	}
 
 	@Override
 	public void setByte(byte value) {
-		
-		// TODO Auto-generated method stub
-
+		byteHWObj.current = value;
 	}
 
 }

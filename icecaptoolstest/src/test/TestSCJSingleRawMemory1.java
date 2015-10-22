@@ -25,9 +25,9 @@ public class TestSCJSingleRawMemory1 {
 		 
 		 System.out.println("RawMemoryFactory: " + factory);
 		 
-		 RawByte controlReg = factory.createRawByte(RawMemoryFactory.MEMORY_MAPPED_REGION, 0x20, 4, 1);
+		 RawByte controlReg = factory.createRawByte(RawMemoryFactory.MEMORY_MAPPED_REGION, 0xFFFFF412, 4, 1);
 		 
-		 RawByte dataReg    = factory.createRawByte(RawMemoryFactory.MEMORY_MAPPED_REGION, 0x24, 8, 1);
+		 //RawByte dataReg    = factory.createRawByte(RawMemoryFactory.MEMORY_MAPPED_REGION, 0x24, 8, 1);
 		 
 		 if (controlReg != null) {
 			 int controlRegSize = controlReg.getSize();
@@ -35,6 +35,12 @@ public class TestSCJSingleRawMemory1 {
 		 }
 		 else
 			 System.out.println("controlReg: " + controlReg); 
+		 
+//		 byte b1 = 12;
+//		 controlReg.setByte(b1);	
+//		 byte b2 = controlReg.getByte();
+//		 System.out.println("Byte is: " + b2);
+		 
 		 
 		 
 		 return 1;
