@@ -13,7 +13,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  */
 @SCJAllowed
 public interface RawMemoryRegionFactory {
-
+	
 	public RawByte createRawByte(long base, int count, int stride) 
 			throws java.lang.SecurityException,
 			javax.realtime.OffsetOutOfBoundsException, 
@@ -21,82 +21,82 @@ public interface RawMemoryRegionFactory {
 			javax.realtime.UnsupportedPhysicalMemoryException, 
 			javax.realtime.MemoryTypeConflictException;
 
-	public RawByteReader createRawByteReader(long base, int count, int stride) 
-			throws java.lang.SecurityException,
-			javax.realtime.OffsetOutOfBoundsException, 
-			javax.realtime.SizeOutOfBoundsException,
-			javax.realtime.UnsupportedPhysicalMemoryException, 
-			javax.realtime.MemoryTypeConflictException;
-
-	public RawByteWriter createRawByteWriter(long base, int count, int stride) 
-			throws java.lang.SecurityException,
-			javax.realtime.OffsetOutOfBoundsException, 
-			javax.realtime.SizeOutOfBoundsException,
-			javax.realtime.UnsupportedPhysicalMemoryException, 
-			javax.realtime.MemoryTypeConflictException;
-
-	public RawInt createRawInt(long base, int count, int stride)
-			throws java.lang.SecurityException, 
-			javax.realtime.OffsetOutOfBoundsException,
-			javax.realtime.SizeOutOfBoundsException, 
-			javax.realtime.UnsupportedPhysicalMemoryException,
-			javax.realtime.MemoryTypeConflictException;
-
-	public RawIntReader createRawIntReader(long base, int count, int stride)
-			throws java.lang.SecurityException, 
-			javax.realtime.OffsetOutOfBoundsException,
-			javax.realtime.SizeOutOfBoundsException, 
-			javax.realtime.UnsupportedPhysicalMemoryException,
-			javax.realtime.MemoryTypeConflictException;
-
-	public RawIntWriter createRawIntWriter(long base, int count, int stride)
-			throws java.lang.SecurityException, 
-			javax.realtime.OffsetOutOfBoundsException,
-			javax.realtime.SizeOutOfBoundsException, 
-			javax.realtime.UnsupportedPhysicalMemoryException,
-			javax.realtime.MemoryTypeConflictException;
-
-	public RawLong createRawLong(long base, int count, int stride)
-			throws java.lang.SecurityException, 
-			javax.realtime.OffsetOutOfBoundsException,
-			javax.realtime.SizeOutOfBoundsException, 
-			javax.realtime.UnsupportedPhysicalMemoryException,
-			javax.realtime.MemoryTypeConflictException;
-
-	public RawLongReader createRawLongReader(long base, int count, int stride)
-			throws java.lang.SecurityException, 
-			javax.realtime.OffsetOutOfBoundsException,
-			javax.realtime.SizeOutOfBoundsException, 
-			javax.realtime.UnsupportedPhysicalMemoryException,
-			javax.realtime.MemoryTypeConflictException;
-
-	public RawLongWriter createRawLongWriter(long base, int count, int stride)
-			throws java.lang.SecurityException, 
-			javax.realtime.OffsetOutOfBoundsException,
-			javax.realtime.SizeOutOfBoundsException, 
-			javax.realtime.UnsupportedPhysicalMemoryException,
-			javax.realtime.MemoryTypeConflictException;
-
-	public RawShort createRawShort(long base, int count, int stride)
-			throws java.lang.SecurityException, 
-			javax.realtime.OffsetOutOfBoundsException,
-			javax.realtime.SizeOutOfBoundsException, 
-			javax.realtime.UnsupportedPhysicalMemoryException,
-			javax.realtime.MemoryTypeConflictException;
-
-	public RawShortReader createRawShortReader(long base, int count, int stride)
-			throws java.lang.SecurityException, 
-			javax.realtime.OffsetOutOfBoundsException,
-			javax.realtime.SizeOutOfBoundsException, 
-			javax.realtime.UnsupportedPhysicalMemoryException,
-			javax.realtime.MemoryTypeConflictException;
-
-	public RawShortWriter createRawShortWriter(long base, int count, int stride)
-			throws java.lang.SecurityException, 
-			javax.realtime.OffsetOutOfBoundsException,
-			javax.realtime.SizeOutOfBoundsException, 
-			javax.realtime.UnsupportedPhysicalMemoryException,
-			javax.realtime.MemoryTypeConflictException;
-
-	public RawMemoryRegion getRegion();
+//	public RawByteReader createRawByteReader(long base, int count, int stride) 
+//			throws java.lang.SecurityException,
+//			javax.realtime.OffsetOutOfBoundsException, 
+//			javax.realtime.SizeOutOfBoundsException,
+//			javax.realtime.UnsupportedPhysicalMemoryException, 
+//			javax.realtime.MemoryTypeConflictException;
+//
+//	public RawByteWriter createRawByteWriter(long base, int count, int stride) 
+//			throws java.lang.SecurityException,
+//			javax.realtime.OffsetOutOfBoundsException, 
+//			javax.realtime.SizeOutOfBoundsException,
+//			javax.realtime.UnsupportedPhysicalMemoryException, 
+//			javax.realtime.MemoryTypeConflictException;
+//
+//	public RawInt createRawInt(long base, int count, int stride)
+//			throws java.lang.SecurityException, 
+//			javax.realtime.OffsetOutOfBoundsException,
+//			javax.realtime.SizeOutOfBoundsException, 
+//			javax.realtime.UnsupportedPhysicalMemoryException,
+//			javax.realtime.MemoryTypeConflictException;
+//
+//	public RawIntReader createRawIntReader(long base, int count, int stride)
+//			throws java.lang.SecurityException, 
+//			javax.realtime.OffsetOutOfBoundsException,
+//			javax.realtime.SizeOutOfBoundsException, 
+//			javax.realtime.UnsupportedPhysicalMemoryException,
+//			javax.realtime.MemoryTypeConflictException;
+//
+//	public RawIntWriter createRawIntWriter(long base, int count, int stride)
+//			throws java.lang.SecurityException, 
+//			javax.realtime.OffsetOutOfBoundsException,
+//			javax.realtime.SizeOutOfBoundsException, 
+//			javax.realtime.UnsupportedPhysicalMemoryException,
+//			javax.realtime.MemoryTypeConflictException;
+//
+//	public RawLong createRawLong(long base, int count, int stride)
+//			throws java.lang.SecurityException, 
+//			javax.realtime.OffsetOutOfBoundsException,
+//			javax.realtime.SizeOutOfBoundsException, 
+//			javax.realtime.UnsupportedPhysicalMemoryException,
+//			javax.realtime.MemoryTypeConflictException;
+//
+//	public RawLongReader createRawLongReader(long base, int count, int stride)
+//			throws java.lang.SecurityException, 
+//			javax.realtime.OffsetOutOfBoundsException,
+//			javax.realtime.SizeOutOfBoundsException, 
+//			javax.realtime.UnsupportedPhysicalMemoryException,
+//			javax.realtime.MemoryTypeConflictException;
+//
+//	public RawLongWriter createRawLongWriter(long base, int count, int stride)
+//			throws java.lang.SecurityException, 
+//			javax.realtime.OffsetOutOfBoundsException,
+//			javax.realtime.SizeOutOfBoundsException, 
+//			javax.realtime.UnsupportedPhysicalMemoryException,
+//			javax.realtime.MemoryTypeConflictException;
+//
+//	public RawShort createRawShort(long base, int count, int stride)
+//			throws java.lang.SecurityException, 
+//			javax.realtime.OffsetOutOfBoundsException,
+//			javax.realtime.SizeOutOfBoundsException, 
+//			javax.realtime.UnsupportedPhysicalMemoryException,
+//			javax.realtime.MemoryTypeConflictException;
+//
+//	public RawShortReader createRawShortReader(long base, int count, int stride)
+//			throws java.lang.SecurityException, 
+//			javax.realtime.OffsetOutOfBoundsException,
+//			javax.realtime.SizeOutOfBoundsException, 
+//			javax.realtime.UnsupportedPhysicalMemoryException,
+//			javax.realtime.MemoryTypeConflictException;
+//
+//	public RawShortWriter createRawShortWriter(long base, int count, int stride)
+//			throws java.lang.SecurityException, 
+//			javax.realtime.OffsetOutOfBoundsException,
+//			javax.realtime.SizeOutOfBoundsException, 
+//			javax.realtime.UnsupportedPhysicalMemoryException,
+//			javax.realtime.MemoryTypeConflictException;
+//
+//	public RawMemoryRegion getRegion();
 }

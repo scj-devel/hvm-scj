@@ -23,11 +23,13 @@ public class PrintStream extends OutputStream {
 	}
 	
 	public void close( ) {
-		
+		if (out != null)
+			out.close();
 	}
 	
 	public void flush( ) {
-		
+		if (out != null)
+			out.flush();
 	}
 	
 	public void print(int i) {
@@ -105,6 +107,9 @@ public class PrintStream extends OutputStream {
 	}
 	
 	public void write(int b) {
+		if (b > 255 || b < 0) {
+			b = '?';
+		}
 		out.write(b);
 	}
 

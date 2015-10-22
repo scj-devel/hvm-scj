@@ -12,14 +12,9 @@ import javax.safetycritical.annotate.SCJAllowed;
  *         HREF="mailto:hso@via.dk">hso@via.dk</A>
  */
 @SCJAllowed
-public class RawMemoryRegion
+public class RawMemoryRegion implements RawMemoryRegionFactory
 {
   private String name;
-		
-	//public static final RawMemoryRegion MEMORY_MAPPED_REGION;
-	
-  public static final String MEMORY_MAPPED_REGION  = "MEMORY_MAPPED_REGION";
-  public static final String IO_PORT_MAPPED_REGION = "IO_PORT_MAPPED_REGION";
 	
   public RawMemoryRegion(String name) {
 	  this.name = name;
@@ -39,5 +34,15 @@ public class RawMemoryRegion
   
   public final String toString() {
     return null;
+  }
+  
+  public RawByte createRawByte(long base, int count, int stride) 
+			throws java.lang.SecurityException,
+			javax.realtime.OffsetOutOfBoundsException, 
+			javax.realtime.SizeOutOfBoundsException,
+			javax.realtime.UnsupportedPhysicalMemoryException, 
+			javax.realtime.MemoryTypeConflictException
+  {
+	  return null;
   }
 }

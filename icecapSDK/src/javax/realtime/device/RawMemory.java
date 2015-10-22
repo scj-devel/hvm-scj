@@ -17,4 +17,5 @@ public interface RawMemory
 {
   public long getAddress();
   public int getSize();
+  public int getStride();
 }

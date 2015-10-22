@@ -23,7 +23,7 @@ public class TestSCJ extends TestAll {
 	}
 
 	protected boolean includeFileInTest(String test) {
-		return test.endsWith(".java") && test.startsWith("TestSCJSingle");
+		return test.endsWith(".java") && test.startsWith("TestPrintStream");  //  TestSCJSingle
 	}
 
 }

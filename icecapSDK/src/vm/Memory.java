@@ -198,6 +198,21 @@ public class Memory {
 	public int getBase() {
 		return base;
 	}
+	
+	@IcecapCompileMe
+	public int getStartMemoryAddress()
+	{
+		if (heapArea.base != 4)
+		{
+			return base;
+		}
+		else
+		{
+			return (int) (getHeapBase() + base);
+		}
+	}
+
+	private static native long getHeapBase();
 
 	public int getSize() {
 		return size;

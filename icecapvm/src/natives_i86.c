@@ -79,7 +79,10 @@ void writeByteToIO(pointer address, unsigned short offset, unsigned char lsb) {
     saddress = address;
     soffset = offset;
     slsb = lsb;
-    printf("write byte\n");
+#if defined(TEST_TESTHWOBJECT_MAIN)
+#else
+    *(unsigned char*) (address + (offset >> 3)) = lsb;
+#endif
 }
 
 void writeBitToIO(pointer address, unsigned short offset, unsigned char bit) {
