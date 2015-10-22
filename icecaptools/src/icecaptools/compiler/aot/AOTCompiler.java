@@ -1882,6 +1882,15 @@ public abstract class AOTCompiler implements SPManipulator {
 				output.append("   sp++;\n");
 				pc++;
 				break;
+			case RawByteCodes.d2i_opcode:
+				localVariables.print("   double d_ouble;\n");
+				sm.flush(true);
+				output.append("   d_ouble = *(double*) (sp - 2);\n");
+				output.append("   sp -= 2;\n");
+				output.append("   *(int32*)sp = (int32)d_ouble;\n");
+				output.append("   sp++;\n");
+				pc++;
+				break;
 			case RawByteCodes.d2l_opcode:
 				localVariables.print("   double d_ouble;\n");
 				sm.flush(true);
@@ -2404,43 +2413,47 @@ public abstract class AOTCompiler implements SPManipulator {
 
 		referredMethod = getCalleeMethodFromBNode(consumer);
 
-		MethodOrFieldDesc methodDesc = getCalleeMethodDescriptorFromBNode(consumer);
+		if (referredMethod != null) {
+			MethodOrFieldDesc methodDesc = getCalleeMethodDescriptorFromBNode(consumer);
 
-		if (interpretMethod(referredMethod, methodDesc, toolBox.getCregistry())) {
-			return Size.INT;
-		}
-
-		int top = consumer.getAinfo().entryStack.size() - 1;
-
-		Type[] args = referredMethod.getArgumentTypes();
-
-		if (args != null) {
-			int index = args.length;
-			while (index > 0) {
-				Type arg = args[index - 1];
-				if (type2Size(arg) == Size.LONG) {
-					if ((top == stackCellIndex) || (top - 1 == stackCellIndex)) {
-						return Size.INT;
-					}
-					top--;
-				} else {
-					if (top == stackCellIndex) {
-						return type2Size(arg);
-					}
-				}
-
-				index--;
-
-				top--;
-			}
-		}
-
-		if (consumer.getOpCode() != RawByteCodes.invokestatic_opcode) {
-			if (top == stackCellIndex) {
+			if (interpretMethod(referredMethod, methodDesc, toolBox.getCregistry())) {
 				return Size.INT;
 			}
+
+			int top = consumer.getAinfo().entryStack.size() - 1;
+
+			Type[] args = referredMethod.getArgumentTypes();
+
+			if (args != null) {
+				int index = args.length;
+				while (index > 0) {
+					Type arg = args[index - 1];
+					if (type2Size(arg) == Size.LONG) {
+						if ((top == stackCellIndex) || (top - 1 == stackCellIndex)) {
+							return Size.INT;
+						}
+						top--;
+					} else {
+						if (top == stackCellIndex) {
+							return type2Size(arg);
+						}
+					}
+
+					index--;
+
+					top--;
+				}
+			}
+
+			if (consumer.getOpCode() != RawByteCodes.invokestatic_opcode) {
+				if (top == stackCellIndex) {
+					return Size.INT;
+				}
+			}
+			throw new Exception("Unexpected stack cell index");
+		} else {
+			return Size.INT;
 		}
-		throw new Exception("Unexpected stack cell index");
 	}
 
 	private Method getCalleeMethodFromBNode(MethodCallBNode consumer) throws ClassNotFoundException, Exception {
