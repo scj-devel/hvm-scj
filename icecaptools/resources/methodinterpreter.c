@@ -1388,7 +1388,16 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 				continue;
 			}
 #endif
-
+#if defined(D2I_OPCODE_USED)
+			case D2I_OPCODE: {
+				double d = *(double*) (sp - 2);
+				sp -= 2;
+				*(int32*) sp = (int32) d;
+				sp += 1;
+				method_code++;
+				continue;
+			}
+#endif
 #if defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED)
 		case LREM_OPCODE:
 		case LDIV_OPCODE:
