@@ -48,6 +48,7 @@ public class LinearMissionSequencer<MissionType extends Mission> extends Mission
 	MissionType[] missions;
 	int active = 0;
 
+	@SuppressWarnings("unchecked")
 	@SCJAllowed
 	public LinearMissionSequencer(PriorityParameters priority, StorageParameters storage, 
 			ConfigurationParameters config, 
@@ -74,6 +75,7 @@ public class LinearMissionSequencer<MissionType extends Mission> extends Mission
 		this(priority, storage, config, repeat, mission, "LinearMS");
 	}
 	
+	@SuppressWarnings("unchecked")
 	@SCJAllowed
 	public LinearMissionSequencer(PriorityParameters priority, StorageParameters storage, 
 			ConfigurationParameters config, 

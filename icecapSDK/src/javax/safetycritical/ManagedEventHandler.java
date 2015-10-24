@@ -25,14 +25,11 @@
  *************************************************************************/
 package javax.safetycritical;
 
-import javax.realtime.AbsoluteTime;
 import javax.realtime.BoundAsyncEventHandler;
-import javax.realtime.HighResolutionTime;
+import javax.realtime.ConfigurationParameters;
 import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
-import javax.realtime.RelativeTime;
 import javax.realtime.ReleaseParameters;
-import javax.realtime.ConfigurationParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;

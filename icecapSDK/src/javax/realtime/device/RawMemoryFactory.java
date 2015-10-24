@@ -81,13 +81,13 @@ public class RawMemoryFactory {
 		
 	}
 	
-	private static class RawIOPortMappedRegion_Default extends RawMemoryRegion { 
+	/*private static class RawIOPortMappedRegion_Default extends RawMemoryRegion { 
 		
 		RawIOPortMappedRegion_Default(String name) {
 			super(name);
 		}
 		
-	}
+	}*/
 	
 	private static class RawMemoryFactory_Default extends RawMemoryFactory {
 		
