@@ -14,10 +14,10 @@ import javax.safetycritical.annotate.SCJAllowed;
 @SCJAllowed
 public class RawMemoryRegion implements RawMemoryRegionFactory
 {
-  private String name;
+  // private String name;
 	
   public RawMemoryRegion(String name) {
-	  this.name = name;
+	  // this.name = name;
   }
   
   public final String getName() {

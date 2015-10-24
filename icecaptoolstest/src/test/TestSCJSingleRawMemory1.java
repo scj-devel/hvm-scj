@@ -25,7 +25,7 @@ public class TestSCJSingleRawMemory1 {
 		 
 		 System.out.println("RawMemoryFactory: " + factory);
 		 
-		 RawByte controlReg = factory.createRawByte(RawMemoryFactory.MEMORY_MAPPED_REGION, 0xFFFFF412, 4, 1);
+		 RawByte controlReg = RawMemoryFactory.createRawByte(RawMemoryFactory.MEMORY_MAPPED_REGION, 0xFFFFF412, 4, 1);
 		 
 		 //RawByte dataReg    = factory.createRawByte(RawMemoryFactory.MEMORY_MAPPED_REGION, 0x24, 8, 1);
 		 

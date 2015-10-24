@@ -32,7 +32,6 @@ import javax.realtime.AbsoluteTime;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
-import javax.scj.util.Const;
 
 /**
  * An SCJ application is comprised of one or more <code>Mission</code> objects.
