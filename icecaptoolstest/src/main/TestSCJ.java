@@ -1,7 +1,5 @@
 package main;
 
-import test.TestSCJSingleCyclicExecutiveLinearMissSeq1;
-
 
 /*
  * To run the automated tests make sure that gcc is installed and can be 
@@ -23,7 +21,9 @@ public class TestSCJ extends TestAll {
 	}
 
 	protected boolean includeFileInTest(String test) {
-		return test.endsWith(".java") && test.startsWith("TestPrintStream");  //  TestSCJSingle
+		return test.endsWith(".java") && test.startsWith("TestHardWareObjectForByte2");  //  TestSCJSingle  TestPrintStream    TestSCJSingleRawMemory1
 	}
 
 }
+
+
