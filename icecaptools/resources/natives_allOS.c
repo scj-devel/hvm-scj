@@ -1,6 +1,4 @@
 #define _GNU_SOURCE
-#include <sched.h>
-
 #include "types.h"
 #include "methods.h"
 #include "classes.h"
@@ -874,6 +872,7 @@ int16 n_java_lang_Thread_toString(int32 *sp) {
 #include <errno.h>
 #include <string.h>
 #include <pthread.h>
+#include <sched.h>
 
 pthread_key_t key_schedulable_object;
 
