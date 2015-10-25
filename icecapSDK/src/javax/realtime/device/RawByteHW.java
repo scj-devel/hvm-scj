@@ -44,6 +44,11 @@ public class RawByteHW implements RawByte {
 	public int get(int offset, byte[] values)
 			throws OffsetOutOfBoundsException, NullPointerException {
 		
+		if (offset < 0 || offset >= count)
+			throw new OffsetOutOfBoundsException ("error in offset");
+		if (values == null)
+			throw new NullPointerException ("values are null");		
+		
 		int number = count - offset;
 		int length = min (number, values.length);
 		for (int i = 0; i < length; i++) {
@@ -59,6 +64,15 @@ public class RawByteHW implements RawByte {
 			throws OffsetOutOfBoundsException, ArrayIndexOutOfBoundsException,
 			NullPointerException {
 		
+		if (offset < 0 || offset >= this.count || offset + count >= this.count)
+			throw new OffsetOutOfBoundsException ("error in offset");
+		if (start < 0 || start >= this.count || start + count >= this.count)
+			throw new ArrayIndexOutOfBoundsException ("index out of bound");
+		if (values == null)
+			throw new NullPointerException ("values are null");
+		if (count < 0)
+			throw new NullPointerException ("count is negative");	
+		
 		int length = min(count, this.count - offset, values.length - start);
 		
 		for (int i = 0; i < length; i++) {
@@ -71,6 +85,9 @@ public class RawByteHW implements RawByte {
 
 	@Override
 	public byte getByte(int offset) throws OffsetOutOfBoundsException {
+		if (offset < 0 || offset >= count)
+			throw new OffsetOutOfBoundsException ("error in offset");
+		
 		byteHWObj.add(offset * stride);
 		byte b = byteHWObj.current;
 		byteHWObj.sub(offset * stride);
@@ -102,6 +119,11 @@ public class RawByteHW implements RawByte {
 	public int set(int offset, byte[] values)
 			throws OffsetOutOfBoundsException, NullPointerException {
 		
+		if (offset < 0 || offset >= count)
+			throw new OffsetOutOfBoundsException ("error in offset");
+		if (values == null)
+			throw new NullPointerException ("values are null");		
+		
 		int number = count - offset;
 		int length = min (number, values.length);
 		for (int i = 0; i < length; i++) {
@@ -115,7 +137,16 @@ public class RawByteHW implements RawByte {
 	@Override
 	public int set(int offset, byte[] values, int start, int count)
 			throws OffsetOutOfBoundsException, ArrayIndexOutOfBoundsException,
-			NullPointerException {
+			NullPointerException {		
+
+		if (offset < 0 || offset >= this.count || offset + count >= this.count)
+			throw new OffsetOutOfBoundsException ("error in offset");
+		if (start < 0 || start >= this.count || start + count >= this.count)
+			throw new ArrayIndexOutOfBoundsException ("index out of bound");
+		if (values == null)
+			throw new NullPointerException ("values are null");
+		if (count < 0)
+			throw new NullPointerException ("count is negative");		
 		
 		int length = min(count, this.count - offset, values.length - start);
 		
@@ -130,6 +161,10 @@ public class RawByteHW implements RawByte {
 	@Override
 	public void setByte(int offset, byte value)
 			throws OffsetOutOfBoundsException {
+		
+		if (offset < 0 || offset >= count)
+			throw new OffsetOutOfBoundsException ("error in offset");
+		
 		byteHWObj.add(offset * stride); 
 		byteHWObj.current = value;
 		byteHWObj.sub(offset * stride);
