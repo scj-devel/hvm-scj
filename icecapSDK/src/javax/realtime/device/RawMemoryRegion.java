@@ -14,18 +14,23 @@ import javax.safetycritical.annotate.SCJAllowed;
 @SCJAllowed
 public class RawMemoryRegion implements RawMemoryRegionFactory
 {
-  // private String name;
+  private String name;
 	
   public RawMemoryRegion(String name) {
-	  // this.name = name;
+	   this.name = name;
   }
   
   public final String getName() {
-    return null;
+    return name;
   }
   
   public static RawMemoryRegion getRegion(String name) {
-    return null;
+	  if (name.equals(RawMemoryFactory.MEMORY_MAPPED_REGION.getName()))
+		  return RawMemoryFactory.MEMORY_MAPPED_REGION;
+	  else if (name.equals(RawMemoryFactory.IO_PORT_MAPPED_REGION.getName()))
+		  return RawMemoryFactory.IO_PORT_MAPPED_REGION;
+	  else 
+		  return new RawMemoryRegion(name);
   }
   
   public static boolean isRawMemoryRegion(String name) {
@@ -33,7 +38,7 @@ public class RawMemoryRegion implements RawMemoryRegionFactory
   }
   
   public final String toString() {
-    return null;
+    return name;
   }
   
   public RawByte createRawByte(long base, int count, int stride) 

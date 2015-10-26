@@ -18,7 +18,7 @@ public class RawMemoryFactory {
 			new RawMemoryMappedRegion_Default("MEMORY_MAPPED_REGION");
 	
 	public static final RawMemoryRegion IO_PORT_MAPPED_REGION = 
-			new RawMemoryMappedRegion_Default("IO_PORT_MAPPED_REGION");
+			new RawIOPortMappedRegion_Default("IO_PORT_MAPPED_REGION");
 	
 	static final RawMemoryFactory defaultFactory = new RawMemoryFactory_Default();
 	
@@ -75,19 +75,31 @@ public class RawMemoryFactory {
 				javax.realtime.SizeOutOfBoundsException,
 				javax.realtime.UnsupportedPhysicalMemoryException, 
 				javax.realtime.MemoryTypeConflictException
-	  {
+	    {
 		  return new RawByteHW(base, count, stride);
-	  }
+	    }
 		
 	}
 	
-	/*private static class RawIOPortMappedRegion_Default extends RawMemoryRegion { 
+	private static class RawIOPortMappedRegion_Default extends RawMemoryRegion { 
 		
 		RawIOPortMappedRegion_Default(String name) {
 			super(name);
 		}
 		
-	}*/
+		public RawByte createRawByte(long base, int count, int stride) 
+				throws java.lang.SecurityException,
+				javax.realtime.OffsetOutOfBoundsException, 
+				javax.realtime.SizeOutOfBoundsException,
+				javax.realtime.UnsupportedPhysicalMemoryException, 
+				javax.realtime.MemoryTypeConflictException
+	    {
+		  return null; // new RawByteHW(base, count, stride);  
+		  // the same implementation as above??
+		  // if the answer is yes, then move the common implementation to superclass RawMemoryRegion
+	    }
+		
+	}
 	
 	private static class RawMemoryFactory_Default extends RawMemoryFactory {
 		
