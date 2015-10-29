@@ -6,7 +6,7 @@ import javax.realtime.device.RawMemoryFactory;
 import vm.Memory;
 
 
-public class TestSCJSingleRawMemory1 {
+public class TestSCJSingleRawMemory_MemoryMapped1 {
 	
 	private static final int SCRATCHPADSTORESIZE = 4000;
 	
@@ -18,8 +18,9 @@ public class TestSCJSingleRawMemory1 {
 	          args = null; 
 		 	}
 	 }
-	 	 
 	 
+	 // using RawMemoryFactory.MEMORY_MAPPED_REGION
+		
 	 static boolean test_RawMemory() {
 		 
 		 System.out.println("test_RawMemory");

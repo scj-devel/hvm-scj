@@ -94,9 +94,7 @@ public class RawMemoryFactory {
 				javax.realtime.UnsupportedPhysicalMemoryException, 
 				javax.realtime.MemoryTypeConflictException
 	    {
-		  return null; // new RawByteHW(base, count, stride);  
-		  // the same implementation as above??
-		  // if the answer is yes, then move the common implementation to superclass RawMemoryRegion
+		  return new RawByteHW_To_IOPort(base, count, stride);  
 	    }
 		
 	}
