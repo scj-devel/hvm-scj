@@ -5,17 +5,23 @@ import javax.realtime.OffsetOutOfBoundsException;
 import vm.Address32Bit;
 import vm.HardwareObject;
 
-public class RawByteHW implements RawByte {
+/**
+ * RawByte for Memory Mapped I/O
+ * 
+ * @author hso
+ *
+ */
+public class RawByteMM implements RawByte {
 
 	long base;
 	int count;
 	int stride;
 
-	private static class ByteHWObject extends HardwareObject {
+	private static class ByteHWO extends HardwareObject {
 
 		byte current;
 
-		ByteHWObject(long base, int count, int stride) {
+		ByteHWO(long base, int count, int stride) {
 
 			super(new Address32Bit((int)base));			
 		}
@@ -29,15 +35,15 @@ public class RawByteHW implements RawByte {
 		}
 	}
 
-	ByteHWObject byteHWObj;
+	ByteHWO byteHWObj;
 
-	public RawByteHW(long base, int count, int stride) {
+	public RawByteMM(long base, int count, int stride) {
 
 		this.base = base;
 		this.count = count;
 		this.stride = stride;
 
-		this.byteHWObj = new ByteHWObject(base, count, stride);
+		this.byteHWObj = new ByteHWO(base, count, stride);
 	}
 
 	@Override

@@ -100,6 +100,7 @@ public class TestSCJSingleRawMemory_MemoryMapped1 {
     		if (b4 != (byte) (50 + i) )
     			return false;
         }
+        
         return true;
 	 }
 	 
