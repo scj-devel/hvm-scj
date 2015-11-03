@@ -19,7 +19,9 @@ public class RawByteATMega implements RawByte {
 	
 	private static class BytePortHWO extends HardwareObject {
 
-		byte current;
+		public byte PINx;   // PINA  has address 0x00	
+		public byte DDRx;   // DDRA  has address 0x01
+		public byte PORTx;  // PORTA has address 0x02
 
 		BytePortHWO(long base, int count, int stride) {
 
@@ -50,15 +52,16 @@ public class RawByteATMega implements RawByte {
 	public byte getByte(int offset) throws OffsetOutOfBoundsException {
 		if (offset < 0 || offset >= count)
 			throw new OffsetOutOfBoundsException ("error in offset");
-		
-		//return port.getByte(offset);
-		return 0;
+		if (offset == 0)
+			return port.PINx;
+		if (offset == 1)
+			return port.DDRx;
+		return port.PORTx;
 	}
 
 	@Override
 	public byte getByte() {
-		//return port.getByte(0);
-		return 0;
+		return port.PINx;
 	}
 	
 	@Override

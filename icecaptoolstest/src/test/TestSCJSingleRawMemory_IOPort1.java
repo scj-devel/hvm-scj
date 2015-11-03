@@ -43,16 +43,16 @@ public class TestSCJSingleRawMemory_IOPort1 {
 		 
 		 // test set- and getByte at offset 0:
 		 
-		 byte b = register.getByte();
-		 System.out.println("Byte is: " + b);
-		 
-		 byte b1 = 12;
-		 register.setByte(b1);	
-		 byte b2 = register.getByte();
-		 System.out.println("Byte is: " + b2);
-		 
-		 if (b2 != b1) 
-	        return false;
+//		 byte b = register.getByte();
+//		 System.out.println("Byte is: " + b);
+//		 
+//		 byte b1 = 12;
+//		 register.setByte(b1);	
+//		 byte b2 = register.getByte();
+//		 System.out.println("Byte is: " + b2);
+//		 
+//		 if (b2 != b1) 
+//	        return false;
 		 
 		// set- and getByte at other offsets
 		   
