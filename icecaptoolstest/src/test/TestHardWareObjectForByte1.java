@@ -1,6 +1,6 @@
 package test;
 
-import javax.realtime.device.RawByteHW;
+import javax.realtime.device.RawByteMM;
 
 import vm.Memory;
 
@@ -20,7 +20,7 @@ public class TestHardWareObjectForByte1 {
     public static boolean test() {
         int base = Memory.allocateInHeap(SCRATCHPADSTORESIZE).getStartMemoryAddress();
         
-        RawByteHW byteObj = new RawByteHW(base, 5, 1);
+        RawByteMM byteObj = new RawByteMM(base, 5, 1);
         
         // testing set- and getByte at offset 0
         

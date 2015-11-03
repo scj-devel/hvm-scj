@@ -76,7 +76,7 @@ public class RawMemoryFactory {
 				javax.realtime.UnsupportedPhysicalMemoryException, 
 				javax.realtime.MemoryTypeConflictException
 	    {
-		  return new RawByteHW(base, count, stride);
+		  return new RawByteMM(base, count, stride);
 	    }
 		
 	}
@@ -94,7 +94,7 @@ public class RawMemoryFactory {
 				javax.realtime.UnsupportedPhysicalMemoryException, 
 				javax.realtime.MemoryTypeConflictException
 	    {
-		  return new RawByteHW_To_IOPort(base, count, stride);  
+		  return new RawByteATMega(base, count, stride);  
 	    }
 		
 	}

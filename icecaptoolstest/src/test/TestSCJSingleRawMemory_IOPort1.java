@@ -8,15 +8,13 @@ import vm.Memory;
 
 public class TestSCJSingleRawMemory_IOPort1 {
 	
-	private static final int SCRATCHPADSTORESIZE = 4000;
-	
-		public static void main(String[] args) {	       
-		       
-			boolean success = test_RawMemory();
-		 	
-		 	if (success) {
-	          args = null; 
-		 	}
+	public static void main(String[] args) {	       
+	       
+		boolean success = test_RawMemory();
+	 	
+	 	if (success) {
+          args = null; 
+	 	}
 	 }
 	 
 	 // using RawMemoryFactory.IO_PORT_MAPPED_REGION
@@ -29,30 +27,32 @@ public class TestSCJSingleRawMemory_IOPort1 {
 		 
 		 System.out.println("RawMemoryFactory: " + factory);
 		 
-		 //int base = Memory.allocateInHeap(SCRATCHPADSTORESIZE).getStartMemoryAddress();
+		 int base = 18; // PING  = 0x12 = 18;  // AVR ATmega
+		                // DDRG  = 0x13 = 19;
+		                // PORTG = 0x14 = 20
 		 
-		 int base = 0; // what is base; how can we get base?
+		 RawByte register = RawMemoryFactory.createRawByte(RawMemoryFactory.IO_PORT_MAPPED_REGION, base, 3, 1); 
 		 
-		 //RawByte register = RawMemoryFactory.createRawByte(RawMemoryFactory.IO_PORT_MAPPED_REGION, base, 3, 1);  
-		 // count = 3: three registers are defined in ByteHWObjectATMega2560IOPort: PINA, DDRA, PORTA
-		 
-//		 if (register != null) {
-//			 int registerSize = register.getSize();
-//			 System.out.println("RegisterSize: " + registerSize);
-//		 }
-//		 else {
-//			 return false;
-//		 }
+		 if (register != null) {
+			 int registerSize = register.getSize();
+			 System.out.println("RegisterSize: " + registerSize);
+		 }
+		 else {
+			 return false;
+		 }
 		 
 		 // test set- and getByte at offset 0:
 		 
-//		 byte b1 = 12;
-//		 register.setByte(b1);	
-//		 byte b2 = register.getByte();
-//		 System.out.println("Byte is: " + b2);
-//		 
-//		 if (b2 != b1) 
-//	        return false;
+		 byte b = register.getByte();
+		 System.out.println("Byte is: " + b);
+		 
+		 byte b1 = 12;
+		 register.setByte(b1);	
+		 byte b2 = register.getByte();
+		 System.out.println("Byte is: " + b2);
+		 
+		 if (b2 != b1) 
+	        return false;
 		 
 		// set- and getByte at other offsets
 		   
