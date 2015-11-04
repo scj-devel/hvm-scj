@@ -64,8 +64,7 @@ public class TestSCJSingleRawMemory_IOPort1 {
 //    	
 //    		if (b3 != (byte) (40 + i) )
 //    			return false;
-//        }
-		 
+//        }	 
         		
       
         return true;
