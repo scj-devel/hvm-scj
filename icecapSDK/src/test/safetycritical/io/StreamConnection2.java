@@ -1,20 +1,21 @@
-package javax.microedition.io;
+package test.safetycritical.io;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import devices.System;
+import javax.microedition.io.StreamConnection;
 
-public class ConsoleConnection implements StreamConnection {
+public class StreamConnection2 implements StreamConnection {
+
+	String name;
 	
-	public ConsoleConnection(String name)
-			throws javax.microedition.io.ConnectionNotFoundException {
-		
-		System.initializeSystemClass();
+	public StreamConnection2(String name) {
+		this.name = name;
+		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	public DataInputStream openDataInputStream() {
 		// TODO Auto-generated method stub
@@ -41,7 +42,8 @@ public class ConsoleConnection implements StreamConnection {
 
 	@Override
 	public OutputStream openOutputStream() {
-		return new System.DevicePrintStream();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
