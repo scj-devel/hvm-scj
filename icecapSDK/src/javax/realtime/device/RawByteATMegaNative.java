@@ -1,9 +1,8 @@
 package javax.realtime.device;
 
-import javax.realtime.OffsetOutOfBoundsException;
+import icecaptools.IcecapCVar;
 
-import vm.Address32Bit;
-import vm.HardwareObject;
+import javax.realtime.OffsetOutOfBoundsException;
 
 /**
  * RawByte for Port-Mapped I/O on AT Mega;
@@ -13,54 +12,47 @@ import vm.HardwareObject;
  *   DDRA  has address 0x01; DDRB  has 0x04; ...; DDRG  has 0x13
  *   PORTA has address 0x02; PORTB has 0x05; ...; PORTG has 0x14
  * 
- * This solution uses HardwareObject
+ * This solution uses native variables.
  * 
  * @author sek/hso
  *
  */
-public class RawByteATMega implements RawByte {
+	
+
+public class RawByteATMegaNative implements RawByte {
 
 	long base;
 	int count;
 	int stride;
 	
-	private static class BytePortHWO extends HardwareObject {
-
-		public byte PINx;   // PINA  has address 0x00; PINB  has 0x03; ...; PING  has 0x12
-		public byte DDRx;   // DDRA  has address 0x01; DDRB  has 0x04; ...; DDRG  has 0x13
-		public byte PORTx;  // PORTA has address 0x02; PORTB has 0x05; ...; PORTG has 0x14
-
-		BytePortHWO(long base) {
-
-			super(new Address32Bit((int)base));			
-		}
-	}
-
-	BytePortHWO port;
-
-	public RawByteATMega(long base, int count, int stride) {
-
+	@IcecapCVar(expression = "PINx", requiredIncludes = "#include \"avr/io.h\"\n")
+	static byte PINx;
+	@IcecapCVar(expression = "DDRx", requiredIncludes = "#include \"avr/io.h\"\n")
+	static byte DDRx;
+	@IcecapCVar(expression = "PORTx", requiredIncludes = "#include \"avr/io.h\"\n")
+	static byte PORTx;
+	
+	public RawByteATMegaNative(long base, int count, int stride) {
+		
 		this.base = base;
 		this.count = count;
 		this.stride = stride;
-
-		this.port = new BytePortHWO(base);
 	}
-	
+
 	@Override
 	public byte getByte(int offset) throws OffsetOutOfBoundsException {
 		if (offset < 0 || offset >= count)
 			throw new OffsetOutOfBoundsException ("error in offset");
 		if (offset == 0)
-			return port.PINx;
+			return PINx;
 		if (offset == 1)
-			return port.DDRx;
-		return port.PORTx;  // offset is 2
+			return DDRx;
+		return PORTx;  // offset is 2
 	}
 
 	@Override
 	public byte getByte() {
-		return port.PINx;
+		return PINx;
 	}
 	
 	@Override
@@ -71,16 +63,16 @@ public class RawByteATMega implements RawByte {
 			throw new OffsetOutOfBoundsException ("error in offset");
 		
 		if (offset == 0)
-			port.PINx = value;
+			PINx = value;
 		else if (offset == 1)
-			port.DDRx = value; 
+			DDRx = value; 
 		else
-			port.PORTx = value;
+			PINx = value;
 	}
 
 	@Override
 	public void setByte(byte value) {
-		port.PINx = value;
+		PINx = value;
 	}
 	
 
@@ -198,6 +190,5 @@ public class RawByteATMega implements RawByte {
 	private int min (int a, int b, int c) {
 		return min (min(a, b), c);
 	}
+
 }
-
-

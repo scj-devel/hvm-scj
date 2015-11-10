@@ -94,7 +94,12 @@ public class RawMemoryFactory {
 				javax.realtime.UnsupportedPhysicalMemoryException, 
 				javax.realtime.MemoryTypeConflictException
 	    {
-		  return new RawByteATMega(base, count, stride);  
+		  return new RawByteATMega(base, count, stride);
+		  
+		  // or this class:
+		  // return new RawByteATMegaNative(base, count, stride); 
+		  
+		  // later: a simple I/O RawByte class; perhaps for a serial port
 	    }
 		
 	}

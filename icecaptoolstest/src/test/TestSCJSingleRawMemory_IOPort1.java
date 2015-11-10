@@ -3,8 +3,6 @@ package test;
 import javax.realtime.device.RawByte;
 import javax.realtime.device.RawMemoryFactory;
 
-import vm.Memory;
-
 
 public class TestSCJSingleRawMemory_IOPort1 {
 	
@@ -64,8 +62,7 @@ public class TestSCJSingleRawMemory_IOPort1 {
 //    	
 //    		if (b3 != (byte) (40 + i) )
 //    			return false;
-//        }
-		 
+//        }	 
         		
       
         return true;

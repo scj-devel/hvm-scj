@@ -3,7 +3,7 @@ package test;
 import java.io.OutputStream;
 
 import javax.io.PrintStream;
-import javax.microedition.io.ConsoleConnection;
+import javax.safetycritical.io.ConsoleConnection;
 
 public class TestPrintStream {
 	
