@@ -1,8 +1,12 @@
 package javax.safetycritical.io;
 
+import javax.scj.util.Const;
+
+
 public abstract class ConnectionFactory {
 	
-	static ConnectionFactory[] connectionFactorySet = new ConnectionFactory[10];  // a set of ConnectionFactory's
+	static ConnectionFactory[] connectionFactorySet = 
+		new ConnectionFactory[Const.DEFAULT_CONNECTION_FACTORY_NUMBER];  // a set of ConnectionFactory's
 	static int count = 0;
 	
 	private String  name;
@@ -21,10 +25,12 @@ public abstract class ConnectionFactory {
 	}
 	
 	public static javax.safetycritical.io.ConnectionFactory getRegistered(String name) {
-		if (! isRegistered(name))
+		
+		int idx = isRegistered(name);
+		if (idx == -1)
 		  return null;
 		else
-		  return getConnectionFactory(name);
+		  return connectionFactorySet[idx];
 	}
 	
 	public final String getServiceName( ) {
@@ -32,21 +38,25 @@ public abstract class ConnectionFactory {
 	}
 	
 	public static void register(ConnectionFactory factory) {
+		int idx = isRegistered(factory.name);
 		
-		connectionFactorySet[count++] = factory;
+		if (idx == -1) {
+			connectionFactorySet[count++] = factory;  // register new
+		}
+		else {
+			connectionFactorySet[idx] = factory;  // replace old one
+		}
 		
 	}
 	
-	private static boolean isRegistered(String connectionFactoryName) {
+	private static int isRegistered(String connectionFactoryName) {
 		// look up in connectionFactorySet to find a ConnectionFactory with the name connectionFactoryName
-		return false;
+		for (int i = 0; i < count; i++) {
+			if (connectionFactorySet[i].name.equals(connectionFactoryName))
+				return i;
+		}
+		return -1;
 	}
-	
-	private static ConnectionFactory getConnectionFactory(String connectionFactoryName) {
-		// returns the ConnectionFactory in connectionFactorySet with the name connectionFactoryName
-		return null;
-	}
-	
 	
 }
 

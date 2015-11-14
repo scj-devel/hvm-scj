@@ -54,7 +54,6 @@ public final class Const {
 
 	/* Memories */
 
-	// New
 	public static final int OVERALL_BACKING_STORE_DEFAULT = 802 * 1000;
 	public static final int IDLE_BACKING_STORE_DEFAULT = 2 * 1000;
 	public static final int IMMORTAL_MEM_DEFAULT = 100 * 1000;
@@ -101,6 +100,12 @@ public final class Const {
 	public static int DEFAULT_PRIORITY_QUEUE_SIZE = DEFAULT_PRIORITY_QUEUE_SIZE_DEFAULT;
 	public static int DEFAULT_SLEEPING_QUEUE_SIZE = DEFAULT_PRIORITY_QUEUE_SIZE_DEFAULT;
 
+	/* IO */
+	
+	public static final int DEFAULT_CONNECTION_FACTORY_NUMBER = 10; 
+	
+	/* Other constants */
+	
 	public static SCJErrorReporter reporter;
 
 	static {
