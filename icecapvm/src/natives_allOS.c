@@ -75,7 +75,7 @@ unsigned char SUPPORTGC_var = 0;
 #endif
 
 #ifdef AVR
-#if defined(VM_CLOCKINTERRUPTHANDLER_INTERRUPT)
+#if defined(VM_PROCESS_EXECUTEWITHSTACK)
 uint8 workingRegister1;
 uint8 workingRegister2;
 uint8 workingRegister3;
