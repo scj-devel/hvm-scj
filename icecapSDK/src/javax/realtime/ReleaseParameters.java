@@ -83,7 +83,7 @@ public abstract class ReleaseParameters implements Cloneable {
 	}
 
 	// Used in JML annotations
-	AsyncEventHandler getMissHandler() //  /*@ spec_public @*/
+	AsyncEventHandler getMissHandler() 
 	{
 		return missHandler;
 	}
