@@ -104,6 +104,7 @@ public abstract class PeriodicEventHandler extends ManagedEventHandler {
 		return releaseP.getPeriod().getNanoseconds() + releaseP.getPeriod().getMilliseconds()
 				* 1000000;
 	}
+	
 }
 
 

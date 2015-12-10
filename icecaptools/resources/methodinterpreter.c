@@ -1870,8 +1870,8 @@ unsigned char* createArrayFromElementSize(unsigned short classIndex,
 
 #if defined(IREM_OPCODE_USED) || defined(IDIV_OPCODE_USED) || defined(IDIV_USED) || defined(IMOD_USED)
 int32 idiv(int32 x, int32 y) {
-	int result = 0;
-	unsigned int k, sum;
+	int32 result = 0;
+	uint32 k, sum;
 	unsigned char isMinus;
 
 	if (x < 0) {
