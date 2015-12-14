@@ -16,4 +16,7 @@ public final class TestPortal {
 	public static final int getMinPr() {
 		return Priorities.MIN_PRIORITY;
 	}
+	
 }
+
+

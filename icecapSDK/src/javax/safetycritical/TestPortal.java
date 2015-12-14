@@ -1,5 +1,8 @@
 package javax.safetycritical;
 
+import javax.realtime.PriorityParameters;
+import javax.realtime.ReleaseParameters;
+
 public final class TestPortal {
 
 	public static void ManagedMemory_allocateBackingStore(int totalBackingStore) {
@@ -23,4 +26,16 @@ public final class TestPortal {
 		ManagedMemory.flag = true;
 		mem.executeInArea(logic);
 	}
+	
+	public static PriorityParameters getPriorityParam (PeriodicEventHandler pevh) {
+		return pevh.priority;
+	}
+	
+	public static ReleaseParameters getReleaseParam (PeriodicEventHandler pevh) {
+		return pevh.release;
+	}
+	
 }
+
+
+
