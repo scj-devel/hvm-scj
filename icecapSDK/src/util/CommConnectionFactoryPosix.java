@@ -6,15 +6,21 @@ import javax.microedition.io.Connection;
 import javax.microedition.io.ConnectionNotFoundException;
 import javax.safetycritical.io.ConnectionFactory;
 
-public class SerialConnectionFactory extends ConnectionFactory {
+public class CommConnectionFactoryPosix extends ConnectionFactory {
 
-	public SerialConnectionFactory(String name) {
+	public CommConnectionFactoryPosix(String name) {
 		super(name);
 	}
 
 	@Override
 	public Connection create(String url) throws IOException, ConnectionNotFoundException {
-		// TODO Auto-generated method stub
+		try {
+			URL uri = new URL(url);
+			String port = uri.getTarget();
+			
+		} catch (URLSyntaxException e) {
+		}
+
 		return null;
 	}
 

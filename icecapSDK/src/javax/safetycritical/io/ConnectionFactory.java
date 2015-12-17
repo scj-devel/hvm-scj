@@ -1,9 +1,9 @@
 package javax.safetycritical.io;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import javax.scj.util.Const;
+
+import util.URL;
+import util.URLSyntaxException;
 
 public abstract class ConnectionFactory {
 
@@ -14,7 +14,7 @@ public abstract class ConnectionFactory {
 
 	protected ConnectionFactory(String name) {
 		try {
-			URI uri = new URI(name);
+			URL uri = new URL(name);
 			if (uri.getScheme() != null)
 			{
 				this.name = uri.getScheme();
@@ -23,7 +23,7 @@ public abstract class ConnectionFactory {
 			{
 				this.name = uri.getSchemeSpecificPart();
 			}
-		} catch (URISyntaxException e) {
+		} catch (URLSyntaxException e) {
 			this.name = name;
 		}
 	}

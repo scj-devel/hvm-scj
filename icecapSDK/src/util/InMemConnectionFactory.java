@@ -5,8 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.microedition.io.Connection;
 import javax.microedition.io.ConnectionNotFoundException;
@@ -71,7 +69,7 @@ public class InMemConnectionFactory extends ConnectionFactory {
 	@Override
 	public Connection create(String url) throws IOException, ConnectionNotFoundException {
 		try {
-			URI uri = new URI(url);
+			URL uri = new URL(url);
 			if ("output".equals(uri.getSchemeSpecificPart()))
 			{
 				return new DataOutputConnection();
@@ -80,7 +78,7 @@ public class InMemConnectionFactory extends ConnectionFactory {
 			{
 				return new DataInputConnection();
 			}
-		} catch (URISyntaxException e) {
+		} catch (URLSyntaxException e) {
 			throw new ConnectionNotFoundException();
 		}
 		

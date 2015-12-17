@@ -1,12 +1,13 @@
 package javax.microedition.io;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.safetycritical.annotate.SCJAllowed;
 import javax.safetycritical.io.ConnectionFactory;
 import javax.safetycritical.io.ConsoleConnection;
+
+import util.URL;
+import util.URLSyntaxException;
 
 public class Connector {
 
@@ -50,7 +51,7 @@ public class Connector {
 		}
 
 		try {
-			URI uri = new URI(name);
+			URL uri = new URL(name);
 			ConnectionFactory factory = getFactory(uri.getScheme());
 			Connection retval = null;
 
@@ -69,7 +70,7 @@ public class Connector {
 				throw new ConnectionNotFoundException();
 			else
 				return retval;
-		} catch (URISyntaxException e1) {
+		} catch (URLSyntaxException e1) {
 			throw new IllegalArgumentException(name + " not legal URI");
 		}
 	}
