@@ -1,54 +1,64 @@
 package javax.safetycritical.io;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.scj.util.Const;
 
-
 public abstract class ConnectionFactory {
-	
-	static ConnectionFactory[] connectionFactorySet = 
-		new ConnectionFactory[Const.DEFAULT_CONNECTION_FACTORY_NUMBER];  // a set of ConnectionFactory's
+
+	static ConnectionFactory[] connectionFactorySet = new ConnectionFactory[Const.DEFAULT_CONNECTION_FACTORY_NUMBER]; // a set of ConnectionFactory's
 	static int count = 0;
-	
-	private String  name;
-	
+
+	private String name;
+
 	protected ConnectionFactory(String name) {
-		this.name = name;
+		try {
+			URI uri = new URI(name);
+			if (uri.getScheme() != null)
+			{
+				this.name = uri.getScheme();
+			}
+			else
+			{
+				this.name = uri.getSchemeSpecificPart();
+			}
+		} catch (URISyntaxException e) {
+			this.name = name;
+		}
 	}
 
-	public abstract javax.microedition.io.Connection create(String url)
-			throws java.io.IOException,
+	public abstract javax.microedition.io.Connection create(String url) throws java.io.IOException,
 			javax.microedition.io.ConnectionNotFoundException;
-	
+
 	public boolean equals(Object other) {
-		return other instanceof ConnectionFactory &&
-				name.equals(((ConnectionFactory)other).name);
+		return other instanceof ConnectionFactory && name.equals(((ConnectionFactory) other).name);
 	}
-	
+
 	public static javax.safetycritical.io.ConnectionFactory getRegistered(String name) {
-		
+
 		int idx = isRegistered(name);
 		if (idx == -1)
-		  return null;
+			return null;
 		else
-		  return connectionFactorySet[idx];
+			return connectionFactorySet[idx];
 	}
-	
-	public final String getServiceName( ) {
+
+	public final String getServiceName() {
 		return name;
 	}
-	
+
 	public static void register(ConnectionFactory factory) {
 		int idx = isRegistered(factory.name);
-		
+
 		if (idx == -1) {
-			connectionFactorySet[count++] = factory;  // register new
+			connectionFactorySet[count++] = factory; // register new
+		} else {
+			connectionFactorySet[idx] = factory; // replace old one
 		}
-		else {
-			connectionFactorySet[idx] = factory;  // replace old one
-		}
-		
+
 	}
-	
+
 	private static int isRegistered(String connectionFactoryName) {
 		// look up in connectionFactorySet to find a ConnectionFactory with the name connectionFactoryName
 		for (int i = 0; i < count; i++) {
@@ -57,8 +67,4 @@ public abstract class ConnectionFactory {
 		}
 		return -1;
 	}
-	
 }
-
-
-
