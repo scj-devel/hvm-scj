@@ -56,6 +56,29 @@ public final class TestPortal {
 		return Priorities.MIN_PRIORITY;
 	}
 	
+	/**
+	 * Used by test programs to get the deadline of a release parameter.
+	 *
+	 * @param release is a release parameter.
+	 * 
+	 * @return the deadline of the parameter <code>release</code>.
+	 */	
+	public static RelativeTime getDeadline(ReleaseParameters release) {
+		return release.deadline;
+	}
+
+	/**
+	 * Used by test programs to get the miss handler of a release parameter.
+	 *
+	 * @param release is a release parameter.
+	 * 
+	 * @return the missHandler of the parameter <code>release</code>.
+	 */	
+	public static AsyncEventHandler getMissHandler(ReleaseParameters release) 
+	{
+		return release.missHandler;
+	}
+	
 }
 
 
