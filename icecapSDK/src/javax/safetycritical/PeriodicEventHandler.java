@@ -49,18 +49,11 @@ import javax.safetycritical.annotate.SCJAllowed;
  *         HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
  *         Hans S&oslash;ndergaard, VIA University College, Denmark, <A
  *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
- * 
- * @scjComment 
- *   - SCJ issue: One constructor only. <br>
- *   - SCJ issue: SCJ Draft says: constructor: param storage -> It must not be <code>null</code>. <br>
- *       An <code>IllegalArgumentException</code> is thrown if storage is null.
- *       But <code>ManagedEventHandler</code> does not require an 
- *       <code>IllegalArgumentException</code> thrown if storage is null.
- *       It only specifies: a non-null maximum storage. This can be satisfied by implementing:
- *       if storage parameter is null, a default value is given. <br>
+ *
  */
 @SCJAllowed
 public abstract class PeriodicEventHandler extends ManagedEventHandler {
+	
 	PeriodicParameters releaseP;
 	
 	/** 

@@ -86,7 +86,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	 * @param release  specifies the release parameters.
 	 * @param storage  specifies the non-null maximum storage demands for this event handler.
 	 * 
-	 * @throws <code>IllegalArgumentException</code> if priority or release parameters are null.
+	 * @throws <code>IllegalArgumentException</code> if priority or release or storage parameters are null.
 	 */
 	ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, 
 		StorageParameters storage, ConfigurationParameters config) {

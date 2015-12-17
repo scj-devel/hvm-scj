@@ -23,6 +23,7 @@ public final class TestPortal {
 	 * Used by test programs to create a <code>HighResolutionTime</code> stub object.	 
 	 */
 	public static class HighResolutionTimeStub extends HighResolutionTime {
+		
 		/**
 		 * Constructs an <code>HighResolutionTimeStub</code> object. <br>
 		 *

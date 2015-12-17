@@ -5,6 +5,7 @@ import javax.safetycritical.annotate.SCJAllowed;
 //import javax.realtime.ImmortalMemory;
 import javax.realtime.PriorityParameters;
 import javax.realtime.ReleaseParameters;
+import javax.safetycritical.StorageParameters;
 
 /**
  * The <code>TestPortal</code> contains the test probes needed by the tests 
@@ -26,14 +27,15 @@ public final class TestPortal {
 	 * 
 	 * @param totalBackingStore is 
 	 */
-	public static void ManagedMemory_allocateBackingStore(int totalBackingStore) {
-		ManagedMemory.allocateBackingStore(totalBackingStore);		
-	}
+//	public static void ManagedMemory_allocateBackingStore(int totalBackingStore) {
+//		ManagedMemory.allocateBackingStore(totalBackingStore);		
+//	}
 	
 	/**
-	 * Used by test programs to get  .
+	 * Used by test programs to initialize and set up the behaviour of a
+	 * single core test, including allocating backing store memory.
 	 * 
-	 * @param totalBackingStore is 
+	 * @param totalBackingStore is the size of the backing store allocated for this TCK test.
 	 */
 	public static void singleCoreSetup (int totalBackingStore) {
 		Launcher.initSingleCoreBehaviour();
@@ -47,25 +49,25 @@ public final class TestPortal {
 	 *  
 	 * @return the
 	 */
-	public static ManagedMemory ManagedMemory_allocateImmortalMemory(int immortalSize) {
-		return new ImmortalMemory(immortalSize);
-	}
+//	public static ManagedMemory ManagedMemory_allocateImmortalMemory(int immortalSize) {
+//		return new ImmortalMemory(immortalSize);
+//	}
 
 	/**
-	 * Used by test programs to get  .
+	 * Used by test programs to get the outer memory of a <code>ManagedMemory</code> area.
 	 * 
-	 * @param totalBackingStore is
+	 * @param mm is the area of interest.
 	 * 
-	 * @return the 
+	 * @return the outer memory area of <code>mm</code>.
 	 */
 	public static ManagedMemory ManagedMemory_getOuterMemory(ManagedMemory mm) {
 		return ManagedMemory.getOuterMemory(mm);
 	}
 
-	public static void executeInAreaOf(ManagedMemory mem, Runnable logic) {
-		ManagedMemory.flag = true;
-		mem.executeInArea(logic);
-	}
+//	public static void executeInAreaOf(ManagedMemory mem, Runnable logic) {
+//		ManagedMemory.flag = true;
+//		mem.executeInArea(logic);
+//	}
 	
 	/**
 	 * Used by test programs to get the priority parameter of a periodic event handler.
@@ -89,6 +91,16 @@ public final class TestPortal {
 		return pevh.release;
 	}
 	
+	/**
+	 * Used by test programs to get the storage parameter of a periodic event handler.
+	 * 
+	 * @param pevh is a periodic event handler.
+	 *  
+	 * @return the storage parameter of <code>pevh</code>.
+	 */
+	public static StorageParameters getStorageParam (PeriodicEventHandler pevh) {
+		return pevh.storage;
+	}
 }
 
 
