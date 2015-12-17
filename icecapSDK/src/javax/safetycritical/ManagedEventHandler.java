@@ -175,14 +175,8 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		this.name = name;
 	}
 	
-	// used for JML annotation only (not public)
 	PriorityParameters getPriorityParam() {
 		return priority;
-	}
-
-	// used for JML annotation only (not public)
-	ReleaseParameters getReleaseParam() {
-		return release;
 	}
 	
 	void setCurrentMemory(ManagedMemory current) {
