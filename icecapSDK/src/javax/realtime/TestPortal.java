@@ -79,6 +79,15 @@ public final class TestPortal {
 		return release.missHandler;
 	}
 	
+	
+	public static	RelativeTime period(PeriodicParameters pp) {
+		return pp.period;
+	}
+
+		
+	public static	RelativeTime start(PeriodicParameters pp) {
+		return pp.start;
+	}
 }
 
 

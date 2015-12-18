@@ -112,13 +112,4 @@ public class PeriodicParameters extends ReleaseParameters {
 		return start;
 	}
 
-	// used for JML annotation only (not public)
-	RelativeTime period() {
-		return period;
-	}
-
-	// used for JML annotation only (not public)
-	RelativeTime start() {
-		return start;
-	}
 }
