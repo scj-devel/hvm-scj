@@ -35,6 +35,21 @@ public class DefaultCompilationRegistry implements ICompilationRegistry {
 			return true;
 		}
 		if (clazz.startsWith("java.io")) {
+			if (clazz.startsWith("java.io.FilterInputStream")) {
+				return false;
+			}
+			if (clazz.startsWith("java.io.InputStream")) {
+				return false;
+			}
+			if (clazz.startsWith("java.io.OutputStream")) {
+				return false;
+			}
+			if (clazz.startsWith("java.io.DataInputStream")) {
+				return false;
+			}
+			if (clazz.startsWith("java.io.DataOutputStream")) {
+				return false;
+			}
 			if (clazz.startsWith("java.io.PrintStream")) {
 				return false;
 			}
