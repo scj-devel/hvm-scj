@@ -5,7 +5,8 @@ import javax.safetycritical.annotate.SCJAllowed;
 import javax.scj.util.Priorities;
 
 /**
- * The <code>TestPortal</code> contains the test probes needed by the tests 
+ * The <code>TestPortalRT</code> contains the test probes needed in package
+ * <code>javax.realtime</code> by the tests 
  * in the Technology Compatibility Kit (TCK).
  * It must be implemented for an implementation under test.
  * 
@@ -17,7 +18,7 @@ import javax.scj.util.Priorities;
  *         HREF="mailto:hso@via.dk">hso@via.dk</A>
  */
 @SCJAllowed(Level.SUPPORT)
-public final class TestPortal {
+public final class TestPortalRT {
 	
 	/**
 	 * Used by test programs to create a <code>HighResolutionTime</code> stub object.	 
@@ -55,6 +56,18 @@ public final class TestPortal {
 	public static final int getMinPr() {
 		return Priorities.MIN_PRIORITY;
 	}
+	
+	/**
+	 * Used by test programs to get the priority of a priority parameter.
+	 * 
+	 * @param release is a priority parameter.
+	 * 
+	 * @return the priority of the parameter <code>pp</code>.
+	 */
+	public static final int getPr(PriorityParameters pp) {
+		return pp.priority;
+	}
+	
 	
 	/**
 	 * Used by test programs to get the deadline of a release parameter.

@@ -16,7 +16,7 @@ import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.PrivateMemory;
 import javax.safetycritical.Safelet;
 import javax.safetycritical.StorageParameters;
-import javax.safetycritical.TestPortal;
+import javax.safetycritical.TestPortalSC;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -137,10 +137,10 @@ public class TestSCJSingleManagedMemory {
 
 			// outer memory is immortal memory  
 			devices.Console.println("---- area 3 is "
-					+ TestPortal.ManagedMemory_getOuterMemory((ManagedMemory) MemoryArea.getMemoryArea(obj)) + "\n");
+					+ TestPortalSC.ManagedMemory_getOuterMemory((ManagedMemory) MemoryArea.getMemoryArea(obj)) + "\n");
 
-			memRecord[3] = TestPortal.ManagedMemory_getOuterMemory((ManagedMemory) MemoryArea.getMemoryArea(obj));
-			if (!(TestPortal.ManagedMemory_getOuterMemory((ManagedMemory) MemoryArea.getMemoryArea(obj)) instanceof ImmortalMemory))
+			memRecord[3] = TestPortalSC.ManagedMemory_getOuterMemory((ManagedMemory) MemoryArea.getMemoryArea(obj));
+			if (!(TestPortalSC.ManagedMemory_getOuterMemory((ManagedMemory) MemoryArea.getMemoryArea(obj)) instanceof ImmortalMemory))
 				errors++;
 
 			// missSeq is in immortal
