@@ -5,7 +5,8 @@ import javax.safetycritical.annotate.SCJAllowed;
 import javax.scj.util.Priorities;
 
 /**
- * The <code>TestPortal</code> contains the test probes needed by the tests 
+ * The <code>TestPortalRT</code> contains the test probes needed in package
+ * <code>javax.realtime</code> by the tests 
  * in the Technology Compatibility Kit (TCK).
  * It must be implemented for an implementation under test.
  * 
@@ -17,7 +18,7 @@ import javax.scj.util.Priorities;
  *         HREF="mailto:hso@via.dk">hso@via.dk</A>
  */
 @SCJAllowed(Level.SUPPORT)
-public final class TestPortal {
+public final class TestPortalRT {
 	
 	/**
 	 * Used by test programs to create a <code>HighResolutionTime</code> stub object.	 
@@ -56,6 +57,50 @@ public final class TestPortal {
 		return Priorities.MIN_PRIORITY;
 	}
 	
+	/**
+	 * Used by test programs to get the priority of a priority parameter.
+	 * 
+	 * @param release is a priority parameter.
+	 * 
+	 * @return the priority of the parameter <code>pp</code>.
+	 */
+	public static final int getPr(PriorityParameters pp) {
+		return pp.priority;
+	}
+	
+	
+	/**
+	 * Used by test programs to get the deadline of a release parameter.
+	 *
+	 * @param release is a release parameter.
+	 * 
+	 * @return the deadline of the parameter <code>release</code>.
+	 */	
+	public static RelativeTime getDeadline(ReleaseParameters release) {
+		return release.deadline;
+	}
+
+	/**
+	 * Used by test programs to get the miss handler of a release parameter.
+	 *
+	 * @param release is a release parameter.
+	 * 
+	 * @return the missHandler of the parameter <code>release</code>.
+	 */	
+	public static AsyncEventHandler getMissHandler(ReleaseParameters release) 
+	{
+		return release.missHandler;
+	}
+	
+	
+	public static	RelativeTime period(PeriodicParameters pp) {
+		return pp.period;
+	}
+
+		
+	public static	RelativeTime start(PeriodicParameters pp) {
+		return pp.start;
+	}
 }
 
 

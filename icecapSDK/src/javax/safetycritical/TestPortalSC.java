@@ -2,13 +2,16 @@ package javax.safetycritical;
 
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
+import javax.realtime.AsyncEventHandler;
 //import javax.realtime.ImmortalMemory;
 import javax.realtime.PriorityParameters;
+import javax.realtime.RelativeTime;
 import javax.realtime.ReleaseParameters;
 import javax.safetycritical.StorageParameters;
 
 /**
- * The <code>TestPortal</code> contains the test probes needed by the tests 
+ * The <code>TestPortalSC</code> contains the test probes needed in package
+ * <code>javax.safetycritical</code>by the tests 
  * in the Technology Compatibility Kit (TCK).
  * It must be implemented for an implementation under test.
  * 
@@ -20,7 +23,7 @@ import javax.safetycritical.StorageParameters;
  *         HREF="mailto:hso@via.dk">hso@via.dk</A>
  */
 @SCJAllowed(Level.SUPPORT)
-public final class TestPortal {
+public final class TestPortalSC {
 
 	/**
 	 * Used by test programs to get  .
@@ -101,6 +104,7 @@ public final class TestPortal {
 	public static StorageParameters getStorageParam (PeriodicEventHandler pevh) {
 		return pevh.storage;
 	}
+
 }
 
 
