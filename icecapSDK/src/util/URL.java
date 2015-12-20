@@ -1,12 +1,16 @@
 package util;
 
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
 public class URL {
 	private String raw;
 
 	private String scheme;
 	private String schemeSpecificPart;
-
 	private String target;
+
+	private HashMap<String, String> parameters;
 
 	public URL(String name) {
 		this.raw = name;
@@ -48,12 +52,36 @@ public class URL {
 			int idx = schemeSpecificPart.indexOf(";");
 			if (idx == -1) {
 				target = schemeSpecificPart;
-			}
-			else
-			{
+			} else {
 				target = schemeSpecificPart.substring(0, idx);
 			}
 		}
 		return target;
+	}
+
+	public String getParameter(String key) throws URLSyntaxException {
+		parseParameters();
+
+		return parameters.get(key);
+	}
+
+	private void parseParameters() throws URLSyntaxException {
+		if (parameters == null) {
+			parameters = new HashMap<String, String>();
+			getSchemeSpecificPart();
+			int idx = schemeSpecificPart.indexOf(';');
+			String parameters = schemeSpecificPart.substring(idx);
+			StringTokenizer tokenizer = new StringTokenizer(parameters, ";");
+			while (tokenizer.hasMoreElements()) {
+				String nextToken = tokenizer.nextToken();
+				idx = nextToken.indexOf('=');
+				if (idx == -1) {
+					throw new URLSyntaxException();
+				}
+				String key = nextToken.substring(0, idx);
+				String value = nextToken.substring(idx + 1);
+				this.parameters.put(key, value);
+			}
+		}
 	}
 }

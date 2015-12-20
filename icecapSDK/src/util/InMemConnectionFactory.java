@@ -8,6 +8,7 @@ import java.io.OutputStream;
 
 import javax.microedition.io.Connection;
 import javax.microedition.io.ConnectionNotFoundException;
+import javax.microedition.io.Connector;
 import javax.microedition.io.InputConnection;
 import javax.microedition.io.OutputConnection;
 import javax.safetycritical.io.ConnectionFactory;
@@ -16,8 +17,7 @@ public class InMemConnectionFactory extends ConnectionFactory {
 	private DataOutputStream outputStream;
 	private DataInputStream inputStream;
 
-	private class DataOutputConnection implements OutputConnection
-	{
+	private class DataOutputConnection implements OutputConnection {
 
 		@Override
 		public void close() {
@@ -35,11 +35,10 @@ public class InMemConnectionFactory extends ConnectionFactory {
 		@Override
 		public OutputStream openOutputStream() {
 			return null;
-		}		
+		}
 	}
 
-	private class DataInputConnection implements InputConnection
-	{
+	private class DataInputConnection implements InputConnection {
 
 		@Override
 		public void close() {
@@ -57,7 +56,7 @@ public class InMemConnectionFactory extends ConnectionFactory {
 		@Override
 		public InputStream openInputStream() {
 			return null;
-		}		
+		}
 	}
 
 	public InMemConnectionFactory(String name, DataOutputStream outputStream, DataInputStream inputStream) {
@@ -67,21 +66,12 @@ public class InMemConnectionFactory extends ConnectionFactory {
 	}
 
 	@Override
-	public Connection create(String url) throws IOException, ConnectionNotFoundException {
-		try {
-			URL uri = new URL(url);
-			if ("output".equals(uri.getSchemeSpecificPart()))
-			{
-				return new DataOutputConnection();
-			}
-			else if ("input".equals(uri.getSchemeSpecificPart()))
-			{
-				return new DataInputConnection();
-			}
-		} catch (URLSyntaxException e) {
-			throw new ConnectionNotFoundException();
+	public Connection create(String url, int mode) throws IOException, ConnectionNotFoundException {
+		if (mode == Connector.WRITE) {
+			return new DataOutputConnection();
+		} else if (mode == Connector.READ) {
+			return new DataInputConnection();
 		}
-		
 		return null;
 	}
 

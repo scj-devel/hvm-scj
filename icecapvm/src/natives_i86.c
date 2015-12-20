@@ -723,3 +723,16 @@ int16 n_vm_RealtimeClock_awaitNextTick(int32 *sp) {
 }
 #endif
 
+#if defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_OPENSERIALINPUT)
+int16 n_util_CommConnectionFactoryPosix_openSerialInput(int32 *sp)
+{
+  return -1;
+}
+#endif
+
+#if defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_OPENSERIALOUTPUT)
+int16 n_util_CommConnectionFactoryPosix_openSerialOutput(int32 *sp)
+{
+  return -1;
+}
+#endif
