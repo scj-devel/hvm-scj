@@ -8,7 +8,6 @@ import java.io.OutputStream;
 
 import javax.microedition.io.Connection;
 import javax.microedition.io.ConnectionNotFoundException;
-import javax.microedition.io.Connector;
 import javax.microedition.io.InputConnection;
 import javax.microedition.io.OutputConnection;
 import javax.safetycritical.io.ConnectionFactory;
@@ -17,12 +16,13 @@ public class InMemConnectionFactory extends ConnectionFactory {
 	private DataOutputStream outputStream;
 	private DataInputStream inputStream;
 
-	private class DataOutputConnection implements OutputConnection {
+	private class InMemDataConnection implements OutputConnection, InputConnection {
 
 		@Override
 		public void close() {
 			try {
 				outputStream.close();
+				inputStream.close();
 			} catch (IOException e) {
 			}
 		}
@@ -35,17 +35,6 @@ public class InMemConnectionFactory extends ConnectionFactory {
 		@Override
 		public OutputStream openOutputStream() {
 			return null;
-		}
-	}
-
-	private class DataInputConnection implements InputConnection {
-
-		@Override
-		public void close() {
-			try {
-				inputStream.close();
-			} catch (IOException e) {
-			}
 		}
 
 		@Override
@@ -66,13 +55,7 @@ public class InMemConnectionFactory extends ConnectionFactory {
 	}
 
 	@Override
-	public Connection create(String url, int mode) throws IOException, ConnectionNotFoundException {
-		if (mode == Connector.WRITE) {
-			return new DataOutputConnection();
-		} else if (mode == Connector.READ) {
-			return new DataInputConnection();
-		}
-		return null;
+	public Connection create(String url) throws IOException, ConnectionNotFoundException {
+		return new InMemDataConnection();
 	}
-
 }

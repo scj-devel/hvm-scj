@@ -13,7 +13,7 @@ public class ConnectionFactory2 extends ConnectionFactory {
 	}
 
 	@Override
-	public Connection create(String url, int mode) throws IOException,
+	public Connection create(String url) throws IOException,
 			ConnectionNotFoundException {
 		return new StreamConnection2(url);
 	}

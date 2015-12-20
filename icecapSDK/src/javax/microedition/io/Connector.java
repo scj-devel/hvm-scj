@@ -56,7 +56,7 @@ public class Connector {
 			Connection retval = null;
 
 			if (factory != null) {
-				retval = factory.create(name, mode);
+				retval = factory.create(name);
 			} else {
 				// fall back to console connection.
 				try {

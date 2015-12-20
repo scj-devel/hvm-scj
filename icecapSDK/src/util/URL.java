@@ -8,9 +8,9 @@ public class URL {
 
 	private String scheme;
 	private String schemeSpecificPart;
-	private String target;
+	private byte[] target;
 
-	private HashMap<String, String> parameters;
+	private HashMap<String, byte[]> parameters;
 
 	public URL(String name) {
 		this.raw = name;
@@ -42,7 +42,7 @@ public class URL {
 		return schemeSpecificPart;
 	}
 
-	public String getTarget() throws URLSyntaxException {
+	public byte[] getTarget() throws URLSyntaxException {
 		if (target == null) {
 			getSchemeSpecificPart();
 			if (schemeSpecificPart == null) {
@@ -51,15 +51,15 @@ public class URL {
 
 			int idx = schemeSpecificPart.indexOf(";");
 			if (idx == -1) {
-				target = schemeSpecificPart;
+				target = StringUtil.getBytes(schemeSpecificPart, true);
 			} else {
-				target = schemeSpecificPart.substring(0, idx);
+				target = StringUtil.getBytes(schemeSpecificPart.substring(0, idx), true);
 			}
 		}
 		return target;
 	}
 
-	public String getParameter(String key) throws URLSyntaxException {
+	public byte[] getParameter(String key) throws URLSyntaxException {
 		parseParameters();
 
 		return parameters.get(key);
@@ -67,7 +67,7 @@ public class URL {
 
 	private void parseParameters() throws URLSyntaxException {
 		if (parameters == null) {
-			parameters = new HashMap<String, String>();
+			parameters = new HashMap<String, byte[]>();
 			getSchemeSpecificPart();
 			int idx = schemeSpecificPart.indexOf(';');
 			String parameters = schemeSpecificPart.substring(idx);
@@ -79,7 +79,8 @@ public class URL {
 					throw new URLSyntaxException();
 				}
 				String key = nextToken.substring(0, idx);
-				String value = nextToken.substring(idx + 1);
+				
+				byte[] value = StringUtil.getBytes(nextToken.substring(idx + 1), true);
 				this.parameters.put(key, value);
 			}
 		}

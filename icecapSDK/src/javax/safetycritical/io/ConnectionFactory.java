@@ -26,15 +26,8 @@ public abstract class ConnectionFactory {
 		}
 	}
 
-	public abstract javax.microedition.io.Connection create(String url, int mode) throws java.io.IOException,
+	public abstract javax.microedition.io.Connection create(String url) throws java.io.IOException,
 			javax.microedition.io.ConnectionNotFoundException;
-
-	public javax.microedition.io.Connection create(String url) throws java.io.IOException,
-			javax.microedition.io.ConnectionNotFoundException
-
-	{
-		return create(url, Connector.READ_WRITE);
-	}
 
 	public boolean equals(Object other) {
 		return other instanceof ConnectionFactory && name.equals(((ConnectionFactory) other).name);
