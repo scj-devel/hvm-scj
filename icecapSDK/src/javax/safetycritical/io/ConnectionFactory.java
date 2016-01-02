@@ -1,6 +1,5 @@
 package javax.safetycritical.io;
 
-import javax.microedition.io.Connector;
 import javax.scj.util.Const;
 
 import util.URL;

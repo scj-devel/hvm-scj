@@ -778,10 +778,13 @@ static int open_port(char* port, int mode, int32 baud) {
 	int fd; /* File descriptor for the port */
 	struct termios options;
 	int brate = getBaud(baud);
+
 	fd = open(port, mode | O_NOCTTY | O_NDELAY);
 
 	if (fd != -1) {
-		fcntl(fd, F_SETFL, 0);
+		if (mode == O_RDONLY) {
+			fcntl(fd, F_SETFL, FNDELAY);
+		}
 	} else {
 		return -1;
 	}
@@ -797,9 +800,22 @@ static int open_port(char* port, int mode, int32 baud) {
 		break;
 	}
 
-	options.c_cflag |= (CLOCAL | CREAD | CS8);
+	options.c_cflag &= ~PARENB;
+	options.c_cflag &= ~CSTOPB;
+	options.c_cflag &= ~CSIZE;
+	options.c_cflag |= CS8;
 
-	tcsetattr(fd, TCSANOW, &options);
+	options.c_cflag |= CLOCAL;
+
+	if (mode == O_RDONLY) {
+		options.c_cflag |= CREAD;
+	}
+
+	options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+
+	if (tcsetattr(fd, TCSANOW, &options)) {
+		printf("failed to set attributes on port");
+	}
 
 	return (fd);
 }
@@ -850,11 +866,22 @@ int16 n_util_CommConnectionFactoryPosix_writeSerial(int32 *sp) {
 #endif
 
 #if defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_READSERIAL)
+
+#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
+extern int16 yieldToScheduler(int32 *sp);
+#endif
+
 int16 n_util_CommConnectionFactoryPosix_readSerial(int32 *sp) {
 	int32 fd = sp[0];
 	unsigned char x;
 
-	read(fd, &x, 1);
+	while (read(fd, &x, 1) <= 0) {
+#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
+		yieldToScheduler(sp);
+#else
+		;
+#endif
+	}
 
 	sp[0] = (int32) x;
 
