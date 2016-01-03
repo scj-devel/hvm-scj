@@ -19,6 +19,7 @@ public class CommConnectionFactoryPosix extends HVMConnectionFactory {
 		private int baudrate;
 
 		private class SerialInputStream extends InputStream {
+
 			SerialInputStream() {
 				if (handle == -1) {
 					handle = openSerial(port, baudrate);
