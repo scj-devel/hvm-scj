@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 
 import javax.microedition.io.Connection;
 import javax.microedition.io.ConnectionNotFoundException;
@@ -14,20 +15,25 @@ import javax.safetycritical.io.ConnectionFactory;
 
 public class CommConnectionFactoryPosix extends ConnectionFactory {
 
+	private KeyValueMap connections;
+
 	public CommConnectionFactoryPosix(String name) {
 		super(name);
+		connections = new KeyValueMap();
 	}
 
-	private static class SerialConnection implements InputConnection,
-			OutputConnection {
+	private class SerialConnection implements InputConnection, OutputConnection {
 		private byte[] port;
 		private int baudrate;
+		private String url;
+		private int handle;
 
 		private class SerialInputStream extends InputStream {
-			private int handle;
 
 			SerialInputStream() {
-				handle = openSerialInput(port, baudrate);
+				if (handle == -1) {
+					handle = openSerialInput(port, baudrate);
+				}
 			}
 
 			@Override
@@ -48,7 +54,6 @@ public class CommConnectionFactoryPosix extends ConnectionFactory {
 		}
 
 		private class SerialOutputStream extends OutputStream {
-			private int handle;
 
 			@Override
 			public void close() throws IOException {
@@ -59,7 +64,9 @@ public class CommConnectionFactoryPosix extends ConnectionFactory {
 			}
 
 			SerialOutputStream() {
-				handle = openSerialOutput(port, baudrate);
+				if (handle == -1) {
+					handle = openSerialOutput(port, baudrate);
+				}
 			}
 
 			@Override
@@ -73,13 +80,15 @@ public class CommConnectionFactoryPosix extends ConnectionFactory {
 			}
 		}
 
-		SerialConnection(byte[] port, int baudrate) {
+		SerialConnection(String url, byte[] port, int baudrate) {
+			this.url = url;
 			this.port = port;
 			this.baudrate = baudrate;
+			this.handle = -1;
 		}
 
 		public void close() {
-			;
+			connections.remove(url);
 		}
 
 		@Override
@@ -104,16 +113,22 @@ public class CommConnectionFactoryPosix extends ConnectionFactory {
 	}
 
 	@Override
-	public Connection create(String url) throws IOException,
-			ConnectionNotFoundException {
-		try {
-			URL uri = new URL(url);
-			byte[] port = uri.getTarget();
-			byte[] baudrateString = uri.getParameter("baudrate");
-			int baudrate = StringUtil.parseInt(baudrateString, true);
-			return new SerialConnection(port, baudrate);
-		} catch (URLSyntaxException e) {
-			throw new ConnectionNotFoundException();
+	public Connection create(String url) throws IOException, ConnectionNotFoundException {
+		Connection con = (Connection) connections.get(url);
+		if (con == null) {
+			try {
+				URL uri = new URL(url);
+				byte[] port = uri.getTarget();
+				byte[] baudrateString = uri.getParameter("baudrate");
+				int baudrate = StringUtil.parseInt(baudrateString, true);
+				con = new SerialConnection(url, port, baudrate);
+				connections.put(url, con);
+				return con;
+			} catch (URLSyntaxException e) {
+				throw new ConnectionNotFoundException();
+			}
+		} else {
+			return con;
 		}
 	}
 

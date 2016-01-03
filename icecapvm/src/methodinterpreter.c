@@ -17,7 +17,10 @@
 extern ClassInfo *classes;
 extern MethodInfo *methods;
 extern ConstantInfo *constants;
+
+#if defined(PUTSTATIC_OPCODE_USED) || defined(GETSTATIC_OPCODE_USED)
 extern unsigned char *classData;
+#endif
 
 extern Object* getClass(unsigned short classIndex);
 
@@ -183,7 +186,10 @@ signed char handleCloneOnArray(int32* sp)
 _NOINLINE_;
 #endif
 void handleLSHL(int32* sp) _NOINLINE_;
+
+#if defined(LSHR_OPCODE_USED) || defined(LUSHR_OPCODE_USED)
 void handleLSHR(int32* sp) _NOINLINE_;
+#endif
 unsigned char handleLMULLDIVLREM(int32* sp, unsigned char code) _NOINLINE_;
 static int32* pushStackFrame(unsigned short maxLocals,
 		unsigned short currentMethodNumber, unsigned short pc, int32* fp,

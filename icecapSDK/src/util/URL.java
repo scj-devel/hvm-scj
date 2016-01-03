@@ -1,6 +1,5 @@
 package util;
 
-import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class URL {
@@ -10,7 +9,7 @@ public class URL {
 	private String schemeSpecificPart;
 	private byte[] target;
 
-	private HashMap<String, byte[]> parameters;
+	private KeyValueMap parameters;
 
 	public URL(String name) {
 		this.raw = name;
@@ -62,12 +61,12 @@ public class URL {
 	public byte[] getParameter(String key) throws URLSyntaxException {
 		parseParameters();
 
-		return parameters.get(key);
+		return (byte[]) parameters.get(key);
 	}
 
 	private void parseParameters() throws URLSyntaxException {
 		if (parameters == null) {
-			parameters = new HashMap<String, byte[]>();
+			parameters = new KeyValueMap();
 			getSchemeSpecificPart();
 			int idx = schemeSpecificPart.indexOf(';');
 			String parameters = schemeSpecificPart.substring(idx);

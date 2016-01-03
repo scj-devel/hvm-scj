@@ -11,66 +11,94 @@ import javax.safetycritical.io.ConnectionFactory;
 import util.TCPConnectionFactoryPosix;
 
 public class TestTCPConnection {
+	private static boolean success;
 	
-	public static void main(String[] args) throws MalformedURLException {
+	private static class ServerLogic implements Runnable
+	{
+		@Override
+		public void run() {
+			String inputLocation = "tcp:localhost;port=3000;server=1";
+
+			DataInputStream inputStream = null;
+
+			try {
+				inputStream = Connector.openDataInputStream(inputLocation);
+			} catch (IOException e1) {
+				devices.Console.println("Could not open [" + inputLocation + "]");
+				return;
+			}
+			
+			try {
+				int res = inputStream.readInt();
+				devices.Console.println("received: " + res);
+				if (res == 42)
+				{
+					success = true;
+				}
+			} catch (IOException e) {
+				devices.Console.println("failed to read from [" + inputLocation
+						+ "]");
+			}
+
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+				}
+			}
+		}		
+	}
+	
+	private static class ClientLogic implements Runnable
+	{
+		@Override
+		public void run() {
+			DataOutputStream outputStream = null;
+
+			String outputLocation = "tcp:localhost;port=3000";
+
+			try {
+				outputStream = Connector.openDataOutputStream(outputLocation);
+			} catch (IOException e1) {
+				devices.Console.println("Could not open [" + outputLocation + "]");
+				return;
+			}
+
+			try {
+				outputStream.writeInt(42);
+			} catch (IOException e1) {
+				devices.Console.println("failed to write to [" + outputLocation
+						+ "]");
+			}	
+
+			if (outputStream != null) {
+				try {
+					outputStream.close();
+				} catch (IOException e) {
+				}
+			}
+		}
+	}
+	
+	public static void main(String[] args) throws MalformedURLException, InterruptedException {
 		ConnectionFactory tcpConnectionFactory = new TCPConnectionFactoryPosix(
 				"tcp");
 		ConnectionFactory.register(tcpConnectionFactory);
 
-		String outputLocation = "tcp:localhost;port=3000";
-
-		DataOutputStream outputStream = null;
-
-		try {
-			outputStream = Connector.openDataOutputStream(outputLocation);
-		} catch (IOException e1) {
-			devices.Console.println("Could not open [" + outputLocation + "]");
-			args = null;
-			return;
-		}
-
-		try {
-			outputStream.writeInt(42);
-		} catch (IOException e1) {
-			devices.Console.println("failed to write to [" + outputLocation
-					+ "]");
-		}	
-
-		String inputLocation = "tcp:localhost;port=3000";
-
-		DataInputStream inputStream = null;
-
-		try {
-			inputStream = Connector.openDataInputStream(inputLocation);
-		} catch (IOException e1) {
-			devices.Console.println("Could not open [" + inputLocation + "]");
-			return;
-		}
-
-		if (outputStream != null) {
-			try {
-				outputStream.close();
-			} catch (IOException e) {
-			}
-		}
+		Thread serverThread = new Thread(new ServerLogic());
+		Thread clientThread = new Thread(new ClientLogic());
 		
-		try {
-			int res = inputStream.readInt();
-			devices.Console.println("received: " + res);
-			if (res == 42)
-			{
-				args = null;
-			}
-		} catch (IOException e) {
-			devices.Console.println("failed to read from [" + inputLocation
-					+ "]");
-		}
-
-		if (inputStream != null) {
-			try {
-				inputStream.close();
-			} catch (IOException e) {
-			}
-		}
+		/*success = false;
+		
+		serverThread.start();
+		clientThread.start();
+		
+		serverThread.join();
+		clientThread.join();
+		
+		if (success)
+		{*/
+			args = null;
+		//}
 	}
 }
