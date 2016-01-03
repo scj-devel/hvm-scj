@@ -722,7 +722,7 @@ int16 n_vm_RealtimeClock_awaitNextTick(int32 *sp) {
 }
 #endif
 
-#if defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_OPENSERIALINPUT) || defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_OPENSERIALOUTPUT)
+#if defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_OPENSERIAL)
 
 #include <stdio.h>
 #include <string.h>
@@ -791,14 +791,8 @@ static int open_port(char* port, int mode, int32 baud) {
 
 	tcgetattr(fd, &options);
 
-	switch (mode) {
-	case O_RDONLY:
-		cfsetispeed(&options, brate);
-		break;
-	case O_WRONLY:
-		cfsetospeed(&options, brate);
-		break;
-	}
+	cfsetispeed(&options, brate);
+	cfsetospeed(&options, brate);
 
 	options.c_cflag &= ~PARENB;
 	options.c_cflag &= ~CSTOPB;
@@ -807,9 +801,7 @@ static int open_port(char* port, int mode, int32 baud) {
 
 	options.c_cflag |= CLOCAL;
 
-	if (mode == O_RDONLY) {
-		options.c_cflag |= CREAD;
-	}
+	options.c_cflag |= CREAD;
 
 	options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
 
@@ -821,26 +813,14 @@ static int open_port(char* port, int mode, int32 baud) {
 }
 #endif
 
-#if defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_OPENSERIALINPUT)
-int16 n_util_CommConnectionFactoryPosix_openSerialInput(int32 *sp) {
+#if defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_OPENSERIAL)
+int16 n_util_CommConnectionFactoryPosix_openSerial(int32 *sp) {
 	uint32 baudrate = (uint32) sp[1];
 	unsigned char* port = HEAP_REF((unsigned char* ) (pointer ) sp[0], unsigned char*);
 
 	port = port + sizeof(Object) + 2;
 
-	sp[0] = (int32) open_port((char*) port, O_RDONLY, baudrate);
-	return -1;
-}
-#endif
-
-#if defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_OPENSERIALOUTPUT)
-int16 n_util_CommConnectionFactoryPosix_openSerialOutput(int32 *sp) {
-	uint32 baudrate = (uint32) sp[1];
-	unsigned char* port = HEAP_REF((unsigned char* ) (pointer ) sp[0], unsigned char*);
-
-	port = port + sizeof(Object) + 2;
-
-	sp[0] = (int32) open_port((char*) port, O_WRONLY, baudrate);
+	sp[0] = (int32) open_port((char*) port, O_RDWR, baudrate);
 	return -1;
 }
 #endif

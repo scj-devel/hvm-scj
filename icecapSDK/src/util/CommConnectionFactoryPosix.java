@@ -1,38 +1,27 @@
 package util;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
 
 import javax.microedition.io.Connection;
-import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.io.InputConnection;
 import javax.microedition.io.OutputConnection;
-import javax.safetycritical.io.ConnectionFactory;
 
-public class CommConnectionFactoryPosix extends ConnectionFactory {
-
-	private KeyValueMap connections;
+public class CommConnectionFactoryPosix extends HVMConnectionFactory {
 
 	public CommConnectionFactoryPosix(String name) {
 		super(name);
-		connections = new KeyValueMap();
 	}
 
-	private class SerialConnection implements InputConnection, OutputConnection {
+	private class SerialConnection extends FullDuplexConnection implements InputConnection, OutputConnection {
 		private byte[] port;
 		private int baudrate;
-		private String url;
-		private int handle;
 
 		private class SerialInputStream extends InputStream {
-
 			SerialInputStream() {
 				if (handle == -1) {
-					handle = openSerialInput(port, baudrate);
+					handle = openSerial(port, baudrate);
 				}
 			}
 
@@ -53,6 +42,12 @@ public class CommConnectionFactoryPosix extends ConnectionFactory {
 			}
 		}
 
+		@Override
+		public void close() {
+			super.close();
+			connections.remove(url);
+		}
+
 		private class SerialOutputStream extends OutputStream {
 
 			@Override
@@ -65,7 +60,7 @@ public class CommConnectionFactoryPosix extends ConnectionFactory {
 
 			SerialOutputStream() {
 				if (handle == -1) {
-					handle = openSerialOutput(port, baudrate);
+					handle = openSerial(port, baudrate);
 				}
 			}
 
@@ -81,60 +76,31 @@ public class CommConnectionFactoryPosix extends ConnectionFactory {
 		}
 
 		SerialConnection(String url, byte[] port, int baudrate) {
-			this.url = url;
+			super(url);
 			this.port = port;
 			this.baudrate = baudrate;
-			this.handle = -1;
 		}
 
-		public void close() {
-			connections.remove(url);
-		}
-
-		@Override
-		public DataInputStream openDataInputStream() {
-			return new DataInputStream(new SerialInputStream());
-		}
-
-		@Override
-		public InputStream openInputStream() {
-			return new SerialInputStream();
-		}
-
-		@Override
-		public DataOutputStream openDataOutputStream() {
-			return new DataOutputStream(new SerialOutputStream());
-		}
-
-		@Override
-		public OutputStream openOutputStream() {
+		protected OutputStream createOutputStream() {
 			return new SerialOutputStream();
 		}
-	}
 
-	@Override
-	public Connection create(String url) throws IOException, ConnectionNotFoundException {
-		Connection con = (Connection) connections.get(url);
-		if (con == null) {
-			try {
-				URL uri = new URL(url);
-				byte[] port = uri.getTarget();
-				byte[] baudrateString = uri.getParameter("baudrate");
-				int baudrate = StringUtil.parseInt(baudrateString, true);
-				con = new SerialConnection(url, port, baudrate);
-				connections.put(url, con);
-				return con;
-			} catch (URLSyntaxException e) {
-				throw new ConnectionNotFoundException();
-			}
-		} else {
-			return con;
+		protected InputStream createInputStream() {
+			return new SerialInputStream();
 		}
 	}
 
-	private static native int openSerialOutput(byte[] port, int baudrate);
+	protected Connection createConnection(String url) throws URLSyntaxException {
+		Connection con;
+		URL uri = new URL(url);
+		byte[] port = uri.getTarget();
+		byte[] baudrateString = uri.getParameter("baudrate");
+		int baudrate = StringUtil.parseInt(baudrateString, true);
+		con = new SerialConnection(url, port, baudrate);
+		return con;
+	}
 
-	private static native int openSerialInput(byte[] port, int baudrate);
+	private static native int openSerial(byte[] port, int baudrate);
 
 	private static native int closeSerial(int fd);
 
