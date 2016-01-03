@@ -12,9 +12,8 @@ import util.TCPConnectionFactoryPosix;
 
 public class TestTCPConnection {
 	private static boolean success;
-	
-	private static class ServerLogic implements Runnable
-	{
+
+	private static class ServerLogic implements Runnable {
 		@Override
 		public void run() {
 			String inputLocation = "tcp:localhost;port=3000;server=1";
@@ -27,17 +26,19 @@ public class TestTCPConnection {
 				devices.Console.println("Could not open [" + inputLocation + "]");
 				return;
 			}
-			
+
 			try {
 				int res = inputStream.readInt();
 				devices.Console.println("received: " + res);
-				if (res == 42)
-				{
-					success = true;
+				if (res == 42) {
+					res = inputStream.readInt();
+					devices.Console.println("received: " + res);
+					if (res == 43) {
+						success = true;
+					}
 				}
 			} catch (IOException e) {
-				devices.Console.println("failed to read from [" + inputLocation
-						+ "]");
+				devices.Console.println("failed to read from [" + inputLocation + "]");
 			}
 
 			if (inputStream != null) {
@@ -46,11 +47,10 @@ public class TestTCPConnection {
 				} catch (IOException e) {
 				}
 			}
-		}		
+		}
 	}
-	
-	private static class ClientLogic implements Runnable
-	{
+
+	private static class ClientLogic implements Runnable {
 		@Override
 		public void run() {
 			DataOutputStream outputStream = null;
@@ -66,10 +66,10 @@ public class TestTCPConnection {
 
 			try {
 				outputStream.writeInt(42);
+				outputStream.writeInt(43);
 			} catch (IOException e1) {
-				devices.Console.println("failed to write to [" + outputLocation
-						+ "]");
-			}	
+				devices.Console.println("failed to write to [" + outputLocation + "]");
+			}
 
 			if (outputStream != null) {
 				try {
@@ -79,26 +79,24 @@ public class TestTCPConnection {
 			}
 		}
 	}
-	
+
 	public static void main(String[] args) throws MalformedURLException, InterruptedException {
-		ConnectionFactory tcpConnectionFactory = new TCPConnectionFactoryPosix(
-				"tcp");
+		ConnectionFactory tcpConnectionFactory = new TCPConnectionFactoryPosix("tcp");
 		ConnectionFactory.register(tcpConnectionFactory);
 
 		Thread serverThread = new Thread(new ServerLogic());
 		Thread clientThread = new Thread(new ClientLogic());
-		
-		/*success = false;
-		
+
+		success = false;
+
 		serverThread.start();
 		clientThread.start();
-		
+
 		serverThread.join();
 		clientThread.join();
-		
-		if (success)
-		{*/
+
+		if (success) {
 			args = null;
-		//}
+		}
 	}
 }

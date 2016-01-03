@@ -485,15 +485,91 @@ int16 n_java_lang_StrictMath_sqrt(int32 *sp) {
 }
 #endif
 
-#if defined(ENABLE_DEBUG)
+#if defined(N_UTIL_TCPCONNECTIONFACTORYPOSIX_OPENTCP) || defined(ENABLE_DEBUG)
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <stdlib.h>
 #include <strings.h>
 #include <unistd.h>
+#include <netdb.h>
 
+static int32 openServerSocket(int32 channelID, void (*stopProgram)(int exitValue)) {
+	int sockfd, newsockfd;
+	socklen_t clilen;
+	struct sockaddr_in* serv_addr;
+	struct sockaddr_in* cli_addr;
+
+	sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	if (sockfd < 0) {
+		perror("ERROR opening socket");
+		stopProgram(1);
+	}
+
+	serv_addr = (struct sockaddr_in*) gc_allocateObject(sizeof(struct sockaddr_in) - sizeof(Object), 0);
+
+	serv_addr = HEAP_REF(serv_addr, struct sockaddr_in*);
+	serv_addr->sin_family = AF_INET;
+	serv_addr->sin_addr.s_addr = INADDR_ANY;
+	serv_addr->sin_port = htons(channelID);
+
+	if (bind(sockfd, (struct sockaddr *) serv_addr, sizeof(struct sockaddr_in)) < 0) {
+		perror("Cannot connect to debugger");
+		stopProgram(1);
+	}
+
+	listen(sockfd, 5);
+	clilen = sizeof(struct sockaddr_in);
+	cli_addr = (struct sockaddr_in *) gc_allocateObject(sizeof(struct sockaddr_in) - sizeof(Object), 0);
+
+	cli_addr = HEAP_REF(cli_addr, struct sockaddr_in *);
+
+	newsockfd = accept(sockfd, (struct sockaddr *) cli_addr, &clilen);
+	if (newsockfd < 0) {
+		perror("Cannot connect to debugger");
+		stopProgram(1);
+	}
+	return newsockfd;
+}
+
+static int32 openClientSocket(unsigned char* hostname, int32 portno, void (*stopProgram)(int exitValue)) {
+	int sockfd;
+	struct sockaddr_in serv_addr;
+	struct hostent *server;
+
+	sockfd = socket(AF_INET, SOCK_STREAM, 0);
+
+	if (sockfd < 0) {
+		stopProgram(0);
+		return -1;
+	}
+
+	server = gethostbyname((char *)hostname);
+	if (server == NULL) {
+		stopProgram(0);
+		return -1;
+	}
+	bzero((char *) &serv_addr, sizeof(serv_addr));
+
+	serv_addr.sin_family = AF_INET;
+
+	bcopy((char *) server->h_addr, (char *) &serv_addr.sin_addr.s_addr, server->h_length);
+
+	serv_addr.sin_port = htons(portno);
+
+	if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+		stopProgram(0);
+		return -1;
+	}
+
+	return sockfd;
+}
+#endif
+
+#if defined(ENABLE_DEBUG)
 extern int requestResponseChannel;
+
 
 extern unsigned char awaitCommandFromDebugger(int32* fp, unsigned short methodNumber, unsigned short pc);
 extern void disconnectFromDebugger(void);
@@ -516,45 +592,7 @@ void closeStdout(void)
 
 int32 connectToChannel(int32 channelID)
 {
-	int sockfd, newsockfd;
-	socklen_t clilen;
-	struct sockaddr_in* serv_addr;
-	struct sockaddr_in* cli_addr;
-
-	sockfd = socket(AF_INET, SOCK_STREAM, 0);
-	if (sockfd < 0)
-	{
-		perror("ERROR opening socket");
-		stopProgram(1);
-	}
-
-	serv_addr = (struct sockaddr_in*)gc_allocateObject(sizeof(struct sockaddr_in) - sizeof(Object), 0);
-
-	serv_addr = HEAP_REF(serv_addr, struct sockaddr_in*);
-	serv_addr -> sin_family = AF_INET;
-	serv_addr -> sin_addr.s_addr = INADDR_ANY;
-	serv_addr -> sin_port = htons(channelID);
-
-	if (bind(sockfd, (struct sockaddr *) serv_addr,
-					sizeof(struct sockaddr_in)) < 0)
-	{
-		perror("Cannot connect to debugger");
-		stopProgram(1);
-	}
-
-	listen(sockfd,5);
-	clilen = sizeof(struct sockaddr_in);
-	cli_addr = (struct sockaddr_in *)gc_allocateObject(sizeof(struct sockaddr_in) - sizeof(Object), 0);
-
-	cli_addr = HEAP_REF(cli_addr, struct sockaddr_in *);
-
-	newsockfd = accept(sockfd, (struct sockaddr *)cli_addr, &clilen);
-	if (newsockfd < 0)
-	{
-		perror("Cannot connect to debugger");
-		stopProgram(1);
-	}
-	return newsockfd;
+	return openServerSocket(channelID, stopProgram);
 }
 
 void readFromDebugger(unsigned char *buf, unsigned short length)
@@ -733,43 +771,43 @@ int16 n_vm_RealtimeClock_awaitNextTick(int32 *sp) {
 
 static int getBaud(int32 baud) {
 	switch (baud) {
-	case 0:
+		case 0:
 		return B0;
-	case 50:
+		case 50:
 		return B50;
-	case 75:
+		case 75:
 		return B75;
-	case 110:
+		case 110:
 		return B110;
-	case 134:
+		case 134:
 		return B134;
-	case 150:
+		case 150:
 		return B150;
-	case 200:
+		case 200:
 		return B200;
-	case 300:
+		case 300:
 		return B300;
-	case 600:
+		case 600:
 		return B600;
-	case 1200:
+		case 1200:
 		return B1200;
-	case 1800:
+		case 1800:
 		return B1800;
-	case 2400:
+		case 2400:
 		return B2400;
-	case 4800:
+		case 4800:
 		return B4800;
-	case 9600:
+		case 9600:
 		return B9600;
-	case 19200:
+		case 19200:
 		return B19200;
-	case 38400:
+		case 38400:
 		return B38400;
-	case 57600:
+		case 57600:
 		return B57600;
-	case 115200:
+		case 115200:
 		return B115200;
-	default:
+		default:
 		return B9600;
 	}
 }
@@ -825,11 +863,29 @@ int16 n_util_CommConnectionFactoryPosix_openSerial(int32 *sp) {
 }
 #endif
 
+#if defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_CLOSESERIAL) || defined(N_UTIL_TCPCONNECTIONFACTORYPOSIX_CLOSETCP)
+static void closeFileDescriptor(int32 *sp) {
+	int32 fd = sp[0];
+	sp[0] = close(fd);
+}
+#endif
+
+
 #if defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_CLOSESERIAL)
 int16 n_util_CommConnectionFactoryPosix_closeSerial(int32 *sp) {
 	int32 fd = sp[0];
 	sp[0] = close(fd);
 	return -1;
+}
+#endif
+
+#if defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_WRITESERIAL) || defined(N_UTIL_TCPCONNECTIONFACTORYPOSIX_WRITETCP)
+static void writeFileDescriptor(int32 *sp) {
+	int32 fd = sp[0];
+	int32 b = sp[1];
+	unsigned char x = (unsigned char) b;
+
+	sp[0] = (int32) write(fd, &x, 1);
 }
 #endif
 
@@ -845,13 +901,13 @@ int16 n_util_CommConnectionFactoryPosix_writeSerial(int32 *sp) {
 }
 #endif
 
-#if defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_READSERIAL)
+#if defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_READSERIAL) || defined(N_UTIL_TCPCONNECTIONFACTORYPOSIX_READTCP)
 
 #if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
 extern int16 yieldToScheduler(int32 *sp);
 #endif
 
-int16 n_util_CommConnectionFactoryPosix_readSerial(int32 *sp) {
+static void readFileDescriptor(int32 *sp) {
 	int32 fd = sp[0];
 	unsigned char x;
 
@@ -864,8 +920,62 @@ int16 n_util_CommConnectionFactoryPosix_readSerial(int32 *sp) {
 	}
 
 	sp[0] = (int32) x;
+}
+#endif
 
+#if defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_READSERIAL)
+
+int16 n_util_CommConnectionFactoryPosix_readSerial(int32 *sp) {
+	readFileDescriptor(sp);
 	return -1;
 }
 #endif
 
+#if defined(N_UTIL_TCPCONNECTIONFACTORYPOSIX_CLOSETCP)
+int16 n_util_TCPConnectionFactoryPosix_closeTCP(int32* sp) {
+	closeFileDescriptor(sp);
+	return -1;
+}
+#endif
+
+/*
+ *
+ * private static native int openTCP(byte[] host, int port, boolean isServer);
+ */
+#if defined(N_UTIL_TCPCONNECTIONFACTORYPOSIX_OPENTCP)
+static int32 tcpfd;
+
+static void failed(int exitValue) {
+	tcpfd = -1;
+}
+
+int16 n_util_TCPConnectionFactoryPosix_openTCP(int32* sp) {
+	uint32 port = (uint32) sp[1];
+	unsigned char* host = HEAP_REF((unsigned char* ) (pointer ) sp[0], unsigned char*);
+	uint32 isServer = (uint32) sp[2];
+
+	host = host + sizeof(Object) + 2;
+
+	if (isServer) {
+		tcpfd = openServerSocket(port, failed);
+	} else {
+		tcpfd = openClientSocket(host, port, failed);
+	}
+	sp[0] = tcpfd;
+	return -1;
+}
+#endif
+
+#if defined(N_UTIL_TCPCONNECTIONFACTORYPOSIX_READTCP)
+int16 n_util_TCPConnectionFactoryPosix_readTCP(int32* sp) {
+	readFileDescriptor(sp);
+	return -1;
+}
+#endif
+
+#if defined(N_UTIL_TCPCONNECTIONFACTORYPOSIX_WRITETCP)
+int16 n_util_TCPConnectionFactoryPosix_writeTCP(int32* sp) {
+	writeFileDescriptor(sp);
+	return -1;
+}
+#endif
