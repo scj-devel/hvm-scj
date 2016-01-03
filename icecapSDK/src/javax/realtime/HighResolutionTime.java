@@ -262,13 +262,13 @@ public abstract class HighResolutionTime implements Comparable<HighResolutionTim
 	//		return javax.safetycritical.PriorityScheduler.waitForObject(target, time);
 	//	}
 
-	// used for JML annotation only (not public)
-	long getMillis() {
-		return millis;
-	}
+//	// used for JML annotation only (not public)
+//	long getMillis() {
+//		return millis;
+//	}
 
-	// used for JML annotation only (not public)
-	int getNanos() {
-		return nanos;
-	}
+//	// used for JML annotation only (not public)
+//	int getNanos() {
+//		return nanos;
+//	}
 }
