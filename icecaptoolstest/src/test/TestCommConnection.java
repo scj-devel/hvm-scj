@@ -12,25 +12,74 @@ import util.CommConnectionFactoryPosix;
 
 public class TestCommConnection {
 
-	public static void main(String[] args) throws MalformedURLException {
-		String outputLocation = "comm:/dev/ttyUSB0;baudrate=19200";
-		String inputLocation = "comm:/dev/ttyUSB1;baudrate=19200";
+	private static final boolean READ = true;
+	private static final boolean WRITE = true;
 
+	public static void main(String[] args) throws MalformedURLException {
 		ConnectionFactory serialConnectionFactory = new CommConnectionFactoryPosix("comm");
 		ConnectionFactory.register(serialConnectionFactory);
-		
-		/*try {
-			DataOutputStream outputStream = Connector.openDataOutputStream(outputLocation);			
-			DataInputStream inputStream = Connector.openDataInputStream(inputLocation);
-		
-			outputStream.writeInt(42);
-			int res = inputStream.read();
-			if (res == 42)
-			{*/
+
+		String outputLocation = "comm:/dev/ttyUSB0;baudrate=19200";
+
+		DataOutputStream outputStream = null;
+
+		if (WRITE) {
+			try {
+				outputStream = Connector.openDataOutputStream(outputLocation);
+			} catch (IOException e1) {
+				devices.Console.println("Could not open [" + outputLocation + "]");
+				return;
+			}
+
+			try {
+				devices.Console.println("Writing to " + outputLocation);
+				outputStream.writeInt(42);
+			} catch (IOException e1) {
+				devices.Console.println("failed to write to [" + outputLocation + "]");
 				args = null;
-			/*}
-		} catch (IOException e) {
-			devices.Console.println("Could not open [" + outputLocation + "]");
-		}*/
+				return;
+			}
+		}
+
+		String inputLocation = "comm:/dev/ttyUSB1;baudrate=19200";
+		DataInputStream inputStream = null;
+
+		if (READ) {
+			try {
+				inputStream = Connector.openDataInputStream(inputLocation);
+			} catch (IOException e1) {
+				devices.Console.println("Could not open [" + inputLocation + "]");
+				return;
+			}
+		}
+
+		if (WRITE) {
+			if (outputStream != null) {
+				try {
+					outputStream.close();
+				} catch (IOException e) {
+				}
+			}
+		}
+
+		if (READ) {
+			try {
+				devices.Console.println("Reading from " + inputLocation);
+				int res = inputStream.readInt();
+				devices.Console.println("received: " + res);
+				if (res == 42) {
+					args = null;
+				}
+			} catch (IOException e) {
+				devices.Console.println("failed to read from [" + inputLocation + "]");
+			}
+
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+				}
+			}
+		}
 	}
 }

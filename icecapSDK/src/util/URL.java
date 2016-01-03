@@ -1,12 +1,15 @@
 package util;
 
+import java.util.StringTokenizer;
+
 public class URL {
 	private String raw;
 
 	private String scheme;
 	private String schemeSpecificPart;
+	private byte[] target;
 
-	private String target;
+	private KeyValueMap parameters;
 
 	public URL(String name) {
 		this.raw = name;
@@ -38,7 +41,7 @@ public class URL {
 		return schemeSpecificPart;
 	}
 
-	public String getTarget() throws URLSyntaxException {
+	public byte[] getTarget() throws URLSyntaxException {
 		if (target == null) {
 			getSchemeSpecificPart();
 			if (schemeSpecificPart == null) {
@@ -47,13 +50,38 @@ public class URL {
 
 			int idx = schemeSpecificPart.indexOf(";");
 			if (idx == -1) {
-				target = schemeSpecificPart;
-			}
-			else
-			{
-				target = schemeSpecificPart.substring(0, idx);
+				target = StringUtil.getBytes(schemeSpecificPart, true);
+			} else {
+				target = StringUtil.getBytes(schemeSpecificPart.substring(0, idx), true);
 			}
 		}
 		return target;
+	}
+
+	public byte[] getParameter(String key) throws URLSyntaxException {
+		parseParameters();
+
+		return (byte[]) parameters.get(key);
+	}
+
+	private void parseParameters() throws URLSyntaxException {
+		if (parameters == null) {
+			parameters = new KeyValueMap();
+			getSchemeSpecificPart();
+			int idx = schemeSpecificPart.indexOf(';');
+			String parameters = schemeSpecificPart.substring(idx);
+			StringTokenizer tokenizer = new StringTokenizer(parameters, ";");
+			while (tokenizer.hasMoreElements()) {
+				String nextToken = tokenizer.nextToken();
+				idx = nextToken.indexOf('=');
+				if (idx == -1) {
+					throw new URLSyntaxException();
+				}
+				String key = nextToken.substring(0, idx);
+				
+				byte[] value = StringUtil.getBytes(nextToken.substring(idx + 1), true);
+				this.parameters.put(key, value);
+			}
+		}
 	}
 }

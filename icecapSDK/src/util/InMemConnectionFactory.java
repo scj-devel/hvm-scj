@@ -16,13 +16,13 @@ public class InMemConnectionFactory extends ConnectionFactory {
 	private DataOutputStream outputStream;
 	private DataInputStream inputStream;
 
-	private class DataOutputConnection implements OutputConnection
-	{
+	private class InMemDataConnection implements OutputConnection, InputConnection {
 
 		@Override
 		public void close() {
 			try {
 				outputStream.close();
+				inputStream.close();
 			} catch (IOException e) {
 			}
 		}
@@ -35,18 +35,6 @@ public class InMemConnectionFactory extends ConnectionFactory {
 		@Override
 		public OutputStream openOutputStream() {
 			return null;
-		}		
-	}
-
-	private class DataInputConnection implements InputConnection
-	{
-
-		@Override
-		public void close() {
-			try {
-				inputStream.close();
-			} catch (IOException e) {
-			}
 		}
 
 		@Override
@@ -57,7 +45,7 @@ public class InMemConnectionFactory extends ConnectionFactory {
 		@Override
 		public InputStream openInputStream() {
 			return null;
-		}		
+		}
 	}
 
 	public InMemConnectionFactory(String name, DataOutputStream outputStream, DataInputStream inputStream) {
@@ -68,21 +56,6 @@ public class InMemConnectionFactory extends ConnectionFactory {
 
 	@Override
 	public Connection create(String url) throws IOException, ConnectionNotFoundException {
-		try {
-			URL uri = new URL(url);
-			if ("output".equals(uri.getSchemeSpecificPart()))
-			{
-				return new DataOutputConnection();
-			}
-			else if ("input".equals(uri.getSchemeSpecificPart()))
-			{
-				return new DataInputConnection();
-			}
-		} catch (URLSyntaxException e) {
-			throw new ConnectionNotFoundException();
-		}
-		
-		return null;
+		return new InMemDataConnection();
 	}
-
 }

@@ -15,12 +15,9 @@ public abstract class ConnectionFactory {
 	protected ConnectionFactory(String name) {
 		try {
 			URL uri = new URL(name);
-			if (uri.getScheme() != null)
-			{
+			if (uri.getScheme() != null) {
 				this.name = uri.getScheme();
-			}
-			else
-			{
+			} else {
 				this.name = uri.getSchemeSpecificPart();
 			}
 		} catch (URLSyntaxException e) {

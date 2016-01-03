@@ -1,13 +1,10 @@
 package javax.safetycritical;
 
-import javax.safetycritical.annotate.Level;
-import javax.safetycritical.annotate.SCJAllowed;
-import javax.realtime.AsyncEventHandler;
 //import javax.realtime.ImmortalMemory;
 import javax.realtime.PriorityParameters;
-import javax.realtime.RelativeTime;
 import javax.realtime.ReleaseParameters;
-import javax.safetycritical.StorageParameters;
+import javax.safetycritical.annotate.Level;
+import javax.safetycritical.annotate.SCJAllowed;
 
 /**
  * The <code>TestPortalSC</code> contains the test probes needed in package

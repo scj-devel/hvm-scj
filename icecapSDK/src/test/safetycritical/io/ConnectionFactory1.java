@@ -15,7 +15,6 @@ public class ConnectionFactory1 extends ConnectionFactory {
 	@Override
 	public Connection create(String url) throws IOException,
 			ConnectionNotFoundException {
-		// TODO Auto-generated method stub
 		return new StreamConnection1(url);
 	}
 
