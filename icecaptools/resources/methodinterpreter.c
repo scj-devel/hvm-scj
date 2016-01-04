@@ -17,7 +17,10 @@
 extern ClassInfo *classes;
 extern MethodInfo *methods;
 extern ConstantInfo *constants;
+
+#if defined(PUTSTATIC_OPCODE_USED) || defined(GETSTATIC_OPCODE_USED)
 extern unsigned char *classData;
+#endif
 
 extern Object* getClass(unsigned short classIndex);
 
@@ -48,7 +51,7 @@ unsigned char getElementSize(unsigned short classIndex);
 int32 imul(int32 a, int32 b) _NOINLINE_;
 #endif
 
-#if (defined(PC64) || defined(PC32) || defined(CR16C)) && defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
+#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
 extern int16 yieldToScheduler(int32 *sp);
 #endif
 
@@ -183,7 +186,10 @@ signed char handleCloneOnArray(int32* sp)
 _NOINLINE_;
 #endif
 void handleLSHL(int32* sp) _NOINLINE_;
+
+#if defined(LSHR_OPCODE_USED) || defined(LUSHR_OPCODE_USED)
 void handleLSHR(int32* sp) _NOINLINE_;
+#endif
 unsigned char handleLMULLDIVLREM(int32* sp, unsigned char code) _NOINLINE_;
 static int32* pushStackFrame(unsigned short maxLocals,
 		unsigned short currentMethodNumber, unsigned short pc, int32* fp,
@@ -680,7 +686,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			unsigned char branchbyte2 = pgm_read_byte(method_code + 2);
 			signed short int offset = (signed short int) ((branchbyte1 << 8)
 					| branchbyte2);
-#if (defined(PC64) || defined(PC32) || defined(CR16C)) && defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
+#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
 			if (offset <= 0) {
 				yieldToScheduler(sp);
 			}

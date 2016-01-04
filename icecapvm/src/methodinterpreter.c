@@ -51,7 +51,7 @@ unsigned char getElementSize(unsigned short classIndex);
 int32 imul(int32 a, int32 b) _NOINLINE_;
 #endif
 
-#if (defined(PC64) || defined(PC32) || defined(CR16C)) && defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
+#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
 extern int16 yieldToScheduler(int32 *sp);
 #endif
 
@@ -686,7 +686,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			unsigned char branchbyte2 = pgm_read_byte(method_code + 2);
 			signed short int offset = (signed short int) ((branchbyte1 << 8)
 					| branchbyte2);
-#if (defined(PC64) || defined(PC32) || defined(CR16C)) && defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
+#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
 			if (offset <= 0) {
 				yieldToScheduler(sp);
 			}
