@@ -23,75 +23,77 @@ import org.junit.Test;
 
 public class TestCompiler {
 
-    @Test
-    public void testFullCompilation() {
-        ConversionConfiguration config = new ConversionConfiguration();
-        
-        config.setClassPath("/home/skr/icecapvm/tools/bin");
-        config.setInputPackage("test");
-        config.setInputClass("TestI2B");
+	@Test
+	public void testFullCompilation() {
+		ConversionConfiguration config = new ConversionConfiguration();
 
-        CompilationSequence sequencer = new CompilationSequence();
-        config.setCodeFormatter(new DefaultIcecapCodeFormatter());
-        try {
-            sequencer.startCompilation(System.out, new DefaultMethodObserver(), config, new DefaultIcecapProgressMonitor(), new DefaultCompilationRegistry(), "", true);
-        } catch (Throwable e2) {
-            Assert.fail();
-        }
+		config.setClassPath("/home/skr/icecapvm/tools/bin");
+		config.setInputPackage("test");
+		config.setInputClass("TestI2B");
 
-        File classesFile = new File("classes.c");
-        Assert.assertTrue(classesFile.exists());
-        Assert.assertTrue(classesFile.length() > 0);
-        classesFile.delete();
-        classesFile = null;
-        
-        
-        File methodsFile = new File("methods.c");
-        Assert.assertTrue(methodsFile.exists());
-        Assert.assertTrue(methodsFile.length() > 0);
-        methodsFile.delete();
-        methodsFile = null;
-    }
+		CompilationSequence sequencer = new CompilationSequence();
+		config.setCodeFormatter(new DefaultIcecapCodeFormatter());
+		config.setOutputFolder("");
+		try {
+			sequencer.startCompilation(System.out, new DefaultMethodObserver(), config,
+					new DefaultIcecapProgressMonitor(), new DefaultCompilationRegistry(), true);
+		} catch (Throwable e2) {
+			Assert.fail();
+		}
 
-    @Test
-    public void testVTable() throws Exception {
-        ClassPath classPath = new ClassPath("/home/skr/icecapvm/tools/bin");
+		File classesFile = new File("classes.c");
+		Assert.assertTrue(classesFile.exists());
+		Assert.assertTrue(classesFile.length() > 0);
+		classesFile.delete();
+		classesFile = null;
 
-        SyntheticRepository repository = SyntheticRepository.getInstance(classPath);
+		File methodsFile = new File("methods.c");
+		Assert.assertTrue(methodsFile.exists());
+		Assert.assertTrue(methodsFile.length() > 0);
+		methodsFile.delete();
+		methodsFile = null;
+	}
 
-        Repository.setRepository(repository);
+	@Test
+	public void testVTable() throws Exception {
+		ClassPath classPath = new ClassPath("/home/skr/icecapvm/tools/bin");
 
-        JavaClass clazz = Repository.lookupClass("test.icecaptools.minitests.Sub2");
+		SyntheticRepository repository = SyntheticRepository.getInstance(classPath);
 
-        AnalysisObserver observer = new DefaultObserver();
+		Repository.setRepository(repository);
 
-        Converter converter = new Converter(System.out, new DefaultMethodObserver(), new DefaultCompilationRegistry(), false);
-        converter.setObserver(observer);
-        VirtualTable vtable = VirtualTable.createVTable(clazz.getClassName(), observer);
+		JavaClass clazz = Repository.lookupClass("test.icecaptools.minitests.Sub2");
 
-        System.out.println(vtable.toString());
-    }
-    
-    @Test
-    public void testMethoID()  {
-        String className;
-        String methodName; 
-        String signature;
-        IDGenerator idGen = new IDGenerator();
-        String id1, id2;
-        
-        className = "java.util.HashMap";
-        methodName = "<init>";
-        signature = "()V";
-        
-        id1 = idGen.getUniqueId(className, methodName, signature);
-        
-        className = "java.util.HashMap";
-        methodName = "init";
-        signature = "()V";
-        
-        id2 = idGen.getUniqueId(className, methodName, signature);
-        
-        Assert.assertFalse(id1.equals(id2));
-    }
+		AnalysisObserver observer = new DefaultObserver();
+
+		Converter converter = new Converter(System.out, new DefaultMethodObserver(), new DefaultCompilationRegistry(),
+				false);
+		converter.setObserver(observer);
+		VirtualTable vtable = VirtualTable.createVTable(clazz.getClassName(), observer);
+
+		System.out.println(vtable.toString());
+	}
+
+	@Test
+	public void testMethoID() {
+		String className;
+		String methodName;
+		String signature;
+		IDGenerator idGen = new IDGenerator();
+		String id1, id2;
+
+		className = "java.util.HashMap";
+		methodName = "<init>";
+		signature = "()V";
+
+		id1 = idGen.getUniqueId(className, methodName, signature);
+
+		className = "java.util.HashMap";
+		methodName = "init";
+		signature = "()V";
+
+		id2 = idGen.getUniqueId(className, methodName, signature);
+
+		Assert.assertFalse(id1.equals(id2));
+	}
 }

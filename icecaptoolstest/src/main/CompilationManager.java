@@ -22,7 +22,7 @@ import test.icecaptools.compiler.TestConversionConfiguration;
 public class CompilationManager {
 
 	/* Test commit to test git */
-	
+
 	private static class JMLCompilationRegistry implements ICompilationRegistry {
 
 		@Override
@@ -164,16 +164,13 @@ public class CompilationManager {
 		setDefaults(props);
 
 		String propertiesFileName = config.getPropertiesFileName();
-		
-		if (propertiesFileName != null)
-		{
+
+		if (propertiesFileName != null) {
 			System.out.println("Loaded properties from [" + propertiesFileName + "]");
-		}
-		else
-		{
+		} else {
 			System.out.println("Using default properties");
 		}
-		
+
 		if (args.length < 1) {
 			System.out.println("Using default values\nUsage: CompilationManager " + inputFolder + " " + inputPackage
 					+ " " + inputClass);
@@ -245,9 +242,9 @@ public class CompilationManager {
 		CompilationSequence sequencer = new CompilationSequence();
 
 		System.out.println("outputFolder = " + outputFolder);
-
+		config.setOutputFolder(outputFolder);
 		sequencer.startCompilation(System.out, new DefaultMethodObserver(), config, new DefaultIcecapProgressMonitor(),
-				cregistry, outputFolder, true);
+				cregistry, true);
 
 		sequencer = null;
 		config = null;

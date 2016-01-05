@@ -336,8 +336,8 @@ public class CompilationManagerHSO {
         CompilationSequence sequencer = new CompilationSequence();
 
         System.out.println("outputFolder = " + outputFolder);
-
-        sequencer.startCompilation(System.out, new DefaultMethodObserver(), config, new DefaultIcecapProgressMonitor(), cregistry, outputFolder, true);
+        config.setOutputFolder(outputFolder);
+        sequencer.startCompilation(System.out, new DefaultMethodObserver(), config, new DefaultIcecapProgressMonitor(), cregistry, true);
 
         sequencer = null;
         config = null;

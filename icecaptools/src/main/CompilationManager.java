@@ -158,12 +158,12 @@ public class CompilationManager {
 		config.setInputSourceFileName(sourceFileName);
 
 		HVMProperties props = config.getProperties();
-		
+
 		setDefaults(props);
 
 		String cwd = System.getProperty("user.dir");
 		System.out.println("Current working directoy = [" + cwd + "]");
-		
+
 		String propertiesFileName = config.getPropertiesFileName();
 
 		if (propertiesFileName != null) {
@@ -243,9 +243,9 @@ public class CompilationManager {
 		CompilationSequence sequencer = new CompilationSequence();
 
 		System.out.println("outputFolder = " + outputFolder);
-
+		config.setOutputFolder(outputFolder);
 		sequencer.startCompilation(System.out, new DefaultMethodObserver(), config, new DefaultIcecapProgressMonitor(),
-				cregistry, outputFolder, true);
+				cregistry, true);
 
 		sequencer = null;
 		config = null;

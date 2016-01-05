@@ -42,11 +42,11 @@ public class ConverterJob extends Job {
                 return new Status(IStatus.ERROR, "Icecaptools", IStatus.ERROR, "Illegal output folder", new Exception());
             }
         }
-        
+        config.setOutputFolder(outputFolder);
         CompilationSequence sequencer = new CompilationSequence();
         
         try {
-            sequencer.startCompilation(out, methodObserver, config, new IcecapEclipseProgressMonitor(progressMonitor), cregistry, outputFolder, true);
+            sequencer.startCompilation(out, methodObserver, config, new IcecapEclipseProgressMonitor(progressMonitor), cregistry, true);
             mostRecentSequence = sequencer;
         } catch (Throwable e) {
             mostRecentSequence = null;

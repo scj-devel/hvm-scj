@@ -228,9 +228,9 @@ public class TestAll {
 		// cregistry = new CompileAllRegistry();
 
 		CompilationSequence sequencer = new CompilationSequence();
-
+		config.setOutputFolder(outputFolder.toString());
 		sequencer.startCompilation(System.out, new DefaultMethodObserver(), config, new DefaultIcecapProgressMonitor(),
-				cregistry, outputFolder.toString(), true);
+				cregistry, true);
 
 		compileAndExecute(outputFolder, testClass, testNo);
 	}
