@@ -5,19 +5,20 @@ Bundle-Name: Icecaptools
 Bundle-SymbolicName: icecaptools;singleton:=true
 Bundle-Version: 2.1.19
 Bundle-Activator: icecaptools.Activator
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
+ org.eclipse.core.expressions,
  org.eclipse.jdt.core,
- org.junit,
- org.eclipse.ui.console,
  org.eclipse.jdt.ui,
+ org.eclipse.jdt.launching,
+ org.junit,
+ org.eclipse.ui,
+ org.eclipse.ui.console,
+ org.eclipse.ui.ide,
  org.eclipse.cdt.core,
  org.eclipse.text,
  org.eclipse.debug.core,
  org.eclipse.debug.ui,
- org.eclipse.jdt.launching,
- org.eclipse.ui.ide,
  com.jcraft.jsch
 Bundle-ActivationPolicy: lazy
 Bundle-NativeCode: lib/Linux/x86_64-unknown-linux-gnu/librxtxSerial.so;
@@ -83,4 +84,4 @@ Export-Package: extensions,
  org.apache.bcel.verifier.exc,
  org.apache.bcel.verifier.statics,
  org.apache.bcel.verifier.structurals
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+

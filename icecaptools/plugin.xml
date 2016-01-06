@@ -183,5 +183,39 @@
             id="icecaptools.launching.hvm">
       </debugModelPresentation>
    </extension>
-
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            label="HVM Application"
+            class="icecaptools.launching.HVMLaunchShortcut"
+            id="hvm.launch.shortcut"
+            modes="run">
+           <contextualLaunch>
+             <enablement>
+               <with variable="selection">
+                 <count value="1"/>
+                 <iterate>
+                   <or>
+                     <test property="org.eclipse.debug.ui.matchesPattern" value="*.java"/>
+                     <test property="org.eclipse.debug.ui.matchesPattern" value="*.class"/>
+                     <instanceof value="org.eclipse.jdt.core.IJavaElement"/>
+                   </or>
+                   <test property="icecaptools.launching.IsHVMapplicationPropertyTester" value="false"/>
+                 </iterate>
+               </with>
+             </enablement>
+  		   </contextualLaunch>
+      </shortcut>
+   </extension>
+   
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="icecaptools.launching.IsHVMapplicationPropertyTester"
+            id="icecaptools.launching.IsHVMapplicationPropertyTester"
+            namespace="icecaptools.launching"
+            properties="IsHVMapplicationPropertyTester"
+            type="java.lang.Object">
+      </propertyTester>
+   </extension>
 </plugin>
