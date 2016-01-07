@@ -48,7 +48,7 @@ public class HVMGenericLaunchConfigurationDelegate extends AbstractHVMPOSIXLaunc
 
 	@Override
 	protected String getStripper(ILaunchConfiguration configuration) throws CoreException {
-		return configuration.getAttribute(GenericLauncherTab.POSTBUILDCOMMAND, "");
+		return null;
 	}
 
 	@Override
@@ -70,8 +70,11 @@ public class HVMGenericLaunchConfigurationDelegate extends AbstractHVMPOSIXLaunc
 	@Override
 	protected Process startProcessOnTarget(ILaunch launch, ILaunchConfiguration configuration, StringBuffer path,
 			String sourceFolder, PrintStream consoleOutputStream, IProgressMonitor monitor) throws CoreException {
+		Process process = null;
 		String deployCommand = configuration.getAttribute(GenericLauncherTab.DEPLOYCOMMAND, "");
-		Process process = DebugPlugin.exec(new String[] { path.toString() }, null);
+		if ((deployCommand != null) && (deployCommand.trim().length() > 0)) {
+			process = DebugPlugin.exec(new String[] { deployCommand.toString() }, null);
+		} 
 		return process;
 	}
 

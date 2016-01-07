@@ -18,7 +18,6 @@ import org.eclipse.swt.widgets.Text;
 
 public class GenericLauncherTab extends CommonLauncherTab {
 
-    public static final String POSTBUILDCOMMAND = "POSTBUILDCOMMAND";
 	public static final String DEPLOYCOMMAND = "DEPLOYCOMMAND";
 
 	@Override

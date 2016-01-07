@@ -83,13 +83,10 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 							m = mainClazz.getMethod("getJavaHeapSize", new Class[0]);
 							int heapSize = (Integer) m.invoke(instance, new Object[0]);
 
-							m = mainClazz.getMethod("getPostBuildCommand", new Class[0]);
-							String postBuildCommand = (String) m.invoke(instance, new Object[0]);
-
 							m = mainClazz.getMethod("getDeployCommand", new Class[0]);
 							String deployCommand = (String) m.invoke(instance, new Object[0]);
 
-							launch(type, outputFolder, buildCommands, heapSize, postBuildCommand, deployCommand);
+							launch(type, outputFolder, buildCommands, heapSize, deployCommand);
 
 							try {
 								loader.close();
@@ -108,8 +105,7 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 		}
 	}
 
-	private void launch(IType type, String outputFolder, String[] buildCommands, int heapSize, String postBuildCommand,
-			String deployCommand) {
+	private void launch(IType type, String outputFolder, String[] buildCommands, int heapSize, String deployCommand) {
 		ILaunchManager launchManager;
 
 		launchManager = DebugPlugin.getDefault().getLaunchManager();
@@ -128,7 +124,7 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 								IResource targetResource = resources[0];
 								if (typeResource.equals(targetResource)) {
 									launch(launchConfiguration.getWorkingCopy(), outputFolder, buildCommands, heapSize,
-											postBuildCommand, deployCommand);
+											deployCommand);
 									return;
 								}
 							}
@@ -148,7 +144,7 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 							wc = configType.newInstance(null,
 									launchManager.generateLaunchConfigurationName(type.getTypeQualifiedName('.')));
 							wc.setMappedResources(new IResource[] { type.getUnderlyingResource() });
-							launch(wc, outputFolder, buildCommands, heapSize, postBuildCommand, deployCommand);
+							launch(wc, outputFolder, buildCommands, heapSize, deployCommand);
 						} catch (CoreException exception) {
 							AbstractHVMPOSIXLaunchConfigurationDelegate.notify(exception.getStatus().getMessage());
 						}
@@ -161,13 +157,12 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 	}
 
 	private void launch(ILaunchConfigurationWorkingCopy wc, String outputFolder, String[] buildCommands, int heapSize,
-			String postBuildCommand, String deployCommand) {
+			String deployCommand) {
 		ILaunchConfiguration config;
 		try {
 			wc.setAttribute(TargetSpecificLauncherTab.SOURCE_FOLDER, outputFolder);
 			wc.setAttribute(CommonLauncherTab.COMPILER_COMMAND, compilerCommandToString(buildCommands));
 			wc.setAttribute(TargetSpecificLauncherTab.HEAPSIZE, heapSize);
-			wc.setAttribute(GenericLauncherTab.POSTBUILDCOMMAND, postBuildCommand);
 			wc.setAttribute(GenericLauncherTab.DEPLOYCOMMAND, deployCommand);
 			config = wc.doSave();
 			DebugUITools.launch(config, ILaunchManager.RUN_MODE);

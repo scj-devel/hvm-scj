@@ -116,32 +116,50 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 
 						stripExecutable(path, consoleOutputStream, sourceFolder, monitor, configuration);
 
-						monitor.subTask("Executing application");
-
-						Process process;
-
-						process = startProcessOnTarget(launch, configuration, path, sourceFolder, consoleOutputStream,
-								monitor);
-
-						if (process != null) {
-							if (mode.equals(ILaunchManager.DEBUG_MODE)) {
-								try {
-									IDebugTarget target;
-									DebugChannel channel = getChannel(process, requestResponseChannel, eventChannel,
-											getTargetIPAddress(configuration));
-									IProcess p = DebugPlugin.newProcess(launch, process, "program");
-									target = new HVMPOSIXDebugTarget(launch, p, channel, monitor);
-									launch.addDebugTarget(target);
-								} catch (Exception e) {
-									consoleOutputStream.println("Attaching to debug process failed: ");
-									consoleOutputStream.println(e.getMessage());
-									ConvertJavaFileAction.bringConsoleToFront(false);
+						if (buildCommands.length > 1) {
+							monitor.subTask("Performing post build commands");
+							for (int i = 1; i < buildCommands.length; i++) {
+								exitValue = ShellCommand.executeCommand(buildCommands[i], consoleOutputStream, true,
+										sourceFolder, null, COMPILATION_TIMEOUT,
+										new IcecapEclipseProgressMonitor(monitor));
+								if (exitValue != 0) {
+									launchErrorMessage = "command [" + buildCommands[i] + "] failed";
+									break;
 								}
-							} else {
-								DebugPlugin.newProcess(launch, process, "program");
 							}
+						}
 
-							return;
+						if (exitValue == 0) {
+							Process process;
+							
+							monitor.subTask("Executing application");
+							
+							process = startProcessOnTarget(launch, configuration, path, sourceFolder,
+									consoleOutputStream, monitor);
+
+							if (process != null) {
+								if (mode.equals(ILaunchManager.DEBUG_MODE)) {
+									try {
+										IDebugTarget target;
+										DebugChannel channel = getChannel(process, requestResponseChannel, eventChannel,
+												getTargetIPAddress(configuration));
+										IProcess p = DebugPlugin.newProcess(launch, process, "program");
+										target = new HVMPOSIXDebugTarget(launch, p, channel, monitor);
+										launch.addDebugTarget(target);
+									} catch (Exception e) {
+										consoleOutputStream.println("Attaching to debug process failed: ");
+										consoleOutputStream.println(e.getMessage());
+										ConvertJavaFileAction.bringConsoleToFront(false);
+									}
+								} else {
+									DebugPlugin.newProcess(launch, process, "program");
+								}
+								return;
+							}
+							else
+							{
+								return;
+							}
 						}
 					} else {
 						consoleOutputStream.println("Compilation failed for unknown reason :-(");
@@ -247,8 +265,8 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 		String stripper = getStripper(configuration);
 		if (stripper != null) {
 			if (stripper.trim().length() > 0) {
-				ShellCommand.executeCommand(getStripper(configuration) + " " + path, consoleOutputStream, true, sourceFolder, null,
-						COMPILATION_TIMEOUT, new IcecapEclipseProgressMonitor(monitor));
+				ShellCommand.executeCommand(getStripper(configuration) + " " + path, consoleOutputStream, true,
+						sourceFolder, null, COMPILATION_TIMEOUT, new IcecapEclipseProgressMonitor(monitor));
 			}
 		}
 	}
