@@ -27,266 +27,298 @@ import org.eclipse.ui.PlatformUI;
 
 public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
 
-    private static final int COMPILATION_TIMEOUT = 20;
+	private static final int COMPILATION_TIMEOUT = 20;
 
-    @Override
-    public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
-        monitor.beginTask("Launch HVM application", 20);
-        monitor.subTask("Retreiving launch parameters");
-        String sourceFolder;
-        sourceFolder = configuration.getAttribute(TargetSpecificLauncherTab.SOURCE_FOLDER, "");
-        if (sourceFolder.trim().length() > 0) {
-            @SuppressWarnings("unused")
-            boolean natives = configuration.getAttribute(TargetSpecificLauncherTab.ENABLE_NATIVE_IMPLEMENTATION, false);
+	@Override
+	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
+			throws CoreException {
+		String launchErrorMessage = "Could not launch application";
+		monitor.beginTask("Launch HVM application", 20);
+		monitor.subTask("Retreiving launch parameters");
+		String sourceFolder;
+		PrintStream consoleOutputStream = ConvertJavaFileAction.getConsolePrintStream();
+		ConvertJavaFileAction.bringConsoleToFront(false);
+		sourceFolder = configuration.getAttribute(TargetSpecificLauncherTab.SOURCE_FOLDER, "");
+		if (sourceFolder.trim().length() > 0) {
+			@SuppressWarnings("unused")
+			boolean natives = configuration.getAttribute(TargetSpecificLauncherTab.ENABLE_NATIVE_IMPLEMENTATION, false);
 
-            @SuppressWarnings("unused")
-            String implementationFile = configuration.getAttribute(TargetSpecificLauncherTab.IMPLEMENTATION_FILE, "");
+			@SuppressWarnings("unused")
+			String implementationFile = configuration.getAttribute(TargetSpecificLauncherTab.IMPLEMENTATION_FILE, "");
 
-            monitor.worked(1);
+			monitor.worked(1);
 
-            monitor.subTask("clean up");
+			monitor.subTask("clean up");
 
-            StringBuffer path = new StringBuffer();
-            path.append(sourceFolder);
-            if (!sourceFolder.endsWith("" + File.separatorChar)) {
-                path.append(File.separatorChar);
-            }
+			StringBuffer path = new StringBuffer();
+			path.append(sourceFolder);
+			if (!sourceFolder.endsWith("" + File.separatorChar)) {
+				path.append(File.separatorChar);
+			}
 
-            path.append("main.exe");
-            try {
-                File leftOver = new File(path.toString());
-                if (leftOver.exists()) {
-                    if (leftOver.isFile()) {
-                        leftOver.delete();
-                    }
-                }
-            } catch (Throwable t) {
-            }
+			path.append("main.exe");
+			try {
+				File leftOver = new File(path.toString());
+				if (leftOver.exists()) {
+					if (leftOver.isFile()) {
+						leftOver.delete();
+					}
+				}
+			} catch (Throwable t) {
+			}
 
-            StringBuffer compilerCommand = getCompilerCommand(configuration);
+			StringBuffer buildCommandsBuffer = getCompilerCommand(configuration);
 
-            int requestResponseChannel = -1;
-            int eventChannel = -1;
+			String[] buildCommands = HVMLaunchShortcut.compilerCommandFromString(buildCommandsBuffer.toString());
+			
+			StringBuffer compilerCommand = new StringBuffer(buildCommands[0]);
+			
+			int requestResponseChannel = -1;
+			int eventChannel = -1;
 
-            compilerCommand.append("-DJAVA_HEAP_SIZE=" + getHeapSize(configuration.getAttribute(TargetSpecificLauncherTab.HEAPSIZE, 0)) + " ");
-            if (mode.equals(ILaunchManager.DEBUG_MODE)) {
-                requestResponseChannel = getRequestResponseChannel();
-                eventChannel = getEventChannel();
+			if ((compilerCommand != null) && (compilerCommand.toString().trim().length() > 0)) {
 
-                compilerCommand.append("-DENABLE_DEBUG -DREQUESTRESPONSECHANNEL=" + requestResponseChannel + " ");
-                compilerCommand.append("-DEVENTCHANNEL=" + eventChannel + " ");
-            }
+				compilerCommand.append(" -DJAVA_HEAP_SIZE="
+						+ getHeapSize(configuration.getAttribute(TargetSpecificLauncherTab.HEAPSIZE, 0)) + " ");
+				if (mode.equals(ILaunchManager.DEBUG_MODE)) {
+					requestResponseChannel = getRequestResponseChannel();
+					eventChannel = getEventChannel();
 
-            compilerCommand.append("classes.c icecapvm.c methodinterpreter.c methods.c gc.c print.c natives_allOS.c rom_heap.c allocation_point.c rom_access.c ");
-            addTargetSpecificFiles(compilerCommand, configuration);
+					compilerCommand.append("-DENABLE_DEBUG -DREQUESTRESPONSECHANNEL=" + requestResponseChannel + " ");
+					compilerCommand.append("-DEVENTCHANNEL=" + eventChannel + " ");
+				}
 
-            compilerCommand.append(" -o main.exe");
+				compilerCommand.append(
+						"classes.c icecapvm.c methodinterpreter.c methods.c gc.c print.c natives_allOS.c rom_heap.c allocation_point.c rom_access.c ");
+				addTargetSpecificFiles(compilerCommand, configuration);
 
-            PrintStream consoleOutputStream = ConvertJavaFileAction.getConsolePrintStream();
-            ConvertJavaFileAction.bringConsoleToFront(false);
+				compilerCommand.append(" -o main.exe");
 
-            int exitValue = ShellCommand.executeCommand(compilerCommand.toString(), consoleOutputStream, true, sourceFolder, null, COMPILATION_TIMEOUT, new IcecapEclipseProgressMonitor(monitor));
+				int exitValue = ShellCommand.executeCommand(compilerCommand.toString(), consoleOutputStream, true,
+						sourceFolder, null, COMPILATION_TIMEOUT, new IcecapEclipseProgressMonitor(monitor));
 
-            switch (exitValue) {
-            case ShellCommand.PROCESS_START_FAILED:
-                processStartFailed(getCompilerExecutable());
-                break;
-            case ShellCommand.ILLEGAL_WORKINGDIRECTORY:
-                illegalWorkingDirectory(sourceFolder);
-                break;
-            case ShellCommand.PROCESS_HANGED:
-                processHanged(COMPILATION_TIMEOUT);
-                break;
-            default:
-                if (exitValue == 0) {
+				switch (exitValue) {
+				case ShellCommand.PROCESS_START_FAILED:
+					processStartFailed(getCompilerExecutable());
+					break;
+				case ShellCommand.ILLEGAL_WORKINGDIRECTORY:
+					illegalWorkingDirectory(sourceFolder);
+					break;
+				case ShellCommand.PROCESS_HANGED:
+					processHanged(COMPILATION_TIMEOUT);
+					break;
+				default:
+					if (exitValue == 0) {
 
-                    consoleOutputStream.println("Compilation succeeded");
+						consoleOutputStream.println("Compilation succeeded");
 
-                    monitor.subTask("Stripping executable");
+						monitor.subTask("Stripping executable");
 
-                    stripExecutable(path, consoleOutputStream, sourceFolder, monitor);
+						stripExecutable(path, consoleOutputStream, sourceFolder, monitor);
 
-                    monitor.subTask("Executing application");
+						monitor.subTask("Executing application");
 
-                    Process process;
+						Process process;
 
-                    process = startProcessOnTarget(launch, configuration, path, sourceFolder, consoleOutputStream, monitor);
+						process = startProcessOnTarget(launch, configuration, path, sourceFolder, consoleOutputStream,
+								monitor);
 
-                    if (process != null) {
-                        if (mode.equals(ILaunchManager.DEBUG_MODE)) {
-                            try {
-                                IDebugTarget target;
-                                DebugChannel channel = getChannel(process, requestResponseChannel, eventChannel, getTargetIPAddress(configuration));
-                                IProcess p = DebugPlugin.newProcess(launch, process, "program");
-                                target = new HVMPOSIXDebugTarget(launch, p, channel, monitor);
-                                launch.addDebugTarget(target);
-                            } catch (Exception e) {
-                                consoleOutputStream.println("Attaching to debug process failed: ");
-                                consoleOutputStream.println(e.getMessage());
-                                ConvertJavaFileAction.bringConsoleToFront(false);
-                            }
-                        } else {
-                            DebugPlugin.newProcess(launch, process, "program");
-                        }
+						if (process != null) {
+							if (mode.equals(ILaunchManager.DEBUG_MODE)) {
+								try {
+									IDebugTarget target;
+									DebugChannel channel = getChannel(process, requestResponseChannel, eventChannel,
+											getTargetIPAddress(configuration));
+									IProcess p = DebugPlugin.newProcess(launch, process, "program");
+									target = new HVMPOSIXDebugTarget(launch, p, channel, monitor);
+									launch.addDebugTarget(target);
+								} catch (Exception e) {
+									consoleOutputStream.println("Attaching to debug process failed: ");
+									consoleOutputStream.println(e.getMessage());
+									ConvertJavaFileAction.bringConsoleToFront(false);
+								}
+							} else {
+								DebugPlugin.newProcess(launch, process, "program");
+							}
 
-                        return;
-                    }
-                } else {
-                    consoleOutputStream.println("Compilation failed for unknown reason :-(");
-                    consoleOutputStream.println("Check the logs above.");
-                }
-            }
-        } else {
-        }
+							return;
+						}
+					} else {
+						consoleOutputStream.println("Compilation failed for unknown reason :-(");
+						consoleOutputStream.println("Check the logs above.");
+					}
+				}
+			} else {
+				launchErrorMessage = "Compiler command is empty";
+			}
+		} else {
+			launchErrorMessage = "Output folder not set";
+		}
 
-        IStatus status = new IStatus() {
+		IStatus status = new IStatus() {
 
-            private static final String message = "Could not launch application";
+			private String message;
 
-            @Override
-            public IStatus[] getChildren() {
-                return null;
-            }
+			public IStatus init(String message) {
+				this.message = message;
+				return this;
+			}
 
-            @Override
-            public int getCode() {
-                return IStatus.ERROR;
-            }
+			@Override
+			public IStatus[] getChildren() {
+				return null;
+			}
 
-            @Override
-            public Throwable getException() {
-                return new Exception(message);
-            }
+			@Override
+			public int getCode() {
+				return IStatus.ERROR;
+			}
 
-            @Override
-            public String getMessage() {
-                return message;
-            }
+			@Override
+			public Throwable getException() {
+				return new Exception(message);
+			}
 
-            @Override
-            public String getPlugin() {
-                return DebugPlugin.getUniqueIdentifier();
-            }
+			@Override
+			public String getMessage() {
+				return message;
+			}
 
-            @Override
-            public int getSeverity() {
-                return IStatus.ERROR;
-            }
+			@Override
+			public String getPlugin() {
+				return DebugPlugin.getUniqueIdentifier();
+			}
 
-            @Override
-            public boolean isMultiStatus() {
-                return false;
-            }
+			@Override
+			public int getSeverity() {
+				return IStatus.ERROR;
+			}
 
-            @Override
-            public boolean isOK() {
-                return false;
-            }
+			@Override
+			public boolean isMultiStatus() {
+				return false;
+			}
 
-            @Override
-            public boolean matches(int severityMask) {
-                return false;
-            };
-        };
-        throw new CoreException(status);
-    }
+			@Override
+			public boolean isOK() {
+				return false;
+			}
 
-    private void addTargetSpecificFiles(StringBuffer compilerCommand, ILaunchConfiguration configuration) throws CoreException {
-        boolean enableNatives = configuration.getAttribute(TargetSpecificLauncherTab.ENABLE_NATIVE_IMPLEMENTATION, false);
-        if (enableNatives)
-        {
-            String implementationFile = configuration.getAttribute(TargetSpecificLauncherTab.IMPLEMENTATION_FILE, "");
+			@Override
+			public boolean matches(int severityMask) {
+				return false;
+			};
+		}.init(launchErrorMessage);
 
-            if ((implementationFile != null) && implementationFile.trim().length() > 0) {
-                compilerCommand.append(implementationFile.trim());
-                compilerCommand.append(" ");
-            }
-        }
+		notify("Launch failed: " + status.getMessage());
 
-        addAdditionalFiles(compilerCommand, configuration);
-    }
+		throw new CoreException(status);
+	}
 
-    protected abstract int getEventChannel();
+	private void addTargetSpecificFiles(StringBuffer compilerCommand, ILaunchConfiguration configuration)
+			throws CoreException {
+		boolean enableNatives = configuration.getAttribute(TargetSpecificLauncherTab.ENABLE_NATIVE_IMPLEMENTATION,
+				false);
+		if (enableNatives) {
+			String implementationFile = configuration.getAttribute(TargetSpecificLauncherTab.IMPLEMENTATION_FILE, "");
 
-    protected abstract int getRequestResponseChannel();
+			if ((implementationFile != null) && implementationFile.trim().length() > 0) {
+				compilerCommand.append(implementationFile.trim());
+				compilerCommand.append(" ");
+			}
+		}
 
-    protected abstract DebugChannel getChannel(Process p, int requestResponseChannel, int eventChannel, String targetIPAddress) throws IOException;
+		addAdditionalFiles(compilerCommand, configuration);
+	}
 
-    protected abstract String getHeapSize(int string);
+	protected abstract int getEventChannel();
 
-    protected abstract String getTargetIPAddress(ILaunchConfiguration configuration) throws CoreException;
+	protected abstract int getRequestResponseChannel();
 
-    protected void stripExecutable(StringBuffer path, PrintStream consoleOutputStream, String sourceFolder, IProgressMonitor monitor) {
-        ShellCommand.executeCommand(getStripper() + " " + path, consoleOutputStream, true, sourceFolder, null, COMPILATION_TIMEOUT, new IcecapEclipseProgressMonitor(monitor));
-    }
+	protected abstract DebugChannel getChannel(Process p, int requestResponseChannel, int eventChannel,
+			String targetIPAddress) throws IOException;
 
-    protected abstract String getStripper();
+	protected abstract String getHeapSize(int string);
 
-    protected abstract void addAdditionalFiles(StringBuffer compilerCommand, ILaunchConfiguration configuration) throws CoreException;
+	protected abstract String getTargetIPAddress(ILaunchConfiguration configuration) throws CoreException;
 
-    public static Shell getShell() {
-        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-        if (window == null) {
-            IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
-            if (windows.length > 0) {
-                return windows[0].getShell();
-            }
-        } else {
-            return window.getShell();
-        }
-        return null;
-    }
+	protected void stripExecutable(StringBuffer path, PrintStream consoleOutputStream, String sourceFolder,
+			IProgressMonitor monitor) {
+		ShellCommand.executeCommand(getStripper() + " " + path, consoleOutputStream, true, sourceFolder, null,
+				COMPILATION_TIMEOUT, new IcecapEclipseProgressMonitor(monitor));
+	}
 
-    public static void notify(final String message) {
-        Display.getDefault().syncExec(new Runnable() {
-            public void run() {
-                Shell shell = getShell();
-                MessageDialog dialog = new MessageDialog(shell, "Icecap Tools", null, message, MessageDialog.ERROR, new String[] { "OK" }, 0);
-                dialog.open();
-            }
-        });
-    }
+	protected abstract String getStripper();
 
-    private void processHanged(final int compilationTimeout) {
-        notify("Compilation did not finish within timeout (" + compilationTimeout + ") sec?");
-    }
+	protected abstract void addAdditionalFiles(StringBuffer compilerCommand, ILaunchConfiguration configuration)
+			throws CoreException;
 
-    private void illegalWorkingDirectory(final String sourceFolder) {
-        notify("Could not compile in folder:\n\n\t\t" + sourceFolder + "\n\nDoes this folder exist?");
-    }
+	public static Shell getShell() {
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (window == null) {
+			IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+			if (windows.length > 0) {
+				return windows[0].getShell();
+			}
+		} else {
+			return window.getShell();
+		}
+		return null;
+	}
 
-    private void processStartFailed(final String compilerExecutable) {
-        notify("Failed to compile executable\nIs the compiler '" + compilerExecutable + "' in your path?");
-    }
+	public static void notify(final String message) {
+		Display.getDefault().syncExec(new Runnable() {
+			public void run() {
+				Shell shell = getShell();
+				MessageDialog dialog = new MessageDialog(shell, "Icecap Tools", null, message, MessageDialog.ERROR,
+						new String[] { "OK" }, 0);
+				dialog.open();
+			}
+		});
+	}
 
-    protected String getOptimizationLevel(ILaunchConfiguration configuration) throws CoreException {
-        int optimLevel = configuration.getAttribute(TargetSpecificLauncherTab.GCC_OPTIMIZATION_LEVEL, 0);
-        StringBuffer optim = new StringBuffer();
-        switch (optimLevel) {
-        case 1:
-            optim.append("-O1");
-            break;
-        case 2:
-            optim.append("-O2");            
-            break;
-        case 3:
-            optim.append("-O3");            
-            break;
-        case 4:
-            optim.append("-Os");            
-            break;
-        case 0:
-        default:
-            optim.append("-O0");            
-            break;
-        }
-        return optim.toString();
-    }
-    
-    protected abstract String getCompilerExecutable();
+	private void processHanged(final int compilationTimeout) {
+		notify("Compilation did not finish within timeout (" + compilationTimeout + ") sec?");
+	}
 
-    protected abstract StringBuffer getCompilerCommand(ILaunchConfiguration configuration) throws CoreException;
+	private void illegalWorkingDirectory(final String sourceFolder) {
+		notify("Could not compile in folder:\n\n\t\t" + sourceFolder + "\n\nDoes this folder exist?");
+	}
 
-    protected abstract Process startProcessOnTarget(ILaunch launch, ILaunchConfiguration configuration, StringBuffer path, String sourceFolder, PrintStream consoleOutputStream, IProgressMonitor monitor) throws CoreException;
+	private void processStartFailed(final String compilerExecutable) {
+		notify("Failed to compile executable\nIs the compiler '" + compilerExecutable + "' in your path?");
+	}
+
+	protected String getOptimizationLevel(ILaunchConfiguration configuration) throws CoreException {
+		int optimLevel = configuration.getAttribute(TargetSpecificLauncherTab.GCC_OPTIMIZATION_LEVEL, 0);
+		StringBuffer optim = new StringBuffer();
+		switch (optimLevel) {
+		case 1:
+			optim.append("-O1");
+			break;
+		case 2:
+			optim.append("-O2");
+			break;
+		case 3:
+			optim.append("-O3");
+			break;
+		case 4:
+			optim.append("-Os");
+			break;
+		case 0:
+		default:
+			optim.append("-O0");
+			break;
+		}
+		return optim.toString();
+	}
+
+	protected abstract String getCompilerExecutable();
+
+	protected abstract StringBuffer getCompilerCommand(ILaunchConfiguration configuration) throws CoreException;
+
+	protected abstract Process startProcessOnTarget(ILaunch launch, ILaunchConfiguration configuration,
+			StringBuffer path, String sourceFolder, PrintStream consoleOutputStream, IProgressMonitor monitor)
+					throws CoreException;
 
 }

@@ -129,41 +129,9 @@ public class ConvertJavaFileAction implements IObjectActionDelegate {
                             }
                         }
 
-                        IPath outputLocation;
-                        IResource projectRessource = javaProject.getCorrespondingResource();
                         config.setProjectResource(javaProject);
-                        IPath projectLocation = projectRessource.getLocation().removeLastSegments(1);
-
-                        outputLocation = javaProject.getOutputLocation();
-
-                        StringBuffer classPath = new StringBuffer(projectLocation.toOSString() + outputLocation.toOSString());
-
-                        String[] requiredProjects = javaProject.getRequiredProjectNames();
-                        for (String project : requiredProjects) {
-                            classPath.append(System.getProperty("path.separator"));
-                            classPath.append(projectLocation);
-                            classPath.append(File.separatorChar);
-                            classPath.append(project);
-                            classPath.append(File.separatorChar);
-                            classPath.append("bin");
-                        }
-
-                        IClasspathEntry[] requiredLibraries = javaProject.getRawClasspath();
-                        for (IClasspathEntry entry : requiredLibraries) {
-                            switch (entry.getContentKind()) {
-                            case IPackageFragmentRoot.K_BINARY:
-                                IPath cpentry = entry.getPath();
-                                String cpitem = cpentry.toOSString();
-                                classPath.append(System.getProperty("path.separator"));
-                                classPath.append(cpitem);
-                                break;
-                            case IPackageFragmentRoot.K_SOURCE:
-                                entry = null;
-                                break;
-                            default:
-                                break;
-                            }
-                        }
+                        
+                        StringBuffer classPath = getClasspathFromProject(javaProject);
 
                         config.setClassPath(classPath.toString());
 
@@ -206,6 +174,47 @@ public class ConvertJavaFileAction implements IObjectActionDelegate {
             }
         }
     }
+
+	public static StringBuffer getClasspathFromProject(IJavaProject javaProject)
+			throws JavaModelException {
+		IPath outputLocation;
+		IResource projectRessource = javaProject.getCorrespondingResource();
+		
+		IPath projectLocation = projectRessource.getLocation().removeLastSegments(1);
+
+		outputLocation = javaProject.getOutputLocation();
+
+		StringBuffer classPath = new StringBuffer(projectLocation.toOSString() + outputLocation.toOSString());
+
+		String[] requiredProjects = javaProject.getRequiredProjectNames();
+		for (String project : requiredProjects) {
+		    classPath.append(System.getProperty("path.separator"));
+		    classPath.append(projectLocation);
+		    classPath.append(File.separatorChar);
+		    classPath.append(project);
+		    classPath.append(File.separatorChar);
+		    classPath.append("bin");
+		}
+
+		IClasspathEntry[] requiredLibraries = javaProject.getRawClasspath();
+		for (IClasspathEntry entry : requiredLibraries) {
+		    switch (entry.getContentKind()) {
+		    case IPackageFragmentRoot.K_BINARY:
+		        IPath cpentry = entry.getPath();
+		        String cpitem = cpentry.toOSString();
+		        classPath.append(System.getProperty("path.separator"));
+		        classPath.append(projectLocation);
+		        classPath.append(cpitem);
+		        break;
+		    case IPackageFragmentRoot.K_SOURCE:
+		        entry = null;
+		        break;
+		    default:
+		        break;
+		    }
+		}
+		return classPath;
+	}
 
     private DependencyView getProgressView() {
         IWorkbench wb = icecaptools.Activator.getDefault().getWorkbench();
