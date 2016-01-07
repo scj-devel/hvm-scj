@@ -1,10 +1,18 @@
 package icecaptools.launching;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+
+import icecaptools.actions.ConvertJavaFileAction;
 
 public class IsHVMapplicationPropertyTester extends PropertyTester {
 
@@ -34,8 +42,11 @@ public class IsHVMapplicationPropertyTester extends PropertyTester {
 		try {
 			return checkType(type);
 		} catch (JavaModelException e) {
-			return false;
+		} catch (MalformedURLException e) {
+		} catch (ClassNotFoundException e) {
+		} catch (IOException e) {
 		}
+		return false;
 	}
 
 	private boolean checkSourceType(IType receiver) {
@@ -47,8 +58,11 @@ public class IsHVMapplicationPropertyTester extends PropertyTester {
 		try {
 			return checkType(type);
 		} catch (JavaModelException e) {
-			return false;
+		} catch (MalformedURLException e) {
+		} catch (ClassNotFoundException e) {
+		} catch (IOException e) {
 		}
+		return false;
 	}
 
 	private boolean checkCompilationUnit(ICompilationUnit receiver) {
@@ -56,19 +70,44 @@ public class IsHVMapplicationPropertyTester extends PropertyTester {
 		try {
 			return checkType(type);
 		} catch (JavaModelException e) {
+		} catch (MalformedURLException e) {
+		} catch (ClassNotFoundException e) {
+		} catch (IOException e) {
 		}
 		return false;
 	}
 
-	private boolean checkType(IType type) throws JavaModelException {
-		String[] interfaces = type.getSuperInterfaceNames();
-		String name = devices.TargetConfiguration.class.getName();
-		String elements[] = name.split("\\.");
-		for (String str : interfaces) {
-			if (str.equals(elements[elements.length - 1])) {
-				return true;
-			}
+	private boolean checkType(IType type) throws JavaModelException, ClassNotFoundException, IOException {
+		String mainClass = type.getFullyQualifiedName();
+		
+		StringBuffer classPath = ConvertJavaFileAction.getClasspathFromProject(type.getJavaProject());
+
+		String[] elements = classPath.toString().split(System.getProperty("path.separator"));
+
+		URL[] urls = new URL[elements.length];
+
+		for (int i = 0; i < elements.length; i++) {
+			urls[i] = new File(elements[i]).toURI().toURL();
 		}
+
+		URLClassLoader loader = new URLClassLoader(urls, ClassLoader.getSystemClassLoader());
+
+		Class<?> mainClazz = loader.loadClass(mainClass);
+
+		while (mainClazz != null)
+		{
+			Class<?>[] interfaces = mainClazz.getInterfaces();
+			for (Class<?> iface: interfaces)
+			{
+				if (iface.getName().equals(devices.TargetConfiguration.class.getName()))
+				{
+					loader.close();
+					return true;
+				}
+			}
+			mainClazz = mainClazz.getSuperclass();
+		}
+		loader.close();		
 		return false;
 	}
 }
