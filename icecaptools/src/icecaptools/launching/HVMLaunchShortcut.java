@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -79,7 +80,7 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 
 							m = mainClazz.getMethod("getBuildCommands", new Class[0]);
 							String[] buildCommands = (String[]) m.invoke(instance, new Object[0]);
-							
+
 							m = mainClazz.getMethod("getJavaHeapSize", new Class[0]);
 							int heapSize = (Integer) m.invoke(instance, new Object[0]);
 
@@ -108,35 +109,60 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 		launchManager = DebugPlugin.getDefault().getLaunchManager();
 
 		if (launchManager != null) {
+			try {
+				ILaunchConfiguration[] launchConfigurations = launchManager.getLaunchConfigurations();
 
-			ILaunchConfigurationType[] launchConfigurations = launchManager.getLaunchConfigurationTypes();
-
-			for (ILaunchConfigurationType lct : launchConfigurations) {
-				String name = lct.getName();
-				if ("HVM Generic Launcher".equals(name)) {
-					ILaunchConfiguration config = null;
-					ILaunchConfigurationWorkingCopy wc = null;
-					try {
-						ILaunchConfigurationType configType = lct;
-						wc = configType.newInstance(null,
-								launchManager.generateLaunchConfigurationName(type.getTypeQualifiedName('.')));
-						//wc.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, type.getFullyQualifiedName());
-						//wc.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, type.getJavaProject().getElementName());
-						
-						wc.setAttribute(TargetSpecificLauncherTab.SOURCE_FOLDER, outputFolder);
-						wc.setAttribute(CommonLauncherTab.COMPILER_COMMAND, compilerCommandToString(buildCommands));
-						wc.setAttribute(TargetSpecificLauncherTab.HEAPSIZE, heapSize);
-						
-						wc.setMappedResources(new IResource[] { type.getUnderlyingResource() });
-						config = wc.doSave();
-						DebugUITools.launch(config, ILaunchManager.RUN_MODE);
-					} catch (CoreException exception) {
-						AbstractHVMPOSIXLaunchConfigurationDelegate.notify(exception.getStatus().getMessage());
+				for (ILaunchConfiguration launchConfiguration : launchConfigurations) {
+					ILaunchConfigurationType configType = launchConfiguration.getType();
+					if ("HVM Generic Launcher".equals(configType.getName())) {
+						IResource[] resources = launchConfiguration.getMappedResources();
+						if (resources != null) {
+							if (resources.length == 1) {
+								IResource typeResource = type.getUnderlyingResource();
+								IResource targetResource = resources[0];
+								if (typeResource.equals(targetResource)) {
+									launch(launchConfiguration.getWorkingCopy(), outputFolder, buildCommands, heapSize);
+									return;
+								}
+							}
+						}
 					}
 				}
-				name = null;
+
+				ILaunchConfigurationType[] launchConfigurationTypes = launchManager.getLaunchConfigurationTypes();
+
+				for (ILaunchConfigurationType lct : launchConfigurationTypes) {
+					String name = lct.getName();
+					if ("HVM Generic Launcher".equals(name)) {
+
+						ILaunchConfigurationWorkingCopy wc = null;
+						try {
+							ILaunchConfigurationType configType = lct;
+							wc = configType.newInstance(null,
+									launchManager.generateLaunchConfigurationName(type.getTypeQualifiedName('.')));
+							wc.setMappedResources(new IResource[] { type.getUnderlyingResource() });
+							launch(wc, outputFolder, buildCommands, heapSize);
+						} catch (CoreException exception) {
+							AbstractHVMPOSIXLaunchConfigurationDelegate.notify(exception.getStatus().getMessage());
+						}
+					}
+					name = null;
+				}
+			} catch (CoreException e) {
 			}
 		}
+	}
+
+	private void launch(ILaunchConfigurationWorkingCopy wc, String outputFolder, String[] buildCommands, int heapSize) {
+		ILaunchConfiguration config;
+		try {
+			wc.setAttribute(TargetSpecificLauncherTab.SOURCE_FOLDER, outputFolder);
+			wc.setAttribute(CommonLauncherTab.COMPILER_COMMAND, compilerCommandToString(buildCommands));
+			wc.setAttribute(TargetSpecificLauncherTab.HEAPSIZE, heapSize);
+			config = wc.doSave();
+			DebugUITools.launch(config, ILaunchManager.RUN_MODE);
+		} catch (CoreException e) {
+		}		
 	}
 
 	public static String compilerCommandToString(String[] buildCommands) {
