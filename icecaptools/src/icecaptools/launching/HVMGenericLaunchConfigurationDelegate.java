@@ -7,6 +7,7 @@ import java.io.PrintStream;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 
@@ -46,9 +47,8 @@ public class HVMGenericLaunchConfigurationDelegate extends AbstractHVMPOSIXLaunc
 	}
 
 	@Override
-	protected String getStripper() {
-		// TODO Auto-generated method stub
-		return null;
+	protected String getStripper(ILaunchConfiguration configuration) throws CoreException {
+		return configuration.getAttribute(GenericLauncherTab.POSTBUILDCOMMAND, "");
 	}
 
 	@Override
@@ -70,7 +70,9 @@ public class HVMGenericLaunchConfigurationDelegate extends AbstractHVMPOSIXLaunc
 	@Override
 	protected Process startProcessOnTarget(ILaunch launch, ILaunchConfiguration configuration, StringBuffer path,
 			String sourceFolder, PrintStream consoleOutputStream, IProgressMonitor monitor) throws CoreException {
-		return null;
+		String deployCommand = configuration.getAttribute(GenericLauncherTab.DEPLOYCOMMAND, "");
+		Process process = DebugPlugin.exec(new String[] { path.toString() }, null);
+		return process;
 	}
 
 }

@@ -488,7 +488,7 @@ public class HVMEV3LaunchConfigurationDelegate extends TCPChannelLauncher {
     }
 
     @Override
-    protected String getStripper() {
+    protected String getStripper(ILaunchConfiguration configuration) throws CoreException {
         return "arm-none-linux-gnueabi-strip";
     }
 

@@ -70,9 +70,9 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 			StringBuffer buildCommandsBuffer = getCompilerCommand(configuration);
 
 			String[] buildCommands = HVMLaunchShortcut.compilerCommandFromString(buildCommandsBuffer.toString());
-			
+
 			StringBuffer compilerCommand = new StringBuffer(buildCommands[0]);
-			
+
 			int requestResponseChannel = -1;
 			int eventChannel = -1;
 
@@ -114,7 +114,7 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 
 						monitor.subTask("Stripping executable");
 
-						stripExecutable(path, consoleOutputStream, sourceFolder, monitor);
+						stripExecutable(path, consoleOutputStream, sourceFolder, monitor, configuration);
 
 						monitor.subTask("Executing application");
 
@@ -243,12 +243,17 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 	protected abstract String getTargetIPAddress(ILaunchConfiguration configuration) throws CoreException;
 
 	protected void stripExecutable(StringBuffer path, PrintStream consoleOutputStream, String sourceFolder,
-			IProgressMonitor monitor) {
-		ShellCommand.executeCommand(getStripper() + " " + path, consoleOutputStream, true, sourceFolder, null,
-				COMPILATION_TIMEOUT, new IcecapEclipseProgressMonitor(monitor));
+			IProgressMonitor monitor, ILaunchConfiguration configuration) throws CoreException {
+		String stripper = getStripper(configuration);
+		if (stripper != null) {
+			if (stripper.trim().length() > 0) {
+				ShellCommand.executeCommand(getStripper(configuration) + " " + path, consoleOutputStream, true, sourceFolder, null,
+						COMPILATION_TIMEOUT, new IcecapEclipseProgressMonitor(monitor));
+			}
+		}
 	}
 
-	protected abstract String getStripper();
+	protected abstract String getStripper(ILaunchConfiguration configuration) throws CoreException;
 
 	protected abstract void addAdditionalFiles(StringBuffer compilerCommand, ILaunchConfiguration configuration)
 			throws CoreException;

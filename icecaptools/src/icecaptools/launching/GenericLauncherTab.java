@@ -18,7 +18,10 @@ import org.eclipse.swt.widgets.Text;
 
 public class GenericLauncherTab extends CommonLauncherTab {
 
-    @Override
+    public static final String POSTBUILDCOMMAND = "POSTBUILDCOMMAND";
+	public static final String DEPLOYCOMMAND = "DEPLOYCOMMAND";
+
+	@Override
     protected String getSourceGroupHeader() {
         return "Working Directory";
     }
