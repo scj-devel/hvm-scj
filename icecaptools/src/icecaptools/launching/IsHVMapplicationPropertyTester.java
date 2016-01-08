@@ -22,14 +22,18 @@ public class IsHVMapplicationPropertyTester extends PropertyTester {
 
 	@Override
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		if (receiver != null) {
-			if (receiver instanceof ICompilationUnit) {
-				return checkCompilationUnit((ICompilationUnit) receiver);
-			} else if (receiver instanceof IType) {
-				return checkSourceType((IType) receiver);
-			} else if (receiver instanceof IMethod) {
-				return checkMethod((IMethod) receiver);
+		try {
+			if (receiver != null) {
+				if (receiver instanceof ICompilationUnit) {
+					return checkCompilationUnit((ICompilationUnit) receiver);
+				} else if (receiver instanceof IType) {
+					return checkSourceType((IType) receiver);
+				} else if (receiver instanceof IMethod) {
+					return checkMethod((IMethod) receiver);
+				}
 			}
+		} catch (Throwable t) {
+			return false;
 		}
 		return false;
 	}
@@ -79,8 +83,10 @@ public class IsHVMapplicationPropertyTester extends PropertyTester {
 
 	private boolean checkType(IType type) throws JavaModelException, ClassNotFoundException, IOException {
 		String mainClass = type.getFullyQualifiedName();
-		
+
 		StringBuffer classPath = ConvertJavaFileAction.getClasspathFromProject(type.getJavaProject());
+
+		System.out.println("Got class path!");
 
 		String[] elements = classPath.toString().split(System.getProperty("path.separator"));
 
@@ -92,22 +98,21 @@ public class IsHVMapplicationPropertyTester extends PropertyTester {
 
 		URLClassLoader loader = new URLClassLoader(urls, ClassLoader.getSystemClassLoader());
 
-		Class<?> mainClazz = loader.loadClass(mainClass);
+		Class<?> mainClazz = null;
 
-		while (mainClazz != null)
-		{
+		mainClazz = loader.loadClass(mainClass);
+
+		while (mainClazz != null) {
 			Class<?>[] interfaces = mainClazz.getInterfaces();
-			for (Class<?> iface: interfaces)
-			{
-				if (iface.getName().equals(devices.TargetConfiguration.class.getName()))
-				{
+			for (Class<?> iface : interfaces) {
+				if (iface.getName().equals(devices.TargetConfiguration.class.getName())) {
 					loader.close();
 					return true;
 				}
 			}
 			mainClazz = mainClazz.getSuperclass();
 		}
-		loader.close();		
+		loader.close();
 		return false;
 	}
 }
