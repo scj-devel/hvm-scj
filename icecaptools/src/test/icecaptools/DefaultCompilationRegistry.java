@@ -5,9 +5,12 @@ import icecaptools.compiler.ICompilationRegistry;
 
 public class DefaultCompilationRegistry implements ICompilationRegistry {
 
+	private boolean doICareHuh;
+	
     @Override
     public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-		if (mdesc.getClassName().contains("jml")) {
+    	doICareHuh = true;
+    	if (mdesc.getClassName().contains("jml")) {
 			return true;
 		}
 		if (mdesc.getClassName().startsWith("sun.security.action.GetPropertyAction")) {
@@ -20,11 +23,13 @@ public class DefaultCompilationRegistry implements ICompilationRegistry {
 		if (mdesc.getClassName().startsWith("java.io.PrintStream")) {
 			return true;
 		}
+		doICareHuh = false;
 		return false;
 	}
 
     @Override
     public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
+    	doICareHuh = true;
     	if (clazz.startsWith("sun.")) {
 			if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
 				return false;
@@ -104,6 +109,7 @@ public class DefaultCompilationRegistry implements ICompilationRegistry {
             }
             return true;
         }
+        doICareHuh = false;
         return false;
     }
 
@@ -111,4 +117,9 @@ public class DefaultCompilationRegistry implements ICompilationRegistry {
     public boolean alwaysClearOutputFolder() {
         return false;
     }
+
+	@Override
+	public boolean didIcareHuh() {
+		return doICareHuh;
+	}
 }

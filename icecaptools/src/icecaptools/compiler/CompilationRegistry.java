@@ -15,11 +15,13 @@ public class CompilationRegistry implements ICompilationRegistry {
     private HashMap<String, ArrayList<MethodOrFieldDesc>> excludedClasses;
 
     private boolean clearOutputFolder;
+	private ICompilationRegistry systemRegistry;
 
-    public CompilationRegistry() {
+    public CompilationRegistry(ICompilationRegistry systemRegistry) {
         compiledClasses = new HashMap<String, ArrayList<MethodOrFieldDesc>>();
         excludedClasses = new HashMap<String, ArrayList<MethodOrFieldDesc>>();
         clearOutputFolder = false;
+        this.systemRegistry = systemRegistry;
     }
 
     public void initializeFromString(String encoded) {
@@ -103,15 +105,24 @@ public class CompilationRegistry implements ICompilationRegistry {
                 return true;
             }
         }
-
         return false;
     }
 
     public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-        return isMethodSelected(mdesc, compiledClasses);
+        boolean systemValue =  systemRegistry.isMethodCompiled(mdesc);
+        if (systemRegistry.didIcareHuh())
+        {
+        	return systemValue;
+        }
+    	return isMethodSelected(mdesc, compiledClasses);
     }
 
     public boolean isMethodExcluded(MethodOrFieldDesc mdesc) {
+    	boolean systemValue =  systemRegistry.isMethodExcluded(mdesc.getClassName(), mdesc.getName(), mdesc.getSignature());
+        if (systemRegistry.didIcareHuh())
+        {
+        	return systemValue;
+        }
         return isMethodSelected(mdesc, excludedClasses);
     }
 
@@ -215,4 +226,9 @@ public class CompilationRegistry implements ICompilationRegistry {
             this.clearOutputFolder = true;
         }
     }
+
+	@Override
+	public boolean didIcareHuh() {
+		return true;
+	}
 }

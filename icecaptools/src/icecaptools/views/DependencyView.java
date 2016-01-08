@@ -7,6 +7,7 @@ import icecaptools.RestartableMethodObserver;
 import icecaptools.SetOutputFolderAction;
 import icecaptools.compiler.CompilationRegistry;
 import icecaptools.compiler.ICompilationRegistry;
+import test.icecaptools.DefaultCompilationRegistry;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -58,7 +59,7 @@ public class DependencyView extends ViewPart implements RestartableMethodObserve
     @Override
     public void createPartControl(Composite parent) {
         addedElements = new HashMap<String, String>();
-        cregistry = new CompilationRegistry();
+        cregistry = new CompilationRegistry(new DefaultCompilationRegistry());
         viewer = new TreeViewer(parent);
         ITreeContentProvider contentProvider = new MethodListContentProvider();
         viewer.setContentProvider(contentProvider);
