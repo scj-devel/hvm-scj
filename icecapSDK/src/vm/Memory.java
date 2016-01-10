@@ -142,7 +142,8 @@ public class Memory {
 
 	@IcecapCompileMe
 	public static Memory allocateInHeap(int size) {
-		devices.Console.println("allocating backingstore");
+		// devices.Console.println("allocating backingstore");
+		
 		if (heapArea.free + size >= heapArea.size) {
 			throw new OutOfMemoryError();
 		}
