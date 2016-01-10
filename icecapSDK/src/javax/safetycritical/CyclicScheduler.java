@@ -65,7 +65,7 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 	}
 
 	private CyclicScheduler() {
-		int[] sequencerStack = new int[Const.HANDLER_STACK_SIZE_DEFAULT];
+		int[] sequencerStack = new int[Const.CYCLIC_SCHEDULER_STACK_SIZE];
 
 		vm.ClockInterruptHandler.initialize(this, sequencerStack);
 	}

@@ -80,12 +80,14 @@ public final class Const {
 	public static final int STACK_UNIT = 1024; // 256
 
 	public static final int PRIORITY_SCHEDULER_STACK_SIZE_DEFAULT = 1 * STACK_UNIT; // 2*1024
+	public static final int CYCLIC_SCHEDULER_STACK_SIZE_DEFAULT = 2 * STACK_UNIT;;
 	public static final int IDLE_PROCESS_STACK_SIZE_DEFAULT = STACK_UNIT; // 1*256;
 	public static final int HANDLER_STACK_SIZE_DEFAULT = 2 * STACK_UNIT; // 2*1024
 
 	public static int PRIORITY_SCHEDULER_STACK_SIZE = PRIORITY_SCHEDULER_STACK_SIZE_DEFAULT; // 2*1024
 	public static int IDLE_PROCESS_STACK_SIZE = IDLE_PROCESS_STACK_SIZE_DEFAULT;
 	public static int HANDLER_STACK_SIZE = HANDLER_STACK_SIZE_DEFAULT; // 2*1024
+	public static int CYCLIC_SCHEDULER_STACK_SIZE = CYCLIC_SCHEDULER_STACK_SIZE_DEFAULT;
 
 	/* Queues */
 
@@ -132,7 +134,6 @@ public final class Const {
 	public static final int PRIVATE_MEM_LEVEL = 4;
 
 	public static final int PRIORITY_SCHEDULING = 1;
-
 	public static int MEMORY_TRACKER_AREA_SIZE = 15000;
 
 }

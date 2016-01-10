@@ -6,7 +6,7 @@ public abstract class POSIXTargetConfiguration implements TargetConfiguration {
 
 	@Override
 	public String[] getBuildCommands() {
-		return new String[] { "gcc -O0 -g -pedantic -Wall -DPC64 natives_i86.c" };
+		return new String[] { "gcc -Os -pedantic -Wall -DPC64 natives_i86.c" };
 	}
 
 	@Override
