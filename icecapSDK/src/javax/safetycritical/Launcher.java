@@ -97,7 +97,7 @@ public abstract class Launcher implements Runnable {
 					MemoryArea.overAllBackingStore, "MemTrk");
 		}
 		
-		ManagedMemory immortalMem = new ImmortalMemory(2 * Const.IMMORTAL_MEM);
+		ManagedMemory immortalMem = new ImmortalMemory(Const.IMMORTAL_MEM);
 		immortalMem.executeInArea(this);
 		//immortalMem.removeArea();
 	}
