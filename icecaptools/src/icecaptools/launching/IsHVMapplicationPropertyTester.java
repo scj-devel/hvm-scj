@@ -86,8 +86,6 @@ public class IsHVMapplicationPropertyTester extends PropertyTester {
 
 		StringBuffer classPath = ConvertJavaFileAction.getClasspathFromProject(type.getJavaProject());
 
-		System.out.println("Got class path!");
-
 		String[] elements = classPath.toString().split(System.getProperty("path.separator"));
 
 		URL[] urls = new URL[elements.length];
