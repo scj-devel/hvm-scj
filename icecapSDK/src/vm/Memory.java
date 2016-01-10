@@ -16,6 +16,8 @@ public class Memory {
 
 	private MemoryInfo memoryInfo;
 
+	private static int backingStoreOffset;
+	
 	private static class MemoryInfo {
 		String name;
 		int size;
@@ -93,6 +95,7 @@ public class Memory {
 				}
 				devices.Console.println("Max backing store usage = "
 						+ (MemoryArea.getRemainingMemorySize()));
+				devices.Console.println("backingStoreOffset in heap = " + backingStoreOffset);
 				switchToArea(current);
 			} else {
 				devices.Console.println("No created memories recorded");
@@ -139,16 +142,17 @@ public class Memory {
 
 	@IcecapCompileMe
 	public static Memory allocateInHeap(int size) {
-
+		devices.Console.println("allocating backingstore");
 		if (heapArea.free + size >= heapArea.size) {
 			throw new OutOfMemoryError();
 		}
 
 		int startPtr = heapArea.base + heapArea.free;
+		backingStoreOffset = heapArea.free;
 		heapArea.free += size;
 
 		Memory memory = new Memory(startPtr, size);
-
+		
 		return memory;
 	}
 

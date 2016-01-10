@@ -385,6 +385,8 @@ extern long heap_base;
 #define EXCLUDESTUB_N_JAVA_LANG_CLASS_GETSUPERCLASS
 
 /* #define PRE_INITIALIZE_EXCEPTIONS */
+#ifndef LAZY_INITIALIZE_CONSTANTS
 #define PRE_INITIALIZE_CONSTANTS
+#endif
 
 #endif /* TYPES_H_ */
