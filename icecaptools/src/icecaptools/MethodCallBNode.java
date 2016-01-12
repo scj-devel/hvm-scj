@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 
+import util.MethodOrFieldDesc;
+
 public abstract class MethodCallBNode extends BNode {
     protected String className;
     protected String methodName;

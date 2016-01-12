@@ -2,7 +2,7 @@ package icecaptools.compiler;
 
 import icecaptools.AnalysisObserver;
 import icecaptools.IcecapTool;
-import icecaptools.MethodOrFieldDesc;
+import util.MethodOrFieldDesc;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -3,10 +3,10 @@ package icecaptools.compiler.aot;
 import icecaptools.BNode;
 import icecaptools.ClassfileUtils;
 import icecaptools.MethodEntryPoints;
-import icecaptools.MethodOrFieldDesc;
 import icecaptools.RawByteCodes;
 import icecaptools.compiler.Compiler;
 import icecaptools.compiler.NoDuplicatesMemorySegment;
+import util.MethodOrFieldDesc;
 
 import java.util.Stack;
 

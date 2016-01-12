@@ -1,4 +1,4 @@
-package icecaptools;
+package util;
 
 /**
  * This class encapsulates method description by set of String parameters

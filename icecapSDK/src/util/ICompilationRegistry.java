@@ -1,6 +1,4 @@
-package icecaptools.compiler;
-
-import icecaptools.MethodOrFieldDesc;
+package util;
 
 public interface ICompilationRegistry {
 

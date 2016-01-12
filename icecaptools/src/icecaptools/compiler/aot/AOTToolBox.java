@@ -4,11 +4,11 @@ import icecaptools.AnalysisObserver;
 import icecaptools.ClassManager;
 import icecaptools.IcecapTool;
 import icecaptools.compiler.ByteCodePatcher;
-import icecaptools.compiler.ICompilationRegistry;
 import icecaptools.compiler.IDGenerator;
 import icecaptools.compiler.StaticInitializersManager;
 import icecaptools.compiler.utils.ClassInheritanceMatrix;
 import icecaptools.conversion.DependencyExtent;
+import util.ICompilationRegistry;
 
 public class AOTToolBox {
     private ClassManager manager;

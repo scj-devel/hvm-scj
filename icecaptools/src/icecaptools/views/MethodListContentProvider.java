@@ -1,9 +1,9 @@
 package icecaptools.views;
 
-import icecaptools.MethodOrFieldDesc;
-
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+
+import util.MethodOrFieldDesc;
 
 public class MethodListContentProvider implements ITreeContentProvider {
 

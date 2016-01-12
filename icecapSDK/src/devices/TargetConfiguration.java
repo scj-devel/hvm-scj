@@ -1,6 +1,8 @@
 package devices;
 
-public interface TargetConfiguration {
+import util.ICompilationRegistry;
+
+public interface TargetConfiguration extends ICompilationRegistry {
 
 	/* The folder into which the C source has been generated */
 	String getOutputFolder();

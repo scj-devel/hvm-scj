@@ -3,7 +3,6 @@ package icecaptools;
 import icecaptools.compiler.ByteCodePatcher;
 import icecaptools.compiler.Compiler;
 import icecaptools.compiler.FieldInfo;
-import icecaptools.compiler.ICompilationRegistry;
 import icecaptools.compiler.IDGenerator;
 import icecaptools.compiler.IcecapByteCodePatcher;
 import icecaptools.compiler.MemorySegment;
@@ -17,6 +16,9 @@ import icecaptools.stackanalyser.ProducerConsumerAnalyser;
 import icecaptools.stackanalyser.StackArrayReferencesAnalyser;
 import icecaptools.stackanalyser.StackReferencesAnalyser;
 import icecaptools.stackanalyser.Util;
+import util.ICompilationRegistry;
+import util.MethodIdentifier;
+import util.MethodOrFieldDesc;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -2,7 +2,9 @@ package devices;
 
 import java.io.File;
 
-public abstract class POSIXTargetConfiguration implements TargetConfiguration {
+import util.BaseTargetConfiguration;
+
+public abstract class POSIXTargetConfiguration extends BaseTargetConfiguration implements TargetConfiguration {
 
 	@Override
 	public String[] getBuildCommands() {

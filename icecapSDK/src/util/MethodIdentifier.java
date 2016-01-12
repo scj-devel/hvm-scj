@@ -1,4 +1,4 @@
-package icecaptools;
+package util;
 
 public interface MethodIdentifier {
     String getClassName();

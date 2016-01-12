@@ -2,14 +2,12 @@ package main;
 
 import icecaptools.CompilationSequence;
 import icecaptools.IcecapProgressMonitor;
-import icecaptools.MethodOrFieldDesc;
 import icecaptools.TestResourceManager;
 import icecaptools.compiler.CodeDetector;
 import icecaptools.compiler.DefaultIcecapCodeFormatter;
 import icecaptools.compiler.DefaultIcecapProgressMonitor;
 import icecaptools.compiler.DefaultIcecapSourceCodeLinker;
 import icecaptools.compiler.DefaultMethodObserver;
-import icecaptools.compiler.ICompilationRegistry;
 import icecaptools.compiler.NativeMethodDetector;
 import icecaptools.compiler.TestCompilationRegistry;
 import icecaptools.conversion.ConversionConfiguration;
@@ -23,6 +21,8 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import test.icecaptools.compiler.TestConversionConfiguration;
+import util.ICompilationRegistry;
+import util.MethodOrFieldDesc;
 
 /*
  * To run the automated tests make sure that gcc is installed and can be 

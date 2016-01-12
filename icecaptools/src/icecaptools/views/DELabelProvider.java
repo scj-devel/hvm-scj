@@ -1,8 +1,8 @@
 package icecaptools.views;
 
-import icecaptools.compiler.ICompilationRegistry;
-
 import org.eclipse.jdt.core.IMethod;
+
+import util.ICompilationRegistry;
 
 public interface DELabelProvider {
 

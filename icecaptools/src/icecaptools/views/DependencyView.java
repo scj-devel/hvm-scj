@@ -2,12 +2,12 @@ package icecaptools.views;
 
 import icecaptools.CanceledByUserException;
 import icecaptools.IcecapIterator;
-import icecaptools.MethodOrFieldDesc;
 import icecaptools.RestartableMethodObserver;
 import icecaptools.SetOutputFolderAction;
 import icecaptools.compiler.CompilationRegistry;
-import icecaptools.compiler.ICompilationRegistry;
 import test.icecaptools.DefaultCompilationRegistry;
+import util.ICompilationRegistry;
+import util.MethodOrFieldDesc;
 
 import java.util.HashMap;
 import java.util.Iterator;

@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import icecaptools.AnalysisObserver;
 import icecaptools.DefaultObserver;
-import icecaptools.MethodOrFieldDesc;
 import icecaptools.compiler.DefaultMethodObserver;
 import icecaptools.compiler.VirtualTable;
 import icecaptools.conversion.Converter;
+import util.MethodOrFieldDesc;
 
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.JavaClass;

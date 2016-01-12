@@ -1,8 +1,8 @@
 package icecaptools.compiler;
 
-import icecaptools.MethodOrFieldDesc;
-
 import java.util.ArrayList;
+
+import util.MethodOrFieldDesc;
 
 public class RequiredMethodsManager extends RequiredEntryManager {
 

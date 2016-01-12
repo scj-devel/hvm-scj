@@ -1,7 +1,7 @@
 package icecaptools.compiler;
 
 import test.icecaptools.DefaultCompilationRegistry;
-import icecaptools.MethodOrFieldDesc;
+import util.MethodOrFieldDesc;
 
 public class AOTRegistry extends DefaultCompilationRegistry {
 

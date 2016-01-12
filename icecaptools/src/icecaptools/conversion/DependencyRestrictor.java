@@ -1,7 +1,7 @@
 package icecaptools.conversion;
 
-import icecaptools.MethodOrFieldDesc;
-import icecaptools.compiler.ICompilationRegistry;
+import util.ICompilationRegistry;
+import util.MethodOrFieldDesc;
 
 import java.util.ArrayList;
 import java.util.HashMap;

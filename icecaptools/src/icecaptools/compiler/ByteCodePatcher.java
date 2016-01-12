@@ -2,7 +2,8 @@ package icecaptools.compiler;
 
 import icecaptools.AnalysisObserver;
 import icecaptools.BNode;
-import icecaptools.MethodOrFieldDesc;
+import util.MethodOrFieldDesc;
+
 import java.util.ArrayList;
 
 public interface ByteCodePatcher {

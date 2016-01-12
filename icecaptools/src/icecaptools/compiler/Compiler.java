@@ -14,7 +14,6 @@ import icecaptools.IcecapTool;
 import icecaptools.JavaArrayClass;
 import icecaptools.LambdaClass;
 import icecaptools.MethodAndClass;
-import icecaptools.MethodOrFieldDesc;
 import icecaptools.ResourceManager;
 import icecaptools.StreamResource;
 import icecaptools.compiler.aot.AOTCompiler;
@@ -30,6 +29,8 @@ import icecaptools.compiler.utils.StringStringContainer;
 import icecaptools.compiler.utils.SubClassChecker;
 import icecaptools.conversion.ConversionConfiguration;
 import icecaptools.conversion.DependencyExtent;
+import util.ICompilationRegistry;
+import util.MethodOrFieldDesc;
 
 import java.io.File;
 import java.io.FileNotFoundException;

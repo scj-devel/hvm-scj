@@ -1,7 +1,8 @@
 package icecaptools.compiler;
 
 import icecaptools.IcecapIterator;
-import icecaptools.MethodOrFieldDesc;
+import util.ICompilationRegistry;
+import util.MethodOrFieldDesc;
 
 import java.util.ArrayList;
 import java.util.HashMap;

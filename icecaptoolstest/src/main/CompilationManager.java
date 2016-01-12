@@ -2,7 +2,6 @@ package main;
 
 import icecaptools.CompilationSequence;
 import icecaptools.HVMProperties;
-import icecaptools.MethodOrFieldDesc;
 import icecaptools.NewList;
 import icecaptools.TestResourceManager;
 import icecaptools.compiler.AOTRegistry;
@@ -11,13 +10,14 @@ import icecaptools.compiler.DefaultIcecapCodeFormatter;
 import icecaptools.compiler.DefaultIcecapProgressMonitor;
 import icecaptools.compiler.DefaultIcecapSourceCodeLinker;
 import icecaptools.compiler.DefaultMethodObserver;
-import icecaptools.compiler.ICompilationRegistry;
 import icecaptools.compiler.NativeMethodDetector;
 import icecaptools.conversion.ConversionConfiguration;
 
 import java.io.FileOutputStream;
 
 import test.icecaptools.compiler.TestConversionConfiguration;
+import util.ICompilationRegistry;
+import util.MethodOrFieldDesc;
 
 public class CompilationManager {
 

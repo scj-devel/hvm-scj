@@ -1,7 +1,7 @@
 package icecaptools;
 
-import icecaptools.compiler.ICompilationRegistry;
 import icecaptools.conversion.ConversionConfiguration;
+import util.ICompilationRegistry;
 
 import java.io.File;
 import java.io.PrintStream;

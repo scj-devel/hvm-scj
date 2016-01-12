@@ -2,6 +2,7 @@ package icecaptools;
 
 import icecaptools.compiler.FieldInfo;
 import icecaptools.compiler.utils.MethodMap;
+import util.MethodOrFieldDesc;
 
 import java.util.ArrayList;
 import java.util.Collections;

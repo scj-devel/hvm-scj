@@ -8,9 +8,9 @@ import icecaptools.CompilationSequence;
 import icecaptools.ConverterJob;
 import icecaptools.MethodAndClass;
 import icecaptools.MethodEntryPoints;
-import icecaptools.MethodOrFieldDesc;
 import icecaptools.compiler.ByteCodePatcher;
 import icecaptools.debugging.variables.HVMVariableFactory;
+import util.MethodOrFieldDesc;
 
 import org.apache.bcel.classfile.LocalVariable;
 import org.apache.bcel.classfile.LocalVariableTable;

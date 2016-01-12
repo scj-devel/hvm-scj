@@ -1,9 +1,9 @@
 package test.icecaptools;
 
-import icecaptools.MethodOrFieldDesc;
-import icecaptools.compiler.ICompilationRegistry;
+import util.ICompilationRegistry;
+import util.MethodOrFieldDesc;
 
-public class DefaultCompilationRegistry implements ICompilationRegistry {
+public class DefaultCompilationRegistry  implements ICompilationRegistry {
 
 	private boolean doICareHuh;
 	

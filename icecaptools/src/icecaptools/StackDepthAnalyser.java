@@ -2,6 +2,7 @@ package icecaptools;
 
 import icecaptools.compiler.utils.CallGraph;
 import icecaptools.conversion.ConversionConfiguration;
+import util.MethodIdentifier;
 
 import java.util.HashMap;
 import java.util.LinkedList;
