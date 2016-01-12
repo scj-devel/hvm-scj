@@ -1,14 +1,5 @@
 package icecaptools.views;
 
-import icecaptools.CanceledByUserException;
-import icecaptools.IcecapIterator;
-import icecaptools.RestartableMethodObserver;
-import icecaptools.SetOutputFolderAction;
-import icecaptools.compiler.CompilationRegistry;
-import test.icecaptools.DefaultCompilationRegistry;
-import util.ICompilationRegistry;
-import util.MethodOrFieldDesc;
-
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -41,6 +32,14 @@ import org.eclipse.ui.part.ViewPart;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
+import icecaptools.CanceledByUserException;
+import icecaptools.IcecapIterator;
+import icecaptools.RestartableMethodObserver;
+import icecaptools.SetOutputFolderAction;
+import icecaptools.compiler.CompilationRegistry;
+import util.ICompilationRegistry;
+import util.MethodOrFieldDesc;
+
 public class DependencyView extends ViewPart implements RestartableMethodObserver, DELabelProvider, IDoubleClickListener {
     private TreeViewer viewer;
 
@@ -59,7 +58,7 @@ public class DependencyView extends ViewPart implements RestartableMethodObserve
     @Override
     public void createPartControl(Composite parent) {
         addedElements = new HashMap<String, String>();
-        cregistry = new CompilationRegistry(new DefaultCompilationRegistry());
+        cregistry = new CompilationRegistry();
         viewer = new TreeViewer(parent);
         ITreeContentProvider contentProvider = new MethodListContentProvider();
         viewer.setContentProvider(contentProvider);

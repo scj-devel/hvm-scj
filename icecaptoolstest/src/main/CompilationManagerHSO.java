@@ -15,6 +15,7 @@ import icecaptools.conversion.ConversionConfiguration;
 
 import java.io.FileOutputStream;
 
+import test.icecaptools.DefaultCompilationRegistry;
 import test.icecaptools.compiler.TestConversionConfiguration;
 import util.ICompilationRegistry;
 import util.MethodOrFieldDesc;
@@ -23,12 +24,9 @@ public class CompilationManagerHSO {
 	
 	private static class JMLCompilationRegistry implements ICompilationRegistry
 	{
-		private boolean doICareHuh;
-		
 		@Override
 		public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-			doICareHuh= true;
-			if (mdesc.getClassName().contains("jml")) {
+				if (mdesc.getClassName().contains("jml")) {
 				return true;
 			}
 			if (mdesc.getClassName().startsWith("sun.security.action.GetPropertyAction")) {
@@ -41,13 +39,11 @@ public class CompilationManagerHSO {
 			if (mdesc.getClassName().startsWith("java.io.PrintStream")) {
 				return true;
 			}
-			doICareHuh = false;
-			return false;
+				return false;
 		}
 
 		@Override
 		public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
-			doICareHuh = true;
 			if (clazz.startsWith("sun.")) {
 				if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
 					return false;
@@ -104,7 +100,6 @@ public class CompilationManagerHSO {
 					return true;
 				}
 			}
-			doICareHuh = false;
 			return false;
 		}
 
@@ -112,14 +107,9 @@ public class CompilationManagerHSO {
 		public boolean alwaysClearOutputFolder() {
 			return true;
 		}
-
-		@Override
-		public boolean didIcareHuh() {
-			return doICareHuh;
-		}
-
 	}
-    public static void main(String args[]) throws Throwable {
+
+	public static void main(String args[]) throws Throwable {
         boolean aotCompile = false;
         boolean includeJMLMethods = true;
         String pathSeparator = System.getProperty("path.separator");
@@ -303,7 +293,7 @@ public class CompilationManagerHSO {
         ICompilationRegistry cregistry;
 
         if (aotCompile) {
-            cregistry = new AOTRegistry();
+            cregistry = new AOTRegistry(new DefaultCompilationRegistry());
         } else {
             cregistry = new JMLCompilationRegistry();
         }

@@ -10,7 +10,7 @@ public class TestTheCompilationRegistry  {
 
 	@Test
     public void testSimple() {
-        CompilationRegistry creg = new CompilationRegistry(new DefaultCompilationRegistry());
+        CompilationRegistry creg = new CompilationRegistry();
 
         MethodOrFieldDesc m1 = new MethodOrFieldDesc("class1", "method1", "sig1");
         MethodOrFieldDesc m2 = new MethodOrFieldDesc("class1", "method2", "sig2");
@@ -43,7 +43,7 @@ public class TestTheCompilationRegistry  {
 	@Test
     public void testEmptyRegistry() {
 
-        CompilationRegistry creg = new CompilationRegistry(new DefaultCompilationRegistry());
+        CompilationRegistry creg = new CompilationRegistry();
 
         MethodOrFieldDesc m1 = new MethodOrFieldDesc("class1", "method1", "sig1");
 

@@ -41,6 +41,7 @@ import icecaptools.compiler.EclipseSourceCodeLinker;
 import icecaptools.conversion.ConversionConfiguration;
 import icecaptools.views.DELabelProvider;
 import icecaptools.views.DependencyView;
+import test.icecaptools.DefaultCompilationRegistry;
 
 public class ConvertJavaFileAction implements IObjectActionDelegate {
 
@@ -159,7 +160,7 @@ public class ConvertJavaFileAction implements IObjectActionDelegate {
 						Job converterJob;
 
 						converterJob = new ConverterJob("Converting from " + selectedJavaFile.getElementName(),
-								methodObserver, config, out, deLabelProvider.getCompilationRegistry());
+								methodObserver, config, out, new DefaultCompilationRegistry(deLabelProvider.getCompilationRegistry()));
 
 						converterJob.schedule();
 

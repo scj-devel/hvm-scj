@@ -3,14 +3,38 @@ package test.icecaptools;
 import util.ICompilationRegistry;
 import util.MethodOrFieldDesc;
 
-public class DefaultCompilationRegistry  implements ICompilationRegistry {
+public class DefaultCompilationRegistry implements ICompilationRegistry {
 
-	private boolean doICareHuh;
-	
-    @Override
-    public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-    	doICareHuh = true;
-    	if (mdesc.getClassName().contains("jml")) {
+	private ICompilationRegistry delegate;
+
+	public DefaultCompilationRegistry(ICompilationRegistry delegate) {
+		this.delegate = delegate;
+	}
+
+	public DefaultCompilationRegistry() {
+		delegate = new ICompilationRegistry() {
+
+			@Override
+			public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
+				return false;
+			}
+
+			@Override
+			public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
+				return false;
+			}
+
+			@Override
+			public boolean alwaysClearOutputFolder() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
+	}
+
+	@Override
+	public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
+		if (mdesc.getClassName().contains("jml")) {
 			return true;
 		}
 		if (mdesc.getClassName().startsWith("sun.security.action.GetPropertyAction")) {
@@ -23,14 +47,12 @@ public class DefaultCompilationRegistry  implements ICompilationRegistry {
 		if (mdesc.getClassName().startsWith("java.io.PrintStream")) {
 			return true;
 		}
-		doICareHuh = false;
-		return false;
+		return delegate.isMethodCompiled(mdesc);
 	}
 
-    @Override
-    public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
-    	doICareHuh = true;
-    	if (clazz.startsWith("sun.")) {
+	@Override
+	public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
+		if (clazz.startsWith("sun.")) {
 			if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
 				return false;
 			}
@@ -101,25 +123,17 @@ public class DefaultCompilationRegistry  implements ICompilationRegistry {
 				return true;
 			}
 		}
-        if (clazz.startsWith("java.lang.reflect"))
-        {
-            if (clazz.equals("java.lang.reflect.Array") && targetMethodName.equals("newInstance"))
-            {
-                return false;
-            }
-            return true;
-        }
-        doICareHuh = false;
-        return false;
-    }
-
-    @Override
-    public boolean alwaysClearOutputFolder() {
-        return false;
-    }
+		if (clazz.startsWith("java.lang.reflect")) {
+			if (clazz.equals("java.lang.reflect.Array") && targetMethodName.equals("newInstance")) {
+				return false;
+			}
+			return true;
+		}
+		return delegate.isMethodExcluded(clazz, targetMethodName, targetMethodSignature);
+	}
 
 	@Override
-	public boolean didIcareHuh() {
-		return doICareHuh;
+	public boolean alwaysClearOutputFolder() {
+		return false;
 	}
 }

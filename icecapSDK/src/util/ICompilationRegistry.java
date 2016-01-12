@@ -6,7 +6,5 @@ public interface ICompilationRegistry {
 
     public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature);
     
-    public boolean didIcareHuh();
-    
     public boolean alwaysClearOutputFolder();
 }
