@@ -10,6 +10,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/Linux" sourcepath="lib/Linux"/>
 	<classpathentry exported="true" kind="lib" path="lib/Windows" sourcepath="lib/Windows"/>
 	<classpathentry exported="true" kind="lib" path="lib/Mac" sourcepath="lib/Mac"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/icecapSDK"/>
+	<classpathentry kind="lib" path="lib/icecapSDK.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

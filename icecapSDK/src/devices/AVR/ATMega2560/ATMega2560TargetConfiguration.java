@@ -1,8 +1,9 @@
 package devices.AVR.ATMega2560;
 
 import devices.TargetConfiguration;
+import util.BaseTargetConfiguration;
 
-public abstract class ATMega2560TargetConfiguration  implements TargetConfiguration {
+public abstract class ATMega2560TargetConfiguration extends BaseTargetConfiguration implements TargetConfiguration {
 
 	@Override
 	public abstract String getOutputFolder();
