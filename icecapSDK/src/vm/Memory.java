@@ -2,6 +2,7 @@ package vm;
 
 import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
+import util.StringUtil;
 
 import java.util.ArrayList;
 
@@ -256,7 +257,7 @@ public class Memory {
 		if (memoryAreaTrackingEnabled)
 		{
 			Memory current = switchToArea(areaToUseForTracking);
-			String name = defaultName + nameCount;
+			String name = StringUtil.constructString(defaultName, nameCount);
 			nameCount++;
 			switchToArea(current);
 			return name;

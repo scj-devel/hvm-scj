@@ -66,6 +66,12 @@ int16 n_vm_RealtimeClock_getNativeTime(int32 *sp) {
 }
 #endif
 
+#if defined(N_VM_REALTIMECLOCK_DELAYNATIVEUNTIL)
+int16 n_vm_RealtimeClock_delayNativeUntil(int32 *sp) {
+  return -1;
+}
+#endif
+
 
 void init_compiler_specifics(void) {
 }
