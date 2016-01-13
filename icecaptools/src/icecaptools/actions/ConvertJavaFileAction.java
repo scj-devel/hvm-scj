@@ -3,6 +3,8 @@ package icecaptools.actions;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -169,12 +171,14 @@ public class ConvertJavaFileAction implements IObjectActionDelegate {
 						CompilationRegistryManager cm = new CompilationRegistryManager();
 
 						cm.addRegistry(new DefaultCompilationRegistry());
-						cm.addRegistry(deLabelProvider.getCompilationRegistry());
-						ICompilationRegistry sourceRegistry = getSourceDefinedRegistry(selectedJavaFile, classPath);
+
+						BaseCompilationRegistryProxy sourceRegistry = getSourceDefinedRegistry(selectedJavaFile, classPath);
 						cm.addRegistry(sourceRegistry);
-						
+
+						cm.addRegistry(deLabelProvider.getCompilationRegistry());
+
 						converterJob = new ConverterJob("Converting from " + selectedJavaFile.getElementName(),
-								methodObserver, config, out, cm);
+								methodObserver, config, out, cm, sourceRegistry.getLoader());
 
 						converterJob.schedule();
 
@@ -193,66 +197,27 @@ public class ConvertJavaFileAction implements IObjectActionDelegate {
 		}
 	}
 
-	private ICompilationRegistry getSourceDefinedRegistry(ICompilationUnit selectedJavaFile, StringBuffer classPath) {
+	private BaseCompilationRegistryProxy getSourceDefinedRegistry(ICompilationUnit selectedJavaFile, StringBuffer classPath) {
 		IType type = selectedJavaFile.findPrimaryType();
 		String mainClass = type.getFullyQualifiedName();
 		URL[] urls;
+		URLClassLoader loader = null;
+
 		try {
 			urls = HVMLaunchShortcut.getURLs(classPath);
-			URLClassLoader loader = new URLClassLoader(urls, ClassLoader.getSystemClassLoader());
+			loader = new URLClassLoader(urls, ClassLoader.getSystemClassLoader());
 
 			Class<?> mainClazz = loader.loadClass(mainClass);
 
 			Object instance = mainClazz.newInstance();
 
-			loader.close();
+			return new CompilationRegistryProxy(mainClazz, instance, loader);
 
-			return new ICompilationRegistry() {
+		} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | InstantiationException
+				| IllegalAccessException | IOException e) {
+			return new BaseCompilationRegistryProxy(loader);
 
-				@Override
-				public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
-					return false;
-				}
-
-				@Override
-				public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
-					return false;
-				}
-
-				@Override
-				public boolean didICareHuh() {
-					return false;
-				}
-
-				@Override
-				public boolean alwaysClearOutputFolder() {
-					return false;
-				}
-			};
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IOException e) {
-			return new ICompilationRegistry() {
-
-				@Override
-				public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
-					return false;
-				}
-
-				@Override
-				public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
-					return false;
-				}
-
-				@Override
-				public boolean didICareHuh() {
-					return false;
-				}
-
-				@Override
-				public boolean alwaysClearOutputFolder() {
-					return false;
-				}
-			};
-		}
+		} 
 	}
 
 	public static StringBuffer getClasspathFromProject(IJavaProject javaProject) throws JavaModelException {
@@ -341,6 +306,108 @@ public class ConvertJavaFileAction implements IObjectActionDelegate {
 					this.entryPoint = iMethod;
 				}
 			}
+		}
+	}
+	
+	private static class BaseCompilationRegistryProxy implements ICompilationRegistry 
+	{
+		private URLClassLoader loader;
+
+		public BaseCompilationRegistryProxy(URLClassLoader loader) {
+			this.loader = loader;
+		}
+
+		public URLClassLoader getLoader() {
+			return loader;
+		}
+		
+		@Override
+		public boolean didICareHuh() {
+			return false;
+		}
+
+		@Override
+		public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
+			return false;
+		}
+
+		@Override
+		public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
+			return false;
+		}
+
+		@Override
+		public boolean alwaysClearOutputFolder() {
+			return false;
+		}		
+	}
+
+	private static class CompilationRegistryProxy extends BaseCompilationRegistryProxy  {
+
+		private Object delegate;
+
+		private Method didICareHuhMethod;
+		private Method isMethodCompiledMethod;
+		private Method isMethodExcludedMethod;
+		private Method alwaysClearOutputFolderMethod;
+
+		public CompilationRegistryProxy(Class<?> mainClazz, Object delegate, URLClassLoader loader)
+				throws NoSuchMethodException, SecurityException {
+			super(loader);
+			this.delegate = delegate;
+
+			didICareHuhMethod = mainClazz.getMethod("didICareHuh", new Class[0]);
+
+			isMethodCompiledMethod = mainClazz.getMethod("isMethodCompiled",
+					new Class[] { String.class, String.class, String.class });
+
+			isMethodExcludedMethod = mainClazz.getMethod("isMethodExcluded",
+					new Class[] { String.class, String.class, String.class });
+
+			alwaysClearOutputFolderMethod = mainClazz.getMethod("alwaysClearOutputFolder", new Class[0]);
+		}
+
+		@Override
+		public boolean didICareHuh() {
+			try {
+				boolean result = (boolean) didICareHuhMethod.invoke(delegate, new Object[0]);
+				return result;
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				System.out.println("problem!");
+			}
+			return false;
+		}
+
+		@Override
+		public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
+			try {
+				boolean result = (boolean) isMethodCompiledMethod.invoke(delegate, clazz, targetMethodName, targetMethodSignature );
+				return result;
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				System.out.println("problem!");
+			}
+			return false;
+		}
+
+		@Override
+		public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
+			try {
+				boolean result = (boolean) isMethodExcludedMethod.invoke(delegate, clazz, targetMethodName, targetMethodSignature );
+				return result;
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				System.out.println("problem!");
+			}
+			return false;
+		}
+
+		@Override
+		public boolean alwaysClearOutputFolder() {
+			try {
+				boolean result = (boolean) alwaysClearOutputFolderMethod.invoke(delegate, new Object[0]);
+				return result;
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			}
+			return false;
 		}
 	}
 }

@@ -105,7 +105,7 @@ public class CompilationRegistry implements ICompilationRegistry {
             }
         }
         return false;
-    }
+    } 
 
     public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
     	return isMethodSelected(new MethodOrFieldDesc(clazz, targetMethodName, targetMethodSignature), compiledClasses);
