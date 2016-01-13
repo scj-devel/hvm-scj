@@ -29,4 +29,9 @@ public class AOTRegistry implements ICompilationRegistry {
 	public boolean alwaysClearOutputFolder() {
 		return delegate.alwaysClearOutputFolder();
 	}
+
+	@Override
+	public boolean didICareHuh() {
+		return delegate.didICareHuh();
+	}
 }

@@ -21,12 +21,14 @@ import util.ICompilationRegistry;
 import util.MethodOrFieldDesc;
 
 public class CompilationManagerHSO {
-	
-	private static class JMLCompilationRegistry implements ICompilationRegistry
-	{
+
+	private static class JMLCompilationRegistry implements ICompilationRegistry {
+		private boolean doIcareHuh;
+
 		@Override
 		public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-				if (mdesc.getClassName().contains("jml")) {
+			doIcareHuh = true;
+			if (mdesc.getClassName().contains("jml")) {
 				return true;
 			}
 			if (mdesc.getClassName().startsWith("sun.security.action.GetPropertyAction")) {
@@ -39,11 +41,13 @@ public class CompilationManagerHSO {
 			if (mdesc.getClassName().startsWith("java.io.PrintStream")) {
 				return true;
 			}
-				return false;
+			doIcareHuh = false;
+			return false;
 		}
 
 		@Override
 		public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
+			doIcareHuh = true;
 			if (clazz.startsWith("sun.")) {
 				if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
 					return false;
@@ -100,6 +104,7 @@ public class CompilationManagerHSO {
 					return true;
 				}
 			}
+			doIcareHuh = false;
 			return false;
 		}
 
@@ -107,246 +112,247 @@ public class CompilationManagerHSO {
 		public boolean alwaysClearOutputFolder() {
 			return true;
 		}
+
+		@Override
+		public boolean didICareHuh() {
+			return doIcareHuh;
+		}
 	}
 
 	public static void main(String args[]) throws Throwable {
-        boolean aotCompile = false;
-        boolean includeJMLMethods = true;
-        String pathSeparator = System.getProperty("path.separator");
-        
-        /* HSO begin ********************************************************* */
+		boolean aotCompile = false;
+		boolean includeJMLMethods = true;
+		String pathSeparator = System.getProperty("path.separator");
 
-        String sourceFileName = null;
+		/* HSO begin ********************************************************* */
 
-        //String inputFolder = "/home/hso/workspace/SCJ_HVM/bin";
-        
-        //String inputFolder = "/home/hso/workspace/icecapSDK/bin";
-        // String inputFolder = "/home/hso/workspace/icecaptools/bin";
-        //String inputFolder = "/home/hso/workspace/icecaptoolstest/bin";
-        // String inputFolder = "/home/hso/workspace/EmbeddedSDJ/bin";
+		String sourceFileName = null;
 
-        // For JML test  with jml4c:
-        //String inputFolder = "/home/hso/java/SCJ_Workspace/SCJJMLTest/bin/" +
-        // pathSeparator + "/home/hso/java/SCJ_Workspace/JML/jml4c.jar";
+		//String inputFolder = "/home/hso/workspace/SCJ_HVM/bin";
 
-        // For OpenJML test:
-        String inputFolder = "/home/hso/workspace/OpenJMLTest/bin/" +
-          pathSeparator + "/home/hso/workspace/OpenJMLTest/lib/jmlruntime.jar" +
-          pathSeparator + "/home/hso/git/hvm-scj/icecapSDK/bin/";
-        
-        
-        String outputFolder = "";
+		//String inputFolder = "/home/hso/workspace/icecapSDK/bin";
+		// String inputFolder = "/home/hso/workspace/icecaptools/bin";
+		//String inputFolder = "/home/hso/workspace/icecaptoolstest/bin";
+		// String inputFolder = "/home/hso/workspace/EmbeddedSDJ/bin";
 
-        // String inputPackage = "test.safetycritical.cyclicschedule3";
-        //String inputPackage = "test.safetycritical.priorityschedule0";
-        // String inputPackage = "test.safetycritical.oneshot1";
-        // String inputPackage = "test.safetycritical.sharedResource1";
-        // String inputPackage = "test.safetycritical.boundedbuffer";
-        // String inputPackage = "test.safetycritical.sleepingQueue1";
-        //String inputPackage = "test.safetycritical.twoMissions";
-        // String inputPackage = "test.safetycritical.executeInAreaOf";
-         //String inputPackage = "test.safetycritical.enterPrivateMemory";
-        // String inputPackage =
-        // "test.safetycritical.priorityscheduleMemAreaNesting";
-         
-         //String inputPackage = "test";
+		// For JML test  with jml4c:
+		//String inputFolder = "/home/hso/java/SCJ_Workspace/SCJJMLTest/bin/" +
+		// pathSeparator + "/home/hso/java/SCJ_Workspace/JML/jml4c.jar";
 
-        // String inputPackage = "esdj.scj.test.example1";
-        // String inputPackage = "esdj.scj.priorityschedule0";
-        // String inputPackage = "esdj.scj.cyclicschedule1";
+		// For OpenJML test:
+		String inputFolder = "/home/hso/workspace/OpenJMLTest/bin/" + pathSeparator
+				+ "/home/hso/workspace/OpenJMLTest/lib/jmlruntime.jar" + pathSeparator
+				+ "/home/hso/git/hvm-scj/icecapSDK/bin/";
 
-        // String inputClass = "MyApp";
-        // String inputClass = "TestSCJSleepingQueue1";
-        // String inputClass = "TestSCJBoundedBuffer";
-        // String inputClass = "TestSCJSharedResource1";
-        // String inputClass = "MyAppTestCase";
-        // String inputClass = "Test_ESDJ_Example1";
-         
-         /* Level 1-2 tests */
-         
-         //String inputPackage = "test.safetycritical.managedMemoryTest1";
-         //String inputClass = "TestManagedMemory";
-         
-         //String inputPackage = "test.safetycritical.memoryModelTest3";
-         //String inputClass = "MySCJ";
-         
-         //String inputPackage = "test.safetycritical.level2ThreadTest1";
-         //String inputClass = "MyApp";
-         //String inputClass = "TestSCJLevel2Thread0";
-         
-         //String inputPackage = "test.safetycritical.level2NestedSequencerTest1";
-         //String inputClass = "MySCJ";
-         
-         //String inputPackage = "test.safetycritical.waitAndNotifyTest2";
-         //String inputClass = "MySCJ";
-        
-//        String inputPackage = "test.safetycritical.cyclicschedule1";
-//        String inputClass = "MyApp";
-        
-         //String inputPackage = "test.safetycritical.SPlevel2";
-         //String inputClass = "TestSPLevel2";
-         
-         
-         /* Level 1-2 tests  end */
-        
-        /* OpenJML tests */
-        
-        //String inputPackage = "test";
-        //String inputClass = "JMLTest1";
-        
-        //String inputPackage = "account";       
-       
-        
-        //String inputPackage = "javax.realtime.test.timeClasses";
-        //String inputPackage = "javax.realtime.test.clock";
-        //String inputPackage = "javax.realtime.test.memoryArea";
-        //String inputPackage = "javax.realtime.test.priorityScheduler";
-        
-        //String inputPackage = "javax.safetycritical.test.safelet1"; 
-        //String inputPackage = "javax.safetycritical.test.safelet22"; 
-        //String inputPackage = "javax.safetycritical.test.priorityScheduling";
-        //String inputPackage = "javax.safetycritical.test.cyclicschedule1";
-        //String inputPackage = "javax.safetycritical.test.cyclicexecutive1";
-        
-        
-        String inputPackage = "javax.realtime.test";
-        //String inputPackage = "javax.safetycritical.test";
-        
-        //String inputClass = "AllTests";
-        
-       
-        /* --- TCKs of javax.realtime.test --- : */
-        //String inputClass = "TckTestMemoryParameters";
-        String inputClass = "TckTestConfigurationParameters";
-        //String inputClass = "TckTestReleaseParameters";
-        //String inputClass = "TckTestPeriodicParameters";
-        //String inputClass = "TckTestAperiodicParameters";
-        //String inputClass = "TckTestPriorityScheduler";        
-        //String inputClass = "TckTestPriorityParameters";   
-        //String inputClass = "TckTestHighResolutionTime";
-        //String inputClass = "TckTestAbsoluteTime";        
-        //String inputClass = "TckTestRelativeTime";
-        
-        /* --- TCKs of javax.safetycritical.test --- : */
-        //String inputClass = "TckTestStorageParameters";
-        //String inputClass = "SafeletStub1"; //   TckTestCyclicExecutive1
-        //String inputClass = "TckTestFrame1";
-        //String inputClass = "TckTestCyclicSchedule1";  //            SafeletStub
-        //String inputClass = "TckTestCyclicSchedule3";
-        //String inputClass = "TckTestSafelet1";
-        //String inputClass = "TckTestSafelet22";   //           SafeletStub22
-        
-        //String inputClass = "TckTestPreemptiveScheduling1";
-        
-        /* OpenJML tests end */
+		String outputFolder = "";
 
-        /* JML tests */
+		// String inputPackage = "test.safetycritical.cyclicschedule3";
+		//String inputPackage = "test.safetycritical.priorityschedule0";
+		// String inputPackage = "test.safetycritical.oneshot1";
+		// String inputPackage = "test.safetycritical.sharedResource1";
+		// String inputPackage = "test.safetycritical.boundedbuffer";
+		// String inputPackage = "test.safetycritical.sleepingQueue1";
+		//String inputPackage = "test.safetycritical.twoMissions";
+		// String inputPackage = "test.safetycritical.executeInAreaOf";
+		//String inputPackage = "test.safetycritical.enterPrivateMemory";
+		// String inputPackage =
+		// "test.safetycritical.priorityscheduleMemAreaNesting";
 
-        //String inputPackage = "jml.account.test";
+		//String inputPackage = "test";
 
-         //String inputPackage = "javax.realtime.test.clock";
-         //String inputPackage = "javax.realtime.test.priorityParameters";
-         //String inputPackage = "javax.realtime.test.releaseParameters";
-         //String inputPackage = "javax.realtime.test.timeClasses";
-        
-         
-         //String inputPackage = "javax.safetycritical.test.priorityScheduling";
-         //String inputPackage = "javax.safetycritical.test.cyclicExecutive"; 
-         //String inputPackage = "javax.safetycritical.test.storageParameters";
-         //String inputClass = "AllTests";
+		// String inputPackage = "esdj.scj.test.example1";
+		// String inputPackage = "esdj.scj.priorityschedule0";
+		// String inputPackage = "esdj.scj.cyclicschedule1";
 
-        //String inputClass = "Main2Clock";
-        // String inputClass = "Main2RealtimeClock";
-        // String inputClass = "Issue";
+		// String inputClass = "MyApp";
+		// String inputClass = "TestSCJSleepingQueue1";
+		// String inputClass = "TestSCJBoundedBuffer";
+		// String inputClass = "TestSCJSharedResource1";
+		// String inputClass = "MyAppTestCase";
+		// String inputClass = "Test_ESDJ_Example1";
 
-        /* JML tests end */
-        
-        /* HSO end ************************************************** */
+		/* Level 1-2 tests */
 
-        if (args.length < 1) {
-            System.out.println("Using default values\nUsage: CompilationManager " + inputFolder + " " + inputPackage + " " + inputClass);
-        } else {
-            if (args.length >= 3) {
-                inputFolder = args[0];
-                inputPackage = args[1];
-                inputClass = args[2];
-                if (args.length == 4) {
-                    if ("-aot".compareTo(args[3]) == 0) {
-                        aotCompile = true;
-                    }
-                }
-            } else {
-                if (args.length == 1) {
-                    if ("-aot".compareTo(args[0]) == 0) {
-                        aotCompile = true;
-                    }
-                } else {
-                    System.out.println("Parameter count mismatch");
-                }
-            }
-            System.out.print("CompilationManager");
-            for (int i = 0; i < args.length; i++) {
-                System.out.print(" " + args[i]);
-            }
-            System.out.println();
-        }
-        ICompilationRegistry cregistry;
+		//String inputPackage = "test.safetycritical.managedMemoryTest1";
+		//String inputClass = "TestManagedMemory";
 
-        if (aotCompile) {
-            cregistry = new AOTRegistry(new DefaultCompilationRegistry());
-        } else {
-            cregistry = new JMLCompilationRegistry();
-        }
+		//String inputPackage = "test.safetycritical.memoryModelTest3";
+		//String inputClass = "MySCJ";
 
-        ConversionConfiguration config = new TestConversionConfiguration();
+		//String inputPackage = "test.safetycritical.level2ThreadTest1";
+		//String inputClass = "MyApp";
+		//String inputClass = "TestSCJLevel2Thread0";
 
-        config.setInputSourceFileName(sourceFileName);
+		//String inputPackage = "test.safetycritical.level2NestedSequencerTest1";
+		//String inputClass = "MySCJ";
 
-        HVMProperties props = config.getProperties();
-        props.setIncludeJMLMethods(includeJMLMethods);
-        config.setClassPath(inputFolder);
-        config.setInputPackage(inputPackage);
-        config.setInputClass(inputClass);
-        config.setCodeFormatter(new DefaultIcecapCodeFormatter());
-        config.setSourceCodeLinker(new DefaultIcecapSourceCodeLinker());
-        config.setCodeDetector(new CodeDetector() {
+		//String inputPackage = "test.safetycritical.waitAndNotifyTest2";
+		//String inputClass = "MySCJ";
 
-            @Override
-            public void newRead(char next) {
+		//        String inputPackage = "test.safetycritical.cyclicschedule1";
+		//        String inputClass = "MyApp";
 
-            }
+		//String inputPackage = "test.safetycritical.SPlevel2";
+		//String inputClass = "TestSPLevel2";
 
-            @Override
-            public void fileStart(String resourceName, FileOutputStream writer) {
+		/* Level 1-2 tests  end */
 
-            }
-        });
-        config.setNativeMethodDetector(new NativeMethodDetector() {
+		/* OpenJML tests */
 
-            @Override
-            public void startAnalysis() {
-            }
+		//String inputPackage = "test";
+		//String inputClass = "JMLTest1";
 
-            @Override
-            public void endAnalysis() {
-            }
-        });
-        config.setResourceManager(new TestResourceManager("/home/hso/java/SCJ_Workspace/icecapvm/src"));
+		//String inputPackage = "account";       
 
-        CompilationSequence sequencer = new CompilationSequence();
+		//String inputPackage = "javax.realtime.test.timeClasses";
+		//String inputPackage = "javax.realtime.test.clock";
+		//String inputPackage = "javax.realtime.test.memoryArea";
+		//String inputPackage = "javax.realtime.test.priorityScheduler";
 
-        System.out.println("outputFolder = " + outputFolder);
-        config.setOutputFolder(outputFolder);
-        sequencer.startCompilation(System.out, new DefaultMethodObserver(), config, new DefaultIcecapProgressMonitor(), cregistry, true);
+		//String inputPackage = "javax.safetycritical.test.safelet1"; 
+		//String inputPackage = "javax.safetycritical.test.safelet22"; 
+		//String inputPackage = "javax.safetycritical.test.priorityScheduling";
+		//String inputPackage = "javax.safetycritical.test.cyclicschedule1";
+		//String inputPackage = "javax.safetycritical.test.cyclicexecutive1";
 
-        sequencer = null;
-        config = null;
-        cregistry = null;
-        System.out.println("Instancecount = " + NewList.getInstanceCount());
-        /*
-         * System.out.println("Done. Press any key to exit");
-         * 
-         * in.next(); in.close();
-         */
-    }
+		String inputPackage = "javax.realtime.test";
+		//String inputPackage = "javax.safetycritical.test";
+
+		//String inputClass = "AllTests";
+
+		/* --- TCKs of javax.realtime.test --- : */
+		//String inputClass = "TckTestMemoryParameters";
+		String inputClass = "TckTestConfigurationParameters";
+		//String inputClass = "TckTestReleaseParameters";
+		//String inputClass = "TckTestPeriodicParameters";
+		//String inputClass = "TckTestAperiodicParameters";
+		//String inputClass = "TckTestPriorityScheduler";        
+		//String inputClass = "TckTestPriorityParameters";   
+		//String inputClass = "TckTestHighResolutionTime";
+		//String inputClass = "TckTestAbsoluteTime";        
+		//String inputClass = "TckTestRelativeTime";
+
+		/* --- TCKs of javax.safetycritical.test --- : */
+		//String inputClass = "TckTestStorageParameters";
+		//String inputClass = "SafeletStub1"; //   TckTestCyclicExecutive1
+		//String inputClass = "TckTestFrame1";
+		//String inputClass = "TckTestCyclicSchedule1";  //            SafeletStub
+		//String inputClass = "TckTestCyclicSchedule3";
+		//String inputClass = "TckTestSafelet1";
+		//String inputClass = "TckTestSafelet22";   //           SafeletStub22
+
+		//String inputClass = "TckTestPreemptiveScheduling1";
+
+		/* OpenJML tests end */
+
+		/* JML tests */
+
+		//String inputPackage = "jml.account.test";
+
+		//String inputPackage = "javax.realtime.test.clock";
+		//String inputPackage = "javax.realtime.test.priorityParameters";
+		//String inputPackage = "javax.realtime.test.releaseParameters";
+		//String inputPackage = "javax.realtime.test.timeClasses";
+
+		//String inputPackage = "javax.safetycritical.test.priorityScheduling";
+		//String inputPackage = "javax.safetycritical.test.cyclicExecutive"; 
+		//String inputPackage = "javax.safetycritical.test.storageParameters";
+		//String inputClass = "AllTests";
+
+		//String inputClass = "Main2Clock";
+		// String inputClass = "Main2RealtimeClock";
+		// String inputClass = "Issue";
+
+		/* JML tests end */
+
+		/* HSO end ************************************************** */
+
+		if (args.length < 1) {
+			System.out.println("Using default values\nUsage: CompilationManager " + inputFolder + " " + inputPackage
+					+ " " + inputClass);
+		} else {
+			if (args.length >= 3) {
+				inputFolder = args[0];
+				inputPackage = args[1];
+				inputClass = args[2];
+				if (args.length == 4) {
+					if ("-aot".compareTo(args[3]) == 0) {
+						aotCompile = true;
+					}
+				}
+			} else {
+				if (args.length == 1) {
+					if ("-aot".compareTo(args[0]) == 0) {
+						aotCompile = true;
+					}
+				} else {
+					System.out.println("Parameter count mismatch");
+				}
+			}
+			System.out.print("CompilationManager");
+			for (int i = 0; i < args.length; i++) {
+				System.out.print(" " + args[i]);
+			}
+			System.out.println();
+		}
+		ICompilationRegistry cregistry;
+
+		if (aotCompile) {
+			cregistry = new AOTRegistry(new DefaultCompilationRegistry());
+		} else {
+			cregistry = new JMLCompilationRegistry();
+		}
+
+		ConversionConfiguration config = new TestConversionConfiguration();
+
+		config.setInputSourceFileName(sourceFileName);
+
+		HVMProperties props = config.getProperties();
+		props.setIncludeJMLMethods(includeJMLMethods);
+		config.setClassPath(inputFolder);
+		config.setInputPackage(inputPackage);
+		config.setInputClass(inputClass);
+		config.setCodeFormatter(new DefaultIcecapCodeFormatter());
+		config.setSourceCodeLinker(new DefaultIcecapSourceCodeLinker());
+		config.setCodeDetector(new CodeDetector() {
+
+			@Override
+			public void newRead(char next) {
+
+			}
+
+			@Override
+			public void fileStart(String resourceName, FileOutputStream writer) {
+
+			}
+		});
+		config.setNativeMethodDetector(new NativeMethodDetector() {
+
+			@Override
+			public void startAnalysis() {
+			}
+
+			@Override
+			public void endAnalysis() {
+			}
+		});
+		config.setResourceManager(new TestResourceManager("/home/hso/java/SCJ_Workspace/icecapvm/src"));
+
+		CompilationSequence sequencer = new CompilationSequence();
+
+		System.out.println("outputFolder = " + outputFolder);
+		config.setOutputFolder(outputFolder);
+		sequencer.startCompilation(System.out, new DefaultMethodObserver(), config, new DefaultIcecapProgressMonitor(),
+				cregistry, true);
+
+		sequencer = null;
+		config = null;
+		cregistry = null;
+		System.out.println("Instancecount = " + NewList.getInstanceCount());
+		/*
+		 * System.out.println("Done. Press any key to exit");
+		 * 
+		 * in.next(); in.close();
+		 */
+	}
 }

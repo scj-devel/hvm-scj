@@ -16,7 +16,7 @@ public class CompilationRegistry implements ICompilationRegistry {
     private HashMap<String, ArrayList<MethodOrFieldDesc>> excludedClasses;
 
     private boolean clearOutputFolder;
-
+    
     public CompilationRegistry() {
         compiledClasses = new HashMap<String, ArrayList<MethodOrFieldDesc>>();
         excludedClasses = new HashMap<String, ArrayList<MethodOrFieldDesc>>();
@@ -121,7 +121,7 @@ public class CompilationRegistry implements ICompilationRegistry {
     }
 
     private static boolean isMethodSelected(MethodOrFieldDesc mdesc, HashMap<String, ArrayList<MethodOrFieldDesc>> map) {
-        ArrayList<MethodOrFieldDesc> methods = map.get(mdesc.getClassName());
+    	ArrayList<MethodOrFieldDesc> methods = map.get(mdesc.getClassName());
 
         if (methods != null) {
             if (methods.contains(mdesc)) {
@@ -205,7 +205,7 @@ public class CompilationRegistry implements ICompilationRegistry {
 
     @Override
     public boolean alwaysClearOutputFolder() {
-        return this.clearOutputFolder;
+    	return this.clearOutputFolder;
     }
 
     public void toggleFolderClearing() {
@@ -215,4 +215,9 @@ public class CompilationRegistry implements ICompilationRegistry {
             this.clearOutputFolder = true;
         }
     }
+
+	@Override
+	public boolean didICareHuh() {
+		return true;
+	}
 }

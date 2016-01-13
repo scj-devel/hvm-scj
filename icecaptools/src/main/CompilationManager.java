@@ -24,8 +24,12 @@ public class CompilationManager {
 
 	private static class JMLCompilationRegistry implements ICompilationRegistry {
 
+		private boolean doIcareHuh;
+		
 		@Override
 		public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
+			doIcareHuh = true;
+			
 			if (mdesc.getClassName().contains("jml")) {
 				return true;
 			}
@@ -39,11 +43,13 @@ public class CompilationManager {
 			if (mdesc.getClassName().startsWith("java.io.PrintStream")) {
 				return true;
 			}
+			doIcareHuh = false;
 			return false;
 		}
 
 		@Override
 		public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
+			doIcareHuh = true;
 			if (clazz.startsWith("sun.")) {
 				if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
 					return false;
@@ -100,12 +106,18 @@ public class CompilationManager {
 					return true;
 				}
 			}
+			doIcareHuh = false;
 			return false;
 		}
 
 		@Override
 		public boolean alwaysClearOutputFolder() {
 			return true;
+		}
+
+		@Override
+		public boolean didICareHuh() {
+			return doIcareHuh;
 		}
 	}
 

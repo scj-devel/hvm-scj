@@ -56,14 +56,10 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 		try {
 			StringBuffer classPath = ConvertJavaFileAction.getClasspathFromProject(type.getJavaProject());
 
-			String[] elements = classPath.toString().split(System.getProperty("path.separator"));
-
-			URL[] urls = new URL[elements.length];
+			
 
 			try {
-				for (int i = 0; i < elements.length; i++) {
-					urls[i] = new File(elements[i]).toURI().toURL();
-				}
+				URL[] urls = getURLs(classPath);
 
 				URLClassLoader loader = new URLClassLoader(urls, ClassLoader.getSystemClassLoader());
 
@@ -103,6 +99,17 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 			}
 		} catch (JavaModelException e1) {
 		}
+	}
+
+	public static URL[] getURLs(StringBuffer classPath) throws MalformedURLException {
+		String[] elements = classPath.toString().split(System.getProperty("path.separator"));
+
+		URL[] urls = new URL[elements.length];
+		
+		for (int i = 0; i < elements.length; i++) {
+			urls[i] = new File(elements[i]).toURI().toURL();
+		}
+		return urls;
 	}
 
 	private void launch(IType type, String outputFolder, String[] buildCommands, int heapSize, String deployCommand) {

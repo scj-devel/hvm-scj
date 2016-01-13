@@ -5,35 +5,11 @@ import util.MethodOrFieldDesc;
 
 public class DefaultCompilationRegistry implements ICompilationRegistry {
 
-	private ICompilationRegistry delegate;
-
-	public DefaultCompilationRegistry(ICompilationRegistry delegate) {
-		this.delegate = delegate;
-	}
-
-	public DefaultCompilationRegistry() {
-		delegate = new ICompilationRegistry() {
-
-			@Override
-			public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-				return false;
-			}
-
-			@Override
-			public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
-				return false;
-			}
-
-			@Override
-			public boolean alwaysClearOutputFolder() {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		};
-	}
+	private boolean doIcareHuh;
 
 	@Override
 	public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
+		doIcareHuh = true;
 		if (mdesc.getClassName().contains("jml")) {
 			return true;
 		}
@@ -47,11 +23,13 @@ public class DefaultCompilationRegistry implements ICompilationRegistry {
 		if (mdesc.getClassName().startsWith("java.io.PrintStream")) {
 			return true;
 		}
-		return delegate.isMethodCompiled(mdesc);
+		doIcareHuh = false;
+		return false;
 	}
 
 	@Override
 	public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
+		doIcareHuh = true;
 		if (clazz.startsWith("sun.")) {
 			if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
 				return false;
@@ -129,11 +107,18 @@ public class DefaultCompilationRegistry implements ICompilationRegistry {
 			}
 			return true;
 		}
-		return delegate.isMethodExcluded(clazz, targetMethodName, targetMethodSignature);
+		doIcareHuh = false;
+		return false;
 	}
 
 	@Override
 	public boolean alwaysClearOutputFolder() {
+		doIcareHuh = false;
 		return false;
+	}
+
+	@Override
+	public boolean didICareHuh() {
+		return doIcareHuh;
 	}
 }

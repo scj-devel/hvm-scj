@@ -229,6 +229,11 @@ public class CompilationSequence {
 		public boolean alwaysClearOutputFolder() {
 			return delegate.alwaysClearOutputFolder();
 		}
+
+		@Override
+		public boolean didICareHuh() {
+			return delegate.didICareHuh();
+		}
 	}
 
 	public void startCompilation(PrintStream out, RestartableMethodObserver methodObserver, ConversionConfiguration config, IcecapProgressMonitor progressMonitor,

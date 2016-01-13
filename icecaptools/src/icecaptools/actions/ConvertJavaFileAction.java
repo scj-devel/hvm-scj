@@ -2,6 +2,9 @@ package icecaptools.actions;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -14,6 +17,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IPackageDeclaration;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -35,13 +39,17 @@ import org.eclipse.ui.console.MessageConsole;
 import icecaptools.ConverterJob;
 import icecaptools.RestartableMethodObserver;
 import icecaptools.compiler.ArchitectureDependentCodeDetector;
+import icecaptools.compiler.CompilationRegistryManager;
 import icecaptools.compiler.EclipseCCodeFormatter;
 import icecaptools.compiler.EclipseNativeMethodDetector;
 import icecaptools.compiler.EclipseSourceCodeLinker;
 import icecaptools.conversion.ConversionConfiguration;
+import icecaptools.launching.HVMLaunchShortcut;
 import icecaptools.views.DELabelProvider;
 import icecaptools.views.DependencyView;
 import test.icecaptools.DefaultCompilationRegistry;
+import util.ICompilationRegistry;
+import util.MethodOrFieldDesc;
 
 public class ConvertJavaFileAction implements IObjectActionDelegate {
 
@@ -159,8 +167,15 @@ public class ConvertJavaFileAction implements IObjectActionDelegate {
 						config.setNativeMethodDetector(new EclipseNativeMethodDetector());
 						Job converterJob;
 
+						CompilationRegistryManager cm = new CompilationRegistryManager();
+
+						cm.addRegistry(new DefaultCompilationRegistry());
+						cm.addRegistry(deLabelProvider.getCompilationRegistry());
+						ICompilationRegistry sourceRegistry = getSourceDefinedRegistry(selectedJavaFile, classPath);
+						cm.addRegistry(sourceRegistry);
+						
 						converterJob = new ConverterJob("Converting from " + selectedJavaFile.getElementName(),
-								methodObserver, config, out, new DefaultCompilationRegistry(deLabelProvider.getCompilationRegistry()));
+								methodObserver, config, out, cm);
 
 						converterJob.schedule();
 
@@ -176,6 +191,66 @@ public class ConvertJavaFileAction implements IObjectActionDelegate {
 				out.println(e.getMessage());
 				out.flush();
 			}
+		}
+	}
+
+	private ICompilationRegistry getSourceDefinedRegistry(ICompilationUnit selectedJavaFile, StringBuffer classPath) {
+		IType type = selectedJavaFile.findPrimaryType();
+		String mainClass = type.getFullyQualifiedName();
+		URL[] urls;
+		try {
+			urls = HVMLaunchShortcut.getURLs(classPath);
+			URLClassLoader loader = new URLClassLoader(urls, ClassLoader.getSystemClassLoader());
+
+			Class<?> mainClazz = loader.loadClass(mainClass);
+
+			Object instance = mainClazz.newInstance();
+
+			return new ICompilationRegistry() {
+
+				@Override
+				public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
+					return false;
+				}
+
+				@Override
+				public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
+					return false;
+				}
+
+				@Override
+				public boolean didICareHuh() {
+					return false;
+				}
+
+				@Override
+				public boolean alwaysClearOutputFolder() {
+					return false;
+				}
+			};
+		} catch (MalformedURLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+			return new ICompilationRegistry() {
+
+				@Override
+				public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
+					return false;
+				}
+
+				@Override
+				public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
+					return false;
+				}
+
+				@Override
+				public boolean didICareHuh() {
+					return false;
+				}
+
+				@Override
+				public boolean alwaysClearOutputFolder() {
+					return false;
+				}
+			};
 		}
 	}
 
@@ -199,14 +274,9 @@ public class ConvertJavaFileAction implements IObjectActionDelegate {
 				classPath.append(p.getRawLocation());
 				classPath.append(File.separatorChar);
 				classPath.append("bin");
+			} else {
 			}
-			else
-			{
-			}
-			
-			
-			
-			
+
 		}
 
 		IClasspathEntry[] requiredLibraries = javaProject.getRawClasspath();
