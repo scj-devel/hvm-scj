@@ -47,6 +47,7 @@ public class BaseTargetConfiguration implements ICompilationRegistry {
 		switch (eb) {
 		case YES:
 			result = true;
+			break;
 		default:
 			result = false;
 		}
