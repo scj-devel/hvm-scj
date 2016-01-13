@@ -407,6 +407,17 @@ public class CompilationSequence {
 					for (int i = 0; i < bnodes.size(); i++) {
 						observer.byteCodeUsed(bnodes.get(i).getOpCode());
 					}
+				} else {
+					for (int i = 0; i < bnodes.size(); i++) {
+						byte opCode = bnodes.get(i).getOpCode();
+						switch (opCode) {
+						case RawByteCodes.ldc2_w_opcode:
+						case RawByteCodes.ldc_w_opcode:
+						case RawByteCodes.ldc_opcode:
+							observer.byteCodeUsed(opCode);
+							break;
+						}
+					}
 				}
 
 				BNodeUtils.collectExceptions(next);

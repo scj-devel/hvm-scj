@@ -36,10 +36,10 @@ public class Memory {
 		public String toString() {
 			StringBuffer buffer = new StringBuffer();
 			buffer.append(name);
-			buffer.append("[" + instanceCount + "]");
-			buffer.append(": size = ");
-			buffer.append(size);
-			buffer.append(", max used = " + maxUsed);
+			buffer.append(StringUtil.constructString("[", instanceCount));
+			buffer.append("]");
+			buffer.append(StringUtil.constructString(": size = ", size));
+			buffer.append(StringUtil.constructString(", max used = ", maxUsed));
 			return buffer.toString();
 		}
 
@@ -89,14 +89,13 @@ public class Memory {
 			if (createdMemories != null) {
 				Memory current = switchToArea(areaToUseForTracking);
 
-				devices.Console.println("\nCreated " + createdMemories.size()
-						+ " memory area types:");
+				devices.Console.print(StringUtil.constructString("\nCreated ", createdMemories.size()));
+				devices.Console.println(" memory area types:");
 				for (MemoryInfo memory : createdMemories) {
 					devices.Console.println(memory.toString());
 				}
-				devices.Console.println("Max backing store usage = "
-						+ (MemoryArea.getRemainingMemorySize()));
-				devices.Console.println("backingStoreOffset in heap = " + backingStoreOffset);
+				devices.Console.println(StringUtil.constructString("Max backing store usage = ", MemoryArea.getRemainingMemorySize()));
+				devices.Console.println(StringUtil.constructString("backingStoreOffset in heap = ", backingStoreOffset));
 				switchToArea(current);
 			} else {
 				devices.Console.println("No created memories recorded");

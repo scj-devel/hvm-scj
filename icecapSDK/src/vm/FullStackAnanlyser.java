@@ -1,5 +1,7 @@
 package vm;
 
+import util.StringUtil;
+
 public class FullStackAnanlyser implements StackAnalyser {
 
 	private int numberOfStacksCreated;
@@ -28,12 +30,17 @@ public class FullStackAnanlyser implements StackAnalyser {
 
 			@Override
 			public void run() {
-				devices.Console.println("Created " + numberOfStacksCreated + " stacks");
+				devices.Console.print(StringUtil.constructString("Created ", numberOfStacksCreated));
+				devices.Console.println(" stacks");
 				for (byte index = 0; index < stacks.length; index++) {
 					if (stacks[index] != null)
 					{
 						analyseStack(stacks[index]);
-						devices.Console.println("stack " + index + "[" + best_start_of_unused_area + ", " + best_end_of_unused_area + "][" + stacks[index].length + "]");
+						devices.Console.print(StringUtil.constructString("stack ", index));
+						devices.Console.print(StringUtil.constructString("[", best_start_of_unused_area));
+						devices.Console.print(StringUtil.constructString(", ", best_end_of_unused_area));
+						devices.Console.print(StringUtil.constructString("][", stacks[index].length));
+						devices.Console.println("]");
 					}
 				}
 			}
