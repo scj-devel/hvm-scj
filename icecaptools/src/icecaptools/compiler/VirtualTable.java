@@ -8,7 +8,7 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 
 import icecaptools.AnalysisObserver;
-import util.MethodOrFieldDesc;
+import icecaptools.MethodOrFieldDesc;
 
 public class VirtualTable {
 

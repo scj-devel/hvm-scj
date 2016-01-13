@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import util.MethodOrFieldDesc;
+import icecaptools.MethodOrFieldDesc;
 
 import java.util.Set;
 

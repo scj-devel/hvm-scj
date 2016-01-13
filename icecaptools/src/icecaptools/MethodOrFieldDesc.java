@@ -1,4 +1,6 @@
-package util;
+package icecaptools;
+
+import util.MethodIdentifier;
 
 /**
  * This class encapsulates method description by set of String parameters

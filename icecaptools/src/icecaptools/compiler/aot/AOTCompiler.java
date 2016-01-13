@@ -8,6 +8,7 @@ import icecaptools.IcecapCFunc;
 import icecaptools.InterfaceMethodCallBNode;
 import icecaptools.MethodCallBNode;
 import icecaptools.MethodEntryPoints;
+import icecaptools.MethodOrFieldDesc;
 import icecaptools.RawByteCodes;
 import icecaptools.RawByteCodes.Raw_lookupswitch;
 import icecaptools.RawByteCodes.Raw_lookupswitch.Pair;
@@ -28,7 +29,6 @@ import icecaptools.stackanalyser.ProducerConsumerStack;
 import icecaptools.stackanalyser.RefType;
 import icecaptools.stackanalyser.RefType.RefState;
 import util.ICompilationRegistry;
-import util.MethodOrFieldDesc;
 
 import java.util.ArrayList;
 import java.util.Iterator;

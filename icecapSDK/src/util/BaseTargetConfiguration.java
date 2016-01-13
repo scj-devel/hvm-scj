@@ -9,8 +9,8 @@ public class BaseTargetConfiguration implements ICompilationRegistry {
 	private boolean doICare;
 
 	@Override
-	public final boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-		EBOOL eb = compileMethod(mdesc.getClassName(), mdesc.getName(), mdesc.getSignature());
+	public final boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
+		EBOOL eb = compileMethod(clazz, targetMethodName, targetMethodSignature);
 		boolean result = convertValue(eb);
 		return result;
 	}

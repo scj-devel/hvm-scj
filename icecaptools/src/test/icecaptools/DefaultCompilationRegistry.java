@@ -1,26 +1,25 @@
 package test.icecaptools;
 
 import util.ICompilationRegistry;
-import util.MethodOrFieldDesc;
 
 public class DefaultCompilationRegistry implements ICompilationRegistry {
 
 	private boolean doIcareHuh;
 
 	@Override
-	public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
+	public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
 		doIcareHuh = true;
-		if (mdesc.getClassName().contains("jml")) {
+		if (clazz.contains("jml")) {
 			return true;
 		}
-		if (mdesc.getClassName().startsWith("sun.security.action.GetPropertyAction")) {
+		if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
 			return true;
 		}
-		if (mdesc.getClassName().startsWith("java.io.BufferedWriter")) {
+		if (clazz.startsWith("java.io.BufferedWriter")) {
 			return true;
 		}
 
-		if (mdesc.getClassName().startsWith("java.io.PrintStream")) {
+		if (clazz.startsWith("java.io.PrintStream")) {
 			return true;
 		}
 		doIcareHuh = false;

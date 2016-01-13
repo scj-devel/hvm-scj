@@ -1,7 +1,6 @@
 package icecaptools.compiler;
 
 import util.ICompilationRegistry;
-import util.MethodOrFieldDesc;
 
 public class AOTRegistry implements ICompilationRegistry {
 
@@ -12,8 +11,8 @@ public class AOTRegistry implements ICompilationRegistry {
 	}
 
 	@Override
-	public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-		if (mdesc.getName().compareTo("main") == 0) {
+	public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
+		if (targetMethodName.compareTo("main") == 0) {
 			return false;
 		} else {
 			return true;

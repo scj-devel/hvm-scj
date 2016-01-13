@@ -22,6 +22,7 @@ import icecaptools.InterfaceMethodCallBNode;
 import icecaptools.JavaArrayClass;
 import icecaptools.LDCBNode;
 import icecaptools.MethodEntryPoints;
+import icecaptools.MethodOrFieldDesc;
 import icecaptools.NewArrayBNode;
 import icecaptools.NewArrayMultiBNode;
 import icecaptools.NewBNode;
@@ -65,7 +66,6 @@ import icecaptools.VirtualMethodCallBNode;
 import icecaptools.compiler.LDCConstant;
 import icecaptools.compiler.utils.CallGraph;
 import util.ICompilationRegistry;
-import util.MethodOrFieldDesc;
 
 import java.io.PrintStream;
 import java.util.ArrayList;

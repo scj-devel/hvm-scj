@@ -5,11 +5,11 @@ import icecaptools.ClassfileUtils;
 import icecaptools.HackInterfaceMethodCallBNode;
 import icecaptools.IcecapIterator;
 import icecaptools.MethodEntryPoints;
+import icecaptools.MethodOrFieldDesc;
 import icecaptools.VirtualOrInterfaceMethodCallBNode;
 import icecaptools.conversion.DependencyExtent;
 import util.ICompilationRegistry;
 import util.MethodIdentifier;
-import util.MethodOrFieldDesc;
 
 import java.util.Collection;
 import java.util.Iterator;

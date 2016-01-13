@@ -1,8 +1,8 @@
 package icecaptools.compiler;
 
 import icecaptools.IcecapIterator;
+import icecaptools.MethodOrFieldDesc;
 import util.ICompilationRegistry;
-import util.MethodOrFieldDesc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,6 +107,10 @@ public class CompilationRegistry implements ICompilationRegistry {
         return false;
     }
 
+    public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
+    	return isMethodSelected(new MethodOrFieldDesc(clazz, targetMethodName, targetMethodSignature), compiledClasses);
+    }
+    
     public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
     	return isMethodSelected(mdesc, compiledClasses);
     }

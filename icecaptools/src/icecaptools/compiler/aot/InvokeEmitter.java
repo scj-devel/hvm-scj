@@ -1,6 +1,6 @@
 package icecaptools.compiler.aot;
 
-import util.MethodOrFieldDesc;
+import icecaptools.MethodOrFieldDesc;
 
 
 public interface InvokeEmitter {

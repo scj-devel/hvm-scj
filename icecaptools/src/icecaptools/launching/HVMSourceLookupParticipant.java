@@ -4,9 +4,9 @@ import java.io.File;
 
 import icecaptools.CompilationSequence;
 import icecaptools.ConverterJob;
+import icecaptools.MethodOrFieldDesc;
 import icecaptools.compiler.ByteCodePatcher;
 import icecaptools.debugging.HVMStackFrame;
-import util.MethodOrFieldDesc;
 
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.JavaClass;

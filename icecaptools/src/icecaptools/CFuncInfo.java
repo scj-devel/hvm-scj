@@ -1,7 +1,5 @@
 package icecaptools;
 
-import util.MethodOrFieldDesc;
-
 public class CFuncInfo {
 
     private MethodOrFieldDesc methodOrFieldDesc;

@@ -1,7 +1,7 @@
 package test.icecaptools;
 
+import icecaptools.MethodOrFieldDesc;
 import icecaptools.compiler.CompilationRegistry;
-import util.MethodOrFieldDesc;
 
 import org.junit.Assert;
 import org.junit.Test;

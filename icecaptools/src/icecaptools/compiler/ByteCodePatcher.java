@@ -2,7 +2,7 @@ package icecaptools.compiler;
 
 import icecaptools.AnalysisObserver;
 import icecaptools.BNode;
-import util.MethodOrFieldDesc;
+import icecaptools.MethodOrFieldDesc;
 
 import java.util.ArrayList;
 

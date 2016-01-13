@@ -34,11 +34,11 @@ import org.osgi.service.prefs.Preferences;
 
 import icecaptools.CanceledByUserException;
 import icecaptools.IcecapIterator;
+import icecaptools.MethodOrFieldDesc;
 import icecaptools.RestartableMethodObserver;
 import icecaptools.SetOutputFolderAction;
 import icecaptools.compiler.CompilationRegistry;
 import util.ICompilationRegistry;
-import util.MethodOrFieldDesc;
 
 public class DependencyView extends ViewPart implements RestartableMethodObserver, DELabelProvider, IDoubleClickListener {
     private TreeViewer viewer;

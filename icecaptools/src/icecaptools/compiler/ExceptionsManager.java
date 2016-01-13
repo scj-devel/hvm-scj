@@ -2,9 +2,9 @@ package icecaptools.compiler;
 
 import icecaptools.AnalysisObserver;
 import icecaptools.IcecapIterator;
+import icecaptools.MethodOrFieldDesc;
 import icecaptools.compiler.utils.CheckSubClassRelationShip;
 import icecaptools.compiler.utils.SubClassChecker;
-import util.MethodOrFieldDesc;
 
 import java.util.Iterator;
 

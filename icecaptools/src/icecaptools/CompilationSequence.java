@@ -18,7 +18,6 @@ import icecaptools.stackanalyser.StackReferencesAnalyser;
 import icecaptools.stackanalyser.Util;
 import util.ICompilationRegistry;
 import util.MethodIdentifier;
-import util.MethodOrFieldDesc;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,7 +46,8 @@ public class CompilationSequence {
 		}
 
 		@Override
-		public void methodCodeUsed(String className, String targetMethodName, String targetMethodSignature, boolean report) throws CanceledByUserException {
+		public void methodCodeUsed(String className, String targetMethodName, String targetMethodSignature,
+				boolean report) throws CanceledByUserException {
 			rdelegate.methodCodeUsed(className, targetMethodName, targetMethodSignature, report);
 			adelegate.methodCodeUsed(className, targetMethodName, targetMethodSignature, report);
 		}
@@ -212,11 +212,11 @@ public class CompilationSequence {
 		}
 
 		@Override
-		public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-			if (rmManager.isRequieredMethod(mdesc)) {
+		public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
+			if (rmManager.isRequieredMethod(clazz, targetMethodName, targetMethodSignature)) {
 				return false;
 			} else {
-				return delegate.isMethodCompiled(mdesc);
+				return delegate.isMethodCompiled(clazz, targetMethodName, targetMethodSignature);
 			}
 		}
 
@@ -236,8 +236,9 @@ public class CompilationSequence {
 		}
 	}
 
-	public void startCompilation(PrintStream out, RestartableMethodObserver methodObserver, ConversionConfiguration config, IcecapProgressMonitor progressMonitor,
-			ICompilationRegistry cregistry, boolean compile) throws Throwable {
+	public void startCompilation(PrintStream out, RestartableMethodObserver methodObserver,
+			ConversionConfiguration config, IcecapProgressMonitor progressMonitor, ICompilationRegistry cregistry,
+			boolean compile) throws Throwable {
 		boolean supportLoading = false;
 		this.config = config;
 
@@ -295,10 +296,12 @@ public class CompilationSequence {
 					stackReferences.analyseStackUsage();
 				} catch (Exception e) {
 					e.printStackTrace();
-					throw new Exception("Stack analysis failed! [" + next.getClazz().getClassName() + ", " + next.getMethod().getName() + "]");
+					throw new Exception("Stack analysis failed! [" + next.getClazz().getClassName() + ", "
+							+ next.getMethod().getName() + "]");
 				}
 
-				StackArrayReferencesAnalyser stackArrayReferences = new StackArrayReferencesAnalyser(next, next.getClazz());
+				StackArrayReferencesAnalyser stackArrayReferences = new StackArrayReferencesAnalyser(next,
+						next.getClazz());
 
 				try {
 					stackArrayReferences.analyseStackUsage();
@@ -339,7 +342,8 @@ public class CompilationSequence {
 					case RawByteCodes.anewarray_opcode:
 					case RawByteCodes.newarray_opcode:
 						patcher.registerByteCode(className, targetMethodName, targetMethodSignature, current);
-						if (stackArrayReferences.isFlashArray(className, targetMethodName, targetMethodSignature, current.getOriginalAddress())) {
+						if (stackArrayReferences.isFlashArray(className, targetMethodName, targetMethodSignature,
+								current.getOriginalAddress())) {
 							((NewArrayBNode) current).setFlashArray();
 						}
 						break;
@@ -388,7 +392,8 @@ public class CompilationSequence {
 					}
 					}
 
-					if (((byte) current.getOpCode() == RawByteCodes.lookupswitch_opcode) || ((byte) current.getOpCode() == RawByteCodes.tableswitch_opcode)) {
+					if (((byte) current.getOpCode() == RawByteCodes.lookupswitch_opcode)
+							|| ((byte) current.getOpCode() == RawByteCodes.tableswitch_opcode)) {
 						SwitchBNode switchNode = (SwitchBNode) current;
 						if (switchNode.getNumberOfTargets() > maxSwitchSize) {
 							maxSwitchSize = switchNode.getNumberOfTargets();
@@ -438,11 +443,14 @@ public class CompilationSequence {
 					}
 					rManager = additionalResourceManager.createResorceManager();
 				}
-				compiler.writeClassesToFile("classes", patcher, config, foCalc, usedElementsObserver,cregistry, rManager, out);
+				compiler.writeClassesToFile("classes", patcher, config, foCalc, usedElementsObserver, cregistry,
+						rManager, out);
 
-				compiler.writeMethodsToFile("methods", usedElementsObserver, patcher, converter, config,  cregistry, converter.getDependencyExtent(), progressMonitor);
+				compiler.writeMethodsToFile("methods", usedElementsObserver, patcher, converter, config, cregistry,
+						converter.getDependencyExtent(), progressMonitor);
 
-				writeTimingInformation(config.getOutputFolder(), out, sda, foCalc, patcher, maxSwitchSize, usedElementsObserver.getMaxVtableSize());
+				writeTimingInformation(config.getOutputFolder(), out, sda, foCalc, patcher, maxSwitchSize,
+						usedElementsObserver.getMaxVtableSize());
 
 				if (config.reportConversion()) {
 					CompilerUtils.reportConversion(methodCount);
@@ -461,12 +469,13 @@ public class CompilationSequence {
 			}
 			throw new Exception("Compilation failed - check logs in console");
 		}
-		out.println("Dependency extent: classes[" + usedElementsObserver.numberOfUsedClasses() + "], methods[" + usedElementsObserver.numberOfUsedMethods() + "]");
+		out.println("Dependency extent: classes[" + usedElementsObserver.numberOfUsedClasses() + "], methods["
+				+ usedElementsObserver.numberOfUsedMethods() + "]");
 		Repository.clearCache();
 	}
 
-	private void writeTimingInformation(String outputFolder, PrintStream out, StackDepthAnalyser sda, FieldOffsetCalculator foCalc, ByteCodePatcher patcher, int maxSwitchSize,
-			int maxVTableSize) {
+	private void writeTimingInformation(String outputFolder, PrintStream out, StackDepthAnalyser sda,
+			FieldOffsetCalculator foCalc, ByteCodePatcher patcher, int maxSwitchSize, int maxVTableSize) {
 		FileOutputStream tinfo = null;
 		try {
 			StringBuffer tinfoPath = new StringBuffer();
@@ -482,7 +491,8 @@ public class CompilationSequence {
 			content.append("/* Maximum stack depth: \n");
 			LinkedList<MethodIdentifier> maxStack = sda.getMaxStack();
 			for (MethodIdentifier current : maxStack) {
-				content.append("   " + current.getClassName() + "." + current.getName() + "(" + current.getSignature() + ")\n");
+				content.append("   " + current.getClassName() + "." + current.getName() + "(" + current.getSignature()
+						+ ")\n");
 			}
 			content.append("*/\n");
 			content.append("#define MAX_APP_STACK " + sda.calculateMaxDepth() + "\n");

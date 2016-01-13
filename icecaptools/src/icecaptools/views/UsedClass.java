@@ -3,7 +3,7 @@ package icecaptools.views;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import util.MethodOrFieldDesc;
+import icecaptools.MethodOrFieldDesc;
 
 public class UsedClass {
 

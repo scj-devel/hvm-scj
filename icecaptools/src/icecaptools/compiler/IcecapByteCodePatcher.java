@@ -9,11 +9,11 @@ import icecaptools.IcecapIterator;
 import icecaptools.InterfaceMethodCallBNode;
 import icecaptools.JavaArrayClass;
 import icecaptools.MethodCallBNode;
+import icecaptools.MethodOrFieldDesc;
 import icecaptools.NewArrayBNode;
 import icecaptools.NewArrayMultiBNode;
 import icecaptools.RawByteCodes;
 import icecaptools.VirtualMethodCallBNode;
-import util.MethodOrFieldDesc;
 
 import java.util.ArrayList;
 import java.util.HashMap;

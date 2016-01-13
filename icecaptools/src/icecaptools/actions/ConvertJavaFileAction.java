@@ -1,8 +1,8 @@
 package icecaptools.actions;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -49,7 +49,6 @@ import icecaptools.views.DELabelProvider;
 import icecaptools.views.DependencyView;
 import test.icecaptools.DefaultCompilationRegistry;
 import util.ICompilationRegistry;
-import util.MethodOrFieldDesc;
 
 public class ConvertJavaFileAction implements IObjectActionDelegate {
 
@@ -206,6 +205,8 @@ public class ConvertJavaFileAction implements IObjectActionDelegate {
 
 			Object instance = mainClazz.newInstance();
 
+			loader.close();
+
 			return new ICompilationRegistry() {
 
 				@Override
@@ -214,7 +215,7 @@ public class ConvertJavaFileAction implements IObjectActionDelegate {
 				}
 
 				@Override
-				public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
+				public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
 					return false;
 				}
 
@@ -228,7 +229,7 @@ public class ConvertJavaFileAction implements IObjectActionDelegate {
 					return false;
 				}
 			};
-		} catch (MalformedURLException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IOException e) {
 			return new ICompilationRegistry() {
 
 				@Override
@@ -237,7 +238,7 @@ public class ConvertJavaFileAction implements IObjectActionDelegate {
 				}
 
 				@Override
-				public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
+				public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
 					return false;
 				}
 

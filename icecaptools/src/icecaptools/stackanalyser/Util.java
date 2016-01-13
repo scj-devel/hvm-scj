@@ -5,10 +5,10 @@ import icecaptools.FieldAccessBNode;
 import icecaptools.JavaArrayClass;
 import icecaptools.LDCBNode;
 import icecaptools.MethodEntryPoints;
+import icecaptools.MethodOrFieldDesc;
 import icecaptools.RawByteCodes;
 import icecaptools.StaticFieldAccessBNode;
 import icecaptools.compiler.LDCConstant;
-import util.MethodOrFieldDesc;
 
 import java.util.ArrayList;
 

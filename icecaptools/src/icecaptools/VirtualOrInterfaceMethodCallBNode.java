@@ -2,7 +2,6 @@ package icecaptools;
 
 import icecaptools.compiler.ByteCodePatcher;
 import icecaptools.compiler.IDGenerator;
-import util.MethodOrFieldDesc;
 
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -7,9 +7,9 @@ import icecaptools.ConverterJob;
 import icecaptools.MethodAndClass;
 import icecaptools.MethodEntryPoints;
 import icecaptools.MethodLocation;
+import icecaptools.MethodOrFieldDesc;
 import icecaptools.compiler.ByteCodePatcher;
 import icecaptools.launching.CommonLauncherTab;
-import util.MethodOrFieldDesc;
 
 import java.io.IOException;
 import java.io.InputStream;

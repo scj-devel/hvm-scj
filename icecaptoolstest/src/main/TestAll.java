@@ -1,5 +1,12 @@
 package main;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.StringTokenizer;
+
 import icecaptools.CompilationSequence;
 import icecaptools.IcecapProgressMonitor;
 import icecaptools.TestResourceManager;
@@ -12,17 +19,8 @@ import icecaptools.compiler.NativeMethodDetector;
 import icecaptools.compiler.TestCompilationRegistry;
 import icecaptools.conversion.ConversionConfiguration;
 import icecaptools.launching.ShellCommand;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.StringTokenizer;
-
 import test.icecaptools.compiler.TestConversionConfiguration;
 import util.ICompilationRegistry;
-import util.MethodOrFieldDesc;
 
 /*
  * To run the automated tests make sure that gcc is installed and can be 
@@ -175,8 +173,8 @@ public class TestAll {
 	private static class CompileAllRegistry extends TestCompilationRegistry {
 
 		@Override
-		public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-			if (mdesc.getName().contains("main")) {
+		public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
+			if (clazz.contains("main")) {
 				return false;
 			}
 			return true;

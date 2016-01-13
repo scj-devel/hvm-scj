@@ -7,7 +7,6 @@ import icecaptools.compiler.utils.MethodMap;
 import icecaptools.compiler.utils.SubClassChecker;
 import icecaptools.conversion.ConversionConfiguration;
 import icecaptools.conversion.Converter;
-import util.MethodOrFieldDesc;
 
 import java.io.PrintStream;
 import java.util.ArrayList;

@@ -2,7 +2,6 @@ package icecaptools;
 
 import icecaptools.compiler.LDCConstant;
 import icecaptools.compiler.aot.Size;
-import util.MethodOrFieldDesc;
 
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.Constant;

@@ -3,7 +3,7 @@ package icecaptools.views;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import util.MethodOrFieldDesc;
+import icecaptools.MethodOrFieldDesc;
 
 public class MethodListContentProvider implements ITreeContentProvider {
 

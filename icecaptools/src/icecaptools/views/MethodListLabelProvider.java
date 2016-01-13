@@ -1,9 +1,9 @@
 package icecaptools.views;
 
 import icecaptools.Activator;
+import icecaptools.MethodOrFieldDesc;
 import icecaptools.SetOutputFolderAction;
 import icecaptools.compiler.CompilationRegistry;
-import util.MethodOrFieldDesc;
 
 import java.net.MalformedURLException;
 import java.net.URL;

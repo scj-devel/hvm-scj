@@ -4,30 +4,26 @@ import java.util.LinkedList;
 import java.util.List;
 
 import util.ICompilationRegistry;
-import util.MethodOrFieldDesc;
 
 public class CompilationRegistryManager implements ICompilationRegistry {
 
 	private List<ICompilationRegistry> registries;
-	
-	public CompilationRegistryManager()
-	{
+
+	public CompilationRegistryManager() {
 		registries = new LinkedList<ICompilationRegistry>();
 	}
-	
+
 	@Override
 	public boolean didICareHuh() {
 		return true;
 	}
 
 	@Override
-	public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
+	public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
 		boolean val = false;
-		for (ICompilationRegistry registry: registries)
-		{
-			val = registry.isMethodCompiled(mdesc);
-			if (registry.didICareHuh())
-			{
+		for (ICompilationRegistry registry : registries) {
+			val = registry.isMethodCompiled(clazz, targetMethodName, targetMethodSignature);
+			if (registry.didICareHuh()) {
 				return val;
 			}
 		}
@@ -37,12 +33,10 @@ public class CompilationRegistryManager implements ICompilationRegistry {
 	@Override
 	public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
 		boolean val = false;
-		for (ICompilationRegistry registry: registries)
-		{
+		for (ICompilationRegistry registry : registries) {
 			val = registry.isMethodExcluded(clazz, targetMethodName, targetMethodSignature);
-			
-			if (registry.didICareHuh())
-			{
+
+			if (registry.didICareHuh()) {
 				return val;
 			}
 		}
@@ -51,12 +45,10 @@ public class CompilationRegistryManager implements ICompilationRegistry {
 
 	@Override
 	public boolean alwaysClearOutputFolder() {
-		for (ICompilationRegistry registry: registries)
-		{
+		for (ICompilationRegistry registry : registries) {
 			boolean val = registry.alwaysClearOutputFolder();
-			
-			if (registry.didICareHuh())
-			{
+
+			if (registry.didICareHuh()) {
 				return val;
 			}
 		}

@@ -1,10 +1,11 @@
 package icecaptools.conversion;
 
 import util.ICompilationRegistry;
-import util.MethodOrFieldDesc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import icecaptools.MethodOrFieldDesc;
 
 public class DependencyRestrictor {
 
