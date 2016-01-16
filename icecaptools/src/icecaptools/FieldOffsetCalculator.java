@@ -204,9 +204,17 @@ public class FieldOffsetCalculator {
 					additionalDependencies);
 		}
 
-		Iterator<String> additionalClasses = additionalDependencies.iterator();
-		while (additionalClasses.hasNext()) {
-			observer.classUsed(additionalClasses.next());
+		while (additionalDependencies.size() > 0) {
+			ArrayList<String> moreDependencies = new ArrayList<String>();
+			Iterator<String> additionalClasses = additionalDependencies.iterator();
+			while (additionalClasses.hasNext()) {
+				String className = additionalClasses.next();
+				observer.classUsed(className);
+				JavaClass next = Repository.lookupClass(className);
+				calculateOffset(next, objectFields, classFields, true, observer, new LinkedList<String>(),
+						moreDependencies);
+			}
+			additionalDependencies = moreDependencies;
 		}
 	}
 
