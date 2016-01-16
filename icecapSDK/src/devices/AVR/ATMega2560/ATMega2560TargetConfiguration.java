@@ -1,10 +1,16 @@
 package devices.AVR.ATMega2560;
 
 import devices.TargetConfiguration;
+import icecaptools.IcecapCVar;
 import util.BaseTargetConfiguration;
 
 public abstract class ATMega2560TargetConfiguration extends BaseTargetConfiguration implements TargetConfiguration {
 
+	@IcecapCVar(expression = "DDRG", requiredIncludes = "#include \"avr/io.h\"\n")
+	public static byte DDRG;
+	@IcecapCVar(expression = "PORTG", requiredIncludes = "#include \"avr/io.h\"\n")
+	public static byte PORTG;
+	
 	@Override
 	public abstract String getOutputFolder();
 
