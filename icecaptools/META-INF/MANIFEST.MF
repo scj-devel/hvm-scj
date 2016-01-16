@@ -18,8 +18,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.cdt.core,
  org.eclipse.text,
  org.eclipse.debug.core,
- org.eclipse.debug.ui,
- com.jcraft.jsch
+ org.eclipse.debug.ui
 Bundle-ActivationPolicy: lazy
 Bundle-NativeCode: lib/Linux/x86_64-unknown-linux-gnu/librxtxSerial.so;
  osname=Linux;
@@ -67,6 +66,7 @@ Bundle-NativeCode: lib/Linux/x86_64-unknown-linux-gnu/librxtxSerial.so;
  osname=macosx;
  processor=x86_64
 Bundle-ClassPath: lib/icecapSDK.jar,
+ lib/jsch-0.1.53.jar,
  lib/bcel-6.0.jar,
  lib/commons-net-3.3.jar,
  lib/RXTXcomm.jar,

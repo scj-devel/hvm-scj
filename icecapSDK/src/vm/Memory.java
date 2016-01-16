@@ -120,16 +120,15 @@ public class Memory {
 		this.base = base;
 		this.size = size;
 		this.free = 0;
-		this.name = "BackingStore";
+		this.name = "BStore";
 	}
 
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(name);
-		buffer.append(": size = ");
-		buffer.append(size);
-		buffer.append(", used = " + free);
+		buffer.append(StringUtil.constructString(": size = ", size));
+		buffer.append(StringUtil.constructString(", used = ", free));
 		return buffer.toString();
 	}
 
