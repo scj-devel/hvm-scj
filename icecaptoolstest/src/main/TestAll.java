@@ -236,7 +236,7 @@ public class TestAll {
 
 		cregistry = new TestCompilationRegistry();
 
-		// cregistry = new CompileAllRegistry();
+		//cregistry = new CompileAllRegistry();
 
 		CompilationSequence sequencer = new CompilationSequence();
 		config.setOutputFolder(outputFolder.toString());

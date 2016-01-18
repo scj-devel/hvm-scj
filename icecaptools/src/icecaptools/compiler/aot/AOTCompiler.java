@@ -412,7 +412,7 @@ public abstract class AOTCompiler implements SPManipulator {
 				output.append("   if (handleNewClassIndex(sp, " + classIndex + ") == 0) {\n");
 				setSPUsed(true);
 				if (hasExceptionHandlers(javaMethod)) {
-					gotoExceptionHandler(output, pc, labelsManager, sm, LabelsManager.LThrowOutOfMemory, null);
+					gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowOutOfMemory, null);
 					labelsManager.generateOutOfMemory();
 				} else {
 					output.append("      fp[0] = " + sm.peekTop(0, Size.INT) + ";\n");
@@ -613,12 +613,12 @@ public abstract class AOTCompiler implements SPManipulator {
 				output.append("   excep = getClassIndex(ex_ception);\n");
 				
 				
-				gotoExceptionHandler(output, pc, labelsManager, sm, true, LabelsManager.LThrowIt, null);
+				gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, true, LabelsManager.LThrowIt, null);
 				
 
 				labelsManager.generateThrowIt();
 				localVariables.print("   " + getTypeCast(entrypoints.getReturnTypeSize()) + " excep;\n");
-				localVariables.print("   unsigned short pc;\n");
+
 				requiredIncludes.print("extern unsigned short getClassIndex(Object* obj);\n");
 				pc++;
 				break;
@@ -849,7 +849,7 @@ public abstract class AOTCompiler implements SPManipulator {
 
 				output.append("      if (excep) {\n");
 				if (currentMethodCode[pc] == RawByteCodes.checkcast_opcode) {
-					gotoExceptionHandler(output, pc, labelsManager, sm, LabelsManager.LThrowClassCast, null);
+					gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowClassCast, null);
 				} else {
 					output.append("      i_res = 0;\n");
 				}
@@ -864,7 +864,7 @@ public abstract class AOTCompiler implements SPManipulator {
 
 				if (currentMethodCode[pc] == RawByteCodes.checkcast_opcode) {
 					labelsManager.generateThrowClassCast();
-					localVariables.print("   unsigned short pc;\n");
+					localVariables.print("#if defined(JAVA_LANG_THROWABLE_INIT_)\n   unsigned short pc;\n#endif\n");
 				}
 				localVariables.print("   " + getTypeCast(entrypoints.getReturnTypeSize()) + " excep;\n");
 				requiredIncludes
@@ -1353,9 +1353,8 @@ public abstract class AOTCompiler implements SPManipulator {
 						+ ", (uint16) _count_ FLASHARG((0)));\n");
 				output.append("      if (narray == 0) {\n");
 				
-				gotoExceptionHandler(output, pc, labelsManager, sm, LabelsManager.LThrowOutOfMemory, null);
+				gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowOutOfMemory, null);
 				
-				localVariables.print("   unsigned short pc;\n");
 				labelsManager.generateOutOfMemory();
 				output.append("      }\n");
 				sm.push(Size.INT, "(int32) (pointer) narray");
@@ -1519,13 +1518,13 @@ public abstract class AOTCompiler implements SPManipulator {
 
 				output.append("      if (excep < 0) {\n");
 				
-				gotoExceptionHandler(output, pc, labelsManager, sm, LabelsManager.LThrowNullPointer, null);
+				gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowNullPointer, null);
 
 				
 				output.append("      } else if (excep > 0) {\n");
 				
 				
-				gotoExceptionHandler(output, pc, labelsManager, sm, LabelsManager.LThrowOutOfMemory, null);
+				gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowOutOfMemory, null);
 
 				
 				output.append("      }\n");
@@ -1713,7 +1712,7 @@ public abstract class AOTCompiler implements SPManipulator {
 					sm.pop("      lsb_" + lsb_type + "", src2Size);
 					output.append("      if (res_" + dstType + " == 0) {\n");
 					
-					gotoExceptionHandler(output, pc, labelsManager, sm, LabelsManager.LThrowArithmeticException, null);
+					gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowArithmeticException, null);
 					
 					labelsManager.generateArithmeticException();
 					output.append("      }\n");
@@ -1725,7 +1724,6 @@ public abstract class AOTCompiler implements SPManipulator {
 					// output.append("#endif\n");
 					sm.push(dstSize, "res_" + dstType + "");
 					pc++;
-					localVariables.print("   unsigned short pc;\n");
 					requiredIncludes.print("extern int32 idiv(int32 x, int32 y);\n");
 					break;
 				}
@@ -1738,7 +1736,7 @@ public abstract class AOTCompiler implements SPManipulator {
 					sm.pop("      lsb_" + lsb_type + "", src2Size);
 					output.append("      if (res_" + dst_type + " == 0) {\n");
 					
-					gotoExceptionHandler(output, pc, labelsManager, sm, LabelsManager.LThrowArithmeticException, null);
+					gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowArithmeticException, null);
 					
 					labelsManager.generateArithmeticException();
 					output.append("      }\n");
@@ -1749,7 +1747,6 @@ public abstract class AOTCompiler implements SPManipulator {
 					output.append("#endif\n");
 					sm.push(dstSize, "res_" + dst_type + "");
 					pc++;
-					localVariables.print("   unsigned short pc;\n");
 					requiredIncludes.print("extern int32 imod(int32 a, int32 b);\n");
 					break;
 				}
@@ -1843,14 +1840,13 @@ public abstract class AOTCompiler implements SPManipulator {
 				output.append("      sp -= 4;\n");
 				output.append("      if (topInc == 0) {\n");
 				
-				gotoExceptionHandler(output, pc, labelsManager, sm, LabelsManager.LThrowArithmeticException, null);
+				gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowArithmeticException, null);
 				
 				labelsManager.generateArithmeticException();
 				output.append("      }\n");
 				output.append("      sp += topInc;\n");
 				pc++;
 				requiredIncludes.print("extern unsigned char handleLMULLDIVLREM(int32* sp, unsigned char code);\n");
-				localVariables.print("   unsigned short pc;\n");
 				break;
 			case RawByteCodes.dstore_0_opcode:
 			case RawByteCodes.dstore_1_opcode:
@@ -2305,14 +2301,16 @@ public abstract class AOTCompiler implements SPManipulator {
 		}
 	}
 
-	private static void gotoExceptionHandler(StringBuffer output, int pc, LabelsManager labelsManager,
+	private static void gotoExceptionHandler(NoDuplicatesMemorySegment localVariables, StringBuffer output, int pc, LabelsManager labelsManager,
 			StackManager sm, String lthrowexception, String object) throws Exception {
-		gotoExceptionHandler(output, pc, labelsManager, sm, false, lthrowexception, object);
+		gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, false, lthrowexception, object);
 	}
 	
-	private static void gotoExceptionHandler(StringBuffer output, int pc, LabelsManager labelsManager,
+	private static void gotoExceptionHandler(NoDuplicatesMemorySegment localVariables, StringBuffer output, int pc, LabelsManager labelsManager,
 			StackManager sm, boolean b, String lthrowexception, String object) throws Exception {
+		output.append("#if defined(JAVA_LANG_THROWABLE_INIT_)\n");
 		output.append("      pc = " + pc + ";\n");
+		output.append("#endif\n");
 		labelsManager.jumpTo(sm, b);
 		
 		if (object != null)
@@ -2321,6 +2319,7 @@ public abstract class AOTCompiler implements SPManipulator {
 		}
 		
 		output.append("      goto " + lthrowexception + ";\n");
+		localVariables.print("#if defined(JAVA_LANG_THROWABLE_INIT_)\n   unsigned short pc;\n#endif\n");
 	}
 
 	public abstract void addUserIncludes(NoDuplicatesMemorySegment requiredIncludes, String includes);
@@ -3086,9 +3085,8 @@ public abstract class AOTCompiler implements SPManipulator {
 		if (hasExceptionHandlers(javaMethod)) {
 			output.append(indent + "      sp++;\n");
 
-			gotoExceptionHandler(output, pc, labelsManager, sm, true, LabelsManager.LThrowIt, indent + "      excep = " + exceptionVariable + ";\n");
+			gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, true, LabelsManager.LThrowIt, indent + "      excep = " + exceptionVariable + ";\n");
 			
-			localVariables.print("   unsigned short pc;\n");
 			labelsManager.generateThrowIt();
 		} else {
 			output.append(indent + "      fp[0] = *sp;\n");
@@ -3145,7 +3143,7 @@ public abstract class AOTCompiler implements SPManipulator {
 			throws Exception {
 		output.append(indent + "      if (" + obj + " == 0) {\n");
 		
-		gotoExceptionHandler(output, pc, labelsManager, sm, LabelsManager.LThrowNullPointer, null);
+		gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowNullPointer, null);
 
 		output.append(indent + "      }\n");
 		if (getObjectInfo != null) {
@@ -3153,7 +3151,6 @@ public abstract class AOTCompiler implements SPManipulator {
 		}
 
 		labelsManager.generateThrowNullPointer();
-		localVariables.print("   unsigned short pc;\n");
 	}
 
 	public static boolean interpretMethod(Method referredMethod, MethodOrFieldDesc methodDesc,
