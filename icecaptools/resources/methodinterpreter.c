@@ -115,7 +115,7 @@ void handleLongOperator(unsigned char code, int32* sp) _NOINLINE_;
 static void handleLNEG(int32* sp) _NOINLINE_;
 #endif
 
-#if defined(NEW_OPCODE_USED)
+#if defined(NEW_OPCODE_USED) || defined(INVOKEDYNAMIC_OPCODE_USED)
 static unsigned char handleNew(int32* sp, unsigned char *method_code) _NOINLINE_;
 #endif
 
@@ -2285,7 +2285,7 @@ static unsigned char handleMultianewarray(int32* sp, unsigned char *method_code)
 }
 #endif
 
-#if defined(NEW_OPCODE_USED)
+#if defined(NEW_OPCODE_USED) || defined(INVOKEDYNAMIC_OPCODE_USED)
 static unsigned char handleNew(int32* sp, unsigned char *method_code) {
 	unsigned short classIndex;
 

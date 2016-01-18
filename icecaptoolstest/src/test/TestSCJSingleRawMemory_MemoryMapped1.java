@@ -31,10 +31,10 @@ public class TestSCJSingleRawMemory_MemoryMapped1 {
 		 
 		 int base = Memory.allocateInHeap(SCRATCHPADSTORESIZE).getStartMemoryAddress();
 		 
-		 RawByte register = RawMemoryFactory.createRawByte(RawMemoryFactory.MEMORY_MAPPED_REGION, base, 5, 1);
+		 RawByte _register_ = RawMemoryFactory.createRawByte(RawMemoryFactory.MEMORY_MAPPED_REGION, base, 5, 1);
 		 
-		 if (register != null) {
-			 int registerSize = register.getSize();
+		 if (_register_ != null) {
+			 int registerSize = _register_.getSize();
 			 System.out.println("RegisterSize: " + registerSize);
 		 }
 		 else {
@@ -44,8 +44,8 @@ public class TestSCJSingleRawMemory_MemoryMapped1 {
 		 // test set- and getByte at offset 0:
 		 
 		 byte b1 = 12;
-		 register.setByte(b1);	
-		 byte b2 = register.getByte();
+		 _register_.setByte(b1);	
+		 byte b2 = _register_.getByte();
 		 System.out.println("Byte is: " + b2);
 		 
 		 if (b2 != b1) 
@@ -53,11 +53,11 @@ public class TestSCJSingleRawMemory_MemoryMapped1 {
 		 
 		// set- and getByte at other offsets
 		   
-        for (int i = 0; i < register.getSize(); i++)         	
-        	register.setByte(i, (byte) (40 + i));
+        for (int i = 0; i < _register_.getSize(); i++)         	
+        	_register_.setByte(i, (byte) (40 + i));
         
-        for (int i = 0; i < register.getSize(); i++)  {
-    		byte b3 = register.getByte(i);
+        for (int i = 0; i < _register_.getSize(); i++)  {
+    		byte b3 = _register_.getByte(i);
     	
     		if (b3 != (byte) (40 + i) )
     			return false;
@@ -67,14 +67,14 @@ public class TestSCJSingleRawMemory_MemoryMapped1 {
         
         byte[] values = new byte[3];
         
-        for (int i = 0; i < register.getSize(); i++) {        	
-        	register.setByte(i, (byte) (40 + i));
-        	System.out.println("insert value[" + i + "] = " + register.getByte(i));
+        for (int i = 0; i < _register_.getSize(); i++) {        	
+        	_register_.setByte(i, (byte) (40 + i));
+        	System.out.println("insert value[" + i + "] = " + _register_.getByte(i));
         }
         
         System.out.println("\nTesting: public int get(int offset, byte[] values)");
         
-        int n = register.get(0, values);
+        int n = _register_.get(0, values);
         
         if (n != 3) 
         	return false;
@@ -91,10 +91,10 @@ public class TestSCJSingleRawMemory_MemoryMapped1 {
         System.out.println("\nTesting: public int set(int offset, byte[] values)");
         		
         values = new byte[] {50, 51, 52};
-        n = register.set(0, values);
+        n = _register_.set(0, values);
         
         for (int i = 0; i < n; i++)  {
-    		byte b4 = register.getByte(i);
+    		byte b4 = _register_.getByte(i);
     		System.out.println("set: value[" + i + "] = " + b2);
     	
     		if (b4 != (byte) (50 + i) )

@@ -96,7 +96,8 @@ public class TestAll {
 
 				ArrayList<String> testlist = new ArrayList<String>();
 				for (int i = 0; i < tests.length; i++) {
-					File candidate = new File(testsDirectory.getAbsolutePath() + File.separatorChar + (String) tests[i]);
+					File candidate = new File(
+							testsDirectory.getAbsolutePath() + File.separatorChar + (String) tests[i]);
 					if (candidate.isFile()) {
 						testlist.add((String) tests[i]);
 					}
@@ -148,10 +149,9 @@ public class TestAll {
 	}
 
 	private static String[] skippedClasses = { "TestSCJWaitAndNotify2.java", "TestSCJLevel2Thread0.java",
-			"TestSCJStep0.java",
-			/* "TestCalculator.java",
-			 "TestNewFloat.java",
-			 */"TestLong.java", "TestMiniTests.java", "TestCAS.java" };
+			"TestSCJStep0.java", /* "TestCalculator.java",
+									 "TestNewFloat.java",
+									 */"TestLong.java", "TestMiniTests.java", "TestCAS.java" };
 
 	// private static String[] skippedClasses = { /*"TestStackScan1.java",
 	// "TestReflectClasses2.java", "TestObjectTraversal.java", */
@@ -174,10 +174,23 @@ public class TestAll {
 
 		@Override
 		public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
-			if (clazz.contains("main")) {
-				return false;
+			boolean b = super.isMethodCompiled(clazz, targetMethodName, targetMethodSignature);
+			boolean result = false;
+
+			if (didICareHuh()) {
+				result = b;
+			} else if (targetMethodName.contains("main")) {
+				result = b;
+			} else if (clazz.contains("InvokeDynamic")) {
+				result = b;
+			} else if (clazz.contains("Thread")) {
+				result = b;
+			} else if (clazz.contains("Float")) {
+				result = b;
+			} else {
+				result = true;
 			}
-			return true;
+			return result;
 		}
 	}
 

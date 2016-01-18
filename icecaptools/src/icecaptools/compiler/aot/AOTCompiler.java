@@ -412,9 +412,7 @@ public abstract class AOTCompiler implements SPManipulator {
 				output.append("   if (handleNewClassIndex(sp, " + classIndex + ") == 0) {\n");
 				setSPUsed(true);
 				if (hasExceptionHandlers(javaMethod)) {
-					output.append("      pc = " + pc + ";\n");
-					labelsManager.jumpTo(sm);
-					output.append("      goto " + LabelsManager.LThrowOutOfMemory + ";\n");
+					gotoExceptionHandler(output, pc, "      pc = " + pc + ";\n", labelsManager, sm, LabelsManager.LThrowOutOfMemory, null);
 					labelsManager.generateOutOfMemory();
 				} else {
 					output.append("      fp[0] = " + sm.peekTop(0, Size.INT) + ";\n");
@@ -613,9 +611,11 @@ public abstract class AOTCompiler implements SPManipulator {
 				localVariables.print("   Object* ex_ception;\n");
 				output.append("   ex_ception = (Object*) (pointer) " + sm.peekTop(1, Size.INT) + ";\n");
 				output.append("   excep = getClassIndex(ex_ception);\n");
-				output.append("   pc = " + pc + ";\n");
-				labelsManager.jumpTo(sm, true);
-				output.append("   goto " + LabelsManager.LThrowIt + ";\n");
+				
+				
+				gotoExceptionHandler(output, pc, "   pc = " + pc + ";\n", labelsManager, sm, true, LabelsManager.LThrowIt, null);
+				
+
 				labelsManager.generateThrowIt();
 				localVariables.print("   " + getTypeCast(entrypoints.getReturnTypeSize()) + " excep;\n");
 				localVariables.print("   unsigned short pc;\n");
@@ -849,9 +849,7 @@ public abstract class AOTCompiler implements SPManipulator {
 
 				output.append("      if (excep) {\n");
 				if (currentMethodCode[pc] == RawByteCodes.checkcast_opcode) {
-					output.append("         pc = " + pc + ";\n");
-					labelsManager.jumpTo(sm);
-					output.append("         goto " + LabelsManager.LThrowClassCast + ";\n");
+					gotoExceptionHandler(output, pc, "         pc = " + pc + ";\n", labelsManager, sm, LabelsManager.LThrowClassCast, null);
 				} else {
 					output.append("      i_res = 0;\n");
 				}
@@ -1349,10 +1347,10 @@ public abstract class AOTCompiler implements SPManipulator {
 				classIndex |= (currentMethodCode[pc + 2] & 0xff);
 
 				localVariables.print("   Object* narray;\n");
-				localVariables.print("   uint16 count;\n");
-				sm.pop("      count", Size.SHORT);
+				localVariables.print("   uint16 _count_;\n");
+				sm.pop("      _count_", Size.SHORT);
 				output.append("      narray = (Object*) createArray(" + classIndex
-						+ ", (uint16) count FLASHARG((0)));\n");
+						+ ", (uint16) _count_ FLASHARG((0)));\n");
 				output.append("      if (narray == 0) {\n");
 				output.append("         pc = " + pc + ";\n");
 				labelsManager.jumpTo(sm);
@@ -2302,6 +2300,18 @@ public abstract class AOTCompiler implements SPManipulator {
 				return;
 			}
 		}
+	}
+
+	private void gotoExceptionHandler(StringBuffer output, int pc, String string, LabelsManager labelsManager,
+			StackManager sm, String lthrowexception, Object object) throws Exception {
+		gotoExceptionHandler(output, pc, string, labelsManager, sm, false, lthrowexception, object);
+	}
+	
+	private void gotoExceptionHandler(StringBuffer output, int pc, String string, LabelsManager labelsManager,
+			StackManager sm, boolean b, String lthrowexception, Object object) throws Exception {
+		output.append("      pc = " + pc + ";\n");
+		labelsManager.jumpTo(sm, b);
+		output.append("      goto " + lthrowexception + ";\n");
 	}
 
 	public abstract void addUserIncludes(NoDuplicatesMemorySegment requiredIncludes, String includes);
