@@ -2,6 +2,7 @@ package devices.AVR.ATMega2560;
 
 import devices.TargetConfiguration;
 import icecaptools.IcecapCVar;
+import icecaptools.IcecapCompileMe;
 import util.BaseTargetConfiguration;
 
 public abstract class ATMega2560TargetConfiguration extends BaseTargetConfiguration implements TargetConfiguration {
@@ -57,6 +58,7 @@ public abstract class ATMega2560TargetConfiguration extends BaseTargetConfigurat
 		return 2048;
 	}
 	
+	@IcecapCompileMe
 	protected static void blink(int i) {
 		DDRG |= 0x3;
 
