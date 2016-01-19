@@ -205,11 +205,11 @@ public abstract class HighResolutionTime implements Comparable<HighResolutionTim
 	 */
 	public int compareTo(HighResolutionTime time) {
 		if (time == null)
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("time is null");		
 		if (this.getClass() != time.getClass())
-			throw new ClassCastException();
+			throw new ClassCastException("class mismatch");		
 		if (this.clock != time.getClock())
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("clock mismatch");
 
 		if (this.millis < time.getMilliseconds())
 			return -1;
