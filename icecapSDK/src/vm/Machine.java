@@ -33,4 +33,9 @@ public class Machine {
 		}
 		currentScheduler = sch;
 	}
+	
+	public MachineFactory getMachineFactory()
+	{
+		return null;
+	}
 }

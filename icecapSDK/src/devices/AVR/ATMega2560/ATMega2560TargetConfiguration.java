@@ -59,7 +59,7 @@ public abstract class ATMega2560TargetConfiguration extends BaseTargetConfigurat
 	}
 	
 	@IcecapCompileMe
-	protected static void blink(int i) {
+	public static void blink(int i) {
 		DDRG |= 0x3;
 
 		while (true) {
