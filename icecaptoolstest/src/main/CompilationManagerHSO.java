@@ -207,9 +207,11 @@ public class CompilationManagerHSO {
         //String inputPackage = "javax.safetycritical.test.priorityScheduling";
         //String inputPackage = "javax.safetycritical.test.cyclicschedule1";
         //String inputPackage = "javax.safetycritical.test.cyclicexecutive1";
+        //String inputPackage = "javax.safetycritical.test.priorityCeilingEmulation";
+        //String inputPackage = "javax.safetycritical.test.memoryAreas";
         
         
-        String inputPackage = "javax.realtime.test";
+        //String inputPackage = "javax.realtime.test";
         //String inputPackage = "javax.safetycritical.test";
         
         //String inputClass = "AllTests";
@@ -217,7 +219,7 @@ public class CompilationManagerHSO {
        
         /* --- TCKs of javax.realtime.test --- : */
         //String inputClass = "TckTestMemoryParameters";
-        String inputClass = "TckTestConfigurationParameters";
+        //String inputClass = "TckTestConfigurationParameters";
         //String inputClass = "TckTestReleaseParameters";
         //String inputClass = "TckTestPeriodicParameters";
         //String inputClass = "TckTestAperiodicParameters";
@@ -237,6 +239,8 @@ public class CompilationManagerHSO {
         //String inputClass = "TckTestSafelet22";   //           SafeletStub22
         
         //String inputClass = "TckTestPreemptiveScheduling1";
+        //String inputClass = "TckTestPriorityCeilingEmulation";
+        //String inputClass = "TckTestManagedMemory";
         
         /* OpenJML tests end */
 
@@ -244,7 +248,7 @@ public class CompilationManagerHSO {
 
         //String inputPackage = "jml.account.test";
 
-         //String inputPackage = "javax.realtime.test.clock";
+         String inputPackage = "javax.realtime.test.clock";
          //String inputPackage = "javax.realtime.test.priorityParameters";
          //String inputPackage = "javax.realtime.test.releaseParameters";
          //String inputPackage = "javax.realtime.test.timeClasses";
@@ -256,7 +260,7 @@ public class CompilationManagerHSO {
          //String inputClass = "AllTests";
 
         //String inputClass = "Main2Clock";
-        // String inputClass = "Main2RealtimeClock";
+         String inputClass = "Main2RealtimeClock";
         // String inputClass = "Issue";
 
         /* JML tests end */
