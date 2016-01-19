@@ -39,6 +39,14 @@ public final class TestPortalRT {
 		}
 	}
 	
+	public static final long getMillis(HighResolutionTime ht) {
+		return ht.getMillis();
+	}
+	
+	public static final int getNanos(HighResolutionTime ht) {
+		return ht.getNanos();
+	}
+	
 	/**
 	 * Used by test programs to get the maximum priority.
 	 * 
@@ -96,7 +104,6 @@ public final class TestPortalRT {
 	public static	RelativeTime period(PeriodicParameters pp) {
 		return pp.period;
 	}
-
 		
 	public static	RelativeTime start(PeriodicParameters pp) {
 		return pp.start;
