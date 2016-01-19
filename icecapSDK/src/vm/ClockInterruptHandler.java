@@ -4,9 +4,6 @@ import javax.scj.util.Const;
 
 import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
-import devices.AVR.ATMega2560.ATMega2560TargetConfiguration;
-import devices.CR16C.KT4585.CR16CInterruptDispatcher;
-import devices.i86.I86InterruptDispatcher;
 
 /* Add setScheduler(Scheduler sch)  */
 public class ClockInterruptHandler implements InterruptHandler, ProcessLogic {

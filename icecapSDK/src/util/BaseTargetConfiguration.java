@@ -1,6 +1,6 @@
 package util;
 
-public class BaseTargetConfiguration implements ICompilationRegistry {
+public abstract class BaseTargetConfiguration implements ICompilationRegistry {
 
 	protected enum EBOOL {
 		YES, NO, DONTCARE

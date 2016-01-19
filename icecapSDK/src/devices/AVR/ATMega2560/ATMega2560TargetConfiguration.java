@@ -4,6 +4,7 @@ import devices.TargetConfiguration;
 import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
 import util.BaseTargetConfiguration;
+import vm.Machine;
 
 public abstract class ATMega2560TargetConfiguration extends BaseTargetConfiguration implements TargetConfiguration {
 
@@ -35,6 +36,10 @@ public abstract class ATMega2560TargetConfiguration extends BaseTargetConfigurat
 	public static byte DDRG;
 	@IcecapCVar(expression = "PORTG", requiredIncludes = "#include \"avr/io.h\"\n")
 	public static byte PORTG;
+	
+	static {
+		Machine.setMachineFactory(new ATMega2560MachineFactory());
+	}
 	
 	@Override
 	public abstract String getOutputFolder();

@@ -3,8 +3,14 @@ package devices;
 import java.io.File;
 
 import util.BaseTargetConfiguration;
+import vm.DefaultMachineFactory;
+import vm.Machine;
 
 public abstract class POSIXTargetConfiguration extends BaseTargetConfiguration implements TargetConfiguration {
+	
+	static {
+		Machine.setMachineFactory(new DefaultMachineFactory());
+	}
 
 	@Override
 	public String[] getBuildCommands() {
