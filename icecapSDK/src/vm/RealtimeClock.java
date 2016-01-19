@@ -17,13 +17,7 @@ public abstract class RealtimeClock {
 		if (instance != null) {
 			return instance;
 		} else {
-			switch (Machine.architecture) {
-			case Machine.CR16_C:
-				instance = new CR16CRealtimeClock();
-				break;
-			default:
-				instance = new DefaultRealtimeClock();
-			}
+			instance = Machine.getMachineFactory().getRealtimeClock();
 			return getRealtimeClock();
 		}
 	}
@@ -32,7 +26,7 @@ public abstract class RealtimeClock {
 
 	abstract public void getCurrentTime(AbsoluteTime now);
 
-	private static class DefaultRealtimeClock extends RealtimeClock {
+	public static class DefaultRealtimeClock extends RealtimeClock {
 		@Override
 		public int getGranularity() {
 			return getNativeResolution();

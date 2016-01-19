@@ -24,16 +24,9 @@ public class Process {
 		this.stack = stack;
 		this.isFinished = false;
 		processExecuter = new ProcessExecutor(this);
-		switch (Machine.architecture) {
-		case Machine.X86_64:
-			sp = new X86_64SP();
-			break;
-		case Machine.CR16_C:
-		case Machine.X86_32:
-		default:
-			sp = new X86_32SP();
-			break;
-		}
+		
+		sp = Machine.getMachineFactory().getProcessSP();
+		
 		if (stackAnalyser != null)
 		{
 			stackAnalyser.addStack(stack);

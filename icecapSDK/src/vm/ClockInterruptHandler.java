@@ -69,15 +69,7 @@ public class ClockInterruptHandler implements InterruptHandler, ProcessLogic {
 
 	@IcecapCompileMe
 	public static void initialize(Scheduler scheduler, int[] stack) {
-		switch (Machine.architecture) {
-		case Machine.X86_64:
-		case Machine.X86_32:
-			I86InterruptDispatcher.init();
-			break;
-		case Machine.CR16_C:
-			CR16CInterruptDispatcher.init();
-			break;
-		}
+		Machine.getMachineFactory().initInterrupts();
 		instance = new ClockInterruptHandler(scheduler, stack);
 	}
 
