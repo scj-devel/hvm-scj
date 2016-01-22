@@ -651,6 +651,9 @@ public class ByteCodeReporter {
         case 0xcd:
             name = "newflasharray_opcode";
             break;
+        case 0xba:
+            name = "invokedynamic_opcode";
+            break;
         }
         return name;
     }

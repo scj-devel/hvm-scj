@@ -1451,7 +1451,9 @@ int16 n_test_TestCVar1_getLVar(int32 *sp)
 pointer stackPointer = 0;
 
 #if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED) && defined(VM_INTERRUPTDISPATCHER_INTERRUPT_USED)
+#if defined(JAVA_LANG_THROWABLE_INIT_)
 extern void handleException(unsigned short classIndex);
+#endif
 #endif
 
 #if defined(VM_PROCESS_EXECUTEWITHSTACK)
@@ -1579,11 +1581,16 @@ int16 yieldToScheduler(int32 *sp) {
 			if (scopeCount == 0) {
 #endif
 #if defined(VM_INTERRUPTDISPATCHER_INTERRUPT_USED)
+#if defined(JAVA_LANG_THROWABLE_INIT_)
 				int16 excep;
-				excep = vm_InterruptDispatcher_interrupt(sp, HVM_CLOCK);
+				excep = 
+#endif
+				vm_InterruptDispatcher_interrupt(sp, HVM_CLOCK);
+#if defined(JAVA_LANG_THROWABLE_INIT_)
 				if (excep >= 0) {
 					handleException(excep);
 				}
+#endif
 #endif
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS)
 			}

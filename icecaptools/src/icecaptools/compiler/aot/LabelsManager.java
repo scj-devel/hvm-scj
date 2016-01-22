@@ -129,7 +129,11 @@ public class LabelsManager {
     public void generateThrowIt() throws Exception {
         if (!labels.containsKey(LThrowIt)) {
             StringBuffer throwIt = new StringBuffer();
+            throwIt.append("#if defined(JAVA_LANG_THROWABLE_INIT_)\n");
             throwIt.append("      handler_pc = handleAthrow(&methods[" + methodNumber + "], excep, pc);\n");
+            throwIt.append("#else\n");
+            throwIt.append("	  handler_pc = -1;\n");
+            throwIt.append("#endif\n");
             throwIt.append("      sp++;\n");
             spManipulator.setSPUsed(true);
             labels.put(LThrowIt, throwIt);

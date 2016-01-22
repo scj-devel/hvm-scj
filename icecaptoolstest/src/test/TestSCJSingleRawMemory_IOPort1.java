@@ -29,10 +29,10 @@ public class TestSCJSingleRawMemory_IOPort1 {
 		                // DDRG  = 0x13 = 19;
 		                // PORTG = 0x14 = 20
 		 
-		 RawByte register = RawMemoryFactory.createRawByte(RawMemoryFactory.IO_PORT_MAPPED_REGION, base, 3, 1); 
+		 RawByte _register_ = RawMemoryFactory.createRawByte(RawMemoryFactory.IO_PORT_MAPPED_REGION, base, 3, 1); 
 		 
-		 if (register != null) {
-			 int registerSize = register.getSize();
+		 if (_register_ != null) {
+			 int registerSize = _register_.getSize();
 			 System.out.println("RegisterSize: " + registerSize);
 		 }
 		 else {

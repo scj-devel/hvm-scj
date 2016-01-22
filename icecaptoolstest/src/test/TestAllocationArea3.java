@@ -40,6 +40,8 @@ public class TestAllocationArea3 {
 	}
 
 	public static void main(String[] args) {
+		devices.Console.println("TestAllocationArea3");
+		
 		ReusableString array[] = new ReusableString[4];
 
 		ReusableStringInitializer initializer = new ReusableStringInitializer();

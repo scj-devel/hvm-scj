@@ -41,11 +41,68 @@ public class StringUtil {
 		return value;
 	}
 
+	public static byte toString(int x, byte[] buffer, int from)
+	{
+		byte i = 0;
+		while (x > 9)
+		{
+			byte digit = (byte) (x % 10);
+			buffer[from + i] = (byte) ('0' + digit);
+			i++;
+			x = x / 10;
+		}
+		
+		buffer[from + i] = (byte) ('0' + x);
+		i++;
+		
+		for (byte j = 0; j < (i >> 1); j++)
+		{
+			byte temp = buffer[from + j];
+			buffer[from + j] = buffer[from + i - j - 1];
+			buffer[from + i - j - 1] = temp;
+		}
+		return i;
+	}
+	
 	public static byte[] getBytes(String str) {
 		return getBytes(str, false);
 	}
 
 	public static int parseInt(byte[] bytes) {
 		return parseInt(bytes, false);
+	}
+
+	public static byte stringSize(int x) {
+		byte i = 0;
+		while (x > 9)
+		{
+			i++;
+			x = x / 10;
+		}
+		
+		return ++i;
+	}
+
+	public static String constructString(String defaultName, int nameCount) {
+		byte nameCountSize = stringSize(nameCount);
+		byte defaultNameSize = (byte) defaultName.length();
+		StringBuffer strBuf = new StringBuffer(defaultNameSize + nameCountSize);
+	
+		byte index = 0;
+		while (index < defaultNameSize)
+		{
+			strBuf.append(defaultName.charAt(index));
+			index++;
+		}
+		
+		byte[] nameCountBuffer = new byte[nameCountSize];
+		toString(nameCount, nameCountBuffer, 0);
+		index = 0;
+		while (index < nameCountSize)
+		{
+			strBuf.append((char)nameCountBuffer[index]);
+			index++;
+		}
+		return strBuf.toString();
 	}
 }

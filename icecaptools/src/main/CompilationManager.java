@@ -1,8 +1,9 @@
 package main;
 
+import java.io.FileOutputStream;
+
 import icecaptools.CompilationSequence;
 import icecaptools.HVMProperties;
-import icecaptools.MethodOrFieldDesc;
 import icecaptools.NewList;
 import icecaptools.TestResourceManager;
 import icecaptools.compiler.AOTRegistry;
@@ -11,38 +12,42 @@ import icecaptools.compiler.DefaultIcecapCodeFormatter;
 import icecaptools.compiler.DefaultIcecapProgressMonitor;
 import icecaptools.compiler.DefaultIcecapSourceCodeLinker;
 import icecaptools.compiler.DefaultMethodObserver;
-import icecaptools.compiler.ICompilationRegistry;
 import icecaptools.compiler.NativeMethodDetector;
 import icecaptools.conversion.ConversionConfiguration;
-
-import java.io.FileOutputStream;
-
+import test.icecaptools.DefaultCompilationRegistry;
 import test.icecaptools.compiler.TestConversionConfiguration;
+import util.ICompilationRegistry;
 
 public class CompilationManager {
 
 	private static class JMLCompilationRegistry implements ICompilationRegistry {
 
+		private boolean doIcareHuh;
+		
 		@Override
-		public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-			if (mdesc.getClassName().contains("jml")) {
+		public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
+			doIcareHuh = true;
+			
+			if (clazz.contains("jml")) {
 				return true;
 			}
-			if (mdesc.getClassName().startsWith("sun.security.action.GetPropertyAction")) {
+			if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
 				return true;
 			}
-			if (mdesc.getClassName().startsWith("java.io.BufferedWriter")) {
+			if (clazz.startsWith("java.io.BufferedWriter")) {
 				return true;
 			}
 
-			if (mdesc.getClassName().startsWith("java.io.PrintStream")) {
+			if (clazz.startsWith("java.io.PrintStream")) {
 				return true;
 			}
+			doIcareHuh = false;
 			return false;
 		}
 
 		@Override
 		public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
+			doIcareHuh = true;
 			if (clazz.startsWith("sun.")) {
 				if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
 					return false;
@@ -99,6 +104,7 @@ public class CompilationManager {
 					return true;
 				}
 			}
+			doIcareHuh = false;
 			return false;
 		}
 
@@ -107,6 +113,10 @@ public class CompilationManager {
 			return true;
 		}
 
+		@Override
+		public boolean didICareHuh() {
+			return doIcareHuh;
+		}
 	}
 
 	static boolean aotCompile = false;
@@ -158,12 +168,12 @@ public class CompilationManager {
 		config.setInputSourceFileName(sourceFileName);
 
 		HVMProperties props = config.getProperties();
-		
+
 		setDefaults(props);
 
 		String cwd = System.getProperty("user.dir");
 		System.out.println("Current working directoy = [" + cwd + "]");
-		
+
 		String propertiesFileName = config.getPropertiesFileName();
 
 		if (propertiesFileName != null) {
@@ -204,7 +214,7 @@ public class CompilationManager {
 		ICompilationRegistry cregistry;
 
 		if (aotCompile) {
-			cregistry = new AOTRegistry();
+			cregistry = new AOTRegistry(new DefaultCompilationRegistry());
 		} else {
 			cregistry = new JMLCompilationRegistry();
 		}
@@ -243,9 +253,9 @@ public class CompilationManager {
 		CompilationSequence sequencer = new CompilationSequence();
 
 		System.out.println("outputFolder = " + outputFolder);
-
+		config.setOutputFolder(outputFolder);
 		sequencer.startCompilation(System.out, new DefaultMethodObserver(), config, new DefaultIcecapProgressMonitor(),
-				cregistry, outputFolder, true);
+				cregistry, true);
 
 		sequencer = null;
 		config = null;

@@ -30,6 +30,7 @@ import icecaptools.compiler.utils.StringStringContainer;
 import icecaptools.compiler.utils.SubClassChecker;
 import icecaptools.conversion.ConversionConfiguration;
 import icecaptools.conversion.DependencyExtent;
+import util.ICompilationRegistry;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -100,8 +101,8 @@ public class Compiler {
 	}
 
 	public void writeClassesToFile(String filename, ByteCodePatcher patcher, IcecapTool manager,
-			FieldOffsetCalculator foCalc, AnalysisObserver observer, String outputFolder,
-			ICompilationRegistry cregistry, ResourceManager resourceManager, PrintStream out) throws Throwable {
+			FieldOffsetCalculator foCalc, AnalysisObserver observer, ICompilationRegistry cregistry,
+			ResourceManager resourceManager, PrintStream out) throws Throwable {
 		RequiredEntryManager rcManager = new RequiredClassesManager(supportLoading);
 		RequiredFieldsManager fieldsManager = new RequiredFieldsManager(supportLoading);
 		RequiredEntryManager interfacesManager = new RequiredInterfacesManager(supportLoading);
@@ -121,7 +122,7 @@ public class Compiler {
 		MemorySegment classNames = new MemorySegment(props);
 
 		try {
-			outputFolder = checkOutputFolder(outputFolder);
+			String outputFolder = checkOutputFolder(config.getOutputFolder());
 			classesSource = new FileOutputStream(outputFolder + filename + ".c");
 			classesHeader = new FileOutputStream(outputFolder + filename + ".h");
 			dumpVMSource(outputFolder, resourceManager, cregistry, out);
@@ -171,7 +172,8 @@ public class Compiler {
 				interfacesManager.registerEntry(nextInterface, interfaceNumber);
 			}
 		}
-		fileSb.append("#include \"types.h\"\n#include \"methods.h\"\n#include \"ostypes.h\"\n#include \"classes.h\"\n\n");
+		fileSb.append(
+				"#include \"types.h\"\n#include \"methods.h\"\n#include \"ostypes.h\"\n#include \"classes.h\"\n\n");
 		classesSb.startProgmem();
 		classesSb.appendCode("static RANGE const ClassInfo _classes[" + classNumber + "] PROGMEM = {\n",
 				35 * classNumber);
@@ -251,9 +253,9 @@ public class Compiler {
 			}
 
 			if (props.includeMethodAndClassNames()) {
-				classNames.appendCode(
-						"RANGE static const char className" + classNumber + "[" + (currentClassName.length() + 1) + "]"
-								+ " PROGMEM = \"" + currentClassName + "\";\n", currentClassName.length());
+				classNames.appendCode("RANGE static const char className" + classNumber + "["
+						+ (currentClassName.length() + 1) + "]" + " PROGMEM = \"" + currentClassName + "\";\n",
+						currentClassName.length());
 			}
 
 			String hasLock = (oSize.hasRoomForLock() ? "1" : "0");
@@ -330,7 +332,8 @@ public class Compiler {
 		fileSb.append(classesSb);
 		fileSb.append("\n");
 
-		fileSb.append("#if defined(INSTANCEOF_OPCODE_USED) || defined(CHECKCAST_OPCODE_USED) || defined(JAVA_LANG_THROWABLE_INIT_) || defined(PUTHWFIELD_OPCODE_USED) || defined(GETHWFIELD_OPCODE_USED)\n");
+		fileSb.append(
+				"#if defined(INSTANCEOF_OPCODE_USED) || defined(CHECKCAST_OPCODE_USED) || defined(JAVA_LANG_THROWABLE_INIT_) || defined(PUTHWFIELD_OPCODE_USED) || defined(GETHWFIELD_OPCODE_USED)\n");
 		this.classMatrix = getClassMatrix(patcher);
 		fileSb.append(this.classMatrix.getMatrix());
 		fileSb.append("\n");
@@ -518,8 +521,8 @@ public class Compiler {
 	}
 
 	public void writeMethodsToFile(String filename, AnalysisObserver observer, ByteCodePatcher patcher,
-			ClassManager manager, IcecapTool tool, String outputFolder, ICompilationRegistry cregistry,
-			DependencyExtent dependencyExtent, IcecapProgressMonitor progressMonitor) throws Exception {
+			ClassManager manager, IcecapTool tool, ICompilationRegistry cregistry, DependencyExtent dependencyExtent,
+			IcecapProgressMonitor progressMonitor) throws Exception {
 		FileOutputStream sourceFile = null;
 		FileOutputStream headerFile = null;
 		OutputLocation nativeHeaderFile = null;
@@ -534,7 +537,7 @@ public class Compiler {
 		MemorySegment sb = new MemorySegment(props);
 		this.nativeMethodDetector.startAnalysis();
 		try {
-			outputFolder = checkOutputFolder(outputFolder);
+			String outputFolder = checkOutputFolder(config.getOutputFolder());
 			sourceFile = new FileOutputStream(outputFolder + filename + ".c");
 			headerFile = new FileOutputStream(outputFolder + filename + ".h");
 
@@ -602,8 +605,8 @@ public class Compiler {
 		while (methods.hasNext()) {
 			MethodOrFieldDesc currentMethod = methods.next();
 
-			MethodAndClass methodDesc = ClassfileUtils.findMethod(currentMethod.getClassName(),
-					currentMethod.getName(), currentMethod.getSignature());
+			MethodAndClass methodDesc = ClassfileUtils.findMethod(currentMethod.getClassName(), currentMethod.getName(),
+					currentMethod.getSignature());
 
 			if (methodDesc != null) {
 
@@ -618,13 +621,10 @@ public class Compiler {
 					String uniqueMethodId = idGen.getUniqueId(currentMethod.getClassName(), currentMethod.getName(),
 							currentMethod.getSignature());
 					String methodNameConst;
-					methodInfoArray
-							.print("  { "
-									+ ((patcher.getClassNumber(currentMethod.getClassName()) << 1) | getLambdaAdjustment(javaMethod))
-									+ ", ");
-					if ((codeAttr != null)
-							&& (!manager.skipMethodHack(currentMethod.getClassName(), currentMethod.getName(),
-									currentMethod.getSignature()))) {
+					methodInfoArray.print("  { " + ((patcher.getClassNumber(currentMethod.getClassName()) << 1)
+							| getLambdaAdjustment(javaMethod)) + ", ");
+					if ((codeAttr != null) && (!manager.skipMethodHack(currentMethod.getClassName(),
+							currentMethod.getName(), currentMethod.getSignature()))) {
 						String methodDeclaration = null;
 
 						currentMethodCode = codeAttr.getCode();
@@ -642,12 +642,12 @@ public class Compiler {
 
 							methodDeclaration = aotCompiler.compile();
 							sb.appendCode(methodDeclaration, 0);
-							nfileManager.addCompiledMethod(methodNumber, uniqueMethodId, javaMethod, manager
-									.skipMethodHack(currentMethod.getClassName(), currentMethod.getName(),
+							nfileManager.addCompiledMethod(methodNumber, uniqueMethodId, javaMethod,
+									manager.skipMethodHack(currentMethod.getClassName(), currentMethod.getName(),
 											currentMethod.getSignature()));
 						} else {
-							sb.appendCode("RANGE const unsigned char " + uniqueMethodId + "["
-									+ currentMethodCode.length + "] PROGMEM = {\n", currentMethodCode.length);
+							sb.appendCode("RANGE const unsigned char " + uniqueMethodId + "[" + currentMethodCode.length
+									+ "] PROGMEM = {\n", currentMethodCode.length);
 							sb.print("  " + ConstantGenerator.getHex(currentMethodCode, 16, patcher.getFieldOffsets()));
 							sb.print("\n};\n");
 						}
@@ -660,15 +660,10 @@ public class Compiler {
 							CodeException[] exceptions = codeAttr.getExceptionTable();
 							for (int i = 0; i < numExceptionHandlers; i++) {
 								CodeException current = exceptions[i];
-								sb.print("  { "
-										+ current.getStartPC()
-										+ ", "
-										+ current.getEndPC()
-										+ ", "
-										+ current.getHandlerPC()
-										+ ", "
-										+ getClassNumber(currentMethod.getClassName(), manager, patcher,
-												current.getCatchType()) + "}");
+								sb.print("  { " + current.getStartPC() + ", " + current.getEndPC() + ", "
+										+ current.getHandlerPC() + ", " + getClassNumber(currentMethod.getClassName(),
+												manager, patcher, current.getCatchType())
+										+ "}");
 								if (i + 1 < numExceptionHandlers) {
 									sb.print(",");
 								}
@@ -721,8 +716,8 @@ public class Compiler {
 							methodInfoArray.print(", methodName_ }");
 						}
 					} else {
-						nfileManager.addNativeMethod(methodNumber, "n_" + uniqueMethodId, javaMethod, manager
-								.skipMethodHack(currentMethod.getClassName(), currentMethod.getName(),
+						nfileManager.addNativeMethod(methodNumber, "n_" + uniqueMethodId, javaMethod,
+								manager.skipMethodHack(currentMethod.getClassName(), currentMethod.getName(),
 										currentMethod.getSignature()));
 						methodInfoArray.print("0");
 						methodInfoArray.print(", 0");
@@ -732,9 +727,8 @@ public class Compiler {
 						methodInfoArray.print(", " + getNumReturnValues(javaMethod));
 						methodInfoArray.print(", 0");
 						methodInfoArray.print(", 0");
-						if (javaMethod.isNative()
-								|| manager.skipMethodHack(currentMethod.getClassName(), currentMethod.getName(),
-										currentMethod.getSignature())) {
+						if (javaMethod.isNative() || manager.skipMethodHack(currentMethod.getClassName(),
+								currentMethod.getName(), currentMethod.getSignature())) {
 							methodInfoArray.print(", n_" + uniqueMethodId); // code
 						} else {
 							methodInfoArray.print(", 0"); // code
@@ -747,8 +741,9 @@ public class Compiler {
 						}
 					}
 					if (props.includeMethodAndClassNames()) {
-						methodNames.appendCode("RANGE static const char methodName" + methodNumber + "["
-								+ (methodNameConst.length() + 1) + "] PROGMEM = \"" + methodNameConst + "\";\n",
+						methodNames.appendCode(
+								"RANGE static const char methodName" + methodNumber + "["
+										+ (methodNameConst.length() + 1) + "] PROGMEM = \"" + methodNameConst + "\";\n",
 								methodNameConst.length());
 					}
 					if (methods.hasNext()) {
@@ -1030,7 +1025,8 @@ public class Compiler {
 			return true;
 		}
 
-		if (cregistry.isMethodCompiled(currentMethod)) {
+		if (cregistry.isMethodCompiled(currentMethod.getClassName(), currentMethod.getName(),
+				currentMethod.getSignature())) {
 			return true;
 		}
 

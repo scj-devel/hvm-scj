@@ -84,42 +84,6 @@ public class Process {
 		}
 	}
 
-	private static abstract class SP {
-		public abstract int getCSP();
-
-		public abstract int getJSP();
-	}
-
-	private static class X86_32SP extends SP {
-		public int csp;
-		public int jsp;
-
-		@Override
-		public int getCSP() {
-			return csp;
-		}
-
-		@Override
-		public int getJSP() {
-			return jsp;
-		}
-	}
-
-	private static class X86_64SP extends SP {
-		public long csp;
-		public long jsp;
-
-		@Override
-		public int getCSP() {
-			return (int) csp;
-		}
-
-		@Override
-		public int getJSP() {
-			return (int) jsp;
-		}
-	}
-
 	public int[] getStack() {
 		return stack;
 	}
@@ -150,5 +114,4 @@ public class Process {
 			stackAnalyser.reportStackUsage();
 		}
 	}
-	
 }

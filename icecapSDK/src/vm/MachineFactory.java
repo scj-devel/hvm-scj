@@ -1,0 +1,10 @@
+package vm;
+
+public interface MachineFactory {
+
+	public void initInterrupts();
+
+	public SP getProcessSP();
+
+	RealtimeClock getRealtimeClock();
+}

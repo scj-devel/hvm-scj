@@ -25,6 +25,7 @@ public abstract class CommonLauncherTab extends AbstractLaunchConfigurationTab {
     private static final String tabName = "Main";
 
     public static final String SOURCE_FOLDER = "SOURCE_FOLDER";
+    public static final String COMPILER_COMMAND = "COMPILER_COMMAND";
 
     protected Composite root;
     private Text sourceText;

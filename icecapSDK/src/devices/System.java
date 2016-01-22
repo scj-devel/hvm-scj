@@ -1,6 +1,7 @@
 package devices;
 
 import icecaptools.IcecapCompileMe;
+import icecaptools.IcecapVolatile;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,6 +16,7 @@ import vm.RealtimeClock;
 
 public class System {
 	
+	@IcecapVolatile("i")
 	public static void delay(int i) {
 		while (i > 0) {
 			i--;

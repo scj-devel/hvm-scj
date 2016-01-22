@@ -43,14 +43,14 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 		MissionSequencer.isOuterMostSeq = false;
 		/* Line below commented out - since cyclic sheduling tests fail */
 		// handler.lock = Monitor.getMonitor(handler);
-		System.out.println("SinglecoreBehavior.initMissionSequencer");
+		//System.out.println("SinglecoreBehavior.initMissionSequencer");
 	}
 
 	@Override
 	void cleanOuterMissionSequencer(MissionSequencer<?> handler) {
 		if (Launcher.level == 2) {
-			devices.Console.println("MS.T: " + handler.name + "; #Missions: " + MissionSequencer.howManyMissions
-					+ "; outerSeq: " + handler.outerSeq);
+			//devices.Console.println("MS.T: " + handler.name + "; #Missions: " + MissionSequencer.howManyMissions
+			//		+ "; outerSeq: " + handler.outerSeq);
 
 			vm.ClockInterruptHandler.instance.disable();
 			if (handler.outerSeq != null)
@@ -62,7 +62,7 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 	@Override
 	void missionSequencerSingleTermination(MissionSequencer<?> handler) {
 		vm.ClockInterruptHandler.instance.disable();
-		devices.Console.println("------ MS.signalTermination: " + handler.name);
+		//devices.Console.println("------ MS.signalTermination: " + handler.name);
 		handler.terminateSeq = true;
 		handler.currMission.requestTermination();
 		vm.ClockInterruptHandler.instance.enable();
@@ -71,7 +71,7 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 	@Override
 	void missionSequencerExecutePhase(MissionSequencer<?> handler) {
 		handler.missionMemory.enterToExecute(handler.currMission);
-		System.out.println("SinglecoreBehavior.missionSequencerExecutePhase");
+		//System.out.println("SinglecoreBehavior.missionSequencerExecutePhase");
 		// the ms will wait here until it is notified
 		if (Launcher.level > 0) {
 			handler.seqWait();

@@ -19,6 +19,8 @@ public class TestAllocationArea1 {
     public static boolean test() {
         Memory mainArea = Memory.getHeapArea();
 
+        devices.Console.println("TestAllocationArea1");
+        
         int start = Memory.allocateInHeap(SCRATCHPADSTORESIZE).getBase();
 
         Memory scratchPadStore = new Memory(start, SCRATCHPADSTORESIZE, "scratchPadStore");

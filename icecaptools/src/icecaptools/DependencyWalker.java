@@ -34,7 +34,8 @@ public class DependencyWalker {
 		}
 	}
 
-	private static final String[] jmlMethodNames = { "checkPre", "checkPost", "evalOldExprInHC", "checkInv", "checkHC" };
+	private static final String[] jmlMethodNames = { "checkPre", "checkPost", "evalOldExprInHC", "checkInv",
+			"checkHC" };
 
 	private SubClassChecker subClassChecker;
 	private ImplementorChecker implementorChecker;
@@ -201,7 +202,8 @@ public class DependencyWalker {
 		this.methodCache = new MethodMap<MethodAndClass>();
 	}
 
-	private void analyseBNode(BNode bnode, NewList newList, NewList mr, Stack<WorkItem> workItemStack) throws Throwable {
+	private void analyseBNode(BNode bnode, NewList newList, NewList mr, Stack<WorkItem> workItemStack)
+			throws Throwable {
 		NewList bnodeNewList = bnode.getNewList();
 
 		if (newList.lessThanOrEquals(bnodeNewList)) {
@@ -282,8 +284,8 @@ public class DependencyWalker {
 					throw dleak;
 				} else {
 					StringBuffer buffer = new StringBuffer();
-					MethodAndClass methodAndClass = ClassfileUtils.findMethod(bnode.locationClass,
-							bnode.locationMethod, bnode.locationMethodSignature);
+					MethodAndClass methodAndClass = ClassfileUtils.findMethod(bnode.locationClass, bnode.locationMethod,
+							bnode.locationMethodSignature);
 					buffer.append("\tat ");
 					buffer.append(methodAndClass.getClazz().getClassName());
 					buffer.append(".");
@@ -396,8 +398,8 @@ public class DependencyWalker {
 		dispatchRest(bnode, newList, mr, workItemStack);
 	}
 
-	protected void ensureStringInitializer(BNode bnode, NewList newList, NewList mr) throws ClassNotFoundException,
-			Throwable {
+	protected void ensureStringInitializer(BNode bnode, NewList newList, NewList mr)
+			throws ClassNotFoundException, Throwable {
 		JavaClass clazz = lookupClass("java/lang/String");
 		MethodEntryPoints entryPoints = converter.convertByteCode(bnode, clazz, "<init>", "([C)V", true);
 
@@ -439,7 +441,8 @@ public class DependencyWalker {
 		return mr;
 	}
 
-	private void dispatchRest(BNode bnode, NewList newList, NewList mr, Stack<WorkItem> workItemStack) throws Exception {
+	private void dispatchRest(BNode bnode, NewList newList, NewList mr, Stack<WorkItem> workItemStack)
+			throws Exception {
 		Iterator<BNode> children = bnode.getChildren();
 		while (children.hasNext()) {
 			workItemStack.push(new WorkItem(children.next(), new NewList(newList)));
@@ -449,11 +452,17 @@ public class DependencyWalker {
 	private void analyseStaticFieldAccessBNode(StaticFieldAccessBNode bnode, NewList newList, NewList mr,
 			Stack<WorkItem> workItemStack) throws Throwable {
 		MethodEntryPoints entryPoints;
+		MethodOrFieldDesc referredField;
 
-		JavaClass clazz = lookupClass(bnode.getClassName());
+		referredField = ClassfileUtils.findField(bnode.getClassName(), bnode.getFieldName(), bnode.getSignature());
+
+		String className = referredField.getClassName();
+		String fieldName = referredField.getName();
+		
+		JavaClass clazz = lookupClass(className);
 
 		observer.classUsed(clazz.getClassName());
-		observer.classFieldUsed(clazz.getClassName(), bnode.getFieldName());
+		observer.classFieldUsed(clazz.getClassName(), fieldName);
 
 		if (ClassfileUtils.hasClassInitializer(clazz)) {
 			entryPoints = converter.convertByteCode(bnode, clazz, "<clinit>", "()V", true);
@@ -479,7 +488,7 @@ public class DependencyWalker {
 				}
 				/* if (ClassfileUtils.findMethodInClass(clazz, "initializeSystemClass", "()V") != null) {
 				     entryPoints = converter.convertByteCode(bnode, clazz, "initializeSystemClass", "()V", true);
-
+				
 				     if (entryPoints != null) {
 				         NewList calledMethodResult = analyseMethod(entryPoints, newList);
 				         mergeResult(newList, mr, calledMethodResult);
@@ -642,25 +651,25 @@ public class DependencyWalker {
 			NewList calledMethodResult = analyseMethod(entryPoints, newList);
 			mergeResult(newList, mr, calledMethodResult);
 		}
-		
+
 		observer.classUsed("devices.System");
-		
+
 	}
 
 	private void handleGetProperty(MethodCallBNode bnode, NewList newList, NewList mr) throws Throwable {
 		JavaClass clazz = lookupClass("devices.System");
 
-		MethodEntryPoints entryPoints = converter.convertByteCode(bnode, clazz, "getProperty", "(Ljava/lang/String;)Ljava/lang/String;", true);
+		MethodEntryPoints entryPoints = converter.convertByteCode(bnode, clazz, "getProperty",
+				"(Ljava/lang/String;)Ljava/lang/String;", true);
 
 		if (entryPoints != null) {
 			NewList calledMethodResult = analyseMethod(entryPoints, newList);
 			mergeResult(newList, mr, calledMethodResult);
 		}
-		
+
 		observer.classUsed("devices.System");
 	}
 
-	
 	private void handleDoPriviledge(MethodCallBNode bnode, NewList newList, NewList mr) throws Throwable {
 		String nextClass = "java.lang.Boolean";
 		classInstantiated(newList, mr, nextClass);
@@ -669,7 +678,6 @@ public class DependencyWalker {
 		JavaClass clazz = lookupClass(nextClass);
 		MethodEntryPoints entryPoints = converter.convertByteCode(bnode, clazz, "<init>", "(Z)V", false);
 
-		
 		if (entryPoints != null) {
 			NewList calledMethodResult = analyseMethod(entryPoints, newList);
 			mergeResult(newList, mr, calledMethodResult);
@@ -677,15 +685,16 @@ public class DependencyWalker {
 
 		clazz = lookupClass("devices.AccessController");
 
-		entryPoints = converter.convertByteCode(bnode, clazz, "doPrivileged", "(Ljava/security/PrivilegedAction;)Ljava/lang/Object;", true);
+		entryPoints = converter.convertByteCode(bnode, clazz, "doPrivileged",
+				"(Ljava/security/PrivilegedAction;)Ljava/lang/Object;", true);
 
 		if (entryPoints != null) {
 			NewList calledMethodResult = analyseMethod(entryPoints, newList);
 			mergeResult(newList, mr, calledMethodResult);
 		}
-		
+
 		observer.classUsed("devices.AccessController");
-		
+
 	}
 
 	private void handleGetMethod(MethodCallBNode bnode, NewList newList, NewList mr) throws Throwable {
@@ -747,8 +756,8 @@ public class DependencyWalker {
 
 		JavaClass clazz = lookupClass(clazzName);
 
-		JavaClass declaringClass = ClassfileUtils.findDeclaringInterface(clazz, bnode.getMethodName(),
-				bnode.getMethodSig()).getClazz();
+		JavaClass declaringClass = ClassfileUtils
+				.findDeclaringInterface(clazz, bnode.getMethodName(), bnode.getMethodSig()).getClazz();
 
 		observer.interfaceUsed(declaringClass.getClassName());
 
@@ -929,7 +938,7 @@ public class DependencyWalker {
 				handleDoPriviledge(bnode, newList, mr);
 			}
 		}
-		
+
 		if (declaringClass.getClassName().equals("java.lang.System")) {
 			if (bnode.getMethodName().equals("getProperty")) {
 				handleGetProperty(bnode, newList, mr);
@@ -941,9 +950,8 @@ public class DependencyWalker {
 		dispatchRest(bnode, newList, mr, workItemStack);
 	}
 
-	
-	private void addMethodToExtent(MethodCallBNode bnode, JavaClass declaringClass, String methodName,
-			String methodSig, boolean isStatic, NewList newList, NewList exitList) throws Throwable {
+	private void addMethodToExtent(MethodCallBNode bnode, JavaClass declaringClass, String methodName, String methodSig,
+			boolean isStatic, NewList newList, NewList exitList) throws Throwable {
 		MethodEntryPoints entryPoints;
 
 		if (config.getProperties().isIncludeJMLMethods()) {

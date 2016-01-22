@@ -1,9 +1,9 @@
 package icecaptools.views;
 
-import icecaptools.MethodOrFieldDesc;
-
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import icecaptools.MethodOrFieldDesc;
 
 public class UsedClass {
 

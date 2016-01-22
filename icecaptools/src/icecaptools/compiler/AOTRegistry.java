@@ -1,26 +1,36 @@
 package icecaptools.compiler;
 
-import test.icecaptools.DefaultCompilationRegistry;
-import icecaptools.MethodOrFieldDesc;
+import util.ICompilationRegistry;
 
-public class AOTRegistry extends DefaultCompilationRegistry {
+public class AOTRegistry implements ICompilationRegistry {
 
-    @Override
-    public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-        if (mdesc.getName().compareTo("main") == 0) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+	private ICompilationRegistry delegate;
 
-    @Override
-    public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
-        return super.isMethodExcluded(clazz, targetMethodName, targetMethodSignature);
-    }
+	public AOTRegistry(ICompilationRegistry delegate) {
+		this.delegate = delegate;
+	}
 
-    @Override
-    public boolean alwaysClearOutputFolder() {
-        return super.alwaysClearOutputFolder();
-    }
+	@Override
+	public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
+		if (targetMethodName.compareTo("main") == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	@Override
+	public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
+		return delegate.isMethodExcluded(clazz, targetMethodName, targetMethodSignature);
+	}
+
+	@Override
+	public boolean alwaysClearOutputFolder() {
+		return delegate.alwaysClearOutputFolder();
+	}
+
+	@Override
+	public boolean didICareHuh() {
+		return delegate.didICareHuh();
+	}
 }

@@ -1,10 +1,10 @@
-package icecaptools.compiler;
-
-import icecaptools.MethodOrFieldDesc;
+package util;
 
 public interface ICompilationRegistry {
 
-    public boolean isMethodCompiled(MethodOrFieldDesc mdesc);
+	public boolean didICareHuh();
+	
+    public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature);
 
     public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature);
     

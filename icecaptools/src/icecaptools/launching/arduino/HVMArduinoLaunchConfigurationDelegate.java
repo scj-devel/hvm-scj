@@ -28,7 +28,7 @@ public class HVMArduinoLaunchConfigurationDelegate extends AbstractHVMPOSIXLaunc
     }
 
     @Override
-    protected String getStripper() {
+    protected String getStripper(ILaunchConfiguration configuration) throws CoreException {
         return "avr-strip";
     }
 
@@ -72,8 +72,8 @@ public class HVMArduinoLaunchConfigurationDelegate extends AbstractHVMPOSIXLaunc
     }
 
     @Override
-    protected void stripExecutable(StringBuffer path, PrintStream consoleOutputStream, String sourceFolder, IProgressMonitor monitor) {
-        super.stripExecutable(path, consoleOutputStream, sourceFolder, monitor);
+    protected void stripExecutable(StringBuffer path, PrintStream consoleOutputStream, String sourceFolder, IProgressMonitor monitor, ILaunchConfiguration configuration) throws CoreException {
+        super.stripExecutable(path, consoleOutputStream, sourceFolder, monitor, configuration);
         ShellCommand.executeCommand("avr-objcopy -O ihex -R .eeprom main.exe main.hex", consoleOutputStream, true, sourceFolder.toString(), null, 20, new IcecapEclipseProgressMonitor(monitor));
     }
 

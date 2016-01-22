@@ -54,6 +54,7 @@ public class ConversionConfiguration implements IcecapTool {
     private boolean doReportConversion;
     private CodeDetector codeDetector;
     private NativeMethodDetector nativeMethodDetector;
+	private String outputFolder;
 
     public static final String DEFAULT_PACKAGE_NAME = "default";
 
@@ -273,5 +274,14 @@ public class ConversionConfiguration implements IcecapTool {
 
 	public String getPropertiesFileName() {
 		return propertyManager.getPropertiesFileName();
+	}
+
+	public void setOutputFolder(String outputFolder) {
+		this.outputFolder = outputFolder;
+		
+	}
+
+	public String getOutputFolder() {
+		return outputFolder;
 	}
 }

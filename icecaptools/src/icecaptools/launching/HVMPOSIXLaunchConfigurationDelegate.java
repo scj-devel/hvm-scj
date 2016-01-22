@@ -75,7 +75,7 @@ public class HVMPOSIXLaunchConfigurationDelegate extends TCPChannelLauncher {
     }
 
     @Override
-    protected String getStripper() {
+    protected String getStripper(ILaunchConfiguration configuration) throws CoreException {
         return "strip";
     }
 

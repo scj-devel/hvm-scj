@@ -1,31 +1,35 @@
 package test.icecaptools;
 
-import icecaptools.MethodOrFieldDesc;
-import icecaptools.compiler.ICompilationRegistry;
+import util.ICompilationRegistry;
 
 public class DefaultCompilationRegistry implements ICompilationRegistry {
 
-    @Override
-    public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-		if (mdesc.getClassName().contains("jml")) {
+	private boolean doIcareHuh;
+
+	@Override
+	public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
+		doIcareHuh = true;
+		if (clazz.contains("jml")) {
 			return true;
 		}
-		if (mdesc.getClassName().startsWith("sun.security.action.GetPropertyAction")) {
+		if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
 			return true;
 		}
-		if (mdesc.getClassName().startsWith("java.io.BufferedWriter")) {
+		if (clazz.startsWith("java.io.BufferedWriter")) {
 			return true;
 		}
 
-		if (mdesc.getClassName().startsWith("java.io.PrintStream")) {
+		if (clazz.startsWith("java.io.PrintStream")) {
 			return true;
 		}
+		doIcareHuh = false;
 		return false;
 	}
 
-    @Override
-    public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
-    	if (clazz.startsWith("sun.")) {
+	@Override
+	public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
+		doIcareHuh = true;
+		if (clazz.startsWith("sun.")) {
 			if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
 				return false;
 			}
@@ -96,19 +100,24 @@ public class DefaultCompilationRegistry implements ICompilationRegistry {
 				return true;
 			}
 		}
-        if (clazz.startsWith("java.lang.reflect"))
-        {
-            if (clazz.equals("java.lang.reflect.Array") && targetMethodName.equals("newInstance"))
-            {
-                return false;
-            }
-            return true;
-        }
-        return false;
-    }
+		if (clazz.startsWith("java.lang.reflect")) {
+			if (clazz.equals("java.lang.reflect.Array") && targetMethodName.equals("newInstance")) {
+				return false;
+			}
+			return true;
+		}
+		doIcareHuh = false;
+		return false;
+	}
 
-    @Override
-    public boolean alwaysClearOutputFolder() {
-        return false;
-    }
+	@Override
+	public boolean alwaysClearOutputFolder() {
+		doIcareHuh = false;
+		return false;
+	}
+
+	@Override
+	public boolean didICareHuh() {
+		return doIcareHuh;
+	}
 }

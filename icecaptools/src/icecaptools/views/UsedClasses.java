@@ -1,10 +1,11 @@
 package icecaptools.views;
 
-import icecaptools.MethodOrFieldDesc;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
+
+import icecaptools.MethodOrFieldDesc;
+
 import java.util.Set;
 
 public class UsedClasses {

@@ -3,7 +3,6 @@ package icecaptools;
 import icecaptools.compiler.ByteCodePatcher;
 import icecaptools.compiler.Compiler;
 import icecaptools.compiler.FieldInfo;
-import icecaptools.compiler.ICompilationRegistry;
 import icecaptools.compiler.IDGenerator;
 import icecaptools.compiler.IcecapByteCodePatcher;
 import icecaptools.compiler.MemorySegment;
@@ -17,6 +16,8 @@ import icecaptools.stackanalyser.ProducerConsumerAnalyser;
 import icecaptools.stackanalyser.StackArrayReferencesAnalyser;
 import icecaptools.stackanalyser.StackReferencesAnalyser;
 import icecaptools.stackanalyser.Util;
+import util.ICompilationRegistry;
+import util.MethodIdentifier;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -211,11 +212,11 @@ public class CompilationSequence {
 		}
 
 		@Override
-		public boolean isMethodCompiled(MethodOrFieldDesc mdesc) {
-			if (rmManager.isRequieredMethod(mdesc)) {
+		public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
+			if (rmManager.isRequieredMethod(clazz, targetMethodName, targetMethodSignature)) {
 				return false;
 			} else {
-				return delegate.isMethodCompiled(mdesc);
+				return delegate.isMethodCompiled(clazz, targetMethodName, targetMethodSignature);
 			}
 		}
 
@@ -228,11 +229,16 @@ public class CompilationSequence {
 		public boolean alwaysClearOutputFolder() {
 			return delegate.alwaysClearOutputFolder();
 		}
+
+		@Override
+		public boolean didICareHuh() {
+			return delegate.didICareHuh();
+		}
 	}
 
 	public void startCompilation(PrintStream out, RestartableMethodObserver methodObserver,
 			ConversionConfiguration config, IcecapProgressMonitor progressMonitor, ICompilationRegistry cregistry,
-			String outputFolder, boolean compile) throws Throwable {
+			boolean compile) throws Throwable {
 		boolean supportLoading = false;
 		this.config = config;
 
@@ -401,6 +407,17 @@ public class CompilationSequence {
 					for (int i = 0; i < bnodes.size(); i++) {
 						observer.byteCodeUsed(bnodes.get(i).getOpCode());
 					}
+				} else {
+					for (int i = 0; i < bnodes.size(); i++) {
+						byte opCode = bnodes.get(i).getOpCode();
+						switch (opCode) {
+						case RawByteCodes.ldc2_w_opcode:
+						case RawByteCodes.ldc_w_opcode:
+						case RawByteCodes.ldc_opcode:
+							observer.byteCodeUsed(opCode);
+							break;
+						}
+					}
 				}
 
 				BNodeUtils.collectExceptions(next);
@@ -437,13 +454,13 @@ public class CompilationSequence {
 					}
 					rManager = additionalResourceManager.createResorceManager();
 				}
-				compiler.writeClassesToFile("classes", patcher, config, foCalc, usedElementsObserver, outputFolder,
-						cregistry, rManager, out);
+				compiler.writeClassesToFile("classes", patcher, config, foCalc, usedElementsObserver, cregistry,
+						rManager, out);
 
-				compiler.writeMethodsToFile("methods", usedElementsObserver, patcher, converter, config, outputFolder,
-						cregistry, converter.getDependencyExtent(), progressMonitor);
+				compiler.writeMethodsToFile("methods", usedElementsObserver, patcher, converter, config, cregistry,
+						converter.getDependencyExtent(), progressMonitor);
 
-				writeTimingInformation(outputFolder, out, sda, foCalc, patcher, maxSwitchSize,
+				writeTimingInformation(config.getOutputFolder(), out, sda, foCalc, patcher, maxSwitchSize,
 						usedElementsObserver.getMaxVtableSize());
 
 				if (config.reportConversion()) {
@@ -453,8 +470,8 @@ public class CompilationSequence {
 				out.println("Data memory: " + MemorySegment.dataBytes + " bytes");
 			}
 		} else {
-			File methodsFile = new File(Compiler.checkOutputFolder(outputFolder) + "methods" + ".c");
-			File classesFile = new File(Compiler.checkOutputFolder(outputFolder) + "classes" + ".c");
+			File methodsFile = new File(Compiler.checkOutputFolder(config.getOutputFolder()) + "methods" + ".c");
+			File classesFile = new File(Compiler.checkOutputFolder(config.getOutputFolder()) + "classes" + ".c");
 			if (methodsFile.exists()) {
 				methodsFile.delete();
 			}
@@ -463,7 +480,8 @@ public class CompilationSequence {
 			}
 			throw new Exception("Compilation failed - check logs in console");
 		}
-		out.println("Dependency extent: classes[" + usedElementsObserver.numberOfUsedClasses() + "], methods[" + usedElementsObserver.numberOfUsedMethods() + "]");
+		out.println("Dependency extent: classes[" + usedElementsObserver.numberOfUsedClasses() + "], methods["
+				+ usedElementsObserver.numberOfUsedMethods() + "]");
 		Repository.clearCache();
 	}
 

@@ -34,7 +34,7 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 					mission.msSetForMission.managedSchObjects[i].signalTermination();
 				}
 			}
-			System.out.println("Mission:SinglecoreBehavior.requestTermination");
+			//System.out.println("Mission:SinglecoreBehavior.requestTermination");
 
 			mission.missionTerminate = true;
 			return false;

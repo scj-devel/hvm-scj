@@ -2,6 +2,7 @@ package vm;
 
 import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
+import util.StringUtil;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,8 @@ public class Memory {
 
 	private MemoryInfo memoryInfo;
 
+	private static int backingStoreOffset;
+	
 	private static class MemoryInfo {
 		String name;
 		int size;
@@ -33,10 +36,10 @@ public class Memory {
 		public String toString() {
 			StringBuffer buffer = new StringBuffer();
 			buffer.append(name);
-			buffer.append("[" + instanceCount + "]");
-			buffer.append(": size = ");
-			buffer.append(size);
-			buffer.append(", max used = " + maxUsed);
+			buffer.append(StringUtil.constructString("[", instanceCount));
+			buffer.append("]");
+			buffer.append(StringUtil.constructString(": size = ", size));
+			buffer.append(StringUtil.constructString(", max used = ", maxUsed));
 			return buffer.toString();
 		}
 
@@ -86,13 +89,13 @@ public class Memory {
 			if (createdMemories != null) {
 				Memory current = switchToArea(areaToUseForTracking);
 
-				devices.Console.println("\nCreated " + createdMemories.size()
-						+ " memory area types:");
+				devices.Console.print(StringUtil.constructString("\nCreated ", createdMemories.size()));
+				devices.Console.println(" memory area types:");
 				for (MemoryInfo memory : createdMemories) {
 					devices.Console.println(memory.toString());
 				}
-				devices.Console.println("Max backing store usage = "
-						+ (MemoryArea.getRemainingMemorySize()));
+				devices.Console.println(StringUtil.constructString("Max backing store usage = ", MemoryArea.getRemainingMemorySize()));
+				devices.Console.println(StringUtil.constructString("backingStoreOffset in heap = ", backingStoreOffset));
 				switchToArea(current);
 			} else {
 				devices.Console.println("No created memories recorded");
@@ -117,16 +120,15 @@ public class Memory {
 		this.base = base;
 		this.size = size;
 		this.free = 0;
-		this.name = "BackingStore";
+		this.name = "BStore";
 	}
 
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(name);
-		buffer.append(": size = ");
-		buffer.append(size);
-		buffer.append(", used = " + free);
+		buffer.append(StringUtil.constructString(": size = ", size));
+		buffer.append(StringUtil.constructString(", used = ", free));
 		return buffer.toString();
 	}
 
@@ -139,16 +141,18 @@ public class Memory {
 
 	@IcecapCompileMe
 	public static Memory allocateInHeap(int size) {
-
+		// devices.Console.println("allocating backingstore");
+		
 		if (heapArea.free + size >= heapArea.size) {
 			throw new OutOfMemoryError();
 		}
 
 		int startPtr = heapArea.base + heapArea.free;
+		backingStoreOffset = heapArea.free;
 		heapArea.free += size;
 
 		Memory memory = new Memory(startPtr, size);
-
+		
 		return memory;
 	}
 
@@ -251,7 +255,7 @@ public class Memory {
 		if (memoryAreaTrackingEnabled)
 		{
 			Memory current = switchToArea(areaToUseForTracking);
-			String name = defaultName + nameCount;
+			String name = StringUtil.constructString(defaultName, nameCount);
 			nameCount++;
 			switchToArea(current);
 			return name;

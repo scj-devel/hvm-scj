@@ -3,7 +3,7 @@
 #include "methods.h"
 #include "classes.h"
 
-/* compile (PC): gcc -Wall -pedantic -g -O0 -DPC64 -DPRINTFSUPPORT classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c x86_64_interrupt.s -lpthread */
+/* compile (PC): gcc -Wall -pedantic -g -O0 -DPC64 -DPRINTFSUPPORT classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c x86_64_interrupt.s print.c -lpthread */
 
 /* compile (PC with flash): gcc -Wall -pedantic -g -O0 -DPC64 -DPRINTFSUPPORT -DUSE_ROM_IMAGE classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c rom_access.c rom.c */
 

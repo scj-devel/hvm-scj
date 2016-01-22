@@ -2,12 +2,8 @@ package devices;
 
 public class Console {
 
-	private static final int DEFAULT_LENGTH = 512;  //256; //128; // HSO: June 2014
+	public static int DEFAULT_LENGTH = 512;  //256; //128; // HSO: June 2014
 	private static byte[] bytes;
-
-	static {
-		bytes = new byte[DEFAULT_LENGTH + 1];
-	}
 
 	public static Writer writer;
 	
@@ -32,11 +28,17 @@ public class Console {
 	private static byte[] getBytes(String string, boolean addNewLine) {
 		int index = 0;
 		int length = string.length();
-
+		
+		if (bytes == null)
+		{
+			bytes = new byte[DEFAULT_LENGTH + 1];
+		}
+		
 		while ((index < length) && (index < DEFAULT_LENGTH - 1)) {
 			bytes[index] = (byte) string.charAt(index);
 			index++;
 		}
+		
 		if (addNewLine) {
 			bytes[index] = '\n';
 		}

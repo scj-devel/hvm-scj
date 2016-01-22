@@ -63,9 +63,9 @@ import icecaptools.StaticFieldAccessBNode;
 import icecaptools.StaticMethodCallBNode;
 import icecaptools.SwitchBNode;
 import icecaptools.VirtualMethodCallBNode;
-import icecaptools.compiler.ICompilationRegistry;
 import icecaptools.compiler.LDCConstant;
 import icecaptools.compiler.utils.CallGraph;
+import util.ICompilationRegistry;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
