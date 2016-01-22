@@ -137,6 +137,7 @@ public class CompilationManagerHSO {
 		//String inputFolder = "/home/hso/java/SCJ_Workspace/SCJJMLTest/bin/" +
 		// pathSeparator + "/home/hso/java/SCJ_Workspace/JML/jml4c.jar";
 
+
 		// For OpenJML test:
 		String inputFolder = "/home/hso/workspace/OpenJMLTest/bin/" + pathSeparator
 				+ "/home/hso/workspace/OpenJMLTest/lib/jmlruntime.jar" + pathSeparator
@@ -156,44 +157,24 @@ public class CompilationManagerHSO {
 		// String inputPackage =
 		// "test.safetycritical.priorityscheduleMemAreaNesting";
 
+
+         //String inputPackage = "javax.realtime.test.clock";
+         //String inputPackage = "javax.realtime.test.priorityParameters";
+         //String inputPackage = "javax.realtime.test.releaseParameters";
+         //String inputPackage = "javax.realtime.test.timeClasses";
+        
+         
+         //String inputPackage = "javax.safetycritical.test.priorityScheduling";
+         //String inputPackage = "javax.safetycritical.test.cyclicExecutive"; 
+         //String inputPackage = "javax.safetycritical.test.storageParameters";
+         //String inputClass = "AllTests";
+         
 		//String inputPackage = "test";
+         
+        //String inputClass = "Main2Clock";
+        //String inputClass = "Main2RealtimeClock";
 
-		// String inputPackage = "esdj.scj.test.example1";
-		// String inputPackage = "esdj.scj.priorityschedule0";
-		// String inputPackage = "esdj.scj.cyclicschedule1";
-
-		// String inputClass = "MyApp";
-		// String inputClass = "TestSCJSleepingQueue1";
-		// String inputClass = "TestSCJBoundedBuffer";
-		// String inputClass = "TestSCJSharedResource1";
-		// String inputClass = "MyAppTestCase";
-		// String inputClass = "Test_ESDJ_Example1";
-
-		/* Level 1-2 tests */
-
-		//String inputPackage = "test.safetycritical.managedMemoryTest1";
-		//String inputClass = "TestManagedMemory";
-
-		//String inputPackage = "test.safetycritical.memoryModelTest3";
-		//String inputClass = "MySCJ";
-
-		//String inputPackage = "test.safetycritical.level2ThreadTest1";
-		//String inputClass = "MyApp";
-		//String inputClass = "TestSCJLevel2Thread0";
-
-		//String inputPackage = "test.safetycritical.level2NestedSequencerTest1";
-		//String inputClass = "MySCJ";
-
-		//String inputPackage = "test.safetycritical.waitAndNotifyTest2";
-		//String inputClass = "MySCJ";
-
-		//        String inputPackage = "test.safetycritical.cyclicschedule1";
-		//        String inputClass = "MyApp";
-
-		//String inputPackage = "test.safetycritical.SPlevel2";
-		//String inputClass = "TestSPLevel2";
-
-		/* Level 1-2 tests  end */
+		
 
 		/* OpenJML tests */
 
@@ -203,8 +184,8 @@ public class CompilationManagerHSO {
 		//String inputPackage = "account";       
 
 		//String inputPackage = "javax.realtime.test.timeClasses";
-		//String inputPackage = "javax.realtime.test.clock";
-		//String inputPackage = "javax.realtime.test.memoryArea";
+		String inputPackage = "javax.realtime.test.clock";
+		//String inputPackage = "javax.realtime.test.memoryAreas";
 		//String inputPackage = "javax.realtime.test.priorityScheduler";
 
 		//String inputPackage = "javax.safetycritical.test.safelet1"; 
@@ -212,15 +193,17 @@ public class CompilationManagerHSO {
 		//String inputPackage = "javax.safetycritical.test.priorityScheduling";
 		//String inputPackage = "javax.safetycritical.test.cyclicschedule1";
 		//String inputPackage = "javax.safetycritical.test.cyclicexecutive1";
+	//	String inputPackage = "javax.safetycritical.test.memoryAreas";
 
-		String inputPackage = "javax.realtime.test";
+
+		//String inputPackage = "javax.realtime.test";
 		//String inputPackage = "javax.safetycritical.test";
 
 		//String inputClass = "AllTests";
 
 		/* --- TCKs of javax.realtime.test --- : */
 		//String inputClass = "TckTestMemoryParameters";
-		String inputClass = "TckTestConfigurationParameters";
+		//String inputClass = "TckTestConfigurationParameters";
 		//String inputClass = "TckTestReleaseParameters";
 		//String inputClass = "TckTestPeriodicParameters";
 		//String inputClass = "TckTestAperiodicParameters";
@@ -229,6 +212,7 @@ public class CompilationManagerHSO {
 		//String inputClass = "TckTestHighResolutionTime";
 		//String inputClass = "TckTestAbsoluteTime";        
 		//String inputClass = "TckTestRelativeTime";
+		String inputClass = "TckTestClock";
 
 		/* --- TCKs of javax.safetycritical.test --- : */
 		//String inputClass = "TckTestStorageParameters";
@@ -240,6 +224,7 @@ public class CompilationManagerHSO {
 		//String inputClass = "TckTestSafelet22";   //           SafeletStub22
 
 		//String inputClass = "TckTestPreemptiveScheduling1";
+		//String inputClass = "TckTestManagedMemory";
 
 		/* OpenJML tests end */
 

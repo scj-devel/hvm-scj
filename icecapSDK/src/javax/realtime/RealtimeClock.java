@@ -82,7 +82,10 @@ class RealtimeClock extends Clock {
 	 */
 	@Override
 	public RelativeTime getResolution() {
-		return new RelativeTime(resolution);
+		RelativeTime rt = new RelativeTime(resolution);
+		if (rt.clock == null)
+		  rt.clock = rtClock;
+		return rt;
 	}
 
 	@Override

@@ -205,11 +205,11 @@ public abstract class HighResolutionTime implements Comparable<HighResolutionTim
 	 */
 	public int compareTo(HighResolutionTime time) {
 		if (time == null)
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("time is null");		
 		if (this.getClass() != time.getClass())
-			throw new ClassCastException();
+			throw new ClassCastException("class mismatch");		
 		if (this.clock != time.getClock())
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("clock mismatch");
 
 		if (this.millis < time.getMilliseconds())
 			return -1;
@@ -262,13 +262,14 @@ public abstract class HighResolutionTime implements Comparable<HighResolutionTim
 	//		return javax.safetycritical.PriorityScheduler.waitForObject(target, time);
 	//	}
 
-//	// used for JML annotation only (not public)
-//	long getMillis() {
-//		return millis;
-//	}
+	// used for JML annotation only (not public)
+	long getMillis() {
+		return millis;
+	}
 
-//	// used for JML annotation only (not public)
-//	int getNanos() {
-//		return nanos;
-//	}
+	// used for JML annotation only (not public)
+	int getNanos() {
+		return nanos;
+	}
+	
 }
