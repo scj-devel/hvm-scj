@@ -3,13 +3,13 @@ package devices;
 import java.io.File;
 
 import util.BaseTargetConfiguration;
-import vm.DefaultMachineFactory;
+import vm.POSIX64BitMachineFactory;
 import vm.Machine;
 
 public abstract class POSIXTargetConfiguration extends BaseTargetConfiguration implements TargetConfiguration {
 	
 	static {
-		Machine.setMachineFactory(new DefaultMachineFactory());
+		Machine.setMachineFactory(new POSIX64BitMachineFactory());
 	}
 
 	@Override

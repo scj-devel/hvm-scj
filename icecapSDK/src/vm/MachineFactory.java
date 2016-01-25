@@ -9,4 +9,6 @@ public interface MachineFactory {
 	RealtimeClock getRealtimeClock();
 
 	public void startSystemTick();
+
+	public void stopSystemTick();
 }

@@ -1,5 +1,6 @@
 package test;
 
+import vm.Machine;
 import vm.Monitor;
 import vm.Process;
 import vm.Scheduler;
@@ -25,6 +26,7 @@ public class TestProcessScheduler1 {
         @Override
         public Process getNextProcess() {
             if (count > 100) {
+            	terminated();
                 current.transferTo(mainProcess);
             }
 
@@ -54,6 +56,11 @@ public class TestProcessScheduler1 {
             // TODO Auto-generated method stub
             
         }
+
+		@Override
+		public void terminated() {
+			Machine.getMachineFactory().stopSystemTick();
+		}
     }
 
     public static void main(String args[]) {

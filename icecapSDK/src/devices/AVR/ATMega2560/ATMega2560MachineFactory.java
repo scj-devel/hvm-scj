@@ -27,4 +27,9 @@ public class ATMega2560MachineFactory implements MachineFactory {
 	public void startSystemTick() {
 		ATMega2560SCJTargetConfiguration.init();
 	}
+	
+	@Override
+	public void stopSystemTick() {
+		ATMega2560SCJTargetConfiguration.deinit();
+	}
 }

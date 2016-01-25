@@ -2,7 +2,7 @@ package vm;
 
 import devices.i86.I86InterruptDispatcher;
 
-public class DefaultMachineFactory implements MachineFactory {
+public class POSIX64BitMachineFactory implements MachineFactory {
 	@Override
 	public void initInterrupts() {
 		I86InterruptDispatcher.init();
@@ -20,10 +20,15 @@ public class DefaultMachineFactory implements MachineFactory {
 
 	@Override
 	public void startSystemTick() {
-		/* System tick must be started elsewhere */ 
-		
-		/* The right thing would be to start it here, or in a subclass, but
-		 * this has not been implemented yet.
-		 */
+		start_system_tick();
 	}
+
+	@Override
+	public void stopSystemTick() {
+		stop_system_tick();
+	}
+
+	private static native void start_system_tick();
+	
+	private static native void stop_system_tick();
 }

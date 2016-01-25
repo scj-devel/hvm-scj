@@ -31,6 +31,7 @@ import javax.realtime.Scheduler;
 import javax.safetycritical.MissionSequencer.State;
 import javax.scj.util.Const;
 
+import vm.Machine;
 import vm.Monitor;
 import vm.Process;
 
@@ -96,6 +97,7 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 
 	@IcecapCompileMe
 	void stop(vm.Process current) {
+		terminated();
 		current.transferTo(mainProcess);
 	}
 
@@ -123,6 +125,11 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 
 	public Monitor getDefaultMonitor() {
 		return null;
+	}
+
+	@Override
+	public void terminated() {
+		Machine.getMachineFactory().stopSystemTick();
 	}
 
 }

@@ -92,6 +92,12 @@ public abstract class ATMega2560TargetConfiguration extends BaseTargetConfigurat
 		SREG |= 0x80;
 	}
 	
+	@IcecapCompileMe
+	protected static void sdi()
+	{
+		SREG &= ~0x80;
+	}
+	
 	protected static int getReasonableProcessStackSize() {
 		return 256; /* 1 kB */
 	}

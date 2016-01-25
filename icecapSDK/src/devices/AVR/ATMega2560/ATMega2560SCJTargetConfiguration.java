@@ -41,4 +41,11 @@ public abstract class ATMega2560SCJTargetConfiguration extends ATMega2560TargetC
 	public int getJavaHeapSize() {
 		return 7100;
 	}
+
+	public static void deinit() {
+		/* disable timer 0 overflow interrupt */
+	    TIMSK0 = 0;
+	    
+	    sdi();
+	}
 }

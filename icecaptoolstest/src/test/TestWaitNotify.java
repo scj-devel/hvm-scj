@@ -1,6 +1,7 @@
 package test;
 
 import vm.ClockInterruptHandler;
+import vm.Machine;
 import vm.Monitor;
 import vm.Process;
 import vm.Scheduler;
@@ -172,6 +173,11 @@ public class TestWaitNotify {
             // TODO Auto-generated method stub
             
         }
+
+		@Override
+		public void terminated() {
+			Machine.getMachineFactory().stopSystemTick();
+		}
     }
 
     public static void main(String[] args) {
