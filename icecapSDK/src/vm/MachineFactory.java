@@ -7,4 +7,6 @@ public interface MachineFactory {
 	public SP getProcessSP();
 
 	RealtimeClock getRealtimeClock();
+
+	public void startSystemTick();
 }

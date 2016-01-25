@@ -17,4 +17,13 @@ public class DefaultMachineFactory implements MachineFactory {
 	public RealtimeClock getRealtimeClock() {
 		return new RealtimeClock.DefaultRealtimeClock();
 	}
+
+	@Override
+	public void startSystemTick() {
+		/* System tick must be started elsewhere */ 
+		
+		/* The right thing would be to start it here, or in a subclass, but
+		 * this has not been implemented yet.
+		 */
+	}
 }

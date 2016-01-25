@@ -37,6 +37,19 @@ public abstract class ATMega2560TargetConfiguration extends BaseTargetConfigurat
 	@IcecapCVar(expression = "PORTG", requiredIncludes = "#include \"avr/io.h\"\n")
 	public static byte PORTG;
 	
+	
+	@IcecapCVar(expression = "TIMSK0", requiredIncludes = "#include \"avr/io.h\"\n")
+	public static byte TIMSK0;
+	@IcecapCVar(expression = "TCCR0B", requiredIncludes = "#include \"avr/io.h\"\n")
+	public static byte TCCR0B;
+	
+	@IcecapCVar(expression = "SREG", requiredIncludes = "#include \"avr/io.h\"\n")
+	public static byte SREG;
+	
+	protected static final byte TOIE0 = 0;
+	protected static final byte CS00 = 0;
+	protected static final byte CS01 = 1;
+	
 	static {
 		Machine.setMachineFactory(new ATMega2560MachineFactory());
 	}
@@ -64,7 +77,7 @@ public abstract class ATMega2560TargetConfiguration extends BaseTargetConfigurat
 	}
 	
 	@IcecapCompileMe
-	public static void blink(int i) {
+	protected static void blink(int i) {
 		DDRG |= 0x3;
 
 		while (true) {
@@ -73,9 +86,13 @@ public abstract class ATMega2560TargetConfiguration extends BaseTargetConfigurat
 		}
 	}
 	
+	@IcecapCompileMe
+	protected static void sei()
+	{
+		SREG |= 0x80;
+	}
+	
 	protected static int getReasonableProcessStackSize() {
 		return 256; /* 1 kB */
 	}
-	
-	
 }

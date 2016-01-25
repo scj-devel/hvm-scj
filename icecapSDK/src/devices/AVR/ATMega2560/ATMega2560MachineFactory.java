@@ -22,4 +22,9 @@ public class ATMega2560MachineFactory implements MachineFactory {
 	public RealtimeClock getRealtimeClock() {
 		return new RealtimeClock.DefaultRealtimeClock();
 	}
+
+	@Override
+	public void startSystemTick() {
+		ATMega2560SCJTargetConfiguration.init();
+	}
 }

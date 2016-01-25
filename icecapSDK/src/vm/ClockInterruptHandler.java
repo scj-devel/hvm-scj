@@ -82,6 +82,7 @@ public class ClockInterruptHandler implements InterruptHandler, ProcessLogic {
 
 	public void startClockHandler(Process process) {
 		this.currentProcess = process;
+		Machine.getMachineFactory().startSystemTick();
 	}
 
 	public void setScheduler(Scheduler sch) {
