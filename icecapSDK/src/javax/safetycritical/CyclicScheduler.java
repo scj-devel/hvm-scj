@@ -32,6 +32,7 @@ import javax.safetycritical.MissionSequencer.State;
 import javax.scj.util.Const;
 
 import vm.Machine;
+import vm.MachineFactory;
 import vm.Monitor;
 import vm.Process;
 
@@ -85,13 +86,13 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 
 	private vm.Process mainProcess;
 
-	private void processStart() {
+	private void processStart(MachineFactory mFactory) {
 		vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
 		mainProcess = new vm.Process(null, null);
 
 		clockHandler.register();
 		clockHandler.enable();
-		clockHandler.startClockHandler(mainProcess);
+		clockHandler.startClockHandler(mainProcess, mFactory);
 		clockHandler.yield();
 	}
 
@@ -101,11 +102,11 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 		current.transferTo(mainProcess);
 	}
 
-	void start(MissionSequencer<?> seq) {
+	void start(MissionSequencer<?> seq, MachineFactory mFactory) {
 		this.seq = seq;
 
 		current = ManagedSchedMethods.createScjProcess(seq);
-		processStart();
+		processStart(mFactory);
 	}
 
 	ScjProcess getCurrentProcess() {

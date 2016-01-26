@@ -32,10 +32,8 @@
 package javax.safetycritical;
 
 import javax.realtime.MemoryArea;
-import javax.scj.util.Configuration;
 import javax.scj.util.Const;
 
-import vm.Machine;
 import vm.MachineFactory;
 import vm.Memory;
 import vm.POSIX64BitMachineFactory;
@@ -55,7 +53,7 @@ import vm.POSIX64BitMachineFactory;
  */
 public abstract class Launcher implements Runnable {
 	Safelet<?> app;
-	private MachineFactory mFactory;
+	protected MachineFactory mFactory;
 	static int level;
 	static boolean useOS = false;
 
@@ -82,20 +80,6 @@ public abstract class Launcher implements Runnable {
 		init();
 		createImmortalMemory();
 	}
-
-	static void initSingleCoreBehaviour() {
-		Mission.missionBehaviour = new SinglecoreMissionBehavior();
-		ManagedEventHandler.handlerBehavior = new SinglecoreHandlerBehavior();
-		Services.servicesBehavior = new SinglecoreServicesBehavior();
-		ManagedMemory.memoryBehavior = new SinglecoreMemoryBehavior();
-	}
-	
-	static void initMultiCoreBehaviour() {
-		Services.servicesBehavior = new MulticoreServicesBehavior();
-		Mission.missionBehaviour = new MulticoreMissionBehavior();
-		ManagedEventHandler.handlerBehavior = new MulticoreHandlerBehavior();
-		ManagedMemory.memoryBehavior = new MulticoreMemoryBehavior();
-	}
 	
 	public void run() {
 		app.initializeApplication();
@@ -119,52 +103,7 @@ public abstract class Launcher implements Runnable {
 	
 	protected abstract void start(); 
 	
-	protected void startLevel0() {
-		MissionSequencer<?> seq = app.getSequencer();
-		CyclicScheduler sch = CyclicScheduler.instance();
-		
-		Machine.setCurrentScheduler(sch);
-		
-		sch.start(seq);
-	}
 	
-	protected void startLevel1_2() {
-		// insert idle process before the mission sequencer.
-		PriorityScheduler sch = PriorityScheduler.instance();
-
-		Machine.setCurrentScheduler(sch.prioritySchedulerImpl);
-		
-		sch.insertReadyQueue(ScjProcess.createIdleProcess());
-		app.getSequencer();
-		PriorityScheduler.instance().start();
-	}
 	
-	protected void startwithOS() {
-		initAffinfitySetsMulticore();
-
-		Machine.setCurrentScheduler(new MultiprocessorHelpingScheduler());
-		
-		OSProcess.initSpecificID();
-		MissionSequencer<?> outerMostMS = app.getSequencer();
-		outerMostMS.privateMemory.enter(outerMostMS);
-		outerMostMS.cleanUp();
-	}
 	
-	private void initAffinfitySetsMulticore() {
-		if (Configuration.processors != null) {
-			AffinitySet.checkAndInitAffinityByCustomized(Configuration.processors);
-		} else {
-			switch (Launcher.level) {
-			case 0:
-				AffinitySet.initAffinitySet_Level0();
-				break;
-			case 1:
-				AffinitySet.initAffinitySet_Level1();
-				break;
-			case 2:
-				AffinitySet.initAffinitySet_Level2();
-				break;
-			}
-		}
-	}
 }

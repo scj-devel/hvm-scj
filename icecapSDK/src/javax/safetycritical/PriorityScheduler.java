@@ -26,6 +26,7 @@
 package javax.safetycritical;
 
 import icecaptools.IcecapCompileMe;
+import vm.MachineFactory;
 
 import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
@@ -112,13 +113,13 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 
 	private vm.Process mainProcess;
 
-	private void processStart() {
+	private void processStart(MachineFactory mFactory) {
 		vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
 		mainProcess = new vm.Process(null, null);
 
 		clockHandler.register();
 		clockHandler.enable();
-		clockHandler.startClockHandler(mainProcess);
+		clockHandler.startClockHandler(mainProcess, mFactory);
 		clockHandler.yield();
 	}
 
@@ -127,9 +128,9 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 		current.transferTo(mainProcess);
 	}
 
-	void start() {
+	void start(MachineFactory mFactory) {
 		current = pFrame.readyQueue.extractMax();
-		processStart();
+		processStart(mFactory);
 	}
 
 	void release(AperiodicEventHandler handler) {

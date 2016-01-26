@@ -2,6 +2,7 @@ package test;
 
 import vm.Machine;
 import vm.Monitor;
+import vm.POSIX64BitMachineFactory;
 import vm.Process;
 import vm.Scheduler;
 
@@ -114,7 +115,7 @@ public class TestProcessScheduler1 {
         
         clockHandler.register();
         clockHandler.enable();
-        clockHandler.startClockHandler(mainProcess);
+        clockHandler.startClockHandler(mainProcess, new POSIX64BitMachineFactory());
         clockHandler.yield();
         
         devices.Console.println("finished");

@@ -1,7 +1,9 @@
 package thread;
 
 import vm.Machine;
+import vm.MachineFactory;
 import vm.Monitor;
+import vm.POSIX64BitMachineFactory;
 import vm.Process;
 import vm.Scheduler;
 
@@ -17,12 +19,19 @@ public class RoundRobinScheduler extends ThreadManager implements Scheduler {
 
 	private Thread thr;
 
-	public RoundRobinScheduler() {
+	private MachineFactory mFactory;
+
+	public RoundRobinScheduler(MachineFactory mFactory) {
 		super();
 		started = false;
 		index = 0;
+		this.mFactory = mFactory;
 	}
 
+	public RoundRobinScheduler() {
+		this(new POSIX64BitMachineFactory());
+	}
+	
 	@Override
 	public Process getNextProcess() {
 		while (true) {
@@ -48,7 +57,7 @@ public class RoundRobinScheduler extends ThreadManager implements Scheduler {
 			mainThread.state = Thread.RUNNING;
 			threads.add(mainThread);
 			clockHandler.register();
-			clockHandler.startClockHandler(mainThread.p);
+			clockHandler.startClockHandler(mainThread.p, mFactory);
 			started = true;
 			clockHandler.enable();
 			clockHandler.yield();
