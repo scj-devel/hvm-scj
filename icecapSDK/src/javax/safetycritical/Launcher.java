@@ -36,7 +36,9 @@ import javax.scj.util.Configuration;
 import javax.scj.util.Const;
 
 import vm.Machine;
+import vm.MachineFactory;
 import vm.Memory;
+import vm.POSIX64BitMachineFactory;
 
 /**
  * This class is used by an application class to launch a Level 0 or a Level 1
@@ -53,23 +55,34 @@ import vm.Memory;
  */
 public abstract class Launcher implements Runnable {
 	Safelet<?> app;
+	private MachineFactory mFactory;
 	static int level;
 	static boolean useOS = false;
 
 	Launcher(Safelet<?> app, int level) {
-		this(app, level, false);
+		this(app, level, false, new POSIX64BitMachineFactory());
 	}
 
+	Launcher(Safelet<?> app, int level, MachineFactory mFactory) {
+		this(app, level, false, mFactory);
+	}
+	
 	Launcher(Safelet<?> app, int level, boolean useOS) {
+		this(app, level, useOS, new POSIX64BitMachineFactory());
+	}
+	
+	Launcher(Safelet<?> app, int level, boolean useOS, MachineFactory mFactory) {
 		if (level < 0 || level > 2 || app == null) {
 			throw new IllegalArgumentException();
 		}
-		
+		this.mFactory = mFactory;
 		this.app = app;
 		Launcher.level = level;
 		Launcher.useOS = useOS;		
+		init();
+		createImmortalMemory();
 	}
-	
+
 	static void initSingleCoreBehaviour() {
 		Mission.missionBehaviour = new SinglecoreMissionBehavior();
 		ManagedEventHandler.handlerBehavior = new SinglecoreHandlerBehavior();
@@ -89,7 +102,7 @@ public abstract class Launcher implements Runnable {
 		start();
 	}
 
-	void createImmortalMemory(){
+	private void createImmortalMemory(){
 		ManagedMemory.allocateBackingStore(Const.OVERALL_BACKING_STORE);
 
 		if (Memory.memoryAreaTrackingEnabled) {
@@ -102,9 +115,11 @@ public abstract class Launcher implements Runnable {
 		//immortalMem.removeArea();
 	}
 	
-	abstract void start(); 
+	protected abstract void init();
 	
-	void startLevel0() {
+	protected abstract void start(); 
+	
+	protected void startLevel0() {
 		MissionSequencer<?> seq = app.getSequencer();
 		CyclicScheduler sch = CyclicScheduler.instance();
 		
@@ -113,7 +128,7 @@ public abstract class Launcher implements Runnable {
 		sch.start(seq);
 	}
 	
-	void startLevel1_2() {
+	protected void startLevel1_2() {
 		// insert idle process before the mission sequencer.
 		PriorityScheduler sch = PriorityScheduler.instance();
 
@@ -124,7 +139,7 @@ public abstract class Launcher implements Runnable {
 		PriorityScheduler.instance().start();
 	}
 	
-	void startwithOS() {
+	protected void startwithOS() {
 		initAffinfitySetsMulticore();
 
 		Machine.setCurrentScheduler(new MultiprocessorHelpingScheduler());
