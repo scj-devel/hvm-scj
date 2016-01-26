@@ -3,16 +3,12 @@ package javax.safetycritical;
 import javax.scj.util.Configuration;
 
 import vm.Machine;
-import vm.MachineFactory;
 
 public final class LaunchMulticore extends Launcher {
 
-	public LaunchMulticore(Safelet<?> app, int level, MachineFactory mFactory) {
-		super(app, level, true, mFactory);
-	}
-
 	public LaunchMulticore(Safelet<?> app, int level) {
-		super(app, level, true);
+		super(true);
+		initAndRun(app, level);
 	}
 
 	protected void init() {

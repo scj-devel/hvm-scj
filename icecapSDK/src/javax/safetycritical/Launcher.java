@@ -34,9 +34,7 @@ package javax.safetycritical;
 import javax.realtime.MemoryArea;
 import javax.scj.util.Const;
 
-import vm.MachineFactory;
 import vm.Memory;
-import vm.POSIX64BitMachineFactory;
 
 /**
  * This class is used by an application class to launch a Level 0 or a Level 1
@@ -53,30 +51,24 @@ import vm.POSIX64BitMachineFactory;
  */
 public abstract class Launcher implements Runnable {
 	Safelet<?> app;
-	protected MachineFactory mFactory;
 	static int level;
 	static boolean useOS = false;
 
-	Launcher(Safelet<?> app, int level) {
-		this(app, level, false, new POSIX64BitMachineFactory());
-	}
-
-	Launcher(Safelet<?> app, int level, MachineFactory mFactory) {
-		this(app, level, false, mFactory);
+	Launcher() {
+		this(false);
 	}
 	
-	Launcher(Safelet<?> app, int level, boolean useOS) {
-		this(app, level, useOS, new POSIX64BitMachineFactory());
+	Launcher(boolean useOS) {
+		Launcher.useOS = useOS;	
 	}
 	
-	Launcher(Safelet<?> app, int level, boolean useOS, MachineFactory mFactory) {
+	protected void initAndRun(Safelet<?> app, int level)
+	{
 		if (level < 0 || level > 2 || app == null) {
 			throw new IllegalArgumentException();
 		}
-		this.mFactory = mFactory;
 		this.app = app;
 		Launcher.level = level;
-		Launcher.useOS = useOS;		
 		init();
 		createImmortalMemory();
 	}
@@ -102,8 +94,4 @@ public abstract class Launcher implements Runnable {
 	protected abstract void init();
 	
 	protected abstract void start(); 
-	
-	
-	
-	
 }

@@ -2,15 +2,20 @@ package javax.safetycritical;
 
 import vm.Machine;
 import vm.MachineFactory;
+import vm.POSIX64BitMachineFactory;
 
 public abstract class LaunchSingleCore extends Launcher {
 
+	private MachineFactory mFactory;
+	
 	public LaunchSingleCore(Safelet<?> app, int level, MachineFactory mFactory) {
-		super(app, level, mFactory);
+		super(false);
+		this.mFactory = mFactory;
+		initAndRun(app, level);
 	}
 
 	public LaunchSingleCore(Safelet<?> app, int level) {
-		super(app, level);
+		this(app, level, new POSIX64BitMachineFactory());
 	}
 
 	protected void init() {
