@@ -1,6 +1,5 @@
 package thread;
 
-import vm.Machine;
 import vm.MachineFactory;
 import vm.Monitor;
 import vm.POSIX64BitMachineFactory;
@@ -111,6 +110,6 @@ public class RoundRobinScheduler extends ThreadManager implements Scheduler {
 
 	@Override
 	public void terminated() {
-		Machine.getMachineFactory().stopSystemTick();
+		mFactory.stopSystemTick();
 	}
 }

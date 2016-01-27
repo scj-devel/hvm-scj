@@ -16,11 +16,13 @@ public class TestProcessScheduler1 {
         private Process p2;
         private Process current;
         private Process mainProcess;
+		private MachineFactory mFactory;
 
-        public TwoProcessScheduler(Process task1, Process task2, Process mainProcess, int[] stack) {
+        public TwoProcessScheduler(Process task1, Process task2, Process mainProcess, int[] stack, MachineFactory mFactory) {
             this.p1 = task1;
             this.p2 = task2;
             this.mainProcess = mainProcess;
+            this.mFactory = mFactory;
             p1.initialize();
             p2.initialize();
             current = task1;
@@ -56,13 +58,11 @@ public class TestProcessScheduler1 {
 
         @Override
         public void notifyAll(Object target) {
-            // TODO Auto-generated method stub
-            
         }
 
 		@Override
 		public void terminated() {
-			Machine.getMachineFactory().stopSystemTick();
+			mFactory.stopSystemTick();
 		}
     }
 
@@ -107,15 +107,15 @@ public class TestProcessScheduler1 {
         }, new int[1024]);
 
         count = 0;
-
+        
+        MachineFactory mFactory = new POSIX64BitMachineFactory();
         int[] sequencerStack = new int[1024];
         Process mainProcess = new vm.Process(null, null);
-        Scheduler scheduler = new TwoProcessScheduler(p1, p2, mainProcess, sequencerStack);
+        Scheduler scheduler = new TwoProcessScheduler(p1, p2, mainProcess, sequencerStack, mFactory);
 
         vm.ClockInterruptHandler.initialize(scheduler, sequencerStack);
         vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
         
-        MachineFactory mFactory = new POSIX64BitMachineFactory();
         clockHandler.startClockHandler(mainProcess, mFactory);
         
         devices.Console.println("finished");

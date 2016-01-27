@@ -106,12 +106,14 @@ public class TestWaitNotify {
 
         private Process currentProcess;
         private SharedResource sr;
+		private MachineFactory mFactory;
 
-        public ProcessScheduler(Process putter, Process taker, Process mainProcess, SharedResource sr) {
+        public ProcessScheduler(Process putter, Process taker, Process mainProcess, SharedResource sr, MachineFactory mFactory) {
             this.putter = putter;
             this.taker = taker;
             this.mainProcess = mainProcess;
             this.sr = sr;
+            this.mFactory = mFactory;
             putter.initialize();
             taker.initialize();
             currentProcess = null;
@@ -172,13 +174,11 @@ public class TestWaitNotify {
 
         @Override
         public void notifyAll(Object target) {
-            // TODO Auto-generated method stub
-            
         }
 
 		@Override
 		public void terminated() {
-			Machine.getMachineFactory().stopSystemTick();
+			mFactory.stopSystemTick();
 		}
     }
 
@@ -188,14 +188,15 @@ public class TestWaitNotify {
         Taker takerLogic = new Taker(sr);
         Process taker = new vm.Process(takerLogic, new int[1024]);
 
+        MachineFactory mFactory = new POSIX64BitMachineFactory();
         int[] sequencerStack = new int[1024];
         Process mainProcess = new vm.Process(null, null);
-        Scheduler scheduler = new ProcessScheduler(putter, taker, mainProcess, sr);
+        Scheduler scheduler = new ProcessScheduler(putter, taker, mainProcess, sr, mFactory);
 
         vm.ClockInterruptHandler.initialize(scheduler, sequencerStack);
         vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
 
-        MachineFactory mFactory = new POSIX64BitMachineFactory();
+        
 
         clockHandler.startClockHandler(mainProcess, mFactory);
 

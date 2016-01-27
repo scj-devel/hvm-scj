@@ -117,7 +117,6 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 
 	@Override
 	public void terminated() {
-		Machine.getMachineFactory().stopSystemTick();
 	}
 
 }
