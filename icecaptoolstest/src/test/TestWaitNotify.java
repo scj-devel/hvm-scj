@@ -2,6 +2,7 @@ package test;
 
 import vm.ClockInterruptHandler;
 import vm.Machine;
+import vm.MachineFactory;
 import vm.Monitor;
 import vm.POSIX64BitMachineFactory;
 import vm.Process;
@@ -194,6 +195,8 @@ public class TestWaitNotify {
         vm.ClockInterruptHandler.initialize(scheduler, sequencerStack);
         vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
 
+        MachineFactory mFactory = new POSIX64BitMachineFactory();
+        mFactory.initInterrupts();
         clockHandler.register();
         clockHandler.enable();
         clockHandler.startClockHandler(mainProcess, new POSIX64BitMachineFactory());

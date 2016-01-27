@@ -1,6 +1,8 @@
 package test;
 
+import devices.AVR.ATMega2560.ATMega2560MachineFactory;
 import vm.Machine;
+import vm.MachineFactory;
 import vm.Monitor;
 import vm.POSIX64BitMachineFactory;
 import vm.Process;
@@ -113,9 +115,11 @@ public class TestProcessScheduler1 {
         vm.ClockInterruptHandler.initialize(scheduler, sequencerStack);
         vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
         
+        MachineFactory mFactory = new POSIX64BitMachineFactory();
+        mFactory.initInterrupts();
         clockHandler.register();
         clockHandler.enable();
-        clockHandler.startClockHandler(mainProcess, new POSIX64BitMachineFactory());
+        clockHandler.startClockHandler(mainProcess, mFactory);
         clockHandler.yield();
         
         devices.Console.println("finished");

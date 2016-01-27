@@ -90,6 +90,7 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 		vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
 		mainProcess = new vm.Process(null, null);
 
+		
 		clockHandler.register();
 		clockHandler.enable();
 		clockHandler.startClockHandler(mainProcess, mFactory);
@@ -104,7 +105,9 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 
 	void start(MissionSequencer<?> seq, MachineFactory mFactory) {
 		this.seq = seq;
-
+		
+		mFactory.initInterrupts();
+		
 		current = ManagedSchedMethods.createScjProcess(seq);
 		processStart(mFactory);
 	}
