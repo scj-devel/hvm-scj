@@ -116,11 +116,7 @@ public class TestProcessScheduler1 {
         vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
         
         MachineFactory mFactory = new POSIX64BitMachineFactory();
-        mFactory.initInterrupts();
-        clockHandler.register();
-        clockHandler.enable();
         clockHandler.startClockHandler(mainProcess, mFactory);
-        clockHandler.yield();
         
         devices.Console.println("finished");
         args = null; 

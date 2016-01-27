@@ -57,12 +57,9 @@ public class RoundRobinScheduler extends ThreadManager implements Scheduler {
 			mainThread.state = Thread.RUNNING;
 			threads.add(mainThread);
 			
-			mFactory.initInterrupts();
-			clockHandler.register();
-			clockHandler.startClockHandler(mainThread.p, mFactory);
 			started = true;
-			clockHandler.enable();
-			clockHandler.yield();
+
+			clockHandler.startClockHandler(mainThread.p, mFactory);
 		}
 	}
 

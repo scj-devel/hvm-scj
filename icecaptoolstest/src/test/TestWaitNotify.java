@@ -196,11 +196,8 @@ public class TestWaitNotify {
         vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
 
         MachineFactory mFactory = new POSIX64BitMachineFactory();
-        mFactory.initInterrupts();
-        clockHandler.register();
-        clockHandler.enable();
-        clockHandler.startClockHandler(mainProcess, new POSIX64BitMachineFactory());
-        clockHandler.yield();
+
+        clockHandler.startClockHandler(mainProcess, mFactory);
 
         devices.Console.println("finished");
         if (!takerLogic.isError()) {
