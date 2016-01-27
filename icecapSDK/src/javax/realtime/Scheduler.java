@@ -49,7 +49,7 @@ public abstract class Scheduler {
 	
 	private vm.Process mainProcess;
 
-	protected void processStart(MachineFactory mFactory) {
+	protected void startScheduler(MachineFactory mFactory) {
 		vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
 		mainProcess = new vm.Process(null, null);
 
