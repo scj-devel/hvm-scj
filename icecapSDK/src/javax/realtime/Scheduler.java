@@ -27,6 +27,7 @@ package javax.realtime;
 
 import javax.safetycritical.annotate.SCJAllowed;
 
+import icecaptools.IcecapCompileMe;
 import vm.MachineFactory;
 
 /**
@@ -46,12 +47,17 @@ import vm.MachineFactory;
 @SCJAllowed
 public abstract class Scheduler {
 	
-	protected vm.Process mainProcess;
+	private vm.Process mainProcess;
 
 	protected void processStart(MachineFactory mFactory) {
 		vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
 		mainProcess = new vm.Process(null, null);
 
 		clockHandler.startClockHandler(mainProcess, mFactory);
+	}
+	
+	@IcecapCompileMe
+	protected void terminateScheduler(vm.Process current) {
+		current.transferTo(mainProcess);
 	}
 }

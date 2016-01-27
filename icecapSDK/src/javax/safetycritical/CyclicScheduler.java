@@ -87,7 +87,7 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 	@IcecapCompileMe
 	void stop(vm.Process current) {
 		terminated();
-		current.transferTo(mainProcess);
+		terminateScheduler(current);
 	}
 
 	void start(MissionSequencer<?> seq, MachineFactory mFactory) {

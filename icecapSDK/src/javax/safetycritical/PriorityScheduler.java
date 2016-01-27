@@ -111,9 +111,8 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 		pFrame.addProcess(process);
 	}
 
-	@IcecapCompileMe
-	void stop(vm.Process current) {
-		current.transferTo(mainProcess);
+    void stop(vm.Process current) {
+		terminateScheduler(current);
 	}
 
 	void start(MachineFactory mFactory) {
