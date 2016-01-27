@@ -111,18 +111,6 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 		pFrame.addProcess(process);
 	}
 
-	private vm.Process mainProcess;
-
-	private void processStart(MachineFactory mFactory) {
-		vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
-		mainProcess = new vm.Process(null, null);
-
-		clockHandler.register();
-		clockHandler.enable();
-		clockHandler.startClockHandler(mainProcess, mFactory);
-		clockHandler.yield();
-	}
-
 	@IcecapCompileMe
 	void stop(vm.Process current) {
 		current.transferTo(mainProcess);

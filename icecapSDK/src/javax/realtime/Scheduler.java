@@ -27,6 +27,8 @@ package javax.realtime;
 
 import javax.safetycritical.annotate.SCJAllowed;
 
+import vm.MachineFactory;
+
 /**
  * An instance of <code>Scheduler</code> manages the execution of 
  * schedulable objects.
@@ -43,4 +45,16 @@ import javax.safetycritical.annotate.SCJAllowed;
  */
 @SCJAllowed
 public abstract class Scheduler {
+	
+	protected vm.Process mainProcess;
+
+	protected void processStart(MachineFactory mFactory) {
+		vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
+		mainProcess = new vm.Process(null, null);
+
+		clockHandler.register();
+		clockHandler.enable();
+		clockHandler.startClockHandler(mainProcess, mFactory);
+		clockHandler.yield();
+	}
 }
