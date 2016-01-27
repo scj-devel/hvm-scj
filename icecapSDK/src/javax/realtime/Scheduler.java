@@ -52,6 +52,7 @@ public abstract class Scheduler {
 		vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
 		mainProcess = new vm.Process(null, null);
 
+		mFactory.initInterrupts();
 		clockHandler.register();
 		clockHandler.enable();
 		clockHandler.startClockHandler(mainProcess, mFactory);

@@ -118,7 +118,6 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 
 	void start(MachineFactory mFactory) {
 		current = pFrame.readyQueue.extractMax();
-		mFactory.initInterrupts();
 		processStart(mFactory);
 	}
 
