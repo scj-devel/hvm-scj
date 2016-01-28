@@ -41,8 +41,9 @@ import icecaptools.IcecapCompileMe;
 class RealtimeClock extends Clock {
 	//	private static vm.RealtimeClock nativeClock = 
 	//		vm.RealtimeClock.getRealtimeClock();
-
-	static Clock rtClock = new RealtimeClock();
+	static Clock rtClock;
+	
+	private static boolean initInProgess;
 
 	RealtimeClock() {
 		super(true);
@@ -58,6 +59,15 @@ class RealtimeClock extends Clock {
 	}
 
 	static Clock instance() {
+		if (rtClock == null) {
+			if (initInProgess) {
+				return null;
+			} else {
+				initInProgess = true;
+				rtClock = new RealtimeClock();
+				initInProgess = false;
+			}
+		}
 		return rtClock;
 	}
 
@@ -84,7 +94,7 @@ class RealtimeClock extends Clock {
 	public RelativeTime getResolution() {
 		RelativeTime rt = new RelativeTime(resolution);
 		if (rt.clock == null)
-		  rt.clock = rtClock;
+			rt.clock = rtClock;
 		return rt;
 	}
 
@@ -109,7 +119,7 @@ class RealtimeClock extends Clock {
 	public AbsoluteTime getTime(AbsoluteTime dest) {
 		if (dest == null)
 			dest = new AbsoluteTime();
-		nativeClock.getCurrentTime(dest); // returns Abs time in dest
+		nativeClock().getCurrentTime(dest); // returns Abs time in dest
 
 		// The values in dest are perhaps not normalized:
 		// Native values are (x secs, y nanoSecs) which are returned in

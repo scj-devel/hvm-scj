@@ -37,6 +37,8 @@ public class TestObjectTraversal {
         
         int aAddress = ObjectInfo.getAddress(a);
         
+        devices.Console.println("Object address a = " + aAddress);
+        
         ReferenceIterator references = heap.getRefFromObj(aAddress);
         
         if (references.hasNext())
@@ -51,8 +53,25 @@ public class TestObjectTraversal {
                     {
                         return false;
                     }
+                    else
+                    {
+                    	devices.Console.println("Object address b unexepcted");
+                    }
                 }
+                else
+                {
+                	devices.Console.println("Only one ref");
+                }
+                
             }
+            else
+            {
+            	devices.Console.println("Object address a unexepcted [" + aAddress + "], was [" + ref1 + "]");
+            }
+        }
+        else
+        {
+        	devices.Console.println("No references");
         }
         return true;
     }
