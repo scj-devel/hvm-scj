@@ -34,6 +34,7 @@ package javax.safetycritical;
 import javax.realtime.MemoryArea;
 import javax.scj.util.Const;
 
+import vm.MachineFactory;
 import vm.Memory;
 
 /**
@@ -53,17 +54,14 @@ public abstract class Launcher implements Runnable {
 	Safelet<?> app;
 	static int level;
 	static boolean useOS = false;
+	protected MachineFactory mFactory;
 
-	Launcher() {
-		this(false);
+	Launcher(boolean useOS, MachineFactory mFactory) {
+		Launcher.useOS = useOS;
+		this.mFactory = mFactory;
 	}
-	
-	Launcher(boolean useOS) {
-		Launcher.useOS = useOS;	
-	}
-	
-	protected void initAndRun(Safelet<?> app, int level)
-	{
+
+	protected void initAndRun(Safelet<?> app, int level) {
 		if (level < 0 || level > 2 || app == null) {
 			throw new IllegalArgumentException();
 		}
@@ -72,26 +70,26 @@ public abstract class Launcher implements Runnable {
 		init();
 		createImmortalMemory();
 	}
-	
+
 	public void run() {
 		app.initializeApplication();
 		start();
 	}
 
-	private void createImmortalMemory(){
+	private void createImmortalMemory() {
 		ManagedMemory.allocateBackingStore(Const.OVERALL_BACKING_STORE);
 
 		if (Memory.memoryAreaTrackingEnabled) {
 			new PrivateMemory(Const.MEMORY_TRACKER_AREA_SIZE, Const.MEMORY_TRACKER_AREA_SIZE,
 					MemoryArea.overAllBackingStore, "MemTrk");
 		}
-		
+
 		ManagedMemory immortalMem = new ImmortalMemory(Const.IMMORTAL_MEM);
 		immortalMem.executeInArea(this);
 		//immortalMem.removeArea();
 	}
-	
+
 	protected abstract void init();
-	
-	protected abstract void start(); 
+
+	protected abstract void start();
 }

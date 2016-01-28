@@ -6,11 +6,8 @@ import vm.POSIX64BitMachineFactory;
 
 public abstract class LaunchSingleCore extends Launcher {
 
-	private MachineFactory mFactory;
-	
 	public LaunchSingleCore(Safelet<?> app, int level, MachineFactory mFactory) {
-		super(false);
-		this.mFactory = mFactory;
+		super(false, mFactory);
 		initAndRun(app, level);
 	}
 

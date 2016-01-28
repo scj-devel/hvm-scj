@@ -1,7 +1,6 @@
 package test;
 
 import vm.ClockInterruptHandler;
-import vm.Machine;
 import vm.MachineFactory;
 import vm.Monitor;
 import vm.POSIX64BitMachineFactory;
@@ -183,7 +182,8 @@ public class TestWaitNotify {
     }
 
     public static void main(String[] args) {
-        SharedResource sr = new SharedResource();
+    	new POSIX64BitMachineFactory();
+    	SharedResource sr = new SharedResource();
         Process putter = new vm.Process(new Putter(sr), new int[1024]);
         Taker takerLogic = new Taker(sr);
         Process taker = new vm.Process(takerLogic, new int[1024]);
@@ -195,8 +195,6 @@ public class TestWaitNotify {
 
         vm.ClockInterruptHandler.initialize(scheduler, sequencerStack);
         vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
-
-        
 
         clockHandler.startClockHandler(mainProcess, mFactory);
 

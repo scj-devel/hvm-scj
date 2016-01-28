@@ -36,12 +36,7 @@ public class Machine {
 	}
 
 	public static MachineFactory getMachineFactory() {
-		if (mFactory == null) {
-			setMachineFactory(new POSIX64BitMachineFactory());
-			return getMachineFactory();
-		} else {
-			return mFactory;
-		}
+		return mFactory;
 	}
 
 	public static void setMachineFactory(MachineFactory mfac) {

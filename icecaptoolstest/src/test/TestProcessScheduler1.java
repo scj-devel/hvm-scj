@@ -1,7 +1,5 @@
 package test;
 
-import devices.AVR.ATMega2560.ATMega2560MachineFactory;
-import vm.Machine;
 import vm.MachineFactory;
 import vm.Monitor;
 import vm.POSIX64BitMachineFactory;
@@ -67,6 +65,8 @@ public class TestProcessScheduler1 {
     }
 
     public static void main(String args[]) {
+    	MachineFactory mFactory = new POSIX64BitMachineFactory();
+    	
         Process p1 = new vm.Process(new vm.ProcessLogic() {
             
             @Override
@@ -108,7 +108,6 @@ public class TestProcessScheduler1 {
 
         count = 0;
         
-        MachineFactory mFactory = new POSIX64BitMachineFactory();
         int[] sequencerStack = new int[1024];
         Process mainProcess = new vm.Process(null, null);
         Scheduler scheduler = new TwoProcessScheduler(p1, p2, mainProcess, sequencerStack, mFactory);

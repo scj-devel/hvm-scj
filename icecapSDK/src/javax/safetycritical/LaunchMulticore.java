@@ -3,14 +3,20 @@ package javax.safetycritical;
 import javax.scj.util.Configuration;
 
 import vm.Machine;
+import vm.MachineFactory;
+import vm.POSIX64BitMachineFactory;
 
 public final class LaunchMulticore extends Launcher {
 
 	public LaunchMulticore(Safelet<?> app, int level) {
-		super(true);
-		initAndRun(app, level);
+		this(app, level, new POSIX64BitMachineFactory());
 	}
 
+	public LaunchMulticore(Safelet<?> app, int level, MachineFactory mFactory) {
+		super(true, mFactory);
+		initAndRun(app, level);
+	}
+	
 	protected void init() {
 		Services.servicesBehavior = new MulticoreServicesBehavior();
 		Mission.missionBehaviour = new MulticoreMissionBehavior();

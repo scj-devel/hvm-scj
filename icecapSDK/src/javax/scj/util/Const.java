@@ -26,9 +26,6 @@
 
 package javax.scj.util;
 
-import javax.realtime.Clock;
-import javax.realtime.RelativeTime;
-
 /**
  * Utility class with constants.
  * 

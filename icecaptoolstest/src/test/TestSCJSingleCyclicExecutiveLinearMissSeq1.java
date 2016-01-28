@@ -16,6 +16,9 @@ import javax.safetycritical.LinearMissionSequencer;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
+import vm.MachineFactory;
+import vm.POSIX64BitMachineFactory;
+
 /** 
  * The SimpleCyclicExecutive Level 0 example from SCJ, Section 3.6.10,
  * with LinearMissionSequencer.
@@ -31,7 +34,7 @@ import javax.scj.util.Priorities;
 public class TestSCJSingleCyclicExecutiveLinearMissSeq1 extends CyclicExecutive 
 	implements Safelet<CyclicExecutive> {
 
-    private static MissionSequencer<CyclicExecutive> sequencer;
+	private static MissionSequencer<CyclicExecutive> sequencer;
 
     private static class MyPEH extends PeriodicEventHandler {
         static final int priority = 13;
@@ -147,7 +150,8 @@ public class TestSCJSingleCyclicExecutiveLinearMissSeq1 extends CyclicExecutive
 	  
 	  configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
-        new LaunchLevel0(new TestSCJSingleCyclicExecutiveLinearMissSeq1());
+	  MachineFactory mFac = new POSIX64BitMachineFactory();
+        new LaunchLevel0(new TestSCJSingleCyclicExecutiveLinearMissSeq1(), mFac);
         args = null;
     }
 }

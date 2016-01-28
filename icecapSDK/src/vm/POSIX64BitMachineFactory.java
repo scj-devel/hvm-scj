@@ -2,7 +2,7 @@ package vm;
 
 import devices.i86.I86InterruptDispatcher;
 
-public class POSIX64BitMachineFactory implements MachineFactory {
+public class POSIX64BitMachineFactory extends AbstractMachineFactory {
 	@Override
 	public void initInterrupts() {
 		I86InterruptDispatcher.init();

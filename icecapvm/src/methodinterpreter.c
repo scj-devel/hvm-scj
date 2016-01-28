@@ -1746,7 +1746,7 @@ static void lshl(uint32* xmsb, uint32* xlsb, unsigned char value) {
 }
 #endif
 
-#if defined(LSHR_OPCODE_USED) || defined(LUSHR_OPCODE_USED) || defined(HANDLELSHR_USED) || defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED) || defined(N_VM_REALTIMECLOCK_GETNATIVERESOLUTION) || defined(N_VM_REALTIMECLOCK_GETNATIVETIME)
+#if defined(LSHR_OPCODE_USED) || defined(LUSHR_OPCODE_USED) || defined(HANDLELSHR_USED) || defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED) || defined(N_VM_REALTIMECLOCK_GETNATIVERESOLUTION) || defined(N_VM_REALTIMECLOCK_GETNATIVETIME) || defined(N_VM_REALTIMECLOCK_DELAYNATIVEUNTIL)
 static void lshr(uint32* msi, uint32* lsi, unsigned char value) {
 	unsigned int carry;
 	if (value > 31) {
@@ -3038,7 +3038,7 @@ unsigned char handleLDCWithIndex(int32* sp, unsigned short index) {
 }
 #endif
 
-#if defined(N_VM_REALTIMECLOCK_GETNATIVERESOLUTION) || defined(N_VM_REALTIMECLOCK_GETNATIVETIME) || defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED)
+#if defined(N_VM_REALTIMECLOCK_GETNATIVERESOLUTION) || defined(N_VM_REALTIMECLOCK_GETNATIVETIME) || defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED) || defined(N_VM_REALTIMECLOCK_DELAYNATIVEUNTIL)
 static unsigned char sign(int32* msb, int32* lsb, signed char s) {
 	if (*msb < 0) {
 		neg((uint32*) msb, (uint32*) lsb);
@@ -3147,7 +3147,7 @@ void handleLSHR(int32* sp) {
 }
 #endif
 
-#if defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED) || defined(N_VM_REALTIMECLOCK_GETNATIVERESOLUTION) || defined(N_VM_REALTIMECLOCK_GETNATIVETIME)
+#if defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED) || defined(N_VM_REALTIMECLOCK_GETNATIVERESOLUTION) || defined(N_VM_REALTIMECLOCK_GETNATIVETIME) || defined(N_VM_REALTIMECLOCK_DELAYNATIVEUNTIL)
 int32 lmul32(int32* sp, uint32 xmsb, uint32 xlsb, uint32 ymsb, uint32 ylsb) {
 	uint32 rmsb = 0, rlsb = 0;
 

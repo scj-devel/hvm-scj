@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.POSIX64BitMachineFactory;
 
 import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
@@ -30,6 +31,8 @@ public class TestPerformance {
         int cTimeSum = 0;
         int javaTimeSum = 0;
 
+        new POSIX64BitMachineFactory();
+        
         for (int i = 0; i < RUNS; i++) {
             initialize(numberSet);
 
