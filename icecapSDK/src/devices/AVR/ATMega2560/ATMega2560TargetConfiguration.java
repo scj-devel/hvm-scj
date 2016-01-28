@@ -101,4 +101,16 @@ public abstract class ATMega2560TargetConfiguration extends BaseTargetConfigurat
 	protected static int getReasonableProcessStackSize() {
 		return 256; /* 1 kB */
 	}
+	
+	@Override
+	protected EBOOL excludeMethod(String clazz, String targetMethodName, String targetMethodSignature) {
+		if (clazz.contains("devices.System"))
+		{
+			if (targetMethodName.contains("clinit"))
+			{
+				return EBOOL.YES;
+			}
+		}
+		return EBOOL.DONTCARE;
+	}
 }
