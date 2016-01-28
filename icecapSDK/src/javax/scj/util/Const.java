@@ -118,12 +118,17 @@ public final class Const {
 		reporter = new DefaultSCJErrorReporter();
 	}
 
+	/* Dont re-add these definitions. They get loaded even though the program never use them.
+	 * 
+	 * This leaks dependencies and memory.
+	 *
 	public static final RelativeTime DEFAULT_TIME_INTERVAL = new RelativeTime(1, 0, null); // one millis
 
 	public static final RelativeTime INFINITE_TIME = new RelativeTime(365 * 24 * 60 * 1000, 0, Clock.getRealtimeClock()); // 365*24*60
 																															// secs = 1 year
 
 	public static final RelativeTime SUSPEND_TIME = new RelativeTime(0, 100 * 1000, null); // 100 micro_secs
+	*/
 
 	public static final boolean TESTING = true;
 
