@@ -5,6 +5,7 @@ import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
 import util.BaseTargetConfiguration;
 import vm.Machine;
+import vm.MachineFactory;
 
 public abstract class ATMega2560TargetConfiguration extends BaseTargetConfiguration implements TargetConfiguration {
 
@@ -112,5 +113,9 @@ public abstract class ATMega2560TargetConfiguration extends BaseTargetConfigurat
 			}
 		}
 		return EBOOL.DONTCARE;
+	}
+	
+	protected static MachineFactory getConfiguration() {
+		return new ATMega2560MachineFactory();
 	}
 }

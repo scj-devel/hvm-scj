@@ -18,11 +18,15 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 import devices.Console;
+import devices.POSIXSCJTargetConfiguration;
+import devices.AVR.ATMega2560.ATMega2560MachineFactory;
 import devices.AVR.ATMega2560.ATMega2560SCJTargetConfiguration;
+import vm.MachineFactory;
 import vm.Memory;
+import vm.POSIX64BitMachineFactory;
 
 @SuppressWarnings("rawtypes")
-public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTargetConfiguration */ {
+public class HelloSCJ extends ATMega2560SCJTargetConfiguration /*POSIXSCJTargetConfiguration*/{
 
 	private static class MyCyclicSchedule {
 		static CyclicSchedule generate0(CyclicExecutive cyclicExec, PeriodicEventHandler[] handlers) {
@@ -162,6 +166,8 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 		int handlerStackSize;
 		int handlerMemorySize;
 
+		blink(8000);
+		
 		if (mimimalMemoryConfig) {
 			Const.OVERALL_BACKING_STORE = 4800;
 			Console.DEFAULT_LENGTH = 128;
@@ -196,7 +202,9 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 				handlerMemorySize, 0, 0);
 		configParameters = new ConfigurationParameters(null, -1, -1, new long[] { handlerStackSize });
 
-		new LaunchLevel0(new MyApp());
+		MachineFactory mFactory = getConfiguration();
+		
+		new LaunchLevel0(new MyApp(), mFactory);
 
 		if (!mimimalMemoryConfig) {
 			vm.Process.reportStackUsage();
@@ -229,13 +237,6 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 		}
 	}
 
-	/*
-	@Override
-	protected EBOOL compileMethod(String clazz, String targetMethodName, String targetMethodSignature) {
-		return EBOOL.YES;
-	}
-*/
-	
 	@Override
 	protected EBOOL excludeMethod(String clazz, String targetMethodName, String targetMethodSignature) {
 		if (clazz.equals("java.lang.Integer")) {
@@ -243,6 +244,6 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 				return EBOOL.YES;
 			}
 		}
-		return EBOOL.DONTCARE;
+		return super.excludeMethod(clazz, targetMethodName, targetMethodSignature);
 	}
 }
