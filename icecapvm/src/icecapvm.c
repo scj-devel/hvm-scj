@@ -35,7 +35,7 @@ extern int16 invokeClassInitializers(int32* sp);
 int16 initializeConstants(int32* sp);
 #endif
 
-#if defined(VM_CLOCKINTERRUPTHANDLER_INTERRUPT)
+#if defined(VM_CLOCKINTERRUPTHANDLER_HANDLE)
 pointer mainStackPointer;
 extern pointer stackPointer;
 extern void set_stack_pointer();
@@ -57,7 +57,7 @@ unsigned char awaitCommandFromDebugger(int32* fp, unsigned short methodNumber, u
 #define	ERROR 1
 #define SUCCESS 0
 
-#if defined(VM_CLOCKINTERRUPTHANDLER_INTERRUPT)
+#if defined(VM_CLOCKINTERRUPTHANDLER_HANDLE)
 static Object temp;
 static int32* mainMethodJavaStack;
 #endif
@@ -65,7 +65,7 @@ static int32* mainMethodJavaStack;
 extern void init_compiler_specifics(void);
 
 int run_vm(void) {
-#if !defined(VM_CLOCKINTERRUPTHANDLER_INTERRUPT)
+#if !defined(VM_CLOCKINTERRUPTHANDLER_HANDLE)
 	Object temp;
 	int32* mainMethodJavaStack;
 #endif
@@ -92,7 +92,7 @@ int run_vm(void) {
 	 * */
 	mainMethodJavaStack = get_java_stack_base(JAVA_STACK_SIZE);
 
-#if defined(VM_CLOCKINTERRUPTHANDLER_INTERRUPT)
+#if defined(VM_CLOCKINTERRUPTHANDLER_HANDLE)
 	/* If more threads are started we give the main thread a new C stack pointer.
 	 * In case of no other threads running the main thread just inherits the
 	 * current C stack.
@@ -168,7 +168,7 @@ int run_vm(void) {
 #if defined(JAVA_LANG_THROWABLE_INIT_)
 		handleException(execp);
 #endif
-#if defined(VM_CLOCKINTERRUPTHANDLER_INTERRUPT)
+#if defined(VM_CLOCKINTERRUPTHANDLER_HANDLE)
 		/* Restore C stack pointer. Otherwise we could not return from here properly */
 		stackPointer = (pointer) mainStackPointer;
 		set_stack_pointer();
@@ -176,7 +176,7 @@ int run_vm(void) {
 		return ERROR;
 	}
 
-#if defined(VM_CLOCKINTERRUPTHANDLER_INTERRUPT)
+#if defined(VM_CLOCKINTERRUPTHANDLER_HANDLE)
 	/* Restore C stack pointer. Otherwise we could not return from here properly */
 	stackPointer = (pointer) mainStackPointer;
 	set_stack_pointer();

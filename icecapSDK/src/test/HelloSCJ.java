@@ -19,14 +19,11 @@ import javax.scj.util.Priorities;
 
 import devices.Console;
 import devices.POSIXSCJTargetConfiguration;
-import devices.AVR.ATMega2560.ATMega2560MachineFactory;
-import devices.AVR.ATMega2560.ATMega2560SCJTargetConfiguration;
 import vm.MachineFactory;
 import vm.Memory;
-import vm.POSIX64BitMachineFactory;
 
 @SuppressWarnings("rawtypes")
-public class HelloSCJ extends ATMega2560SCJTargetConfiguration /*POSIXSCJTargetConfiguration*/{
+public class HelloSCJ extends /*ATMega2560SCJTargetConfiguration*/ POSIXSCJTargetConfiguration{
 
 	private static class MyCyclicSchedule {
 		static CyclicSchedule generate0(CyclicExecutive cyclicExec, PeriodicEventHandler[] handlers) {
@@ -166,7 +163,7 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /*POSIXSCJTargetC
 		int handlerStackSize;
 		int handlerMemorySize;
 
-		blink(8000);
+		// blink(8000);
 		
 		if (mimimalMemoryConfig) {
 			Const.OVERALL_BACKING_STORE = 4800;
@@ -233,7 +230,7 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /*POSIXSCJTargetC
 			return super.getBuildCommands();
 		} else {
 			return new String[] {
-					"gcc -O0 -g -pedantic -Wall -DPC64 -DLAZY_INITIALIZE_CONSTANTS natives_i86.c native_scj.c x86_64_interrupt.s -l pthread" };
+					"gcc -O0 -g -pedantic -Wall -DJAVA_STACK_SIZE=1024 -DPC64 -DLAZY_INITIALIZE_CONSTANTS natives_i86.c native_scj.c x86_64_interrupt.s -l pthread" };
 		}
 	}
 

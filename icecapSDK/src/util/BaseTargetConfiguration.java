@@ -1,7 +1,5 @@
 package util;
 
-import vm.MachineFactory;
-
 public abstract class BaseTargetConfiguration implements ICompilationRegistry {
 
 	protected enum EBOOL {
