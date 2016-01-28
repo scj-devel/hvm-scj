@@ -18,7 +18,7 @@
 #define STDOUTCHANNEL 3
 #endif
 
-static unsigned char java_stack[256];
+static unsigned char java_stack[JAVA_STACK_SIZE << 2];
 
 int32* get_java_stack_base(int16 size) {
     return (int32*) &java_stack[0];
