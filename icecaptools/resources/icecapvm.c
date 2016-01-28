@@ -3,7 +3,7 @@
 #include "methods.h"
 #include "classes.h"
 
-/* compile (PC): gcc -Wall -pedantic -g -O0 -DPC64 -DPRINTFSUPPORT classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c x86_64_interrupt.s -lpthread */
+/* compile (PC): gcc -Wall -pedantic -g -O0 -DPC64 -DPRINTFSUPPORT classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c x86_64_interrupt.s print.c -lpthread */
 
 /* compile (PC with flash): gcc -Wall -pedantic -g -O0 -DPC64 -DPRINTFSUPPORT -DUSE_ROM_IMAGE classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c rom_access.c rom.c */
 
@@ -24,7 +24,6 @@ extern int32* get_java_stack_base(int16 size);
 extern int16 initializeExceptions(int32* sp);
 
 #if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
-extern void start_system_tick(void);
 extern void stop_system_tick(void);
 #endif
 
@@ -138,10 +137,6 @@ int run_vm(void) {
 				 */
 				*mainMethodJavaStack = (int32) (pointer) &temp;
 
-#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
-				start_system_tick();
-#endif
-
 #if defined(DEVICES_SYSTEM_INITIALIZESYSTEMCLASS)
 				execp = enterMethodInterpreter(
 				DEVICES_SYSTEM_INITIALIZESYSTEMCLASS, mainMethodJavaStack);
@@ -150,9 +145,6 @@ int run_vm(void) {
 						/* Start the VM */
 						execp = enterMethodInterpreter(mainMethodIndex,
 								mainMethodJavaStack);
-#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
-						stop_system_tick();
-#endif
 #if defined(DEVICES_SYSTEM_INITIALIZESYSTEMCLASS)
 				}
 #endif
