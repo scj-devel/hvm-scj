@@ -1,4 +1,4 @@
-package test;
+package test.AVR.ATMega2560;
 
 import devices.AVR.ATMega2560.ATMega2560TargetConfiguration;
 import icecaptools.IcecapCompileMe;

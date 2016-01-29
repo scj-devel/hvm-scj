@@ -1,4 +1,4 @@
-package test;
+package test.AVR.ATMega2560;
 
 import javax.realtime.Clock;
 import javax.realtime.ConfigurationParameters;
@@ -18,12 +18,12 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 import devices.Console;
-import devices.POSIXSCJTargetConfiguration;
+import devices.AVR.ATMega2560.ATMega2560SCJTargetConfiguration;
 import vm.MachineFactory;
 import vm.Memory;
 
 @SuppressWarnings("rawtypes")
-public class HelloSCJ extends /*ATMega2560SCJTargetConfiguration*/ POSIXSCJTargetConfiguration{
+public class HelloSCJ extends ATMega2560SCJTargetConfiguration /*POSIXSCJTargetConfiguration*/{
 
 	private static class MyCyclicSchedule {
 		static CyclicSchedule generate0(CyclicExecutive cyclicExec, PeriodicEventHandler[] handlers) {
@@ -163,7 +163,7 @@ public class HelloSCJ extends /*ATMega2560SCJTargetConfiguration*/ POSIXSCJTarge
 		int handlerStackSize;
 		int handlerMemorySize;
 
-		// blink(8000);
+		blink(8000);
 		
 		if (mimimalMemoryConfig) {
 			Const.OVERALL_BACKING_STORE = 4800;

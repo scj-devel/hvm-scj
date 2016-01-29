@@ -1,11 +1,10 @@
-package test;
+package test.AVR.ATMega2560;
 
+import devices.AVR.ATMega2560.ATMega2560SCJTargetConfiguration;
 import vm.Process;
 import vm.ProcessLogic;
-import devices.AVR.ATMega2560.ATMega2560SCJTargetConfiguration;
-import icecaptools.IcecapCompileMe;
 
-public class TestProcessTransfer1 extends ATMega2560SCJTargetConfiguration {
+public class TestProcessTransfer2 extends ATMega2560SCJTargetConfiguration {
     private static Process p1;
     private static Process p2;
     private static Process mainProcess;
@@ -14,12 +13,8 @@ public class TestProcessTransfer1 extends ATMega2560SCJTargetConfiguration {
 
     private static class P1 implements ProcessLogic {
         @Override
-        @IcecapCompileMe
         public void run() {
-            while (count < 10) {
-                p1.transferTo(p2);
-            }
-            p1.transferTo(mainProcess);
+            p1.transferTo(p2);
         }
         @Override
         public void catchError(Throwable t) {
@@ -29,12 +24,13 @@ public class TestProcessTransfer1 extends ATMega2560SCJTargetConfiguration {
 
     private static class P2 implements ProcessLogic {
         @Override
-        @IcecapCompileMe
         public void run() {
-            while (true) {
+            while (count < 10) {
                 count++;
+                p1.initialize();
                 p2.transferTo(p1);
             }
+            p2.transferTo(mainProcess);
         }
         @Override
         public void catchError(Throwable t) {
@@ -59,7 +55,7 @@ public class TestProcessTransfer1 extends ATMega2560SCJTargetConfiguration {
         mainProcess.transferTo(p1);
 
         if (count == 10) {
-            blink(16000);
+        	blink(16000);
         }
         else
         {
