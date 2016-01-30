@@ -47,9 +47,26 @@ public abstract class ATMega2560TargetConfiguration extends BaseTargetConfigurat
 	@IcecapCVar(expression = "SREG", requiredIncludes = "#include \"avr/io.h\"\n")
 	public static byte SREG;
 	
+	@IcecapCVar(expression = "UBRR2", requiredIncludes = "#include \"avr/io.h\"\n")
+	public static short UBRR2;
+	@IcecapCVar(expression = "UCSR2A", requiredIncludes = "#include \"avr/io.h\"\n")
+	public static byte UCSR2A;
+	@IcecapCVar(expression = "UCSR2B", requiredIncludes = "#include \"avr/io.h\"\n")
+	public static byte UCSR2B;
+	@IcecapCVar(expression = "UCSR2C", requiredIncludes = "#include \"avr/io.h\"\n")
+	public static byte UCSR2C;
+	@IcecapCVar(expression = "UDR2", requiredIncludes = "#include \"avr/io.h\"\n")
+	public static byte UDR2;
+	
 	protected static final byte TOIE0 = 0;
 	protected static final byte CS00 = 0;
 	protected static final byte CS01 = 1;
+	
+	protected static final byte RXEN2 = 4;
+	protected static final byte TXEN2 = 3;
+	protected static final byte UCSZ20 = 1;
+	protected static final byte UDRE2 = 5;
+	protected static final byte RXC2 = 7;
 	
 	static {
 		Machine.setMachineFactory(new ATMega2560MachineFactory());

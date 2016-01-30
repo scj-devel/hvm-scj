@@ -226,7 +226,7 @@ int16 n_java_lang_Class_getName0(int32 *sp) {
  * param : byte[]
  * return: void
  */
-#ifdef N_DEVICES_X86WRITER_NWRITE
+#ifdef N_DEVICES_DEFAULTWRITER_NWRITE
 static void print_to_stdout(unsigned char* src, unsigned char* buffer,
 		int32 buffersize, int32 nb) {
 	int32 count;
@@ -250,7 +250,7 @@ static void print_to_stdout(unsigned char* src, unsigned char* buffer,
 	}
 }
 
-int16 n_devices_X86Writer_nwrite(int32 *sp) {
+int16 n_devices_DefaultWriter_nwrite(int32 *sp) {
 	unsigned char buffer[16];
 	unsigned char* src;
 	int32 length;

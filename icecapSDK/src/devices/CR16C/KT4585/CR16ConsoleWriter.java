@@ -33,4 +33,9 @@ public class CR16ConsoleWriter implements Writer
 	public void write(byte[] bytes, short length) {
 		channel.write(bytes, length);
 	}
+
+	@Override
+	public short getMaxLineLength() {
+		return 64;
+	}
 }

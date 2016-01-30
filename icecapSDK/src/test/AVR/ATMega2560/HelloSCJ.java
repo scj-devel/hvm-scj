@@ -18,6 +18,8 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 import devices.Console;
+import devices.DefaultWriter;
+import devices.Writer;
 import devices.AVR.ATMega2560.ATMega2560SCJTargetConfiguration;
 import vm.MachineFactory;
 import vm.Memory;
@@ -159,15 +161,25 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /*POSIXSCJTargetC
 
 	private static final boolean mimimalMemoryConfig = true;
 
+	private static class ConsoleWriter extends DefaultWriter
+	{
+
+		@Override
+		public short getMaxLineLength() {
+			return 128;
+		}
+	}
+	
 	public static void main(String[] args) {
 		int handlerStackSize;
 		int handlerMemorySize;
 
 		blink(8000);
 		
+		Console.writer = new ConsoleWriter();
+		
 		if (mimimalMemoryConfig) {
 			Const.OVERALL_BACKING_STORE = 4800;
-			Console.DEFAULT_LENGTH = 128;
 			Const.MEMORY_TRACKER_AREA_SIZE = 30000;
 			Const.CYCLIC_SCHEDULER_STACK_SIZE = 256;
 			Const.MISSION_MEM = 800;
@@ -176,7 +188,6 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /*POSIXSCJTargetC
 			handlerMemorySize = 50;
 
 		} else {
-			Console.DEFAULT_LENGTH = 128;
 			Const.MEMORY_TRACKER_AREA_SIZE = 30000;
 			Const.CYCLIC_SCHEDULER_STACK_SIZE = 2048;
 			Const.MISSION_MEM = 40000;
