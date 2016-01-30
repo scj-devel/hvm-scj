@@ -1,6 +1,7 @@
 package devices.AVR.ATMega2560;
 
 import devices.TargetConfiguration;
+import devices.Writer;
 import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
 import util.BaseTargetConfiguration;
@@ -129,10 +130,53 @@ public abstract class ATMega2560TargetConfiguration extends BaseTargetConfigurat
 				return EBOOL.YES;
 			}
 		}
+		if (clazz.contains("java.lang.Integer"))
+		{
+			if (targetMethodName.contains("clinit"))
+			{
+				return EBOOL.YES;
+			}
+		}
 		return EBOOL.DONTCARE;
 	}
 	
 	protected static MachineFactory getConfiguration() {
 		return new ATMega2560MachineFactory();
+	}
+	
+	protected static class ATMega2560Writer implements Writer
+	{
+		public ATMega2560Writer()
+		{
+			Uart_Init((short) 64); // Set baud 9600 at CPU frequency 10 MHz
+		}
+		
+		@IcecapCompileMe
+		private static void Uart_Init(short enBaudRate) {
+			UBRR2 = enBaudRate;
+			UCSR2B = (1 << RXEN2) | (1 << TXEN2);
+			UCSR2C = (3 << UCSZ20);
+		}
+		
+		@IcecapCompileMe
+		public static void WriteUartChar(byte ui8Char) {
+			while ((UCSR2A & (1 << UDRE2)) == 0) {
+				;
+			}
+			UDR2 = ui8Char;
+		}
+		
+		@Override
+		public void write(byte[] bytes, short length) {
+			for (short i = 0; i < length; i++)
+			{
+				WriteUartChar(bytes[i]);
+			}
+		}
+
+		@Override
+		public short getMaxLineLength() {
+			return 128;
+		}		
 	}
 }

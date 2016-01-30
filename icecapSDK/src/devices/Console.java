@@ -54,7 +54,5 @@ public class Console {
 
 	public static void println(int i) {
 		println("" + i);
-
 	}
-
 }
