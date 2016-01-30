@@ -11,6 +11,7 @@ public abstract class POSIXTargetConfiguration extends BaseTargetConfiguration i
 
 	static {
 		Machine.setMachineFactory(new POSIX64BitMachineFactory());
+		Console.writer = new DefaultWriter();
 	}
 
 	@Override

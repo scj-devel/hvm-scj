@@ -1,6 +1,5 @@
 package test.AVR.ATMega2560;
 
-import devices.Console;
 import devices.AVR.ATMega2560.ATMega2560TargetConfiguration;
 import icecaptools.IcecapCompileMe;
 
@@ -8,8 +7,6 @@ public class TestUART extends ATMega2560TargetConfiguration {
 
 	@IcecapCompileMe
 	public static void main(String[] args) {
-		Console.writer = new ATMega2560Writer();
-		
 		char toggle = 0;
 		DDRA = (byte) 0xFF;
 

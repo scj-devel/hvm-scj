@@ -1,5 +1,6 @@
 package devices.AVR.ATMega2560;
 
+import devices.Console;
 import devices.TargetConfiguration;
 import devices.Writer;
 import icecaptools.IcecapCVar;
@@ -71,6 +72,7 @@ public abstract class ATMega2560TargetConfiguration extends BaseTargetConfigurat
 	
 	static {
 		Machine.setMachineFactory(new ATMega2560MachineFactory());
+		Console.writer = new ATMega2560Writer();
 	}
 	
 	@Override
