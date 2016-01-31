@@ -9,10 +9,6 @@ public class TestInnerClasses {
 		public int foo() {
 			return 42;
 		}
-
-		public static void main(String[] args) {
-			args = null;
-		}
 	}
 
 	/**

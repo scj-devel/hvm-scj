@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestMiniTests {
 
 	public static void main(String[] args) throws Exception {
@@ -61,7 +63,7 @@ public class TestMiniTests {
 		// --- failed = check(TestStringBuffer2.test(failed));
 		// --- failed = check(TestNullPointerException.test(failed)); 
 
-		args = null;
+		VMTest.markResult(false);
 	}
 
 	private static String[] check(boolean failed) throws Exception {

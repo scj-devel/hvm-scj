@@ -218,7 +218,6 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /*POSIXSCJTargetC
 			vm.Process.reportStackUsage();
 			Memory.reportMemoryUsage();
 		}
-		args = null;
 	}
 
 	@Override
