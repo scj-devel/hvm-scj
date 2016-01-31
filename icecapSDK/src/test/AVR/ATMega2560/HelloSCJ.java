@@ -19,7 +19,6 @@ import javax.scj.util.Priorities;
 
 import devices.Console;
 import devices.DefaultWriter;
-import devices.Writer;
 import devices.AVR.ATMega2560.ATMega2560SCJTargetConfiguration;
 import vm.MachineFactory;
 import vm.Memory;
