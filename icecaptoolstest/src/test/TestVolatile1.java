@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestVolatile1 {
 
     public static class VolatileObject1 {
@@ -26,7 +28,7 @@ public class TestVolatile1 {
             VolatileObject2 vobj2 = new VolatileObject2();
 
             if (vobj2.a + vobj2.b == 42) {
-                args = null;
+            	VMTest.markResult(false);
             }
         }
     }

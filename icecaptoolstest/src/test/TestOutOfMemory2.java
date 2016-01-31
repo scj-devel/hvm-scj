@@ -1,13 +1,15 @@
 package test;
 
+import vm.VMTest;
+
 public class TestOutOfMemory2 {
 
     public static void main(String[] args) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
     @SuppressWarnings("unused")
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		try {
             int i = 0;
             while (true) {
@@ -15,7 +17,7 @@ public class TestOutOfMemory2 {
                 i++;
             }
         } catch (OutOfMemoryError error) {
-            return null;
+            return false;
         }
 	}
 }

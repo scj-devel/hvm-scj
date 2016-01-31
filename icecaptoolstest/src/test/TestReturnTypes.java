@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestReturnTypes {
 
     /**
@@ -15,9 +17,7 @@ public class TestReturnTypes {
         failed |= test.testShortVirt();
         failed |= test.testIntVirt();
         
-        if (!failed) {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 
     public boolean testByteVirt() {

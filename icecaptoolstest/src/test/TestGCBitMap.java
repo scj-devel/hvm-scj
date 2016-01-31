@@ -3,6 +3,7 @@ package test;
 import gc.BitMap;
 import util.ReferenceIterator;
 import util.ReferenceList;
+import vm.VMTest;
 
 public class TestGCBitMap {
 
@@ -22,7 +23,7 @@ public class TestGCBitMap {
 
         if (simpleTest()) {
             if (bitMapTest.test()) {
-                args = null;
+                VMTest.markResult(false);
                 return;
             } else {
                 devices.Console.println("\nbitMapTest failed");

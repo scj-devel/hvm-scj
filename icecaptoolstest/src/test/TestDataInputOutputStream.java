@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.LinkedList;
 
+import vm.VMTest;
+
 public class TestDataInputOutputStream {
 
 	public static class SimpleOutputStream extends OutputStream {
@@ -55,7 +57,7 @@ public class TestDataInputOutputStream {
 					outputStream.close();
 					simpleInput.close();
 					simpleOutput.close();
-					args = null;
+					VMTest.markResult(false);
 				}
 			}
 		} catch (IOException e) {

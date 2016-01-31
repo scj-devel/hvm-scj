@@ -1,15 +1,17 @@
 package test;
 
+import vm.VMTest;
+
 public class TestLong2 extends TestLong {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-    	args = test(args);
+    	VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		long x = 100;
         long y = 0;
         try {
@@ -17,10 +19,10 @@ public class TestLong2 extends TestLong {
         } catch (ArithmeticException ae) {
             return testldiv32();
         }
-        return args;
+        return true;
 	}
 
-    public static String[] testldiv32() {
+    public static boolean testldiv32() {
         long[][] operands = { { 100, 10 }, { 10, 100 }, { 1000000000000L, 1 }, { -100, 10 }, { 0x1, 0x1 }, { 0x0, 0x1 }, {0x143f3278a61L, 1000} };
         for (int i = operands.length - 1; i >= 0; i--) {
             long[] nextPair = operands[i];
@@ -54,7 +56,7 @@ public class TestLong2 extends TestLong {
                 return failed();
             }
         }
-        return null;
+        return false;
     }
 
     private static long ldiv32(long x, long y) {

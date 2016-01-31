@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestPrintLong {
 
     /**
@@ -7,11 +9,7 @@ public class TestPrintLong {
      */
     public static void main(String[] args) {
         boolean failed = test();
-        if (!failed)
-        {
-            args = null;
-        }
-
+        VMTest.markResult(failed);
     }
 
     public static boolean test() {

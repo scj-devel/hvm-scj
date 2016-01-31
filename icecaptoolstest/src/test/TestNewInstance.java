@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestNewInstance {
 
     private static class A
@@ -23,10 +25,7 @@ public class TestNewInstance {
      */
     public static void main(String[] args) {
         boolean failure = test();
-        if (!failure)
-        {
-            args = null;
-        }
+        VMTest.markResult(failure);
     }
 
     public static boolean test() {

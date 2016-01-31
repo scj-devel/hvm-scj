@@ -3,6 +3,8 @@ package test;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import vm.VMTest;
+
 public class TestReflectMethod2 {
 
     public int foo(int x) {
@@ -22,7 +24,7 @@ public class TestReflectMethod2 {
             try {
                 m = cl.getMethod("nonexistant", types);
             } catch (NoSuchMethodException e) {
-                args = null;
+            	VMTest.markResult(false);
             }
         }
     }

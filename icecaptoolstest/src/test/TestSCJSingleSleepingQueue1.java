@@ -33,6 +33,8 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
+import vm.VMTest;
+
 @SuppressWarnings("rawtypes")
 public class TestSCJSingleSleepingQueue1 {
     private static class MyAperiodicEvh extends AperiodicEventHandler {
@@ -215,6 +217,6 @@ public class TestSCJSingleSleepingQueue1 {
         // executes in heap memory
         new LaunchLevel1(new MyApp());
         devices.Console.println("***** Sleeping queue end **************");
-        args = null;
+        VMTest.markResult(false);
     }
 }

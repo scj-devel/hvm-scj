@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestInvokeDynamic3 {
     private static interface Adder {
         int add(int x, int y);
@@ -12,7 +14,7 @@ public class TestInvokeDynamic3 {
 
         if (!test()) {
             if (adder.add(30, 12) == 42) {
-                args = null;
+            	VMTest.markResult(false);
             }
         }
     }

@@ -4,6 +4,7 @@ import reflect.ObjectInfo;
 import util.ReferenceIterator;
 import vm.HVMHeap;
 import vm.Heap;
+import vm.VMTest;
 
 public class TestObjectTraversal {
 
@@ -20,10 +21,7 @@ public class TestObjectTraversal {
      */
     public static void main(String[] args) {
        boolean failed = test();
-       if (!failed)
-       {
-           args = null;
-       }
+       VMTest.markResult(failed);
     }
 
     public static boolean test() {

@@ -1,6 +1,7 @@
 package test;
 
 import vm.Memory;
+import vm.VMTest;
 
 public class TestAllocationArea2 {
 
@@ -18,6 +19,6 @@ public class TestAllocationArea2 {
                 break;
             }
         }
-        args = null;
+        VMTest.markResult(false);
     }
 }

@@ -14,6 +14,8 @@ import javax.safetycritical.Services;
 import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 
+import vm.VMTest;
+
 public class TestSCJMPMemory {
 	public static MissionSequencer<MyMission0> ms;
 
@@ -146,7 +148,7 @@ public class TestSCJMPMemory {
 		devices.Console.println("\n***** test multicore memory management main.begin ************");
 		new LaunchMulticore(new MyApp(), 1);
 		devices.Console.println("***** test multicore memory management main.end **************");
-		args = null;
+		VMTest.markResult(false);
 	}
 
 }

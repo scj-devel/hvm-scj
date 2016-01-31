@@ -6,6 +6,7 @@ import vm.Monitor;
 import vm.POSIX64BitMachineFactory;
 import vm.Process;
 import vm.Scheduler;
+import vm.VMTest;
 
 public class TestWaitNotify {
 
@@ -200,8 +201,8 @@ public class TestWaitNotify {
 
         devices.Console.println("finished");
         if (!takerLogic.isError()) {
-            args = null;
+        	VMTest.markResult(false);
         }
-        args = null;
+        // VMTest.markResult(false);
     }
 }

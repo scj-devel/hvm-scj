@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestBug4 {
 
     final static char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
@@ -49,12 +51,12 @@ public class TestBug4 {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
     static int counter;
 
-    private static String[] test(String[] args) {
+    private static boolean test() {
         char[] buf = new char[5];
         getChars(42000, buf.length, buf);
         if (buf[0] == '4') {
@@ -62,7 +64,7 @@ public class TestBug4 {
                 if (buf[2] == '0') {
                     if (buf[3] == '0') {
                         if (buf[4] == '0') {
-                            return null;
+                            return false;
                         }
 
                     }
@@ -72,7 +74,6 @@ public class TestBug4 {
             }
 
         }
-        return args;
+        return true;
     }
-
 }

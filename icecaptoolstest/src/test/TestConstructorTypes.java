@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestConstructorTypes {
 
 	private static class Constructor {
@@ -81,11 +83,11 @@ public class TestConstructorTypes {
 	}
 
 	public static void main(String[] args) {
-		args = test(args);
+		VMTest.markResult(test());
 	}
 
 	@SuppressWarnings("unused")
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		Constructor emptyConstructor = new Constructor();
 		Constructor boolConstructor = new Constructor(true);
 		Constructor byteConstructor = new Constructor((byte) 255);
@@ -98,13 +100,12 @@ public class TestConstructorTypes {
 				if (shortConstructor.getsVal() == (short) 65535) {
 					if (intConstructor.getiVal() == (int) 12345678) {
 						if (longConstructor.getlVal() == (long) 0x1122334455667788L) {
-							return null;
+							return false;
 						}
 					}
 				}
 			}
 		}
-		return args;
+		return true;
 	}
-
 }

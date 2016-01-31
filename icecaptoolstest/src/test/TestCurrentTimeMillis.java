@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestCurrentTimeMillis {
 
 	public static void main(String[] args) {
@@ -13,6 +15,6 @@ public class TestCurrentTimeMillis {
 		} while (end - start < 1000);
 			
 		devices.Console.println("Done");
-		args = null;
+		VMTest.markResult(false);
 	}
 }

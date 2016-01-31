@@ -5,14 +5,15 @@ import java.io.IOException;
 import devices.Console;
 
 import util.CircularBuffer;
+import vm.VMTest;
 
 public class TestCircularBuffer {
 
     public static void main(String args[]) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-    public static String[] test(String[] args) {
+    public static boolean test() {
         CircularBuffer cbuf = new CircularBuffer((short) 10);
         try {
             if (cbuf.isEmpty()) {
@@ -47,14 +48,14 @@ public class TestCircularBuffer {
         } catch (IOException e) {
             Console.println(e.getMessage());
         }
-        return args;
+        return true;
     }
 
-    private static String[] testSpecialCases(CircularBuffer cbuf) throws IOException {
+    private static boolean testSpecialCases(CircularBuffer cbuf) throws IOException {
         testWrapAround(cbuf);
         testReadFromEmptyBuffer(cbuf);
         testWriteToFullBuffer(cbuf);
-        return null;
+        return false;
     }
 
     private static void testWrapAround(CircularBuffer cbuf) throws IOException {

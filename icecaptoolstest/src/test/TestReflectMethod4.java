@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 
 import reflect.ReflectionUtils;
 import vm.Memory;
+import vm.VMTest;
 
 public class TestReflectMethod4 {
 
@@ -37,7 +38,7 @@ public class TestReflectMethod4 {
                 if (index == ReflectionUtils.readMethodIndex(m)) {
                     Integer x = (Integer) m.invoke(b, new Integer(32));
                     if (x == b.foo(32)) {
-                        args = null;
+                    	VMTest.markResult(false);
                     }
                 }
             } else {

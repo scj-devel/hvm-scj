@@ -34,6 +34,7 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 import vm.Memory;
+import vm.VMTest;
 
 public class TestSCJSingleHandlerMemory {
 	private static int sizeOfSmallObject;
@@ -257,8 +258,6 @@ public class TestSCJSingleHandlerMemory {
 
 		devices.Console.println("********* TestSCJHandlerMemory main.end ********************");
 
-		if (!fail) {
-			args = null;
-		}
+		VMTest.markResult(fail);
 	}
 }

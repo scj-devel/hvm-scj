@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestInvokeDynamic5 {
 
 	private static int count = 0;
@@ -36,7 +38,7 @@ public class TestInvokeDynamic5 {
 
 		doItTwice();
 		if (count == 3) {
-			args = null;
+			VMTest.markResult(false);
 		}
 	}
 

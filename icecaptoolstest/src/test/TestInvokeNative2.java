@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestInvokeNative2 {
 
     private static class Super {
@@ -14,14 +16,14 @@ public class TestInvokeNative2 {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
-    public static String[] test(String[] args) {
+    public static boolean test() {
 
         if (SubClass.testNativeStatic() == 42) {
-            return null;
+            return false;
         }
-        return args;
+        return true;
     }
 }

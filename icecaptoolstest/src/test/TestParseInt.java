@@ -1,6 +1,7 @@
 package test;
 
 import util.StringUtil;
+import vm.VMTest;
 
 public class TestParseInt {
 
@@ -20,7 +21,7 @@ public class TestParseInt {
 					res = StringUtil.parseInt(StringUtil.getBytes(("" + Integer.MAX_VALUE)));
 					if (res == Integer.MAX_VALUE)
 					{
-						args = null;
+						VMTest.markResult(false);
 					}					
 				}
 			}

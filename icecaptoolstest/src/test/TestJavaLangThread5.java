@@ -2,6 +2,7 @@ package test;
 
 import thread.JavaLangThreadScheduler;
 import vm.Machine;
+import vm.VMTest;
 
 public class TestJavaLangThread5 {
 
@@ -61,7 +62,7 @@ public class TestJavaLangThread5 {
         }
 
         if (c.getCount() == 420000) {
-            args = null;
+        	VMTest.markResult(false);
         }
 
         devices.Console.println("got count = " + c.getCount());

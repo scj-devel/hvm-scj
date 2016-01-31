@@ -1,22 +1,24 @@
 package test;
 
+import vm.VMTest;
+
 public class TestInvokeStatic {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		int x = staticMethod(10, 32);
         
         if (x == 42)
         {
-            return null;
+            return false;
         }
-        return args;
+        return true;
 	}
 
     private static int staticMethod(int i, int j) {

@@ -1,16 +1,18 @@
 package test;
 
+import vm.VMTest;
+
 public class TestLREM {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
 
     }
 
-    private static String[] test(String[] args) {
+    private static boolean test() {
         long x = 0x1ffffffffL;
         long y = 0x23L;
 
@@ -26,10 +28,10 @@ public class TestLREM {
             try {
                 expected = x % y;
             } catch (ArithmeticException e) {
-                return null;
+                return false;
             }
         }
-        return args;
+        return true;
     }
 
 }

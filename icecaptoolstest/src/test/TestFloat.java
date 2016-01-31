@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestFloat {
 
     public static void main(String[] args) {
@@ -7,9 +9,7 @@ public class TestFloat {
         failure |= test2();
         failure |= test3();
         failure |= test4(4.20f);
-        if (!failure) {
-            args = null;
-        }
+        VMTest.markResult(failure);
     }
 
     public static boolean test4(float f) {

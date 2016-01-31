@@ -17,6 +17,8 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
+import vm.VMTest;
+
 public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet<Mission> {
 
     private static class MyPeriodicEvh extends PeriodicEventHandler {
@@ -161,6 +163,6 @@ public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet<Missio
       new LaunchLevel1(new TestSCJSingleLinearMissSeqWithTwoMissions());
       devices.Console.println("***** TestSCJSingleLinearMissSeqWithTwoMissions main.end **************");
       
-      args = null;
+      VMTest.markResult(false);
     }
 }

@@ -1,6 +1,7 @@
 package test;
 
 import thread.Thread;
+import vm.VMTest;
 
 public class TestThread1 {
 
@@ -42,7 +43,7 @@ public class TestThread1 {
         }
 
         if (count == 420000) {
-            args = null;
+        	VMTest.markResult(false);
         }
 
         devices.Console.println("got count = " + count);

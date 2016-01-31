@@ -17,6 +17,7 @@ import javax.scj.util.Priorities;
 
 import vm.MachineFactory;
 import vm.POSIX64BitMachineFactory;
+import vm.VMTest;
 
 public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive implements Safelet<CyclicExecutive> {
 
@@ -124,6 +125,6 @@ public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive i
 		MachineFactory mFactory = new POSIX64BitMachineFactory();
 		
 		new LaunchLevel0(new TestSCJSingleLevel0SimpleCyclicExecutive1(), mFactory);
-		args = null;
+		VMTest.markResult(false);
 	}
 }

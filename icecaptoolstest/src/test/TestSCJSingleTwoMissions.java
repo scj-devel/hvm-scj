@@ -16,6 +16,8 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
+import vm.VMTest;
+
 @SuppressWarnings("rawtypes")
 public class TestSCJSingleTwoMissions {
 
@@ -189,6 +191,6 @@ public class TestSCJSingleTwoMissions {
       new LaunchLevel1(new MyApp());
       devices.Console.println("***** Two Missions main.end **************");
       
-      args = null;
+      VMTest.markResult(false);
     }
 }

@@ -17,6 +17,8 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
+import vm.VMTest;
+
 public class TestSCJSingleCyclicSchedule4 {
 
     public static class MyCyclicSchedule {
@@ -147,7 +149,7 @@ public class TestSCJSingleCyclicSchedule4 {
         devices.Console.println("\n****** CyclicSchedule4 main.begin *********");
         new LaunchLevel0(new MyApp());
         devices.Console.println("****** CyclicSchedule4 main.end *********");
-        args = null;
+        VMTest.markResult(false);
     }
 
 }

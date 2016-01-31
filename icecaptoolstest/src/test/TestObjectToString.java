@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestObjectToString {
 
     private static class A {
@@ -11,17 +13,17 @@ public class TestObjectToString {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-    public static String[] test(String[] args) {
+    public static boolean test() {
         A a = new A();
         String str = a.toString();
         if (str != null) {
             if (str.length() > 0) {
-                return null;
+                return false;
             }
         }
-        return args;
+        return true;
     }
 }

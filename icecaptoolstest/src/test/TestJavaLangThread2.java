@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class TestJavaLangThread2 {
     private static class Counter
@@ -62,7 +63,7 @@ public class TestJavaLangThread2 {
         }
 
         if (counter.getCount() > 0) {
-            args = null;
+        	VMTest.markResult(false);
         }
 
         devices.Console.println("got count = " + counter.getCount());

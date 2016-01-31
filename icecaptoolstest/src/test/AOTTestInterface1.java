@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class AOTTestInterface1 {
 
@@ -81,11 +82,11 @@ public class AOTTestInterface1 {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
     @IcecapCompileMe
-    public static String[] test(String[] args) {
+    public static boolean test() {
         Interface1 a = new A();
         Interface1 b = new B();
         Interface2 b2 = (B) b;
@@ -96,8 +97,8 @@ public class AOTTestInterface1 {
         int x = a.bar() + b.bar() + b2.baz() + c.bar() + c2.baz() + c3.baf() + ((Interface4)c).caf();
 
         if (x == 152) {
-           return null;
+           return false;
         }
-        return args;
+        return true;
     }
 }

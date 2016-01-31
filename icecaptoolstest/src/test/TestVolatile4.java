@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestVolatile4 {
 
     private static class ConstantData {
@@ -23,7 +25,7 @@ public class TestVolatile4 {
 
                     if (sum == 6) {
                         if (cdata.NUM2 == 43) {
-                            args = null;
+                        	VMTest.markResult(false);
                         }
                     }
                 }

@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestBoxedBoolean {
 
     private static Boolean sb = false;
@@ -9,10 +11,7 @@ public class TestBoxedBoolean {
      */
     public static void main(String[] args) {
        boolean failed = test();
-       if (!failed)
-       {
-           args = null;
-       }
+       VMTest.markResult(failed);
     }
 
     private static boolean test() {

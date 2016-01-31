@@ -9,6 +9,7 @@ import javax.microedition.io.Connector;
 import javax.safetycritical.io.ConnectionFactory;
 
 import util.TCPConnectionFactoryPosix;
+import vm.VMTest;
 
 public class TestTCPConnection {
 	private static boolean success;
@@ -96,7 +97,7 @@ public class TestTCPConnection {
 		clientThread.join();
 
 		if (success) {
-			args = null;
+			VMTest.markResult(false);
 		}
 	}
 }

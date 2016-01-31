@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestVolatile3 {
 
 	private static class Configuration
@@ -41,7 +43,7 @@ public class TestVolatile3 {
 			        {
 			            if (conf.other.other == null)
 			            {
-			                args = null; 
+			            	VMTest.markResult(false);
 			            }
 			        }
 			    }

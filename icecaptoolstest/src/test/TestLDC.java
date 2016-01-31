@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestLDC {
 
     static String str;
@@ -8,10 +10,10 @@ public class TestLDC {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		String s = "HelloWorld!";
         str = s;
         if (str == s) {
@@ -24,12 +26,12 @@ public class TestLDC {
                     str = s;
                     if (oneMore == str) {
                         if (oneMore.getClass() == String.class) {
-                            return null;
+                            return false;
                         }
                     }
                 }
             }
         }
-        return args;
+        return true;
 	}
 }

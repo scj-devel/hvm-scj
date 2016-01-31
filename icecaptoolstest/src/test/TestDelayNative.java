@@ -6,6 +6,7 @@ import javax.realtime.RelativeTime;
 
 import vm.Machine;
 import vm.POSIX64BitMachineFactory;
+import vm.VMTest;
 
 public class TestDelayNative {
 
@@ -24,6 +25,6 @@ public class TestDelayNative {
             vm.RealtimeClock.delayNativeUntil(next);
             devices.Console.println("tick");
         }
-        args = null;
+        VMTest.markResult(false);
     }
 }

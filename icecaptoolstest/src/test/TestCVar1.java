@@ -2,6 +2,7 @@ package test;
 
 import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class TestCVar1 {
 
@@ -13,9 +14,7 @@ public class TestCVar1 {
         failed |= test2();
         failed |= test3();
         failed |= test4();
-        if (!failed) {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 
     @IcecapCVar

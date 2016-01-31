@@ -19,6 +19,8 @@ import javax.safetycritical.Services;
 import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 
+import vm.VMTest;
+
 
 public class TestSCJMPApevhAndOneShotAndThread implements Safelet<Mission> {
 	static StorageParameters storageParameters_Sequencer;
@@ -163,7 +165,7 @@ public class TestSCJMPApevhAndOneShotAndThread implements Safelet<Mission> {
 		devices.Console.println("\n***** test multicore aperiodic handler and thread main.begin ************");
 		new LaunchMulticore(new TestSCJMPApevhAndOneShotAndThread(), 1);
 		devices.Console.println("***** test multicore aperiodic handler and thread main.end **************");
-		args = null;
+		VMTest.markResult(false);
 	}
 }
 

@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class TestBug5 {
 
@@ -50,6 +51,6 @@ public class TestBug5 {
      */
     public static void main(String[] args) {
         new StringBuilder(100);
-        args = null;
+        VMTest.markResult(false);
     }
 }

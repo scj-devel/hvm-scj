@@ -1,8 +1,8 @@
 package test;
 
 public class TestLong {
-    protected static String[] failed() {
-        String[] str = { "It failed" };
-        return str;
+    protected static boolean failed() {
+        
+        return true;
     }    
 }

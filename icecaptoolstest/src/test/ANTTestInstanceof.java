@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class ANTTestInstanceof {
 
@@ -14,9 +15,7 @@ public class ANTTestInstanceof {
      */
     public static void main(String[] args) {
         boolean failure = test(new A());
-        if (!failure) {
-            args = null;
-        }
+        VMTest.markResult(failure);
     }
 
     @IcecapCompileMe

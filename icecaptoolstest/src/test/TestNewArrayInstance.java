@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestNewArrayInstance {
 
     /**
@@ -7,9 +9,7 @@ public class TestNewArrayInstance {
      */
     public static void main(String[] args) {
         boolean failure = test();
-        if (!failure) {
-            args = null;
-        }
+        VMTest.markResult(failure);
     }
 
     public static boolean test() {

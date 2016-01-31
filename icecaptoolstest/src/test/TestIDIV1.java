@@ -1,26 +1,29 @@
 package test;
 
+import vm.VMTest;
+
 public class TestIDIV1 extends TestLong {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		int x = 100;
         int y = 0;
+        boolean result = true;
         try {
             x = x / y;
         } catch (ArithmeticException ae) {
-            args = testidiv(); 
+        	result = testidiv(); 
         }
-        return args;
+        return result;
 	}
     
-    public static String[] testidiv() {
+    public static boolean testidiv() {
         int[][] operands = { { 100, 10 }, { 10, 100 }, { -100, 10 }, { 0x1, 0x1 }, { 0x0, 0x1 } };
         for (int i = operands.length - 1; i >= 0; i--) {
             int[] nextPair = operands[i];
@@ -54,7 +57,7 @@ public class TestIDIV1 extends TestLong {
                 return failed();
             }
         }
-        return null;
+        return false;
     }
     
     private static int idiv(int x, int y) {

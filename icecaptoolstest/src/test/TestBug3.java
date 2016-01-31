@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class TestBug3 {
 
@@ -27,14 +28,16 @@ public class TestBug3 {
     public static void main(String[] args) {
         Bug3 b = new Bug3();
         b.foo(true);
+        boolean failed = true;
         if (b.array.length == 11)
         {
             b.foo(false);
             
             if (b.array.length == 10)
             {
-                args = null;
+            	failed = false;
             }
         }
+        VMTest.markResult(failed);
     }
 }

@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class ANTTestPutGetField {
     private static class TempClass
@@ -12,9 +13,7 @@ public class ANTTestPutGetField {
      */
     public static void main(String[] args) {
         boolean failure = test(new TempClass());
-        if (!failure) {
-            args = null;
-        }
+        VMTest.markResult(failure);
     }
     
     @IcecapCompileMe

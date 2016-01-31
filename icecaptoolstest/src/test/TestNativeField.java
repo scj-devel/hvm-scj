@@ -2,6 +2,7 @@ package test;
 
 import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class TestNativeField {
 
@@ -28,7 +29,7 @@ public class TestNativeField {
 	public static void main(String[] args) {
 		if (!SubClass.testField())
 		{
-			args = null;
+			VMTest.markResult(false);
 		}
 	}
 }

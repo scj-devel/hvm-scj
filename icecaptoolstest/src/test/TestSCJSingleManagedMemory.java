@@ -21,6 +21,7 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 import vm.Memory;
+import vm.VMTest;
 
 public class TestSCJSingleManagedMemory {
 	private static int sizeOfSmallObject;
@@ -371,6 +372,6 @@ public class TestSCJSingleManagedMemory {
 		//vm.Memory.reportMemoryUsage();
 
 		if (fails == 0 && errors == 0)
-			args = null;
+			VMTest.markResult(false);
 	}
 }

@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestIDIV2 {
 
     /**
@@ -7,9 +9,7 @@ public class TestIDIV2 {
      */
     public static void main(String[] args) {
         boolean failed = test();
-        if (!failed) {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 
     private static boolean test() {

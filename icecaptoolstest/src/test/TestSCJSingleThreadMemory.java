@@ -30,6 +30,7 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 import vm.Memory;
+import vm.VMTest;
 
 public class TestSCJSingleThreadMemory {
 	private static int sizeOfSmallObject;
@@ -246,8 +247,6 @@ public class TestSCJSingleThreadMemory {
 		devices.Console.println("\n********** TestSCJThreadMemory main.begin ******************");
 		new LaunchLevel2(new MyApp());
 		devices.Console.println("********* TestSCJThreadMemory main.end ********************");
-		if (!fail) {
-			args = null;
-		}
+		VMTest.markResult(fail);
 	}
 }

@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestPrint {
 
     /**
@@ -12,7 +14,7 @@ public class TestPrint {
 
         if (length == 3) {
             if (string.charAt(0) == 'a') {
-                args = null;
+            	VMTest.markResult(false);
             }
         }
 

@@ -18,6 +18,7 @@ import javax.scj.util.Priorities;
 
 import vm.Address32Bit;
 import vm.HardwareObject;
+import vm.VMTest;
 
 public class TestSCJSingleSimpleLowMemory {
 
@@ -195,6 +196,6 @@ public class TestSCJSingleSimpleLowMemory {
         new LaunchLevel1(new MyApp());
         devices.Console.println("\n***** TestSCJSimpleLowMemory end *****");
 
-        args = null;
+        VMTest.markResult(false);
     }
 }

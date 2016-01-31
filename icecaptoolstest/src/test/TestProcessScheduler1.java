@@ -5,6 +5,7 @@ import vm.Monitor;
 import vm.POSIX64BitMachineFactory;
 import vm.Process;
 import vm.Scheduler;
+import vm.VMTest;
 
 public class TestProcessScheduler1 {
     static int count;
@@ -118,6 +119,6 @@ public class TestProcessScheduler1 {
         clockHandler.startClockHandler(mainProcess, mFactory);
         
         devices.Console.println("finished");
-        args = null; 
+        VMTest.markResult(false);
     }
 }

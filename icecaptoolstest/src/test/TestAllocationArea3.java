@@ -1,6 +1,7 @@
 package test;
 
 import vm.Memory;
+import vm.VMTest;
 
 public class TestAllocationArea3 {
 
@@ -69,8 +70,6 @@ public class TestAllocationArea3 {
 
 		devices.Console.println("Used " + consumed + " bytes");
 		
-		if (consumed == 0) {
-			args = null;
-		}
+		VMTest.markResult(consumed != 0);
 	}
 }

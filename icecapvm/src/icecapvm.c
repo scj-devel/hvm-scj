@@ -17,8 +17,6 @@
 #if defined(JAVA_LANG_THROWABLE_INIT_)
 extern void handleException(unsigned short classIndex);
 #endif
-extern void mark_error(void);
-extern void mark_success(void);
 extern unsigned char init_vm(void);
 extern int32* get_java_stack_base(int16 size);
 extern int16 initializeExceptions(int32* sp);
@@ -57,8 +55,9 @@ unsigned char awaitCommandFromDebugger(int32* fp, unsigned short methodNumber, u
 #define	ERROR 1
 #define SUCCESS 0
 
+int8 exitValue;
+
 #if defined(VM_CLOCKINTERRUPTHANDLER_HANDLE)
-static Object temp;
 static int32* mainMethodJavaStack;
 #endif
 
@@ -66,11 +65,13 @@ extern void init_compiler_specifics(void);
 
 int run_vm(void) {
 #if !defined(VM_CLOCKINTERRUPTHANDLER_HANDLE)
-	Object temp;
 	int32* mainMethodJavaStack;
 #endif
 
 	int16 execp = 0;
+
+	exitValue = 1;
+
 	/* Required for certain compilers. */
 	init_compiler_specifics();
 
@@ -104,7 +105,6 @@ int run_vm(void) {
 
 	/* mainMethodJavaStack contains both Java and C stack. Java stack grows
 	 * upwards from the beginning, C stack downwards from the end. */
-	stackPointer = (pointer) &mainMethodJavaStack[JAVA_STACK_SIZE - 2];
 	/* 'set_stack_pointer' sets the C stack */
 	stackPointer = (pointer) & mainMethodJavaStack[JAVA_STACK_SIZE - 2];
 	set_stack_pointer();
@@ -132,10 +132,8 @@ int run_vm(void) {
 			execp = invokeClassInitializers(mainMethodJavaStack);
 			if (execp == -1) {
 #endif
-				/* This is only for testing. All tests will write 0 (null) to
-				 * '*mainMethodJavaStack' if the test is successful.
-				 */
-				*mainMethodJavaStack = (int32) (pointer) &temp;
+				/* Set the args parameter to null */
+				*mainMethodJavaStack = 0;
 
 #if defined(DEVICES_SYSTEM_INITIALIZESYSTEMCLASS)
 				execp = enterMethodInterpreter(
@@ -162,8 +160,6 @@ int run_vm(void) {
 	papi_mark();
 #endif
 
-	mark_error();
-
 	if (execp >= 0) {
 #if defined(JAVA_LANG_THROWABLE_INIT_)
 		handleException(execp);
@@ -186,14 +182,7 @@ int run_vm(void) {
 	disconnectFromDebugger();
 #endif
 
-	if (*mainMethodJavaStack) {
-		return ERROR;
-	} else {
-		mark_success();
-		return SUCCESS;
-	}
-
-	return 0;
+	return exitValue;
 }
 
 /* TODO: Use the Process concept to handle main and main processes */

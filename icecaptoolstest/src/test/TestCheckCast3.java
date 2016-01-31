@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestCheckCast3 {
     
     private static interface Interface1
@@ -21,21 +23,21 @@ public class TestCheckCast3 {
  
     public static void main(String args[])
     {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
     @SuppressWarnings("unused")
-    public static String[] test(String[] args) {
+    public static boolean test() {
         Interface1 inter1;
         Object a = new A();
         try
         {
             inter1 = (Interface1) a;
-            return null;
+            return false;
         } catch (ClassCastException cce)
         {
             
         }
-        return args;
+        return true;
     }
 }

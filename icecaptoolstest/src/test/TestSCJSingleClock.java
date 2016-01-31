@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 
 public class TestSCJSingleClock {
@@ -17,10 +18,7 @@ public class TestSCJSingleClock {
         app.run();
 
         devices.Console.println("\n********** TestSCJClock main.end ******************");
-        if (!error)
-        {
-            args = null;
-        }
+        VMTest.markResult(error);
     }
     
     @IcecapCompileMe

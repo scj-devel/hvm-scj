@@ -18,7 +18,7 @@ public class TestUART extends ATMega2560TargetConfiguration {
 				PORTA = 0x55;
 				toggle = 0;
 			}
-			devices.Console.println("HelloWorld!");
+			devices.Console.println("Hello Lisbeth");
 			devices.System.delay(8000);
 		}
 	}

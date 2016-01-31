@@ -17,6 +17,8 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
+import vm.VMTest;
+
 @SuppressWarnings("rawtypes") 
 public class TestSCJSingleCyclicSchedule3 {
 
@@ -228,6 +230,6 @@ public class TestSCJSingleCyclicSchedule3 {
         new LaunchLevel0(new MyApp());
         devices.Console.println("****** Cyc 3 main.end *********");
         
-        args = null;
+        VMTest.markResult(false);
     }
 }

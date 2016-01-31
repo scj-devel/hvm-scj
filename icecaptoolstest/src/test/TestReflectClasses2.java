@@ -3,6 +3,7 @@ package test;
 import reflect.ClassInfo;
 import reflect.ObjectInfo;
 import util.ReferenceIterator;
+import vm.VMTest;
 
 public class TestReflectClasses2 {
 
@@ -32,9 +33,7 @@ public class TestReflectClasses2 {
      */
     public static void main(String[] args) {
         boolean failed = test();
-        if (!failed) {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 
     public static boolean test() {

@@ -13,6 +13,8 @@ import javax.safetycritical.Safelet;
 import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 
+import vm.VMTest;
+
 public class TestSCJMP_NestedMissionSequencer_1 implements Safelet<Mission> {
 	static StorageParameters storageParameters_Sequencer;
 	static StorageParameters storageParameters_Handlers;
@@ -349,6 +351,6 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet<Mission> {
 		devices.Console.println("\n***** test multicore nested mission sequencer1 main.begin ************");
 		new LaunchMulticore(new TestSCJMP_NestedMissionSequencer_1(), 2);
 		devices.Console.println("***** test multicore nested mission sequencer1 main.end **************");
-		args = null;
+		VMTest.markResult(false);
 	}
 }

@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestBug2 {
 
     private int x;
@@ -14,10 +16,7 @@ public class TestBug2 {
     public static void main(String[] args) {
         TestBug2 bug2 = new TestBug2();
         bug2.threadMethod.run();
-        if (bug2.x == 42)
-        {
-            args = null;
-        }
+        VMTest.markResult(bug2.x != 42);
     }
 
     private Runnable threadMethod = new Runnable() {

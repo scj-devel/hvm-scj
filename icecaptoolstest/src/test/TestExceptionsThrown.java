@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestExceptionsThrown {
 
     /**
@@ -7,10 +9,7 @@ public class TestExceptionsThrown {
      */
     public static void main(String[] args) {
         boolean failure = foo(args);
-        if (!failure)
-        {
-            args = null;
-        }
+        VMTest.markResult(failure);
     }
 
     private static boolean foo(String[] args) {

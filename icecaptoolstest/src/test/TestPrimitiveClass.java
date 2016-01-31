@@ -1,20 +1,22 @@
 package test;
 
+import vm.VMTest;
+
 public class TestPrimitiveClass {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		Class<Integer> intClass = int.class;
         if (intClass == int.class)
         {
-            return null;
+            return false;
         }
-        return args;
+        return true;
 	}
 }

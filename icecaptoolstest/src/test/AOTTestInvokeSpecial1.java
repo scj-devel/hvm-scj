@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class AOTTestInvokeSpecial1 {
 
@@ -15,17 +16,17 @@ public class AOTTestInvokeSpecial1 {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+    	VMTest.markResult(test() );
     }
 
     @IcecapCompileMe
-    private static String[] test(String[] args) {
+    private static boolean test() {
         try {
             @SuppressWarnings("unused")
             MyWeirdClass instance = new MyWeirdClass();
         } catch (Exception e) {
-            return null;
+            return false;
         }
-        return args;
+        return true;
     }
 }

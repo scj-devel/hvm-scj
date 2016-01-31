@@ -36,6 +36,7 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 import vm.Memory;
+import vm.VMTest;
 
 public class TestSCJSingleBoundedBuffer {
 	static boolean failed;
@@ -331,8 +332,6 @@ public class TestSCJSingleBoundedBuffer {
 		devices.Console.println("********* Bounded Buffer main.end *****************");
 		vm.Process.reportStackUsage();
 		Memory.reportMemoryUsage();
-		if (!failed) {
-			args = null;
-		}
+		VMTest.markResult(failed);
 	}
 }

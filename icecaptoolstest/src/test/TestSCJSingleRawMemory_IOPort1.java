@@ -3,6 +3,8 @@ package test;
 import javax.realtime.device.RawByte;
 import javax.realtime.device.RawMemoryFactory;
 
+import vm.VMTest;
+
 
 public class TestSCJSingleRawMemory_IOPort1 {
 	
@@ -11,7 +13,7 @@ public class TestSCJSingleRawMemory_IOPort1 {
 		boolean success = test_RawMemory();
 	 	
 	 	if (success) {
-          args = null; 
+	 		VMTest.markResult(false);
 	 	}
 	 }
 	 

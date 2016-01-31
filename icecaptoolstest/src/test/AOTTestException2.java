@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class AOTTestException2 {
 
@@ -8,15 +9,15 @@ public class AOTTestException2 {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
     @IcecapCompileMe 
-    public static String[] test(String[] args) {
+    public static boolean test() {
         try {
             throw new Exception();
         } catch (Exception e) {
-            return null;
+            return false;
         }
     }
 }

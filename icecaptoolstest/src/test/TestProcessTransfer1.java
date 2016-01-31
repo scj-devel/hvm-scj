@@ -3,6 +3,7 @@ package test;
 import vm.POSIX64BitMachineFactory;
 import vm.Process;
 import vm.ProcessLogic;
+import vm.VMTest;
 import icecaptools.IcecapCompileMe;
 
 public class TestProcessTransfer1 {
@@ -63,7 +64,7 @@ public class TestProcessTransfer1 {
         mainProcess.transferTo(p1);
 
         if (count == 10) {
-            args = null;
+        	VMTest.markResult(false);
         }
 
         devices.Console.println("done");

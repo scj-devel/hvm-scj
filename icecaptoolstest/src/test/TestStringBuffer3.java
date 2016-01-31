@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestStringBuffer3 {
 
     final static char [] DigitOnes = { 
@@ -41,10 +43,10 @@ public class TestStringBuffer3 {
      * @param args
      */
     public static void main(String[] args) {
-       args = test(args);
+    	VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		char[] chars = new char[2];
 		   
 		   getChars(-2, 2, chars);
@@ -53,9 +55,9 @@ public class TestStringBuffer3 {
 		   
 		   if (str.equals("-2"))
 		   {
-		       return null;
+		       return false;
 		   }
-		   return args;
+		   return true;
 	}
 
     static void getChars(int i, int index, char[] buf) {

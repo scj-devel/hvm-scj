@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestVolatile2 {
 
     private static class VolatileObject
@@ -32,7 +34,7 @@ public class TestVolatile2 {
         
         if (sum == 298)
         {
-            args = null;
+        	VMTest.markResult(false);
         }
     }
 

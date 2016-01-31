@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapVolatile;
+import vm.VMTest;
 
 public class TestVolatile7 {
 
@@ -11,9 +12,7 @@ public class TestVolatile7 {
         boolean failure = test1();
         failure |= test2();
         failure |= test3();
-        if (!failure) {
-            args = null;
-        }
+        VMTest.markResult(failure);
     }
 
     @IcecapVolatile("x")

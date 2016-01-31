@@ -11,6 +11,7 @@ import javax.microedition.io.Connector;
 import javax.safetycritical.io.ConnectionFactory;
 
 import util.InMemConnectionFactory;
+import vm.VMTest;
 
 public class TestIOConnection {
 
@@ -66,7 +67,7 @@ public class TestIOConnection {
 			int res = inputStream.readInt();
 			if (res == 42)
 			{
-				args = null;
+				VMTest.markResult(false);
 			}
 		} catch (IOException e) {
 			devices.Console.println("Could not open [" + outputLocation + "]");

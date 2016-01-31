@@ -2,6 +2,7 @@ package test;
 
 import icecaptools.IcecapCompileMe;
 import vm.POSIX64BitMachineFactory;
+import vm.VMTest;
 
 import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
@@ -15,7 +16,7 @@ public class TestPerformance {
         try {
             failed = test();
             if (!failed) {
-                args = null;
+            	VMTest.markResult(false);
             }
         } catch (Exception e) {
         }

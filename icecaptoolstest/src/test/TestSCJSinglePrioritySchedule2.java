@@ -16,6 +16,8 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
+import vm.VMTest;
+
 public class TestSCJSinglePrioritySchedule2 {
 	private static int testCount;
 	static {
@@ -164,7 +166,7 @@ public class TestSCJSinglePrioritySchedule2 {
 		devices.Console
 				.println("***** TestSCJPrioritySchedule2 end *****");
 		if (testCount == 3) {
-			args = null;
+			VMTest.markResult(false);
 		}
 	}
 }
