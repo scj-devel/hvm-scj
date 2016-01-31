@@ -69,14 +69,6 @@ int16 n_vm_RealtimeClock_getNativeTime(int32 *sp) {
 void init_compiler_specifics(void) {
 }
 
-void mark_error(void) {
-    ;
-}
-
-void mark_success(void) {
-    ;
-}
-
 void init_memory_lock(void) {
 }
 
