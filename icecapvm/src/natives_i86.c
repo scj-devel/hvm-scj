@@ -713,7 +713,7 @@ uint16 n_test_TestPerformance_quicksortC(uint32 *sp)
 
 #endif
 
-#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
+#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED) ||  defined(N_VM_REALTIMECLOCK_AWAITNEXTTICK)
 #include <unistd.h>
 #include <pthread.h>
 volatile uint8 systemTick;
@@ -729,6 +729,7 @@ static void *tick_thread_logic(void *ptr) {
 	}
 	return 0;
 }
+
 #if defined(N_VM_POSIX64BITMACHINEFACTORY_START_SYSTEM_TICK)
 int16 n_vm_POSIX64BitMachineFactory_start_system_tick(void) {
 	signal_stop = 0;
@@ -762,7 +763,8 @@ int16 n_vm_POSIX64BitMachineFactory_stop_system_tick(void) {
 #if defined(N_VM_REALTIMECLOCK_AWAITNEXTTICK)
 #include <unistd.h>
 int16 n_vm_RealtimeClock_awaitNextTick(int32 *sp) {
-	while (systemTick == 0) {
+	uint8 start = systemTick;
+	while (systemTick == start) {
 		usleep(1000);
 	}
 	return -1;
