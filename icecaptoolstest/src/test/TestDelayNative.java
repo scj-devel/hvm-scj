@@ -22,7 +22,7 @@ public class TestDelayNative {
         
         for (int i = 0; i < 3; i++) {
             next.add(duration, next);
-            vm.RealtimeClock.delayNativeUntil(next);
+            vm.RealtimeClock.delayUntilTime(next);
             devices.Console.println("tick");
         }
         VMTest.markResult(false);

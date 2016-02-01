@@ -77,7 +77,7 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 			handler.seqWait();
 		} else {
 			while (!handler.currMission.terminationPending() && handler.currMission.msSetForMission.msCount > 0) {
-				vm.RealtimeClock.awaitNextTick();
+				vm.RealtimeClock.waitForNextTick();
 			}
 		}
 

@@ -20,7 +20,7 @@ public class ATMega2560MachineFactory extends AbstractMachineFactory {
 
 	@Override
 	public RealtimeClock getRealtimeClock() {
-		return new RealtimeClock.DefaultRealtimeClock();
+		return new ATMega2560SCJTargetConfiguration.ATMega2560RealtimeClock();
 	}
 
 	@Override

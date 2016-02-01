@@ -24,6 +24,10 @@ public abstract class RealtimeClock {
 
 	abstract public void getCurrentTime(AbsoluteTime now);
 
+	abstract public void delayUntil(AbsoluteTime time);
+	
+	abstract public void awaitTick();
+	
 	public static class DefaultRealtimeClock extends RealtimeClock {
 		@Override
 		public int getGranularity() {
@@ -34,6 +38,16 @@ public abstract class RealtimeClock {
 		public void getCurrentTime(AbsoluteTime now) {
 			getNativeTime(now); 
 			/* 'now' may not be normalized */ 
+		}
+
+		@Override
+		public void delayUntil(AbsoluteTime time) {
+			delayNativeUntil(time);
+		}
+
+		@Override
+		public void awaitTick() {
+			awaitNextTick();
 		}
 	}
 
@@ -61,11 +75,21 @@ public abstract class RealtimeClock {
 	 * @param time
 	 *            is the absolut time
 	 */
-	public static native void delayNativeUntil(AbsoluteTime time);
-
+	public static void delayUntilTime(AbsoluteTime time)
+	{
+		getRealtimeClock().delayUntil(time);
+	}
+	
+	private static native void delayNativeUntil(AbsoluteTime time);
+	
 	/**
 	 * Delay until next system tick 
 	 * 
 	 */
-	public static native void awaitNextTick();
+	public static void waitForNextTick()
+	{
+		getRealtimeClock().awaitTick();
+	}
+	
+	private static native void awaitNextTick();
 }

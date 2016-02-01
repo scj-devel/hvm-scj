@@ -1,11 +1,16 @@
 package devices.AVR.ATMega2560;
 
+import javax.realtime.AbsoluteTime;
+
 import icecaptools.IcecapCFunc;
 import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
+import vm.RealtimeClock;
 
 public abstract class ATMega2560SCJTargetConfiguration extends ATMega2560TargetConfiguration {
 
+	private static int clock;
+	
 	@IcecapCompileMe
 	protected static void init() {
 		/* enable timer 0 overflow interrupt */
@@ -14,6 +19,8 @@ public abstract class ATMega2560SCJTargetConfiguration extends ATMega2560TargetC
 	    /* start timer without presscaler */
 	    TCCR0B = (1 << CS01) | (1 << CS00);
 
+	    clock = 0;
+	    
 	    /* at 4 Mhz schedule gets called approx every 15th miliseconds */
 	    /* enable interrupts */
 	    sei();
@@ -26,6 +33,7 @@ public abstract class ATMega2560SCJTargetConfiguration extends ATMega2560TargetC
 	private static void timerTick()
 	{
 		systemTick++;
+		clock++;
 	}
 	
 	@Override
@@ -47,5 +55,29 @@ public abstract class ATMega2560SCJTargetConfiguration extends ATMega2560TargetC
 	    TIMSK0 = 0;
 	    
 	    sdi();
+	}
+	
+	static class ATMega2560RealtimeClock extends RealtimeClock
+	{
+		@Override
+		public int getGranularity() {
+			/* 10 MS */
+			return 10000000;
+		}
+
+		@Override
+		public void getCurrentTime(AbsoluteTime now) {
+			now.set(clock * 10, 0);
+		}
+
+		@Override
+		public void delayUntil(AbsoluteTime time) {
+			
+		}
+
+		@Override
+		public void awaitTick() {
+			
+		}		
 	}
 }

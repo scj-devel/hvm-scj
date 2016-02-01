@@ -263,7 +263,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 				@IcecapCompileMe
 				private void yield() {
 					while (true) {
-						RealtimeClock.awaitNextTick();
+						RealtimeClock.waitForNextTick();
 					}
 				}
 			};

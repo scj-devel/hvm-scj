@@ -173,8 +173,6 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /*POSIXSCJTargetC
 		int handlerStackSize;
 		int handlerMemorySize;
 
-		blink(8000);
-		
 		Console.writer = new ConsoleWriter();
 		
 		if (mimimalMemoryConfig) {
