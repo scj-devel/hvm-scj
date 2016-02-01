@@ -1,23 +1,25 @@
 package test;
 
+import vm.VMTest;
+
 public class TestInvokeSpecial7 {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
-    private static String[] test(String[] args) {
+    private static boolean test() {
         TestInvokeSpecial7 obj = getObj();
         try {
             obj.foo(2);
         } catch (NullPointerException npe) {
-            return null;
+            return false;
         }
 
-        return args;
+        return true;
     }
 
     private int foo(int i) {

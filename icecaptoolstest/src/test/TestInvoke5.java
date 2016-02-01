@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestInvoke5 {
 
     private static interface Interface1 {
@@ -39,10 +41,10 @@ public class TestInvoke5 {
     }
 
     public static void main(String args[]) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
-	public static String[] test(String args[]) {
+	public static boolean test() {
 
 		Super s = new Sub();
         Interface1 ss;
@@ -62,8 +64,8 @@ public class TestInvoke5 {
         }
         x += n;
         if (x == 283) {
-            return null;
+            return false;
         }
-        return args;
+        return true;
 	}
 }

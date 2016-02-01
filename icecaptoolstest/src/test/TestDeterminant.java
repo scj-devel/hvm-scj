@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestDeterminant {
 
     private static class Vector {
@@ -124,9 +126,7 @@ public class TestDeterminant {
      */
     public static void main(String[] args) {
         boolean failed = test();
-        if (!failed) {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 
     private static boolean test() {

@@ -38,7 +38,7 @@ public final class TestPortalSC {
 	 * @param totalBackingStore is the size of the backing store allocated for this TCK test.
 	 */
 	public static void singleCoreSetup (int totalBackingStore) {
-		Launcher.initSingleCoreBehaviour();
+		LaunchSingleCore.initSingleCoreBehaviour();
 		ManagedMemory.allocateBackingStore(totalBackingStore);		
 	}
 

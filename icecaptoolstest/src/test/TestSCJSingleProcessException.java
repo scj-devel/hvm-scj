@@ -16,6 +16,8 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
+import vm.VMTest;
+
 public class TestSCJSingleProcessException {
 	private static int testCount;
 	static {
@@ -159,7 +161,7 @@ public class TestSCJSingleProcessException {
 		new LaunchLevel1(new MyApp());
 		devices.Console.println("***** TestSCJPrioritySchedule2 end *****");
 		if (testCount == 3) {
-			args = null;
+			VMTest.markResult(false);
 		}
 	}
 }

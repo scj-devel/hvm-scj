@@ -3,6 +3,7 @@ package test;
 import javax.realtime.device.RawByteMM;
 
 import vm.Memory;
+import vm.VMTest;
 
 public class TestHardWareObjectForByte2 {
 	
@@ -13,9 +14,7 @@ public class TestHardWareObjectForByte2 {
      */
     public static void main(String[] args) {
         boolean success = test();
-        if (success) {
-            args = null;
-        }
+        VMTest.markResult(success == false);
     }
 
     public static boolean test() {

@@ -12,9 +12,16 @@ import javax.realtime.AbsoluteTime;
 import vm.Address;
 import vm.Address32Bit;
 import vm.HardwareObject;
+import vm.Machine;
+import vm.POSIX64BitMachineFactory;
 import vm.RealtimeClock;
 
 public class System {
+	
+	static
+	{
+		Machine.setMachineFactory(new POSIX64BitMachineFactory());
+	}
 	
 	@IcecapVolatile("i")
 	public static void delay(int i) {

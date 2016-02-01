@@ -18,6 +18,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 import javax.realtime.Clock;
 import javax.realtime.ConfigurationParameters;
@@ -200,6 +201,6 @@ public class TestSCJMPWaitAndNotify {
 		devices.Console.println("***** test multicore wait and notify main.end *****");
 
 		if (count == 0)
-			args = null;
+			VMTest.markResult(false);
 	}
 }

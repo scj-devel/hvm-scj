@@ -28,6 +28,8 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
+import vm.VMTest;
+
 public class TestSCJMPSharedResource1 {
     static boolean failed;
 
@@ -211,9 +213,7 @@ public class TestSCJMPSharedResource1 {
         new LaunchMulticore(new MyApp(), 1);
         devices.Console.println("********* test multicore shared resource main.end ***********");
 
-        if (!failed) {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 
 }

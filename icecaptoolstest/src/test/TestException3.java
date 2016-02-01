@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestException3 {
 
     private static class TestException extends Exception {
@@ -17,19 +19,19 @@ public class TestException3 {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		try {
             foo(10, 100L, false);
         } catch (TestException ex) {
             String msg = ex.getMessage();
             if (msg == "Hej") {
-                return null;
+                return false;
             }
         }
-        return args;
+        return true;
 	}
 
     public static void foo(int i, long l, boolean b) throws TestException {

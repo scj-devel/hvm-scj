@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestStaticInitializers1 {
 
     static int x;
@@ -13,15 +15,15 @@ public class TestStaticInitializers1 {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		x = 43;
         if (x == 43)
         {
-           return null;
+           return false;
         }
-        return args;
+        return true;
 	}
 }

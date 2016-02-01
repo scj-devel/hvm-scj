@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class ANTTestArrayAccess {
 
     /**
@@ -13,9 +15,7 @@ public class ANTTestArrayAccess {
         } catch (NullPointerException e) {
 
         }
-        if (!failure) {
-            args = null;
-        }
+        VMTest.markResult(failure);
     }
 
     @SuppressWarnings("null")

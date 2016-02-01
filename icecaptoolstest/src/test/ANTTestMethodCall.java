@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class ANTTestMethodCall {
 
@@ -12,10 +13,7 @@ public class ANTTestMethodCall {
         failure |= testShort();
         failure |= testShortByte();
         
-        if (!failure)
-        {
-            args = null;
-        }
+        VMTest.markResult(failure);
     }
 
     @IcecapCompileMe

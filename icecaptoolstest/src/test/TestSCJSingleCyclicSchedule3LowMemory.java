@@ -18,6 +18,7 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 import vm.Memory;
+import vm.VMTest;
 
 public class TestSCJSingleCyclicSchedule3LowMemory {
 	private static class MyCyclicSchedule {
@@ -205,6 +206,6 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 
 		vm.Process.reportStackUsage();
 		Memory.reportMemoryUsage();
-		args = null;
+		VMTest.markResult(false);
 	}
 }

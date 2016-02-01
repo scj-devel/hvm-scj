@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestNullPointerException1 {
 
     private static class Super {
@@ -8,11 +10,11 @@ public class TestNullPointerException1 {
     }
 
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
     @SuppressWarnings("null")
-    public static String[] test(String[] args) {
+    public static boolean test() {
         Super a = null;
         try {
             a.x = 42;
@@ -20,16 +22,16 @@ public class TestNullPointerException1 {
             StringBuffer buffer = getStringBuffer();
             try {
                 if (buffer.length() > 0) {
-                    return args;
+                    return true;
                 } else {
-                    return args;
+                    return true;
                 }
             } catch (NullPointerException ne) {
-                return null;
+                return false;
             }
         }
 
-        return args;
+        return true;
     }
 
     private static StringBuffer getStringBuffer() {

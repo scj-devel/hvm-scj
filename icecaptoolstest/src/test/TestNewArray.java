@@ -1,16 +1,18 @@
 package test;
 
+import vm.VMTest;
+
 public class TestNewArray {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+       VMTest.markResult(test());
     }
 
 	@SuppressWarnings("unused")
-    public static String[] test(String[] args) {
+    public static boolean test() {
 		int array[];
         array = new int[5];
         for (int i = 0; i < array.length; i++) {
@@ -20,8 +22,8 @@ public class TestNewArray {
         for (int i = 0; i < array.length; i++) {
             res += array[i];
         }
-        if (array.length == 5) {
-            args = null;
+        if (array.length != 5) {
+            return true;
         }
 
         char[][][] charMap;
@@ -48,11 +50,8 @@ public class TestNewArray {
         
         if (buffer.toString().equals("ABCDEFGH"))
         {
-            if (args == null)
-            {
-            	return args;
-            }
+        	return false;
         }
-        return args;
+        return true;
 	}
 }

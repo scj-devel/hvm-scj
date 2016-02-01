@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestException6 {
 
     private static abstract class TestException extends Exception {
@@ -29,9 +31,7 @@ public class TestException6 {
     }
     
     public static void main(String[] args) {
-        if (!test()) {
-            args = null;
-        }
+        VMTest.markResult(test());
     }
 
     private static boolean test() {

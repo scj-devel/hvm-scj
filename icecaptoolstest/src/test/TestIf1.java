@@ -1,20 +1,22 @@
 package test;
 
+import vm.VMTest;
+
 public class TestIf1 {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
 	@SuppressWarnings("unused")
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		if (true)
         {
-            return null;
+            return false;
         }
-		return args;
+		return true;
 	}
 }

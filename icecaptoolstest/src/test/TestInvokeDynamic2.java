@@ -1,5 +1,6 @@
 package test;
 
+import vm.VMTest;
 
 public class TestInvokeDynamic2 {
 
@@ -27,7 +28,7 @@ public class TestInvokeDynamic2 {
         
         if (x1 == x2)
         {
-            args = null;
+        	VMTest.markResult(false);
         }
     }
 }

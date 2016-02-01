@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 
 public class AOTTestPutGetField {
@@ -18,11 +19,11 @@ public class AOTTestPutGetField {
     }
 
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
     @IcecapCompileMe
-    public static String[] test(String[] args) {
+    public static boolean test() {
         TestPutGetField test = new TestPutGetField();
         test.answer = 42;
 
@@ -35,9 +36,9 @@ public class AOTTestPutGetField {
             x += ((Sub) sup).c;
 
             if (x == 42) {
-                return null;
+                return false;
             }
         }
-        return args;
+        return true;
     }
 }

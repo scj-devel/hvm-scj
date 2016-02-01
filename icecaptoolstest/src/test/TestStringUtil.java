@@ -1,14 +1,13 @@
 package test;
 
 import util.StringUtil;
+import vm.VMTest;
 
 public class TestStringUtil {
 
 	public static void main(String[] args) {
 		boolean failed = test();
-		if (!failed) {
-			args = null;
-		}
+		VMTest.markResult(failed);
 	}
 
 	private static boolean test() {
@@ -96,28 +95,24 @@ public class TestStringUtil {
 			System.out.println("fail 4");
 			return true;
 		}
-		
+
 		String result = StringUtil.constructString("temp", 0);
-		if (!result.equals("temp0"))
-		{
+		if (!result.equals("temp0")) {
 			return true;
 		}
-		
+
 		result = StringUtil.constructString("temp", 1);
-		if (!result.equals("temp1"))
-		{
+		if (!result.equals("temp1")) {
 			return true;
 		}
-		
+
 		result = StringUtil.constructString("temp", 42);
-		if (!result.equals("temp42"))
-		{
+		if (!result.equals("temp42")) {
 			return true;
 		}
-		
+
 		result = StringUtil.constructString("temp", 1234);
-		if (!result.equals("temp1234"))
-		{
+		if (!result.equals("temp1234")) {
 			return true;
 		}
 		return false;

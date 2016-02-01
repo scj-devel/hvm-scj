@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestNullPointerException {
 
     private static class Super {
@@ -20,16 +22,16 @@ public class TestNullPointerException {
     }
 
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		StringBuffer buffer = getStringBuffer();
         try {
             if (buffer.length() > 0) {
-                return args;
+                return true;
             } else {
-                return args;
+                return true;
             }
         } catch (NullPointerException ne) {
             Super a = getSuper();
@@ -40,16 +42,16 @@ public class TestNullPointerException {
 
                 try {
                     if (array.length == 0) {
-                        return args;
+                        return true;
                     } else {
-                        return args;
+                        return true;
                     }
                 } catch (NullPointerException ne2) {
                     try {
                         if (array[0] == 42) {
-                            return args;
+                            return true;
                         } else {
-                            return args;
+                            return true;
                         }
                     } catch (NullPointerException ne3) {
                         try {
@@ -62,7 +64,7 @@ public class TestNullPointerException {
                                     anInterface in = getAnImplementor();
                                     in.foo();
                                 } catch (NullPointerException ne6) {
-                                    return null;
+                                    return false;
                                 }
                             }
                         }
@@ -70,7 +72,7 @@ public class TestNullPointerException {
                 }
             }
         }
-        return args;
+        return true;
 	}
 
     private static anInterface getAnImplementor() {

@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 
 public class AOTTestInvokeVirtual1 {
@@ -53,11 +54,11 @@ public class AOTTestInvokeVirtual1 {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
     @IcecapCompileMe
-    private static String[] test(String[] args) {
+    private static boolean test() {
         Polygon square = new Square(2);
         Polygon rect = new Rectangle(2, 3);
         Polygon circ = new Circle(3);
@@ -72,9 +73,9 @@ public class AOTTestInvokeVirtual1 {
         sum += pol.area();
         
         if (sum == 37) {
-            return null;
+            return false;
         } else {
-            return args;
+            return true;
         }
     }
 

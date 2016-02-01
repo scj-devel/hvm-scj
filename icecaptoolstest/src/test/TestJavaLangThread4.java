@@ -2,6 +2,7 @@ package test;
 
 import thread.JavaLangThreadScheduler;
 import vm.Machine;
+import vm.VMTest;
 
 public class TestJavaLangThread4 {
 
@@ -122,7 +123,7 @@ public class TestJavaLangThread4 {
         //System.out.println("takewait: " + queue.getTakeWaitCount());
         
         if (queue.getInOut() == 0) {
-            args = null;
+        	VMTest.markResult(false);
         }
     }
 }

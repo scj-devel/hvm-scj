@@ -20,6 +20,8 @@ import javax.safetycritical.Services;
 import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 
+import vm.VMTest;
+
 
 public class TestSCJMP_CustAffinitySet_Level1 implements Safelet<Mission> {
 	static StorageParameters storageParameters_Sequencer;
@@ -190,7 +192,7 @@ public class TestSCJMP_CustAffinitySet_Level1 implements Safelet<Mission> {
 		devices.Console.println("\n***** test multicore affinity set4 main.begin ************");
 		new LaunchMulticore(new TestSCJMP_CustAffinitySet_Level1(), 1);
 		devices.Console.println("***** test multicore affinity set4 main.end **************");
-		args = null;
+		VMTest.markResult(false);
 	}
 }
 

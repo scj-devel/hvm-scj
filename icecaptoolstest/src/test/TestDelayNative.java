@@ -4,13 +4,19 @@ import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
 import javax.realtime.RelativeTime;
 
+import vm.Machine;
+import vm.POSIX64BitMachineFactory;
+import vm.VMTest;
+
 public class TestDelayNative {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        Clock rtClock = Clock.getRealtimeClock();
+    	Machine.setMachineFactory(new POSIX64BitMachineFactory());
+        
+    	Clock rtClock = Clock.getRealtimeClock();
         AbsoluteTime next = rtClock.getTime();
         RelativeTime duration = new RelativeTime(500, 0, rtClock);
         
@@ -19,6 +25,6 @@ public class TestDelayNative {
             vm.RealtimeClock.delayNativeUntil(next);
             devices.Console.println("tick");
         }
-        args = null;
+        VMTest.markResult(false);
     }
 }

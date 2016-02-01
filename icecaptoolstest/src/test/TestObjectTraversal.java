@@ -4,6 +4,7 @@ import reflect.ObjectInfo;
 import util.ReferenceIterator;
 import vm.HVMHeap;
 import vm.Heap;
+import vm.VMTest;
 
 public class TestObjectTraversal {
 
@@ -20,10 +21,7 @@ public class TestObjectTraversal {
      */
     public static void main(String[] args) {
        boolean failed = test();
-       if (!failed)
-       {
-           args = null;
-       }
+       VMTest.markResult(failed);
     }
 
     public static boolean test() {
@@ -36,6 +34,8 @@ public class TestObjectTraversal {
         a.ref2 = b;
         
         int aAddress = ObjectInfo.getAddress(a);
+        
+        devices.Console.println("Object address a = " + aAddress);
         
         ReferenceIterator references = heap.getRefFromObj(aAddress);
         
@@ -51,8 +51,25 @@ public class TestObjectTraversal {
                     {
                         return false;
                     }
+                    else
+                    {
+                    	devices.Console.println("Object address b unexepcted");
+                    }
                 }
+                else
+                {
+                	devices.Console.println("Only one ref");
+                }
+                
             }
+            else
+            {
+            	devices.Console.println("Object address a unexepcted [" + aAddress + "], was [" + ref1 + "]");
+            }
+        }
+        else
+        {
+        	devices.Console.println("No references");
         }
         return true;
     }

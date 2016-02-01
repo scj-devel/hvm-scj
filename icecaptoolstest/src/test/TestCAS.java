@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestCAS {
 
     public static class AbortException extends RuntimeException
@@ -210,10 +212,7 @@ public class TestCAS {
         
         test0 = test.get();
         //devices.Console.println(String.valueOf(test.get().newValue));
-        if (test0 == test1)
-        {
-            args = null;
-        }
+        VMTest.markResult(test0 != test1);
         //*/
     }
 

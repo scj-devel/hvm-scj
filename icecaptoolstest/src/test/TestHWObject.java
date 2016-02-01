@@ -2,6 +2,7 @@ package test;
 
 import vm.Address32Bit;
 import vm.HardwareObject;
+import vm.VMTest;
 
 public class TestHWObject {
 
@@ -28,10 +29,10 @@ public class TestHWObject {
     }
 
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-    protected static String[] test(String[] args) {
+    protected static boolean test() {
         Port port = new Port(0x12345678);
 
         port.byte1 = 42;
@@ -41,11 +42,11 @@ public class TestHWObject {
                 if (port.short1 == (short) 0xfefe) {
                     port.int1 = 0xabbaabba;
                     if (port.int1 == 0xabbaabba) {
-                        return null;
+                        return false;
                     }
                 }
             }
         }
-        return args;
+        return true;
     }
 }

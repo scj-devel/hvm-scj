@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestInvokeDynamic1 {
     private static interface Adder {
         int add(int x, int y);
@@ -19,7 +21,7 @@ public class TestInvokeDynamic1 {
         devices.Console.println("x = " + x);
         
         if (x == 42) {
-            args = null;
+        	VMTest.markResult(false);
         }
     }
 }

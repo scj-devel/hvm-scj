@@ -5,6 +5,7 @@ import java.util.Iterator;
 import thread.Semaphore;
 import thread.Thread;
 import thread.ThreadManager;
+import vm.VMTest;
 
 public class TestStackScan1 {
 
@@ -128,7 +129,7 @@ public class TestStackScan1 {
             threadToScan.join();
             stackScanner.join();
             if (!stackScanner.failed) {
-                args = null;
+            	VMTest.markResult(false);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

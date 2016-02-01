@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestF2D {
 
     /**
@@ -7,10 +9,7 @@ public class TestF2D {
      */
     public static void main(String[] args) {
         boolean failed = test();
-        if (!failed)
-        {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 
     public static boolean test() {

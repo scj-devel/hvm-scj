@@ -119,12 +119,6 @@ void PrintStatus(UByte StatusMessageLevel, char *msg) {
     ;
 }
 
-void mark_error(void) {
-}
-
-void mark_success(void) {
-}
-
 int32 isrMethodStack[50];
 
 extern int16 vm_InterruptDispatcher_interrupt(int32 *fp);

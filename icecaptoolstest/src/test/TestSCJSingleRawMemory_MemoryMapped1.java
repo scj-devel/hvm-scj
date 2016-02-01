@@ -4,6 +4,7 @@ import javax.realtime.device.RawByte;
 import javax.realtime.device.RawMemoryFactory;
 
 import vm.Memory;
+import vm.VMTest;
 
 
 public class TestSCJSingleRawMemory_MemoryMapped1 {
@@ -15,7 +16,7 @@ public class TestSCJSingleRawMemory_MemoryMapped1 {
 			boolean success = test_RawMemory();
 		 	
 		 	if (success) {
-	          args = null; 
+		 		VMTest.markResult(false);
 		 	}
 	 }
 	 

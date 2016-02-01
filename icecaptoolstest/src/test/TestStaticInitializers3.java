@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class TestStaticInitializers3 {
 
@@ -21,9 +22,7 @@ public class TestStaticInitializers3 {
         failed |= test2(true);
         failed |= test3();
         failed |= test4();
-        if (!failed) {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 
     @IcecapCompileMe

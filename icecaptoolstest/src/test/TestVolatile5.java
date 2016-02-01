@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestVolatile5 {
 
     public static final int size = 10;
@@ -33,7 +35,7 @@ public class TestVolatile5 {
                     return;
                 }
             }
-            args = null;
+            VMTest.markResult(false);
         }
     }
 }

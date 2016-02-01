@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class ANTTestINEG {
 
@@ -9,10 +10,7 @@ public class ANTTestINEG {
      */
     public static void main(String[] args) {
         boolean failed = test((short)23);
-        if (!failed)
-        {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 
     @IcecapCompileMe

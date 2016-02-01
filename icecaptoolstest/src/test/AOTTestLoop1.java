@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class AOTTestLoop1 {
 
@@ -8,19 +9,19 @@ public class AOTTestLoop1 {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
     @IcecapCompileMe
-    public static String[] test(String[] args) {
+    public static boolean test() {
         int x = 5;
         for (int i = 0; i < 5; i++) {
             x--;
         }
         if (x == 0) {
-            return null;
+            return false;
         } else {
-            return args;
+            return true;
         }
     }
 }

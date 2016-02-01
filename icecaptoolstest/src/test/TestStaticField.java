@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestStaticField {
 
     private static class Super
@@ -15,10 +17,10 @@ public class TestStaticField {
     }
     
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		Super sup1 = new Super();
         Super sup2 = new Super();
         
@@ -30,9 +32,9 @@ public class TestStaticField {
         {
             if (res == 2)
             {
-                return null;
+                return false;
             }
         }
-        return args;
+        return true;
 	}
 }

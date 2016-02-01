@@ -1,15 +1,16 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 // import devices.Console;
 
 public class TestProgram1 {
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-    public static String[] test(String[] args) {
+    public static boolean test() {
         short[] numberSet = new short[20];
 
         for (byte i = 0; i < numberSet.length; i++) {
@@ -21,10 +22,10 @@ public class TestProgram1 {
         for (byte i = 0; i < numberSet.length - 1; i++) {
             // Console.println(i + ": " + numberSet[i]);
             if (numberSet[i] > numberSet[i + 1]) {
-                return args;
+                return true;
             } 
         }
-        return null;
+        return false;
     }
 
     @IcecapCompileMe

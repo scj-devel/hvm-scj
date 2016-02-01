@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class ANTTestIADD {
 
@@ -14,9 +15,7 @@ public class ANTTestIADD {
         failure |= testIMUL((short)10, (short)4);
         failure |= testIDIV(10, 4);
         failure |= testIREM((byte)10, 4);
-        if (!failure) {
-            args = null;
-        }
+        VMTest.markResult(failure);
     }
 
     @IcecapCompileMe

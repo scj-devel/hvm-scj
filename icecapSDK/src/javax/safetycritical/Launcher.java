@@ -32,10 +32,9 @@
 package javax.safetycritical;
 
 import javax.realtime.MemoryArea;
-import javax.scj.util.Configuration;
 import javax.scj.util.Const;
 
-import vm.Machine;
+import vm.MachineFactory;
 import vm.Memory;
 
 /**
@@ -55,101 +54,42 @@ public abstract class Launcher implements Runnable {
 	Safelet<?> app;
 	static int level;
 	static boolean useOS = false;
+	protected MachineFactory mFactory;
 
-	Launcher(Safelet<?> app, int level) {
-		this(app, level, false);
+	Launcher(boolean useOS, MachineFactory mFactory) {
+		Launcher.useOS = useOS;
+		this.mFactory = mFactory;
 	}
 
-	Launcher(Safelet<?> app, int level, boolean useOS) {
+	protected void initAndRun(Safelet<?> app, int level) {
 		if (level < 0 || level > 2 || app == null) {
 			throw new IllegalArgumentException();
 		}
-		
 		this.app = app;
 		Launcher.level = level;
-		Launcher.useOS = useOS;		
+		init();
+		createImmortalMemory();
 	}
-	
-	static void initSingleCoreBehaviour() {
-		Mission.missionBehaviour = new SinglecoreMissionBehavior();
-		ManagedEventHandler.handlerBehavior = new SinglecoreHandlerBehavior();
-		Services.servicesBehavior = new SinglecoreServicesBehavior();
-		ManagedMemory.memoryBehavior = new SinglecoreMemoryBehavior();
-	}
-	
-	static void initMultiCoreBehaviour() {
-		Services.servicesBehavior = new MulticoreServicesBehavior();
-		Mission.missionBehaviour = new MulticoreMissionBehavior();
-		ManagedEventHandler.handlerBehavior = new MulticoreHandlerBehavior();
-		ManagedMemory.memoryBehavior = new MulticoreMemoryBehavior();
-	}
-	
+
 	public void run() {
 		app.initializeApplication();
 		start();
 	}
 
-	void createImmortalMemory(){
+	private void createImmortalMemory() {
 		ManagedMemory.allocateBackingStore(Const.OVERALL_BACKING_STORE);
 
 		if (Memory.memoryAreaTrackingEnabled) {
 			new PrivateMemory(Const.MEMORY_TRACKER_AREA_SIZE, Const.MEMORY_TRACKER_AREA_SIZE,
 					MemoryArea.overAllBackingStore, "MemTrk");
 		}
-		
+
 		ManagedMemory immortalMem = new ImmortalMemory(Const.IMMORTAL_MEM);
 		immortalMem.executeInArea(this);
 		//immortalMem.removeArea();
 	}
-	
-	abstract void start(); 
-	
-	void startLevel0() {
-		MissionSequencer<?> seq = app.getSequencer();
-		CyclicScheduler sch = CyclicScheduler.instance();
-		
-		Machine.setCurrentScheduler(sch);
-		
-		sch.start(seq);
-	}
-	
-	void startLevel1_2() {
-		// insert idle process before the mission sequencer.
-		PriorityScheduler sch = PriorityScheduler.instance();
 
-		Machine.setCurrentScheduler(sch.prioritySchedulerImpl);
-		
-		sch.insertReadyQueue(ScjProcess.createIdleProcess());
-		app.getSequencer();
-		PriorityScheduler.instance().start();
-	}
-	
-	void startwithOS() {
-		initAffinfitySetsMulticore();
+	protected abstract void init();
 
-		Machine.setCurrentScheduler(new MultiprocessorHelpingScheduler());
-		
-		OSProcess.initSpecificID();
-		MissionSequencer<?> outerMostMS = app.getSequencer();
-		outerMostMS.privateMemory.enter(outerMostMS);
-		outerMostMS.cleanUp();
-	}
-	
-	private void initAffinfitySetsMulticore() {
-		if (Configuration.processors != null) {
-			AffinitySet.checkAndInitAffinityByCustomized(Configuration.processors);
-		} else {
-			switch (Launcher.level) {
-			case 0:
-				AffinitySet.initAffinitySet_Level0();
-				break;
-			case 1:
-				AffinitySet.initAffinitySet_Level1();
-				break;
-			case 2:
-				AffinitySet.initAffinitySet_Level2();
-				break;
-			}
-		}
-	}
+	protected abstract void start();
 }

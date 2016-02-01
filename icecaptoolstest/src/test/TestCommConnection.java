@@ -9,6 +9,7 @@ import javax.microedition.io.Connector;
 import javax.safetycritical.io.ConnectionFactory;
 
 import util.CommConnectionFactoryPosix;
+import vm.VMTest;
 
 public class TestCommConnection {
 
@@ -28,6 +29,7 @@ public class TestCommConnection {
 				outputStream = Connector.openDataOutputStream(outputLocation);
 			} catch (IOException e1) {
 				devices.Console.println("Could not open [" + outputLocation + "]");
+				VMTest.markResult(true);
 				return;
 			}
 
@@ -36,7 +38,7 @@ public class TestCommConnection {
 				outputStream.writeInt(42);
 			} catch (IOException e1) {
 				devices.Console.println("failed to write to [" + outputLocation + "]");
-				args = null;
+				VMTest.markResult(false);
 				return;
 			}
 		}
@@ -49,6 +51,7 @@ public class TestCommConnection {
 				inputStream = Connector.openDataInputStream(inputLocation);
 			} catch (IOException e1) {
 				devices.Console.println("Could not open [" + inputLocation + "]");
+				VMTest.markResult(true);
 				return;
 			}
 		}
@@ -68,7 +71,7 @@ public class TestCommConnection {
 				int res = inputStream.readInt();
 				devices.Console.println("received: " + res);
 				if (res == 42) {
-					args = null;
+					VMTest.markResult(false);
 				}
 			} catch (IOException e) {
 				devices.Console.println("failed to read from [" + inputLocation + "]");

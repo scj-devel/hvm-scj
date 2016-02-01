@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestPutGetField {
 
     public int answer;
@@ -15,10 +17,10 @@ public class TestPutGetField {
     }
 
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		TestPutGetField test = new TestPutGetField();
         test.answer = 42;
 
@@ -31,9 +33,9 @@ public class TestPutGetField {
             x += ((Sub) sup).c;
 
             if (x == 42) {
-                return null;
+                return false;
             }
         }
-        return args;
+        return true;
 	}
 }

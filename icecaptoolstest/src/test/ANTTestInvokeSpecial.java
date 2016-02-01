@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class ANTTestInvokeSpecial {
 
@@ -8,13 +9,15 @@ public class ANTTestInvokeSpecial {
      * @param args
      */
     public static void main(String[] args) {
-        String failure = test1(true);
+        boolean failed = true;
+    	String failure = test1(true);
         if (failure != null) {
             failure = test2(true);
             if (failure != null) {
-                args = null;
+            	failed = false;
             }
         }
+        VMTest.markResult(failed);
     }
 
     @IcecapCompileMe

@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestReflectForName {
     
     private static class Number
@@ -25,7 +27,7 @@ public class TestReflectForName {
         Number n = (Number) cls.newInstance();
         if (n.getX() == 42)
         {
-            args = null;
+        	VMTest.markResult(false);
         }
     }
 }

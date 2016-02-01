@@ -244,10 +244,11 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 	 */
 	static ScjProcess createIdleProcess() {
 		if (idleProcess == null) {
-
+			RelativeTime INFINITE_TIME = new RelativeTime(365 * 24 * 60 * 1000, 0, Clock.getRealtimeClock());
+			
 			PeriodicEventHandler peh = new PeriodicEventHandler(new PriorityParameters(Priorities.MIN_PRIORITY),
 					new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()), // start (0,0)
-							Const.INFINITE_TIME), // period
+							INFINITE_TIME), // period
 //					new StorageParameters(2 * Const.IDLE_BACKING_STORE, new long[] { Const.IDLE_PROCESS_STACK_SIZE },
 //							2 * Const.IDLE_BACKING_STORE, 0, 0)
 					new StorageParameters(2 * Const.IDLE_BACKING_STORE, 

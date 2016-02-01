@@ -24,13 +24,6 @@ void sendbyte(unsigned char byte) {
 	fflush(stdout);
 }
 
-void mark_error(void) {
-}
-
-void mark_success(void) {
-	printf("SUCCESS\n");
-}
-
 #if defined(N_DEVICES_SYSTEM_BLINK)
 int32 n_devices_System_blink(int32 *sp) {
 	return -1;
@@ -736,22 +729,34 @@ static void *tick_thread_logic(void *ptr) {
 	}
 	return 0;
 }
-
-void start_system_tick(void) {
+#if defined(N_VM_POSIX64BITMACHINEFACTORY_START_SYSTEM_TICK)
+int16 n_vm_POSIX64BitMachineFactory_start_system_tick(void) {
 	signal_stop = 0;
 	if (pthread_create(&tick_thread, NULL, tick_thread_logic, NULL)) {
 		fprintf(stderr, "Error creating system tick thread\n");
-		return;
+		return -2;
+	}
+	else
+	{
+		return -1;
 	}
 }
+#endif
 
-void stop_system_tick(void) {
+#if defined(N_VM_POSIX64BITMACHINEFACTORY_STOP_SYSTEM_TICK)
+int16 n_vm_POSIX64BitMachineFactory_stop_system_tick(void) {
 	signal_stop = 1;
 	if (pthread_join(tick_thread, NULL)) {
 		fprintf(stderr, "Error joining thread\n");
-		return;
+		return -2;
+	}
+	else
+	{
+		return -1;
 	}
 }
+#endif
+
 #endif
 
 #if defined(N_VM_REALTIMECLOCK_AWAITNEXTTICK)

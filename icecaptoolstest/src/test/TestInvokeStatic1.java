@@ -1,11 +1,13 @@
 package test;
 
+import vm.VMTest;
+
 public class TestInvokeStatic1 {
     public static void main(String args[]) {
         try {
             args = test(args);
         } catch (Exception e) {
-            args = null;
+            VMTest.markResult(false);
         }
     }
 

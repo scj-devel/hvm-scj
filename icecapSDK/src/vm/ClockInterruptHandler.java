@@ -66,7 +66,6 @@ public class ClockInterruptHandler implements InterruptHandler, ProcessLogic {
 
 	@IcecapCompileMe
 	public static void initialize(Scheduler scheduler, int[] stack) {
-		Machine.getMachineFactory().initInterrupts();
 		instance = new ClockInterruptHandler(scheduler, stack);
 	}
 
@@ -80,9 +79,13 @@ public class ClockInterruptHandler implements InterruptHandler, ProcessLogic {
 				.registerHandler(this, InterruptDispatcher.HVM_CLOCK);
 	}
 
-	public void startClockHandler(Process process) {
+	public void startClockHandler(Process process, MachineFactory mFactory) {
+		mFactory.initInterrupts();
+		register();
+		enable();
 		this.currentProcess = process;
-		Machine.getMachineFactory().startSystemTick();
+		mFactory.startSystemTick();
+		yield();
 	}
 
 	public void setScheduler(Scheduler sch) {

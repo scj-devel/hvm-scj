@@ -1,15 +1,13 @@
 package test;
 
 import util.TextString;
+import vm.VMTest;
 
 public class TestTextString {
 
     public static void main(String[] args) {
         boolean failed = test();
-        if (!failed) {
-            args = null;
-        }
-
+        VMTest.markResult(failed);
     }
 
     private static boolean test() {

@@ -1,11 +1,11 @@
 package devices.AVR.ATMega2560;
 
-import vm.MachineFactory;
+import vm.AbstractMachineFactory;
 import vm.RealtimeClock;
 import vm.SP;
 import vm.X86_32SP;
 
-public class ATMega2560MachineFactory implements MachineFactory {
+public class ATMega2560MachineFactory extends AbstractMachineFactory {
 
 	@Override
 	public void initInterrupts() {

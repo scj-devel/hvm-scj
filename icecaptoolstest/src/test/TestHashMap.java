@@ -2,6 +2,8 @@ package test;
 
 import java.util.HashMap;
 
+import vm.VMTest;
+
 public class TestHashMap {
 
     /**
@@ -9,9 +11,7 @@ public class TestHashMap {
      */
     public static void main(String[] args) {
         boolean failure = test1();
-        if (!failure) {
-            args = null;
-        }
+        VMTest.markResult(failure);
     }
 
     private static boolean test1() {

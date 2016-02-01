@@ -1,7 +1,9 @@
 package test;
 
+import vm.POSIX64BitMachineFactory;
 import vm.Process;
 import vm.ProcessLogic;
+import vm.VMTest;
 import icecaptools.IcecapCompileMe;
 
 public class TestExecuteWithStack {
@@ -58,10 +60,10 @@ public class TestExecuteWithStack {
      * @param args
      */
     public static void main(String[] args) {
+    	new POSIX64BitMachineFactory();
+    	
         TestObject testObj = new TestObject();
         testObj.start();
-        if (!failed) {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 }

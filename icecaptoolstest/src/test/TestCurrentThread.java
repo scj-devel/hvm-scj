@@ -1,6 +1,7 @@
 package test;
 
-import thread.Thread;;
+import thread.Thread;
+import vm.VMTest;;
 
 public class TestCurrentThread {
 
@@ -27,9 +28,6 @@ public class TestCurrentThread {
         passed = false;
         tester.start();
         tester.join();
-        if (passed)
-        {
-            args = null;
-        }
+        VMTest.markResult(passed == false);
     }
 }

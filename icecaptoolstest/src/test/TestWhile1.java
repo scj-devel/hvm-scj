@@ -1,13 +1,14 @@
 package test;
 
+import vm.VMTest;
+
 public class TestWhile1 {
 
     public static void main(String args[]) {
-        args = test(args);
-
+        VMTest.markResult(test());
     }
 
-	public static String[] test(String args[]) {
+	public static boolean test() {
 		int count = -5;
         int result = 10;
         while (count < 5) {
@@ -15,8 +16,8 @@ public class TestWhile1 {
             count++;
         }
         if (result == 0) {
-            return null;
+            return false;
         }
-        return args;
+        return true;
 	}
 }

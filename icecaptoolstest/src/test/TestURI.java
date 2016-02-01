@@ -3,6 +3,8 @@ package test;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import vm.VMTest;
+
 public class TestURI {
 
 	public static void main(String[] args) {
@@ -16,6 +18,6 @@ public class TestURI {
 			System.out.println("Failed to create URI");
 		}
 		
-		args = null;
+		VMTest.markResult(false);
 	}
 }

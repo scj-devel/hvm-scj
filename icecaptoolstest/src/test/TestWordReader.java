@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestWordReader {
 
     private static class Random {
@@ -200,9 +202,7 @@ public class TestWordReader {
      */
     public static void main(String[] args) {
         boolean failed = test();
-        if (!failed) {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 
     private static boolean test() {

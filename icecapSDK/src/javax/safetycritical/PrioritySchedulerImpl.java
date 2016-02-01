@@ -25,7 +25,6 @@
  *************************************************************************/
 package javax.safetycritical;
 
-import vm.Machine;
 import vm.Process;
 
 final class PrioritySchedulerImpl implements vm.Scheduler {
@@ -119,7 +118,6 @@ final class PrioritySchedulerImpl implements vm.Scheduler {
 
 	@Override
 	public void terminated() {
-		Machine.getMachineFactory().stopSystemTick();
 	}
 
 	//	public static boolean waitForObject(Object target, HighResolutionTime time) {

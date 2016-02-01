@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 import javax.realtime.Clock;
 import javax.realtime.ConfigurationParameters;
@@ -151,7 +152,7 @@ public class TestSCJSinglePrioritySchedule0 {
     new LaunchLevel1(new MyApp());
     devices.Console.println("********* TestSCJPrioritySchedule0 end *****");
     if (testCount == 3) {
-        args = null;
+    	VMTest.markResult(false);
     }
   }
 

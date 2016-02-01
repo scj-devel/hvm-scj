@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestClone1 {
 
     private static class A implements Cloneable {
@@ -20,10 +22,10 @@ public class TestClone1 {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-    public static String[] test(String[] args) {
+    public static boolean test() {
         int[] intArray = new int[3];
         intArray[0] = 1;
         intArray[1] = 2;
@@ -39,12 +41,12 @@ public class TestClone1 {
                         A[] aClone = aArray.clone();
                         if (aArray[0] == aClone[0]) {
                             if (aArray[1] == aClone[1]) {
-                                return null;
+                                return false;
 
                             }
                         }
                     }
         }
-        return args;
+        return true;
     }
 }

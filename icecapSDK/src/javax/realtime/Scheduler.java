@@ -27,6 +27,9 @@ package javax.realtime;
 
 import javax.safetycritical.annotate.SCJAllowed;
 
+import icecaptools.IcecapCompileMe;
+import vm.MachineFactory;
+
 /**
  * An instance of <code>Scheduler</code> manages the execution of 
  * schedulable objects.
@@ -43,4 +46,21 @@ import javax.safetycritical.annotate.SCJAllowed;
  */
 @SCJAllowed
 public abstract class Scheduler {
+	
+	private vm.Process mainProcess;
+
+	private MachineFactory mFactory;
+	
+	protected void startScheduler(MachineFactory mFactory) {
+		vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
+		mainProcess = new vm.Process(null, null);
+		this.mFactory = mFactory;
+		clockHandler.startClockHandler(mainProcess, mFactory);
+	}
+	
+	@IcecapCompileMe
+	protected void terminateScheduler(vm.Process current) {
+		mFactory.stopSystemTick();
+		current.transferTo(mainProcess);
+	}
 }

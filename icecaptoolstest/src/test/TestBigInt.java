@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestBigInt {
 
     private static class FDBigInt
@@ -132,12 +134,14 @@ public class TestBigInt {
         FDBigInt bii = new FDBigInt(2);
         bi = bi.mult(10);
         bi = bi.add(bii);
+        boolean failed = true;
         if (bi.longValue() == 42L)
         {
             if (bi.toString().equals("[2a]"))
             {
-               args = null;
+            	failed = false;
             }
         }
+        VMTest.markResult(failed);
     }
 }

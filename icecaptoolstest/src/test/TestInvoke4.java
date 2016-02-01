@@ -1,22 +1,24 @@
 package test;
 
+import vm.VMTest;
+
 public class TestInvoke4 {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		TestInvoke4 test = new TestInvoke4();
         test.foo(32);
         int res = 42;
         if (res == 42) {
-            return null;
+            return false;
         }
-        return args;
+        return true;
 	}
 
     private void foo(int x) {

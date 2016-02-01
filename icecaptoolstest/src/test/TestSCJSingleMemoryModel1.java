@@ -33,6 +33,8 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
+import vm.VMTest;
+
 public class TestSCJSingleMemoryModel1
 {  
   private static class MyPEH extends PeriodicEventHandler {
@@ -164,6 +166,6 @@ public class TestSCJSingleMemoryModel1
     new LaunchLevel1(new MyApp());
     devices.Console.println("***** TestSCJMemoryModel1 main.end *******************");
     
-    args = null;
+    VMTest.markResult(false);
   }  
 }

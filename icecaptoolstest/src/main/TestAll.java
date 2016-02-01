@@ -236,7 +236,7 @@ public class TestAll {
 
 		cregistry = new TestCompilationRegistry();
 
-		//cregistry = new CompileAllRegistry();
+		// cregistry = new CompileAllRegistry();
 
 		CompilationSequence sequencer = new CompilationSequence();
 		config.setOutputFolder(outputFolder.toString());
@@ -258,7 +258,7 @@ public class TestAll {
 	private void compileAndExecute(File outputFolder, String testClass, int testNo) throws Exception {
 		String exe = "a" + testNo + ".exe";
 		String prefix = "sudo ";
-		String gccCommand = getGCCCommand() + exe;
+		String gccCommand = getGCCCommand(testClass) + exe;
 
 		/* Patmos, fails at TestCVar1.java */
 		// prefix = "pasim ";
@@ -320,9 +320,9 @@ public class TestAll {
 		}
 	}
 
-	protected String getGCCCommand() {
+	protected String getGCCCommand(String testClass) {
 		/* for 64 bit Linux */
-		String gccCommand = "gcc -Wall -pedantic -Os -DPC64 -DREF_OFFSET -DPRINTFSUPPORT -DSUPPORTGC -DJAVA_HEAP_SIZE=10240000 -L/usr/lib64 classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c native_scj.c print.c x86_64_interrupt.s -lpthread -lrt -lm -o ";
+		String gccCommand = "gcc -Wall -pedantic -Os -DPC64" + getPackedAttribute(testClass) + " -DREF_OFFSET -DPRINTFSUPPORT -DSUPPORTGC -DJAVA_HEAP_SIZE=10240000 -L/usr/lib64 classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c native_scj.c print.c x86_64_interrupt.s -lpthread -lrt -lm -o ";
 
 		/* for 32 bit Linux */
 		//String gccCommand =
@@ -342,6 +342,18 @@ public class TestAll {
 
 		// prefix = "pasim ";
 		return gccCommand;
+	}
+
+	private String getPackedAttribute(String testClass) {
+		if (testClass.contains("TestGC1"))
+		{
+			return " -DPACKED=";
+		}
+		else
+		{
+			return "";
+		}
+		
 	}
 
 	private static void deleteIfExists(File outputFolder, String name) throws Exception {

@@ -1,5 +1,6 @@
 package test;
 
+import vm.VMTest;
 
 public class TestVolatile6 {
 
@@ -47,7 +48,7 @@ public class TestVolatile6 {
                 sum += count(cdata.configuratorRegisterMap);
                 if (sum == 544)
                 {
-                    args = null;
+                	VMTest.markResult(false);
                 }
             }
         }

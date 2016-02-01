@@ -4,6 +4,7 @@ import gc.GarbageCollector;
 import reflect.ObjectInfo;
 import test.icecapvm.DefaultGCMonitor;
 import thread.Thread;
+import vm.VMTest;
 
 public class TestGC1 {
 
@@ -119,7 +120,7 @@ public class TestGC1 {
 		}
 		else
 		{
-		    args = null;
+		    VMTest.markResult(false);
 		}
 	}
 }

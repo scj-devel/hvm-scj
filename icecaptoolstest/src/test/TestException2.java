@@ -1,15 +1,17 @@
 package test;
 
+import vm.VMTest;
+
 public class TestException2 {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		int result = 0;
         TestException2 test = new TestException2();
         try {
@@ -22,9 +24,9 @@ public class TestException2 {
             result++;
         }
         if (result == 2) {
-            return null;
+            return false;
         }
-        return args;
+        return true;
 	}
 
     private void foo() throws Exception {

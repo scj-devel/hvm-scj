@@ -2,6 +2,7 @@ package test;
 
 import reflect.MethodInfo;
 import vm.Memory;
+import vm.VMTest;
 
 public class TestReflectMethods {
 
@@ -52,7 +53,7 @@ public class TestReflectMethods {
         }
         else
         {
-            args = null;
+        	VMTest.markResult(false);
         }
     }
 }

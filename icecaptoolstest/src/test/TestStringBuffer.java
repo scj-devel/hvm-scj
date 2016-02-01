@@ -1,18 +1,20 @@
 package test;
 
+import vm.VMTest;
+
 public class TestStringBuffer {
 
     public static void main(String args[]) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
-    public static String[] test(String[] args) {
+    public static boolean test() {
         StringBuffer strbuf = new StringBuffer();
         String str1 = strbuf.toString();
         
         if (str1.equals("")) {
-            return null;
+            return false;
         }
-        return args;
+        return true;
     }
 }

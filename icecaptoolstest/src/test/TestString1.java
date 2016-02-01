@@ -1,15 +1,17 @@
 package test;
 
+import vm.VMTest;
+
 public class TestString1 {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		char[] chars = new char[11];
         chars[0] = 'H';
         chars[1] = 'e';
@@ -25,8 +27,8 @@ public class TestString1 {
         String str = new String(chars);
         if (str.length() == 11)
         {
-            return null;
+            return false;
         }
-        return args;
+        return true;
 	}
 }

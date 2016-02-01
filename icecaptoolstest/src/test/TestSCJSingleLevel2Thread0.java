@@ -29,6 +29,8 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
+import vm.VMTest;
+
 public class TestSCJSingleLevel2Thread0 {
 	private static boolean testResult;
 
@@ -125,7 +127,7 @@ public class TestSCJSingleLevel2Thread0 {
 		devices.Console.println("**** Level2Thread0 Test main.end ******");
 
 		if (testResult == true)
-			args = null;
+			VMTest.markResult(false);
 	}
 
 }

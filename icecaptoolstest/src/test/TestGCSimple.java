@@ -5,6 +5,7 @@ import gc.GarbageCollector;
 import icecaptools.IcecapCompileMe;
 import test.icecapvm.DefaultGCMonitor;
 import thread.Thread;
+import vm.VMTest;
 
 public class TestGCSimple {
 
@@ -114,6 +115,6 @@ public class TestGCSimple {
             }
         }
 
-        args = null;
+        VMTest.markResult(false);
     }
 }

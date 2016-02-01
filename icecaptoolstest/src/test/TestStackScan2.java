@@ -7,6 +7,7 @@ import thread.Thread;
 import util.ReferenceIterator;
 import vm.HVMHeap;
 import vm.Heap;
+import vm.VMTest;
 
 public class TestStackScan2 {
 
@@ -124,7 +125,7 @@ public class TestStackScan2 {
             threadToScan.join();
             stackScanner.join();
             if (!stackScanner.failed) {
-                args = null;
+            	VMTest.markResult(false);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

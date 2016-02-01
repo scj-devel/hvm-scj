@@ -2,6 +2,7 @@ package test;
 
 import reflect.ClassInfo;
 import vm.Address;
+import vm.VMTest;
 
 public class TestReflectClasses1 {
 
@@ -12,9 +13,7 @@ public class TestReflectClasses1 {
         boolean failed = test();
         if (!failed) {
             failed = test();
-            if (!failed) {
-                args = null;
-            }
+            VMTest.markResult(failed);
         }
     }
 

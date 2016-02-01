@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestNewString {
 
     /**
@@ -7,10 +9,7 @@ public class TestNewString {
      */
     public static void main(String[] args) {
         boolean failed = test();
-        if (!failed) {
-            args = null;
-        }
-
+        VMTest.markResult(failed);
     }
 
     private static boolean test() {

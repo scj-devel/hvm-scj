@@ -25,13 +25,12 @@
  *************************************************************************/
 package javax.safetycritical;
 
-import icecaptools.IcecapCompileMe;
-
 import javax.realtime.Scheduler;
 import javax.safetycritical.MissionSequencer.State;
 import javax.scj.util.Const;
 
-import vm.Machine;
+import icecaptools.IcecapCompileMe;
+import vm.MachineFactory;
 import vm.Monitor;
 import vm.Process;
 
@@ -77,35 +76,22 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 		if (scjProcess.getTarget() instanceof MissionSequencer<?>
 				&& ((MissionSequencer<?>) (scjProcess.getTarget())).currState == State.END) {
 			scjProcess.getTarget().cleanUp();
-			CyclicScheduler.instance().stop(scjProcess.process);
+			stop(scjProcess.process);
 		}
 
 		return scjProcess.process;
 	}
 
-	private vm.Process mainProcess;
-
-	private void processStart() {
-		vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
-		mainProcess = new vm.Process(null, null);
-
-		clockHandler.register();
-		clockHandler.enable();
-		clockHandler.startClockHandler(mainProcess);
-		clockHandler.yield();
-	}
-
 	@IcecapCompileMe
 	void stop(vm.Process current) {
 		terminated();
-		current.transferTo(mainProcess);
+		terminateScheduler(current);
 	}
 
-	void start(MissionSequencer<?> seq) {
+	void start(MissionSequencer<?> seq, MachineFactory mFactory) {
 		this.seq = seq;
-
 		current = ManagedSchedMethods.createScjProcess(seq);
-		processStart();
+		startScheduler(mFactory);
 	}
 
 	ScjProcess getCurrentProcess() {
@@ -129,7 +115,6 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 
 	@Override
 	public void terminated() {
-		Machine.getMachineFactory().stopSystemTick();
 	}
 
 }

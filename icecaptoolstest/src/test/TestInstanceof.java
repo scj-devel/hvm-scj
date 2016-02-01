@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestInstanceof {
 
     static private class A
@@ -25,26 +27,26 @@ public class TestInstanceof {
     }
     
     public static void main(String[] args) {
-        args = test(args);
+       VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		Object a = new A();
         Object b = new B();
         
         if (a instanceof B)
         {
-            return args;
+            return true;
         }
 
         if (a instanceof Interface1)
         {
-            return args;
+            return true;
         }
 
         if (b instanceof String)
         {
-            return args;
+            return true;
         }
         
         if (a instanceof A)
@@ -55,11 +57,11 @@ public class TestInstanceof {
                 {
                     if (b instanceof A)
                     {
-                        return null;
+                        return false;
                     }
                 }
             }
         }
-        return args;
+        return true;
 	}
 }

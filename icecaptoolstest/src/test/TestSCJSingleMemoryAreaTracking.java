@@ -19,6 +19,7 @@ import javax.scj.util.Priorities;
 import vm.Address32Bit;
 import vm.HardwareObject;
 import vm.Memory;
+import vm.VMTest;
 
 public class TestSCJSingleMemoryAreaTracking {
 	private static class Light extends HardwareObject {
@@ -176,7 +177,7 @@ public class TestSCJSingleMemoryAreaTracking {
 		devices.Console.println("\n***** TestSCJSingleMemoryAreaTracking end *****");
 
 		Memory.reportMemoryUsage();
-		args = null;
+		VMTest.markResult(false);
 	}
 
 }

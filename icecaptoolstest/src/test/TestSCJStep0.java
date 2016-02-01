@@ -15,6 +15,7 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 import vm.Memory;
+import vm.VMTest;
 
 public class TestSCJStep0 {
 
@@ -95,7 +96,7 @@ public class TestSCJStep0 {
 		new LaunchLevel1(new Application());
 		devices.Console.println("********* Application done *****************");
 		Memory.reportMemoryUsage();
-		args = null;
+		VMTest.markResult(false);
 	}
 
 }

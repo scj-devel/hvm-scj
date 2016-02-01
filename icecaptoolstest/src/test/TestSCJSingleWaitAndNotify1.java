@@ -18,6 +18,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 import javax.realtime.Clock;
 import javax.realtime.ConfigurationParameters;
@@ -198,6 +199,6 @@ public class TestSCJSingleWaitAndNotify1 {
 		devices.Console.println("***** TestSCJWaitAndNotify1 main.end *****");
 
 		if (count == 0)
-			args = null;
+			VMTest.markResult(false);
 	}
 }

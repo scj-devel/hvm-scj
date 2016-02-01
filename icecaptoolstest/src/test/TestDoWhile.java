@@ -1,11 +1,13 @@
 package test;
 
+import vm.VMTest;
+
 public class TestDoWhile {
     public static void main(String[] args) {
-    	args = test(args);
+    	VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		int i = 1;
 
         do {
@@ -13,9 +15,8 @@ public class TestDoWhile {
         } while (i < 255);
 
         if (i == 256) {
-            return null;
+            return false;
         }
-        return args;
+        return true;
 	}
-
 }

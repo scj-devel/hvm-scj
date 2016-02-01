@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestMultiDimentionalArrays {
 
     public static boolean test() {
@@ -28,8 +30,6 @@ public class TestMultiDimentionalArrays {
 
     public static void main(String[] args) {
         boolean failed = test();
-        if (!failed) {
-            args = null;
-        }
+        VMTest.markResult(failed);
     }
 }

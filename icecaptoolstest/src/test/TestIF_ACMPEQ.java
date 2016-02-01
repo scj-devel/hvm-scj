@@ -1,5 +1,7 @@
 package test;
 
+import vm.VMTest;
+
 public class TestIF_ACMPEQ {
 
     private static class FooClass {
@@ -32,10 +34,10 @@ public class TestIF_ACMPEQ {
     }
 
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		FooClass myFoo = new FooClass(42, null);
         FooClass myOtherFoo = new FooClass(1337, myFoo);
         myFoo.setReference(myOtherFoo);
@@ -44,11 +46,11 @@ public class TestIF_ACMPEQ {
             if (myFoo.getReference() == myOtherFoo) {
                 if (myOtherFoo.getReference() == myFoo) {
                     if (myFoo.getReference() == myFoo.getReference()) {
-                        return null;
+                        return false;
                     }
                 }
             }
         }
-        return args;
+        return true;
 	}
 }

@@ -3,6 +3,8 @@ package test;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import vm.VMTest;
+
 public class TestReflectConstructor {
 
     public static class A {
@@ -34,7 +36,7 @@ public class TestReflectConstructor {
 
         if (a.x == 42) {
             if (anotherA != a) {
-                args = null;
+            	VMTest.markResult(false);
             }
         }
     }

@@ -1,6 +1,7 @@
 package test;
 
 import icecaptools.IcecapCompileMe;
+import vm.VMTest;
 
 public class AOTTestSimple {
 
@@ -8,11 +9,11 @@ public class AOTTestSimple {
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+        VMTest.markResult(test());
     }
 
     @IcecapCompileMe
-    public static String[] test(String[] args) {
-        return null;
+    public static boolean test() {
+        return false;
     }
 }

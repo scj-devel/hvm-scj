@@ -2,6 +2,7 @@ package test;
 
 import vm.Address32Bit;
 import vm.HardwareObject;
+import vm.VMTest;
 
 public class TestBitWriteHWObject {
 
@@ -36,9 +37,6 @@ public class TestBitWriteHWObject {
 
         port.bit7 = true;
         
-        if (port.bit7 == true)
-        {
-            args = null;
-        }
+        VMTest.markResult(port.bit7 != true);
     }
 }

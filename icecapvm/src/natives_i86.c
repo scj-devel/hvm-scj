@@ -24,13 +24,6 @@ void sendbyte(unsigned char byte) {
 	fflush(stdout);
 }
 
-void mark_error(void) {
-}
-
-void mark_success(void) {
-	printf("SUCCESS\n");
-}
-
 #if defined(N_DEVICES_SYSTEM_BLINK)
 int32 n_devices_System_blink(int32 *sp) {
 	return -1;

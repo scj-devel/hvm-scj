@@ -1,15 +1,17 @@
 package test;
 
+import vm.VMTest;
+
 public class TestMul1 {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        args = test(args);
+    	VMTest.markResult(test());
     }
 
-	public static String[] test(String[] args) {
+	public static boolean test() {
 		int[][] pairs = { { 10, 10 }, { 1, 10 }, { 0, 0 }, { 100, 10 }, { 1, 0 }, { 0x7fffffff, 0xff } };
 
         for (int i = 0; i < pairs.length; i++) {
@@ -19,30 +21,30 @@ public class TestMul1 {
             int expected = x * y;
             int actual = imul(x, y);
             if (expected != actual) {
-                return args;
+                return true;
             }
             
             actual = imul(y, x);
             if (expected != actual) {
-                return args;
+                return true;
             }
             
             actual = imul(x, -y);
             if (expected != -actual) {
-                return args;
+                return true;
             }
             
             actual = imul(-x, y);
             if (expected != -actual) {
-                return args;
+                return true;
             }
             
             actual = imul(-x, -y);
             if (expected != actual) {
-                return args;
+                return true;
             }
         }
-        return null;
+        return false;
 	}
 
     public static int imul(int x, int y) {
