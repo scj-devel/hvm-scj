@@ -187,6 +187,11 @@ public class DependencyWalker {
 		public IcecapIterator<CFuncInfo> getCFunctions() throws Exception {
 			return delegate.getCFunctions();
 		}
+
+		@Override
+		public int getNumberOfUsedClassInitializers() {
+			return delegate.getNumberOfUsedClassInitializers();
+		}
 	}
 
 	public DependencyWalker(Converter converter, AnalysisObserver observer, PrintStream out,
@@ -438,7 +443,7 @@ public class DependencyWalker {
 				analyseBNode(nextWorkItem.bnode, nextWorkItem.newList, mr, workItemStack);
 			}
 		}
-		return mr;
+		return newList;
 	}
 
 	private void dispatchRest(BNode bnode, NewList newList, NewList mr, Stack<WorkItem> workItemStack)
@@ -458,7 +463,7 @@ public class DependencyWalker {
 
 		String className = referredField.getClassName();
 		String fieldName = referredField.getName();
-		
+
 		JavaClass clazz = lookupClass(className);
 
 		observer.classUsed(clazz.getClassName());
@@ -495,7 +500,9 @@ public class DependencyWalker {
 				     }
 				 }*/
 			} else {
-				observer.classInitializerUsed(clazz.getClassName());
+				if (ClassfileUtils.hasClassInitializer(clazz)) {
+					observer.classInitializerUsed(clazz.getClassName());
+				}
 			}
 		}
 

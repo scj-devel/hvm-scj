@@ -127,4 +127,9 @@ public class DefaultObserver implements AnalysisObserver {
     public IcecapIterator<CFuncInfo> getCFunctions() {
         return null;
     }
+
+	@Override
+	public int getNumberOfUsedClassInitializers() {
+		return 0;
+	}
 }
