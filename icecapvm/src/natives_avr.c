@@ -26,14 +26,6 @@ int32* get_java_stack_base(int16 size) {
 
 volatile uint8 systemTick;
 
-void start_system_tick(void) {
-	;
-}
-
-void stop_system_tick(void) {
-	;
-}
-
 #if defined(N_VM_REALTIMECLOCK_DELAYNATIVEUNTIL)
 int16 n_vm_RealtimeClock_delayNativeUntil(int32 *sp) {
 	return -1;
