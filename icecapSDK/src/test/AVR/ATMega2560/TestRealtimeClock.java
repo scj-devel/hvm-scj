@@ -4,33 +4,37 @@ import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
 import javax.realtime.RelativeTime;
 
-import vm.Machine;
+import devices.AVR.ATMega2560.ATMega2560TargetConfiguration;
 import vm.MachineFactory;
-import vm.POSIX64BitMachineFactory;
 import vm.RealtimeClock;
 import vm.VMTest;
 
-public class TestRealtimeClock {
+public class TestRealtimeClock extends ATMega2560TargetConfiguration {
 	static final int ticks = 100;
 
 	public static void main(String[] args) {
-		MachineFactory mFactory = new POSIX64BitMachineFactory();
-
-		Machine.setMachineFactory(mFactory);
+		MachineFactory mFactory = getConfiguration();
 
 		mFactory.startSystemTick();
+
+		devices.Console.println("Start...");
 
 		Clock rtClock = Clock.getRealtimeClock();
 
 		RelativeTime granularity = rtClock.getResolution();
+
 		AbsoluteTime start = rtClock.getTime();
 
 		int count = ticks;
+
+		devices.Console.print("Waiting...");
 
 		while (count > 0) {
 			RealtimeClock.waitForNextTick();
 			count--;
 		}
+
+		devices.Console.println("done");
 
 		AbsoluteTime stop = rtClock.getTime();
 
@@ -54,5 +58,16 @@ public class TestRealtimeClock {
 		}
 
 		mFactory.stopSystemTick();
+		blink(2000);
+	}
+
+	@Override
+	public String getOutputFolder() {
+		return "/home/skr/hvmsrc";
+	}
+
+	@Override
+	public int getJavaHeapSize() {
+		return 4096;
 	}
 }

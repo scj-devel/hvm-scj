@@ -230,7 +230,7 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 
 		notify("Launch failed: " + status.getMessage());
 
-		throw new CoreException(status);
+		//throw new CoreException(status);
 	}
 
 	private void addTargetSpecificFiles(StringBuffer compilerCommand, ILaunchConfiguration configuration)

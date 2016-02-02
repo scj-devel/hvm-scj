@@ -84,6 +84,10 @@ public class StringUtil {
 	}
 
 	public static String constructString(String defaultName, int nameCount) {
+		return constructStringBuffer(defaultName, nameCount).toString();
+	}
+	
+	public static StringBuffer constructStringBuffer(String defaultName, int nameCount) {
 		byte nameCountSize = stringSize(nameCount);
 		byte defaultNameSize = (byte) defaultName.length();
 		StringBuffer strBuf = new StringBuffer(defaultNameSize + nameCountSize);
@@ -103,6 +107,6 @@ public class StringUtil {
 			strBuf.append((char)nameCountBuffer[index]);
 			index++;
 		}
-		return strBuf.toString();
-	}
+		return strBuf;
+	}	
 }

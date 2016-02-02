@@ -1881,17 +1881,17 @@ extern const char* getClassName(unsigned short classIndex);
 extern const char* getMethodName(unsigned short methodIndex);
 
 void reportStackTraceIntro(unsigned short classIndex) {
-	printROMStr("Exception in thread \"\" ");
+	printStr("Exception in thread \"\" ");
 	printROMStr(getClassName(classIndex));
-	printROMStr("\n");
+	printStr("\n");
 }
 
 void reportStackTraceElement(unsigned short methodIndex, unsigned short pc) {
-	printROMStr("   at ");
+	printStr("   at ");
 	printROMStr(getMethodName(methodIndex));
-	printROMStr("(:");
+	printStr("(:");
 	printShort(pc);
-	printROMStr(")\n");
+	printStr(")\n");
 }
 #endif
 

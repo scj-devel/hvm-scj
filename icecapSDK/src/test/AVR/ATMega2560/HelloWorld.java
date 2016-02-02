@@ -7,16 +7,9 @@ public class HelloWorld extends ATMega2560TargetConfiguration {
 
 	@IcecapCompileMe
 	public static void main(String[] args) {
-		char toggle = 0;
-
-		// DDRA = (byte) 0xFF;
-
 		devices.Console.println("Starting...");
 		
-		while (true) {
-			
-			blink(1000);
-		}
+		blink(1000);
 	}
 
 	@Override
