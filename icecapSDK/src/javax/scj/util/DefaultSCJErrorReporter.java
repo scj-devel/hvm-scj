@@ -1,5 +1,6 @@
 package javax.scj.util;
 
+import util.StringUtil;
 import vm.Memory;
 
 public class DefaultSCJErrorReporter implements SCJErrorReporter {
@@ -25,7 +26,10 @@ public class DefaultSCJErrorReporter implements SCJErrorReporter {
 
 	@Override
 	public String processOutOfBackingStoreError(int start, int end, int left) {
-		return "Out of backingstore: " + start + ", " + (end) + ", " + (left);
+		StringBuffer buf = StringUtil.constructStringBuffer("Out of backingstore: ", start);
+		buf.append(StringUtil.constructStringBuffer(", ", end));
+		buf.append(StringUtil.constructStringBuffer(", ", left));
+		return buf.toString();
 	}
 
 }

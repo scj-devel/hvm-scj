@@ -1,5 +1,7 @@
 package devices;
 
+import util.StringUtil;
+
 public class Console {
 
 	private static byte[] bytes;
@@ -42,7 +44,7 @@ public class Console {
 	}
 
 	public static void print(long l) {
-		print("" + l);
+		print(StringUtil.constructString("", (int) l));
 	}
 
 	public static void print(String space) {
@@ -50,6 +52,6 @@ public class Console {
 	}
 
 	public static void println(int i) {
-		println("" + i);
+		println(StringUtil.constructString("", i));
 	}
 }

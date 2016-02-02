@@ -84,7 +84,7 @@ final class MulticoreMemoryBehavior extends MemoryBehavior {
 	
 	void runEnterPrivateMemoryMulticore(ManagedSchedulable ms, int size, Runnable logic) {
 		ManagedMemory prev = ManagedMemory.getMemory(ms);
-		devices.Console.println("enterPrivateMemory: prev " + prev);
+		// devices.Console.println("enterPrivateMemory: prev " + prev);
 		long prevFree = prev.memoryConsumed();
 
 		InnerPrivateMemory inner = new InnerPrivateMemory(size,
@@ -160,10 +160,10 @@ final class MulticoreMemoryBehavior extends MemoryBehavior {
 			ManagedThread handler = ((ManagedThread) ms);
 			currentMem = handler.getCurrentMemory();
 		}
-		devices.Console.println("executeInOuterArea: currentMem: " + currentMem);
+		// devices.Console.println("executeInOuterArea: currentMem: " + currentMem);
 
 		if (currentMem instanceof ImmortalMemory) {
-			devices.Console.println("executeInOuterArea: already in ImmortalMemory");
+			//devices.Console.println("executeInOuterArea: already in ImmortalMemory");
 			throw new IllegalStateException("executeInOuterArea: already in ImmortalMemory");
 		}
 

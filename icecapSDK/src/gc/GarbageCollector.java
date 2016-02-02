@@ -7,6 +7,7 @@ import thread.Semaphore;
 import thread.Thread;
 import util.LiveSet;
 import util.ReferenceIterator;
+import util.StringUtil;
 import vm.HVMHeap;
 import vm.Heap;
 
@@ -181,7 +182,7 @@ public class GarbageCollector implements Runnable {
 
 		liveSet = new LiveSet(bitMap);
 
-		devices.Console.println("Bitmap size = " + bitMap.getSize());
+		devices.Console.println(StringUtil.constructString("Bitmap size = ", bitMap.getSize()));
 		controller.start();
 		gc.start();
 

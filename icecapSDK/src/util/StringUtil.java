@@ -87,20 +87,19 @@ public class StringUtil {
 		return constructStringBuffer(defaultName, nameCount).toString();
 	}
 	
-	public static StringBuffer constructStringBuffer(String defaultName, int nameCount) {
-		byte nameCountSize = stringSize(nameCount);
-		byte defaultNameSize = (byte) defaultName.length();
+	public static StringBuffer constructStringBuffer(String message, int number) {
+		byte nameCountSize = stringSize(number);
+		byte defaultNameSize = (byte) message.length();
 		StringBuffer strBuf = new StringBuffer(defaultNameSize + nameCountSize);
 	
 		byte index = 0;
 		while (index < defaultNameSize)
 		{
-			strBuf.append(defaultName.charAt(index));
+			strBuf.append(message.charAt(index));
 			index++;
 		}
-		
 		byte[] nameCountBuffer = new byte[nameCountSize];
-		toString(nameCount, nameCountBuffer, 0);
+		toString(number, nameCountBuffer, 0);
 		index = 0;
 		while (index < nameCountSize)
 		{

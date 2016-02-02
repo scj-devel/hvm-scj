@@ -33,6 +33,7 @@
 package javax.safetycritical;
 
 import icecaptools.IcecapCompileMe;
+import util.StringUtil;
 
 import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
@@ -185,7 +186,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 	}
 
 	public String toString() {
-		return ("ScjProcess:" + msObject + " index: " + index);
+		return StringUtil.constructString("ScjProcess:" + msObject + " index: ", index);
 	}
 
 	/**
@@ -282,7 +283,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 	}
 
 	String print() {
-		return ("name: " + this.msObject + " 	index: " + index);
+		return StringUtil.constructString("name: " + this.msObject + " 	index: ", index);
 	}
 
 	protected boolean nextState(PriorityFrame pFrame) {
