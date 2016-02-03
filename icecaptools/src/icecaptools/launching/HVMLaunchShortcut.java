@@ -234,14 +234,11 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 
 	@Override
 	public IResource getLaunchableResource(ISelection arg0) {
-		System.out.println("getLaunchableResource");
 		return null;
 	}
 
 	@Override
 	public IResource getLaunchableResource(IEditorPart arg0) {
-		System.out.println("getLaunchableResource");
 		return null;
 	}
-
 }
