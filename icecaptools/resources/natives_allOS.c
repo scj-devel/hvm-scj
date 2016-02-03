@@ -2497,3 +2497,41 @@ void unimplemented(int16 mid) {
 		printROMStr("\n");
 	}
 }
+
+extern void setClassIndex(Object* obj, unsigned short classIndex);
+
+#if defined(TEST_TESTNATIVEFIELD_SUBCLASS_TESTFIELD_USED)
+int8 superByte;
+#endif
+
+static unsigned char java_stack[(JAVA_STACK_SIZE << 2) + sizeof(Object) + sizeof(uint16)];
+
+int32* get_java_stack_base(int16 size) {
+	Object* stackAsArray = (Object*)&java_stack[0];
+	int32* intStack;
+	uint16 length = JAVA_STACK_SIZE;
+	uint16 index;
+#if defined(_I)
+	setClassIndex((Object*) stackAsArray, _I);
+#else
+	setClassIndex((Object*) stackAsArray, -1);
+#endif
+
+	*(uint16 *) ((unsigned char*)stackAsArray + sizeof(Object)) = length;
+	intStack = (int32*) &java_stack[4];
+
+	for (index = 0; index < length; index++)
+	{
+		intStack[index] = index;
+	}
+
+	return intStack;
+}
+
+#if defined(N_VM_FULLSTACKANANLYSER_GET_JAVA_STACK_ARRAY)
+int16 n_vm_FullStackAnanlyser_get_java_stack_array(int32 *sp)
+{
+	sp[0] = (int32)(pointer)&java_stack[0];
+	return -1;
+}
+#endif

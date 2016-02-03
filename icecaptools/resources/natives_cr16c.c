@@ -12,11 +12,6 @@ static void delay(int time);
 
 unsigned char cstack[0x400] __attribute__ ((section (".data")));
 unsigned char istack[0x100] __attribute__ ((section (".data")));
-unsigned char java_stack[JAVA_STACK_SIZE << 2] __attribute__ ((section (".data")));
-
-int32* get_java_stack_base(int16 size) {
-    return (int32*) &java_stack[0];
-}
 
 void blink(int time) {
     SET_FREEZE_REG |= FRZ_WDOG;

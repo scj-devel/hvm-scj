@@ -6,16 +6,6 @@
 
 #include <stdio.h>
 
-static unsigned char java_stack[JAVA_STACK_SIZE << 2];
-
-#if defined(TEST_TESTNATIVEFIELD_SUBCLASS_TESTFIELD_USED)
-int8 superByte;
-#endif
-
-int32* get_java_stack_base(int16 size) {
-	return (int32*) &java_stack[0];
-}
-
 void initNatives(void) {
 }
 
