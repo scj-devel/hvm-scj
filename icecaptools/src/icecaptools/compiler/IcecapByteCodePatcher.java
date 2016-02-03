@@ -268,7 +268,7 @@ public class IcecapByteCodePatcher implements ByteCodePatcher {
                 methodCode[location + 3] = (byte) numArgs;
                 methodCode[location + 4] = (byte) (-1);
 
-                System.out.println(className + ":" + methodName + ":" + location + ": Interface '" + referredInterfaceMethod.getClassName() + "' might be invoked but is never instantiated");
+                //System.out.println(className + ":" + methodName + ":" + location + ": Interface '" + referredInterfaceMethod.getClassName() + "' might be invoked but is never instantiated");
             }
         }
     }
@@ -360,7 +360,7 @@ public class IcecapByteCodePatcher implements ByteCodePatcher {
             methodCode[location + 1] = (byte) ((methodNumber >> 8) & 0xff);
             methodCode[location + 2] = (byte) (methodNumber & 0xff);
         } else {
-            System.out.println(className + ":" + methodName + ":" + location + ": Method '" + referredMethod + "' might be invoked but class is never instantiated");
+            // System.out.println(className + ":" + methodName + ":" + location + ": Method '" + referredMethod + "' might be invoked but class is never instantiated");
         }
     }
 
@@ -473,7 +473,7 @@ public class IcecapByteCodePatcher implements ByteCodePatcher {
                     fieldOffsets[location + 4] = fi;
                 }
             } else {
-                System.out.println(className + ":" + referredField.getName() + ":" + location + ": Field in object might be invoked but class is never instantiated");
+                //System.out.println(className + ":" + referredField.getName() + ":" + location + ": Field in object might be invoked but class is never instantiated");
             }
 
             if (foCalc.isHardwareObject(referredClassName)) {

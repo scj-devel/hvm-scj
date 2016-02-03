@@ -64,7 +64,7 @@ public class TestSCJSingleManagedMemory {
 			new SmallObject();
 			y = memory.consumedMemory();
 			devices.Console.println("---- " + name + ", y = " + y + ", x = " + x);
-			if (y != (x + sizeOfSmallObject)) {
+			if (y < (x + sizeOfSmallObject)) {
 				devices.Console.println("!!!! " + name + " Fail 2, y = " + y + ", x = " + x);
 				fails++;
 			}

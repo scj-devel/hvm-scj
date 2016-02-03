@@ -56,10 +56,10 @@ public class JavaArrayClass extends JavaClass {
         switch (type) {
         case 'Z':
         case 'B':
-            return 1;
+        case 'C':
+        	return 1;
         case 'S':
             return 2;
-        case 'C':
         case 'F':
         case 'I':
             return 4;

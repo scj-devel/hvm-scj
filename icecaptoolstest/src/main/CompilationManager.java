@@ -214,7 +214,7 @@ public class CompilationManager {
 		if (aotCompile) {
 			cregistry = new AOTRegistry(new DefaultCompilationRegistry());
 		} else {
-			cregistry = new JMLCompilationRegistry();
+			cregistry = new DefaultCompilationRegistry();
 		}
 
 		props.setIncludeJMLMethods(includeJMLMethods);

@@ -95,7 +95,7 @@ public class TestSCJSingleHandlerMemory {
 			new SmallObject();
 			y = memory.consumedMemory();
 
-			if (y != x + sizeOfSmallObject) {
+			if (y < x + sizeOfSmallObject) {
 				devices.Console.println("---- MyPEH1 Fail 2, y = " + y + ", x = " + x);
 				fail = true;
 			}
@@ -133,7 +133,7 @@ public class TestSCJSingleHandlerMemory {
 			new BiggerObject();
 			y = memory.consumedMemory();
 
-			if (y != x + sizeOfBiggerObject) {
+			if (y < x + sizeOfBiggerObject) {
 				devices.Console.println("-------- MyPEH2 Fail 2, y = " + y + ", x = " + x);
 				fail = true;
 			}
