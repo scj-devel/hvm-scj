@@ -6,14 +6,23 @@
 
 #include <stdio.h>
 
-static unsigned char java_stack[JAVA_STACK_SIZE << 2];
+extern void setClassIndex(Object* obj, unsigned short classIndex);
 
 #if defined(TEST_TESTNATIVEFIELD_SUBCLASS_TESTFIELD_USED)
 int8 superByte;
 #endif
 
+static unsigned char java_stack[(JAVA_STACK_SIZE << 2) + sizeof(Object) + sizeof(uint16)];
+
 int32* get_java_stack_base(int16 size) {
-	return (int32*) &java_stack[0];
+	Object* stackAsArray = (Object*)&java_stack[0];
+#if defined(_I)
+	setClassIndex((Object*) stackAsArray, _I);
+#else
+	setClassIndex((Object*) stackAsArray, -1);
+#endif
+	*(uint16 *) ((unsigned char*)stackAsArray + sizeof(Object)) = JAVA_STACK_SIZE;
+	return (int32*) &java_stack[4];
 }
 
 void initNatives(void) {

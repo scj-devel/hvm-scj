@@ -19,12 +19,13 @@ import javax.scj.util.Priorities;
 
 import devices.Console;
 import devices.DefaultWriter;
+import devices.POSIXSCJTargetConfiguration;
 import devices.AVR.ATMega2560.ATMega2560SCJTargetConfiguration;
 import vm.MachineFactory;
 import vm.Memory;
 
 @SuppressWarnings("rawtypes")
-public class HelloSCJ extends ATMega2560SCJTargetConfiguration /*POSIXSCJTargetConfiguration*/{
+public class HelloSCJ extends /* ATMega2560SCJTargetConfiguration */ POSIXSCJTargetConfiguration {
 
 	private static class MyCyclicSchedule {
 		static CyclicSchedule generate0(CyclicExecutive cyclicExec, PeriodicEventHandler[] handlers) {
@@ -125,6 +126,7 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /*POSIXSCJTargetC
 	}
 
 	private static class MyApp implements Safelet {
+		
 		public MissionSequencer getSequencer() {
 			devices.Console.println("*");
 			return new MySequencer();
@@ -158,22 +160,13 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /*POSIXSCJTargetC
 	public static StorageParameters storageParameters_Handlers;
 	public static ConfigurationParameters configParameters;
 
-	private static final boolean mimimalMemoryConfig = true;
+	private static final boolean mimimalMemoryConfig = false;
 
-	private static class ConsoleWriter extends DefaultWriter
-	{
-
-		@Override
-		public short getMaxLineLength() {
-			return 128;
-		}
-	}
-	
 	public static void main(String[] args) {
 		int handlerStackSize;
 		int handlerMemorySize;
-
-		Console.writer = new ConsoleWriter();
+		
+		MachineFactory mFactory = getConfiguration();
 		
 		if (mimimalMemoryConfig) {
 			Const.OVERALL_BACKING_STORE = 4800;
@@ -193,23 +186,23 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /*POSIXSCJTargetC
 			handlerMemorySize = 50;
 		}
 
-		if (!mimimalMemoryConfig) {
+		 		if (!mimimalMemoryConfig) {
 			//Const.setDefaultErrorReporter();
 			Memory.startMemoryAreaTracking();
 			vm.Process.enableStackAnalysis();
 		}
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				/*new long[] { Const.HANDLER_STACK_SIZE },*/
+				//new long[] { Const.HANDLER_STACK_SIZE },
 				0, Const.IMMORTAL_MEM, Const.MISSION_MEM);
 
 		storageParameters_Handlers = new StorageParameters(handlerMemorySize,
-				/*new long[] { Const.HANDLER_STACK_SIZE },*/
+				//new long[] { Const.HANDLER_STACK_SIZE },
 				handlerMemorySize, 0, 0);
 		configParameters = new ConfigurationParameters(null, -1, -1, new long[] { handlerStackSize });
-
-		MachineFactory mFactory = getConfiguration();
 		
-		new LaunchLevel0(new MyApp(), mFactory);
+		MyApp app = new MyApp();
+
+		new LaunchLevel0(app, mFactory);
 
 		if (!mimimalMemoryConfig) {
 			vm.Process.reportStackUsage();
@@ -239,15 +232,5 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /*POSIXSCJTargetC
 			return new String[] {
 					"gcc -O0 -g -pedantic -Wall -DJAVA_STACK_SIZE=1024 -DPC64 -DLAZY_INITIALIZE_CONSTANTS natives_i86.c native_scj.c x86_64_interrupt.s -l pthread" };
 		}
-	}
-
-	@Override
-	protected EBOOL excludeMethod(String clazz, String targetMethodName, String targetMethodSignature) {
-		if (clazz.equals("java.lang.Integer")) {
-			if (targetMethodName.equals("<clinit>")) {
-				return EBOOL.YES;
-			}
-		}
-		return super.excludeMethod(clazz, targetMethodName, targetMethodSignature);
 	}
 }

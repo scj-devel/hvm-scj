@@ -2208,7 +2208,7 @@ extern int16 vm_Monitor_getDefaultMonitor(int32 *sp);
 unsigned char handleNewClassIndex(int32* sp, unsigned short classIndex) {
 	unsigned short dobjectSize, pobjectSize;
 	Object* object;
-	unsigned char hasLock = classes[classIndex].hasLock;
+	unsigned char hasLock = pgm_read_byte(&classes[classIndex].hasLock);
 
 	dobjectSize = pgm_read_word(&classes[classIndex].dobjectSize) >> 3;
 	pobjectSize = pgm_read_word(&classes[classIndex].pobjectSize) >> 3;

@@ -9,14 +9,25 @@ import vm.MachineFactory;
 
 public abstract class POSIXTargetConfiguration extends BaseTargetConfiguration implements TargetConfiguration {
 
+	private static MachineFactory mFac;
+	
 	static {
-		Machine.setMachineFactory(new POSIX64BitMachineFactory());
+		
+		Machine.setMachineFactory(factoryInstance());
 		Console.writer = new DefaultWriter();
 	}
 
 	@Override
 	public String[] getBuildCommands() {
 		return new String[] { "gcc -Os -pedantic -Wall -DJAVA_STACK_SIZE=2048 -DPC64 -DLAZY_INITIALIZE_CONSTANTS natives_i86.c" };
+	}
+
+	private static MachineFactory factoryInstance() {
+		if (mFac == null)
+		{
+			mFac = new POSIX64BitMachineFactory();
+		}
+		return mFac;
 	}
 
 	@Override
@@ -33,7 +44,6 @@ public abstract class POSIXTargetConfiguration extends BaseTargetConfiguration i
 	}
 
 	protected static MachineFactory getConfiguration() {
-		return new POSIX64BitMachineFactory();
+		return factoryInstance();
 	}
-
 }

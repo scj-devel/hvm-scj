@@ -58,6 +58,7 @@ public abstract class Launcher implements Runnable {
 
 	Launcher(boolean useOS, MachineFactory mFactory) {
 		Launcher.useOS = useOS;
+		
 		this.mFactory = mFactory;
 	}
 
