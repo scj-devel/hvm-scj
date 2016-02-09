@@ -1613,6 +1613,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 						switch (minfo) {
 						case 0:
 						case 1:
+						case 3:
 							*sp = *(signed char*) sp;
 							break;
 						case 2:

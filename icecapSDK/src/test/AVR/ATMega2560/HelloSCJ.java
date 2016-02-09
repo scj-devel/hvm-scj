@@ -18,12 +18,13 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 import devices.Console;
+import devices.POSIXSCJTargetConfiguration;
 import devices.AVR.ATMega2560.ATMega2560SCJTargetConfiguration;
 import vm.MachineFactory;
 import vm.Memory;
 
 @SuppressWarnings("rawtypes")
-public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTargetConfiguration*/ {
+public class HelloSCJ extends /*ATMega2560SCJTargetConfiguration*/ POSIXSCJTargetConfiguration {
 
 	private static class MyCyclicSchedule {
 		static CyclicSchedule generate0(CyclicExecutive cyclicExec, PeriodicEventHandler[] handlers) {
@@ -158,21 +159,21 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 	public static StorageParameters storageParameters_Handlers;
 	public static ConfigurationParameters configParameters;
 
-	private static class MyWriter extends ATMega2560Writer {
+	/*private static class MyWriter extends ATMega2560Writer {
 		@Override
 		public short getMaxLineLength() {
 			return 64;
 		}
-	}
+	}*/
 
-	private static final boolean mimimalMemoryConfig = true;
+	private static final boolean mimimalMemoryConfig = false;
 
 	public static void main(String[] args) {
 		int handlerStackSize;
 		int handlerMemorySize;
 
 		MachineFactory mFactory = getConfiguration();
-		Console.writer = new MyWriter();
+		//Console.writer = new MyWriter();
 
 		if (mimimalMemoryConfig) {
 			Const.OVERALL_BACKING_STORE = 4800;

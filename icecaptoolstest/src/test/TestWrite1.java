@@ -1,8 +1,9 @@
 package test;
 
+import devices.POSIXTargetConfiguration;
 import vm.VMTest;
 
-public class TestWrite {
+public class TestWrite1 extends POSIXTargetConfiguration {
 
     /**
      * @param args
@@ -15,4 +16,9 @@ public class TestWrite {
         devices.Console.println("hello");
         return false;
     }
+
+	@Override
+	public String getOutputFolder() {
+		return "/home/skr/hvmsrc";
+	}
 }

@@ -3017,7 +3017,7 @@ public abstract class AOTCompiler implements SPManipulator {
 			break;
 		case RawByteCodes.caload_opcode:
 		case RawByteCodes.castore_opcode:
-			elementSize = 4;
+			elementSize = 1;
 			break;
 		case RawByteCodes.saload_opcode:
 		case RawByteCodes.sastore_opcode:
