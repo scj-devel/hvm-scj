@@ -183,7 +183,7 @@ int16 n_java_lang_String_init_(int32 *sp) {
 		bytes = bytes + 4;
 
 		for (count = 0; count < nb; count++) {
-			*((int32 *) (HEAP_REF(charArrayObject, unsigned char *) + sizeof(Object) + 2) + count) = *(HEAP_REF(bytes, unsigned char*) + count + offset);
+			*((uint8 *) (HEAP_REF(charArrayObject, unsigned char *) + sizeof(Object) + 2) + count) = *(HEAP_REF(bytes, unsigned char*) + count + offset);
 		}
 
 		*(sp + 1) = (int32) (pointer) charArrayObject;
@@ -407,9 +407,9 @@ static char* getCString(unsigned char* strObj) {
 	string_value = string_value + sizeof(Object) + 2 + (string_offset << 2);
 	while (count < string_count) {
 		int32 value;
-		getField(HEAP_REF(string_value, unsigned char*), 32, &value);
+		getField(HEAP_REF(string_value, unsigned char*), 8, &value);
 		buffer[count++] = (unsigned char) value;
-		string_value += 4;
+		string_value += 1;
 	}
 
 	buffer[count] = '\0';
@@ -637,7 +637,7 @@ Object* createStringObject(int32 size, const char* data, int32* sp) {
 	if (charArrayObject != 0) {
 
 		for (count = 0; count < size; count++) {
-			*((int32 *) (HEAP_REF(charArrayObject, unsigned char *)
+			*((uint8 *) (HEAP_REF(charArrayObject, unsigned char *)
 							+ sizeof(Object) + 2) + count) = pgm_read_byte(
 					data + count);
 		}
