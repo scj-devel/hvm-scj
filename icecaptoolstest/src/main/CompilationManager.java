@@ -22,6 +22,7 @@ public class CompilationManager {
 
 	/* Test commit to test git */
 
+	/*
 	private static class JMLCompilationRegistry implements ICompilationRegistry {
 		
 		private boolean doICareHuh;
@@ -119,6 +120,7 @@ public class CompilationManager {
 			return doICareHuh;
 		}
 	}
+	*/
 
 	static boolean aotCompile = false;
 	static boolean includeJMLMethods = false;

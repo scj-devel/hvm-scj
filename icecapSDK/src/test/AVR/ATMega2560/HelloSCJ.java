@@ -18,7 +18,6 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 import devices.Console;
-import devices.DefaultWriter;
 import devices.AVR.ATMega2560.ATMega2560SCJTargetConfiguration;
 import vm.MachineFactory;
 import vm.Memory;
@@ -125,7 +124,7 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 	}
 
 	private static class MyApp implements Safelet {
-		
+
 		public MissionSequencer getSequencer() {
 			devices.Console.println("*");
 			return new MySequencer();
@@ -159,24 +158,22 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 	public static StorageParameters storageParameters_Handlers;
 	public static ConfigurationParameters configParameters;
 
-	private static class MyWriter extends ATMega2560Writer
-	{
+	private static class MyWriter extends ATMega2560Writer {
 		@Override
 		public short getMaxLineLength() {
 			return 64;
-		}		
+		}
 	}
-	
+
 	private static final boolean mimimalMemoryConfig = true;
 
-	
 	public static void main(String[] args) {
 		int handlerStackSize;
 		int handlerMemorySize;
-		
+
 		MachineFactory mFactory = getConfiguration();
 		Console.writer = new MyWriter();
-		
+
 		if (mimimalMemoryConfig) {
 			Const.OVERALL_BACKING_STORE = 4800;
 			Const.MEMORY_TRACKER_AREA_SIZE = 30000;
@@ -195,7 +192,7 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 			handlerMemorySize = 20;
 		}
 
-		 		if (!mimimalMemoryConfig) {
+		if (!mimimalMemoryConfig) {
 			//Const.setDefaultErrorReporter();
 			Memory.startMemoryAreaTracking();
 			vm.Process.enableStackAnalysis();
@@ -208,7 +205,7 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 				//new long[] { Const.HANDLER_STACK_SIZE },
 				handlerMemorySize, 0, 0);
 		configParameters = new ConfigurationParameters(null, -1, -1, new long[] { handlerStackSize });
-		
+
 		MyApp app = new MyApp();
 
 		new LaunchLevel0(app, mFactory);
@@ -234,15 +231,16 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 	}
 
 	@Override
-	public String[] getBuildCommands() {
+	public String[][] getBuildCommands() {
 		if (mimimalMemoryConfig) {
 			//return new String[] {	              /* 420 minimal on posix */
 			// "gcc -Os -pedantic -Wall -DJAVA_STACK_SIZE=420 -DPC64 -DLAZY_INITIALIZE_CONSTANTS natives_i86.c native_scj.c x86_64_interrupt.s -l pthread" };
 
 			return super.getBuildCommands();
 		} else {
-			return new String[] {	              /* 420 minimal on posix */
-					"gcc -O0 -g -pedantic -Wall -DJAVA_STACK_SIZE=2048 -DPC64 -DLAZY_INITIALIZE_CONSTANTS natives_i86.c native_scj.c x86_64_interrupt.s -l pthread" };
+			return new String[][] { /* 420 minimal on posix */
+					new String[] {
+							"gcc -O0 -g -pedantic -Wall -DJAVA_STACK_SIZE=2048 -DPC64 -DLAZY_INITIALIZE_CONSTANTS natives_i86.c native_scj.c x86_64_interrupt.s -l pthread" } };
 		}
 	}
 }

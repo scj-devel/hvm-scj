@@ -17,7 +17,7 @@ public interface TargetConfiguration extends ICompilationRegistry {
 	 * Refer to the executable as 'main.exe'  
 	 * 
 	 */
-	String[] getBuildCommands();
+	String[][] getBuildCommands();
 		
 	/* Returns the command for deploying the generated executable to the target.
 	 * 

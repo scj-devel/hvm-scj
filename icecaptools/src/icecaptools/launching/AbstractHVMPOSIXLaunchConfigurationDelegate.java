@@ -69,9 +69,9 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 
 			StringBuffer buildCommandsBuffer = getCompilerCommand(configuration);
 
-			String[] buildCommands = HVMLaunchShortcut.compilerCommandFromString(buildCommandsBuffer.toString());
+			String[][] buildCommands = HVMLaunchShortcut.compilerCommandFromString(buildCommandsBuffer.toString());
 
-			StringBuffer compilerCommand = new StringBuffer(buildCommands[0]);
+			StringBuffer compilerCommand = new StringBuffer(buildCommands[0][0]);
 
 			int requestResponseChannel = -1;
 			int eventChannel = -1;
@@ -119,11 +119,17 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 						if (buildCommands.length > 1) {
 							monitor.subTask("Performing post build commands");
 							for (int i = 1; i < buildCommands.length; i++) {
-								exitValue = ShellCommand.executeCommand(buildCommands[i], consoleOutputStream, true,
-										sourceFolder, null, COMPILATION_TIMEOUT,
-										new IcecapEclipseProgressMonitor(monitor));
+								if (buildCommands[i].length == 1) {
+									exitValue = ShellCommand.executeCommand(buildCommands[i][0], consoleOutputStream,
+											null, true, sourceFolder, null, COMPILATION_TIMEOUT,
+											new IcecapEclipseProgressMonitor(monitor));
+								} else {
+									exitValue = ShellCommand.executeCommand(buildCommands[i], consoleOutputStream, null,
+											true, sourceFolder, null, COMPILATION_TIMEOUT,
+											new IcecapEclipseProgressMonitor(monitor));
+								}
 								if (exitValue != 0) {
-									launchErrorMessage = "command [" + buildCommands[i] + "] failed";
+									launchErrorMessage = "command [" + combine(buildCommands[i]) + "] failed";
 									break;
 								}
 							}
@@ -131,9 +137,9 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 
 						if (exitValue == 0) {
 							Process process;
-							
+
 							monitor.subTask("Executing application");
-							
+
 							process = startProcessOnTarget(launch, configuration, path, sourceFolder,
 									consoleOutputStream, monitor);
 
@@ -155,9 +161,7 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 									DebugPlugin.newProcess(launch, process, "program");
 								}
 								return;
-							}
-							else
-							{
+							} else {
 								return;
 							}
 						}
@@ -230,7 +234,20 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 
 		notify("Launch failed: " + status.getMessage());
 
+		ILaunchManager launchManager;
+
+		launchManager = DebugPlugin.getDefault().getLaunchManager();
+		launchManager.removeLaunch(launch);
 		//throw new CoreException(status);
+	}
+
+	private String combine(String[] strings) {
+		StringBuffer buf = new StringBuffer();
+		for (String element : strings) {
+			buf.append(element);
+			buf.append(" ");
+		}
+		return buf.toString();
 	}
 
 	private void addTargetSpecificFiles(StringBuffer compilerCommand, ILaunchConfiguration configuration)

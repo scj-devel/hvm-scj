@@ -190,7 +190,9 @@ void handleLSHL(int32* sp) _NOINLINE_;
 #if defined(LSHR_OPCODE_USED) || defined(LUSHR_OPCODE_USED)
 void handleLSHR(int32* sp) _NOINLINE_;
 #endif
+#if defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED) || defined(N_VM_REALTIMECLOCK_DELAYNATIVEUNTIL)
 unsigned char handleLMULLDIVLREM(int32* sp, unsigned char code) _NOINLINE_;
+#endif
 static int32* pushStackFrame(unsigned short maxLocals,
 		unsigned short currentMethodNumber, unsigned short pc, int32* fp,
 		int32* sp);

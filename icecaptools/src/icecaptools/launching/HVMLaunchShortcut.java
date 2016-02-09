@@ -74,7 +74,7 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 							String outputFolder = (String) m.invoke(instance, new Object[0]);
 
 							m = mainClazz.getMethod("getBuildCommands", new Class[0]);
-							String[] buildCommands = (String[]) m.invoke(instance, new Object[0]);
+							String[][] buildCommands = (String[][]) m.invoke(instance, new Object[0]);
 
 							m = mainClazz.getMethod("getJavaHeapSize", new Class[0]);
 							int heapSize = (Integer) m.invoke(instance, new Object[0]);
@@ -112,7 +112,7 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 		return urls;
 	}
 
-	private void launch(IType type, String outputFolder, String[] buildCommands, int heapSize, String deployCommand) {
+	private void launch(IType type, String outputFolder, String[][] buildCommands, int heapSize, String deployCommand) {
 		ILaunchManager launchManager;
 
 		launchManager = DebugPlugin.getDefault().getLaunchManager();
@@ -163,7 +163,7 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 		}
 	}
 
-	private void launch(ILaunchConfigurationWorkingCopy wc, String outputFolder, String[] buildCommands, int heapSize,
+	private void launch(ILaunchConfigurationWorkingCopy wc, String outputFolder, String[][] buildCommands, int heapSize,
 			String deployCommand) {
 		ILaunchConfiguration config;
 		try {
@@ -177,12 +177,12 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 		}
 	}
 
-	public static String compilerCommandToString(String[] buildCommands) {
+	public static String compilerCommandToString(String[][] buildCommands) {
 		StringBuffer strBuffer = new StringBuffer();
 		String lineSeparator = System.getProperty("line.separator");
 
 		for (int i = 0; i < buildCommands.length; i++) {
-			strBuffer.append(buildCommands[i]);
+			strBuffer.append(multiTokenCommandToString(buildCommands[i]));
 			if (i < buildCommands.length - 1) {
 				strBuffer.append(lineSeparator);
 			}
@@ -190,8 +190,36 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 		return strBuffer.toString();
 	}
 
-	public static String[] compilerCommandFromString(String buildCommands) {
-		return buildCommands.split(System.getProperty("line.separator"));
+	private static String multiTokenCommandToString(String[] tokens) {
+		StringBuffer buffer = new StringBuffer();
+		
+		int index = 0;
+		
+		buffer.append(tokens[index++]);
+		while (index < tokens.length)
+		{
+			buffer.append(';');
+			buffer.append(tokens[index++]);
+		}
+		return buffer.toString();
+	}
+	
+	private static String[] multiTokenCommandFromString(String line) {
+		String[] commandArray = line.split(";");
+		return commandArray;
+	}
+
+	public static String[][] compilerCommandFromString(String buildCommands) {
+		String[] lines = buildCommands.split(System.getProperty("line.separator"));
+		String[][] commandArrays = new String[lines.length][];
+		
+		int index = 0;
+		
+		for (String line: lines)
+		{
+			commandArrays[index++] = multiTokenCommandFromString(line);
+		}
+		return commandArrays;
 	}
 
 	private IType getMethodType(IMethod receiver) {
@@ -217,18 +245,15 @@ public class HVMLaunchShortcut implements ILaunchShortcut2 {
 
 	@Override
 	public void launch(IEditorPart delection, String mode) {
-		System.out.println("launch editorpart");
 	}
 
 	@Override
 	public ILaunchConfiguration[] getLaunchConfigurations(ISelection arg0) {
-		System.out.println("getLaunchConfigurations");
 		return null;
 	}
 
 	@Override
 	public ILaunchConfiguration[] getLaunchConfigurations(IEditorPart arg0) {
-		System.out.println("getLaunchConfigurations");
 		return null;
 	}
 
