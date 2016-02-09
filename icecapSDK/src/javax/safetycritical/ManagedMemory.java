@@ -232,8 +232,9 @@ public abstract class ManagedMemory extends MemoryArea {
 	}
 
 	// used for JML annotation only (not public)
-	static MemoryArea getTopMostArea() {
-		return null;
+	protected static MemoryArea getTopMostArea() {
+		
+		return MemoryArea.getTopMostArea();
 	}
 
 }
