@@ -55,6 +55,16 @@ public final class TestPortalSC {
 //	}
 	
 	/**
+	 * Used by test programs to get the remaining memory area available to
+	 * the current Managedmemory area.
+	 *
+	 * @return the available remaining memory area.  
+	 */
+	public static long getCurrentRemainingArea()  {
+		return ManagedMemory.getCurrentRemainingArea();
+	}
+	
+	/**
 	 * Used by test programs to get the current memory area.
 	 *
 	 * @return the current memory area.
