@@ -14,4 +14,10 @@ public class EmptyStringIterator implements Iterator<String> {
 		return null;
 	}
 
+	
+	public void remove() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

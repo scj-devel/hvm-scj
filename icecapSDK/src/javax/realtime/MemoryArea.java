@@ -295,6 +295,15 @@ public abstract class MemoryArea extends Object {
 		return null;
 	}
 
+	protected static MemoryArea getTopMostArea() {
+		
+		MemoryArea current = MemoryArea.getCurrentMemoryArea();
+		while (current.nextContainedMemory != null) {
+			current = current.nextContainedMemory;
+		}			
+		return current;
+	}
+	
 	private static void print(MemoryArea backingStoreProvider, int indent) {
 		MemoryArea current = backingStoreProvider.headOfContainedMemories;
 

@@ -38,8 +38,8 @@ public class Memory {
 			buffer.append(name);
 			buffer.append(StringUtil.constructString("[", instanceCount));
 			buffer.append("]");
-			buffer.append(StringUtil.constructString(": size = ", size));
-			buffer.append(StringUtil.constructString(", max used = ", maxUsed));
+			buffer.append(StringUtil.constructString(": ", size));
+			buffer.append(StringUtil.constructString(", used = ", maxUsed));
 			return buffer.toString();
 		}
 
@@ -94,8 +94,8 @@ public class Memory {
 				for (MemoryInfo memory : createdMemories) {
 					devices.Console.println(memory.toString());
 				}
-				devices.Console.println(StringUtil.constructString("Max backing store usage = ", MemoryArea.getRemainingMemorySize()));
-				devices.Console.println(StringUtil.constructString("backingStoreOffset in heap = ", backingStoreOffset));
+				devices.Console.println(StringUtil.constructString("BS used = ", MemoryArea.getRemainingMemorySize()));
+				devices.Console.println(StringUtil.constructString("BS heap offset = ", backingStoreOffset));
 				switchToArea(current);
 			} else {
 				devices.Console.println("No created memories recorded");

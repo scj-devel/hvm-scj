@@ -1,6 +1,7 @@
 package javax.safetycritical;
 
 //import javax.realtime.ImmortalMemory;
+import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
 import javax.realtime.ReleaseParameters;
 import javax.safetycritical.annotate.Level;
@@ -52,6 +53,34 @@ public final class TestPortalSC {
 //	public static ManagedMemory ManagedMemory_allocateImmortalMemory(int immortalSize) {
 //		return new ImmortalMemory(immortalSize);
 //	}
+	
+	/**
+	 * Used by test programs to get the remaining memory area available to
+	 * the current Managedmemory area.
+	 *
+	 * @return the available remaining memory area.  
+	 */
+	public static long getCurrentRemainingArea()  {
+		return ManagedMemory.getCurrentRemainingArea();
+	}
+	
+	/**
+	 * Used by test programs to get the current memory area.
+	 *
+	 * @return the current memory area.
+	 */
+	public static MemoryArea getCurrentAllocationArea() {
+		return ManagedMemory.getCurrentAllocationArea();
+	}
+	
+	/**
+	 * Used by test programs to get the topmost memory area.
+	 *
+	 * @return the topmost memory area.
+	 */
+	public static MemoryArea getTopMostArea() {
+		return ManagedMemory.getTopMostArea();
+	}
 
 	/**
 	 * Used by test programs to get the outer memory of a <code>ManagedMemory</code> area.
