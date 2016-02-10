@@ -97,11 +97,11 @@ void neg(uint32* msb, uint32* lsb) _NOINLINE_;
 int16 initializeException(int32* sp, int16 exceptionClass, int16 exceptionInitMethod) _NOINLINE_;
 
 #if defined(TABLESWITCH_OPCODE_USED)
-static unsigned short handleTableSwitch(unsigned short pc, const unsigned char* ptr, int32 index) _NOINLINE_;
+static int32 handleTableSwitch(const unsigned char* ptr, int32 index) _NOINLINE_;
 #endif
 
 #if defined(LOOKUPSWITCH_OPCODE_USED)
-static unsigned short handleLookupSwitch(unsigned short pc, unsigned char* ptr, int32 key) _NOINLINE_;
+static int32 handleLookupSwitch(const unsigned char* ptr, int32 key) _NOINLINE_;
 #endif
 
 void handleLongOperator(unsigned char code, int32* sp) _NOINLINE_;
@@ -1270,19 +1270,13 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 #endif
 #if defined(TABLESWITCH_OPCODE_USED)
 		case TABLESWITCH_OPCODE: {
-			unsigned short pc;
-			method_code += 4;
-			pc = handleTableSwitch(method_code - (const unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**), method_code, *(--sp));
-			method_code = (const unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**) + pc;
+			method_code +=  handleTableSwitch(method_code + 4, *(--sp));
 			continue;
 		}
 #endif
 #if defined(LOOKUPSWITCH_OPCODE_USED)
 			case LOOKUPSWITCH_OPCODE: {
-				unsigned short pc;
-				method_code += 4;
-				pc = handleLookupSwitch(method_code - (const unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**), method_code, *(--sp));
-				method_code = (unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**) + pc;
+				method_code += handleLookupSwitch(method_code + 4, *(--sp));
 				continue;
 			}
 #endif
@@ -1995,10 +1989,9 @@ int16 initializeException(int32* sp, int16 exceptionClass, int16 exceptionInitMe
 #endif
 
 #if defined(TABLESWITCH_OPCODE_USED)
-static unsigned short handleTableSwitch(unsigned short pc, const unsigned char* ptr, int32 index) {
+static int32 handleTableSwitch(const unsigned char* ptr, int32 index) {
 	int32 defaultVal, lowVal, highVal, offset = 0;
 	unsigned char byte1, byte2, byte3, byte4;
-	unsigned short pcStart = pc - 4;
 
 	/* ptr = &method_code[pc]; */
 	byte1 = pgm_read_byte(ptr++);
@@ -2020,7 +2013,7 @@ static unsigned short handleTableSwitch(unsigned short pc, const unsigned char* 
 	/* index = sp[--top]; */
 
 	if ((index < lowVal) || (index > highVal)) {
-		pc = pcStart + defaultVal;
+		return defaultVal;
 	} else {
 		while (index >= lowVal) {
 			byte1 = pgm_read_byte(ptr++);
@@ -2030,17 +2023,15 @@ static unsigned short handleTableSwitch(unsigned short pc, const unsigned char* 
 			offset = ((int32) byte1 << 24) | ((int32) byte2 << 16) | (byte3 << 8) | byte4;
 			index--;
 		}
-		pc = pcStart + offset;
+		return offset;
 	}
-	return pc;
 }
 #endif
 
 #if defined(LOOKUPSWITCH_OPCODE_USED)
-static unsigned short handleLookupSwitch(unsigned short pc, unsigned char* ptr, int32 key) {
+static int32 handleLookupSwitch(const unsigned char* ptr, int32 key) {
 	int32 defaultVal, npairs, match, offset;
 	unsigned char byte1, byte2, byte3, byte4;
-	unsigned short pcStart = pc - 4;
 
 	byte1 = pgm_read_byte(ptr++);
 	byte2 = pgm_read_byte(ptr++);
@@ -2065,17 +2056,12 @@ static unsigned short handleLookupSwitch(unsigned short pc, unsigned char* ptr, 
 		byte4 = pgm_read_byte(ptr++);
 		offset = ((int32) byte1 << 24) | ((int32) byte2 << 16) | (byte3 << 8) | byte4;
 		if (match == key) {
-			pc = pcStart + offset;
-			npairs = -1;
+			return offset;
 		} else {
 			npairs--;
 		}
 	}
-	if (npairs == 0) {
-		pc = pcStart + defaultVal;
-	}
-
-	return pc;
+	return defaultVal;
 }
 #endif
 
