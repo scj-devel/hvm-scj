@@ -71,7 +71,7 @@ unsigned char* createArrayFromElementSize(unsigned short classIndex,
 unsigned char handleNewClassIndex(int32* sp, unsigned short classIndex);
 
 #if defined(WIDE_OPCODE_USED)
-static signed short handleWide(int32* fp, int32* sp, unsigned char *method_code) _NOINLINE_;
+static signed short handleWide(int32* fp, int32* sp, const unsigned char *method_code) _NOINLINE_;
 #endif
 
 unsigned char* createArray(unsigned short classIndex,
@@ -102,7 +102,7 @@ int16 initializeException(int32* sp, int16 exceptionClass,
 		int16 exceptionInitMethod) _NOINLINE_;
 
 #if defined(TABLESWITCH_OPCODE_USED)
-static unsigned short handleTableSwitch(unsigned short pc, unsigned char* ptr, int32 index) _NOINLINE_;
+static unsigned short handleTableSwitch(unsigned short pc, const unsigned char* ptr, int32 index) _NOINLINE_;
 #endif
 
 #if defined(LOOKUPSWITCH_OPCODE_USED)
@@ -116,11 +116,11 @@ static void handleLNEG(int32* sp) _NOINLINE_;
 #endif
 
 #if defined(NEW_OPCODE_USED) || defined(INVOKEDYNAMIC_OPCODE_USED)
-static unsigned char handleNew(int32* sp, unsigned char *method_code) _NOINLINE_;
+static unsigned char handleNew(int32* sp, const unsigned char *method_code) _NOINLINE_;
 #endif
 
 #if defined(MULTIANEWARRAY_OPCODE_USED)
-static unsigned char handleMultianewarray(int32* sp, unsigned char *method_code) _NOINLINE_;
+static unsigned char handleMultianewarray(int32* sp, const unsigned char *method_code) _NOINLINE_;
 #endif
 
 #if defined(JAVA_LANG_THROWABLE_INIT_)
@@ -129,35 +129,35 @@ unsigned short handleAthrow(const MethodInfo* method, unsigned short classIndex,
 #endif
 
 #if defined(PUTFIELD_OPCODE_USED)
-static unsigned char handlePutField(unsigned char* method_code, int32* sp) _NOINLINE_;
+static unsigned char handlePutField(const unsigned char* method_code, int32* sp) _NOINLINE_;
 #endif
 
 #if defined(PUTHWFIELD_OPCODE_USED)
-static unsigned char handlePutHWField(unsigned char* method_code, int32* sp) _NOINLINE_;
+static unsigned char handlePutHWField(const unsigned char* method_code, int32* sp) _NOINLINE_;
 #endif
 
 #if defined(GETSTATIC_OPCODE_USED)
-static unsigned short handleGetStatic(unsigned char* method_code, int32* sp) _NOINLINE_;
+static unsigned short handleGetStatic(const unsigned char* method_code, int32* sp) _NOINLINE_;
 #endif
 
 #if defined(PUTSTATIC_OPCODE_USED)
-static unsigned short handlePutStatic(unsigned char* method_code, int32* sp) _NOINLINE_;
+static unsigned short handlePutStatic(const unsigned char* method_code, int32* sp) _NOINLINE_;
 #endif
 
 #if defined(GETFIELD_OPCODE_USED)
-static signed char handleGetField(unsigned char* method_code, int32* sp) _NOINLINE_;
+static signed char handleGetField(const unsigned char* method_code, int32* sp) _NOINLINE_;
 #endif
 
 #if defined(GETHWFIELD_OPCODE_USED)
-static signed char handleGetHWField(unsigned char* method_code, int32* sp) _NOINLINE_;
+static signed char handleGetHWField(const unsigned char* method_code, int32* sp) _NOINLINE_;
 #endif
 
 #if defined(AASTORE_OPCODE_USED) || defined(FASTORE_OPCODE_USED) || defined(BASTORE_OPCODE_USED) || defined(CASTORE_OPCODE_USED) || defined(SASTORE_OPCODE_USED) || defined(LASTORE_OPCODE_USED) || defined(IASTORE_OPCODE_USED)
-static unsigned char handleAStore(int32* sp, unsigned char *method_code) _NOINLINE_;
+static unsigned char handleAStore(int32* sp, const unsigned char *method_code) _NOINLINE_;
 #endif
 
 #if defined(FALOAD_OPCODE_USED) || defined(AALOAD_OPCODE_USED) || defined(BALOAD_OPCODE_USED) || defined(CALOAD_OPCODE_USED) || defined(SALOAD_OPCODE_USED) || defined(LALOAD_OPCODE_USED) || defined(IALOAD_OPCODE_USED)
-static unsigned char handleALoad(int32* sp, unsigned char *method_code) _NOINLINE_;
+static unsigned char handleALoad(int32* sp, const unsigned char *method_code) _NOINLINE_;
 #endif
 
 #if defined(DUP_X2_OPCODE_USED)
@@ -173,7 +173,7 @@ static void handleDup2X2(int32* sp) _NOINLINE_;
 #endif
 
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED)
-static unsigned char handleLDC(int32* sp, unsigned char *method_code) _NOINLINE_;
+static unsigned char handleLDC(int32* sp, const unsigned char *method_code) _NOINLINE_;
 #endif
 
 #if defined(GC_GARBAGECOLLECTOR_NEWBARRIER_USED)
@@ -216,7 +216,7 @@ static void addStackElement(const MethodInfo *method, int32 pc) _NOINLINE_;
 #endif
 
 static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
-	unsigned char *method_code;
+	const unsigned char *method_code;
 	int32* sp;
 	unsigned char numArgs = 0;
 	unsigned short callee;
@@ -224,14 +224,14 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 
 	start: {
 		currentMethod = &methods[currentMethodNumber];
-		method_code = (unsigned char *) pgm_read_pointer(&currentMethod->code,
+		method_code = (const unsigned char *) pgm_read_pointer(&currentMethod->code,
 				unsigned char**);
 		sp = &fp[pgm_read_word(&currentMethod->maxLocals) + 2]; /* make room for local VM state on the stack */
 	}
 	loop: while (1) {
 		unsigned char code = pgm_read_byte(method_code);
 #if defined(ENABLE_DEBUG)
-		checkBreakpoint(fp, currentMethodNumber, method_code - (unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**));
+		checkBreakpoint(fp, currentMethodNumber, method_code - (const unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**));
 #endif
 		switch (code) {
 #if defined(ICONST_M1_OPCODE_USED) || defined(ICONST_0_OPCODE_USED) || defined(ICONST_1_OPCODE_USED) || defined(ICONST_2_OPCODE_USED) || defined(ICONST_3_OPCODE_USED) || defined(ICONST_4_OPCODE_USED) || defined(ICONST_5_OPCODE_USED)
@@ -764,7 +764,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 
 				currentMethodNumber--;
 				currentMethod = &methods[currentMethodNumber];
-				method_code = (unsigned char *) pgm_read_pointer(
+				method_code = (const unsigned char *) pgm_read_pointer(
 						&currentMethod->code, unsigned char**) + pc;
 				code = pgm_read_byte(method_code);
 				switch (code) {
@@ -823,7 +823,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 		case INVOKEVIRTUAL_OPCODE:
 		case INVOKEINTERFACE_OPCODE: {
 			Object *object;
-			unsigned char* mcode = method_code;
+			const unsigned char* mcode = method_code;
 			unsigned short classIndex;
 			unsigned short jumpTableSize;
 
@@ -1292,8 +1292,8 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			case TABLESWITCH_OPCODE: {
 				unsigned short pc;
 				method_code += 4;
-				pc = handleTableSwitch(method_code - (unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**), method_code, *(--sp));
-				method_code = (unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**) + pc;
+				pc = handleTableSwitch(method_code - (const unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**), method_code, *(--sp));
+				method_code = (const unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**) + pc;
 				continue;
 			}
 #endif
@@ -1301,7 +1301,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			case LOOKUPSWITCH_OPCODE: {
 				unsigned short pc;
 				method_code += 4;
-				pc = handleLookupSwitch(method_code - (unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**), method_code, *(--sp));
+				pc = handleLookupSwitch(method_code - (const unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**), method_code, *(--sp));
 				method_code = (unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**) + pc;
 				continue;
 			}
@@ -1542,7 +1542,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 #if defined(JAVA_LANG_THROWABLE_INIT_)
 			unsigned short handler_pc;
 			unsigned short pc = method_code
-					- (unsigned char *) pgm_read_pointer(&currentMethod->code,
+					- (const unsigned char *) pgm_read_pointer(&currentMethod->code,
 							unsigned char**);
 			Object* exception = (Object*) (pointer) *(sp - 1);
 			unsigned short classIndex = getClassIndex(exception);
@@ -1562,7 +1562,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			sp = &fp[pgm_read_word(&currentMethod->maxLocals) + 2];
 			*sp++ = (int32) (pointer) exception;
 			pc = handler_pc;
-			method_code = (unsigned char *) pgm_read_pointer(
+			method_code = (const unsigned char *) pgm_read_pointer(
 					&currentMethod->code, unsigned char**) + pc;
 #else
 			while (1) {;};
@@ -1661,7 +1661,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 }
 
 #if defined(WIDE_OPCODE_USED)
-static signed short handleWide(int32* fp, int32* sp, unsigned char *method_code) {
+static signed short handleWide(int32* fp, int32* sp, const unsigned char *method_code) {
 	unsigned char opcode = pgm_read_byte(&method_code[1]);
 	unsigned char indexbyte1 = pgm_read_byte(&method_code[2]);
 	unsigned char indexbyte2 = pgm_read_byte(&method_code[3]);
@@ -2034,7 +2034,7 @@ int16 initializeException(int32* sp, int16 exceptionClass, int16 exceptionInitMe
 #endif
 
 #if defined(TABLESWITCH_OPCODE_USED)
-static unsigned short handleTableSwitch(unsigned short pc, unsigned char* ptr, int32 index) {
+static unsigned short handleTableSwitch(unsigned short pc, const unsigned char* ptr, int32 index) {
 	int32 defaultVal, lowVal, highVal, offset = 0;
 	unsigned char byte1, byte2, byte3, byte4;
 	unsigned short pcStart = pc - 4;
@@ -2271,7 +2271,7 @@ Object* createMultiDimensionalArrays(int32* sp, unsigned char dimensions, unsign
 #endif
 
 #if defined(MULTIANEWARRAY_OPCODE_USED)
-static unsigned char handleMultianewarray(int32* sp, unsigned char *method_code) {
+static unsigned char handleMultianewarray(int32* sp, const unsigned char *method_code) {
 	unsigned short classIndex;
 	unsigned char dimensions;
 	Object* array;
@@ -2289,7 +2289,7 @@ static unsigned char handleMultianewarray(int32* sp, unsigned char *method_code)
 #endif
 
 #if defined(NEW_OPCODE_USED) || defined(INVOKEDYNAMIC_OPCODE_USED)
-static unsigned char handleNew(int32* sp, unsigned char *method_code) {
+static unsigned char handleNew(int32* sp, const unsigned char *method_code) {
 	unsigned short classIndex;
 
 	classIndex = pgm_read_byte(&method_code[1]) << 8;
@@ -2348,7 +2348,7 @@ unsigned short handleAthrow(const MethodInfo* method, unsigned short classIndex,
 #endif
 
 #if defined(PUTFIELD_OPCODE_USED) || defined(PUTHWFIELD_OPCODE_USED) || defined(PUTSTATIC_OPCODE_USED) || defined(GETSTATIC_OPCODE_USED) || defined(GETFIELD_OPCODE_USED) || defined(GETHWFIELD_OPCODE_USED)
-static unsigned short getFieldInfo(unsigned char* method_code,
+static unsigned short getFieldInfo(const unsigned char* method_code,
 		unsigned short *offset, unsigned char *size) {
 	unsigned char fsize;
 	unsigned short foffset;
@@ -2423,7 +2423,7 @@ extern int16 gc_GarbageCollector_writeBarrier(int32 *fp, int32 source, int32 old
 #endif
 
 #if defined(PUTFIELD_OPCODE_USED)
-static unsigned char handlePutField(unsigned char* method_code, int32* sp) {
+static unsigned char handlePutField(const unsigned char* method_code, int32* sp) {
 	unsigned char *object;
 	int32 lsb;
 	int32 msb = 0;
@@ -2484,7 +2484,7 @@ static unsigned char handlePutField(unsigned char* method_code, int32* sp) {
 #endif
 
 #if defined(PUTHWFIELD_OPCODE_USED)
-static unsigned char handlePutHWField(unsigned char* method_code, int32* sp) {
+static unsigned char handlePutHWField(const unsigned char* method_code, int32* sp) {
 	unsigned char *data;
 	int32 lsb;
 	int32 msb = 0;
@@ -2635,7 +2635,7 @@ static unsigned char write_rom_data(unsigned char *object, unsigned char size, u
 #endif
 
 #if defined(PUTSTATIC_OPCODE_USED)
-static unsigned short handlePutStatic(unsigned char* method_code, int32* sp) {
+static unsigned short handlePutStatic(const unsigned char* method_code, int32* sp) {
 	int32 lsb = *(--sp);
 	int32 msb = 0;
 	unsigned short offset;
@@ -2660,7 +2660,7 @@ static unsigned short handlePutStatic(unsigned char* method_code, int32* sp) {
 #endif
 
 #if defined(GETSTATIC_OPCODE_USED)
-static unsigned short handleGetStatic(unsigned char* method_code, int32* sp) {
+static unsigned short handleGetStatic(const unsigned char* method_code, int32* sp) {
 	unsigned char *data;
 	unsigned short offset;
 	unsigned char size;
@@ -2674,7 +2674,7 @@ static unsigned short handleGetStatic(unsigned char* method_code, int32* sp) {
 #endif
 
 #if defined(GETFIELD_OPCODE_USED)
-static signed char handleGetField(unsigned char* method_code, int32* sp) {
+static signed char handleGetField(const unsigned char* method_code, int32* sp) {
 	unsigned char *data;
 	signed char topInc = 0;
 	unsigned short offset;
@@ -2715,7 +2715,7 @@ static signed char handleGetField(unsigned char* method_code, int32* sp) {
 #endif
 
 #if defined(GETHWFIELD_OPCODE_USED)
-static signed char handleGetHWField(unsigned char* method_code, int32* sp) {
+static signed char handleGetHWField(const unsigned char* method_code, int32* sp) {
 	unsigned char *data;
 	int32 value = 0;
 	signed char topInc = 0;
@@ -2790,7 +2790,7 @@ static signed char handleGetHWField(unsigned char* method_code, int32* sp) {
 #endif
 
 #if defined(AASTORE_OPCODE_USED) || defined(FASTORE_OPCODE_USED) || defined(BASTORE_OPCODE_USED) || defined(CASTORE_OPCODE_USED) || defined(SASTORE_OPCODE_USED) || defined(LASTORE_OPCODE_USED) || defined(IASTORE_OPCODE_USED)
-static unsigned char handleAStore(int32* sp, unsigned char *method_code) {
+static unsigned char handleAStore(int32* sp, const unsigned char *method_code) {
 	int32 msb = 0, lsb = 0;
 	int32 index;
 	unsigned char* array;
@@ -2860,7 +2860,7 @@ static unsigned char handleAStore(int32* sp, unsigned char *method_code) {
 #endif
 
 #if defined(FALOAD_OPCODE_USED) || defined(AALOAD_OPCODE_USED) || defined(BALOAD_OPCODE_USED) || defined(CALOAD_OPCODE_USED) || defined(SALOAD_OPCODE_USED) || defined(LALOAD_OPCODE_USED) || defined(IALOAD_OPCODE_USED)
-static unsigned char handleALoad(int32* sp, unsigned char *method_code) {
+static unsigned char handleALoad(int32* sp, const unsigned char *method_code) {
 	int32 index = *(--sp);
 	unsigned char* array = (unsigned char*) (pointer) *(--sp);
 	uint8 count = 0;
@@ -2964,7 +2964,7 @@ static void handleDup2X2(int32* sp) {
 #endif
 
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED)
-static unsigned char handleLDC(int32* sp, unsigned char *method_code) {
+static unsigned char handleLDC(int32* sp, const unsigned char *method_code) {
 	unsigned short index;
 	index = pgm_read_byte(++method_code) << 8;
 	index |= pgm_read_byte(++method_code);

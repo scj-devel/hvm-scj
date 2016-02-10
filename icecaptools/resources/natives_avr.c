@@ -56,11 +56,9 @@ void sendbyte(unsigned char byte) {
 #define MYUBRR ( ( F_CPU / ( BAUD * 8UL ) ) - 1 )
 
 void initNatives(void) {
-	/*UBRR0H = ( MYUBRR >> 8);
-	UBRR0L = MYUBRR;
-	UCSR0A |= (1 << U2X0);
-	UCSR0B |= (1 << RXEN0) | (1 << TXEN0) | (1 << RXCIE0);
-	UCSR0C |= (1 << UCSZ00) | (1 << UCSZ01);*/
+	UBRR2 = 64;
+	UCSR2B = (1 << RXEN2) | (1 << TXEN2);
+	UCSR2C = (3 << UCSZ20);
 }
 
 void writeLongToIO(pointer address, unsigned short offset, int32 msb, int32 lsb) {
