@@ -25,8 +25,7 @@ extern unsigned char *classData;
 extern Object* getClass(unsigned short classIndex);
 
 #if defined(JAVA_LANG_THROWABLE_INIT_)
-extern void reportStackTraceElement(unsigned short methodIndex,
-		unsigned short pc);
+extern void reportStackTraceElement(unsigned short methodIndex, unsigned short pc);
 extern void reportStackTraceIntro(unsigned short classIndex);
 #endif
 
@@ -66,16 +65,14 @@ extern void printByte(unsigned char byte);
 extern unsigned short getClassIndex(Object* obj);
 extern void setClassIndex(Object* obj, unsigned short classIndex);
 
-unsigned char* createArrayFromElementSize(unsigned short classIndex,
-		unsigned char elementSize, uint16 count FLASHARG(uint8 flash));
+unsigned char* createArrayFromElementSize(unsigned short classIndex, unsigned char elementSize, uint16 count FLASHARG(uint8 flash));
 unsigned char handleNewClassIndex(int32* sp, unsigned short classIndex);
 
 #if defined(WIDE_OPCODE_USED)
 static signed short handleWide(int32* fp, int32* sp, const unsigned char *method_code) _NOINLINE_;
 #endif
 
-unsigned char* createArray(unsigned short classIndex,
-		uint16 count FLASHARG(uint8 flash)) _NOINLINE_;
+unsigned char* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash)) _NOINLINE_;
 unsigned char checkImplements(Object* object, unsigned short interfaceIndex) _NOINLINE_;
 int32 lmul32(int32* sp, uint32 xmsb, uint32 xlsb, uint32 ymsb, uint32 ylsb);
 int32 idiv(int32 a, int32 b) _NOINLINE_;
@@ -93,13 +90,11 @@ static void lshr(uint32* msi, uint32* lsi, unsigned char value);
 #endif
 
 #if defined(LCMP_OPCODE_USED) || defined(HANDLELCMP_USED) || defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED)
-static int32 lcmp(int32 value1msb, uint32 value1lsb, int32 value2msb,
-		uint32 value2lsb);
+static int32 lcmp(int32 value1msb, uint32 value1lsb, int32 value2msb, uint32 value2lsb);
 #endif
 
 void neg(uint32* msb, uint32* lsb) _NOINLINE_;
-int16 initializeException(int32* sp, int16 exceptionClass,
-		int16 exceptionInitMethod) _NOINLINE_;
+int16 initializeException(int32* sp, int16 exceptionClass, int16 exceptionInitMethod) _NOINLINE_;
 
 #if defined(TABLESWITCH_OPCODE_USED)
 static unsigned short handleTableSwitch(unsigned short pc, const unsigned char* ptr, int32 index) _NOINLINE_;
@@ -124,8 +119,7 @@ static unsigned char handleMultianewarray(int32* sp, const unsigned char *method
 #endif
 
 #if defined(JAVA_LANG_THROWABLE_INIT_)
-unsigned short handleAthrow(const MethodInfo* method, unsigned short classIndex,
-		unsigned short pc) _NOINLINE_;
+unsigned short handleAthrow(const MethodInfo* method, unsigned short classIndex, unsigned short pc) _NOINLINE_;
 #endif
 
 #if defined(PUTFIELD_OPCODE_USED)
@@ -193,11 +187,8 @@ void handleLSHR(int32* sp) _NOINLINE_;
 #if defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED) || defined(N_VM_REALTIMECLOCK_DELAYNATIVEUNTIL)
 unsigned char handleLMULLDIVLREM(int32* sp, unsigned char code) _NOINLINE_;
 #endif
-static int32* pushStackFrame(unsigned short maxLocals,
-		unsigned short currentMethodNumber, unsigned short pc, int32* fp,
-		int32* sp);
-unsigned short popStackFrame(int32** fp, int32** sp, const MethodInfo* method,
-		unsigned short *pc);
+static int32* pushStackFrame(unsigned short maxLocals, unsigned short currentMethodNumber, unsigned short pc, int32* fp, int32* sp);
+unsigned short popStackFrame(int32** fp, int32** sp, const MethodInfo* method, unsigned short *pc);
 unsigned char isSubClassOf(unsigned short subClass, unsigned short superClass);
 unsigned char handleLDCWithIndex(int32* sp, unsigned short index);
 
@@ -205,8 +196,7 @@ unsigned char handleLDCWithIndex(int32* sp, unsigned short index);
 static unsigned char write_rom_data(unsigned char *object, unsigned char size, unsigned char isReference, unsigned char count, int32 msb, int32 lsb);
 #endif
 
-unsigned char handleMonitorEnterExit(Object* lockObj, unsigned char isEnter,
-		int32* sp, const char* fromMethod);
+unsigned char handleMonitorEnterExit(Object* lockObj, unsigned char isEnter, int32* sp);
 
 #if defined(JAVA_LANG_THROWABLE_INIT_)
 #define STACK_TRACE_SIZE 32
@@ -224,8 +214,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 
 	start: {
 		currentMethod = &methods[currentMethodNumber];
-		method_code = (const unsigned char *) pgm_read_pointer(&currentMethod->code,
-				unsigned char**);
+		method_code = (const unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**);
 		sp = &fp[pgm_read_word(&currentMethod->maxLocals) + 2]; /* make room for local VM state on the stack */
 	}
 	loop: while (1) {
@@ -349,8 +338,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			if (result) {
 				unsigned char branchbyte1 = pgm_read_byte(method_code + 1);
 				unsigned char branchbyte2 = pgm_read_byte(method_code + 2);
-				signed short offset = (signed short) ((branchbyte1 << 8)
-						| branchbyte2);
+				signed short offset = (signed short) ((branchbyte1 << 8) | branchbyte2);
 				method_code += offset;
 			} else {
 				method_code += 3;
@@ -547,7 +535,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 				continue;
 			} else {
 				initializeException(sp, JAVA_LANG_ARITHMETICEXCEPTION_var,
-						JAVA_LANG_ARITHMETICEXCEPTION_INIT__var);
+				JAVA_LANG_ARITHMETICEXCEPTION_INIT__var);
 				sp++;
 				break;
 			}
@@ -576,11 +564,11 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 		}
 #endif
 #if defined(LNEG_OPCODE_USED)
-		case LNEG_OPCODE: {
-			handleLNEG(sp);
-			method_code++;
-			continue;
-		}
+			case LNEG_OPCODE: {
+				handleLNEG(sp);
+				method_code++;
+				continue;
+			}
 #endif
 #if defined(IOR_OPCODE_USED)
 			case IOR_OPCODE: {
@@ -592,19 +580,19 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			}
 #endif
 #if defined(IREM_OPCODE_USED)
-			case IREM_OPCODE: {
-				int32 res = *(--sp);
-				if (res != 0) {
-					res = imod(res, *(sp - 1));
-					*(sp - 1) = res;
-					method_code++;
-					continue;
-				} else {
-					initializeException(sp, JAVA_LANG_ARITHMETICEXCEPTION_var, JAVA_LANG_ARITHMETICEXCEPTION_INIT__var);
-					sp++;
-					break;
-				}
+		case IREM_OPCODE: {
+			int32 res = *(--sp);
+			if (res != 0) {
+				res = imod(res, *(sp - 1));
+				*(sp - 1) = res;
+				method_code++;
+				continue;
+			} else {
+				initializeException(sp, JAVA_LANG_ARITHMETICEXCEPTION_var, JAVA_LANG_ARITHMETICEXCEPTION_INIT__var);
+				sp++;
+				break;
 			}
+		}
 #endif
 #if defined(ISUB_OPCODE_USED)
 		case ISUB_OPCODE: {
@@ -616,13 +604,13 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 		}
 #endif
 #if defined(IXOR_OPCODE_USED)
-			case IXOR_OPCODE: {
-				int32 res = *(--sp);
-				res ^= *(sp - 1);
-				*(sp - 1) = res;
-				method_code++;
-				continue;
-			}
+		case IXOR_OPCODE: {
+			int32 res = *(--sp);
+			res ^= *(sp - 1);
+			*(sp - 1) = res;
+			method_code++;
+			continue;
+		}
 #endif
 #if defined(IFNONNULL_OPCODE_USED) || defined(IFNULL_OPCODE_USED) || defined(IF_ICMPEQ_OPCODE_USED) || defined(IF_ICMPNE_OPCODE_USED) || defined(IF_ICMPLT_OPCODE_USED) || defined(IF_ICMPGE_OPCODE_USED) || defined(IF_ICMPGT_OPCODE_USED) || defined(IF_ICMPLE_OPCODE_USED) || defined(IFEQ_OPCODE_USED) || defined(IFNE_OPCODE_USED) || defined(IFLT_OPCODE_USED) || defined(IFGE_OPCODE_USED) || defined(IFGT_OPCODE_USED) || defined(IFLE_OPCODE_USED) || defined(GOTO_OPCODE_USED)
 		case IFNONNULL_OPCODE:
@@ -686,8 +674,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 		case GOTO_OPCODE: {
 			unsigned char branchbyte1 = pgm_read_byte(method_code + 1);
 			unsigned char branchbyte2 = pgm_read_byte(method_code + 2);
-			signed short int offset = (signed short int) ((branchbyte1 << 8)
-					| branchbyte2);
+			signed short int offset = (signed short int) ((branchbyte1 << 8) | branchbyte2);
 #if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
 			if (offset <= 0) {
 				yieldToScheduler(sp);
@@ -734,10 +721,8 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			unsigned short pc;
 			unsigned char minfo = pgm_read_byte(&currentMethod->minfo);
 			unsigned char lambdaAdjustment =
-					pgm_read_word(&currentMethod->classIndex) & 0x1;
+			pgm_read_word(&currentMethod->classIndex) & 0x1;
 			Object *this = (Object*) (pointer) fp[0];
-			const char* fromMethod = (const char*) pgm_read_pointer(
-					&currentMethod->name, const char**);
 			int32 spm1 = *(sp - 1);
 			int32 spm2 = *(sp - 2);
 
@@ -747,7 +732,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			currentMethod = &methods[currentMethodNumber];
 
 			if (minfo >> 7) {
-				if (!handleMonitorEnterExit(this, 0, sp, fromMethod)) {
+				if (!handleMonitorEnterExit(this, 0, sp)) {
 					sp++;
 					goto throwIt;
 				}
@@ -764,17 +749,14 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 
 				currentMethodNumber--;
 				currentMethod = &methods[currentMethodNumber];
-				method_code = (const unsigned char *) pgm_read_pointer(
-						&currentMethod->code, unsigned char**) + pc;
+				method_code = (const unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**) + pc;
 				code = pgm_read_byte(method_code);
 				switch (code) {
 				case INVOKEINTERFACE_OPCODE:
-					method_code += 5 + 1
-							+ (pgm_read_byte(method_code + 5) << 2);
+					method_code += 5 + 1 + (pgm_read_byte(method_code + 5) << 2);
 					break;
 				case INVOKEVIRTUAL_OPCODE:
-					method_code += 4 + 1
-							+ (pgm_read_byte(method_code + 4) << 2);
+					method_code += 4 + 1 + (pgm_read_byte(method_code + 4) << 2);
 					break;
 				default:
 					method_code += 4;
@@ -908,7 +890,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 
 				if (throwException && (code == CHECKCAST_OPCODE)) {
 					initializeException(sp, JAVA_LANG_CLASSCASTEXCEPTION_var,
-							JAVA_LANG_CLASSCASTEXCEPTION_INIT__var);
+					JAVA_LANG_CLASSCASTEXCEPTION_INIT__var);
 					sp++;
 					break;
 				}
@@ -927,13 +909,13 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 		}
 #endif
 #if defined(ISHR_OPCODE_USED)
-			case ISHR_OPCODE: {
-				unsigned char shift = (*(--sp)) & 0x1f;
-				int32 value = *(--sp);
-				*sp++ = value >> shift;
-				method_code++;
-				continue;
-			}
+		case ISHR_OPCODE: {
+			unsigned char shift = (*(--sp)) & 0x1f;
+			int32 value = *(--sp);
+			*sp++ = value >> shift;
+			method_code++;
+			continue;
+		}
 #endif
 #if defined(ISHL_OPCODE_USED)
 		case ISHL_OPCODE: {
@@ -1047,8 +1029,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			unsigned short classIndex = pgm_read_byte(++method_code) << 8;
 			classIndex |= pgm_read_byte(++method_code);
 
-			array = (Object*) createArray(classIndex,
-					(uint16) count FLASHARG((code == NEWFLASHARRAY_OPCODE)));
+			array = (Object*) createArray(classIndex, (uint16) count FLASHARG((code == NEWFLASHARRAY_OPCODE)));
 
 			if (array != 0) {
 #if defined(GC_GARBAGECOLLECTOR_NEWBARRIER_USED)
@@ -1057,7 +1038,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 				*(sp - 1) = (int32) (pointer) array;
 			} else {
 				initializeException(sp, JAVA_LANG_OUTOFMEMORYERROR_var,
-						JAVA_LANG_OUTOFMEMORYERROR_INIT__var);
+				JAVA_LANG_OUTOFMEMORYERROR_INIT__var);
 				sp++;
 				break;
 			}
@@ -1071,8 +1052,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			uint16* ptr;
 			uint16 length;
 			if (array != 0) {
-				ptr = (uint16*) (HEAP_REF(array, unsigned char*)
-						+ sizeof(Object));
+				ptr = (uint16*) (HEAP_REF(array, unsigned char*) + sizeof(Object));
 #ifdef FLASHSUPPORT
 				if (isRomRef((uint8*)array)) {
 					length = get_rom_dword((uint8*)ptr);
@@ -1289,13 +1269,13 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 		}
 #endif
 #if defined(TABLESWITCH_OPCODE_USED)
-			case TABLESWITCH_OPCODE: {
-				unsigned short pc;
-				method_code += 4;
-				pc = handleTableSwitch(method_code - (const unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**), method_code, *(--sp));
-				method_code = (const unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**) + pc;
-				continue;
-			}
+		case TABLESWITCH_OPCODE: {
+			unsigned short pc;
+			method_code += 4;
+			pc = handleTableSwitch(method_code - (const unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**), method_code, *(--sp));
+			method_code = (const unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**) + pc;
+			continue;
+		}
 #endif
 #if defined(LOOKUPSWITCH_OPCODE_USED)
 			case LOOKUPSWITCH_OPCODE: {
@@ -1407,20 +1387,20 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			}
 #endif
 #if defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED)
-		case LREM_OPCODE:
-		case LDIV_OPCODE:
-		case LMUL_OPCODE: {
-			unsigned char topInc = handleLMULLDIVLREM(sp, code);
-			sp -= 4;
-			if (topInc == 0) {
-				initializeException(sp, JAVA_LANG_ARITHMETICEXCEPTION_var,
-						JAVA_LANG_ARITHMETICEXCEPTION_INIT__var);
-				sp++;
-				break;
+			case LREM_OPCODE:
+			case LDIV_OPCODE:
+			case LMUL_OPCODE: {
+				unsigned char topInc = handleLMULLDIVLREM(sp, code);
+				sp -= 4;
+				if (topInc == 0) {
+					initializeException(sp, JAVA_LANG_ARITHMETICEXCEPTION_var,
+							JAVA_LANG_ARITHMETICEXCEPTION_INIT__var);
+					sp++;
+					break;
+				}
+				sp += topInc;
+				method_code++;
 			}
-			sp += topInc;
-			method_code++;
-		}
 			continue;
 #endif
 #if defined(DMUL_OPCODE_USED) || defined(DDIV_OPCODE_USED) || defined(DADD_OPCODE_USED) || defined(DSUB_OPCODE_USED)
@@ -1497,7 +1477,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			case MONITORENTER_OPCODE:
 			case MONITOREXIT_OPCODE: {
 				sp--;
-				if (handleMonitorEnterExit((Object*) (pointer) sp[0], *method_code == MONITORENTER_OPCODE, sp, (const char*)pgm_read_pointer(&currentMethod->name, const char**))) {
+				if (handleMonitorEnterExit((Object*) (pointer) sp[0], *method_code == MONITORENTER_OPCODE, sp)) {
 					method_code++;
 					continue;
 				} else {
@@ -1541,17 +1521,13 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 		{
 #if defined(JAVA_LANG_THROWABLE_INIT_)
 			unsigned short handler_pc;
-			unsigned short pc = method_code
-					- (const unsigned char *) pgm_read_pointer(&currentMethod->code,
-							unsigned char**);
+			unsigned short pc = method_code - (const unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**);
 			Object* exception = (Object*) (pointer) *(sp - 1);
 			unsigned short classIndex = getClassIndex(exception);
-			while ((handler_pc = handleAthrow(currentMethod, classIndex, pc))
-					== (unsigned short) -1) {
+			while ((handler_pc = handleAthrow(currentMethod, classIndex, pc)) == (unsigned short) -1) {
 				/* Not handled */
 				sp--;
-				currentMethodNumber = popStackFrame(&fp, &sp, currentMethod,
-						&pc);
+				currentMethodNumber = popStackFrame(&fp, &sp, currentMethod, &pc);
 				if (currentMethodNumber == 0) {
 					fp[0] = (int32) (pointer) exception;
 					return classIndex;
@@ -1562,8 +1538,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			sp = &fp[pgm_read_word(&currentMethod->maxLocals) + 2];
 			*sp++ = (int32) (pointer) exception;
 			pc = handler_pc;
-			method_code = (const unsigned char *) pgm_read_pointer(
-					&currentMethod->code, unsigned char**) + pc;
+			method_code = (const unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**) + pc;
 #else
 			while (1) {;};
 #endif
@@ -1573,7 +1548,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 		throwNullPointer:
 
 		initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var,
-				JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+		JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
 		sp++;
 		goto throwIt;
 
@@ -1581,14 +1556,12 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			const MethodInfo* methodInfo = &methods[callee];
 			unsigned char minfo = pgm_read_byte(&methodInfo->minfo);
 			unsigned char lambdaAdjustment =
-					pgm_read_word(&methodInfo->classIndex) & 0x1; /* adjustment for lambda methods, if this is a lambda method */
+			pgm_read_word(&methodInfo->classIndex) & 0x1; /* adjustment for lambda methods, if this is a lambda method */
 			if (code != INVOKESTATIC_OPCODE) {
 				if (minfo >> 7) {
 					Object* this = (Object*) (pointer) sp[0];
 					int32* spm = sp + numArgs + 1;
-					if (!handleMonitorEnterExit(this, 1, spm,
-							(const char*) pgm_read_pointer(&currentMethod->name,
-									const char**))) {
+					if (!handleMonitorEnterExit(this, 1, spm)) {
 						spm++;
 						sp = spm;
 						goto throwIt;
@@ -1601,12 +1574,11 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			if (pgm_read_pointer(&methodInfo->code, unsigned char**) == 0) {
 				int16 (*nativeFunc)(int32 *fp);
 				signed short excep;
-				nativeFunc = (int16 (*)(int32 *fp)) (pointer) pgm_read_pointer(
-						&methodInfo->nativeFunc, int16 (**)(int32 *fp));
+				nativeFunc = (int16 (*)(int32 *fp)) (pointer) pgm_read_pointer(&methodInfo->nativeFunc, int16 (**)(int32 *fp));
 				excep = nativeFunc(sp);
 				if (excep == -1) {
 					unsigned char numReturnArgs =
-							pgm_read_byte(&methodInfo->minfo) & 0x3;
+					pgm_read_byte(&methodInfo->minfo) & 0x3;
 
 					minfo = (minfo >> 2) & 0xF;
 					if (numReturnArgs == 1) {
@@ -1628,12 +1600,10 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 
 					switch (code) {
 					case INVOKEINTERFACE_OPCODE:
-						method_code += 5 + 1
-								+ (pgm_read_byte(method_code + 5) << 2);
+						method_code += 5 + 1 + (pgm_read_byte(method_code + 5) << 2);
 						break;
 					case INVOKEVIRTUAL_OPCODE:
-						method_code += 4 + 1
-								+ (pgm_read_byte(method_code + 4) << 2);
+						method_code += 4 + 1 + (pgm_read_byte(method_code + 4) << 2);
 						break;
 					default:
 						method_code += 4;
@@ -1647,11 +1617,8 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 					}
 				}
 			} else {
-				unsigned short pc = method_code
-						- (unsigned char *) pgm_read_pointer(
-								&currentMethod->code, unsigned char**);
-				fp = pushStackFrame(pgm_read_word(&methodInfo->maxLocals),
-						currentMethodNumber, pc, fp, sp);
+				unsigned short pc = method_code - (unsigned char *) pgm_read_pointer(&currentMethod->code, unsigned char**);
+				fp = pushStackFrame(pgm_read_word(&methodInfo->maxLocals), currentMethodNumber, pc, fp, sp);
 				currentMethodNumber = callee;
 				goto start;
 			}
@@ -1775,8 +1742,7 @@ void neg(uint32* msb, uint32* lsb) {
 }
 
 #if defined(LCMP_OPCODE_USED) || defined(HANDLELCMP_USED) || defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED)
-static int32 lcmp(int32 value1msb, uint32 value1lsb, int32 value2msb,
-		uint32 value2lsb) {
+static int32 lcmp(int32 value1msb, uint32 value1lsb, int32 value2msb, uint32 value2lsb) {
 	int32 res = 0;
 
 	if (value1msb > value2msb) {
@@ -1800,8 +1766,7 @@ static int32 lcmp(int32 value1msb, uint32 value1lsb, int32 value2msb,
 unsigned char checkImplements(Object* object, unsigned short interfaceIndex) {
 	unsigned short classIndex = getClassIndex(object);
 
-	const unsigned short *interfaces = (unsigned short *) pgm_read_pointer(
-			&classes[classIndex].interfaces, unsigned short**);
+	const unsigned short *interfaces = (unsigned short *) pgm_read_pointer(&classes[classIndex].interfaces, unsigned short**);
 
 	if (interfaces) {
 		unsigned short count;
@@ -1828,20 +1793,17 @@ unsigned char getElementSize(unsigned short classIndex) {
 }
 
 #if defined(CREATEMULTIDIMENSIONALARRAYS_USED) || defined(MULTIANEWARRAY_OPCODE_USED) || defined(ANEWARRAY_OPCODE_USED) || defined(NEWFLASHARRAY_OPCODE_USED) || defined(NEWARRAY_OPCODE_USED) || defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0) || defined(INVOKE_CLONE_ONARRAY_USED) || defined(HANDLECLONEONARRAY_USED) || defined(CREATEARRAY_USED)
-unsigned char* createArray(unsigned short classIndex,
-		uint16 count FLASHARG(uint8 flash)) {
+unsigned char* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash)) {
 	unsigned char elementSize;
 
 	elementSize = getElementSize(classIndex);
 
-	return createArrayFromElementSize(classIndex, elementSize,
-			count FLASHARG(flash));
+	return createArrayFromElementSize(classIndex, elementSize, count FLASHARG(flash));
 }
 #endif
 
 #if defined(CREATEMULTIDIMENSIONALARRAYS_USED) || defined(MULTIANEWARRAY_OPCODE_USED) || defined(ANEWARRAY_OPCODE_USED) || defined(NEWFLASHARRAY_OPCODE_USED) || defined(NEWARRAY_OPCODE_USED) || defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0) || defined(INVOKE_CLONE_ONARRAY_USED) || defined(HANDLECLONEONARRAY_USED) || defined(N_JAVA_LANG_REFLECT_ARRAY_NEWARRAY) || defined(CREATEARRAY_USED)
-unsigned char* createArrayFromElementSize(unsigned short classIndex,
-		unsigned char elementSize, uint16 count FLASHARG(uint8 flash)) {
+unsigned char* createArrayFromElementSize(unsigned short classIndex, unsigned char elementSize, uint16 count FLASHARG(uint8 flash)) {
 	unsigned char* array;
 	uint32 size;
 
@@ -1996,8 +1958,7 @@ extern ExceptionObject *exceptionObjects;
 #else
 extern Object* outOfMemoryException;
 #endif
-int16 initializeException(int32* sp, int16 exceptionClass,
-		int16 exceptionInitMethod) {
+int16 initializeException(int32* sp, int16 exceptionClass, int16 exceptionInitMethod) {
 #if defined(PRE_INITIALIZE_EXCEPTIONS)
 	unsigned short index = 0;
 	while (index < NUMRUNTIMEEXCEPTIONS) {
@@ -2300,7 +2261,7 @@ static unsigned char handleNew(int32* sp, const unsigned char *method_code) {
 		return 1;
 	} else {
 		initializeException(sp, JAVA_LANG_OUTOFMEMORYERROR_var,
-				JAVA_LANG_OUTOFMEMORYERROR_INIT__var);
+		JAVA_LANG_OUTOFMEMORYERROR_INIT__var);
 		return 0;
 	}
 }
@@ -2321,13 +2282,10 @@ unsigned char isSubClassOf(unsigned short subClass, unsigned short superClass) {
 #endif
 
 #if defined(JAVA_LANG_THROWABLE_INIT_)
-unsigned short handleAthrow(const MethodInfo* method, unsigned short classIndex,
-		unsigned short pc) {
-	unsigned char numExceptionHandlers = pgm_read_byte(
-			&method->numExceptionHandlers);
+unsigned short handleAthrow(const MethodInfo* method, unsigned short classIndex, unsigned short pc) {
+	unsigned char numExceptionHandlers = pgm_read_byte(&method->numExceptionHandlers);
 	if (numExceptionHandlers > 0) {
-		ExceptionHandler * handlers = (ExceptionHandler*) pgm_read_pointer(
-				&method->handlers, ExceptionHandler**);
+		ExceptionHandler * handlers = (ExceptionHandler*) pgm_read_pointer(&method->handlers, ExceptionHandler**);
 		unsigned char count = 0;
 		while (count < numExceptionHandlers) {
 			ExceptionHandler *handler = &handlers[count];
@@ -2348,8 +2306,7 @@ unsigned short handleAthrow(const MethodInfo* method, unsigned short classIndex,
 #endif
 
 #if defined(PUTFIELD_OPCODE_USED) || defined(PUTHWFIELD_OPCODE_USED) || defined(PUTSTATIC_OPCODE_USED) || defined(GETSTATIC_OPCODE_USED) || defined(GETFIELD_OPCODE_USED) || defined(GETHWFIELD_OPCODE_USED)
-static unsigned short getFieldInfo(const unsigned char* method_code,
-		unsigned short *offset, unsigned char *size) {
+static unsigned short getFieldInfo(const unsigned char* method_code, unsigned short *offset, unsigned char *size) {
 	unsigned char fsize;
 	unsigned short foffset;
 
@@ -2399,8 +2356,7 @@ unsigned char getField(unsigned char *data, unsigned char size, int32* sp) {
 #endif
 
 #if defined(PUTSTATIC_OPCODE_USED) || defined(PUTFIELD_OPCODE_USED)
-static void putField(unsigned char *data, unsigned char size, int32 lsb,
-		int32 msb) {
+static void putField(unsigned char *data, unsigned char size, int32 lsb, int32 msb) {
 	switch (size & 0xfc) {
 	case 64:
 		*(int32*) (data + 4) = msb;
@@ -2818,8 +2774,7 @@ static unsigned char handleAStore(int32* sp, const unsigned char *method_code) {
 #if defined(GLIBC_DOES_NOT_SUPPORT_MUL)
 		ptr = HEAP_REF(array, unsigned char*) + sizeof(Object) + 2 + imul(elementSize, index);
 #else
-		ptr = HEAP_REF(array, unsigned char*) + sizeof(Object) + 2
-				+ (elementSize * index);
+		ptr = HEAP_REF(array, unsigned char*) + sizeof(Object) + 2 + (elementSize * index);
 #endif
 
 #ifdef FLASHSUPPORT
@@ -2866,8 +2821,7 @@ static unsigned char handleALoad(int32* sp, const unsigned char *method_code) {
 	uint8 count = 0;
 
 	if (array != 0) {
-		if (index
-				< *(uint16*) (HEAP_REF(array, unsigned char*) + sizeof(Object))) {
+		if (index < *(uint16*) (HEAP_REF(array, unsigned char*) + sizeof(Object))) {
 			unsigned char elementSize;
 			unsigned char* ptr;
 			int32 lsb = 0, msb = 0;
@@ -2882,8 +2836,7 @@ static unsigned char handleALoad(int32* sp, const unsigned char *method_code) {
 #if defined(GLIBC_DOES_NOT_SUPPORT_MUL)
 			ptr = (unsigned char*) HEAP_REF(array, unsigned char*) + sizeof(Object) + 2 + imul(elementSize, index);
 #else
-			ptr = (unsigned char*) HEAP_REF(array, unsigned char*)
-					+ sizeof(Object) + 2 + (elementSize * index);
+			ptr = (unsigned char*) HEAP_REF(array, unsigned char*) + sizeof(Object) + 2 + (elementSize * index);
 #endif
 
 #ifdef FLASHSUPPORT
@@ -3015,8 +2968,7 @@ unsigned char handleLDCWithIndex(int32* sp, unsigned short index) {
 	} else if (type == CONSTANT_LONG) {
 		int32 msi;
 		int32 lsi;
-		const unsigned char *data = (const unsigned char *) pgm_read_pointer(
-				&constant->data, const void **);
+		const unsigned char *data = (const unsigned char *) pgm_read_pointer(&constant->data, const void **);
 		msi = ((int32) pgm_read_byte(data)) << 24;
 		msi |= ((int32) pgm_read_byte(data +1)) << 16;
 		msi |= pgm_read_byte(data + 2) << 8;
@@ -3032,8 +2984,7 @@ unsigned char handleLDCWithIndex(int32* sp, unsigned short index) {
 		*sp++ = lsi;
 		count++;
 	} else if (type == CONSTANT_DOUBLE) {
-		*(double*) sp = *(const double*) pgm_read_pointer(&constant->data,
-				const void **);
+		*(double*) sp = *(const double*) pgm_read_pointer(&constant->data, const void **);
 		sp += 2;
 		count += 2;
 	}
@@ -3273,9 +3224,7 @@ unsigned char handleLMULLDIVLREM(int32* sp, unsigned char code) {
 }
 #endif
 
-static int32* pushStackFrame(unsigned short index,
-		unsigned short currentMethodNumber, unsigned short pc, int32* fp,
-		int32* sp) {
+static int32* pushStackFrame(unsigned short index, unsigned short currentMethodNumber, unsigned short pc, int32* fp, int32* sp) {
 	unsigned short top;
 	top = sp - fp;
 	fp = sp;
@@ -3284,8 +3233,7 @@ static int32* pushStackFrame(unsigned short index,
 	return fp;
 }
 
-unsigned short popStackFrame(int32** fp, int32** sp,
-		const MethodInfo* currentMethod, unsigned short *pc) {
+unsigned short popStackFrame(int32** fp, int32** sp, const MethodInfo* currentMethod, unsigned short *pc) {
 	unsigned short index;
 	unsigned char numReturnValues;
 	unsigned short top = (*sp) - (*fp);
@@ -3321,8 +3269,7 @@ int16 enterMethodInterpreter(unsigned short methodNumber, int32* sp) {
 	if (vm_initialized) {
 		if (pgm_read_pointer(&currentMethod->code, unsigned char**) == 0) {
 			int16 (*nativeFunc)(int32 *fp);
-			nativeFunc = (int16 (*)(int32 *fp)) (pointer) pgm_read_pointer(
-					&currentMethod->nativeFunc, int16 (**)(int32 *fp));
+			nativeFunc = (int16 (*)(int32 *fp)) (pointer) pgm_read_pointer(&currentMethod->nativeFunc, int16 (**)(int32 *fp));
 			return nativeFunc(sp);
 		} else {
 			unsigned short index = pgm_read_word(&currentMethod->maxLocals);
@@ -3336,8 +3283,7 @@ int16 enterMethodInterpreter(unsigned short methodNumber, int32* sp) {
 }
 
 #if defined(DISPATCHINTERFACE_USED)
-signed short dispatchInterface(unsigned short methodNumber,
-		unsigned char *minfo, int32* sp) {
+signed short dispatchInterface(unsigned short methodNumber, unsigned char *minfo, int32* sp) {
 	const MethodInfo* methodInfo;
 
 	methodInfo = &methods[methodNumber];
@@ -3347,8 +3293,7 @@ signed short dispatchInterface(unsigned short methodNumber,
 
 	if (pgm_read_pointer(&methodInfo->code, unsigned char**) == 0) {
 		int16 (*nativeFunc)(int32 *fp);
-		nativeFunc = (int16 (*)(int32 *fp)) (pointer) pgm_read_pointer(
-				&methodInfo->nativeFunc, int16 (**)(int32 *fp));
+		nativeFunc = (int16 (*)(int32 *fp)) (pointer) pgm_read_pointer(&methodInfo->nativeFunc, int16 (**)(int32 *fp));
 		return nativeFunc(sp);
 	} else {
 		return enterMethodInterpreter(methodNumber, sp);
@@ -3364,8 +3309,7 @@ extern int16 vm_Monitor_lock_(int32 *fp);
 extern int16 vm_Monitor_unlock_(int32 *fp);
 #endif
 
-unsigned char handleMonitorEnterExit(Object* this, unsigned char isEnter,
-		int32* sp, const char* fromMethod) {
+unsigned char handleMonitorEnterExit(Object* this, unsigned char isEnter, int32* sp) {
 	uint32* ptr;
 	Object* monitor;
 	if (classes[getClassIndex(this)].hasLock) {
@@ -3398,11 +3342,9 @@ unsigned char handleMonitorEnterExit(Object* this, unsigned char isEnter,
 }
 
 const char* getClassName(unsigned short classIndex) {
-	return (const char*) pgm_read_pointer(&classes[classIndex].name,
-			const char**);
+	return (const char*) pgm_read_pointer(&classes[classIndex].name, const char**);
 }
 
 const char* getMethodName(unsigned short methodIndex) {
-	return (const char*) pgm_read_pointer(&methods[methodIndex].name,
-			const char**);
+	return (const char*) pgm_read_pointer(&methods[methodIndex].name, const char**);
 }
