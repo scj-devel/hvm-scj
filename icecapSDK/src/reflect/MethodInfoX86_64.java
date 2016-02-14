@@ -10,7 +10,7 @@ public class MethodInfoX86_64 extends MethodInfo {
 	protected static long methods;
 
 	public long handlers;
-	public long code;
+	public int codeOffset;
 	public long nativeFunc;
 	public long name;
 
@@ -18,10 +18,6 @@ public class MethodInfoX86_64 extends MethodInfo {
 	public MethodInfoX86_64(short index) {
 		super(null);
 		address = new Address64Bit(memory_size() * index + methods);
-	}
-
-	protected byte memory_size() {
-		return 43;
 	}
 	
 	@Override

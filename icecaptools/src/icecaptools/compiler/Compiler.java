@@ -602,6 +602,8 @@ public class Compiler {
 		methodNumber = 0;
 		methods = observer.getUsedMethods();
 
+		CodeManager codeManager = new CodeManager();
+		
 		while (methods.hasNext()) {
 			MethodOrFieldDesc currentMethod = methods.next();
 
@@ -612,12 +614,10 @@ public class Compiler {
 
 				Method javaMethod = methodDesc.getMethod();
 				if (javaMethod != null) {
-					sb.print("/* Class: " + currentMethod.getClassName() + " */\n");
-
+					
 					Code codeAttr = javaMethod.getCode();
 					int numExceptionHandlers = 0;
-					sb.print("/* Method: " + currentMethod.getName() + " */\n");
-
+					
 					String uniqueMethodId = idGen.getUniqueId(currentMethod.getClassName(), currentMethod.getName(),
 							currentMethod.getSignature());
 					String methodNameConst;
@@ -633,6 +633,9 @@ public class Compiler {
 								currentMethod.getSignature(), currentMethodCode, observer, idGen);
 
 						if (compileMethod(cregistry, javaMethod, currentMethod)) {
+							sb.print("/* Class: " + currentMethod.getClassName() + " */\n");
+							sb.print("/* Method: " + currentMethod.getName() + " */\n");
+
 							AOTToolBox toolBox = new AOTToolBox(manager, dependencyExtent, tool, patcher,
 									currentMethod.getClassName(), cregistry, siManager, idGen, observer,
 									this.classMatrix);
@@ -645,11 +648,22 @@ public class Compiler {
 							nfileManager.addCompiledMethod(methodNumber, uniqueMethodId, javaMethod,
 									manager.skipMethodHack(currentMethod.getClassName(), currentMethod.getName(),
 											currentMethod.getSignature()));
+
+							if (methods.hasNext()) {
+								sb.print("\n");
+							}
+
 						} else {
+							String codeString = ConstantGenerator.getHex(currentMethodCode, 16, patcher.getFieldOffsets());
+							
+							codeManager.addMethod(uniqueMethodId, currentMethodCode.length, codeString);
+							
+							/*
 							sb.appendCode("RANGE const unsigned char " + uniqueMethodId + "[" + currentMethodCode.length
 									+ "] PROGMEM = {\n", currentMethodCode.length);
-							sb.print("  " + ConstantGenerator.getHex(currentMethodCode, 16, patcher.getFieldOffsets()));
+							sb.print("  " + codeString);
 							sb.print("\n};\n");
+							*/
 						}
 						numExceptionHandlers = getNumExceptionhandlers(javaMethod);
 
@@ -670,10 +684,6 @@ public class Compiler {
 								sb.print("\n");
 							}
 							sb.print("};\n");
-						}
-
-						if (methods.hasNext()) {
-							sb.print("\n");
 						}
 
 						methodInfoArray.print("" + codeAttr.getMaxStack());
@@ -698,7 +708,7 @@ public class Compiler {
 						}
 
 						if (methodDeclaration == null) {
-							methodInfoArray.print(", " + uniqueMethodId);
+							methodInfoArray.print(", " + codeManager.getOffset(uniqueMethodId) + " /* " + uniqueMethodId + " */");
 							methodInfoArray.print(", 0");
 						} else {
 							methodInfoArray.print(", 0");
@@ -836,9 +846,11 @@ public class Compiler {
 			methodsFile.generateNumberOfClassInitializersImpl();
 			methodsFile.generateNumberOfConstantsImpl();
 			methodsFile.generateMainMethodIndexImpl();
-
+			
 			result.append(sb.toString());
 			result.append(nfileManager.getDeclerations(additionalHeaderFileContent));
+			result.append(codeManager.getCodeSegmentDeclaration());
+			result.append("\n");
 			if (props.includeMethodAndClassNames()) {
 				result.append(methodNames.toString());
 			} else {
@@ -860,9 +872,12 @@ public class Compiler {
 				result.append("const ConstantInfo *constants;\n");
 			}
 
+			result.append("const unsigned char* codecache;\n");
+			
 			result.append("#ifdef INVOKECLASSINITIALIZERS\n");
 			result.append("const short* classInitializerSequence;\n");
 			result.append("#endif\n");
+			
 
 			result.append("#if defined(PRE_INITIALIZE_EXCEPTIONS)\n");
 			result.append("ExceptionObject* exceptionObjects;\n");
@@ -878,6 +893,7 @@ public class Compiler {
 			result.append("#ifdef INVOKECLASSINITIALIZERS\n");
 			result.append("   classInitializerSequence = &_classInitializerSequence[0];\n");
 			result.append("#endif\n\n");
+			result.append("   codecache = &_codecache[0];\n");
 			result.append("   return 1;\n");
 			result.append("}\n\n");
 

@@ -93,4 +93,12 @@ public abstract class MethodInfo extends HardwareObject {
 			return names[index];
 		}
 	}
+	
+	@IcecapCVar(expression = "sizeof(MethodInfo)", requiredIncludes = "#include \"types.h\"\n")
+	private static byte structSize;
+	
+	@IcecapCompileMe
+	protected byte memory_size() {
+		return structSize;
+	}
 }
