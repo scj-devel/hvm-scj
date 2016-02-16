@@ -113,7 +113,7 @@ public abstract class StaticFieldEmitter {
                     localVariables.print("   unsigned char* sdata;\n");
                     output.append("      sdata = classData + " + (foffset >> 3) + ";\n");
                 }
-                requiredIncludes.print("extern const unsigned char *classData;\n");
+                requiredIncludes.print("extern unsigned char *classData;\n");
 
                 if ((fsize >> 3) > 4) {
                     sm.pop("      msb_int32", Size.INT);
@@ -219,7 +219,7 @@ public abstract class StaticFieldEmitter {
                     localVariables.print("   unsigned char* sdata;\n");
                     output.append("      sdata = classData + " + (foffset >> 3) + ";\n");
                 }
-                requiredIncludes.print("extern const unsigned char *classData;\n");
+                requiredIncludes.print("extern unsigned char *classData;\n");
 
                 if ((fInfo != null) && (!fInfo.isFloat)) {
                     StringBuffer buffer = new StringBuffer();

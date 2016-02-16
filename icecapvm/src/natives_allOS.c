@@ -97,7 +97,7 @@ int16 n_java_lang_System_getProperty(int32 *sp) {
 #endif
 
 #if defined (N_JAVA_LANG_SYSTEM_SETOUT)
-extern const unsigned char *classData;
+extern unsigned char *classData;
 int16 n_java_lang_System_setOut(int32 *sp) {
 	((struct _staticClassFields_c *) classData)->out_f = (uint32) sp[0];
 	return -1;

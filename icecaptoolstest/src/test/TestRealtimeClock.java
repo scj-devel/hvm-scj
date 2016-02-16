@@ -46,7 +46,7 @@ public class TestRealtimeClock {
 
 		if (actualDuration < expectedDuration) {
 			devices.Console.println("waiting less than expected");
-		} else if (actualDuration > 2 * expectedDuration) {
+		} else if (actualDuration > 3 * expectedDuration) {
 			devices.Console.println("waiting more than expected");
 		} else {
 			devices.Console.println("waiting as expected");

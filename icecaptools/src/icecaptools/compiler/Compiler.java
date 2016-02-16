@@ -350,7 +350,7 @@ public class Compiler {
 		fileSb.append("const ClassInfo *classes = &_classes[0];\n");
 
 		if (classFieldsManager.hasClassFields()) {
-			fileSb.append("const unsigned char* classData;\n\n");
+			fileSb.append("unsigned char* classData;\n\n");
 			if (staticReferenceOffsetsVariableUsed) {
 				fileSb.append("const uint32* staticReferenceOffsets;\n\n");
 			}

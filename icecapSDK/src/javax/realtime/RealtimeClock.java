@@ -45,19 +45,11 @@ class RealtimeClock extends Clock {
 	
 	private static boolean initInProgess;
 
-	RealtimeClock() {
+	private RealtimeClock() {
 		super(true);
-
-		//		int granularity = nativeClock.getGranularity();
-		//
-		//		long millis = granularity / 1000000;
-		//		int nanos = granularity % 1000000;
-		//
-		//		resolution = new RelativeTime(millis, nanos, rtClock);
-
-		resolution.clock = rtClock;
 	}
 
+	@IcecapCompileMe
 	static Clock instance() {
 		if (rtClock == null) {
 			if (initInProgess) {
@@ -65,6 +57,7 @@ class RealtimeClock extends Clock {
 			} else {
 				initInProgess = true;
 				rtClock = new RealtimeClock();
+				rtClock.ensureResolution().clock = rtClock;
 				initInProgess = false;
 			}
 		}
@@ -92,7 +85,7 @@ class RealtimeClock extends Clock {
 	 */
 	@Override
 	public RelativeTime getResolution() {
-		RelativeTime rt = new RelativeTime(resolution);
+		RelativeTime rt = new RelativeTime(ensureResolution());
 		if (rt.clock == null)
 			rt.clock = rtClock;
 		return rt;
@@ -103,6 +96,7 @@ class RealtimeClock extends Clock {
 		if (dest == null)
 			return getResolution();
 		else {
+			RelativeTime resolution = ensureResolution();
 			dest.set(resolution.getMilliseconds(), resolution.getNanoseconds());
 			dest.clock = rtClock;
 			return dest;
