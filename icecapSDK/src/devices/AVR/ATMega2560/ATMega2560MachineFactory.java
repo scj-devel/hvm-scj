@@ -9,12 +9,11 @@ public class ATMega2560MachineFactory extends AbstractMachineFactory {
 
 	@Override
 	public void initInterrupts() {
-		ATMega2560InterruptDispatcher.init();
+		ATMega2560InterruptDispatcher.init(1); // Only allocate handler for the CLOCK interrupt
 	}
 
 	@Override
 	public SP getProcessSP() {
-		/* Should actually use 16 bit stack accessor */
 		return new X86_32SP();
 	}
 

@@ -18,8 +18,6 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 import devices.Console;
-import devices.DefaultWriter;
-import devices.POSIXSCJTargetConfiguration;
 import devices.AVR.ATMega2560.ATMega2560SCJTargetConfiguration;
 import vm.MachineFactory;
 import vm.Memory;
@@ -35,7 +33,7 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 			PeriodicEventHandler[] frame0 = new PeriodicEventHandler[2];
 			PeriodicEventHandler[] frame1 = new PeriodicEventHandler[1];
 
-			RelativeTime frameDuration = new RelativeTime(500, 0, Clock.getRealtimeClock());
+			RelativeTime frameDuration = new RelativeTime(2000, 0, Clock.getRealtimeClock());
 
 			frame0[0] = handlers[0];
 			frame0[1] = handlers[1];
@@ -235,7 +233,7 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 	@Override
 	public int getJavaHeapSize() {
 		if (mimimalMemoryConfig) {
-			return 5400; /* 5400 */
+			return 5500; /* 5400 */
 		} else {
 			return super.getJavaHeapSize();
 		}

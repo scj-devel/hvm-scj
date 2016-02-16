@@ -697,6 +697,12 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			case NEW_OPCODE:
 			case INVOKEDYNAMIC_OPCODE:
 			if (handleNew(sp, method_code) == 0) {
+				extern void sendbyte(unsigned char byte);
+				extern void printStr(const char* str);
+				extern void printAddress(uint32 addr);
+				printStr("Could not allocate object ");
+				printAddress(pgm_read_pointer(&currentMethod->codeOffset, uint32*));
+				sendbyte('\n');
 				sp++;
 				break;
 			}
@@ -1041,6 +1047,13 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 #endif
 					*(sp - 1) = (int32) (pointer) array;
 				} else {
+					extern void sendbyte(unsigned char byte);
+					extern void printStr(const char* str);
+					extern void printAddress(uint32 addr);
+					printStr("Could not allocate array ");
+					printAddress(pgm_read_pointer(&currentMethod->codeOffset, uint32*));
+					sendbyte('\n');
+
 					initializeException(sp, JAVA_LANG_OUTOFMEMORYERROR_var,
 							JAVA_LANG_OUTOFMEMORYERROR_INIT__var);
 					sp++;

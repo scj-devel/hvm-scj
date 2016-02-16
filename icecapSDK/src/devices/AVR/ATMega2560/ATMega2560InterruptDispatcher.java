@@ -65,8 +65,8 @@ public class ATMega2560InterruptDispatcher extends InterruptDispatcher {
 	private ATMega2560InterruptDispatcher() {
 	}
 
-	public static void init() {
-		InterruptDispatcher.numberOfInterrupts = 57;
+	public static void init(int numberOfInterrupts) {
+		InterruptDispatcher.numberOfInterrupts = numberOfInterrupts;
 		InterruptDispatcher.handlers = new InterruptHandler[numberOfInterrupts];
 		InterruptDispatcher.init();
 	}

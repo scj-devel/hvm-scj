@@ -103,6 +103,9 @@ int16 n_vm_Memory_getHeapBase(int32 *sp)
 #ifdef USEMALLOCFREE
 #include <stdlib.h>
 #endif
+extern void sendbyte(unsigned char byte);
+extern void printStr(const char* str);
+extern void printAddress(uint32 addr);
 static unsigned char* allocRaw(uint32 objectSize, unsigned char* store,
 		uint32 *top, uint32 size, char clear) {
 #ifdef USEMALLOCFREE
@@ -131,6 +134,11 @@ static unsigned char* allocRaw(uint32 objectSize, unsigned char* store,
 		}
 	}
 	if (obj == 0) {
+		printStr("out of memory: ");
+		printAddress(size);
+		printStr(", ");
+		printAddress(objectSize);
+		sendbyte('\n');
 		return obj;
 	} else {
 		return HEAP_UNREF(obj, unsigned char*);
