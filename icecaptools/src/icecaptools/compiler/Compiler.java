@@ -14,6 +14,7 @@ import icecaptools.IcecapTool;
 import icecaptools.JavaArrayClass;
 import icecaptools.LambdaClass;
 import icecaptools.MethodAndClass;
+import icecaptools.MethodEntryPoints;
 import icecaptools.MethodOrFieldDesc;
 import icecaptools.ResourceManager;
 import icecaptools.StreamResource;
@@ -603,7 +604,7 @@ public class Compiler {
 		methods = observer.getUsedMethods();
 
 		CodeManager codeManager = new CodeManager();
-		
+
 		while (methods.hasNext()) {
 			MethodOrFieldDesc currentMethod = methods.next();
 
@@ -614,10 +615,10 @@ public class Compiler {
 
 				Method javaMethod = methodDesc.getMethod();
 				if (javaMethod != null) {
-					
+
 					Code codeAttr = javaMethod.getCode();
 					int numExceptionHandlers = 0;
-					
+
 					String uniqueMethodId = idGen.getUniqueId(currentMethod.getClassName(), currentMethod.getName(),
 							currentMethod.getSignature());
 					String methodNameConst;
@@ -644,20 +645,26 @@ public class Compiler {
 									uniqueMethodId, methodNumber, requiredIncludes, userIncludes, toolBox);
 
 							methodDeclaration = aotCompiler.compile();
-							sb.appendCode(methodDeclaration, 0);
-							nfileManager.addCompiledMethod(methodNumber, uniqueMethodId, javaMethod,
-									manager.skipMethodHack(currentMethod.getClassName(), currentMethod.getName(),
-											currentMethod.getSignature()));
 
+							MethodEntryPoints entrypoints = aotCompiler.getMethodEntryPoints();
+
+							sb.appendCode(methodDeclaration, 0);
+
+							if ((entrypoints == null) || !entrypoints.canCallWithArgs()) {
+								nfileManager.addCompiledMethod(methodNumber, uniqueMethodId, javaMethod,
+										manager.skipMethodHack(currentMethod.getClassName(), currentMethod.getName(),
+												currentMethod.getSignature()));
+							}
 							if (methods.hasNext()) {
 								sb.print("\n");
 							}
 
 						} else {
-							String codeString = ConstantGenerator.getHex(currentMethodCode, 16, patcher.getFieldOffsets());
-							
+							String codeString = ConstantGenerator.getHex(currentMethodCode, 16,
+									patcher.getFieldOffsets());
+
 							codeManager.addMethod(uniqueMethodId, currentMethodCode.length, codeString);
-							
+
 							/*
 							sb.appendCode("RANGE const unsigned char " + uniqueMethodId + "[" + currentMethodCode.length
 									+ "] PROGMEM = {\n", currentMethodCode.length);
@@ -708,15 +715,16 @@ public class Compiler {
 						}
 
 						if (methodDeclaration == null) {
-							methodInfoArray.print(", " + codeManager.getOffset(uniqueMethodId) + " /* " + uniqueMethodId + " */");
+							methodInfoArray.print(
+									", " + codeManager.getOffset(uniqueMethodId) + " /* " + uniqueMethodId + " */");
 							methodInfoArray.print(", 0");
 						} else {
 							methodInfoArray.print(", 0");
 							IcecapCFunc annotation = hasAnnotation(javaMethod, IcecapCFunc.class);
 							if (annotation == null) {
-								methodInfoArray.print(", (int16 (*)(int32 *))" + uniqueMethodId);
+								methodInfoArray.print(", " + uniqueMethodId.toUpperCase());
 							} else {
-								methodInfoArray.print(", (int16 (*)(int32 *))0");
+								methodInfoArray.print(", 0");
 							}
 						}
 						methodNameConst = currentMethod.getClassName() + "." + javaMethod.getName();
@@ -739,7 +747,7 @@ public class Compiler {
 						methodInfoArray.print(", 0");
 						if (javaMethod.isNative() || manager.skipMethodHack(currentMethod.getClassName(),
 								currentMethod.getName(), currentMethod.getSignature())) {
-							methodInfoArray.print(", n_" + uniqueMethodId); // code
+							methodInfoArray.print(", " + ("n_" + uniqueMethodId).toUpperCase()); // code
 						} else {
 							methodInfoArray.print(", 0"); // code
 						}
@@ -846,11 +854,13 @@ public class Compiler {
 			methodsFile.generateNumberOfClassInitializersImpl();
 			methodsFile.generateNumberOfConstantsImpl();
 			methodsFile.generateMainMethodIndexImpl();
-			
+
 			result.append(sb.toString());
 			result.append(nfileManager.getDeclerations(additionalHeaderFileContent));
 			result.append(codeManager.getCodeSegmentDeclaration());
 			result.append("\n");
+			result.append("\n");
+			result.append(nfileManager.getNativeDispatcher());
 			if (props.includeMethodAndClassNames()) {
 				result.append(methodNames.toString());
 			} else {
@@ -873,11 +883,10 @@ public class Compiler {
 			}
 
 			result.append("const unsigned char* codecache;\n");
-			
+
 			result.append("#ifdef INVOKECLASSINITIALIZERS\n");
 			result.append("const short* classInitializerSequence;\n");
 			result.append("#endif\n");
-			
 
 			result.append("#if defined(PRE_INITIALIZE_EXCEPTIONS)\n");
 			result.append("ExceptionObject* exceptionObjects;\n");

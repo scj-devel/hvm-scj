@@ -72,6 +72,8 @@ unsigned char handleNewClassIndex(int32* sp, unsigned short classIndex);
 static signed short handleWide(int32* fp, int32* sp, const unsigned char *method_code) _NOINLINE_;
 #endif
 
+extern int16 dispatch_native_func(int16 functionNumber, int32 *sp);
+
 unsigned char* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash)) _NOINLINE_;
 unsigned char checkImplements(Object* object, unsigned short interfaceIndex) _NOINLINE_;
 int32 lmul32(int32* sp, uint32 xmsb, uint32 xlsb, uint32 ymsb, uint32 ylsb);
@@ -1568,10 +1570,10 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			sp += lambdaAdjustment;
 
 			if (getCodePointer(methodInfo) == 0) {
-				int16 (*nativeFunc)(int32 *fp);
+				int16 nativeFuncIndex;
 				signed short excep;
-				nativeFunc = (int16 (*)(int32 *fp)) (pointer) pgm_read_pointer(&methodInfo->nativeFunc, int16 (**)(int32 *fp));
-				excep = nativeFunc(sp);
+				nativeFuncIndex = pgm_read_word(&methodInfo->nativeFuncIndex);
+				excep = dispatch_native_func(nativeFuncIndex, sp);
 				if (excep == -1) {
 					unsigned char numReturnArgs =
 					pgm_read_byte(&methodInfo->minfo) & 0x3;
@@ -3256,9 +3258,9 @@ int16 enterMethodInterpreter(unsigned short methodNumber, int32* sp) {
 	const MethodInfo* currentMethod = &methods[methodNumber];
 	if (vm_initialized) {
 		if (getCodePointer(currentMethod) == 0) {
-			int16 (*nativeFunc)(int32 *fp);
-			nativeFunc = (int16 (*)(int32 *fp)) (pointer) pgm_read_pointer(&currentMethod->nativeFunc, int16 (**)(int32 *fp));
-			return nativeFunc(sp);
+			int16 nativeFuncIndex;
+			nativeFuncIndex = pgm_read_word(&currentMethod->nativeFuncIndex);
+			return dispatch_native_func(nativeFuncIndex, sp);
 		} else {
 			unsigned short index = pgm_read_word(&currentMethod->maxLocals);
 			sp[index] = (int32) (pointer) 0;
@@ -3280,9 +3282,9 @@ signed short dispatchInterface(unsigned short methodNumber, unsigned char *minfo
 	*minfo = pgm_read_byte(&methodInfo->minfo) & 0x3;
 
 	if (getCodePointer(methodInfo) == 0) {
-		int16 (*nativeFunc)(int32 *fp);
-		nativeFunc = (int16 (*)(int32 *fp)) (pointer) pgm_read_pointer(&methodInfo->nativeFunc, int16 (**)(int32 *fp));
-		return nativeFunc(sp);
+		int16 nativeFuncIndex;
+		nativeFuncIndex = pgm_read_word(&methodInfo->nativeFuncIndex);
+		return dispatch_native_func(nativeFuncIndex, sp);
 	} else {
 		return enterMethodInterpreter(methodNumber, sp);
 	}

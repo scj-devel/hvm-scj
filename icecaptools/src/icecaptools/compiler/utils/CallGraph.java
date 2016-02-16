@@ -257,6 +257,12 @@ public class CallGraph {
             }
         }
 
+        if (desc.getClassName().equals("devices.System")) {
+            if (desc.getName().equals("initializeSystemClass")) {
+            	return;
+            }
+        }
+        
         if (icecaptools.compiler.Compiler.isStaticInitializer(desc)) {
             return;
         }

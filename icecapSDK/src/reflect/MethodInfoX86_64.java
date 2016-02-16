@@ -11,7 +11,7 @@ public class MethodInfoX86_64 extends MethodInfo {
 
 	public long handlers;
 	public int codeOffset;
-	public long nativeFunc;
+	public short nativeFuncIndex;
 	public long name;
 
 	@IcecapCompileMe

@@ -42,7 +42,7 @@ typedef struct PACKED _methodInfo {
 
 	const ExceptionHandler* handlers;
 	uint32 codeOffset;
-	int16 (*nativeFunc)(int32 *sp);
+	int16 nativeFuncIndex;
 	const char* name;
 } MethodInfo;
 

@@ -53,6 +53,8 @@ public abstract class AOTCompiler implements SPManipulator {
 	private boolean spUsed;
 	private CFuncInfo cfunc;
 
+	private MethodEntryPoints entrypoints;
+	
 	public AOTCompiler(Method javaMethod, byte[] methodCode, String uniqueMethodId, int methodNumber,
 			NoDuplicatesMemorySegment requiredIncludes, AOTToolBox toolBox) {
 		this.javaMethod = javaMethod;
@@ -72,7 +74,7 @@ public abstract class AOTCompiler implements SPManipulator {
 		String methodName = javaMethod.getName();
 		String methodSignature = javaMethod.getSignature();
 
-		MethodEntryPoints entrypoints = toolBox.getDependencyExtent().getMethod(currentClassName, methodName,
+		entrypoints = toolBox.getDependencyExtent().getMethod(currentClassName, methodName,
 				methodSignature);
 
 		StringBuffer prelude = new StringBuffer();
@@ -3395,5 +3397,10 @@ public abstract class AOTCompiler implements SPManipulator {
 			handleExceptionOccurred(output, localVariables, pc, labelsManager, returnValueString, string, smCopy,
 					methodDesc, exceptionVariable, entrypoints, noExceptionCondition, negateExceptionValue);
 		}
+	}
+	
+	public MethodEntryPoints getMethodEntryPoints()
+	{
+		return this.entrypoints;
 	}
 }

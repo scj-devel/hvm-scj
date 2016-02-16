@@ -46,7 +46,7 @@ public class NativeFileManager {
 		nativeFileTargetSource.append("extern void printStr(const char* str);\n");
 		if (nUMBEROFCLASSES_varUsed) {
 			nativeFileTargetSource.append("\nRANGE uint16 NUMBEROFCLASSES_var = " + numberOfClasses + ";\n\n");
-        }
+		}
 		nativeFileTargetSource.append("fptr readNativeFunc(void) {\n");
 		nativeFileTargetSource.append("    unsigned char b = readByte();\n");
 		nativeFileTargetSource.append("    switch (b) {\n");
@@ -171,6 +171,33 @@ public class NativeFileManager {
 		return nativeFileTargetSource.toString();
 	}
 
+	public String getNativeDispatcher() {
+		StringBuffer dispatcher = new StringBuffer();
+		dispatcher.append("int16 dispatch_native_func(int16 functionNumber, int32 *sp)\n");
+		dispatcher.append("{\n");
+		dispatcher.append("   switch (functionNumber) {\n");
+		Iterator<String> functionsItr = nativeFunctions.iterator();
+
+		while (functionsItr.hasNext()) {
+			String functionName = functionsItr.next();
+			dispatcher.append("    case " + functionName.toUpperCase() +":\n");
+			dispatcher.append("       return " + functionName + "(sp);\n");
+		}
+		functionsItr = compiledFunctions.iterator();
+
+		while (functionsItr.hasNext()) {
+			String functionName = functionsItr.next();
+			dispatcher.append("    case " + functionName.toUpperCase() + ":\n");
+			dispatcher.append("       return " + functionName + "(sp);\n");
+		}
+
+		dispatcher.append("    default:\n");
+		dispatcher.append("       return JAVA_LANG_NULLPOINTEREXCEPTION_var;\n");
+		dispatcher.append("   }\n");
+		dispatcher.append("}\n");
+		return dispatcher.toString();
+	}
+
 	public String getNativeHostSource() {
 		StringBuffer nativeStubs = new StringBuffer();
 		boolean oneTime = true;
@@ -199,7 +226,7 @@ public class NativeFileManager {
 		nativeFileTargetSource.append("    case " + uniqueMethodId.toUpperCase() + "_NUM:\n");
 		nativeFileTargetSource.append("        return " + uniqueMethodId + ";\n");
 	}
-	
+
 	private boolean handleMethodInHostFile(StringBuffer nativeStubs, boolean oneTime, Iterator<String> functionsItr,
 			boolean addStub) {
 		String uniqueMethodId = functionsItr.next();
