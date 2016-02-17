@@ -131,6 +131,16 @@ public final class TestPortalSC {
 		return pevh.storage;
 	}
 
+	/**
+	 * Used by test programs to get the frame array of a cyclic scheduler.
+	 * 
+	 * @param cs is a cyclic scheduler.
+	 *  
+	 * @return the frame array of <code>cs</code>.
+	 */
+	public static Frame[] getFrames(CyclicSchedule cs) {
+		return cs.getFrames();
+	}
 }
 
 

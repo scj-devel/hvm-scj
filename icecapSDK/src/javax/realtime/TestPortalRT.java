@@ -47,6 +47,16 @@ public final class TestPortalRT {
 		return ht.getNanos();
 	}
 	
+	
+	public static final RelativeTime getResol(Clock clck) {
+		return clck.getResol();
+	}
+	
+	public static final boolean getAct(Clock clck) {
+		return clck.getAct();
+	}
+	
+	
 	/**
 	 * Used by test programs to get the maximum priority.
 	 * 
