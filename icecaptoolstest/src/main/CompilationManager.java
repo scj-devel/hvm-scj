@@ -19,17 +19,21 @@ import test.icecaptools.compiler.TestConversionConfiguration;
 import util.ICompilationRegistry;
 
 public class CompilationManager {
+	static boolean aotCompile = false;
+	static boolean includeJMLMethods = false;
+	static String sourceFileName = null;
+	static String inputClass = "Main";
+	static String inputPackage = "jembench";
+	static String outputFolder = "";
+	static String inputFolder = "/home/skr/workspace/jembench/bin";
+	static String vmSourceFolder = "/home/skr/git/hvm-scj/icecapvm/src";
 
-	/* Test commit to test git */
+	public static class JMLCompilationRegistry extends DefaultCompilationRegistry {
+		private boolean doIcareHuh;
 
-	/*
-	private static class JMLCompilationRegistry implements ICompilationRegistry {
-		
-		private boolean doICareHuh;
-		
 		@Override
 		public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
-			doICareHuh = true;
+			doIcareHuh = true;
 			if (clazz.contains("jml")) {
 				return true;
 			}
@@ -43,13 +47,13 @@ public class CompilationManager {
 			if (clazz.startsWith("java.io.PrintStream")) {
 				return true;
 			}
-			doICareHuh = false;
-			return false;
+			doIcareHuh = false;
+			return super.isMethodCompiled(clazz, targetMethodName, targetMethodSignature);
 		}
 
 		@Override
 		public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
-			doICareHuh = true;
+			doIcareHuh = true;
 			if (clazz.startsWith("sun.")) {
 				if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
 					return false;
@@ -106,8 +110,8 @@ public class CompilationManager {
 					return true;
 				}
 			}
-			doICareHuh = false;
-			return false;
+			doIcareHuh = false;
+			return super.isMethodExcluded(clazz, targetMethodName, targetMethodSignature);
 		}
 
 		@Override
@@ -117,20 +121,10 @@ public class CompilationManager {
 
 		@Override
 		public boolean didICareHuh() {
-			return doICareHuh;
+			return doIcareHuh;
 		}
 	}
-	*/
-
-	static boolean aotCompile = false;
-	static boolean includeJMLMethods = false;
-	static String sourceFileName = null;
-	static String inputClass = "Main";
-	static String inputPackage = "jembench";
-	static String outputFolder = "";
-	static String inputFolder = "/home/skr/workspace/jembench/bin";
-	static String vmSourceFolder = "/home/skr/git/hvm-scj/icecapvm/src";
-
+	
 	private static void setDefaults(HVMProperties props) {
 		if (props.getProperty("inputClass") != null) {
 			inputClass = props.getProperty("inputClass");

@@ -20,103 +20,6 @@ import util.ICompilationRegistry;
 
 public class CompilationManagerHSO {
 
-	private static class JMLCompilationRegistry implements ICompilationRegistry {
-		private boolean doIcareHuh;
-
-		@Override
-		public boolean isMethodCompiled(String clazz, String targetMethodName, String targetMethodSignature) {
-			doIcareHuh = true;
-			if (clazz.contains("jml")) {
-				return true;
-			}
-			if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
-				return true;
-			}
-			if (clazz.startsWith("java.io.BufferedWriter")) {
-				return true;
-			}
-
-			if (clazz.startsWith("java.io.PrintStream")) {
-				return true;
-			}
-			doIcareHuh = false;
-			return false;
-		}
-
-		@Override
-		public boolean isMethodExcluded(String clazz, String targetMethodName, String targetMethodSignature) {
-			doIcareHuh = true;
-			if (clazz.startsWith("sun.")) {
-				if (clazz.startsWith("sun.security.action.GetPropertyAction")) {
-					return false;
-				}
-				return true;
-			}
-			if (clazz.startsWith("java.util.concurrent")) {
-				return true;
-			}
-			if (clazz.startsWith("java.io")) {
-				if (clazz.startsWith("java.io.PrintStream")) {
-					return false;
-				}
-				if (clazz.startsWith("java.io.FilterOutputStream")) {
-					return false;
-				}
-				if (clazz.startsWith("java.io.Writer")) {
-					return false;
-				}
-				if (clazz.startsWith("java.io.BufferedWriter")) {
-					return false;
-				}
-				if (clazz.startsWith("java.io.OutputStreamWriter")) {
-					return false;
-				}
-				if (clazz.startsWith("java.io.OutputStream") && targetMethodName.contains("init")) {
-					return false;
-				}
-				return true;
-			}
-			if (clazz.startsWith("java.nio")) {
-				return true;
-			}
-			if (clazz.startsWith("java.lang.Thread")) {
-				return true;
-			}
-			if (clazz.startsWith("java.lang.ClassLoader")) {
-				return true;
-			}
-			if (clazz.startsWith("java.lang.System")) {
-				if (targetMethodName.startsWith("initProperties")) {
-					return true;
-				}
-				if (targetMethodName.startsWith("setErr0")) {
-					return true;
-				}
-				if (targetMethodName.startsWith("setIn0")) {
-					return true;
-				}
-				if (targetMethodName.startsWith("setOut")) {
-					return true;
-				}
-				if (targetMethodName.startsWith("getProperty")) {
-					return true;
-				}
-			}
-			doIcareHuh = false;
-			return false;
-		}
-
-		@Override
-		public boolean alwaysClearOutputFolder() {
-			return true;
-		}
-
-		@Override
-		public boolean didICareHuh() {
-			return doIcareHuh;
-		}
-	}
-
 	public static void main(String args[]) throws Throwable {
 		boolean aotCompile = false;
 		boolean includeJMLMethods = true;
@@ -283,7 +186,7 @@ public class CompilationManagerHSO {
 		if (aotCompile) {
 			cregistry = new AOTRegistry(new DefaultCompilationRegistry());
 		} else {
-			cregistry = new JMLCompilationRegistry();
+			cregistry = new CompilationManager.JMLCompilationRegistry();
 		}
 
 		ConversionConfiguration config = new TestConversionConfiguration();
