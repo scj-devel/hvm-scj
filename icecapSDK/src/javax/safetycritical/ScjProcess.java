@@ -41,6 +41,7 @@ import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
+import javax.realtime.TestPortalRT;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -157,8 +158,10 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 
 	private void setRelease(ManagedSchedulable ms) {
 		if (ms instanceof PeriodicEventHandler) {
-			this.start = ((PeriodicParameters) ((PeriodicEventHandler) ms).release).getStart();
-			this.period = ((PeriodicParameters) ((PeriodicEventHandler) ms).release).getPeriod();
+			//this.start = ((PeriodicParameters) ((PeriodicEventHandler) ms).release).getStart();
+			this.start = TestPortalRT.start((PeriodicParameters) ((PeriodicEventHandler) ms).release);
+			//this.period = ((PeriodicParameters) ((PeriodicEventHandler) ms).release).getPeriod();
+			this.period = TestPortalRT.period((PeriodicParameters) ((PeriodicEventHandler) ms).release);
 			next.add(start, next); // next = next + start
 		} else if (ms instanceof OneShotEventHandler) {
 			if (((OneShotEventHandler) ms).releaseTime instanceof RelativeTime) {

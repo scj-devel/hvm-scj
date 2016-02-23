@@ -102,14 +102,4 @@ public class PeriodicParameters extends ReleaseParameters {
 		this.period = new RelativeTime(period);
 	}
 
-	// Not public in SCJ
-	public RelativeTime getPeriod() {
-		return period;
-	}
-
-	// Not public in SCJ
-	public RelativeTime getStart() {
-		return start;
-	}
-
 }
