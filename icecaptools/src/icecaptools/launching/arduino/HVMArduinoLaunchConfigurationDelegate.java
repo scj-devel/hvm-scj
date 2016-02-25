@@ -8,6 +8,7 @@ import icecaptools.launching.ShellCommand;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -33,9 +34,10 @@ public class HVMArduinoLaunchConfigurationDelegate extends AbstractHVMPOSIXLaunc
     }
 
     @Override
-    protected void addAdditionalFiles(StringBuffer command, ILaunchConfiguration configuration) throws CoreException {
-        command.append("natives_arduino.c natives_avr.c avr_interrupt.s");
-
+    protected void addAdditionalFiles(ArrayList<String> command, ILaunchConfiguration configuration) throws CoreException {
+    	command.add("natives_arduino.c");
+    	command.add("natives_avr.c");
+    	command.add("avr_interrupt.s");
     }
 
     @Override

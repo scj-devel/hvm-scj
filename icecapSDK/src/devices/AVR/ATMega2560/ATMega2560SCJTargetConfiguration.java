@@ -38,9 +38,18 @@ public abstract class ATMega2560SCJTargetConfiguration extends ATMega2560TargetC
 	@Override
 	public String[][] getBuildCommands() {
 		String[][] buildCommands = super.getBuildCommands();
-		StringBuffer gcccommand = new StringBuffer(buildCommands[0][0]);
-		gcccommand.append(" -DLAZY_INITIALIZE_CONSTANTS atmega2560_interrupt.s ");
-		buildCommands[0][0] = gcccommand.toString();
+		String[] gcccommand = new String[buildCommands[0].length + 2];
+		int commandIndex = 0;
+		gcccommand[commandIndex++] = buildCommands[0][0];
+		gcccommand[commandIndex++] = "-DLAZY_INITIALIZE_CONSTANTS";
+		
+		for (int inx = 1; inx < buildCommands[0].length; inx++)
+		{
+			gcccommand[commandIndex++] = buildCommands[0][inx];
+		}
+		gcccommand[commandIndex++] = "atmega2560_interrupt.s";
+
+		buildCommands[0] = gcccommand;
 		return buildCommands;
 	}
 

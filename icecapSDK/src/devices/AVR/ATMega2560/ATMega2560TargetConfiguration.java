@@ -81,7 +81,19 @@ public abstract class ATMega2560TargetConfiguration extends BaseTargetConfigurat
 	public String[][] getBuildCommands() {
 		return new String[][] {
 				new String[] {
-						"avr-gcc -mmcu=atmega2560 -Wall -gdwarf-2 -Os -DJAVA_STACK_SIZE=420 -DF_CPU=10000000 -std=gnu99 -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums natives_avr.c" },
+						"avr-gcc",
+						"-mmcu=atmega2560",
+						"-Wall",
+						"-gdwarf-2",
+						"-Os",
+					    "-DJAVA_STACK_SIZE=420",
+					    "-DF_CPU=10000000",
+					    "-std=gnu99",
+					    "-funsigned-char",
+					    "-funsigned-bitfields",
+					    "-fpack-struct",
+					    "-fshort-enums",
+					    "natives_avr.c" },
 				new String[] { "/bin/sh", "-c", "avr-nm --print-size --size-sort main.exe | grep -v ' T ' | grep -v ' t '" },
 				new String[] { "avr-size -C -x main.exe" },
 				new String[] { "avr-strip main.exe" },

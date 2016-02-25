@@ -4,6 +4,7 @@ import icecaptools.debugging.DebugChannel;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -52,7 +53,7 @@ public class HVMGenericLaunchConfigurationDelegate extends AbstractHVMPOSIXLaunc
 	}
 
 	@Override
-	protected void addAdditionalFiles(StringBuffer compilerCommand, ILaunchConfiguration configuration)
+	protected void addAdditionalFiles(ArrayList<String> compilerCommand, ILaunchConfiguration configuration)
 			throws CoreException {
 	}
 

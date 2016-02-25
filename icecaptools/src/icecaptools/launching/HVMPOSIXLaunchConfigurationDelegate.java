@@ -1,6 +1,7 @@
 package icecaptools.launching;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -46,31 +47,36 @@ public class HVMPOSIXLaunchConfigurationDelegate extends TCPChannelLauncher {
     }
 
     @Override
-    protected void addAdditionalFiles(StringBuffer command, ILaunchConfiguration configuration) throws CoreException {
-        command.append("native_scj.c natives_i86.c x86_");
+    protected void addAdditionalFiles(ArrayList<String> command, ILaunchConfiguration configuration) throws CoreException {
+        StringBuffer buffer = new StringBuffer("x86_");
+    	command.add("native_scj.c");
+    	command.add("natives_i86.c");
         
         if (is64bit(configuration)) {
-            command.append("64");
+        	buffer.append("64");
         } else {
-            command.append("32");
+        	buffer.append("32");
         }
         
         String cygwinUsed = configuration.getAttribute(POSIXLauncherTab.CYGWIN_USED, "");
         
         if (cygwinUsed.equals("true"))
         {
-            command.append("_cygwin");
+        	buffer.append("_cygwin");
         }
         
-        command.append("_interrupt.s -lpthread");
+        buffer.append("_interrupt.s");
+        command.add(buffer.toString());
+        
+        command.add("-lpthread");
         
         if (cygwinUsed.equals("false"))
         {
-            command.append(" -lrt");
+            command.add("-lrt");
         }
         
         if (is64bit(configuration)) {
-            command.append(" -DREF_OFFSET ");
+            command.add("-DREF_OFFSET");
         }
     }
 

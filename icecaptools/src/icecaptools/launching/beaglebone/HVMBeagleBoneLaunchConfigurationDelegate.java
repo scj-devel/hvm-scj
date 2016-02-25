@@ -3,6 +3,7 @@ package icecaptools.launching.beaglebone;
 import icecaptools.launching.ev3.HVMEV3LaunchConfigurationDelegate;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 import org.eclipse.debug.core.ILaunchConfiguration;
 
@@ -29,7 +30,8 @@ public class HVMBeagleBoneLaunchConfigurationDelegate extends HVMEV3LaunchConfig
     }
 
     @Override
-    protected void addAdditionalFiles(StringBuffer command, ILaunchConfiguration configuration) {
-        command.append("natives_i86.c natives_beaglebone.c");
+    protected void addAdditionalFiles(ArrayList<String> command, ILaunchConfiguration configuration) {
+    	command.add("natives_i86.c");
+    	command.add("natives_beaglebone.c");
     }
 }

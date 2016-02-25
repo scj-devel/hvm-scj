@@ -8,6 +8,8 @@ import icecaptools.debugging.HVMPOSIXDebugTarget;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -77,25 +79,43 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 			int eventChannel = -1;
 
 			if ((compilerCommand != null) && (compilerCommand.toString().trim().length() > 0)) {
+				ArrayList<String> fullCompileCommand = new ArrayList<String>();
 
-				compilerCommand.append(" -DJAVA_HEAP_SIZE="
+				fullCompileCommand.add(compilerCommand.toString());
+
+				fullCompileCommand.add("-DJAVA_HEAP_SIZE="
 						+ getHeapSize(configuration.getAttribute(TargetSpecificLauncherTab.HEAPSIZE, 0)) + " ");
 				if (mode.equals(ILaunchManager.DEBUG_MODE)) {
 					requestResponseChannel = getRequestResponseChannel();
 					eventChannel = getEventChannel();
 
-					compilerCommand.append("-DENABLE_DEBUG -DREQUESTRESPONSECHANNEL=" + requestResponseChannel + " ");
-					compilerCommand.append("-DEVENTCHANNEL=" + eventChannel + " ");
+					fullCompileCommand.add("-DENABLE_DEBUG");
+					fullCompileCommand.add("-DREQUESTRESPONSECHANNEL=" + requestResponseChannel);
+					fullCompileCommand.add("-DEVENTCHANNEL=" + eventChannel);
 				}
 
-				compilerCommand.append(
-						"classes.c icecapvm.c methodinterpreter.c methods.c gc.c print.c natives_allOS.c rom_heap.c allocation_point.c rom_access.c ");
-				addTargetSpecificFiles(compilerCommand, configuration);
+				for (int inx = 1; inx < buildCommands[0].length; inx++) {
+					fullCompileCommand.add(buildCommands[0][inx]);
+				}
 
-				compilerCommand.append(" -o main.exe");
+				for (String file : "classes.c icecapvm.c methodinterpreter.c methods.c gc.c print.c natives_allOS.c rom_heap.c allocation_point.c rom_access.c "
+						.split(" "))
+					fullCompileCommand.add(file);
 
-				int exitValue = ShellCommand.executeCommand(compilerCommand.toString(), consoleOutputStream, true,
-						sourceFolder, null, COMPILATION_TIMEOUT, new IcecapEclipseProgressMonitor(monitor));
+				addTargetSpecificFiles(fullCompileCommand, configuration);
+
+				fullCompileCommand.add("-o");
+				fullCompileCommand.add("main.exe");
+
+				String[] command = new String[fullCompileCommand.size()];
+				Iterator<String> it = fullCompileCommand.iterator();
+				int nextInx = 0;
+				while (it.hasNext()) {
+					command[nextInx++] = it.next();
+				}
+
+				int exitValue = ShellCommand.executeCommand(command, consoleOutputStream, null, true, sourceFolder,
+						null, COMPILATION_TIMEOUT, new IcecapEclipseProgressMonitor(monitor));
 
 				switch (exitValue) {
 				case ShellCommand.PROCESS_START_FAILED:
@@ -250,7 +270,7 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 		return buf.toString();
 	}
 
-	private void addTargetSpecificFiles(StringBuffer compilerCommand, ILaunchConfiguration configuration)
+	private void addTargetSpecificFiles(ArrayList<String> fullCompileCommand, ILaunchConfiguration configuration)
 			throws CoreException {
 		boolean enableNatives = configuration.getAttribute(TargetSpecificLauncherTab.ENABLE_NATIVE_IMPLEMENTATION,
 				false);
@@ -258,12 +278,11 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 			String implementationFile = configuration.getAttribute(TargetSpecificLauncherTab.IMPLEMENTATION_FILE, "");
 
 			if ((implementationFile != null) && implementationFile.trim().length() > 0) {
-				compilerCommand.append(implementationFile.trim());
-				compilerCommand.append(" ");
+				fullCompileCommand.add(implementationFile.trim());
 			}
 		}
 
-		addAdditionalFiles(compilerCommand, configuration);
+		addAdditionalFiles(fullCompileCommand, configuration);
 	}
 
 	protected abstract int getEventChannel();
@@ -290,7 +309,7 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 
 	protected abstract String getStripper(ILaunchConfiguration configuration) throws CoreException;
 
-	protected abstract void addAdditionalFiles(StringBuffer compilerCommand, ILaunchConfiguration configuration)
+	protected abstract void addAdditionalFiles(ArrayList<String> fullCompileCommand, ILaunchConfiguration configuration)
 			throws CoreException;
 
 	public static Shell getShell() {

@@ -19,8 +19,8 @@ public abstract class POSIXTargetConfiguration extends BaseTargetConfiguration i
 
 	@Override
 	public String[][] getBuildCommands() {
-		return new String[][] { new String[] {
-				"gcc -Os -pedantic -Wall -DJAVA_STACK_SIZE=2048 -DPC64 -DLAZY_INITIALIZE_CONSTANTS natives_i86.c" } };
+		return new String[][] { new String[] { "gcc", "-Os", "-pedantic", "-Wall", "-DJAVA_STACK_SIZE=2048", "-DPC64",
+				"-DLAZY_INITIALIZE_CONSTANTS", "natives_i86.c" } };
 	}
 
 	private static MachineFactory factoryInstance() {
