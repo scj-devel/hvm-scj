@@ -106,8 +106,8 @@ public final class TestPortalSC {
 	 *  
 	 * @return the priority parameter of <code>pevh</code>.
 	 */
-	public static PriorityParameters getPriorityParam (PeriodicEventHandler pevh) {
-		return pevh.priority;
+	public static PriorityParameters getPriorityParam (ManagedEventHandler evh) {
+		return evh.priority;
 	}
 	
 	/**
