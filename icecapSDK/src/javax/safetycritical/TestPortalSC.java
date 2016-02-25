@@ -3,6 +3,7 @@ package javax.safetycritical;
 //import javax.realtime.ImmortalMemory;
 import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
+import javax.realtime.RelativeTime;
 import javax.realtime.ReleaseParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
@@ -105,8 +106,8 @@ public final class TestPortalSC {
 	 *  
 	 * @return the priority parameter of <code>pevh</code>.
 	 */
-	public static PriorityParameters getPriorityParam (PeriodicEventHandler pevh) {
-		return pevh.priority;
+	public static PriorityParameters getPriorityParam (ManagedEventHandler evh) {
+		return evh.priority;
 	}
 	
 	/**
@@ -140,6 +141,28 @@ public final class TestPortalSC {
 	 */
 	public static Frame[] getFrames(CyclicSchedule cs) {
 		return cs.getFrames();
+	}
+	
+	/**
+	 * Used by test programs to get the periodic event handler array of a frame.
+	 * 
+	 * @param f is a frame.
+	 *  
+	 * @return The periodic event handler array of frame <code>f</code>.
+	 */
+	public static PeriodicEventHandler[] getHandlers(Frame f) {
+		return f.getHandlers();
+	}
+
+	/**
+	 * Used by test programs to get the duration of a frame.
+	 * 
+	 * @param f is a frame.
+	 * 
+	 * @return The duration of frame <code>f</code>.
+	 */
+	public static RelativeTime getDuration(Frame f) {
+		return f.getDuration();
 	}
 }
 

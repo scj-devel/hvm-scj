@@ -28,7 +28,7 @@ package javax.safetycritical;
 import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
-
+import javax.realtime.TestPortalRT;
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
@@ -89,12 +89,17 @@ public abstract class PeriodicEventHandler extends ManagedEventHandler {
 	}
 	
 	long getStart() {
-		return releaseP.getStart().getNanoseconds() + releaseP.getStart().getMilliseconds()
+		//return releaseP.getStart().getNanoseconds() + releaseP.getStart().getMilliseconds()
+		//		* 1000000;
+		return TestPortalRT.start(releaseP).getNanoseconds() + TestPortalRT.start(releaseP).getMilliseconds()
 				* 1000000;
 	}
 
 	long getPeriod() {
-		return releaseP.getPeriod().getNanoseconds() + releaseP.getPeriod().getMilliseconds()
+		//return releaseP.getPeriod().getNanoseconds() + releaseP.getPeriod().getMilliseconds()
+		//		* 1000000;
+		
+		return TestPortalRT.period(releaseP).getNanoseconds() + TestPortalRT.period(releaseP).getMilliseconds()
 				* 1000000;
 	}
 	

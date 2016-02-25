@@ -69,6 +69,7 @@ public final class Frame {
 			throw new IllegalArgumentException();
 		if (handlers == null)
 			throw new IllegalArgumentException();
+		
 		this.duration = duration;
 		this.handlers = handlers;
 	}

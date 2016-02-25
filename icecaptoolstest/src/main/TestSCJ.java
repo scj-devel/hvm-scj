@@ -22,7 +22,7 @@ public class TestSCJ extends TestAll {
 	}
 
 	protected boolean includeFileInTest(String test) {
-		return test.endsWith(".java") && test.startsWith("TestSCJSingle");  // TestSCJSingleRawMemory_IOPort1  TestSCJSingleRawMemory_MemoryMapped1  TestPrintStream TestHardWareObjectForByte
+		return test.endsWith(".java") && test.startsWith("TestSCJSingleCyclicExecutiveLinearMissSeq1");  // TestSCJSingle  // TestSCJSingleRawMemory_IOPort1  TestSCJSingleRawMemory_MemoryMapped1  TestPrintStream TestHardWareObjectForByte
 	}
 
 }

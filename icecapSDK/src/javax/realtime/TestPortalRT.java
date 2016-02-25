@@ -4,6 +4,9 @@ import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 import javax.scj.util.Priorities;
 
+import vm.Machine;
+import vm.POSIX64BitMachineFactory;
+
 /**
  * The <code>TestPortalRT</code> contains the test probes needed in package
  * <code>javax.realtime</code> by the tests 
@@ -19,6 +22,14 @@ import javax.scj.util.Priorities;
  */
 @SCJAllowed(Level.SUPPORT)
 public final class TestPortalRT {
+	
+	/**
+	 * Used by test programs to set up the virtual machine.
+	 */	
+	public static void setupVM() {
+		// VM set for 64 bits
+		Machine.setMachineFactory(new POSIX64BitMachineFactory());  
+	}
 	
 	/**
 	 * Used by test programs to create a <code>HighResolutionTime</code> stub object.	 

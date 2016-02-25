@@ -87,7 +87,7 @@ public class CompilationManagerHSO {
 		//String inputPackage = "account";       
 
 		//String inputPackage = "javax.realtime.test.timeClasses";
-		String inputPackage = "javax.realtime.test.clock";
+		//String inputPackage = "javax.realtime.test.clock";
 		//String inputPackage = "javax.realtime.test.memoryAreas";
 		//String inputPackage = "javax.realtime.test.priorityScheduler";
 
@@ -96,7 +96,8 @@ public class CompilationManagerHSO {
 		//String inputPackage = "javax.safetycritical.test.priorityScheduling";
 		//String inputPackage = "javax.safetycritical.test.cyclicschedule1";
 		//String inputPackage = "javax.safetycritical.test.cyclicexecutive1";
-	//	String inputPackage = "javax.safetycritical.test.memoryAreas";
+	    //String inputPackage = "javax.safetycritical.test.memoryAreas";
+		String inputPackage = "javax.safetycritical.test.linearSequencer1";
 
 
 		//String inputPackage = "javax.realtime.test";
@@ -115,7 +116,7 @@ public class CompilationManagerHSO {
 		//String inputClass = "TckTestHighResolutionTime";
 		//String inputClass = "TckTestAbsoluteTime";        
 		//String inputClass = "TckTestRelativeTime";
-		String inputClass = "TckTestClock";
+		//String inputClass = "TckTestClock";
 
 		/* --- TCKs of javax.safetycritical.test --- : */
 		//String inputClass = "TckTestStorageParameters";
@@ -125,6 +126,9 @@ public class CompilationManagerHSO {
 		//String inputClass = "TckTestCyclicSchedule3";
 		//String inputClass = "TckTestSafelet1";
 		//String inputClass = "TckTestSafelet22";   //           SafeletStub22
+		
+		String inputClass = "TckTestLinearSequencer1";
+		//String inputClass = "TestSCJSingleCyclicExecutiveLinearMissSeq1";
 
 		//String inputClass = "TckTestPreemptiveScheduling1";
 		//String inputClass = "TckTestManagedMemory";
