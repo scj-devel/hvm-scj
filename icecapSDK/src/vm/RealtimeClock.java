@@ -1,8 +1,8 @@
 package vm;
 
-import javax.realtime.AbsoluteTime;
-
 import icecaptools.IcecapCompileMe;
+
+import javax.realtime.AbsoluteTime;
 
 public abstract class RealtimeClock {
 	private static RealtimeClock instance;

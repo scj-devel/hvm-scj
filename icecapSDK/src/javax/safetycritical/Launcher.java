@@ -52,7 +52,7 @@ import vm.Memory;
  */
 public abstract class Launcher implements Runnable {
 	Safelet<?> app;
-	static int level;
+	static int level = 0;
 	static boolean useOS = false;
 	protected MachineFactory mFactory;
 

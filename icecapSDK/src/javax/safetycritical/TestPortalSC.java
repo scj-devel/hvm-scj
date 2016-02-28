@@ -34,6 +34,15 @@ public final class TestPortalSC {
 //	}
 	
 	/**
+	 * Used by test programs to get the level of the application.
+	 * @return The level of the application.
+	 */
+	public static int getLevel() {
+		return Launcher.level;
+	}
+	
+	
+	/**
 	 * Used by test programs to initialize and set up the behaviour of a
 	 * single core test, including allocating backing store memory.
 	 * 
