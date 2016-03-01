@@ -74,7 +74,7 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 	void runExecute(Mission mission) {
 		vm.ClockInterruptHandler.instance.disable();
 
-		mission.phaseOfMission = Phase.EXECUTE;
+		mission.phaseOfMission = Phase.RUN;
 		ManagedSchedulableSet msSet = mission.msSetForMission;
 		PriorityFrame frame = PriorityScheduler.instance().pFrame;
 

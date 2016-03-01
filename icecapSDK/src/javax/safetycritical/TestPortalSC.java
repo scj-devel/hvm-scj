@@ -7,6 +7,7 @@ import javax.realtime.RelativeTime;
 import javax.realtime.ReleaseParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
+import javax.safetycritical.annotate.Phase;
 
 /**
  * The <code>TestPortalSC</code> contains the test probes needed in package
@@ -172,6 +173,17 @@ public final class TestPortalSC {
 	 */
 	public static RelativeTime getDuration(Frame f) {
 		return f.getDuration();
+	}
+	
+	/**
+	 * Used by test programs to get the phase of a mission.
+	 * 
+	 * @param m is a mission.
+	 * 
+	 * @return The phase of mission <code>m</code>.
+	 */
+	public static Phase getPhase(Mission m) {
+		return m.getPhase();
 	}
 }
 

@@ -33,5 +33,5 @@
 package javax.safetycritical.annotate;
 
 public enum Phase {
-	INITIALIZE, EXECUTE, CLEANUP, ALL
+	INITIALIZE, RUN, CLEANUP, STARTUP, ALL
 }
