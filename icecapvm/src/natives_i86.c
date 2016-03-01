@@ -706,7 +706,7 @@ uint16 n_test_TestPerformance_quicksortC(uint32 *sp)
 #if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED) ||  defined(N_VM_REALTIMECLOCK_AWAITNEXTTICK)
 #include <unistd.h>
 #include <pthread.h>
-volatile uint8 systemTick;
+extern volatile uint8 systemTick;
 
 static pthread_t tick_thread;
 
