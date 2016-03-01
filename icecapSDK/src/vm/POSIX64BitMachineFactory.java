@@ -15,11 +15,13 @@ public class POSIX64BitMachineFactory extends AbstractMachineFactory {
 
 	@Override
 	public RealtimeClock getRealtimeClock() {
-		return new RealtimeClock.DefaultRealtimeClock();
+		RealtimeClock clock = new RealtimeClock.DefaultRealtimeClock();
+		startSystemTick();
+		return clock;
 	}
 
 	@Override
-	public void startSystemTick() {
+	public void startMachineSpecificSystemTick() {
 		start_system_tick();
 	}
 

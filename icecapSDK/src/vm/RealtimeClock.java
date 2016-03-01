@@ -1,5 +1,6 @@
 package vm;
 
+import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
 
 import javax.realtime.AbsoluteTime;
@@ -7,10 +8,14 @@ import javax.realtime.AbsoluteTime;
 public abstract class RealtimeClock {
 	private static RealtimeClock instance;
 
-	protected RealtimeClock() {
-	}
+	@IcecapCVar(expression = "systemClock", requiredIncludes = "extern volatile uint32 systemClock;")
+	private static int systemClock;
 
 	@IcecapCompileMe
+	protected RealtimeClock() {
+		systemClock = 0;
+	}
+
 	public static RealtimeClock getRealtimeClock() {
 		if (instance != null) {
 			return instance;
@@ -20,54 +25,58 @@ public abstract class RealtimeClock {
 		}
 	}
 
-	abstract public int getGranularity();
-
-	abstract public void getCurrentTime(AbsoluteTime now);
-
-	abstract public void delayUntil(AbsoluteTime time);
-	
-	abstract public void awaitTick();
-	
-	public static class DefaultRealtimeClock extends RealtimeClock {
-		@Override
-		public int getGranularity() {
-			return getNativeResolution();
-		}
-
-		@Override
-		public void getCurrentTime(AbsoluteTime now) {
-			getNativeTime(now); 
-			/* 'now' may not be normalized */ 
-		}
-
-		@Override
-		public void delayUntil(AbsoluteTime time) {
-			delayNativeUntil(time);
-		}
-
-		@Override
-		public void awaitTick() {
-			awaitNextTick();
-		}
-	}
-
-	/* ==== Clock and Time ================================================ */
-
 	/**
 	 * Gets the current resolution of the realtime clock. The resolution is the
 	 * nominal interval between ticks. 
 	 * 
 	 * @return The current resolution of the realtime clock in nanoseconds.
 	 */
-	private static native int getNativeResolution();
+	abstract public int getGranularity();
 
-	/**
-	 * Gets the current time of the realtime clock Returns Absolute time in
-	 * <code>dest</code>.
-	 * 
-	 * @return 0 if ok, not zero if an error occor.
-	 */
-	private static native int getNativeTime(AbsoluteTime dest);
+	abstract public void getCurrentTime(AbsoluteTime now);
+
+	abstract public void delayUntil(AbsoluteTime time);
+
+	abstract public void awaitTick();
+
+	public static class DefaultRealtimeClock extends RealtimeClock {
+		@IcecapCVar(expression = "systemClock", requiredIncludes = "extern volatile uint32 systemClock;")
+		protected static int systemClock;
+		
+		protected AbsoluteTime now;
+
+		protected DefaultRealtimeClock() {
+			now = new AbsoluteTime();
+		}
+
+		@Override
+		public int getGranularity() {
+			return 1000000;
+		}
+
+		@IcecapCompileMe
+		@Override
+		public void getCurrentTime(AbsoluteTime now) {
+			now.set(systemClock, 0);
+		}
+
+		@Override
+		public void delayUntil(AbsoluteTime time) {
+			do {
+				getCurrentTime(now);
+			} while (now.compareTo(time) < 0);
+		}
+
+		@IcecapCompileMe
+		@Override
+		public void awaitTick() {
+			int time = systemClock;
+			/* Should call a wait assembler instruction instead */
+			while (time == systemClock) {
+				;
+			}
+		}
+	}
 
 	/**
 	 * Delay until <code>time</code>.
@@ -75,21 +84,15 @@ public abstract class RealtimeClock {
 	 * @param time
 	 *            is the absolut time
 	 */
-	public static void delayUntilTime(AbsoluteTime time)
-	{
+	public static void delayUntilTime(AbsoluteTime time) {
 		getRealtimeClock().delayUntil(time);
 	}
-	
-	private static native void delayNativeUntil(AbsoluteTime time);
-	
+
 	/**
 	 * Delay until next system tick 
 	 * 
 	 */
-	public static void waitForNextTick()
-	{
+	public static void waitForNextTick() {
 		getRealtimeClock().awaitTick();
 	}
-	
-	private static native void awaitNextTick();
 }

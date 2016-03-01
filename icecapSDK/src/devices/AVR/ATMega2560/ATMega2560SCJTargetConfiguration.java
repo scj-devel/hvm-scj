@@ -5,11 +5,9 @@ import javax.realtime.AbsoluteTime;
 import icecaptools.IcecapCFunc;
 import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
-import vm.RealtimeClock;
+import vm.RealtimeClock.DefaultRealtimeClock;
 
 public abstract class ATMega2560SCJTargetConfiguration extends ATMega2560TargetConfiguration {
-
-	private static int clock;
 
 	@IcecapCompileMe
 	protected static void init() {
@@ -19,7 +17,7 @@ public abstract class ATMega2560SCJTargetConfiguration extends ATMega2560TargetC
 		/* start timer without presscaler */
 		TCCR0B = (1 << CS01) | (1 << CS00);
 
-		clock = 0;
+		systemClock = systemTick = 0;
 
 		/* at 4 Mhz schedule gets called approx every 15th miliseconds */
 		/* enable interrupts */
@@ -28,11 +26,14 @@ public abstract class ATMega2560SCJTargetConfiguration extends ATMega2560TargetC
 
 	@IcecapCVar(expression = "systemTick", requiredIncludes = "extern volatile uint8 systemTick;")
 	private static byte systemTick;
+	
+	@IcecapCVar(expression = "systemClock", requiredIncludes = "extern volatile uint32 systemClock;")
+	private static byte systemClock;
 
 	@IcecapCFunc(signature = "ISR(TIMER0_OVF_vect)", requiredIncludes = "#include <avr/interrupt.h>")
 	private static void timerTick() {
 		systemTick++;
-		clock++;
+		systemClock++;
 	}
 
 	@Override
@@ -65,12 +66,7 @@ public abstract class ATMega2560SCJTargetConfiguration extends ATMega2560TargetC
 		sdi();
 	}
 
-	static class ATMega2560RealtimeClock extends RealtimeClock {
-		private AbsoluteTime now;
-
-		ATMega2560RealtimeClock() {
-			now = new AbsoluteTime();
-		}
+	static class ATMega2560RealtimeClock extends DefaultRealtimeClock {
 
 		@Override
 		public int getGranularity() {
@@ -78,25 +74,10 @@ public abstract class ATMega2560SCJTargetConfiguration extends ATMega2560TargetC
 			return 10000000;
 		}
 
+		@IcecapCompileMe
 		@Override
 		public void getCurrentTime(AbsoluteTime now) {
-			now.set(clock * 10, 0);
-		}
-
-		@Override
-		public void delayUntil(AbsoluteTime time) {
-			do {
-				getCurrentTime(now);
-			} while (now.compareTo(time) < 0);
-		}
-
-		@Override
-		public void awaitTick() {
-			int time = clock;
-			/* Should call a wait assembler instruction instead */
-			while (time == clock) {
-				;
-			}
+			now.set(systemClock * 10, 0);
 		}
 	}
 }

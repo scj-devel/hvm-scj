@@ -19,11 +19,13 @@ public class ATMega2560MachineFactory extends AbstractMachineFactory {
 
 	@Override
 	public RealtimeClock getRealtimeClock() {
-		return new ATMega2560SCJTargetConfiguration.ATMega2560RealtimeClock();
+		RealtimeClock clock = new ATMega2560SCJTargetConfiguration.ATMega2560RealtimeClock(); 
+		startSystemTick();
+		return clock; 
 	}
 
 	@Override
-	public void startSystemTick() {
+	public void startMachineSpecificSystemTick() {
 		ATMega2560SCJTargetConfiguration.init();
 	}
 	

@@ -15,8 +15,6 @@ public class TestRealtimeClock extends ATMega2560TargetConfiguration {
 	public static void main(String[] args) {
 		MachineFactory mFactory = getConfiguration();
 
-		mFactory.startSystemTick();
-
 		devices.Console.println("Start...");
 
 		Clock rtClock = Clock.getRealtimeClock();

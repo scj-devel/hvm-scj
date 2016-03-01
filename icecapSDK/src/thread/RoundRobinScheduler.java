@@ -59,6 +59,8 @@ public class RoundRobinScheduler extends ThreadManager implements Scheduler {
 			started = true;
 
 			clockHandler.startClockHandler(mainThread.p, mFactory);
+			
+			mFactory.startSystemTick();
 		}
 	}
 

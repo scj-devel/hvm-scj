@@ -16,9 +16,7 @@ public class TestRealtimeClock {
 	public static void main(String[] args) {
 		MachineFactory mFactory = new POSIX64BitMachineFactory();
 
-		Machine.setMachineFactory(mFactory);
-
-		mFactory.startSystemTick();
+		Machine.setMachineFactory(mFactory);		
 
 		Clock rtClock = Clock.getRealtimeClock();
 
@@ -46,7 +44,7 @@ public class TestRealtimeClock {
 
 		if (actualDuration < expectedDuration) {
 			devices.Console.println("waiting less than expected");
-		} else if (actualDuration > 3 * expectedDuration) {
+		} else if (actualDuration > 2 * expectedDuration) {
 			devices.Console.println("waiting more than expected");
 		} else {
 			devices.Console.println("waiting as expected");
