@@ -83,7 +83,7 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 
 	@Override
 	void runExecute(Mission mission) {
-		mission.phaseOfMission = Phase.EXECUTE;
+		mission.phaseOfMission = Phase.RUN;
 		ManagedSchedulableSet msSet = mission.msSetForMission;
 
 		int index = mission.missionIndex * Const.DEFAULT_HANDLER_NUMBER;

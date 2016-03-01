@@ -74,6 +74,9 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	}
 
 	int currState;
+	
+	Phase phase;  // used for JML test
+	
 	boolean terminateSeq = false;
 	static volatile boolean isOuterMostSeq = true;
 
@@ -108,6 +111,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 				name);
 		
 		currState = State.START;
+		phase = Phase.INITIALIZE;
 		
 		if(Launcher.level != 0)
 			Services.setCeiling(this, this.priority.getPriority());
@@ -169,6 +173,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 			switch (currState) {
 			case State.START:
 				//devices.Console.println("MS.S: " + name);
+				phase = Phase.STARTUP;
 				currMission = getNextMission();
 
 				if (currMission != null) {
@@ -194,6 +199,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 
 			case State.EXECUTE:
 				//devices.Console.println("MS.E");
+				phase = Phase.RUN;
 				ManagedEventHandler.handlerBehavior.missionSequencerExecutePhase(this);
 				currState = State.CLEANUP;
 				break;
@@ -201,6 +207,8 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 			case State.CLEANUP:
 				//devices.Console.println("MS.C: " + name);
 
+				phase = Phase.CLEANUP;
+				
 				missionMemory.enterToCleanup(currMission);
 				missionMemory.resizeArea(storage.maxMissionMemory);
 
@@ -268,7 +276,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	
 	// used for JML annotation only (not public)
 	Phase getPhase() {
-		return null;
+		return phase;
 	}
 	
 	Monitor getLock() {
