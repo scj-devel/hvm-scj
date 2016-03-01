@@ -49,7 +49,6 @@ public class HVMPOSIXLaunchConfigurationDelegate extends TCPChannelLauncher {
     @Override
     protected void addAdditionalFiles(ArrayList<String> command, ILaunchConfiguration configuration) throws CoreException {
         StringBuffer buffer = new StringBuffer("x86_");
-    	command.add("native_scj.c");
     	command.add("natives_i86.c");
         
         if (is64bit(configuration)) {

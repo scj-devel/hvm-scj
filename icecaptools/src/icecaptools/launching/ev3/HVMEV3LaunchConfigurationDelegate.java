@@ -486,7 +486,6 @@ public class HVMEV3LaunchConfigurationDelegate extends TCPChannelLauncher {
     protected void addAdditionalFiles(ArrayList<String> command, ILaunchConfiguration configuration) {
     	command.add("natives_i86.c");
     	command.add("natives_ev3.c");
-    	command.add("native_scj.c");
     	command.add("arm_interrupt.s");
     	command.add("-lrt ");
     }

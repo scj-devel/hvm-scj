@@ -145,7 +145,7 @@ public class TestSCJSingleProcessException {
 	 * gcc -Wall -pedantic -g -Os -DPC64 -DPRINTFSUPPORT -DJAVA_STACK_SIZE=768
 	 * -DJAVA_HEAP_SIZE=15360 classes.c icecapvm.c methodinterpreter.c methods.c
 	 * gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c
-	 * rom_access.c x86_64_interrupt.s native_scj.c -lpthread -lrt
+	 * rom_access.c x86_64_interrupt.s -lpthread -lrt
 	 *
 	 * @param args
 	 */

@@ -244,13 +244,13 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 		if (mimimalMemoryConfig) {
 			/* return new String[][] { // 420 minimal on posix 
 					new String[] {
-							"gcc -Os -pedantic -Wall -DJAVA_STACK_SIZE=420 -DPC64 -DLAZY_INITIALIZE_CONSTANTS natives_i86.c native_scj.c x86_64_interrupt.s -l pthread" } };
+							"gcc -Os -pedantic -Wall -DJAVA_STACK_SIZE=420 -DPC64 -DLAZY_INITIALIZE_CONSTANTS natives_i86.c x86_64_interrupt.s -l pthread" } };
 			*/
 			return super.getBuildCommands();
 		} else {
 			return new String[][] { /* 420 minimal on posix */
 					new String[] {
-							"gcc -O0 -g -pedantic -Wall -DJAVA_STACK_SIZE=2048 -DPC64 -DLAZY_INITIALIZE_CONSTANTS natives_i86.c native_scj.c x86_64_interrupt.s -l pthread" } };
+							"gcc -O0 -g -pedantic -Wall -DJAVA_STACK_SIZE=2048 -DPC64 -DLAZY_INITIALIZE_CONSTANTS natives_i86.c x86_64_interrupt.s -l pthread" } };
 		}
 	}
 }

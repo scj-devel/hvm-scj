@@ -155,7 +155,7 @@ public class TestSCJPrioritySchedule2 {
 	 * gcc -Wall -pedantic -g -Os -DPC64 -DPRINTFSUPPORT -DJAVA_STACK_SIZE=768
 	 * -DJAVA_HEAP_SIZE=18432 classes.c icecapvm.c print.c methodinterpreter.c
 	 * methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c
-	 * allocation_point.c rom_access.c x86_64_interrupt.s native_scj.c -lpthread
+	 * allocation_point.c rom_access.c x86_64_interrupt.s  -lpthread
 	 * -lrt
 	 * 
 	 * @param args

@@ -5,7 +5,7 @@ public abstract class POSIXSCJTargetConfiguration extends POSIXTargetConfigurati
 	@Override
 	public String[][] getBuildCommands() {
 		StringBuffer command = new StringBuffer(super.getBuildCommands()[0][0]);
-		command.append(" native_scj.c x86_64_interrupt.s -l pthread");
+		command.append(" x86_64_interrupt.s -l pthread");
 
 		return new String[][] { new String[] { command.toString() } };
 	}

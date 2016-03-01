@@ -1567,11 +1567,15 @@ int16 n_vm_Process_executeWithStack(int32 *sp) {
 }
 #endif
 
+#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED) ||  defined(VM_REALTIMECLOCK_GETREALTIMECLOCK)
+volatile uint8 systemTick;
+volatile uint32 systemClock;
+#endif
+
 #if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
 extern int16 vm_InterruptDispatcher_interrupt(int32 *fp, int8 n);
 
 int8 hvmClockReady = 0;
-extern volatile uint8 systemTick;
 
 int16 yieldToScheduler(int32 *sp) {
 	if (systemTick > 0) {

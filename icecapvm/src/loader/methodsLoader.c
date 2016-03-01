@@ -28,7 +28,7 @@ ConstantInfo *constants;
 uint16 mainMethodIndex;
 Object** stringConstants;
 
-/* gcc -Wall -pedantic -g -O0 -DPC64 -DSUPPORT_LOADING -DPRINTFSUPPORT -DJAVA_HEAP_SIZE=1310720 loader/classesLoader.c  icecapvm.c  methodinterpreter.c  loader/methodsLoader.c loader/io_allOS.c loader/io_i86.c gc.c natives_allOS.c natives_i86.c rom_heap.c natives_target.c allocation_point.c rom_access.c native_scj.c print.c methods.c -lpthread x86_64_interrupt.s -lrt */
+/* gcc -Wall -pedantic -g -O0 -DPC64 -DSUPPORT_LOADING -DPRINTFSUPPORT -DJAVA_HEAP_SIZE=1310720 loader/classesLoader.c  icecapvm.c  methodinterpreter.c  loader/methodsLoader.c loader/io_allOS.c loader/io_i86.c gc.c natives_allOS.c natives_i86.c rom_heap.c natives_target.c allocation_point.c rom_access.c print.c methods.c -lpthread x86_64_interrupt.s -lrt */
 
 static ExceptionHandler* readExceptionHandlers(unsigned char numExceptionHandlers);
 static unsigned char* readCode(unsigned short codeSize);

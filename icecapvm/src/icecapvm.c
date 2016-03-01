@@ -9,7 +9,7 @@
 
 /* compile (AVR): avr-gcc -Wall -Os -fpack-struct -fshort-enums -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega2560 -DF_CPU=10000000UL classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_avr.c rom_heap.c rom_access.c -o a.elf */
 
-/* compile (PC, SCJ): gcc -Wall -pedantic -g -O0 -DPC64 -DPRINTFSUPPORT -DJAVA_HEAP_SIZE=131072 classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c native_scj.c print.c -lpthread x86_64_interrupt.s -lrt */
+/* compile (PC, SCJ): gcc -Wall -pedantic -g -O0 -DPC64 -DPRINTFSUPPORT -DJAVA_HEAP_SIZE=131072 classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c print.c -lpthread x86_64_interrupt.s -lrt */
 
 #include "methodinterpreter.h"
 #include "gc.h"
