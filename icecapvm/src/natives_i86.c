@@ -752,17 +752,6 @@ int16 n_vm_POSIX64BitMachineFactory_stop_system_tick(void) {
 
 #endif
 
-#if defined(N_VM_REALTIMECLOCK_AWAITNEXTTICK)
-#include <unistd.h>
-int16 n_vm_RealtimeClock_awaitNextTick(int32 *sp) {
-	uint8 start = systemTick;
-	while (systemTick == start) {
-		usleep(1000);
-	}
-	return -1;
-}
-#endif
-
 #if defined(N_UTIL_COMMCONNECTIONFACTORYPOSIX_OPENSERIAL)
 
 #include <stdio.h>
