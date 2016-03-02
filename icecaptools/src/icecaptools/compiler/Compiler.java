@@ -850,6 +850,10 @@ public class Compiler {
 			addToRequiredIncludes("#include \"types.h\"\n#include \"ostypes.h\"\n#include \"methods.h\"\n\n",
 					requiredIncludes);
 			addToRequiredIncludes("extern void unimplemented_native_function(uint16 methodID);", requiredIncludes);
+			
+			addToRequiredIncludes("int16 dispatch_native_func(int16 functionNumber, int32 *sp);\n", requiredIncludes);
+			addToRequiredIncludes("unsigned char initMethods(void);\n", requiredIncludes);
+			
 			String includes = oraganizeRequiredIncludes(requiredIncludes);
 
 			result.append(includes);

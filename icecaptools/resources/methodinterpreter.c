@@ -45,6 +45,17 @@ extern unsigned char readByteFromIO(pointer address, unsigned short offset);
 extern unsigned char readBitFromIO(pointer address, unsigned short offset);
 #endif
 
+const char* getClassName(unsigned short classIndex);
+const char* getMethodName(unsigned short methodIndex);
+
+#if defined(JAVA_LANG_THROWABLE_INIT_)
+void handleException(unsigned short classIndex);
+#endif
+
+#if defined(GETSTATIC_OPCODE_USED) || defined(GETFIELD_OPCODE_USED) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS)
+unsigned char getField(unsigned char *data, unsigned char size, int32* sp);
+#endif
+
 unsigned char getElementSize(unsigned short classIndex);
 #if defined(GLIBC_DOES_NOT_SUPPORT_MUL)
 int32 imul(int32 a, int32 b) _NOINLINE_;
@@ -2195,7 +2206,7 @@ unsigned char handleNewClassIndex(int32* sp, unsigned short classIndex) {
 				n_vm_Monitor_attachMonitor(sp);
 			}
 #else
-			object = (Object*) (((unsigned char*) object) + 4);
+			object = (Object*)(pointer)(((unsigned char*) object) + 4);
 #endif
 		}
 		setClassIndex(object, classIndex);
@@ -2334,17 +2345,17 @@ unsigned char getField(unsigned char *data, unsigned char size, int32* sp) {
 
 	switch (size & 0xfc) {
 	case 64: {
-		value = *(int32*) (data + 4);
+	  value = *(int32*)(pointer)(data + 4);
 		*sp = value;
 		topInc++;
 		sp++;
 	}
 		/* no break */
 	case 32:
-		value = *(int32*) data;
+	  value = *(int32*)(pointer)data;
 		break;
 	case 16: {
-		int16 svalue = *(int16*) data;
+	  int16 svalue = *(int16*)(pointer) data;
 		value = svalue;
 		break;
 	}
@@ -2362,13 +2373,13 @@ unsigned char getField(unsigned char *data, unsigned char size, int32* sp) {
 static void putField(unsigned char *data, unsigned char size, int32 lsb, int32 msb) {
 	switch (size & 0xfc) {
 	case 64:
-		*(int32*) (data + 4) = msb;
+	  *(int32*) (pointer)(data + 4) = msb;
 		/* no break */
 	case 32:
-		*(int32*) data = lsb;
+	  *(int32*) (pointer)data = lsb;
 		break;
 	case 16:
-		*(int16*) data = lsb;
+	  *(int16*) (pointer)data = lsb;
 		break;
 	case 8:
 		*(int8*) data = lsb;
@@ -2390,7 +2401,7 @@ static unsigned char handlePutField(const unsigned char* method_code, int32* sp)
 	unsigned char size;
 	unsigned char count = 0;
 	unsigned char* data;
-#if FLASHSUPPORT
+#if defined(FLASHSUPPORT)
 	unsigned short classIndex;
 
 	classIndex =
@@ -2408,7 +2419,7 @@ static unsigned char handlePutField(const unsigned char* method_code, int32* sp)
 	count++;
 
 	if (object != 0) {
-#if FLASHSUPPORT
+#if defined(FLASHSUPPORT)
 		if (pgm_read_word(&classes[classIndex].pobjectSize) == 0) {
 			object = &object[sizeof(Object) + (offset >> 3)];
 		} else {
@@ -2638,7 +2649,7 @@ static signed char handleGetField(const unsigned char* method_code, int32* sp) {
 	signed char topInc = 0;
 	unsigned short offset;
 	unsigned char size;
-#if FLASHSUPPORT
+#if defined(FLASHSUPPORT)
 	unsigned short classIndex;
 
 	classIndex =
@@ -2649,7 +2660,7 @@ static signed char handleGetField(const unsigned char* method_code, int32* sp) {
 	topInc--;
 
 	if (data != 0) {
-#if FLASHSUPPORT
+#if defined(FLASHSUPPORT)
 		if (pgm_read_word(&classes[classIndex].pobjectSize) == 0) {
 			data = &data[sizeof(Object) + (offset >> 3)];
 		} else {
@@ -2780,7 +2791,7 @@ static unsigned char handleAStore(int32* sp, const unsigned char *method_code) {
 		ptr = HEAP_REF(array, unsigned char*) + sizeof(Object) + 2 + (elementSize * index);
 #endif
 
-#ifdef FLASHSUPPORT
+#if defined(FLASHSUPPORT)
 		if (isRomRef(ptr)) {
 			return write_rom_data(ptr, elementSize, pgm_read_byte(method_code) == AASTORE_OPCODE, count, msb, lsb);
 		} else {
@@ -2808,7 +2819,7 @@ static unsigned char handleAStore(int32* sp, const unsigned char *method_code) {
 				break;
 			}
 			return count;
-#ifdef FLASHSUPPORT
+#if defined(FLASHSUPPORT)
 		}
 #endif
 	} else {
@@ -2842,7 +2853,7 @@ static unsigned char handleALoad(int32* sp, const unsigned char *method_code) {
 			ptr = (unsigned char*) HEAP_REF(array, unsigned char*) + sizeof(Object) + 2 + (elementSize * index);
 #endif
 
-#ifdef FLASHSUPPORT
+#if defined(FLASHSUPPORT)
 			if (isRomRef(ptr)) {
 				return read_rom_data(ptr, elementSize, pgm_read_byte(method_code) == AALOAD_OPCODE, count, sp);
 			} else {
@@ -2870,7 +2881,7 @@ static unsigned char handleALoad(int32* sp, const unsigned char *method_code) {
 				*sp++ = lsb;
 				count++;
 				return count;
-#ifdef FLASHSUPPORT
+#if defined(FLASHSUPPORT)
 			}
 #endif
 		}
@@ -3316,7 +3327,7 @@ unsigned char handleMonitorEnterExit(Object* this, unsigned char isEnter, int32*
 	uint32* ptr;
 	Object* monitor;
 	if (classes[getClassIndex(this)].hasLock) {
-		ptr = (uint32*) ((unsigned char*) HEAP_REF(this, unsigned char*) - 4);
+	  ptr = (uint32*) (pointer)((unsigned char*) HEAP_REF(this, unsigned char*) - 4);
 		monitor = (Object*) (pointer) *ptr;
 
 		if (monitor != 0) {

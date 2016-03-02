@@ -28,14 +28,14 @@ typedef struct PACKED _VMMemory
     uint32 free;
 } VMMemory;
 
-void initDefaultRAMAllocationPoint();
-AllocationPoint* getDefaultROMAllocationPoint();
+void initDefaultRAMAllocationPoint(void);
+AllocationPoint* getDefaultROMAllocationPoint(void);
 Object* allocData(uint32 objectSize, unsigned char* store, uint32 *top, uint32 size, char clear);
 uint8 readStore(uint16 offset, unsigned char* store);
 uint8 isInStore(uint8* ptr);
 uint32 getOffsetOf(Object* dobject, unsigned char* heap);
 uint32 getHeapPointer(uint32 offset, unsigned char* store);
-void initAllocationPoints();
+void initAllocationPoints(void);
 void freeAllocationPoint(AllocationPoint* ap);
 
 #endif /* ALLOCATION_POINT_H_ */

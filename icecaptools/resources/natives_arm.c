@@ -4,10 +4,6 @@
  *  Created on: Nov 17, 2010
  *      Author: user
  */
-
-
-
-
 #include "types.h"
 #include "ostypes.h"
 #include "methods.h"
@@ -19,36 +15,33 @@
 
 volatile uint8 systemTick;
 
-#if defined(N_VM_REALTIMECLOCK_AWAITNEXTTICK)
-int16 n_vm_RealtimeClock_awaitNextTick(int32 *sp) {
-    return -1;
-}
+void init_compiler_specifics(void); 
+void init_memory_lock(void); 
+void lock_memory(void); 
+void unlock_memory(void);
+static void sendbyteraw(unsigned char byte);
+void sendbyte(unsigned char byte); 
+void initNatives(void);
+void writeLongToIO(pointer address, unsigned short offset, int32 msb, int32 lsb);
+void writeIntToIO(pointer address, unsigned short offset, int32 lsb);
+void writeShortToIO(pointer address, unsigned short offset, unsigned short lsb);
+void writeByteToIO(pointer address, unsigned short offset, unsigned char lsb);
+void writeBitToIO(pointer address, unsigned short offset, unsigned char bit);
+void readLongFromIO(pointer address, unsigned short offset, int32* msb, int32* lsb);
+int32 readIntFromIO(pointer address, unsigned short offset);
+unsigned short readShortFromIO(pointer address, unsigned short offset);
+unsigned char readByteFromIO(pointer address, unsigned short offset);
+unsigned char readBitFromIO(pointer address, unsigned short offset);
+
+#if defined(ENABLE_DEBUG)
+void stopProgram(int exitValue);
+void closeChannel(int channelID);
+void closeStdout(void);
+int32 connectToChannel(int32 channelID);
+void readFromDebugger(unsigned char *buf, unsigned short length);
+void writeToDebugger(int channelID, const unsigned char *buf, unsigned short length);
+void checkForRequests(int32* fp);
 #endif
-
-#if defined(N_VM_REALTIMECLOCK_GETNATIVERESOLUTION)
-int16 n_vm_RealtimeClock_getNativeResolution(int32 *sp) {
-
-    *sp = MS_10; /* 10 ms */ 
-
-    return -1;
-}
-#endif
-
-#if defined(N_VM_REALTIMECLOCK_GETNATIVETIME)
-extern int16 javax_realtime_HighResolutionTime_setNormalized(int32 *fp);
-int16 n_vm_RealtimeClock_getNativeTime(int32 *sp) {
-  sp[1] = 0;
-  sp[2] = 0;
-  sp[3] = 0;
-
-  javax_realtime_HighResolutionTime_setNormalized(sp);
-  
-  *sp = 0;
-  
-  return -1;
-}
-#endif
-
 
 void init_compiler_specifics(void) {
 }
@@ -72,8 +65,6 @@ void sendbyte(unsigned char byte) {
 #endif
     sendbyteraw(byte);
 }
-
-
 
 void initNatives(void) {
     
