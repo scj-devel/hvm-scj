@@ -10,6 +10,12 @@
 #include <pthread.h>
 #endif
 
+void initGC(void);
+static Object* gc_allocatepdObject(uint32 objectSize, unsigned char* store, uint32 *top, uint32 size, char clear); 
+Object* gc_allocateObject(uint32 dobjectSize, uint32 pobjectsize);
+unsigned short getClassIndex(Object* obj);
+void setClassIndex(Object* obj, unsigned short classIndex);
+
 #ifdef FLASHSUPPORT
 extern void initROMHeap(void);
 extern Object* gc_allocatepObject(unsigned short dobjectSize, unsigned short pobjectsize);

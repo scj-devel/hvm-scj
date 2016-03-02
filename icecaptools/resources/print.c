@@ -8,6 +8,14 @@
 
 extern void sendbyte(unsigned char byte);
 
+void printStr(const char* str);
+void printROMStr(const char* str);
+static void printNibble(unsigned char nibble);
+void printByte(unsigned char c);
+void printShort(unsigned short c);
+void printMem(char* str, int length);
+void printAddress(uint32 addr);
+
 void printStr(const char* str) {
     while (*str) {
         sendbyte(*str);

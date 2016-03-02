@@ -27,7 +27,6 @@ Object* createStringObject(int32 size, const char* data, int32* sp);
 #if defined(GLIBC_DOES_NOT_SUPPORT_MUL)
 extern int32 imul(int32 a, int32 b);
 #endif
-extern void initGC(void);
 extern void printStr(const char* str);
 extern void printROMStr(const char* str);
 extern void printShort(unsigned short c);
@@ -45,8 +44,319 @@ extern int16 initializeException(int32* sp, int16 exceptionClass,
 		int16 exceptionInitMethod);
 #endif
 
+#if defined (N_JAVA_LANG_SYSTEM_GETPROPERTY)
+int16 n_java_lang_System_getProperty(int32 *sp);
+#endif
+#if defined (N_JAVA_LANG_SYSTEM_SETOUT)
+int16 n_java_lang_System_setOut(int32 *sp);
+#endif
+#if defined (N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined (N_JAVA_LANG_CLASS_GETNAME0) || defined(N_JAVA_LANG_FLOAT_TOSTRING)
+int32 _strlen(const char* str);
+#endif
+#if defined(N_SUN_MISC_VM_ISBOOTED)
+int16 n_sun_misc_VM_isBooted(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_DOUBLE_LONGBITSTODOUBLE)
+int16 n_java_lang_Double_longBitsToDouble(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_THREAD_CURRENTTHREAD)
+int16 n_java_lang_Thread_currentThread(int32 *sp);
+#endif
+#if defined(N_SUN_MISC_VM_GETSAVEDPROPERTY)
+int16 n_sun_misc_VM_getSavedProperty(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_STRINGBUFFER_APPEND)
+int16 n_java_lang_StringBuffer_append(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_STRINGBUILDER_APPEND)
+int16 n_java_lang_StringBuilder_append(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_STRING_INIT_)
+int16 n_java_lang_String_init_(int32 *sp);
+#endif
+#ifdef N_JAVA_LANG_CLASS_GETNAME0
+int16 n_java_lang_Class_getName0(int32 *sp);
+#endif
+#ifdef N_DEVICES_DEFAULTWRITER_NWRITE
+static void print_to_stdout(unsigned char* src, unsigned char* buffer,
+		int32 buffersize, int32 nb);
+int16 n_devices_DefaultWriter_nwrite(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_THROWABLE_CLINIT_)
+int16 n_java_lang_Throwable_clinit_(int32 *sp);
+#endif
+#ifdef N_JAVA_LANG_THROWABLE_FILLINSTACKTRACE
+int16 n_java_lang_Throwable_fillInStackTrace(int32 *sp);
+#endif
+#ifdef N_JAVA_LANG_THROWABLE_FILLINSTACKTRACE_
+int16 n_java_lang_Throwable_fillInStackTrace_(int32 *sp);
+#endif
+#ifdef N_JAVA_LANG_CLASS_DESIREDASSERTIONSTATUS
+int16 n_java_lang_Class_desiredAssertionStatus(int32 *sp);
+#endif
+#ifdef N_TEST_TESTINVOKENATIVE1_SUPER_TESTNATIVE
+int16 n_test_TestInvokeNative1_Super_testNative(int32 *sp);
+#endif
+#ifdef N_TEST_TESTINVOKENATIVE1_SUPER_TESTNATIVESTATIC
+int16 n_test_TestInvokeNative1_Super_testNativeStatic(int32 *sp);
+#endif
+#ifdef N_TEST_TESTINVOKENATIVE2_SUPER_TESTNATIVESTATIC
+int16 n_test_TestInvokeNative2_Super_testNativeStatic(int32 *sp);
+#endif
+#ifdef N_JAVA_LANG_CLASS_GETPRIMITIVECLASS
+static int32 _streq(char* str1, char* str2);
+static char* getCString(unsigned char* strObj);
+int16 n_java_lang_Class_getPrimitiveClass(int32 *sp);
+#endif
+#ifdef N_JAVA_LANG_SYSTEM_CURRENTTIMEMILLIS
+int16 n_java_lang_System_currentTimeMillis(int32 *sp);
+#endif
+void* getPointer(int32 val);
+#ifdef N_JAVA_LANG_SYSTEM_ARRAYCOPY
+static void arraycopy(unsigned char* src, unsigned short srcPos,
+		unsigned char* dst, unsigned short dstPos, unsigned short length);
+int16 n_java_lang_System_arraycopy(int32 *sp);
+#endif
+#ifdef N_JAVA_LANG_OBJECT_GETCLASS
+int16 n_java_lang_Object_getClass(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_CLASS_GETSUPERCLASS)
+int16 n_java_lang_Class_getSuperclass(int32 *sp);
+#endif
+#if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(GETCLASS_USED)
+static void pushDefaultArea(void);
+static void popDefaultArea(void);
+static Object* gc_allocateObjectInArea(unsigned short dobjectSize,
+		unsigned short pobjectSize);
+#if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0)
+static Object* initializeStringObject(int32* sp, unsigned char *charArrayObject);
+Object* createStringObject(int32 size, const char* data, int32* sp);
+#endif
+Object* getClass(unsigned short classIndex);
+#endif
+#if defined(N_JAVA_LANG_CLASS_NEWINSTANCE)
+static int16 newInstance(int32* sp, unsigned short classIndex);
+#endif
+#ifdef N_JAVA_LANG_CLASS_NEWINSTANCE
+int16 n_java_lang_Class_newInstance(int32* sp);
+#endif
+#ifdef N_JAVA_LANG_CLASS_GETCOMPONENTTYPE
+int16 n_java_lang_Class_getComponentType(int32 *sp);
+#endif
+#ifdef N_JAVA_LANG_OBJECT_CLONE
+int16 n_java_lang_Object_clone(int32 *sp);
+#endif
+#ifdef N_JAVA_LANG_OBJECT_HASHCODE
+int16 n_java_lang_Object_hashCode(int32 *sp);
+#endif
+#ifdef N_JAVA_SECURITY_ACCESSCONTROLLER_DOPRIVILEGED
+int16 n_java_security_AccessController_doPrivileged(int32 *sp);
+#endif
+#ifdef N_JAVA_LANG_REFLECT_ARRAY_NEWARRAY
+int16 n_java_lang_reflect_Array_newArray(int32 *sp);
+#endif
+#ifdef N_JAVA_LANG_THREAD_TOSTRING
+int16 n_java_lang_Thread_toString(int32 *sp);
+#endif
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETMAXPRIORITY)
+int16 n_javax_safetycritical_OSProcess_getMaxPriority(int32 *sp);
+#endif
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETAFFINITY)
+int16 n_javax_safetycritical_OSProcess_setAffinity(int32 *sp);
+#endif
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETOMMSAFFINITYSET)
+int16 n_javax_safetycritical_OSProcess_setOMMSAffinitySet(int32 *sp);
+#endif
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_ISPROCESSORINSET)
+int16 n_javax_safetycritical_OSProcess_isProcessorInSet(int32 *sp);
+#endif
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETALLCPUCOUNT)
+int16 n_javax_safetycritical_OSProcess_getAllCPUCount(int32 *sp);
+#endif
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETAVAILABLECPUCOUNT)
+int16 n_javax_safetycritical_OSProcess_getAvailableCPUCount(int32 *sp);
+#endif
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETCURRENTCPUID)
+int16 n_javax_safetycritical_OSProcess_getCurrentCPUID(int32 *sp);
+#endif
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETTHREADID)
+int16 n_javax_safetycritical_OSProcess_getThreadID(int32 *sp);
+#endif
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_REQUESTTERMINATION_C)
+int16 n_javax_safetycritical_OSProcess_requestTermination_c(int32 *sp);
+#endif
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_TESTCANCEL_C)
+int16 n_javax_safetycritical_OSProcess_testCancel_c(int32 *sp);
+#endif
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETTIMERFD)
+int16 n_javax_safetycritical_OSProcess_setTimerfd(int32 *sp);
+#endif
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETMEMORYAREA )
+int16 n_javax_safetycritical_OSProcess_setMemoryArea(int32 *sp);
+#endif
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETCURRENTMEMORYAREA)
+int16 n_javax_safetycritical_OSProcess_getCurrentMemoryArea(int32 *sp);
+#endif
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETOUTERMOSTMISSIONSEQUENCER)
+int16 n_javax_safetycritical_OSProcess_setOuterMostMissionSequencer(int32 *sp);
+#endif
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_INITSPECIFICID)
+int16 n_javax_safetycritical_OSProcess_initSpecificID(int32 *sp);
+#endif
+/*Periodic Parameters*/
+struct periodic_info {
+    int timer_fd;
+};
+/*Initialize Periodic Parameters*/
+int make_periodic(long period, struct periodic_info *info);
+void wait_period(struct periodic_info *info);
+void open_file_cleanup_handler(void *arg);
+void scj_multicore_thread_executor(void* arg);
+void scj_multicore_thread_starter(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_THREAD_START)
+int16 n_java_lang_Thread_join(int32 *sp);
+static void *startThread(void* arg);
+int16 n_java_lang_Thread_start(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_THREAD_INIT_) || defined(N_JAVA_LANG_THREAD_INIT_DEFAULT)
+int16 n_java_lang_Thread_init_(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_THREAD_INIT_DEFAULT)
+int16 n_java_lang_Thread_init_default(int32 *sp);
+#endif
+#if defined(N_TEST_TESTCVAR1_GETIVAR)
+int16 n_test_TestCVar1_getIVar(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_FLOAT_FLOATTORAWINTBITS)
+int16 n_java_lang_Float_floatToRawIntBits(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_SYSTEM_REGISTERNATIVES)
+int16 n_java_lang_System_registerNatives(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_DOUBLE_DOUBLETORAWLONGBITS)
+int16 n_java_lang_Double_doubleToRawLongBits(int32 *sp);
+#endif
+#if defined(N_SUN_SECURITY_ACTION_GETBOOLEANACTION_INIT_)
+int16 n_sun_security_action_GetBooleanAction_init_(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_SYSTEM_NANOTIME)
+int16 n_java_lang_System_nanoTime(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_SYSTEM_IDENTITYHASHCODE)
+int16 n_java_lang_System_identityHashCode(int32 *sp);
+#endif
+#if defined(N_TEST_TESTCVAR1_GETBVAR)
+int16 n_test_TestCVar1_getBVar(int32 *sp);
+#endif
+#if defined(N_TEST_TESTCVAR1_GETSVAR)
+int16 n_test_TestCVar1_getSVar(int32 *sp);
+#endif
+#if defined(N_TEST_TESTCVAR1_GETLVAR)
+int16 n_test_TestCVar1_getLVar(int32 *sp);
+#endif
+void _transfer(void);
+#if defined(VM_CLOCKINTERRUPTHANDLER_HANDLE) || defined(VM_PROCESS_INITIALIZE)
+int16 n_vm_Process_transfer(int32 *sp);
+#endif
+#if defined(VM_PROCESS_EXECUTEWITHSTACK)
+static void executeWithStack(uint16 stackSize);
+int16 n_vm_Process_executeWithStack(int32 *sp);
+#endif
+#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED)
+int16 yieldToScheduler(int32 *sp);
+#endif
+#if defined(N_VM_MONITOR_ATTACHMONITOR)
+int16 n_vm_Monitor_attachMonitor(int32 *sp);
+#endif
+#if defined(N_VM_MONITOR_GETATTACHEDMONITOR)
+int16 n_vm_Monitor_getAttachedMonitor(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_OBJECT_NOTIFY)
+int16 n_java_lang_Object_notify(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_OBJECT_NOTIFYALL)
+int16 n_java_lang_Object_notifyAll(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_OBJECT_WAIT_)
+int16 n_java_lang_Object_wait_(int32 *sp);
+#endif
+unsigned char init_vm(void);
+int16 initializeExceptions(int32* sp);
+#if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED)
+int16 initializeConstants(int32* sp);
+int16 initializeStringConstant(const ConstantInfo* constant, int32* sp);
+#endif
 #if defined(INVOKECLASSINITIALIZERS)
+static int16 invokeClassInitializer(unsigned short methodIndex, int32* sp);
 int16 invokeClassInitializers(int32* sp);
+#endif
+#if defined(N_TEST_TESTINVOKESTATIC2_APIDEMO1)
+int16 n_test_TestInvokeStatic2_ApiDemo1(int32 *sp);
+#endif
+#if defined(REFLECT_OBJECTINFO_GETADDRESS)
+int16 n_reflect_ObjectInfo_getAddress(int32 *sp);
+#endif
+#ifdef N_DEVICES_SYSTEM_RESETMEMORY
+int16 n_devices_System_resetMemory(int32 *sp);
+#endif
+#if defined(JAVA_LANG_THROWABLE_INIT_)
+void reportStackTraceIntro(unsigned short classIndex);
+void reportStackTraceElement(unsigned short methodIndex, unsigned short pc);
+#endif
+#if defined(N_REFLECT_UNBOXING_REPORTBOOLEAN_USED)
+int16 n_reflect_Unboxing_reportBoolean(int32 *sp);
+#endif
+#if defined(N_REFLECT_UNBOXING_REPORTBYTE_USED)
+int16 n_reflect_Unboxing_reportByte(int32 *sp);
+#endif
+#if defined(N_REFLECT_UNBOXING_REPORTCHARACTER_USED)
+int16 n_reflect_Unboxing_reportCharacter(int32 *sp);
+#endif
+#if defined(N_REFLECT_UNBOXING_REPORTINT_USED)
+int16 n_reflect_Unboxing_reportInt(int32 *sp);
+#endif
+#if defined(N_REFLECT_UNBOXING_REPORTLONG_USED)
+int16 n_reflect_Unboxing_reportLong(int32 *sp);
+#endif
+#if defined(N_REFLECT_UNBOXING_REPORTSHORT_USED)
+int16 n_reflect_Unboxing_reportShort(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_REFLECT_METHOD_INVOKE) || defined(N_JAVA_LANG_REFLECT_CONSTRUCTOR_NEWINSTANCE)
+int16 n_java_lang_reflect_Method_invoke(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_CLASS_GETMETHOD)
+int16 n_java_lang_Class_getMethod(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_CLASS_GETCONSTRUCTOR)
+int16 n_java_lang_Class_getConstructor(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_REFLECT_CONSTRUCTOR_NEWINSTANCE)
+int16 n_java_lang_reflect_Constructor_newInstance(int32 *sp);
+#endif
+#if defined(N_JAVA_LANG_CLASS_FORNAME)
+int16 n_java_lang_Class_forName(int32 *sp);
+#endif
+void unimplemented_native_function(uint16 methodID);
+#if defined(ENABLE_DEBUG)
+void connectToDebugger(void);
+void disconnectFromDebugger(void);
+void sendTerminatedEvent(void);
+void sendStartEvent(void);
+void sendOnChannel(int channelID, unsigned char event);
+void sendMethodNumberAndPC(int channelID, unsigned short methodNumber, unsigned short pc);
+void readMethodNumberAndPC(unsigned short *methodNumber, unsigned short *pc);
+void addBreakpoint(unsigned short methodNumber, unsigned short pc);
+void removeBreakpoint(unsigned short methodNumber, unsigned short pc);
+void checkBreakpoint(int32* fp, unsigned short methodNumber, unsigned short pc);
+unsigned char awaitCommandFromDebugger(int32* fp, unsigned short methodNumber, unsigned short pc);
+void breakPointHit(unsigned short methodNumber, unsigned short pc);
+#endif
+void unimplemented(int16 mid);
+int32* get_java_stack_base(int16 size);
+#if defined(N_VM_FULLSTACKANANLYSER_GET_JAVA_STACK_ARRAY)
+int16 n_vm_FullStackAnanlyser_get_java_stack_array(int32 *sp);
 #endif
 
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED)
@@ -1070,12 +1380,6 @@ int16 n_javax_safetycritical_OSProcess_initSpecificID(int32 *sp)
 }
 #endif
 
-/*Periodic Parameters*/
-struct periodic_info {
-    int timer_fd;
-};
-
-/*Initialize Periodic Parameters*/
 int make_periodic(long period, struct periodic_info *info) {
 	int ret;
 	unsigned int ns;
@@ -2502,8 +2806,6 @@ void unimplemented(int16 mid) {
 	}
 }
 
-extern void setClassIndex(Object* obj, unsigned short classIndex);
-
 #if defined(TEST_TESTNATIVEFIELD_SUBCLASS_TESTFIELD_USED)
 int8 superByte;
 #endif
@@ -2511,7 +2813,7 @@ int8 superByte;
 static unsigned char java_stack[(JAVA_STACK_SIZE << 2) + sizeof(Object) + sizeof(uint16)];
 
 int32* get_java_stack_base(int16 size) {
-	Object* stackAsArray = (Object*)&java_stack[0];
+  Object* stackAsArray = (Object*)(pointer)&java_stack[0];
 	int32* intStack;
 	uint16 length = JAVA_STACK_SIZE;
 	uint16 index;
@@ -2521,8 +2823,8 @@ int32* get_java_stack_base(int16 size) {
 	setClassIndex((Object*) stackAsArray, -1);
 #endif
 
-	*(uint16 *) ((unsigned char*)stackAsArray + sizeof(Object)) = length;
-	intStack = (int32*) &java_stack[4];
+	*(uint16 *) (pointer) ((unsigned char*)stackAsArray + sizeof(Object)) = length;
+	intStack = (int32*) (pointer)&java_stack[4];
 
 	for (index = 0; index < length; index++)
 	{
