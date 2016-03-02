@@ -106,7 +106,7 @@ int16 n_vm_Memory_getHeapBase(int32 *sp)
 extern void sendbyte(unsigned char byte);
 extern void printStr(const char* str);
 extern void printAddress(uint32 addr);
-static unsigned char* allocRaw(uint32 objectSize, unsigned char* store,
+static Object* allocRaw(uint32 objectSize, unsigned char* store,
 		uint32 *top, uint32 size, char clear) {
 #ifdef USEMALLOCFREE
 	return calloc(objectSize, 1);
@@ -139,16 +139,16 @@ static unsigned char* allocRaw(uint32 objectSize, unsigned char* store,
 		printStr(", ");
 		printAddress(objectSize);
 		sendbyte('\n');
-		return obj;
+		return (Object*)(pointer)obj;
 	} else {
-		return HEAP_UNREF(obj, unsigned char*);
+	  return (Object*)(pointer)HEAP_UNREF(obj, unsigned char*);
 	}
 #endif
 }
 
 Object* allocData(uint32 objectSize, unsigned char* store, uint32 *top,
 		uint32 size, char clear) {
-	return (Object*) allocRaw(objectSize, store, top, size, clear);
+  return allocRaw(objectSize, store, top, size, clear);
 }
 
 #ifdef FLASHSUPPORT
