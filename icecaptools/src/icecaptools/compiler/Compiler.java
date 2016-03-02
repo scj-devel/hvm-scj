@@ -175,6 +175,9 @@ public class Compiler {
 		}
 		fileSb.append(
 				"#include \"types.h\"\n#include \"methods.h\"\n#include \"ostypes.h\"\n#include \"classes.h\"\n\n");
+		
+		fileSb.append("unsigned char initClasses(void);\n");
+		
 		classesSb.startProgmem();
 		classesSb.appendCode("static RANGE const ClassInfo _classes[" + classNumber + "] PROGMEM = {\n",
 				35 * classNumber);

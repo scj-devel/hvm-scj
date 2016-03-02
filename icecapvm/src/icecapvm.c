@@ -14,6 +14,8 @@
 #include "methodinterpreter.h"
 #include "gc.h"
 
+int run_vm(void);
+
 #if defined(JAVA_LANG_THROWABLE_INIT_)
 extern void handleException(unsigned short classIndex);
 #endif

@@ -45,6 +45,10 @@ extern unsigned char readByteFromIO(pointer address, unsigned short offset);
 extern unsigned char readBitFromIO(pointer address, unsigned short offset);
 #endif
 
+#if defined(JAVA_LANG_THROWABLE_INIT_)
+void handleException(unsigned short classIndex);
+#endif
+
 unsigned char getElementSize(unsigned short classIndex);
 #if defined(GLIBC_DOES_NOT_SUPPORT_MUL)
 int32 imul(int32 a, int32 b) _NOINLINE_;
