@@ -104,8 +104,10 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 
 				addTargetSpecificFiles(fullCompileCommand, configuration);
 
-				fullCompileCommand.add("-o");
-				fullCompileCommand.add("main.exe");
+				if (!commandContains("-c", buildCommands[0])) {
+					fullCompileCommand.add("-o");
+					fullCompileCommand.add("main.exe");
+				}
 
 				String[] command = new String[fullCompileCommand.size()];
 				Iterator<String> it = fullCompileCommand.iterator();
@@ -155,13 +157,19 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 							}
 						}
 
+						boolean processStartSucceeded = true;
+
 						if (exitValue == 0) {
-							Process process;
+							Process process = null;
 
 							monitor.subTask("Executing application");
 
-							process = startProcessOnTarget(launch, configuration, path, sourceFolder,
-									consoleOutputStream, monitor);
+							try {
+								process = startProcessOnTarget(launch, configuration, path, sourceFolder,
+										consoleOutputStream, monitor);
+							} catch (Exception e) {
+								processStartSucceeded = false;
+							}
 
 							if (process != null) {
 								if (mode.equals(ILaunchManager.DEBUG_MODE)) {
@@ -182,7 +190,11 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 								}
 								return;
 							} else {
-								return;
+								if (processStartSucceeded) {
+									return;
+								} else {
+									launchErrorMessage = "Could not launch program";
+								}
 							}
 						}
 					} else {
@@ -259,6 +271,15 @@ public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends Launch
 		launchManager = DebugPlugin.getDefault().getLaunchManager();
 		launchManager.removeLaunch(launch);
 		//throw new CoreException(status);
+	}
+
+	private boolean commandContains(String string, String[] strings) {
+		for (String str : strings) {
+			if (str.contains(string)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private String combine(String[] strings) {
