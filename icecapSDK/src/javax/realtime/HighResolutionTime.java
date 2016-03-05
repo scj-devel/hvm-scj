@@ -267,6 +267,11 @@ public abstract class HighResolutionTime implements Comparable<HighResolutionTim
 	//	}
 
 	// used for JML annotation only (not public)
+	Clock getClck() {
+		return clock;
+	}
+		
+	// used for JML annotation only (not public)
 	long getMillis() {
 		return millis;
 	}
@@ -276,4 +281,8 @@ public abstract class HighResolutionTime implements Comparable<HighResolutionTim
 		return nanos;
 	}
 	
+	// used for JML annotation only (not public)
+	boolean isNormalized() {
+		return isNormalized (millis, nanos);
+	}
 }
