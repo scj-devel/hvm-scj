@@ -50,6 +50,10 @@ public final class TestPortalRT {
 		}
 	}
 	
+	public static final Clock getClck(HighResolutionTime ht) {
+		return ht.getClck();
+	}
+	
 	public static final long getMillis(HighResolutionTime ht) {
 		return ht.getMillis();
 	}
@@ -58,6 +62,9 @@ public final class TestPortalRT {
 		return ht.getNanos();
 	}
 	
+	public static final boolean isNormalized(HighResolutionTime ht) {
+		return ht.isNormalized();
+	}
 	
 	public static final RelativeTime getResol(Clock clck) {
 		return clck.getResol();
