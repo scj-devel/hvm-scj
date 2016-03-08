@@ -175,9 +175,9 @@ public class Compiler {
 		}
 		fileSb.append(
 				"#include \"types.h\"\n#include \"methods.h\"\n#include \"ostypes.h\"\n#include \"classes.h\"\n\n");
-		
+
 		fileSb.append("unsigned char initClasses(void);\n");
-		
+
 		classesSb.startProgmem();
 		classesSb.appendCode("static RANGE const ClassInfo _classes[" + classNumber + "] PROGMEM = {\n",
 				35 * classNumber);
@@ -850,10 +850,10 @@ public class Compiler {
 			addToRequiredIncludes("#include \"types.h\"\n#include \"ostypes.h\"\n#include \"methods.h\"\n\n",
 					requiredIncludes);
 			addToRequiredIncludes("extern void unimplemented_native_function(uint16 methodID);", requiredIncludes);
-			
+
 			addToRequiredIncludes("int16 dispatch_native_func(int16 functionNumber, int32 *sp);\n", requiredIncludes);
 			addToRequiredIncludes("unsigned char initMethods(void);\n", requiredIncludes);
-			
+
 			String includes = oraganizeRequiredIncludes(requiredIncludes);
 
 			result.append(includes);
@@ -1025,7 +1025,7 @@ public class Compiler {
 		return maxLocals;
 	}
 
-	private static <A extends Annotation> A hasAnnotation(Method javaMethod, Class<A> annotationClass) {
+	static <A extends Annotation> A hasAnnotation(Method javaMethod, Class<A> annotationClass) {
 		Attribute[] attributes = javaMethod.getAttributes();
 		for (Attribute attribute : attributes) {
 			if (attribute instanceof AnnotationsAttribute) {

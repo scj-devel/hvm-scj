@@ -1,6 +1,7 @@
 package icecaptools.compiler;
 
 import icecaptools.Activator;
+import icecaptools.IcecapInlineNative;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,7 +82,14 @@ public class NativeFileManager {
 				sourceFileContent.append("}\n");
 				sourceFileContent.append("#else\n");
 			}
-			sourceFileContent.append("extern int16 " + uniqueMethodId + "(int32 *sp);\n");
+			IcecapInlineNative annotation = Compiler.hasAnnotation(javaMethod, IcecapInlineNative.class);
+			if (annotation != null) {
+				sourceFileContent.append("int16 " + uniqueMethodId + "(int32 *sp)\n");
+				sourceFileContent.append(annotation.functionBody());
+				sourceFileContent.append("\n");
+			} else {
+				sourceFileContent.append("extern int16 " + uniqueMethodId + "(int32 *sp);\n");
+			}
 			if (skipMethod) {
 				sourceFileContent.append("#endif\n\n");
 			}
@@ -180,7 +188,7 @@ public class NativeFileManager {
 
 		while (functionsItr.hasNext()) {
 			String functionName = functionsItr.next();
-			dispatcher.append("    case " + functionName.toUpperCase() +":\n");
+			dispatcher.append("    case " + functionName.toUpperCase() + ":\n");
 			dispatcher.append("       return " + functionName + "(sp);\n");
 		}
 		functionsItr = compiledFunctions.iterator();
