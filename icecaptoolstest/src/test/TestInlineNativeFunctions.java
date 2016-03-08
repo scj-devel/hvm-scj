@@ -9,8 +9,10 @@ public class TestInlineNativeFunctions {
 			functionBody = ""
 			+ "{\n"
 			+ "   sp[0] = 42;\n"
+			+ "   printf(\"calling native method body\\n\");\n" 
 			+ "   return -1;\n"
-			+ "}\n")
+			+ "}\n",
+			requiredIncludes = "#include <stdio.h>\n")
 	private static native int foo();
 	
 	public static void main(String[] args) {

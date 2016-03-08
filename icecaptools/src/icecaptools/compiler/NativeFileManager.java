@@ -87,6 +87,12 @@ public class NativeFileManager {
 				sourceFileContent.append("int16 " + uniqueMethodId + "(int32 *sp)\n");
 				sourceFileContent.append(annotation.functionBody());
 				sourceFileContent.append("\n");
+				
+				String requiredIncludes = annotation.requiredIncludes();
+				if ((requiredIncludes != null) && (requiredIncludes.trim().length() > 0))
+				{
+					headerFileContent.append(requiredIncludes);
+				}
 			} else {
 				sourceFileContent.append("extern int16 " + uniqueMethodId + "(int32 *sp);\n");
 			}
