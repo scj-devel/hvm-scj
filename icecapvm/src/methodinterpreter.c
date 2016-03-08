@@ -18,6 +18,12 @@ extern ClassInfo *classes;
 extern MethodInfo *methods;
 extern ConstantInfo *constants;
 
+#if defined(NEW_OPCODE_USED) || defined(INVOKEDYNAMIC_OPCODE_USED) || defined(ANEWARRAY_OPCODE_USED) || defined(NEWFLASHARRAY_OPCODE_USED) || defined(NEWARRAY_OPCODE_USED)
+extern void sendbyte(unsigned char byte);
+extern void printAddress(uint32 addr);
+#endif
+
+
 #if defined(PUTSTATIC_OPCODE_USED) || defined(GETSTATIC_OPCODE_USED)
 extern unsigned char *classData;
 #endif
@@ -708,9 +714,6 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 			case NEW_OPCODE:
 			case INVOKEDYNAMIC_OPCODE:
 			if (handleNew(sp, method_code) == 0) {
-				extern void sendbyte(unsigned char byte);
-				extern void printStr(const char* str);
-				extern void printAddress(uint32 addr);
 				printStr("Could not allocate object ");
 				printAddress(pgm_read_pointer(&currentMethod->codeOffset, uint32*));
 				sendbyte('\n');
@@ -1058,9 +1061,6 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 #endif
 					*(sp - 1) = (int32) (pointer) array;
 				} else {
-					extern void sendbyte(unsigned char byte);
-					extern void printStr(const char* str);
-					extern void printAddress(uint32 addr);
 					printStr("Could not allocate array ");
 					printAddress(pgm_read_pointer(&currentMethod->codeOffset, uint32*));
 					sendbyte('\n');
