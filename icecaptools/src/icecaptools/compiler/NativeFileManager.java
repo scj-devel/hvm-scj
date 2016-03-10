@@ -1,14 +1,14 @@
 package icecaptools.compiler;
 
-import icecaptools.Activator;
-import icecaptools.IcecapInlineNative;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.Type;
+
+import icecaptools.Activator;
+import icecaptools.IcecapInlineNative;
 
 public class NativeFileManager {
 	private StringBuffer sourceFileContent;
@@ -20,11 +20,15 @@ public class NativeFileManager {
 	private ArrayList<String> nativeFunctions;
 	private boolean functionsSorted;
 	private ArrayList<String> compiledFunctions;
+	private LabeledMemorySegment requiredIncludes;
 
 	public static final String UserNativeFunctionExtensionPointId = Activator.PLUGIN_ID + ".UserNativeFunction";
 	public static final String UserNativeFunctionExtensionPointElement = "class";
 
-	public NativeFileManager(boolean nUMBEROFCLASSES_varUsed, int numberOfClasses) {
+	public NativeFileManager(boolean nUMBEROFCLASSES_varUsed, int numberOfClasses,
+			LabeledMemorySegment requiredIncludes) {
+		this.requiredIncludes = requiredIncludes;
+
 		sourceFileContent = new StringBuffer();
 		headerFileContent = new StringBuffer();
 
@@ -73,9 +77,10 @@ public class NativeFileManager {
 			sourceFileContent.append(" * param : " + getParameters(javaMethod) + "\n");
 			sourceFileContent.append(" * return: " + javaMethod.getReturnType().toString() + "\n");
 			sourceFileContent.append(" */\n");
+			String signature = "int16 " + uniqueMethodId + "(int32* sp)";
 			if (skipMethod) {
 				sourceFileContent.append("#ifndef EXCLUDESTUB_" + uniqueMethodId.toUpperCase() + "\n");
-				sourceFileContent.append("int16 " + uniqueMethodId + "(int32 *sp)\n");
+				sourceFileContent.append(signature + "\n");
 				sourceFileContent.append("{\n");
 				sourceFileContent.append("   unimplemented_native_function(" + uniqueMethodId.toUpperCase() + ");\n");
 				sourceFileContent.append("   return -1;\n");
@@ -84,23 +89,24 @@ public class NativeFileManager {
 			}
 			IcecapInlineNative annotation = Compiler.hasAnnotation(javaMethod, IcecapInlineNative.class);
 			if (annotation != null) {
-				sourceFileContent.append("int16 " + uniqueMethodId + "(int32 *sp)\n");
+				sourceFileContent.append(signature + "\n");
 				sourceFileContent.append(annotation.functionBody());
 				sourceFileContent.append("\n");
-				
+
 				String requiredIncludes = annotation.requiredIncludes();
-				if ((requiredIncludes != null) && (requiredIncludes.trim().length() > 0))
-				{
-					headerFileContent.append(requiredIncludes);
+				if ((requiredIncludes != null) && (requiredIncludes.trim().length() > 0)) {
+					this.requiredIncludes.print(requiredIncludes);
 				}
+				this.requiredIncludes.print(signature + ";\n");
 			} else {
 				sourceFileContent.append("extern int16 " + uniqueMethodId + "(int32 *sp);\n");
 			}
 			if (skipMethod) {
 				sourceFileContent.append("#endif\n\n");
 			}
-			nativeFunctions.add(uniqueMethodId);
 
+			nativeFunctions.add(uniqueMethodId);
+			
 			headerFileContent.append("#define ");
 			headerFileContent.append(uniqueMethodId.toUpperCase());
 			headerFileContent.append(" " + methodNumber);
@@ -200,9 +206,9 @@ public class NativeFileManager {
 		functionsItr = compiledFunctions.iterator();
 
 		while (functionsItr.hasNext()) {
-			String functionName = functionsItr.next();
-			dispatcher.append("    case " + functionName.toUpperCase() + ":\n");
-			dispatcher.append("       return " + functionName + "(sp);\n");
+			String functionLabel = functionsItr.next();
+			dispatcher.append("    case " + functionLabel.toUpperCase() + ":\n");
+			dispatcher.append("       return " + functionLabel + "(sp);\n");
 		}
 
 		dispatcher.append("    default:\n");
