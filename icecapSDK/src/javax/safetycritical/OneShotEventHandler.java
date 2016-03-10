@@ -35,7 +35,7 @@ import javax.realtime.RelativeTime;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
-import javax.safetycritical.annotate.SCJRestricted;
+import javax.safetycritical.annotate.SCJPhase;
 
 /**
  * This class permits the automatic execution of time-triggered code.
@@ -85,7 +85,7 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	 *
 	 */
 	@SCJAllowed(Level.LEVEL_1)
-	@SCJRestricted(Phase.INITIALIZE)
+	@SCJPhase(Phase.INITIALIZATION)
 	public OneShotEventHandler(PriorityParameters priority, HighResolutionTime releaseTime,
 			AperiodicParameters release, StorageParameters storage, ConfigurationParameters config) {
 		this(priority, releaseTime, release, storage, config, null);
@@ -120,7 +120,7 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	}
 
 	@SCJAllowed(Level.INFRASTRUCTURE)
-	@SCJRestricted(Phase.INITIALIZE)
+	@SCJPhase(Phase.INITIALIZATION)
 	public final void register() {
 		super.register();
 	}

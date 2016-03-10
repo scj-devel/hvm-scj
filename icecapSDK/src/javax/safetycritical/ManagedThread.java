@@ -36,7 +36,7 @@ import javax.realtime.ConfigurationParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
-import javax.safetycritical.annotate.SCJRestricted;
+import javax.safetycritical.annotate.SCJPhase;
 
 import vm.ClockInterruptHandler;
 import vm.Memory;
@@ -121,7 +121,7 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 	}
 
 	@SCJAllowed(Level.INFRASTRUCTURE)
-	@SCJRestricted(Phase.INITIALIZE)
+	@SCJPhase(Phase.INITIALIZATION)
 	public final void register() {
 		ManagedSchedulableSet msSet = Mission.getMission().msSetForMission;
 		msSet.addMS(this);
@@ -131,7 +131,7 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 	}
 
 	@SCJAllowed(Level.SUPPORT)
-	@SCJRestricted(Phase.CLEANUP)
+	@SCJPhase(Phase.CLEANUP)
 	public void cleanUp() {
 		privateMemory.removeArea();
 	}

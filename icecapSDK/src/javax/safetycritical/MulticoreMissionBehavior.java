@@ -75,7 +75,7 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 
 	@Override
 	void runInitialize(Mission mission) {
-		mission.phaseOfMission = Phase.INITIALIZE;
+		mission.phaseOfMission = Phase.INITIALIZATION;
 		mission.missionIndex = addNewMission(mission);
 		mission.msSetForMission = new ManagedSchedulableSet();
 		mission.initialize();

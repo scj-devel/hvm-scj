@@ -33,7 +33,7 @@ import javax.realtime.ReleaseParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
-import javax.safetycritical.annotate.SCJRestricted;
+import javax.safetycritical.annotate.SCJPhase;
 
 import vm.Memory;
 
@@ -140,7 +140,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	public abstract void handleAsyncEvent();
 
 	@SCJAllowed(Level.SUPPORT)
-	@SCJRestricted(Phase.CLEANUP)
+	@SCJPhase(Phase.CLEANUP)
 	public void cleanUp() {
 		privateMemory.removeArea();
 	}
@@ -149,7 +149,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	 * Registers this event handler with the current mission.
 	 */
 	@SCJAllowed(Level.INFRASTRUCTURE)
-	@SCJRestricted(Phase.INITIALIZE)
+	@SCJPhase(Phase.INITIALIZATION)
 	public void register() {
 		ManagedSchedulableSet hs = mission.msSetForMission;
 		hs.addMS(this);

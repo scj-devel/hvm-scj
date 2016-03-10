@@ -31,7 +31,7 @@ import javax.realtime.PriorityParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
-import javax.safetycritical.annotate.SCJRestricted;
+import javax.safetycritical.annotate.SCJPhase;
 
 /**
  * A <code>MissionSequencer</code> oversees a sequence of Mission executions. 
@@ -95,7 +95,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	 * with the memory resources specified by its parameters.
 	 */
 	@SCJAllowed
-	@SCJRestricted(Phase.INITIALIZE)
+	@SCJPhase(Phase.INITIALIZATION)
 	public MissionSequencer(PriorityParameters priority, StorageParameters storage, 
 			ConfigurationParameters config, String name)
 			throws IllegalStateException {
@@ -111,7 +111,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 				name);
 		
 		currState = State.START;
-		phase = Phase.INITIALIZE;
+		phase = Phase.INITIALIZATION;
 		
 		if(Launcher.level != 0)
 			Services.setCeiling(this, this.priority.getPriority());
@@ -120,7 +120,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	}
 
 	@SCJAllowed
-	@SCJRestricted(Phase.INITIALIZE)
+	@SCJPhase(Phase.INITIALIZATION)
 	public MissionSequencer(PriorityParameters priority, StorageParameters storage,
 			ConfigurationParameters config) throws IllegalStateException {
 		this(priority, storage, config, "MisMem");

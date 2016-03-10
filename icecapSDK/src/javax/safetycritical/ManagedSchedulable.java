@@ -29,7 +29,7 @@ import javax.realtime.Schedulable;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
-import javax.safetycritical.annotate.SCJRestricted;
+import javax.safetycritical.annotate.SCJPhase;
 
 /**
  * All schedulable objects are managed by a mission.
@@ -46,7 +46,7 @@ public interface ManagedSchedulable extends Schedulable {
 	/**
 	 * Registers this schedulable object with the current mission.
 	 */
-	@SCJRestricted(Phase.INITIALIZE)
+	@SCJPhase(Phase.INITIALIZATION)
 	public void register();
 
 	/**
