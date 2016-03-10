@@ -29,7 +29,7 @@ import javax.realtime.MemoryArea;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
-import javax.safetycritical.annotate.SCJRestricted;
+import javax.safetycritical.annotate.SCJPhase;
 
 /**
  * A safety-critical application consists of one or more missions, executed 
@@ -48,7 +48,7 @@ import javax.safetycritical.annotate.SCJRestricted;
  */
 @SuppressWarnings("unused")
 @SCJAllowed(Level.SUPPORT)
-@SCJRestricted(Phase.INITIALIZE)
+@SCJPhase(Phase.INITIALIZATION)
 public interface Safelet<MissionType extends Mission> {
 	/**
 	 * The infrastructure invokes <code>getSequencer</code> to obtain the 
@@ -60,7 +60,7 @@ public interface Safelet<MissionType extends Mission> {
 	 *   application.
 	 */
 	@SCJAllowed(Level.SUPPORT)
-	@SCJRestricted(Phase.INITIALIZE)
+	@SCJPhase(Phase.INITIALIZATION)
 	public MissionSequencer<MissionType> getSequencer();
 
 	/**
@@ -71,7 +71,7 @@ public interface Safelet<MissionType extends Mission> {
 	public long immortalMemorySize();
 
 	@SCJAllowed(Level.SUPPORT)
-	@SCJRestricted(Phase.INITIALIZE)
+	@SCJPhase(Phase.INITIALIZATION)
 	public void initializeApplication();
 
 }

@@ -1,5 +1,5 @@
 /**************************************************************************
- * File name  : SCJRestricted.java
+ * File name  : SCJPhase.java
  * 
  * This file is part a SCJ Level 0 and Level 1 implementation, 
  * based on SCJ Draft, Version 0.94 25 June 2013.
@@ -34,6 +34,14 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.CLASS)
 @Target({ ElementType.TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR })
-public @interface SCJRestricted {
-	public Phase value() default Phase.ALL;
+public @interface SCJPhase {
+	public Phase[] value() default {
+		Phase.STARTUP,
+		Phase.INITIALIZATION,
+		Phase.RUN,
+		Phase.CLEANUP		
+	};
 }
+
+
+

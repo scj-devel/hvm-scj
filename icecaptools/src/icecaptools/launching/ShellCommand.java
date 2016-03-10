@@ -72,9 +72,15 @@ public class ShellCommand {
 					if (command != null) {
 						compilerProcess = runTime.exec(command, envp, workingDirectory);
 					} else {
+						for (String cmd: commands)
+						{
+							writer.print(cmd);
+							writer.print(" ");
+						}
+						writer.println();
 						compilerProcess = runTime.exec(commands, envp, workingDirectory);
 					}
-
+					writer.flush();
 					ProcessTerminator waiter = new ProcessTerminator(compilerProcess, timeout, monitor);
 					waiter.startWaiting();
 

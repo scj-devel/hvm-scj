@@ -79,7 +79,7 @@ public abstract class CyclicExecutive extends Mission {
 
 	void runInitialize() {
 		// overrides the method in class Mission and is called in mission memory
-		phaseOfMission = Phase.INITIALIZE;
+		phaseOfMission = Phase.INITIALIZATION;
 		msSetForMission = new ManagedSchedulableSet();
 		initialize();
 	}

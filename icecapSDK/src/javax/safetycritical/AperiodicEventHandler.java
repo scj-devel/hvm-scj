@@ -31,7 +31,7 @@ import javax.realtime.PriorityParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
-import javax.safetycritical.annotate.SCJRestricted;
+import javax.safetycritical.annotate.SCJPhase;
 
 /**
  * This class permits the explicit release of application code.
@@ -67,7 +67,7 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 	}
 	
 	@SCJAllowed(Level.LEVEL_1)
-	@SCJRestricted(Phase.INITIALIZE)
+	@SCJPhase(Phase.INITIALIZATION)
 	public AperiodicEventHandler(PriorityParameters priority, AperiodicParameters release,
 			StorageParameters storage, ConfigurationParameters config, String name) {
 		super(priority, release, storage, config, name);
@@ -79,7 +79,7 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 	}
 
 	@SCJAllowed(Level.INFRASTRUCTURE)
-	@SCJRestricted(Phase.INITIALIZE)
+	@SCJPhase(Phase.INITIALIZATION)
 	public final void register() {
 		super.register();
 	}
