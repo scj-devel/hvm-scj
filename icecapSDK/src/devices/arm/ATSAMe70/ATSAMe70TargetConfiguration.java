@@ -2,30 +2,43 @@ package devices.arm.ATSAMe70;
 
 import java.io.File;
 
+import devices.Console;
 import devices.TargetConfiguration;
+import devices.Writer;
+import icecaptools.IcecapCompileMe;
+import icecaptools.IcecapInlineNative;
 import util.BaseTargetConfiguration;
+import vm.Machine;
 
 public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguration implements TargetConfiguration {
 
+	private static boolean initialized = false;
+	
+	static {
+		Machine.setMachineFactory(new ATSAMe70MachineFactory());
+		Console.writer = new ATSAMe70Writer();
+	}
+	
 	@Override
 	public String[][] getBuildCommands() {
+		String ASF = trim(getASFLocation());
 		return new String[][] {
 				new String[] {
 						"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-gcc.exe",
 						"-DPC32", "-Os", "-c", "-DJAVA_STACK_SIZE=420", "-x", "c", "-mthumb", "-D__SAME70Q21__",
 						"-DDEBUG", "-DPACKED=", "-D__SAME70Q21__", "-DBOARD=SAME70_XPLAINED", "-Dscanf=iscanf",
 						"-DARM_MATH_CM7=true", "-Dprintf=iprintf ",
-						"-I\"../common/services/ioport/example1/same70q21_same70_xplained\"", "-I\"../src/config\"",
-						"-I\"../src/ASF/thirdparty/CMSIS/Lib/GCC\"", "-I\"../src/ASF/common/utils\"",
-						"-I\"../src/ASF/sam/boards/same70_xplained\"", "-I\"../src/ASF/sam/utils/fpu\"", "-I\"../src\"",
-						"-I\"../src/ASF/common/services/clock\"",
-						"-I\"../src/ASF/sam/utils/cmsis/same70/source/templates\"", "-I\"../src/ASF/sam/drivers/pmc\"",
-						"-I\"../src/ASF/common/services/delay\"", "-I\"../src/ASF/sam/utils\"",
-						"-I\"../src/ASF/sam/utils/preprocessor\"", "-I\"../src/ASF/sam/boards\"",
-						"-I\"../src/ASF/common/boards\"", "-I\"../src/ASF/common/services/gpio\"",
-						"-I\"../src/ASF/sam/drivers/pio\"", "-I\"../src/ASF/sam/utils/header_files\"",
-						"-I\"../src/ASF/common/services/ioport\"", "-I\"../src/ASF/sam/drivers/mpu\"",
-						"-I\"../src/ASF/thirdparty/CMSIS/Include\"", "-I\"../src/ASF/sam/utils/cmsis/same70/include\"",
+						"-I\"" +  trim(getASFLocation())+ "\"",
+						"-I\"" + ASF + "/thirdparty/CMSIS/Lib/GCC\"", "-I\"" + ASF + "/common/utils\"",
+						"-I\"" + ASF + "/sam/boards/same70_xplained\"", "-I\"" + ASF + "/sam/utils/fpu\"", "-I\"../src\"",
+						"-I\"" + ASF + "/common/services/clock\"",
+						"-I\"" + ASF + "/sam/utils/cmsis/same70/source/templates\"", "-I\"" + ASF + "/sam/drivers/pmc\"",
+						"-I\"" + ASF + "/common/services/delay\"", "-I\"" + ASF + "/sam/utils\"",
+						"-I\"" + ASF + "/sam/utils/preprocessor\"", "-I\"" + ASF + "/sam/boards\"",
+						"-I\"" + ASF + "/common/boards\"", "-I\"" + ASF + "/common/services/gpio\"",
+						"-I\"" + ASF + "/sam/drivers/pio\"", "-I\"" + ASF + "/sam/utils/header_files\"",
+						"-I\"" + ASF + "/common/services/ioport\"", "-I\"" + ASF + "/sam/drivers/mpu\"",
+						"-I\"" + ASF + "/thirdparty/CMSIS/Include\"", "-I\"" + ASF + "/sam/utils/cmsis/same70/include\"",
 						"-Os", "-fdata-sections", "-ffunction-sections", "-mlong-calls", "-Wall", "-mcpu=cortex-m7",
 						"-pipe", "-fno-strict-aliasing", "-Wall", "-Wstrict-prototypes", "-Wmissing-prototypes",
 						"-Werror-implicit-function-declaration", "-Wpointer-arith", "-std=gnu99", "-ffunction-sections",
@@ -34,7 +47,7 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 						"-Wuninitialized", "-Wunknown-pragmas", "-Wfloat-equal", "-Wundef", "-Wshadow",
 						"-Wbad-function-cast", "-Wwrite-strings", "-Wsign-compare", "-Waggregate-return",
 						"-Wmissing-declarations", "-Wformat", "-Wmissing-format-attribute",
-						"-Wno-deprecated-declarations", "-Wpacked", "-Wredundant-decls", "-Wnested-externs",
+						"-Wno-deprecated-declarations", "-Wpacked", "-Wnested-externs",
 						"-Wlong-long", "-Wunreachable-code", "-Wcast-align", "--param", "max-inline-insns-single=500",
 						"-mfloat-abi=softfp", "-mfpu=fpv5-sp-d16", "natives_arm.c" },
 				new String[] {
@@ -76,5 +89,50 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 	@Override
 	public int getJavaHeapSize() {
 		return 8192;
+	}
+	
+	@IcecapCompileMe
+	protected static void blink(int i) {
+		if (!initialized)
+		{
+			initialized = true;
+		}
+		
+		set_led_output();
+
+		while (true) {
+			toggle_led();
+			devices.System.delay(i);
+		}
+	}
+	
+	@IcecapInlineNative(functionBody = ""
+			+ "{\n"
+			+ "   ioport_toggle_port_level(EXAMPLE_LED_PORT, EXAMPLE_LED_MASK);\n"
+			+ "   return -1;\n"
+			+ "}\n",
+			requiredIncludes = "#include \"asf.h\"\n"
+			)
+	private static native void toggle_led();
+
+	@IcecapInlineNative(functionBody = ""
+			+ "{\n"
+			+ "   ioport_set_port_dir(EXAMPLE_LED_PORT, EXAMPLE_LED_MASK,IOPORT_DIR_OUTPUT);\n"
+			+ "   return -1;\n"
+			+ "}\n",
+			requiredIncludes = "#define EXAMPLE_LED_PORT (2)\n#define EXAMPLE_LED_MASK ((1 << 8))\n"
+			)
+	private static native void set_led_output();
+
+	public static class ATSAMe70Writer implements Writer {
+
+		@Override
+		public void write(byte[] bytes, short length) {
+		}
+
+		@Override
+		public short getMaxLineLength() {
+			return 0;
+		}
 	}
 }

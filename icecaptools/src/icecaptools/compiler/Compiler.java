@@ -569,9 +569,6 @@ public class Compiler {
 			e.printStackTrace();
 		}
 
-		NativeFileManager nfileManager = new NativeFileManager(this.classFieldsManager.NUMBEROFCLASSES_varUsed,
-				patcher.getNumberOfClasses());
-
 		byte[] currentMethodCode = null;
 
 		int methodNumber = 0;
@@ -582,6 +579,9 @@ public class Compiler {
 		MemorySegment methodNames = new MemorySegment(tool.getProperties());
 		LabeledMemorySegment requiredIncludes = new LabeledMemorySegment(tool.getProperties());
 		NoDuplicatesMemorySegment userIncludes = new NoDuplicatesMemorySegment(tool.getProperties());
+
+		NativeFileManager nfileManager = new NativeFileManager(this.classFieldsManager.NUMBEROFCLASSES_varUsed,
+				patcher.getNumberOfClasses(), requiredIncludes);
 
 		methodsFile.setHeader(header);
 
