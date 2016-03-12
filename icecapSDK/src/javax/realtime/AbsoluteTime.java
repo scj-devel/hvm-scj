@@ -61,7 +61,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  *      an <code>IllegalArgumentException</code> is thrown.
  */
 @SCJAllowed
-public class AbsoluteTime extends HighResolutionTime {
+public class AbsoluteTime extends HighResolutionTime<AbsoluteTime> {
 	/**
 	 * Equivalent to <code>new AbsoluteTime(0,0)</code>. <br>
 	 * The clock association is implicitly made with the real-time clock.

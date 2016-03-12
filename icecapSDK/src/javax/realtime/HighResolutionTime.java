@@ -55,7 +55,8 @@ import javax.safetycritical.annotate.SCJAllowed;
  *      <code>interface Comparable</code> <br>
  */
 @SCJAllowed
-public abstract class HighResolutionTime implements Comparable<HighResolutionTime> {
+public abstract class HighResolutionTime<T extends HighResolutionTime<T>> implements Comparable<T> {
+	
 	Clock clock;
 	long millis;
 	int nanos;
@@ -74,6 +75,14 @@ public abstract class HighResolutionTime implements Comparable<HighResolutionTim
 		return (millis >= 0L && (0 <= nanos && nanos < 1000000)) || (millis <= 0L && (-1000000 < nanos && nanos <= 0));
 	}
 
+	/**
+	 * 
+	 * @return a reference to the chronograph associated with <code>this</code>.
+	 */
+	public final Chronograph getChronograph() {
+		return null;
+	}
+	
 	/**
 	 * 
 	 * @return a reference to the clock associated with <code>this</code>.
@@ -109,7 +118,7 @@ public abstract class HighResolutionTime implements Comparable<HighResolutionTim
 	 *    not associated with the same clock as <code>this</code>, or when 
 	 *    the <code>time</code> parameter is null.
 	 */
-	public void set(HighResolutionTime time) {
+	public void set(T time) {
 		
 		if (time == null)
 			throw new IllegalArgumentException("null parameter");
@@ -165,7 +174,7 @@ public abstract class HighResolutionTime implements Comparable<HighResolutionTim
 	 * @return true just when the parameter <code>time</code> is of the same 
 	 *   type and has the same values as <code>this</code>.
 	 */
-	public boolean equals(HighResolutionTime time) {
+	public boolean equals(/*HighResolutionTime*/ T time) {
 		if (time == null)
 			return false;
 
@@ -204,7 +213,7 @@ public abstract class HighResolutionTime implements Comparable<HighResolutionTim
 	 *    not associated with the same clock as <code>this</code>, or when 
 	 *    the <code>time</code> parameter is null.
 	 */
-	public int compareTo(HighResolutionTime time) {
+	public int compareTo(T time) {
 		if (time == null)
 			throw new IllegalArgumentException("time is null");		
 		if (this.getClass() != time.getClass())
@@ -262,9 +271,16 @@ public abstract class HighResolutionTime implements Comparable<HighResolutionTim
 		}
 	}
 
-	//	public static boolean waitForObject(Object target, HighResolutionTime time) {
-	//		return javax.safetycritical.PriorityScheduler.waitForObject(target, time);
-	//	}
+	//public static boolean waitForObject(Object target, HighResolutionTime<?> time) 
+	//public static boolean waitForObject(Object target, HighResolutionTime<? extends Object> time) 
+	
+	public static boolean waitForObject(Object target, HighResolutionTime<? extends HighResolutionTime<?>>  time) 
+	
+	{
+		return false;
+		
+		//return javax.safetycritical.PriorityScheduler.waitForObject(target, time);
+	}
 
 	// used for JML annotation only (not public)
 	Clock getClck() {

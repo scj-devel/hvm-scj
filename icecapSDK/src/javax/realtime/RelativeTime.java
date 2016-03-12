@@ -44,7 +44,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  *  
  */
 @SCJAllowed
-public class RelativeTime extends HighResolutionTime {
+public class RelativeTime extends HighResolutionTime<RelativeTime> {
 	/**
 	 * Equivalent to <code>RelativeTime(0,0)</code>.
 	 */
