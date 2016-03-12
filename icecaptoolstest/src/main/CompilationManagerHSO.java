@@ -2,6 +2,8 @@ package main;
 
 import java.io.FileOutputStream;
 
+import javax.realtime.TestPortalRT;
+
 import icecaptools.CompilationSequence;
 import icecaptools.HVMProperties;
 import icecaptools.NewList;
@@ -21,6 +23,8 @@ import util.ICompilationRegistry;
 public class CompilationManagerHSO {
 
 	public static void main(String args[]) throws Throwable {
+		TestPortalRT.setupVM();  
+		
 		boolean aotCompile = false;
 		boolean includeJMLMethods = true;
 		String pathSeparator = System.getProperty("path.separator");
@@ -97,10 +101,10 @@ public class CompilationManagerHSO {
 		//String inputPackage = "javax.safetycritical.test.cyclicschedule1";
 		//String inputPackage = "javax.safetycritical.test.cyclicexecutive1";
 	    //String inputPackage = "javax.safetycritical.test.memoryAreas";
-		String inputPackage = "javax.safetycritical.test.linearSequencer1";
+		//String inputPackage = "javax.safetycritical.test.linearSequencer2";
 
 
-		//String inputPackage = "javax.realtime.test";
+		String inputPackage = "javax.realtime.test";
 		//String inputPackage = "javax.safetycritical.test";
 
 		//String inputClass = "AllTests";
@@ -113,23 +117,27 @@ public class CompilationManagerHSO {
 		//String inputClass = "TckTestAperiodicParameters";
 		//String inputClass = "TckTestPriorityScheduler";        
 		//String inputClass = "TckTestPriorityParameters";   
-		//String inputClass = "TckTestHighResolutionTime";
+		String inputClass = "TckTestHighResolutionTime";
 		//String inputClass = "TckTestAbsoluteTime";        
 		//String inputClass = "TckTestRelativeTime";
 		//String inputClass = "TckTestClock";
+		//String inputClass = "TckTestRealtimeClock";
 
 		/* --- TCKs of javax.safetycritical.test --- : */
 		//String inputClass = "TckTestStorageParameters";
-		//String inputClass = "SafeletStub1"; //   TckTestCyclicExecutive1
-		//String inputClass = "TckTestFrame1";
-		//String inputClass = "TckTestCyclicSchedule1";  //            SafeletStub
+		//String inputClass = "SafeletStub1"; 
+		//String inputClass = "TckTestFrame2";
+		
+		//String inputClass = "TckTestCyclicExecutive1";
+		//String inputClass = "TckTestCyclicSchedule0";  
 		//String inputClass = "TckTestCyclicSchedule3";
 		//String inputClass = "TckTestSafelet1";
-		//String inputClass = "TckTestSafelet22";   //           SafeletStub22
+		//String inputClass = "TckTestSafelet22";   
 		
-		String inputClass = "TckTestLinearSequencer1";
+		//String inputClass = "TckTestLinearSequencer2";
 		//String inputClass = "TestSCJSingleCyclicExecutiveLinearMissSeq1";
 
+		//String inputClass = "TckTestPriorityCeilingEmulation";
 		//String inputClass = "TckTestPreemptiveScheduling1";
 		//String inputClass = "TckTestManagedMemory";
 
