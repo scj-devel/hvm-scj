@@ -105,7 +105,7 @@ public class TestSCJSingleMemoryAreaTracking {
 
 			PeriodicEventHandler pevh1 = new MyPeriodicEvh(new PriorityParameters(Priorities.PR97),
 					new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()), // start
-							new RelativeTime(2000, 0, Clock.getRealtimeClock())), // period
+							new RelativeTime(1000, 0, Clock.getRealtimeClock())), // period
 					storageParameters_Handlers, light, aevh); // used in pevh.handleAsyncEvent
 			pevh1.register();
 		}

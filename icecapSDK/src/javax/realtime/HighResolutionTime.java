@@ -55,7 +55,8 @@ import javax.safetycritical.annotate.SCJAllowed;
  *      <code>interface Comparable</code> <br>
  */
 @SCJAllowed
-public abstract class HighResolutionTime<T extends HighResolutionTime<T>> implements Comparable<T> {
+public abstract class HighResolutionTime<T extends HighResolutionTime<T>> 
+  implements Comparable<T>, Cloneable {
 	
 	Clock clock;
 	long millis;
@@ -174,7 +175,7 @@ public abstract class HighResolutionTime<T extends HighResolutionTime<T>> implem
 	 * @return true just when the parameter <code>time</code> is of the same 
 	 *   type and has the same values as <code>this</code>.
 	 */
-	public boolean equals(/*HighResolutionTime*/ T time) {
+	public boolean equals(T time) {
 		if (time == null)
 			return false;
 
@@ -183,20 +184,31 @@ public abstract class HighResolutionTime<T extends HighResolutionTime<T>> implem
 	}
 
 	public boolean equals(Object object) {
-		HighResolutionTime time = null;
-		if (object instanceof HighResolutionTime)
-			time = (HighResolutionTime) object;
-		if (object instanceof AbsoluteTime)
-			time = (AbsoluteTime) object;
-		if (object instanceof RelativeTime)
-			time = (RelativeTime) object;
-		else
-			time = null;
-		if (time == null || object == null)
+		
+//		HighResolutionTime<T> time = null;
+//		if (object instanceof HighResolutionTime)
+//			time = (HighResolutionTime<T>) object;
+//		if (object instanceof AbsoluteTime)
+//			time = (AbsoluteTime) object;
+//		if (object instanceof RelativeTime)
+//			time = (RelativeTime) object;
+//		else
+//			time = null;
+//		if (time == null || object == null)
+//			return false;
+//
+//		return (this.getClass() == time.getClass()) && (this.millis == time.getMilliseconds())
+//				&& (this.nanos == time.getNanoseconds()) && (this.clock == time.getClock());
+		
+		if (object == null) 
 			return false;
-
-		return (this.getClass() == time.getClass()) && (this.millis == time.getMilliseconds())
+		if (this.getClass() != object.getClass()) 
+			return false;
+		
+		HighResolutionTime<T> time = (HighResolutionTime<T>)object;
+		return (this.millis == time.getMilliseconds())
 				&& (this.nanos == time.getNanoseconds()) && (this.clock == time.getClock());
+		
 	}
 
 	/**
@@ -231,6 +243,17 @@ public abstract class HighResolutionTime<T extends HighResolutionTime<T>> implem
 			return 1;
 		else
 			return 0;
+	}
+	
+	public Object clone()  {
+		
+		try {
+		    return super.clone();  // shallow copy; not tested
+		}
+		catch (CloneNotSupportedException e) {
+			throw new Error ("HighResolutionTime.clone error");
+		}
+		
 	}
 
 	public String toString() {
