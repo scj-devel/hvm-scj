@@ -23,7 +23,7 @@ final class MulticoreHandlerBehavior extends HandlerBehavior {
 	}
 
 	@Override
-	void oneshotHandlerScheduleNextReleaseTime(OneShotEventHandler handler, HighResolutionTime time) {
+	void oneshotHandlerScheduleNextReleaseTime(OneShotEventHandler handler, HighResolutionTime<?> time) {
 		if (time == null)
 			handler.deschedule();
 		else {
