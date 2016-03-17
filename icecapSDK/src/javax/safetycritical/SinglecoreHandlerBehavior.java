@@ -22,7 +22,7 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 	}
 
 	@Override
-	void oneshotHandlerScheduleNextReleaseTime(OneShotEventHandler handler, HighResolutionTime time) {
+	void oneshotHandlerScheduleNextReleaseTime(OneShotEventHandler handler, HighResolutionTime<?> time) {
 		// to be implement
 	}
 

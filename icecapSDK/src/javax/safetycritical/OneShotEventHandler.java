@@ -62,7 +62,7 @@ import javax.safetycritical.annotate.SCJPhase;
 
 @SCJAllowed(Level.LEVEL_1)
 public abstract class OneShotEventHandler extends ManagedEventHandler {
-	HighResolutionTime releaseTime;
+	HighResolutionTime<?> releaseTime;
 	boolean deschedulePending = false;
 	int state = 0;
 
@@ -86,12 +86,12 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	 */
 	@SCJAllowed(Level.LEVEL_1)
 	@SCJPhase(Phase.INITIALIZATION)
-	public OneShotEventHandler(PriorityParameters priority, HighResolutionTime releaseTime,
+	public OneShotEventHandler(PriorityParameters priority, HighResolutionTime<?> releaseTime,
 			AperiodicParameters release, StorageParameters storage, ConfigurationParameters config) {
 		this(priority, releaseTime, release, storage, config, null);
 	}
 	
-	OneShotEventHandler(PriorityParameters priority, HighResolutionTime releaseTime,
+	OneShotEventHandler(PriorityParameters priority, HighResolutionTime<?> releaseTime,
 			AperiodicParameters release, StorageParameters storage, ConfigurationParameters config, String name) {
 		super(priority, release, storage, config, name);
 
@@ -129,7 +129,7 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 		return releaseTime.getNanoseconds() + releaseTime.getMilliseconds() * 1000000;
 	}
 	
-	public void scheduleNextReleaseTime(HighResolutionTime time) {
+	public void scheduleNextReleaseTime(HighResolutionTime<?> time) {
 		ManagedEventHandler.handlerBehavior.oneshotHandlerScheduleNextReleaseTime(this, time);
 	}
 	

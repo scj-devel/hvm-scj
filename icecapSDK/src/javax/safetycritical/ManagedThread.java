@@ -151,7 +151,7 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 	 * @param time
 	 * @throws java.lang.InterruptedException
 	 */
-	public static void sleep(HighResolutionTime time) throws java.lang.InterruptedException {
+	public static void sleep(HighResolutionTime<?> time) throws java.lang.InterruptedException {
 		vm.ClockInterruptHandler.instance.disable();
 		// get current process and reset the boolean value
 		ScjProcess current = PriorityScheduler.instance().current;

@@ -63,6 +63,12 @@ public abstract class HighResolutionTime<T extends HighResolutionTime<T>>
 	int nanos;
 
 	HighResolutionTime(long millis, int nanos, Clock clock) {
+		/* overflow */
+        if ( (millis >= 0 && nanos/1000000 > Long.MAX_VALUE - millis) || 
+        	 (millis < 0 && nanos/1000000 < Long.MIN_VALUE - millis) ) {
+        	throw new IllegalArgumentException("overflow");
+        }
+        
 		if (!isNormalized(millis, nanos)) {
 			setNormalized(millis, nanos);
 		} else {
@@ -151,6 +157,12 @@ public abstract class HighResolutionTime<T extends HighResolutionTime<T>>
 	 * @param nanos is the new value of the nanosecond component.
 	 */
 	public void set(long millis, int nanos) {
+		/* overflow */
+        if ( (millis >= 0 && nanos/1000000 > Long.MAX_VALUE - millis) || 
+        	 (millis < 0 && nanos/1000000 < Long.MIN_VALUE - millis) ) {
+        	throw new IllegalArgumentException("overflow");
+        }
+        
 		if (!isNormalized(millis, nanos))
 			setNormalized(millis, nanos);
 		else {
@@ -185,27 +197,12 @@ public abstract class HighResolutionTime<T extends HighResolutionTime<T>>
 
 	public boolean equals(Object object) {
 		
-//		HighResolutionTime<T> time = null;
-//		if (object instanceof HighResolutionTime)
-//			time = (HighResolutionTime<T>) object;
-//		if (object instanceof AbsoluteTime)
-//			time = (AbsoluteTime) object;
-//		if (object instanceof RelativeTime)
-//			time = (RelativeTime) object;
-//		else
-//			time = null;
-//		if (time == null || object == null)
-//			return false;
-//
-//		return (this.getClass() == time.getClass()) && (this.millis == time.getMilliseconds())
-//				&& (this.nanos == time.getNanoseconds()) && (this.clock == time.getClock());
-		
 		if (object == null) 
 			return false;
 		if (this.getClass() != object.getClass()) 
 			return false;
 		
-		HighResolutionTime<T> time = (HighResolutionTime<T>)object;
+		HighResolutionTime<?> time = (HighResolutionTime<?>)object;
 		return (this.millis == time.getMilliseconds())
 				&& (this.nanos == time.getNanoseconds()) && (this.clock == time.getClock());
 		
@@ -271,6 +268,7 @@ public abstract class HighResolutionTime<T extends HighResolutionTime<T>>
 	@IcecapCompileMe
 	// Don't remove this CompileMe annotation
 	final void setNormalized(final long ms, final int ns) {
+				
 		/*
 		 * Examples:
 		 *   3.12 millis =  3 millis and  120*1000 nanos

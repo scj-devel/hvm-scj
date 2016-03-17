@@ -34,7 +34,7 @@ public final class TestPortalRT {
 	/**
 	 * Used by test programs to create a <code>HighResolutionTime</code> stub object.	 
 	 */
-	public static class HighResolutionTimeStub extends HighResolutionTime {
+	public static class HighResolutionTimeStub extends HighResolutionTime<HighResolutionTimeStub> {
 		
 		/**
 		 * Constructs an <code>HighResolutionTimeStub</code> object. <br>
@@ -50,22 +50,18 @@ public final class TestPortalRT {
 		}
 	}
 	
-	public static final Clock getClck(HighResolutionTime ht) {
+	public static final Clock getClck(HighResolutionTime<?> ht) {
 		return ht.getClck();
 	}
 	
-	public static final long getMillis(HighResolutionTime ht) {
+	public static final long getMillis(HighResolutionTime<?> ht) {
 		return ht.getMillis();
 	}
 	
-	public static final int getNanos(HighResolutionTime ht) {
+	public static final int getNanos(HighResolutionTime<?> ht) {
 		return ht.getNanos();
 	}
-	
-	public static final boolean isNormalized(HighResolutionTime ht) {
-		return ht.isNormalized();
-	}
-	
+		
 	public static final RelativeTime getResol(Clock clck) {
 		return clck.getResol();
 	}

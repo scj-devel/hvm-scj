@@ -8,7 +8,7 @@ abstract class HandlerBehavior {
 
 	abstract boolean oneshotHandlerDeschedule(OneShotEventHandler handler);
 
-	abstract void oneshotHandlerScheduleNextReleaseTime(OneShotEventHandler handler, HighResolutionTime time);
+	abstract void oneshotHandlerScheduleNextReleaseTime(OneShotEventHandler handler, HighResolutionTime<?> time);
 
 	abstract void initMissionSequencer(MissionSequencer<?> handler);
 
