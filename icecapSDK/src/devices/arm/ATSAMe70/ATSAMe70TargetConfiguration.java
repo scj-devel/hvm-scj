@@ -5,12 +5,19 @@ import java.io.File;
 import devices.Console;
 import devices.TargetConfiguration;
 import devices.Writer;
+import icecaptools.IcecapCFunc;
+import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
 import icecaptools.IcecapInlineNative;
 import util.BaseTargetConfiguration;
 import vm.Machine;
+import vm.RealtimeClock.DefaultRealtimeClock;
 
 public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguration implements TargetConfiguration {
+
+	public static class ATSAMe70RealtimeClock extends DefaultRealtimeClock {
+
+	}
 
 	private static boolean initialized = false;
 	
@@ -71,6 +78,26 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 						"-i", "SWD", "-d", "atsame70q21", "program", "-f", "main.elf", } };
 	}
 
+	
+	@IcecapInlineNative(functionBody = ""
+			+ "{\n"
+			+ "   sysclk_init();\n"
+			+ "   board_init();\n"
+			+ "   ioport_init();\n"
+			+ "   delay_init(sysclk_get_cpu_hz());\n"
+			+ "   return -1;\n"
+			+ "}\n"
+			)
+	private static native void initNative();
+
+	protected static void init()
+	{
+		if (!initialized)
+		{
+			initNative();
+			initialized = true;
+		}
+	}
 	private String trim(String asfLocation) {
 		if (asfLocation.endsWith(File.separator)) {
 			return trim(asfLocation.substring(0, asfLocation.length() - 1));
@@ -113,7 +140,7 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 			+ "}\n",
 			requiredIncludes = "#include \"asf.h\"\n"
 			)
-	private static native void toggle_led();
+	protected static native void toggle_led();
 
 	@IcecapInlineNative(functionBody = ""
 			+ "{\n"
@@ -122,13 +149,40 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 			+ "}\n",
 			requiredIncludes = "#define EXAMPLE_LED_PORT (2)\n#define EXAMPLE_LED_MASK ((1 << 8))\n"
 			)
-	private static native void set_led_output();
+	protected static native void set_led_output();
 
+	@IcecapInlineNative(functionBody = "" + "{\n" + "   SysTick_Config(30000000);\n" + "   return -1;\n" + "}\n")
+	static native void initSystemTick();
+	
+	@IcecapCVar(expression = "systemTick", requiredIncludes = "extern volatile uint8 systemTick;")
+	private static byte systemTick;
+	
+	@IcecapCVar(expression = "systemClock", requiredIncludes = "extern volatile uint32 systemClock;")
+	private static byte systemClock;
+	
+	@IcecapCFunc(signature = "void SysTick_Handler(void)", requiredIncludes = "static int32 fp[4];")
+	private static void handleSystemTick() {
+		systemTick++;
+		systemClock++;
+	}
+	
 	public static class ATSAMe70Writer implements Writer {
 
 		@Override
 		public void write(byte[] bytes, short length) {
+			for (short i = 0; i < length; i++) {
+				putc(bytes[i]);
+			}
 		}
+
+		@IcecapInlineNative(functionBody = ""
+				+ "{\n"
+				+ "   putchar(sp[0] && 0xFF);\n"
+				+ "   return -1;\n"
+				+ "}\n",
+				requiredIncludes = "#include <stdio.h>\n"
+				)
+		private static native void putc(byte b);
 
 		@Override
 		public short getMaxLineLength() {

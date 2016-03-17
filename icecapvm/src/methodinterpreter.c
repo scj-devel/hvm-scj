@@ -54,6 +54,14 @@ extern unsigned char readBitFromIO(pointer address, unsigned short offset);
 const char* getClassName(unsigned short classIndex);
 const char* getMethodName(unsigned short methodIndex);
 
+#if defined(CREATEMULTIDIMENSIONALARRAYS_USED) || defined(MULTIANEWARRAY_OPCODE_USED) || defined(IMUL_OPCODE_USED) || defined(ANEWARRAY_OPCODE_USED) || defined(NEWFLASHARRAY_OPCODE_USED) || defined(NEWARRAY_OPCODE_USED) || defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0) || defined(N_JAVA_LANG_REFLECT_ARRAY_NEWARRAY) || defined(IREM_OPCODE_USED) || defined(IMOD_USED) || defined(AASTORE_OPCODE_USED) || defined(FASTORE_OPCODE_USED) || defined(BASTORE_OPCODE_USED) || defined(CASTORE_OPCODE_USED) || defined(SASTORE_OPCODE_USED) || defined(LASTORE_OPCODE_USED) || defined(IASTORE_OPCODE_USED) ||  defined(FALOAD_OPCODE_USED) || defined(AALOAD_OPCODE_USED) || defined(BALOAD_OPCODE_USED) || defined(CALOAD_OPCODE_USED) || defined(SALOAD_OPCODE_USED) || defined(LALOAD_OPCODE_USED) || defined(IALOAD_OPCODE_USED) || defined(INVOKE_CLONE_ONARRAY_USED) || defined(HANDLECLONEONARRAY_USED) || defined(N_JAVA_LANG_SYSTEM_ARRAYCOPY) || defined(CREATEARRAY_USED) || defined(IMUL_USED)
+int32 imul(int32 x, int32 y);
+#endif
+
+#if defined(LSUB_OPCODE_USED) || defined(LADD_OPCODE_USED) || defined(LOR_OPCODE_USED) || defined(LXOR_OPCODE_USED) || defined(LAND_OPCODE_USED) || defined(HANDLELONGOPERATOR_USED) || defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED)
+void ladd(uint32* msb1, uint32* lsb1, uint32 msb2, uint32 lsb2);
+#endif
+
 #if defined(JAVA_LANG_THROWABLE_INIT_)
 void handleException(unsigned short classIndex);
 #endif
@@ -1080,7 +1088,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 				uint16* ptr;
 				uint16 length;
 				if (array != 0) {
-					ptr = (uint16*) (HEAP_REF(array, unsigned char*) + sizeof(Object));
+					ptr = (uint16*) (pointer) (HEAP_REF(array, unsigned char*) + sizeof(Object));
 #ifdef FLASHSUPPORT
 					if (isRomRef((uint8*)array)) {
 						length = get_rom_dword((uint8*)ptr);
@@ -1846,7 +1854,7 @@ unsigned char* createArrayFromElementSize(unsigned short classIndex, unsigned ch
 #endif
 
 	if (array != 0) {
-		setClassIndex((Object*) array, classIndex);
+		setClassIndex((Object*) (pointer) array, classIndex);
 #ifdef FLASHSUPPORT
 		if (flash) {
 			set_rom_dword(array + sizeof(Object), count);
@@ -1854,7 +1862,7 @@ unsigned char* createArrayFromElementSize(unsigned short classIndex, unsigned ch
 			*(int32 *) (HEAP_REF(array, unsigned char*) + sizeof(Object)) = count;
 		}
 #else
-		*(uint16 *) (HEAP_REF(array, unsigned char*) + sizeof(Object)) = count;
+		*(uint16 *) (pointer) (HEAP_REF(array, unsigned char*) + sizeof(Object)) = count;
 #endif
 	}
 	return array;
@@ -1864,7 +1872,7 @@ unsigned char* createArrayFromElementSize(unsigned short classIndex, unsigned ch
 #if defined(IREM_OPCODE_USED) || defined(IDIV_OPCODE_USED) || defined(IDIV_USED) || defined(IMOD_USED)
 int32 idiv(int32 x, int32 y) {
 	int32 result = 0;
-	uint32 k, sum;
+	int32 k, sum;
 	unsigned char isMinus;
 
 	if (x < 0) {
@@ -2781,7 +2789,7 @@ static unsigned char handleAStore(int32* sp, const unsigned char *method_code) {
 		if (pgm_read_byte(method_code) == AASTORE_OPCODE) {
 			elementSize = 4;
 		} else {
-			unsigned short classIndex = getClassIndex((Object*) array);
+			unsigned short classIndex = getClassIndex((Object*) (pointer) array);
 			elementSize = getElementSize(classIndex);
 		}
 
@@ -2801,7 +2809,7 @@ static unsigned char handleAStore(int32* sp, const unsigned char *method_code) {
 				*ptr = lsb & 0xff;
 				break;
 				case 2:
-				*((unsigned short *) ptr) = lsb & 0xffff;
+				*((unsigned short *) (pointer) ptr) = lsb & 0xffff;
 				break;
 				case 4:
 #if defined(GC_GARBAGECOLLECTOR_WRITEBARRIER_USED)
@@ -2810,12 +2818,12 @@ static unsigned char handleAStore(int32* sp, const unsigned char *method_code) {
 					gc_GarbageCollector_writeBarrier(sp, (int32)(pointer)array, *((int32*) ptr));
 				}
 #endif
-				*((uint32 *) ptr) = lsb;
+				*((uint32 *) (pointer) ptr) = lsb;
 				break;
 				case 8:
-				*((uint32 *) ptr) = msb;
+				*((uint32 *) (pointer) ptr) = msb;
 				ptr += 4;
-				*((uint32 *) ptr) = lsb;
+				*((uint32 *) (pointer) ptr) = lsb;
 				break;
 			}
 			return count;
@@ -2835,7 +2843,7 @@ static unsigned char handleALoad(int32* sp, const unsigned char *method_code) {
 	uint8 count = 0;
 
 	if (array != 0) {
-		if (index < *(uint16*) (HEAP_REF(array, unsigned char*) + sizeof(Object))) {
+		if (index < *(uint16*) (pointer) (HEAP_REF(array, unsigned char*) + sizeof(Object))) {
 			unsigned char elementSize;
 			unsigned char* ptr;
 			int32 lsb = 0, msb = 0;
@@ -2843,7 +2851,7 @@ static unsigned char handleALoad(int32* sp, const unsigned char *method_code) {
 			if (pgm_read_byte(method_code) == AALOAD_OPCODE) {
 				elementSize = 4;
 			} else {
-				unsigned short classIndex = getClassIndex((Object*) array);
+				unsigned short classIndex = getClassIndex((Object*) (pointer) array);
 				elementSize = getElementSize(classIndex);
 			}
 
@@ -2863,15 +2871,15 @@ static unsigned char handleALoad(int32* sp, const unsigned char *method_code) {
 					lsb = *(signed char*) ptr;
 					break;
 					case 2:
-					lsb = *((signed short *) ptr);
+					lsb = *((signed short *) (pointer) ptr);
 					break;
 					case 4:
-					lsb = *((uint32 *) ptr);
+					lsb = *((uint32 *) (pointer) ptr);
 					break;
 					case 8:
-					msb = *((uint32 *) ptr);
+					msb = *((uint32 *) (pointer) ptr);
 					ptr += 4;
-					lsb = *((uint32 *) ptr);
+					lsb = *((uint32 *) (pointer) ptr);
 					break;
 				}
 				if (pgm_read_byte(method_code) == LALOAD_OPCODE) {
@@ -2998,7 +3006,7 @@ unsigned char handleLDCWithIndex(int32* sp, unsigned short index) {
 		*sp++ = lsi;
 		count++;
 	} else if (type == CONSTANT_DOUBLE) {
-		*(double*) sp = *(const double*) pgm_read_pointer(&constant->data, const void **);
+		* (double*) (pointer) sp = *(const double*) pgm_read_pointer(&constant->data, const void **);
 		sp += 2;
 		count += 2;
 	}
