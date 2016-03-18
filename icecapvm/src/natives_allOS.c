@@ -2798,6 +2798,39 @@ void breakPointHit(unsigned short methodNumber, unsigned short pc)
 
 #endif
 
+#if defined (N_JAVA_LANG_CLASS_ISASSIGNABLEFROM)
+static int32 isAssignableFrom(unsigned short super, unsigned short sub)
+{
+	if (super == sub)
+	{
+		return 1;
+	}
+	else if (sub == JAVA_LANG_OBJECT)
+	{
+		return 0;
+	}
+	else
+	{
+		return isAssignableFrom(super, pgm_read_word(&classes[sub].superClass));
+	}
+}
+
+int16 n_java_lang_Class_isAssignableFrom(int32 *sp)
+{
+	Object* class1 = (Object*)(pointer)sp[0];
+	Object* class2 = (Object*)(pointer)sp[1];
+
+	unsigned short classIndex1 = *(unsigned short *) ((unsigned char*) HEAP_REF(class1, Object*)	+ sizeof(Object));
+	unsigned short classIndex2 = *(unsigned short *) ((unsigned char*) HEAP_REF(class2, Object*)	+ sizeof(Object));
+
+
+	sp[0] = isAssignableFrom(classIndex1, classIndex2);
+
+	return -1;
+}
+#endif
+
+
 void unimplemented(int16 mid) {
 	if (mid > 0) {
 		printROMStr("unimplemented ");
