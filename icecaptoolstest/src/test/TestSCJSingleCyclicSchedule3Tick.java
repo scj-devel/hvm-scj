@@ -128,7 +128,8 @@ public class TestSCJSingleCyclicSchedule3Tick
         Const.IMMORTAL_MEM = 23 * 1000;
         Const.MISSION_MEM  =  3 * 1000;
         Const.PRIVATE_MEM  =  1 * 1000;
-         
+        Const.HANDLER_STACK_SIZE = Const.STACK_UNIT;
+        
   	  storageParameters_Sequencer = 
           new StorageParameters(
               Const.OUTERMOST_SEQ_BACKING_STORE,
