@@ -159,7 +159,7 @@ public class TestSCJSingleMemoryAreaTracking {
 		Const.IMMORTAL_MEM = 20 * 1000;
 		Const.MISSION_MEM = 23 * 1000;
 		Const.PRIVATE_MEM = 2 * 1000;
-
+		Const.HANDLER_STACK_SIZE = Const.STACK_UNIT;
 		Const.MEMORY_TRACKER_AREA_SIZE = 30000;
 
 		Memory.startMemoryAreaTracking();
