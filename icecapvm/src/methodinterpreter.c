@@ -90,7 +90,7 @@ extern void printByte(unsigned char byte);
 extern unsigned short getClassIndex(Object* obj);
 extern void setClassIndex(Object* obj, unsigned short classIndex);
 
-unsigned char* createArrayFromElementSize(unsigned short classIndex, unsigned char elementSize, uint16 count FLASHARG(uint8 flash));
+Object* createArrayFromElementSize(unsigned short classIndex, unsigned char elementSize, uint16 count FLASHARG(uint8 flash));
 unsigned char handleNewClassIndex(int32* sp, unsigned short classIndex);
 
 #if defined(WIDE_OPCODE_USED)
@@ -99,7 +99,7 @@ static signed short handleWide(int32* fp, int32* sp, const unsigned char *method
 
 extern int16 dispatch_native_func(int16 functionNumber, int32 *sp);
 
-unsigned char* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash)) _NOINLINE_;
+Object* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash)) _NOINLINE_;
 unsigned char checkImplements(Object* object, unsigned short interfaceIndex) _NOINLINE_;
 int32 lmul32(int32* sp, uint32 xmsb, uint32 xlsb, uint32 ymsb, uint32 ylsb);
 int32 idiv(int32 a, int32 b) _NOINLINE_;
@@ -1061,7 +1061,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 				unsigned short classIndex = pgm_read_byte(++method_code) << 8;
 				classIndex |= pgm_read_byte(++method_code);
 
-				array = (Object*) createArray(classIndex, (uint16) count FLASHARG((code == NEWFLASHARRAY_OPCODE)));
+				array = createArray(classIndex, (uint16) count FLASHARG((code == NEWFLASHARRAY_OPCODE)));
 
 				if (array != 0) {
 #if defined(GC_GARBAGECOLLECTOR_NEWBARRIER_USED)
@@ -1823,7 +1823,7 @@ unsigned char getElementSize(unsigned short classIndex) {
 }
 
 #if defined(CREATEMULTIDIMENSIONALARRAYS_USED) || defined(MULTIANEWARRAY_OPCODE_USED) || defined(ANEWARRAY_OPCODE_USED) || defined(NEWFLASHARRAY_OPCODE_USED) || defined(NEWARRAY_OPCODE_USED) || defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0) || defined(INVOKE_CLONE_ONARRAY_USED) || defined(HANDLECLONEONARRAY_USED) || defined(CREATEARRAY_USED)
-unsigned char* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash)) {
+Object* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash)) {
 	unsigned char elementSize;
 
 	elementSize = getElementSize(classIndex);
@@ -1833,8 +1833,8 @@ unsigned char* createArray(unsigned short classIndex, uint16 count FLASHARG(uint
 #endif
 
 #if defined(CREATEMULTIDIMENSIONALARRAYS_USED) || defined(MULTIANEWARRAY_OPCODE_USED) || defined(ANEWARRAY_OPCODE_USED) || defined(NEWFLASHARRAY_OPCODE_USED) || defined(NEWARRAY_OPCODE_USED) || defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0) || defined(INVOKE_CLONE_ONARRAY_USED) || defined(HANDLECLONEONARRAY_USED) || defined(N_JAVA_LANG_REFLECT_ARRAY_NEWARRAY) || defined(CREATEARRAY_USED)
-unsigned char* createArrayFromElementSize(unsigned short classIndex, unsigned char elementSize, uint16 count FLASHARG(uint8 flash)) {
-	unsigned char* array;
+Object* createArrayFromElementSize(unsigned short classIndex, unsigned char elementSize, uint16 count FLASHARG(uint8 flash)) {
+	Object* array;
 	uint32 size;
 
 #if defined(GLIBC_DOES_NOT_SUPPORT_MUL)
@@ -1845,19 +1845,19 @@ unsigned char* createArrayFromElementSize(unsigned short classIndex, unsigned ch
 
 #ifdef FLASHSUPPORT
 	if (flash) {
-		array = (unsigned char*) gc_allocateObject(0, size);
+		array = gc_allocateObject(0, size);
 	} else {
-		array = (unsigned char*) gc_allocateObject(size, 0);
+		array = gc_allocateObject(size, 0);
 	}
 #else
-	array = (unsigned char*) gc_allocateObject(size, 0);
+	array = gc_allocateObject(size, 0);
 #endif
 
 	if (array != 0) {
-		setClassIndex((Object*) (pointer) array, classIndex);
+		setClassIndex(array, classIndex);
 #ifdef FLASHSUPPORT
 		if (flash) {
-			set_rom_dword(array + sizeof(Object), count);
+			set_rom_dword(((unsigned char*)array) + sizeof(Object), count);
 		} else {
 			*(int32 *) (HEAP_REF(array, unsigned char*) + sizeof(Object)) = count;
 		}
@@ -1895,7 +1895,7 @@ int32 idiv(int32 x, int32 y) {
 	while (y <= x) {
 		k = 1;
 		sum = y;
-		while ((sum << 1) <= x) {
+		while ((sum << 1) <= (uint32)x) {
 			sum = sum << 1;
 			k = k << 1;
 		}
@@ -2235,12 +2235,12 @@ Object* createMultiDimensionalArrays(int32* sp, unsigned char dimensions, unsign
 
 	if (dimensions == 1)
 	{
-		array = (Object*) createArray(classIndex, (uint16) *(sp - dimensions) FLASHARG(flash));
+		array = createArray(classIndex, (uint16) *(sp - dimensions) FLASHARG(flash));
 	}
 	else
 	{
 		uint16 count = (uint16) *(sp - dimensions);
-		uint32* arrays = (uint32*)createArrayFromElementSize(classIndex, 4, count FLASHARG(flash));
+		uint32* arrays = (uint32*) (pointer) createArrayFromElementSize(classIndex, 4, count FLASHARG(flash));
 		unsigned short index;
 		for (index = 0; index < count; index++)
 		{
@@ -3060,7 +3060,7 @@ signed char handleCloneOnArray(int32* sp) {
 	unsigned char* dst;
 	unsigned char* src;
 	uint16 count;
-	unsigned char* clone = 0;
+	Object* clone = 0;
 
 	unsigned char* array = (unsigned char*) (pointer) *(--sp);
 	if (array != 0) {

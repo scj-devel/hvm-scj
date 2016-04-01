@@ -129,7 +129,7 @@ static void popDefaultArea(void);
 static Object* gc_allocateObjectInArea(unsigned short dobjectSize,
 		unsigned short pobjectSize);
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0)
-static Object* initializeStringObject(int32* sp, unsigned char *charArrayObject);
+static Object* initializeStringObject(int32* sp, Object *charArrayObject);
 Object* createStringObject(int32 size, const char* data, int32* sp);
 #endif
 Object* getClass(unsigned short classIndex);
@@ -478,9 +478,9 @@ int16 n_java_lang_StringBuilder_append(int32 *sp) {
 #endif
 
 #if defined(N_JAVA_LANG_STRING_INIT_)
-extern unsigned char* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash));
+extern Object* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash));
 int16 n_java_lang_String_init_(int32 *sp) {
-	unsigned char *charArrayObject;
+	Object *charArrayObject;
 	unsigned char* bytes = (unsigned char*) (pointer) sp[1];
 	int32 offset = sp[2];
 	int32 nb = sp[3];
@@ -915,9 +915,9 @@ static Object* gc_allocateObjectInArea(unsigned short dobjectSize,
 }
 
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0)
-extern unsigned char* createArray(unsigned short classIndex,
+extern Object* createArray(unsigned short classIndex,
 		uint16 count FLASHARG(uint8 flash));
-static Object* initializeStringObject(int32* sp, unsigned char *charArrayObject) {
+static Object* initializeStringObject(int32* sp, Object *charArrayObject) {
 	unsigned short dobjectSize, pobjectSize, classIndex;
 	Object* stringObject;
 
@@ -936,7 +936,7 @@ static Object* initializeStringObject(int32* sp, unsigned char *charArrayObject)
 }
 
 Object* createStringObject(int32 size, const char* data, int32* sp) {
-	unsigned char *charArrayObject;
+	Object *charArrayObject;
 	int32 count;
 	Object* object;
 
@@ -1126,14 +1126,14 @@ int16 n_java_security_AccessController_doPrivileged(int32 *sp) {
  * return: java.lang.Object
  */
 #ifdef N_JAVA_LANG_REFLECT_ARRAY_NEWARRAY
-extern unsigned char* createArrayFromElementSize(unsigned short classIndex,
+extern Object* createArrayFromElementSize(unsigned short classIndex,
 		unsigned char elementSize, uint16 count FLASHARG(uint8 flash));
 
 int16 n_java_lang_reflect_Array_newArray(int32 *sp) {
 	Object* class = (Object*) (pointer) sp[0];
 	int32 size = sp[1];
 	unsigned short classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(class, Object*) + sizeof(Object));
-	unsigned char* array = 0;
+	Object* array = 0;
 	unsigned char elementSize = 0;
 
 	if (classIndex == JAVA_LANG_OBJECT_var) {
