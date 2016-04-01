@@ -6,7 +6,7 @@ import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
 
 public class ClassInfoX86_32 extends ClassInfo {
-	@IcecapCVar(expression = "classes", requiredIncludes = "#include \"types.h\"\n#include \"classes.h\"\nextern const ClassInfo *classes;\n")
+	@IcecapCVar(expression = "(pointer)classes", requiredIncludes = "#include \"types.h\"\n#include \"classes.h\"\nextern const ClassInfo *classes;\n")
 	protected static int classes;
 	
 	public int interfaces;

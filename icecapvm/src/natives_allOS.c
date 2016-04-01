@@ -129,7 +129,7 @@ static void popDefaultArea(void);
 static Object* gc_allocateObjectInArea(unsigned short dobjectSize,
 		unsigned short pobjectSize);
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0)
-static Object* initializeStringObject(int32* sp, unsigned char *charArrayObject);
+static Object* initializeStringObject(int32* sp, Object *charArrayObject);
 Object* createStringObject(int32 size, const char* data, int32* sp);
 #endif
 Object* getClass(unsigned short classIndex);
@@ -917,7 +917,7 @@ static Object* gc_allocateObjectInArea(unsigned short dobjectSize,
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0)
 extern Object* createArray(unsigned short classIndex,
 		uint16 count FLASHARG(uint8 flash));
-static Object* initializeStringObject(int32* sp, unsigned char *charArrayObject) {
+static Object* initializeStringObject(int32* sp, Object *charArrayObject) {
 	unsigned short dobjectSize, pobjectSize, classIndex;
 	Object* stringObject;
 
