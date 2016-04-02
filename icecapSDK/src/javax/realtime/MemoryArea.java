@@ -73,6 +73,29 @@ public abstract class MemoryArea extends Object {
 	private int reservedEnd;
 
 	private int maxUsage;
+	
+	
+	// TCK memory begin -------------------------------------------------
+	
+	static MemoryArea memoryAreaForTckTest = null;
+	
+	static MemoryArea allocateTckTestMem(int size) {
+		if (memoryAreaForTckTest == null) {
+		    System.out.println("MemoryArea: allocateTckTestMem: not implemented");
+		}
+		
+		return memoryAreaForTckTest;
+	}
+	
+    void enterTckTestMem() {
+		System.out.println("MemoryArea: enterTckMem");
+	}
+	
+    void resetTckTestMem() {
+    	System.out.println("MemoryArea: resetTckMem");
+	}
+    
+   // TCK memory end ----------------------------------------------------
 
 	/**
 	 * Dummy constructor for javax.realtime.ImmortalMemory
@@ -99,12 +122,6 @@ public abstract class MemoryArea extends Object {
 	 *    The size of the reserved area in the backing store in which this memory area is located. This must be 
 	 *    larger than or the same as the initialSize  
 	 */
-	//	/*@ 
-	//	  behavior    
-	//	    requires size > 0;   
-	//	    ensures size() == size && memoryConsumed() == 0;
-	//	@*/
-
 	@IcecapCompileMe
 	protected MemoryArea(int initialSize, int reservedSize, MemoryArea backingStoreProvider, String label) {
 		int base = backingStoreProvider.reservedEnd - backingStoreProvider.getRemainingBackingstoreSize();

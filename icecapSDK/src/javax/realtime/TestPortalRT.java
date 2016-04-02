@@ -1,5 +1,6 @@
 package javax.realtime;
 
+import javax.safetycritical.ManagedMemory;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 import javax.scj.util.Priorities;
@@ -29,6 +30,25 @@ public final class TestPortalRT {
 	public static void setupVM() {
 		// VM set for 64 bits
 		Machine.setMachineFactory(new POSIX64BitMachineFactory());  
+	}
+	
+	/**
+	 * Used by test programs to allocate some memory for local test objects
+	 * because HVM has no garbage collector.
+	 * PS: It is not for use when testing a full SCJ program.
+	 */	
+	public static MemoryArea allocateMemoryForTckTest(int size) {
+		
+		return MemoryArea.allocateTckTestMem(size);
+		
+	}
+	
+	public static void enterTckMem(MemoryArea tckMem) {
+		tckMem.enterTckTestMem();
+	}
+	
+    public static void resetTckMem(MemoryArea tckMem) {
+    	tckMem.resetTckTestMem();
 	}
 	
 	/**
