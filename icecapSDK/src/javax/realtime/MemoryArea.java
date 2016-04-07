@@ -99,12 +99,6 @@ public abstract class MemoryArea extends Object {
 	 *    The size of the reserved area in the backing store in which this memory area is located. This must be 
 	 *    larger than or the same as the initialSize  
 	 */
-	//	/*@ 
-	//	  behavior    
-	//	    requires size > 0;   
-	//	    ensures size() == size && memoryConsumed() == 0;
-	//	@*/
-
 	@IcecapCompileMe
 	protected MemoryArea(int initialSize, int reservedSize, MemoryArea backingStoreProvider, String label) {
 		int base = backingStoreProvider.reservedEnd - backingStoreProvider.getRemainingBackingstoreSize();
