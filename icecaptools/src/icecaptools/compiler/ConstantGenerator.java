@@ -107,7 +107,7 @@ public class ConstantGenerator {
 					break;
 				case LDCConstant.INTEGER:
 					type = "CONSTANT_INTEGER";
-					buffer.print(" { " + type + ", " + current.getInt() + ", 0, 0 }");
+					buffer.print(" { " + type + ", 0x" + Integer.toHexString(current.getInt()) + ", 0, 0 }");
 					break;
 				case LDCConstant.FLOAT: {
 					float f = current.getFloat();
