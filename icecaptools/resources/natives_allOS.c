@@ -104,7 +104,7 @@ int16 n_test_TestInvokeNative1_Super_testNativeStatic(int32 *sp);
 int16 n_test_TestInvokeNative2_Super_testNativeStatic(int32 *sp);
 #endif
 #ifdef N_JAVA_LANG_CLASS_GETPRIMITIVECLASS
-static int32 _streq(char* str1, char* str2);
+static int32 _streq(const char* str1, const char* str2);
 static char* getCString(unsigned char* strObj);
 int16 n_java_lang_Class_getPrimitiveClass(int32 *sp);
 #endif
@@ -113,8 +113,8 @@ int16 n_java_lang_System_currentTimeMillis(int32 *sp);
 #endif
 void* getPointer(int32 val);
 #ifdef N_JAVA_LANG_SYSTEM_ARRAYCOPY
-static void arraycopy(unsigned char* src, unsigned short srcPos,
-		unsigned char* dst, unsigned short dstPos, unsigned short length);
+static void arraycopy(Object* osrc, unsigned short srcPos,
+		Object* odst, unsigned short dstPos, unsigned short length);
 int16 n_java_lang_System_arraycopy(int32 *sp);
 #endif
 #ifdef N_JAVA_LANG_OBJECT_GETCLASS
@@ -653,7 +653,7 @@ int16 n_test_TestInvokeNative2_Super_testNativeStatic(int32 *sp) {
  * return: java.lang.Class
  */
 #ifdef N_JAVA_LANG_CLASS_GETPRIMITIVECLASS
-static int32 _streq(char* str1, char* str2) {
+static int32 _streq(const char* str1, const char* str2) {
 	int32 length1 = _strlen(str1);
 	int32 length2 = _strlen(str2);
 	if (length1 == length2) {
@@ -729,17 +729,17 @@ static char* getCString(unsigned char* strObj) {
 int16 n_java_lang_Class_getPrimitiveClass(int32 *sp) {
 	int32 classIndex;
 	unsigned char* strObj = (unsigned char*) (pointer) sp[0];
-	char* buffer = getCString(strObj);
+	char* _buf = getCString(strObj);
 
-	if (_streq((char*) buffer, "int")) {
+	if (_streq((const char*) _buf, "int")) {
 		classIndex = JAVA_LANG_INTEGER_var;
-	} else if (_streq((char*) buffer, "byte")) {
+	} else if (_streq((const char*) _buf, "byte")) {
 		classIndex = JAVA_LANG_BYTE_var;
-	} else if (_streq((char*) buffer, "short")) {
+	} else if (_streq((const char*) _buf, "short")) {
 		classIndex = JAVA_LANG_SHORT_var;
-	} else if (_streq((char*) buffer, "boolean")) {
+	} else if (_streq((const char*) _buf, "boolean")) {
 		classIndex = JAVA_LANG_BOOLEAN_var;
-	} else if (_streq((char*) buffer, "long")) {
+	} else if (_streq((const char*) _buf, "long")) {
 		classIndex = JAVA_LANG_LONG_var;
 	} else {
 		classIndex = JAVA_LANG_OBJECT_var;
@@ -747,7 +747,7 @@ int16 n_java_lang_Class_getPrimitiveClass(int32 *sp) {
 	{
 		Object* class = getClass(classIndex);
 		if (class != 0) {
-			sp[0] = (int32) (pointer) getClass(classIndex);
+			sp[0] = (int32) (pointer) class;
 			return -1;
 		} else {
 			return JAVA_LANG_OUTOFMEMORYERROR_var;
@@ -784,22 +784,24 @@ void* getPointer(int32 val) {
  * return: void
  */
 #ifdef N_JAVA_LANG_SYSTEM_ARRAYCOPY
-static void arraycopy(unsigned char* src, unsigned short srcPos,
-		unsigned char* dst, unsigned short dstPos, unsigned short length) {
+static void arraycopy(Object* osrc, unsigned short srcPos,
+		Object* odst, unsigned short dstPos, unsigned short length) {
 	unsigned char elementSize;
 	unsigned short count;
+	unsigned char* src;
+	unsigned char* dst;
 
-	elementSize = getElementSize(getClassIndex((Object*) src));
+	elementSize = getElementSize(getClassIndex(osrc));
 
 #if defined(GLIBC_DOES_NOT_SUPPORT_MUL)
-	src = HEAP_REF(src, unsigned char*) + sizeof(Object) + 2 + imul(srcPos, elementSize);
-	dst = HEAP_REF(dst, unsigned char*) + sizeof(Object) + 2 + imul(dstPos, elementSize);
+	src = HEAP_REF(osrc, unsigned char*) + sizeof(Object) + 2 + imul(srcPos, elementSize);
+	dst = HEAP_REF(odst, unsigned char*) + sizeof(Object) + 2 + imul(dstPos, elementSize);
 
 	count = imul(length, elementSize);
 #else
-	src = HEAP_REF(src, unsigned char*) + sizeof(Object) + 2
+	src = HEAP_REF(osrc, unsigned char*) + sizeof(Object) + 2
 	+ (srcPos * elementSize);
-	dst = HEAP_REF(dst, unsigned char*) + sizeof(Object) + 2
+	dst = HEAP_REF(odst, unsigned char*) + sizeof(Object) + 2
 	+ (dstPos * elementSize);
 
 	count = length * elementSize;
@@ -812,15 +814,15 @@ static void arraycopy(unsigned char* src, unsigned short srcPos,
 }
 
 int16 n_java_lang_System_arraycopy(int32 *sp) {
-	unsigned char* src;
+	Object* src;
 	unsigned short srcPos;
-	unsigned char* dst;
+	Object* dst;
 	unsigned short dstPos;
 	unsigned short length;
 
-	src = (unsigned char*) getPointer(sp[0]);
+	src = (Object*) getPointer(sp[0]);
 	srcPos = sp[1];
-	dst = (unsigned char*) getPointer(sp[2]);
+	dst = (Object*) getPointer(sp[2]);
 	dstPos = sp[3];
 	length = sp[4];
 
