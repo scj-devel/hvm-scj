@@ -123,17 +123,23 @@ int16 n_java_lang_Object_getClass(int32 *sp);
 #if defined(N_JAVA_LANG_CLASS_GETSUPERCLASS)
 int16 n_java_lang_Class_getSuperclass(int32 *sp);
 #endif
-#if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(GETCLASS_USED)
-static void pushDefaultArea(void);
-static void popDefaultArea(void);
-static Object* gc_allocateObjectInArea(unsigned short dobjectSize,
-		unsigned short pobjectSize);
+
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0)
 static Object* initializeStringObject(int32* sp, Object *charArrayObject);
 Object* createStringObject(int32 size, const char* data, int32* sp);
 #endif
-Object* getClass(unsigned short classIndex);
+
+
+#if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0) || defined(LDC_CLASS) || defined(GETCLASS_USED) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(N_JAVA_LANG_CLASS_GETCONSTRUCTOR)
+static void pushDefaultArea(void);
+static void popDefaultArea(void);
 #endif
+
+
+#if defined(LDC_CLASS) || defined(GETCLASS_USED) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(N_JAVA_LANG_CLASS_GETCONSTRUCTOR)
+static Object* gc_allocateObjectInArea(unsigned short dobjectSize, unsigned short pobjectSize);
+#endif
+
 #if defined(N_JAVA_LANG_CLASS_NEWINSTANCE)
 static int16 newInstance(int32* sp, unsigned short classIndex);
 #endif
@@ -363,7 +369,9 @@ int16 n_vm_FullStackAnanlyser_get_java_stack_array(int32 *sp);
 int16 initializeConstants(int32* sp);
 #endif
 
+#if defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(LDC_CLASS)
 Object* getClass(unsigned short classIndex);
+#endif
 
 #if defined(ENABLE_DEBUG)
 typedef struct _methodLocation
@@ -799,9 +807,9 @@ static void arraycopy(Object* osrc, unsigned short srcPos,
 
 	count = imul(length, elementSize);
 #else
-	src = HEAP_REF(osrc, unsigned char*) + sizeof(Object) + 2
+	src = (unsigned char*)HEAP_REF(osrc, unsigned char*) + sizeof(Object) + 2
 	+ (srcPos * elementSize);
-	dst = HEAP_REF(odst, unsigned char*) + sizeof(Object) + 2
+	dst = (unsigned char*)HEAP_REF(odst, unsigned char*) + sizeof(Object) + 2
 	+ (dstPos * elementSize);
 
 	count = length * elementSize;
@@ -873,49 +881,6 @@ static uint8 scopeCount = 0;
 extern pthread_key_t key;
 #endif
 
-static void pushDefaultArea(void) {
-	if (heapArea != 0) {
-		if (scopeCount == 0) {
-			#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
-				current = pthread_getspecific(key);
-			    pthread_setspecific(key, heapArea);
-			#else
-				current = currentMemoryArea;
-				currentMemoryArea = heapArea;
-			#endif
-
-		}
-		scopeCount++;
-	}
-}
-
-static void popDefaultArea(void) {
-	if (heapArea != 0) {
-		if (scopeCount == 1) {
-			#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
-			 	pthread_setspecific(key, current);
-			#else
-			    currentMemoryArea = current;
-			#endif
-
-		}
-		scopeCount--;
-	}
-}
-
-static Object* gc_allocateObjectInArea(unsigned short dobjectSize,
-		unsigned short pobjectSize) {
-	Object *obj = 0;
-
-	pushDefaultArea();
-
-	obj = gc_allocateObject(dobjectSize, pobjectSize);
-
-	popDefaultArea();
-
-	return obj;
-}
-
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0)
 extern Object* createArray(unsigned short classIndex,
 		uint16 count FLASHARG(uint8 flash));
@@ -961,8 +926,58 @@ Object* createStringObject(int32 size, const char* data, int32* sp) {
 	return object;
 }
 #endif
+#endif
 
-Object* getClass(unsigned short classIndex) {
+#if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0) || defined(LDC_CLASS) || defined(GETCLASS_USED) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(N_JAVA_LANG_CLASS_GETCONSTRUCTOR)
+static void pushDefaultArea(void) {
+	if (heapArea != 0) {
+		if (scopeCount == 0) {
+			#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+				current = pthread_getspecific(key);
+			    pthread_setspecific(key, heapArea);
+			#else
+				current = currentMemoryArea;
+				currentMemoryArea = heapArea;
+			#endif
+
+		}
+		scopeCount++;
+	}
+}
+
+static void popDefaultArea(void) {
+	if (heapArea != 0) {
+		if (scopeCount == 1) {
+			#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+			 	pthread_setspecific(key, current);
+			#else
+			    currentMemoryArea = current;
+			#endif
+
+		}
+		scopeCount--;
+	}
+}
+#endif
+
+#if defined(LDC_CLASS) || defined(GETCLASS_USED) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(N_JAVA_LANG_CLASS_GETCONSTRUCTOR)
+static Object* gc_allocateObjectInArea(unsigned short dobjectSize,
+		unsigned short pobjectSize) {
+	Object *obj = 0;
+
+	pushDefaultArea();
+
+	obj = gc_allocateObject(dobjectSize, pobjectSize);
+
+	popDefaultArea();
+
+	return obj;
+}
+#endif
+
+#if defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(LDC_CLASS)
+Object* getClass(unsigned short classIndex)
+{
 	Object *class = head;
 	while (class != 0) {
 		if (*(unsigned short *) ((unsigned char*) HEAP_REF(class, Object*)
