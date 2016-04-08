@@ -86,6 +86,12 @@ public class NativeFileManager {
 				sourceFileContent.append("   return -1;\n");
 				sourceFileContent.append("}\n");
 				sourceFileContent.append("#else\n");
+				
+				StringBuffer prototype = new StringBuffer();
+				prototype.append("#ifndef EXCLUDESTUB_" + uniqueMethodId.toUpperCase() + "\n");
+				prototype.append(signature + ";\n");
+				prototype.append("#endif\n");
+				this.requiredIncludes.print(prototype.toString());
 			}
 			IcecapInlineNative annotation = Compiler.hasAnnotation(javaMethod, IcecapInlineNative.class);
 			if (annotation != null) {
