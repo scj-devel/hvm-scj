@@ -799,9 +799,9 @@ static void arraycopy(Object* osrc, unsigned short srcPos,
 
 	count = imul(length, elementSize);
 #else
-	src = HEAP_REF(osrc, unsigned char*) + sizeof(Object) + 2
+	src = (unsigned char*)HEAP_REF(osrc, unsigned char*) + sizeof(Object) + 2
 	+ (srcPos * elementSize);
-	dst = HEAP_REF(odst, unsigned char*) + sizeof(Object) + 2
+	dst = (unsigned char*)HEAP_REF(odst, unsigned char*) + sizeof(Object) + 2
 	+ (dstPos * elementSize);
 
 	count = length * elementSize;
