@@ -979,10 +979,10 @@ Object* getClass(unsigned short classIndex)
 {
 	Object *class = head;
 	while (class != 0) {
-		if ((unsigned short)((java_lang_Class_c *)HEAP_REF(class, Object*))-> cachedConstructor_f == classIndex) {
+	  if ((unsigned short)((java_lang_Class_c *)(pointer)HEAP_REF(class, Object*))-> cachedConstructor_f == classIndex) {
 			return class;
 		} else {
-			class = (Object *)(pointer)(((java_lang_Class_c *)HEAP_REF(class, Object*))-> reflectionData_f);
+	    class = (Object *)(pointer)(((java_lang_Class_c *)(pointer)HEAP_REF(class, Object*))-> reflectionData_f);
 		}
 	}
 	{
@@ -996,8 +996,8 @@ Object* getClass(unsigned short classIndex)
 		if (class != 0) {
 			setClassIndex(class, (unsigned short) JAVA_LANG_CLASS_var);
 
-			((java_lang_Class_c *)HEAP_REF(class, Object*))-> cachedConstructor_f = classIndex;
-			((java_lang_Class_c *)HEAP_REF(class, Object*))-> reflectionData_f = (uint32)(pointer)head;
+			((java_lang_Class_c *)(pointer)HEAP_REF(class, Object*))-> cachedConstructor_f = classIndex;
+			((java_lang_Class_c *)(pointer)HEAP_REF(class, Object*))-> reflectionData_f = (uint32)(pointer)head;
 
 			head = class;
 		} else {
@@ -2120,16 +2120,16 @@ static int16 invokeClassInitializer(unsigned short methodIndex, int32* sp) {
 extern const short* classInitializerSequence;
 
 int16 invokeClassInitializers(int32* sp) {
-	unsigned short current = 0;
+	unsigned short currentClassInitializer = 0;
 
-	while (current < NUMBEROFCLASSINITIALIZERS_var) {
+	while (currentClassInitializer < NUMBEROFCLASSINITIALIZERS_var) {
 		int16 excep;
 		excep = invokeClassInitializer(
-				pgm_read_word(classInitializerSequence + current), sp);
+				pgm_read_word(classInitializerSequence + currentClassInitializer), sp);
 		if (excep > -1) {
 			return excep;
 		}
-		current++;
+		currentClassInitializer++;
 	}
 	return -1;
 }
