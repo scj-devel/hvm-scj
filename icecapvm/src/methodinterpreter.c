@@ -28,7 +28,9 @@ extern void printAddress(uint32 addr);
 extern unsigned char *classData;
 #endif
 
+#if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED)
 extern Object* getClass(unsigned short classIndex);
+#endif
 
 #if defined(JAVA_LANG_THROWABLE_INIT_)
 extern void reportStackTraceElement(unsigned short methodIndex, unsigned short pc);
@@ -2983,11 +2985,15 @@ unsigned char handleLDCWithIndex(int32* sp, unsigned short index) {
 		*(float*) sp = pgm_read_pointer(&constant->fvalue, float*);
 		sp++;
 		count++;
-	} else if (type == CONSTANT_CLASS) {
+	}
+#if defined(LDC_CLASS)
+	else if (type == CONSTANT_CLASS) {
 		Object* class = getClass(pgm_read_pointer(&constant->value, int32*));
 		*sp++ = (int32) (pointer) class;
 		count++;
-	} else if (type == CONSTANT_LONG) {
+	}
+#endif
+	else if (type == CONSTANT_LONG) {
 		int32 msi;
 		int32 lsi;
 		const unsigned char *data = (const unsigned char *) pgm_read_pointer(&constant->data, const void **);
