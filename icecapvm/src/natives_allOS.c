@@ -527,8 +527,7 @@ int16 n_java_lang_Class_getName0(int32 *sp) {
 	classIndex = getClassIndex(this);
 
 	if (classIndex == JAVA_LANG_CLASS) {
-		classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(this,
-						Object*) + sizeof(Object));
+		classIndex = ((java_lang_Class_c *)HEAP_REF(this, Object*))-> cachedConstructor_f;
 
 		className = (char*) pgm_read_pointer(&classes[classIndex].name, char**);
 
@@ -861,7 +860,7 @@ int16 n_java_lang_Object_getClass(int32 *sp) {
 #if defined(N_JAVA_LANG_CLASS_GETSUPERCLASS)
 int16 n_java_lang_Class_getSuperclass(int32 *sp) {
 	Object* class = (Object*) (pointer) sp[0];
-	uint16 classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(class, Object*) + sizeof(Object));
+	uint16 classIndex = ((java_lang_Class_c *)HEAP_REF(class, Object*))-> cachedConstructor_f;
 	sp[0] = (int32) (pointer) getClass(classes[classIndex].superClass);
 	return -1;
 }
@@ -980,8 +979,7 @@ Object* getClass(unsigned short classIndex)
 {
 	Object *class = head;
 	while (class != 0) {
-		if (*(unsigned short *) ((unsigned char*) HEAP_REF(class, Object*)
-						+ sizeof(Object)) == classIndex) {
+		if (((java_lang_Class_c *)HEAP_REF(class, Object*))-> cachedConstructor_f == classIndex) {
 			return class;
 		} else {
 			class = *(Object **) ((unsigned char*) HEAP_REF(class, Object*)
@@ -999,8 +997,7 @@ Object* getClass(unsigned short classIndex)
 		if (class != 0) {
 			class = (Object *) ((unsigned char*) class + sizeof(Object*));
 			setClassIndex(class, (unsigned short) JAVA_LANG_CLASS_var);
-			*(unsigned short *) ((unsigned char*) HEAP_REF(class, Object*)
-					+ sizeof(Object)) = classIndex;
+			((java_lang_Class_c *)HEAP_REF(class, Object*))-> cachedConstructor_f = classIndex;
 			*(Object **) ((unsigned char*) HEAP_REF(class, Object*)
 					- sizeof(Object*)) = head;
 			head = class;
@@ -1036,7 +1033,7 @@ static int16 newInstance(int32* sp, unsigned short classIndex) {
 #ifdef N_JAVA_LANG_CLASS_NEWINSTANCE
 int16 n_java_lang_Class_newInstance(int32* sp) {
 	Object *class = (Object *) (pointer) sp[0];
-	unsigned short classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(class, Object *) + sizeof(Object));
+	unsigned short classIndex = ((java_lang_Class_c *)HEAP_REF(class, Object*))-> cachedConstructor_f;
 
 	return newInstance(sp, classIndex);
 }
@@ -1056,7 +1053,7 @@ int16 n_java_lang_Class_getComponentType(int32 *sp) {
 	classIndex = getClassIndex(obj);
 	componentType = 0;
 	if (classIndex == (unsigned short) JAVA_LANG_CLASS_var) {
-		classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(obj, Object*) + sizeof(Object));
+		classIndex = ((java_lang_Class_c *)HEAP_REF(obj, Object*))-> cachedConstructor_f;
 		if (pgm_read_byte(&classes[classIndex].dimension) != 0) {
 			signed short componentTypeClasIndex;
 			componentTypeClasIndex = pgm_read_word(&classes[classIndex].dobjectSize);
@@ -1149,7 +1146,7 @@ extern Object* createArrayFromElementSize(unsigned short classIndex,
 int16 n_java_lang_reflect_Array_newArray(int32 *sp) {
 	Object* class = (Object*) (pointer) sp[0];
 	int32 size = sp[1];
-	unsigned short classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(class, Object*) + sizeof(Object));
+	unsigned short classIndex = ((java_lang_Class_c *)HEAP_REF(class, Object*))-> cachedConstructor_f;
 	Object* array = 0;
 	unsigned char elementSize = 0;
 
@@ -2401,7 +2398,7 @@ int16 n_java_lang_reflect_Method_invoke(int32 *sp) {
 #if defined(N_JAVA_LANG_CLASS_GETMETHOD)
 int16 n_java_lang_Class_getMethod(int32 *sp) {
 	Object *class = (Object*) (pointer) sp[0];
-	uint16 classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(class, Object*) + sizeof(Object));
+	uint16 classIndex = ((java_lang_Class_c *)HEAP_REF(class, Object*))-> cachedConstructor_f;
 	const char* className;
 
 	while (1) {
@@ -2477,8 +2474,7 @@ int16 n_java_lang_Class_getConstructor(int32 *sp) {
 	Object *cls = HEAP_REF((Object* )(pointer )sp[0], Object*);
 	Object *argsarray = HEAP_REF((Object* )(pointer )sp[1], Object*);
 
-	uint16 classIndex = *(unsigned short *) ((unsigned char*) cls
-			+ sizeof(Object));
+	uint16 classIndex = ((java_lang_Class_c *)cls)-> cachedConstructor_f;
 	uint16 count = *((uint16*) argsarray + 1);
 
 	uint16 i;
