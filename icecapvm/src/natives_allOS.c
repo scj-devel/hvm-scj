@@ -982,8 +982,7 @@ Object* getClass(unsigned short classIndex)
 		if ((unsigned short)((java_lang_Class_c *)HEAP_REF(class, Object*))-> cachedConstructor_f == classIndex) {
 			return class;
 		} else {
-			class = *(Object **) ((unsigned char*) HEAP_REF(class, Object*)
-					- sizeof(Object*));
+			class = (Object *)(pointer)(((java_lang_Class_c *)HEAP_REF(class, Object*))-> reflectionData_f);
 		}
 	}
 	{
@@ -995,11 +994,11 @@ Object* getClass(unsigned short classIndex)
 		class = gc_allocateObjectInArea(dobjectSize, pobjectSize);
 
 		if (class != 0) {
-			class = (Object *) ((unsigned char*) class + sizeof(Object*));
 			setClassIndex(class, (unsigned short) JAVA_LANG_CLASS_var);
+
 			((java_lang_Class_c *)HEAP_REF(class, Object*))-> cachedConstructor_f = classIndex;
-			*(Object **) ((unsigned char*) HEAP_REF(class, Object*)
-					- sizeof(Object*)) = head;
+			((java_lang_Class_c *)HEAP_REF(class, Object*))-> reflectionData_f = (uint32)(pointer)head;
+
 			head = class;
 		} else {
 			return 0;
