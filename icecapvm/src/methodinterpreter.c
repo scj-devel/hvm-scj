@@ -37,6 +37,10 @@ extern void reportStackTraceElement(unsigned short methodIndex, unsigned short p
 extern void reportStackTraceIntro(unsigned short classIndex);
 #endif
 
+#if defined(DISPATCHINTERFACE_USED)
+signed short dispatchInterface(unsigned short methodNumber, unsigned char *minfo, int32* sp);
+#endif
+
 #if defined(PUTHWFIELD_OPCODE_USED)
 extern void writeLongToIO(pointer address, unsigned short offset, int32 msb, int32 lsb);
 extern void writeIntToIO(pointer address, unsigned short offset, int32 lsb);

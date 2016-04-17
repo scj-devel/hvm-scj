@@ -170,8 +170,6 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 		}
 	}
 
-	protected abstract String getASFLocation();
-
 	@Override
 	public String getDeployCommand() {
 		return null;
@@ -181,7 +179,7 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 	public int getJavaHeapSize() {
 		return 8192;
 	}
-	
+		
 	@IcecapCompileMe
 	protected static void blink(int i) {
 		if (!initialized)
@@ -250,5 +248,9 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 		public short getMaxLineLength() {
 			return 128;
 		}
+	}
+	
+	protected String getASFLocation() {
+		return "../ASF";
 	}
 }
