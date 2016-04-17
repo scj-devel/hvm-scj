@@ -963,13 +963,13 @@ public abstract class AOTCompiler implements SPManipulator {
 					if ((finfo != null) && (!finfo.isFloat)) {
 						output.append("      ((struct ");
 						output.append(finfo.getStructName());
-						output.append(" *)HEAP_REF(cobj, unsigned char*)) -> ");
+						output.append(" *)HEAP_REF(cobj, Object*)) -> ");
 						output.append(finfo.getStructMemberName());
 						output.append(" = lsb_" + type + ";\n");
 						if ((fsize & 0xfc) > 32) {
 							output.append("      ((struct ");
 							output.append(finfo.getStructName());
-							output.append(" *)HEAP_REF(cobj, unsigned char*)) -> ");
+							output.append(" *)HEAP_REF(cobj, Object*)) -> ");
 							output.append(finfo.getStructMemberLSBName());
 							output.append(" = msb_int32;\n");
 						}
@@ -1093,14 +1093,14 @@ public abstract class AOTCompiler implements SPManipulator {
 						if ((fsize & 0xfc) > 32) {
 							buffer.append("((struct ");
 							buffer.append(finfo.getStructName());
-							buffer.append(" *)HEAP_REF(cobj, unsigned char*)) -> ");
+							buffer.append(" *)HEAP_REF(cobj, Object*)) -> ");
 							buffer.append(finfo.getStructMemberLSBName());
 							sm.push(valueSize, buffer.toString());
 							buffer = new StringBuffer();
 						}
 						buffer.append("((struct ");
 						buffer.append(finfo.getStructName());
-						buffer.append(" *)HEAP_REF(cobj, unsigned char*)) -> ");
+						buffer.append(" *)HEAP_REF(cobj, Object*)) -> ");
 						buffer.append(finfo.getStructMemberName());
 
 						sm.push(valueSize, buffer.toString());
@@ -1284,7 +1284,7 @@ public abstract class AOTCompiler implements SPManipulator {
 				if (((RefType) cell.content).getState() != RefState.NONNULL) {
 					checkObject(output, localVariables, pc, labelsManager, null, "", sm, "cobj");
 				}
-				sm.push(valueSize, "*(uint16*) ((HEAP_REF(cobj, unsigned char*)) + sizeof(Object))");
+				sm.push(valueSize, "*(uint16*)(pointer)((HEAP_REF(cobj, unsigned char*)) + sizeof(Object))");
 				pc++;
 				break;
 			}
