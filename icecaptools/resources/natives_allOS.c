@@ -1774,7 +1774,7 @@ extern void handleException(unsigned short classIndex);
 #endif
 
 #if defined(VM_PROCESS_EXECUTEWITHSTACK)
-extern void set_stack_pointer();
+extern void set_stack_pointer(void);
 #endif
 
 #if defined(VM_CLOCKINTERRUPTHANDLER_HANDLE) || defined(VM_PROCESS_INITIALIZE)
@@ -1788,8 +1788,8 @@ void _transfer(void) {
 	uint32 nextSpObject = nextProcess->sp_f;
 	uint32 currentSpObject = currentProcess->sp_f;
 
-	pointer* nextSp = (pointer*) ((unsigned char*) (pointer) nextSpObject + sizeof(Object));
-	pointer* currentSp = (pointer*) ((unsigned char*) (pointer) currentSpObject + sizeof(Object));
+	pointer* nextSp = (pointer*) (pointer)((unsigned char*) (pointer) nextSpObject + sizeof(Object));
+	pointer* currentSp = (pointer*) (pointer)((unsigned char*) (pointer) currentSpObject + sizeof(Object));
 
 	nextSp = HEAP_REF(nextSp, pointer*);
 	currentSp = HEAP_REF(currentSp, pointer*);
