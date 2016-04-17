@@ -63,7 +63,7 @@ public class TestExecuteWithStack extends ATSAMe70SCJTargetConfiguration {
 		testObj.start();
 		
 		if (!failed) {
-			blink(20000);
+			blink(2000);
 		} else {
 			blink(10000);
 		}
