@@ -30,12 +30,17 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 	public String[][] getBuildCommands() {
 		String ASF = trim(getASFLocation());
 		return new String[][] {
+				
 				new String[] {
 						"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-gcc.exe",
 						"-DPC32", "-Os", "-c", "-DJAVA_STACK_SIZE=420", "-x", "c", "-mthumb", "-D__SAME70Q21__",
 						"-DDEBUG", "-DPACKED=", "-D__SAME70Q21__", "-DBOARD=SAME70_XPLAINED", "-Dscanf=iscanf",
 						"-DARM_MATH_CM7=true", "-Dprintf=iprintf ",
 						"-I\"" +  trim(getASFLocation())+ "\"",
+						"-I\"" + ASF + "/sam/drivers/uart\"",
+						"-I\"" + ASF + "/sam/drivers/usart\"",
+						"-I\"" + ASF + "/common/utils/stdio/stdio_serial\"",
+						"-I\"" + ASF + "/common/services/serial\"",						
 						"-I\"" + ASF + "/thirdparty/CMSIS/Lib/GCC\"", "-I\"" + ASF + "/common/utils\"",
 						"-I\"" + ASF + "/sam/boards/same70_xplained\"", "-I\"" + ASF + "/sam/utils/fpu\"", "-I\"../src\"",
 						"-I\"" + ASF + "/common/services/clock\"",
@@ -59,11 +64,38 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 						"-mfloat-abi=softfp", "-mfpu=fpv5-sp-d16", "natives_arm.c" },
 				new String[] {
 						"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-gcc.exe",
-						"-o", "main.elf", "*.o", "-mthumb", "-Wl,-Map=\"main.map\"", "-Wl,--start-group",
-						"-larm_cortexM7lfsp_math_softfp", "-lm", "-latsame70", "-Wl,--end-group",
-						"-L\"" + trim(getASFLocation()) + "\"",
-						"-L\"" + trim(getASFLocation()) + "/thirdparty/CMSIS/Lib/GCC\"", "-Wl,--gc-sections",
-						"-mcpu=cortex-m7", "-Wl,--entry=Reset_Handler", "-Wl,--cref", "-mthumb",
+						"-o", 
+						"main.elf", 
+						"*.o", 
+						ASF + "/common/services/clock/same70/sysclk.o", 
+						ASF + "/common/services/delay/sam/cycle_counter.o",
+						ASF + "/common/services/serial/usart_serial.o",
+						ASF + "/common/utils/interrupt/interrupt_sam_nvic.o",
+						ASF + "/common/utils/stdio/read.o",
+						ASF + "/common/utils/stdio/write.o",
+						ASF + "/sam/boards/same70_xplained/init.o",
+						ASF + "/sam/drivers/mpu/mpu.o",
+						ASF + "/sam/drivers/pio/pio.o",
+						ASF + "/sam/drivers/pio/pio_handler.o",
+						ASF + "/sam/drivers/pmc/pmc.o",
+						ASF + "/sam/drivers/pmc/sleep.o",
+						ASF + "/sam/drivers/uart/uart.o",
+						ASF + "/sam/drivers/usart/usart.o",					
+						ASF + "/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o",
+						ASF + "/sam/utils/cmsis/same70/source/templates/system_same70.o",
+						ASF + "/sam/utils/syscalls/gcc/syscalls.o",					
+						"-mthumb", 
+						"-Wl,-Map=\"main.map\"", 
+						"-Wl,--start-group",
+						"-larm_cortexM7lfsp_math_softfp", 
+						"-lm", 
+						"-Wl,--end-group",
+						"-L\"" + trim(getASFLocation()) + "/thirdparty/CMSIS/Lib/GCC\"", 
+						"-Wl,--gc-sections",
+						"-mcpu=cortex-m7", 
+						"-Wl,--entry=Reset_Handler", 
+						"-Wl,--cref", 
+						"-mthumb",
 						"-T" + trim(getASFLocation()) + "/sam/utils/linker_scripts/same70/same70q21/gcc/flash.ld" },
 				new String[] {
 						"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-nm.exe",
@@ -75,7 +107,9 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 						"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-strip.exe",
 						"main.elf" },
 				new String[] { "C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\atbackend\\atprogram.exe", "-t", "edbg",
-						"-i", "SWD", "-d", "atsame70q21", "program", "-f", "main.elf", } };
+						"-i", "SWD", "-d", "atsame70q21", "program", "-f", "main.elf", }, 
+				new String[] { "cmd", "/c", "del", "main.elf" } 
+				};		
 	}
 
 	
@@ -90,11 +124,41 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 			)
 	private static native void initNative();
 
+	@IcecapInlineNative(functionBody = ""
+			+ "{\n"
+			+ "  const usart_serial_options_t uart_serial_options = {\n"
+			+ "  .baudrate = CONF_UART_BAUDRATE,\n"
+			+ "  #ifdef CONF_UART_CHAR_LENGTH\n"
+			+ "  .charlength = CONF_UART_CHAR_LENGTH,\n"
+			+ "  #endif\n"
+			+ "  .paritytype = CONF_UART_PARITY,\n"
+			+ "  #ifdef CONF_UART_STOP_BITS\n"
+			+ "  .stopbits = CONF_UART_STOP_BITS,\n"
+			+ "  #endif\n"
+			+ "  };\n"
+			+ "  \n"
+			+ "  ioport_set_pin_peripheral_mode(USART1_RXD_GPIO, USART1_RXD_FLAGS);\n"
+			+ "  MATRIX->CCFG_SYSIO |= CCFG_SYSIO_SYSIO4;\n"
+			+ "  ioport_set_pin_peripheral_mode(USART1_TXD_GPIO, USART1_TXD_FLAGS);\n"
+			+ "  sysclk_enable_peripheral_clock(CONSOLE_UART_ID);\n"
+			+ "  stdio_serial_init(CONF_UART, &uart_serial_options);\n"
+			+ "  return -1;\n"
+			+ "}\n", 
+			requiredIncludes = ""
+			+ "#include <conf_uart_serial.h>\n"
+			+ "#define ioport_set_pin_peripheral_mode(pin, mode) \\\n"
+			+ "do {\\\n"
+			+ "ioport_set_pin_mode(pin, mode);\\\n"
+			+ "ioport_disable_pin(pin);\\\n"
+			+ "} while (0)\n")
+	private static native void initUart();
+
 	protected static void init()
 	{
 		if (!initialized)
 		{
 			initNative();
+			initUart();
 			initialized = true;
 		}
 	}
@@ -175,18 +239,16 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 			}
 		}
 
-		@IcecapInlineNative(functionBody = ""
-				+ "{\n"
-				+ "   putchar(sp[0] && 0xFF);\n"
+		@IcecapInlineNative(functionBody = "" 
+				+ "{\n" 
+				+ "   putchar(sp[0] & 0xff);\n" 
 				+ "   return -1;\n"
-				+ "}\n",
-				requiredIncludes = "#include <stdio.h>\n"
-				)
-		private static native void putc(byte b);
+				+ "}\n", requiredIncludes = "#include <stdio.h>\n")
+		public static native void putc(byte b);
 
 		@Override
 		public short getMaxLineLength() {
-			return 0;
+			return 128;
 		}
 	}
 }

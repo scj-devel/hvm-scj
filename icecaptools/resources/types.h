@@ -315,8 +315,8 @@ extern long heap_base;
 #define HEAP_REF(x, type) ((type)(((unsigned char*)x) + heap_base))
 #define HEAP_UNREF(x, type) ((type)(((unsigned char*)x) - heap_base))
 #else
-#define HEAP_REF(x, type) x
-#define HEAP_UNREF(x, type) x
+#define HEAP_REF(x, type) ((type)x)
+#define HEAP_UNREF(x, type) ((type)x)
 #endif
 
 #define EXCLUDESTUB_N_SUN_SECURITY_ACTION_GETPROPERTYACTION_INIT_
