@@ -1884,7 +1884,7 @@ int16 n_vm_Process_executeWithStack(int32 *sp) {
 }
 #endif
 
-#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED) ||  defined(VM_REALTIMECLOCK_GETREALTIMECLOCK)
+#if defined(VM_CLOCKINTERRUPTHANDLER_ENABLE_USED) ||  defined(VM_REALTIMECLOCK_GETREALTIMECLOCK) || defined(DEVICES_ARM_ATSAME70_ATSAME70TARGETCONFIGURATION_HANDLESYSTEMTICK)
 volatile uint8 systemTick;
 volatile uint32 systemClock;
 #endif
