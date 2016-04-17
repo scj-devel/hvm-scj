@@ -213,10 +213,8 @@ public class ConvertJavaFileAction implements IObjectActionDelegate {
 
 			return new CompilationRegistryProxy(mainClazz, instance, loader);
 
-		} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | InstantiationException
-				| IllegalAccessException | IOException e) {
+		} catch (Throwable t) {
 			return new BaseCompilationRegistryProxy(loader);
-
 		} 
 	}
 

@@ -5,6 +5,7 @@ import javax.safetycritical.annotate.SCJAllowed;
 import javax.scj.util.Priorities;
 
 import vm.Machine;
+import vm.Memory;
 import vm.POSIX64BitMachineFactory;
 
 /**
@@ -23,12 +24,41 @@ import vm.POSIX64BitMachineFactory;
 @SCJAllowed(Level.SUPPORT)
 public final class TestPortalRT {
 	
+	private static final int TCKTESTMEMORYSIZE = 131070;
+
+	private static Memory tckTestMemory;
+	
+	private static Memory mainMemory;
 	/**
 	 * Used by test programs to set up the virtual machine.
 	 */	
 	public static void setupVM() {
 		// VM set for 64 bits
-		Machine.setMachineFactory(new POSIX64BitMachineFactory());  
+		Machine.setMachineFactory(new POSIX64BitMachineFactory()); 
+	}
+	
+	/**
+	 * Used by test programs to allocate some memory for local test objects
+	 * because HVM has no garbage collector.
+	 * PS: It is not for use when testing a full SCJ program.
+	 */	
+	private static void allocateMemoryForTckTest() {
+		int start = Memory.allocateInHeap(TCKTESTMEMORYSIZE).getBase();
+
+        tckTestMemory = new Memory(start, TCKTESTMEMORYSIZE, "tckTestMemory");
+	}
+	
+	public static void enterTckMem() {
+		if (tckTestMemory == null)
+		{
+			allocateMemoryForTckTest();
+		}
+		mainMemory = Memory.switchToArea(tckTestMemory);
+	}
+	
+    public static void resetTckMem() {
+    	Memory.switchToArea(mainMemory);
+    	tckTestMemory.reset(0);
 	}
 	
 	/**
