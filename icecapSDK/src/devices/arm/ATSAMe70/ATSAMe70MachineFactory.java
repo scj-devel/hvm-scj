@@ -1,37 +1,40 @@
 package devices.arm.ATSAMe70;
 
-import vm.MachineFactory;
+import devices.AVR.ATMega2560.ATMega2560InterruptDispatcher;
+import vm.AbstractMachineFactory;
 import vm.RealtimeClock;
 import vm.SP;
+import vm.X86_32SP;
 
-public class ATSAMe70MachineFactory implements MachineFactory {
+public class ATSAMe70MachineFactory extends AbstractMachineFactory  {
 
 	@Override
 	public void initInterrupts() {
-		// TODO Auto-generated method stub
+		/* Reusing the ATMega2560 interrupt initialization. 
+		 * This will not be good enough for a program actually using interrupts.
+		 */
+		ATMega2560InterruptDispatcher.init(1);
 	}
 
 	@Override
 	public SP getProcessSP() {
-		// TODO Auto-generated method stub
-		return null;
+		return new X86_32SP();
 	}
 
 	@Override
 	public RealtimeClock getRealtimeClock() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void startSystemTick() {
-		// TODO Auto-generated method stub
-
+		RealtimeClock clock = new ATSAMe70TargetConfiguration.ATSAMe70RealtimeClock(); 
+		startSystemTick();
+		return clock; 
 	}
 
 	@Override
 	public void stopSystemTick() {
-		// TODO Auto-generated method stub
+		// Don't know how to actually stop the system tick again */
+	}
 
+	@Override
+	protected void startMachineSpecificSystemTick() {
+		ATSAMe70TargetConfiguration.initSystemTick();
 	}
 }

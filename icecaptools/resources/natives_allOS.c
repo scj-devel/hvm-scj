@@ -104,7 +104,7 @@ int16 n_test_TestInvokeNative1_Super_testNativeStatic(int32 *sp);
 int16 n_test_TestInvokeNative2_Super_testNativeStatic(int32 *sp);
 #endif
 #ifdef N_JAVA_LANG_CLASS_GETPRIMITIVECLASS
-static int32 _streq(char* str1, char* str2);
+static int32 _streq(const char* str1, const char* str2);
 static char* getCString(unsigned char* strObj);
 int16 n_java_lang_Class_getPrimitiveClass(int32 *sp);
 #endif
@@ -113,8 +113,8 @@ int16 n_java_lang_System_currentTimeMillis(int32 *sp);
 #endif
 void* getPointer(int32 val);
 #ifdef N_JAVA_LANG_SYSTEM_ARRAYCOPY
-static void arraycopy(unsigned char* src, unsigned short srcPos,
-		unsigned char* dst, unsigned short dstPos, unsigned short length);
+static void arraycopy(Object* osrc, unsigned short srcPos,
+		Object* odst, unsigned short dstPos, unsigned short length);
 int16 n_java_lang_System_arraycopy(int32 *sp);
 #endif
 #ifdef N_JAVA_LANG_OBJECT_GETCLASS
@@ -123,17 +123,23 @@ int16 n_java_lang_Object_getClass(int32 *sp);
 #if defined(N_JAVA_LANG_CLASS_GETSUPERCLASS)
 int16 n_java_lang_Class_getSuperclass(int32 *sp);
 #endif
-#if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(GETCLASS_USED)
-static void pushDefaultArea(void);
-static void popDefaultArea(void);
-static Object* gc_allocateObjectInArea(unsigned short dobjectSize,
-		unsigned short pobjectSize);
+
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0)
-static Object* initializeStringObject(int32* sp, unsigned char *charArrayObject);
+static Object* initializeStringObject(int32* sp, Object *charArrayObject);
 Object* createStringObject(int32 size, const char* data, int32* sp);
 #endif
-Object* getClass(unsigned short classIndex);
+
+
+#if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0) || defined(LDC_CLASS) || defined(GETCLASS_USED) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(N_JAVA_LANG_CLASS_GETCONSTRUCTOR)
+static void pushDefaultArea(void);
+static void popDefaultArea(void);
 #endif
+
+
+#if defined(LDC_CLASS) || defined(GETCLASS_USED) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(N_JAVA_LANG_CLASS_GETCONSTRUCTOR)
+static Object* gc_allocateObjectInArea(unsigned short dobjectSize, unsigned short pobjectSize);
+#endif
+
 #if defined(N_JAVA_LANG_CLASS_NEWINSTANCE)
 static int16 newInstance(int32* sp, unsigned short classIndex);
 #endif
@@ -363,7 +369,9 @@ int16 n_vm_FullStackAnanlyser_get_java_stack_array(int32 *sp);
 int16 initializeConstants(int32* sp);
 #endif
 
+#if defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(LDC_CLASS)
 Object* getClass(unsigned short classIndex);
+#endif
 
 #if defined(ENABLE_DEBUG)
 typedef struct _methodLocation
@@ -478,9 +486,9 @@ int16 n_java_lang_StringBuilder_append(int32 *sp) {
 #endif
 
 #if defined(N_JAVA_LANG_STRING_INIT_)
-extern unsigned char* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash));
+extern Object* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash));
 int16 n_java_lang_String_init_(int32 *sp) {
-	unsigned char *charArrayObject;
+	Object *charArrayObject;
 	unsigned char* bytes = (unsigned char*) (pointer) sp[1];
 	int32 offset = sp[2];
 	int32 nb = sp[3];
@@ -519,8 +527,7 @@ int16 n_java_lang_Class_getName0(int32 *sp) {
 	classIndex = getClassIndex(this);
 
 	if (classIndex == JAVA_LANG_CLASS) {
-		classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(this,
-						Object*) + sizeof(Object));
+		classIndex = ((java_lang_Class_c *)HEAP_REF(this, Object*))-> cachedConstructor_f;
 
 		className = (char*) pgm_read_pointer(&classes[classIndex].name, char**);
 
@@ -653,7 +660,7 @@ int16 n_test_TestInvokeNative2_Super_testNativeStatic(int32 *sp) {
  * return: java.lang.Class
  */
 #ifdef N_JAVA_LANG_CLASS_GETPRIMITIVECLASS
-static int32 _streq(char* str1, char* str2) {
+static int32 _streq(const char* str1, const char* str2) {
 	int32 length1 = _strlen(str1);
 	int32 length2 = _strlen(str2);
 	if (length1 == length2) {
@@ -729,17 +736,17 @@ static char* getCString(unsigned char* strObj) {
 int16 n_java_lang_Class_getPrimitiveClass(int32 *sp) {
 	int32 classIndex;
 	unsigned char* strObj = (unsigned char*) (pointer) sp[0];
-	char* buffer = getCString(strObj);
+	char* _buf = getCString(strObj);
 
-	if (_streq((char*) buffer, "int")) {
+	if (_streq((const char*) _buf, "int")) {
 		classIndex = JAVA_LANG_INTEGER_var;
-	} else if (_streq((char*) buffer, "byte")) {
+	} else if (_streq((const char*) _buf, "byte")) {
 		classIndex = JAVA_LANG_BYTE_var;
-	} else if (_streq((char*) buffer, "short")) {
+	} else if (_streq((const char*) _buf, "short")) {
 		classIndex = JAVA_LANG_SHORT_var;
-	} else if (_streq((char*) buffer, "boolean")) {
+	} else if (_streq((const char*) _buf, "boolean")) {
 		classIndex = JAVA_LANG_BOOLEAN_var;
-	} else if (_streq((char*) buffer, "long")) {
+	} else if (_streq((const char*) _buf, "long")) {
 		classIndex = JAVA_LANG_LONG_var;
 	} else {
 		classIndex = JAVA_LANG_OBJECT_var;
@@ -747,7 +754,7 @@ int16 n_java_lang_Class_getPrimitiveClass(int32 *sp) {
 	{
 		Object* class = getClass(classIndex);
 		if (class != 0) {
-			sp[0] = (int32) (pointer) getClass(classIndex);
+			sp[0] = (int32) (pointer) class;
 			return -1;
 		} else {
 			return JAVA_LANG_OUTOFMEMORYERROR_var;
@@ -784,22 +791,24 @@ void* getPointer(int32 val) {
  * return: void
  */
 #ifdef N_JAVA_LANG_SYSTEM_ARRAYCOPY
-static void arraycopy(unsigned char* src, unsigned short srcPos,
-		unsigned char* dst, unsigned short dstPos, unsigned short length) {
+static void arraycopy(Object* osrc, unsigned short srcPos,
+		Object* odst, unsigned short dstPos, unsigned short length) {
 	unsigned char elementSize;
 	unsigned short count;
+	unsigned char* src;
+	unsigned char* dst;
 
-	elementSize = getElementSize(getClassIndex((Object*) src));
+	elementSize = getElementSize(getClassIndex(osrc));
 
 #if defined(GLIBC_DOES_NOT_SUPPORT_MUL)
-	src = HEAP_REF(src, unsigned char*) + sizeof(Object) + 2 + imul(srcPos, elementSize);
-	dst = HEAP_REF(dst, unsigned char*) + sizeof(Object) + 2 + imul(dstPos, elementSize);
+	src = HEAP_REF(osrc, unsigned char*) + sizeof(Object) + 2 + imul(srcPos, elementSize);
+	dst = HEAP_REF(odst, unsigned char*) + sizeof(Object) + 2 + imul(dstPos, elementSize);
 
 	count = imul(length, elementSize);
 #else
-	src = HEAP_REF(src, unsigned char*) + sizeof(Object) + 2
+	src = (unsigned char*)HEAP_REF(osrc, unsigned char*) + sizeof(Object) + 2
 	+ (srcPos * elementSize);
-	dst = HEAP_REF(dst, unsigned char*) + sizeof(Object) + 2
+	dst = (unsigned char*)HEAP_REF(odst, unsigned char*) + sizeof(Object) + 2
 	+ (dstPos * elementSize);
 
 	count = length * elementSize;
@@ -812,15 +821,15 @@ static void arraycopy(unsigned char* src, unsigned short srcPos,
 }
 
 int16 n_java_lang_System_arraycopy(int32 *sp) {
-	unsigned char* src;
+	Object* src;
 	unsigned short srcPos;
-	unsigned char* dst;
+	Object* dst;
 	unsigned short dstPos;
 	unsigned short length;
 
-	src = (unsigned char*) getPointer(sp[0]);
+	src = (Object*) getPointer(sp[0]);
 	srcPos = sp[1];
-	dst = (unsigned char*) getPointer(sp[2]);
+	dst = (Object*) getPointer(sp[2]);
 	dstPos = sp[3];
 	length = sp[4];
 
@@ -851,7 +860,7 @@ int16 n_java_lang_Object_getClass(int32 *sp) {
 #if defined(N_JAVA_LANG_CLASS_GETSUPERCLASS)
 int16 n_java_lang_Class_getSuperclass(int32 *sp) {
 	Object* class = (Object*) (pointer) sp[0];
-	uint16 classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(class, Object*) + sizeof(Object));
+	uint16 classIndex = (uint16)((java_lang_Class_c *)HEAP_REF(class, Object*))-> cachedConstructor_f;
 	sp[0] = (int32) (pointer) getClass(classes[classIndex].superClass);
 	return -1;
 }
@@ -871,6 +880,54 @@ static uint8 scopeCount = 0;
 extern pthread_key_t key;
 #endif
 
+#if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0)
+extern Object* createArray(unsigned short classIndex,
+		uint16 count FLASHARG(uint8 flash));
+static Object* initializeStringObject(int32* sp, Object *charArrayObject) {
+	unsigned short dobjectSize, pobjectSize, classIndex;
+	Object* stringObject;
+
+	classIndex = (unsigned short) JAVA_LANG_STRING_var;
+	dobjectSize = pgm_read_word(&classes[classIndex].dobjectSize) >> 3;
+	pobjectSize = pgm_read_word(&classes[classIndex].pobjectSize) >> 3;
+	stringObject = gc_allocateObject(dobjectSize, pobjectSize);
+	setClassIndex(stringObject, classIndex);
+
+	*sp = (int32) (pointer) stringObject;
+	*(sp + 1) = (int32) (pointer) charArrayObject;
+
+	enterMethodInterpreter(JAVA_LANG_STRING_INITFROMCHARARRAY_var, sp);
+
+	return stringObject;
+}
+
+Object* createStringObject(int32 size, const char* data, int32* sp) {
+	Object *charArrayObject;
+	int32 count;
+	Object* object;
+
+	pushDefaultArea();
+	charArrayObject = createArray((unsigned short) _C_var,
+			(uint16) size FLASHARG(0));
+
+	if (charArrayObject != 0) {
+
+		for (count = 0; count < size; count++) {
+			*((uint8 *) (HEAP_REF(charArrayObject, unsigned char *)
+							+ sizeof(Object) + 2) + count) = pgm_read_byte(
+					data + count);
+		}
+		object = initializeStringObject(sp, charArrayObject);
+	} else {
+		object = 0;
+	}
+	popDefaultArea();
+	return object;
+}
+#endif
+#endif
+
+#if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0) || defined(LDC_CLASS) || defined(GETCLASS_USED) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(N_JAVA_LANG_CLASS_GETCONSTRUCTOR)
 static void pushDefaultArea(void) {
 	if (heapArea != 0) {
 		if (scopeCount == 0) {
@@ -900,7 +957,9 @@ static void popDefaultArea(void) {
 		scopeCount--;
 	}
 }
+#endif
 
+#if defined(LDC_CLASS) || defined(GETCLASS_USED) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(N_JAVA_LANG_CLASS_GETCONSTRUCTOR)
 static Object* gc_allocateObjectInArea(unsigned short dobjectSize,
 		unsigned short pobjectSize) {
 	Object *obj = 0;
@@ -913,62 +972,17 @@ static Object* gc_allocateObjectInArea(unsigned short dobjectSize,
 
 	return obj;
 }
-
-#if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0)
-extern unsigned char* createArray(unsigned short classIndex,
-		uint16 count FLASHARG(uint8 flash));
-static Object* initializeStringObject(int32* sp, unsigned char *charArrayObject) {
-	unsigned short dobjectSize, pobjectSize, classIndex;
-	Object* stringObject;
-
-	classIndex = (unsigned short) JAVA_LANG_STRING_var;
-	dobjectSize = pgm_read_word(&classes[classIndex].dobjectSize) >> 3;
-	pobjectSize = pgm_read_word(&classes[classIndex].pobjectSize) >> 3;
-	stringObject = gc_allocateObject(dobjectSize, pobjectSize);
-	setClassIndex(stringObject, classIndex);
-
-	*sp = (int32) (pointer) stringObject;
-	*(sp + 1) = (int32) (pointer) charArrayObject;
-
-	enterMethodInterpreter(JAVA_LANG_STRING_INITFROMCHARARRAY_var, sp);
-
-	return stringObject;
-}
-
-Object* createStringObject(int32 size, const char* data, int32* sp) {
-	unsigned char *charArrayObject;
-	int32 count;
-	Object* object;
-
-	pushDefaultArea();
-	charArrayObject = createArray((unsigned short) _C_var,
-			(uint16) size FLASHARG(0));
-
-	if (charArrayObject != 0) {
-
-		for (count = 0; count < size; count++) {
-			*((uint8 *) (HEAP_REF(charArrayObject, unsigned char *)
-							+ sizeof(Object) + 2) + count) = pgm_read_byte(
-					data + count);
-		}
-		object = initializeStringObject(sp, charArrayObject);
-	} else {
-		object = 0;
-	}
-	popDefaultArea();
-	return object;
-}
 #endif
 
-Object* getClass(unsigned short classIndex) {
+#if defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(LDC_CLASS)
+Object* getClass(unsigned short classIndex)
+{
 	Object *class = head;
 	while (class != 0) {
-		if (*(unsigned short *) ((unsigned char*) HEAP_REF(class, Object*)
-						+ sizeof(Object)) == classIndex) {
+	  if ((unsigned short)((java_lang_Class_c *)(pointer)HEAP_REF(class, Object*))-> cachedConstructor_f == classIndex) {
 			return class;
 		} else {
-			class = *(Object **) ((unsigned char*) HEAP_REF(class, Object*)
-					- sizeof(Object*));
+	    class = (Object *)(pointer)(((java_lang_Class_c *)(pointer)HEAP_REF(class, Object*))-> reflectionData_f);
 		}
 	}
 	{
@@ -980,12 +994,11 @@ Object* getClass(unsigned short classIndex) {
 		class = gc_allocateObjectInArea(dobjectSize, pobjectSize);
 
 		if (class != 0) {
-			class = (Object *) ((unsigned char*) class + sizeof(Object*));
 			setClassIndex(class, (unsigned short) JAVA_LANG_CLASS_var);
-			*(unsigned short *) ((unsigned char*) HEAP_REF(class, Object*)
-					+ sizeof(Object)) = classIndex;
-			*(Object **) ((unsigned char*) HEAP_REF(class, Object*)
-					- sizeof(Object*)) = head;
+
+			((java_lang_Class_c *)(pointer)HEAP_REF(class, Object*))-> cachedConstructor_f = classIndex;
+			((java_lang_Class_c *)(pointer)HEAP_REF(class, Object*))-> reflectionData_f = (uint32)(pointer)head;
+
 			head = class;
 		} else {
 			return 0;
@@ -1019,7 +1032,7 @@ static int16 newInstance(int32* sp, unsigned short classIndex) {
 #ifdef N_JAVA_LANG_CLASS_NEWINSTANCE
 int16 n_java_lang_Class_newInstance(int32* sp) {
 	Object *class = (Object *) (pointer) sp[0];
-	unsigned short classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(class, Object *) + sizeof(Object));
+	unsigned short classIndex = (unsigned short)((java_lang_Class_c *)HEAP_REF(class, Object*))-> cachedConstructor_f;
 
 	return newInstance(sp, classIndex);
 }
@@ -1039,7 +1052,7 @@ int16 n_java_lang_Class_getComponentType(int32 *sp) {
 	classIndex = getClassIndex(obj);
 	componentType = 0;
 	if (classIndex == (unsigned short) JAVA_LANG_CLASS_var) {
-		classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(obj, Object*) + sizeof(Object));
+		classIndex = (unsigned short)((java_lang_Class_c *)HEAP_REF(obj, Object*))-> cachedConstructor_f;
 		if (pgm_read_byte(&classes[classIndex].dimension) != 0) {
 			signed short componentTypeClasIndex;
 			componentTypeClasIndex = pgm_read_word(&classes[classIndex].dobjectSize);
@@ -1126,14 +1139,14 @@ int16 n_java_security_AccessController_doPrivileged(int32 *sp) {
  * return: java.lang.Object
  */
 #ifdef N_JAVA_LANG_REFLECT_ARRAY_NEWARRAY
-extern unsigned char* createArrayFromElementSize(unsigned short classIndex,
+extern Object* createArrayFromElementSize(unsigned short classIndex,
 		unsigned char elementSize, uint16 count FLASHARG(uint8 flash));
 
 int16 n_java_lang_reflect_Array_newArray(int32 *sp) {
 	Object* class = (Object*) (pointer) sp[0];
 	int32 size = sp[1];
-	unsigned short classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(class, Object*) + sizeof(Object));
-	unsigned char* array = 0;
+	unsigned short classIndex = (unsigned short)((java_lang_Class_c *)HEAP_REF(class, Object*))-> cachedConstructor_f;
+	Object* array = 0;
 	unsigned char elementSize = 0;
 
 	if (classIndex == JAVA_LANG_OBJECT_var) {
@@ -2107,16 +2120,16 @@ static int16 invokeClassInitializer(unsigned short methodIndex, int32* sp) {
 extern const short* classInitializerSequence;
 
 int16 invokeClassInitializers(int32* sp) {
-	unsigned short current = 0;
+	unsigned short currentClassInitializer = 0;
 
-	while (current < NUMBEROFCLASSINITIALIZERS_var) {
+	while (currentClassInitializer < NUMBEROFCLASSINITIALIZERS_var) {
 		int16 excep;
 		excep = invokeClassInitializer(
-				pgm_read_word(classInitializerSequence + current), sp);
+				pgm_read_word(classInitializerSequence + currentClassInitializer), sp);
 		if (excep > -1) {
 			return excep;
 		}
-		current++;
+		currentClassInitializer++;
 	}
 	return -1;
 }
@@ -2384,7 +2397,7 @@ int16 n_java_lang_reflect_Method_invoke(int32 *sp) {
 #if defined(N_JAVA_LANG_CLASS_GETMETHOD)
 int16 n_java_lang_Class_getMethod(int32 *sp) {
 	Object *class = (Object*) (pointer) sp[0];
-	uint16 classIndex = *(unsigned short *) ((unsigned char*) HEAP_REF(class, Object*) + sizeof(Object));
+	uint16 classIndex = (uint16)((java_lang_Class_c *)HEAP_REF(class, Object*))-> cachedConstructor_f;
 	const char* className;
 
 	while (1) {
@@ -2460,8 +2473,7 @@ int16 n_java_lang_Class_getConstructor(int32 *sp) {
 	Object *cls = HEAP_REF((Object* )(pointer )sp[0], Object*);
 	Object *argsarray = HEAP_REF((Object* )(pointer )sp[1], Object*);
 
-	uint16 classIndex = *(unsigned short *) ((unsigned char*) cls
-			+ sizeof(Object));
+	uint16 classIndex = (uint16)((java_lang_Class_c *)cls)-> cachedConstructor_f;
 	uint16 count = *((uint16*) argsarray + 1);
 
 	uint16 i;

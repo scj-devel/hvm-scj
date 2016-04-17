@@ -35,6 +35,7 @@ public class ConstantGenerator {
 		boolean LDC_long = false;
 		boolean LDC_float = false;
 		boolean LDC_double = false;
+		boolean LDC_class = false;
 
 		ArrayList<LDCConstant> constants = patcher.getConstants();
 
@@ -107,7 +108,7 @@ public class ConstantGenerator {
 					break;
 				case LDCConstant.INTEGER:
 					type = "CONSTANT_INTEGER";
-					buffer.print(" { " + type + ", " + current.getInt() + ", 0, 0 }");
+					buffer.print(" { " + type + ", 0x" + Integer.toHexString(current.getInt()) + ", 0, 0 }");
 					break;
 				case LDCConstant.FLOAT: {
 					float f = current.getFloat();
@@ -138,6 +139,10 @@ public class ConstantGenerator {
 				case LDCConstant.CLASS:
 					type = "CONSTANT_CLASS";
 					buffer.print(" { " + type + ", " + patcher.getClassNumber(current.getClassName()) + ", 0, 0 }");
+					if (!LDC_class) {
+						defines.append("#define LDC_CLASS\n");
+						LDC_class = true;
+					}
 					break;
 				}
 

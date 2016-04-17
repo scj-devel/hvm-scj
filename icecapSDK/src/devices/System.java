@@ -17,12 +17,13 @@ import vm.POSIX64BitMachineFactory;
 import vm.RealtimeClock;
 
 public class System {
-	
-	static
-	{
-		Machine.setMachineFactory(new POSIX64BitMachineFactory());
+
+	static {
+		if (Machine.getMachineFactory() == null) {
+			Machine.setMachineFactory(new POSIX64BitMachineFactory());
+		}
 	}
-	
+
 	@IcecapVolatile("i")
 	public static void delay(int i) {
 		while (i > 0) {
@@ -38,12 +39,12 @@ public class System {
 
 	public static native void resetMemory();
 
-	/*private*/ public static class DevicePrintStream extends PrintStream {
+	/* private */ public static class DevicePrintStream extends PrintStream {
 		@Override
 		public void println(String msg) {
 			devices.Console.println(msg);
 		}
-		
+
 		@Override
 		public void print(String msg) {
 			devices.Console.print(msg);
@@ -62,7 +63,7 @@ public class System {
 		@Override
 		public void print(boolean b) {
 			if (b)
-				devices.Console.print("true"); 
+				devices.Console.print("true");
 			else
 				devices.Console.print("false");
 		}
@@ -100,7 +101,7 @@ public class System {
 			else
 				devices.Console.print(obj.toString());
 		}
-		
+
 		@Override
 		public void write(int b) {
 			devices.Console.print(b);
@@ -111,7 +112,7 @@ public class System {
 			for (int i = off; i < off + len; i++)
 				devices.Console.print(buf[i]);
 		}
-		
+
 		private static class DummyOutputStream extends OutputStream {
 
 			@Override
@@ -128,53 +129,42 @@ public class System {
 	public static void initializeSystemClass() {
 		java.lang.System.setOut(new DevicePrintStream());
 	}
-	
-	private static class DummyHWObject extends HardwareObject
-	{
+
+	private static class DummyHWObject extends HardwareObject {
 		@SuppressWarnings("unused")
 		public int dummyField;
+
 		public DummyHWObject(Address address) {
 			super(address);
 		}
 	}
-	
-	public static void includeHWObjectSupport()
-	{
+
+	public static void includeHWObjectSupport() {
 		DummyHWObject dummy = new DummyHWObject(new Address32Bit(0));
 		dummy.dummyField = 42;
 	}
-	
+
 	static AbsoluteTime now;
-	
+
 	@IcecapCompileMe
-	public static long currentTimeMillis()
-	{
-		RealtimeClock clock = vm.RealtimeClock.getRealtimeClock();		
-		if (now == null)
-		{
+	public static long currentTimeMillis() {
+		RealtimeClock clock = vm.RealtimeClock.getRealtimeClock();
+		if (now == null) {
 			now = new AbsoluteTime();
 		}
 		clock.getCurrentTime(now);
 		return now.getMilliseconds();
 	}
-	
+
 	@IcecapCompileMe
-	public static String getProperty(String key)
-	{
-		if (key.equals("line.separator"))
-		{
-			return "\n"; 
-		}
-		else if (key.equals("org.jmlspecs.openjml.racexceptions"))
-		{
+	public static String getProperty(String key) {
+		if (key.equals("line.separator")) {
+			return "\n";
+		} else if (key.equals("org.jmlspecs.openjml.racexceptions")) {
 			return "true";
-		}
-		else if (key.equals("org.jmlspecs.openjml.racjavaassert"))
-		{
+		} else if (key.equals("org.jmlspecs.openjml.racjavaassert")) {
 			return "true";
-		}
-		else
-		{
+		} else {
 			return null;
 		}
 	}

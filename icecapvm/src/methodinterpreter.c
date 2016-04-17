@@ -28,7 +28,9 @@ extern void printAddress(uint32 addr);
 extern unsigned char *classData;
 #endif
 
+#if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED)
 extern Object* getClass(unsigned short classIndex);
+#endif
 
 #if defined(JAVA_LANG_THROWABLE_INIT_)
 extern void reportStackTraceElement(unsigned short methodIndex, unsigned short pc);
@@ -53,6 +55,14 @@ extern unsigned char readBitFromIO(pointer address, unsigned short offset);
 
 const char* getClassName(unsigned short classIndex);
 const char* getMethodName(unsigned short methodIndex);
+
+#if defined(CREATEMULTIDIMENSIONALARRAYS_USED) || defined(MULTIANEWARRAY_OPCODE_USED) || defined(IMUL_OPCODE_USED) || defined(ANEWARRAY_OPCODE_USED) || defined(NEWFLASHARRAY_OPCODE_USED) || defined(NEWARRAY_OPCODE_USED) || defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0) || defined(N_JAVA_LANG_REFLECT_ARRAY_NEWARRAY) || defined(IREM_OPCODE_USED) || defined(IMOD_USED) || defined(AASTORE_OPCODE_USED) || defined(FASTORE_OPCODE_USED) || defined(BASTORE_OPCODE_USED) || defined(CASTORE_OPCODE_USED) || defined(SASTORE_OPCODE_USED) || defined(LASTORE_OPCODE_USED) || defined(IASTORE_OPCODE_USED) ||  defined(FALOAD_OPCODE_USED) || defined(AALOAD_OPCODE_USED) || defined(BALOAD_OPCODE_USED) || defined(CALOAD_OPCODE_USED) || defined(SALOAD_OPCODE_USED) || defined(LALOAD_OPCODE_USED) || defined(IALOAD_OPCODE_USED) || defined(INVOKE_CLONE_ONARRAY_USED) || defined(HANDLECLONEONARRAY_USED) || defined(N_JAVA_LANG_SYSTEM_ARRAYCOPY) || defined(CREATEARRAY_USED) || defined(IMUL_USED)
+int32 imul(int32 x, int32 y);
+#endif
+
+#if defined(LSUB_OPCODE_USED) || defined(LADD_OPCODE_USED) || defined(LOR_OPCODE_USED) || defined(LXOR_OPCODE_USED) || defined(LAND_OPCODE_USED) || defined(HANDLELONGOPERATOR_USED) || defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED)
+void ladd(uint32* msb1, uint32* lsb1, uint32 msb2, uint32 lsb2);
+#endif
 
 #if defined(JAVA_LANG_THROWABLE_INIT_)
 void handleException(unsigned short classIndex);
@@ -82,7 +92,7 @@ extern void printByte(unsigned char byte);
 extern unsigned short getClassIndex(Object* obj);
 extern void setClassIndex(Object* obj, unsigned short classIndex);
 
-unsigned char* createArrayFromElementSize(unsigned short classIndex, unsigned char elementSize, uint16 count FLASHARG(uint8 flash));
+Object* createArrayFromElementSize(unsigned short classIndex, unsigned char elementSize, uint16 count FLASHARG(uint8 flash));
 unsigned char handleNewClassIndex(int32* sp, unsigned short classIndex);
 
 #if defined(WIDE_OPCODE_USED)
@@ -91,7 +101,7 @@ static signed short handleWide(int32* fp, int32* sp, const unsigned char *method
 
 extern int16 dispatch_native_func(int16 functionNumber, int32 *sp);
 
-unsigned char* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash)) _NOINLINE_;
+Object* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash)) _NOINLINE_;
 unsigned char checkImplements(Object* object, unsigned short interfaceIndex) _NOINLINE_;
 int32 lmul32(int32* sp, uint32 xmsb, uint32 xlsb, uint32 ymsb, uint32 ylsb);
 int32 idiv(int32 a, int32 b) _NOINLINE_;
@@ -1053,7 +1063,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 				unsigned short classIndex = pgm_read_byte(++method_code) << 8;
 				classIndex |= pgm_read_byte(++method_code);
 
-				array = (Object*) createArray(classIndex, (uint16) count FLASHARG((code == NEWFLASHARRAY_OPCODE)));
+				array = createArray(classIndex, (uint16) count FLASHARG((code == NEWFLASHARRAY_OPCODE)));
 
 				if (array != 0) {
 #if defined(GC_GARBAGECOLLECTOR_NEWBARRIER_USED)
@@ -1080,7 +1090,7 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 				uint16* ptr;
 				uint16 length;
 				if (array != 0) {
-					ptr = (uint16*) (HEAP_REF(array, unsigned char*) + sizeof(Object));
+					ptr = (uint16*) (pointer) (HEAP_REF(array, unsigned char*) + sizeof(Object));
 #ifdef FLASHSUPPORT
 					if (isRomRef((uint8*)array)) {
 						length = get_rom_dword((uint8*)ptr);
@@ -1815,7 +1825,7 @@ unsigned char getElementSize(unsigned short classIndex) {
 }
 
 #if defined(CREATEMULTIDIMENSIONALARRAYS_USED) || defined(MULTIANEWARRAY_OPCODE_USED) || defined(ANEWARRAY_OPCODE_USED) || defined(NEWFLASHARRAY_OPCODE_USED) || defined(NEWARRAY_OPCODE_USED) || defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0) || defined(INVOKE_CLONE_ONARRAY_USED) || defined(HANDLECLONEONARRAY_USED) || defined(CREATEARRAY_USED)
-unsigned char* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash)) {
+Object* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash)) {
 	unsigned char elementSize;
 
 	elementSize = getElementSize(classIndex);
@@ -1825,8 +1835,8 @@ unsigned char* createArray(unsigned short classIndex, uint16 count FLASHARG(uint
 #endif
 
 #if defined(CREATEMULTIDIMENSIONALARRAYS_USED) || defined(MULTIANEWARRAY_OPCODE_USED) || defined(ANEWARRAY_OPCODE_USED) || defined(NEWFLASHARRAY_OPCODE_USED) || defined(NEWARRAY_OPCODE_USED) || defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0) || defined(INVOKE_CLONE_ONARRAY_USED) || defined(HANDLECLONEONARRAY_USED) || defined(N_JAVA_LANG_REFLECT_ARRAY_NEWARRAY) || defined(CREATEARRAY_USED)
-unsigned char* createArrayFromElementSize(unsigned short classIndex, unsigned char elementSize, uint16 count FLASHARG(uint8 flash)) {
-	unsigned char* array;
+Object* createArrayFromElementSize(unsigned short classIndex, unsigned char elementSize, uint16 count FLASHARG(uint8 flash)) {
+	Object* array;
 	uint32 size;
 
 #if defined(GLIBC_DOES_NOT_SUPPORT_MUL)
@@ -1837,24 +1847,24 @@ unsigned char* createArrayFromElementSize(unsigned short classIndex, unsigned ch
 
 #ifdef FLASHSUPPORT
 	if (flash) {
-		array = (unsigned char*) gc_allocateObject(0, size);
+		array = gc_allocateObject(0, size);
 	} else {
-		array = (unsigned char*) gc_allocateObject(size, 0);
+		array = gc_allocateObject(size, 0);
 	}
 #else
-	array = (unsigned char*) gc_allocateObject(size, 0);
+	array = gc_allocateObject(size, 0);
 #endif
 
 	if (array != 0) {
-		setClassIndex((Object*) array, classIndex);
+		setClassIndex(array, classIndex);
 #ifdef FLASHSUPPORT
 		if (flash) {
-			set_rom_dword(array + sizeof(Object), count);
+			set_rom_dword(((unsigned char*)array) + sizeof(Object), count);
 		} else {
 			*(int32 *) (HEAP_REF(array, unsigned char*) + sizeof(Object)) = count;
 		}
 #else
-		*(uint16 *) (HEAP_REF(array, unsigned char*) + sizeof(Object)) = count;
+		*(uint16 *) (pointer) (HEAP_REF(array, unsigned char*) + sizeof(Object)) = count;
 #endif
 	}
 	return array;
@@ -1887,7 +1897,7 @@ int32 idiv(int32 x, int32 y) {
 	while (y <= x) {
 		k = 1;
 		sum = y;
-		while ((sum << 1) <= x) {
+		while ((sum << 1) <= (uint32)x) {
 			sum = sum << 1;
 			k = k << 1;
 		}
@@ -2227,12 +2237,12 @@ Object* createMultiDimensionalArrays(int32* sp, unsigned char dimensions, unsign
 
 	if (dimensions == 1)
 	{
-		array = (Object*) createArray(classIndex, (uint16) *(sp - dimensions) FLASHARG(flash));
+		array = createArray(classIndex, (uint16) *(sp - dimensions) FLASHARG(flash));
 	}
 	else
 	{
 		uint16 count = (uint16) *(sp - dimensions);
-		uint32* arrays = (uint32*)createArrayFromElementSize(classIndex, 4, count FLASHARG(flash));
+		uint32* arrays = (uint32*) (pointer) createArrayFromElementSize(classIndex, 4, count FLASHARG(flash));
 		unsigned short index;
 		for (index = 0; index < count; index++)
 		{
@@ -2781,7 +2791,7 @@ static unsigned char handleAStore(int32* sp, const unsigned char *method_code) {
 		if (pgm_read_byte(method_code) == AASTORE_OPCODE) {
 			elementSize = 4;
 		} else {
-			unsigned short classIndex = getClassIndex((Object*) array);
+			unsigned short classIndex = getClassIndex((Object*) (pointer) array);
 			elementSize = getElementSize(classIndex);
 		}
 
@@ -2801,7 +2811,7 @@ static unsigned char handleAStore(int32* sp, const unsigned char *method_code) {
 				*ptr = lsb & 0xff;
 				break;
 				case 2:
-				*((unsigned short *) ptr) = lsb & 0xffff;
+				*((unsigned short *) (pointer) ptr) = lsb & 0xffff;
 				break;
 				case 4:
 #if defined(GC_GARBAGECOLLECTOR_WRITEBARRIER_USED)
@@ -2810,12 +2820,12 @@ static unsigned char handleAStore(int32* sp, const unsigned char *method_code) {
 					gc_GarbageCollector_writeBarrier(sp, (int32)(pointer)array, *((int32*) ptr));
 				}
 #endif
-				*((uint32 *) ptr) = lsb;
+				*((uint32 *) (pointer) ptr) = lsb;
 				break;
 				case 8:
-				*((uint32 *) ptr) = msb;
+				*((uint32 *) (pointer) ptr) = msb;
 				ptr += 4;
-				*((uint32 *) ptr) = lsb;
+				*((uint32 *) (pointer) ptr) = lsb;
 				break;
 			}
 			return count;
@@ -2835,7 +2845,7 @@ static unsigned char handleALoad(int32* sp, const unsigned char *method_code) {
 	uint8 count = 0;
 
 	if (array != 0) {
-		if (index < *(uint16*) (HEAP_REF(array, unsigned char*) + sizeof(Object))) {
+		if (index < *(uint16*) (pointer) (HEAP_REF(array, unsigned char*) + sizeof(Object))) {
 			unsigned char elementSize;
 			unsigned char* ptr;
 			int32 lsb = 0, msb = 0;
@@ -2843,7 +2853,7 @@ static unsigned char handleALoad(int32* sp, const unsigned char *method_code) {
 			if (pgm_read_byte(method_code) == AALOAD_OPCODE) {
 				elementSize = 4;
 			} else {
-				unsigned short classIndex = getClassIndex((Object*) array);
+				unsigned short classIndex = getClassIndex((Object*) (pointer) array);
 				elementSize = getElementSize(classIndex);
 			}
 
@@ -2863,15 +2873,15 @@ static unsigned char handleALoad(int32* sp, const unsigned char *method_code) {
 					lsb = *(signed char*) ptr;
 					break;
 					case 2:
-					lsb = *((signed short *) ptr);
+					lsb = *((signed short *) (pointer) ptr);
 					break;
 					case 4:
-					lsb = *((uint32 *) ptr);
+					lsb = *((uint32 *) (pointer) ptr);
 					break;
 					case 8:
-					msb = *((uint32 *) ptr);
+					msb = *((uint32 *) (pointer) ptr);
 					ptr += 4;
-					lsb = *((uint32 *) ptr);
+					lsb = *((uint32 *) (pointer) ptr);
 					break;
 				}
 				if (pgm_read_byte(method_code) == LALOAD_OPCODE) {
@@ -2975,11 +2985,15 @@ unsigned char handleLDCWithIndex(int32* sp, unsigned short index) {
 		*(float*) sp = pgm_read_pointer(&constant->fvalue, float*);
 		sp++;
 		count++;
-	} else if (type == CONSTANT_CLASS) {
+	}
+#if defined(LDC_CLASS)
+	else if (type == CONSTANT_CLASS) {
 		Object* class = getClass(pgm_read_pointer(&constant->value, int32*));
 		*sp++ = (int32) (pointer) class;
 		count++;
-	} else if (type == CONSTANT_LONG) {
+	}
+#endif
+	else if (type == CONSTANT_LONG) {
 		int32 msi;
 		int32 lsi;
 		const unsigned char *data = (const unsigned char *) pgm_read_pointer(&constant->data, const void **);
@@ -2998,7 +3012,7 @@ unsigned char handleLDCWithIndex(int32* sp, unsigned short index) {
 		*sp++ = lsi;
 		count++;
 	} else if (type == CONSTANT_DOUBLE) {
-		*(double*) sp = *(const double*) pgm_read_pointer(&constant->data, const void **);
+		* (double*) (pointer) sp = *(const double*) pgm_read_pointer(&constant->data, const void **);
 		sp += 2;
 		count += 2;
 	}
@@ -3052,7 +3066,7 @@ signed char handleCloneOnArray(int32* sp) {
 	unsigned char* dst;
 	unsigned char* src;
 	uint16 count;
-	unsigned char* clone = 0;
+	Object* clone = 0;
 
 	unsigned char* array = (unsigned char*) (pointer) *(--sp);
 	if (array != 0) {
