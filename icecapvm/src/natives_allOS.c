@@ -2864,6 +2864,11 @@ int32* get_java_stack_base(int16 size) {
 
 	stackAsArray = gc_allocateObject((JAVA_STACK_SIZE << 2) + sizeof(uint16), 0);
 
+	if (stackAsArray == 0)
+	{
+		printStr("Could not allocate java heap (out of heap memory)\n");
+	}
+
 	java_stack_base = (uint32*) (pointer) stackAsArray;
 
 #if defined(_I)
@@ -2887,6 +2892,10 @@ unsigned char* get_classdata_base(void)
 {
 	Object* classdata = gc_allocateObject(sizeof(struct _staticClassFields_c), 0);
 
+	if (classdata == 0)
+	{
+		printStr("Could not allocate static class data (out of heap memory)\n");
+	}
 	return (unsigned char*)(pointer)classdata;
 }
 
