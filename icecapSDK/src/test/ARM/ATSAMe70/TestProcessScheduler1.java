@@ -67,6 +67,9 @@ public class TestProcessScheduler1 extends ATSAMe70SCJTargetConfiguration {
 	}
 
 	public static void main(String args[]) {
+		init();
+		
+		devices.Console.println("Starting..");
 		MachineFactory mFactory = new ATSAMe70MachineFactory();
 		
 		Process p1 = new vm.Process(new vm.ProcessLogic() {
@@ -83,7 +86,7 @@ public class TestProcessScheduler1 extends ATSAMe70SCJTargetConfiguration {
 
 			@Override
 			public void catchError(Throwable t) {
-				blink(1000);
+				devices.Console.println("catchError p1");
 			}
 		}, new int[getReasonableProcessStackSize()]);
 
@@ -101,7 +104,7 @@ public class TestProcessScheduler1 extends ATSAMe70SCJTargetConfiguration {
 
 			@Override
 			public void catchError(Throwable t) {
-				blink(1000);
+				devices.Console.println("catchError p1");
 			}
 		}, new int[getReasonableProcessStackSize()]);
 
@@ -116,9 +119,11 @@ public class TestProcessScheduler1 extends ATSAMe70SCJTargetConfiguration {
 		vm.ClockInterruptHandler.initialize(scheduler, sequencerStack);
 		vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
 
+		devices.Console.println("startClockHandler..");
 		clockHandler.startClockHandler(mainProcess, mFactory);
 
-		blink(16000);
+		devices.Console.println("Finished..");
+		blink(10000);
 	}
 
 	@Override

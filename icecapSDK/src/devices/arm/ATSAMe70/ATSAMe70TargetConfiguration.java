@@ -19,7 +19,7 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 
 	}
 
-	private static boolean initialized = false;
+	protected static boolean initialized = false;
 	
 	static {
 		Machine.setMachineFactory(new ATSAMe70MachineFactory());
@@ -122,7 +122,7 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 			+ "   return -1;\n"
 			+ "}\n"
 			)
-	private static native void initNative();
+	protected static native void initNative();
 
 	@IcecapInlineNative(functionBody = ""
 			+ "{\n"
@@ -151,7 +151,7 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 			+ "ioport_set_pin_mode(pin, mode);\\\n"
 			+ "ioport_disable_pin(pin);\\\n"
 			+ "} while (0)\n")
-	private static native void initUart();
+	protected static native void initUart();
 
 	protected static void init()
 	{
@@ -213,16 +213,17 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 			)
 	protected static native void set_led_output();
 
-	@IcecapInlineNative(functionBody = "" + "{\n" + "   SysTick_Config(30000000);\n" + "   return -1;\n" + "}\n")
-	static native void initSystemTick();
+	@IcecapInlineNative(functionBody = "" + "{\n" + "   SysTick_Config(300000);\n" + "   return -1;\n" + "}\n")
+	protected static native void initSystemTick();
 	
 	@IcecapCVar(expression = "systemTick", requiredIncludes = "extern volatile uint8 systemTick;")
 	private static byte systemTick;
 	
+	/* This clock will run for approx 49 days before overrun */
 	@IcecapCVar(expression = "systemClock", requiredIncludes = "extern volatile uint32 systemClock;")
-	private static byte systemClock;
+	protected static int systemClock;
 	
-	@IcecapCFunc(signature = "void SysTick_Handler(void)" /*, requiredIncludes = "static int32 fp[4];"*/)
+	@IcecapCFunc(signature = "void SysTick_Handler(void)")
 	private static void handleSystemTick() {
 		systemTick++;
 		systemClock++;

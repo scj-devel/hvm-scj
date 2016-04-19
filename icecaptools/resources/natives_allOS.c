@@ -361,6 +361,7 @@ void breakPointHit(unsigned short methodNumber, unsigned short pc);
 #endif
 void unimplemented(int16 mid);
 int32* get_java_stack_base(int16 size);
+unsigned char* get_classdata_base(void);
 #if defined(N_VM_FULLSTACKANANLYSER_GET_JAVA_STACK_ARRAY)
 int16 n_vm_FullStackAnanlyser_get_java_stack_array(int32 *sp);
 #endif
@@ -2878,7 +2879,7 @@ int32* get_java_stack_base(int16 size) {
 #endif
 
 	*(uint16 *) (pointer) (HEAP_REF(stackAsArray, unsigned char*) + sizeof(Object)) = length;
-	intStack = HEAP_REF(stackAsArray, int32*) + 1;
+	intStack = HEAP_REF((pointer)stackAsArray, int32*) + 1;
 
 	for (index = 0; index < length; index++)
 	{

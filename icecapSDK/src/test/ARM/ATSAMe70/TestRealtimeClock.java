@@ -14,9 +14,9 @@ public class TestRealtimeClock extends ATSAMe70SCJTargetConfiguration {
 	static final int ticks = 100;
 
 	public static void main(String[] args) {
-		MachineFactory mFactory = new ATSAMe70MachineFactory();
-
 		init();
+		
+		MachineFactory mFactory = new ATSAMe70MachineFactory();
 		
 		devices.Console.println("Start...");
 

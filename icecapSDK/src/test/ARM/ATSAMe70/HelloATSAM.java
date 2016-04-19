@@ -17,8 +17,4 @@ public class HelloATSAM extends ATSAMe70TargetConfiguration {
 		return "C:\\home\\icecapout";
 	}
 
-	@Override
-	protected String getASFLocation() {
-		return "../ASF";
-	}
 }
