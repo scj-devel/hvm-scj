@@ -162,6 +162,28 @@ public final class TestPortalRT {
 	public static	RelativeTime start(PeriodicParameters pp) {
 		return pp.start;
 	}
+	
+	/**
+	 * Used by test programs to get the configuration parameter's message length.
+	 *
+	 * @param configParam is a configuration parameter.
+	 * 
+	 * @return the message length of the parameter <code>configParam</code>.
+	 */	
+	public static int getMessageLength(ConfigurationParameters configParam) {
+		return configParam.getMessageLength();
+	}
+	
+	/**
+	 * Used by test programs to get the configuration parameter's stack trace length.
+	 *
+	 * @param configParam is a configuration parameter.
+	 * 
+	 * @return the stack trace length of the parameter <code>configParam</code>.
+	 */	
+	public static int getStackTraceLength(ConfigurationParameters configParam) {
+		return configParam.getStackTraceLength();
+	}
 }
 
 
