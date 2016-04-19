@@ -417,7 +417,7 @@ int16 n_java_lang_System_getProperty(int32 *sp) {
 #if defined (N_JAVA_LANG_SYSTEM_SETOUT)
 extern unsigned char *classData;
 int16 n_java_lang_System_setOut(int32 *sp) {
-	((struct _staticClassFields_c *) classData)->out_f = (uint32) sp[0];
+	HEAP_REF(classData, struct _staticClassFields_c *)->out_f = (uint32) sp[0];
 	return -1;
 }
 #endif
@@ -2881,6 +2881,13 @@ int32* get_java_stack_base(int16 size) {
 	}
 
 	return intStack;
+}
+
+unsigned char* get_classdata_base(void)
+{
+	Object* classdata = gc_allocateObject(sizeof(struct _staticClassFields_c), 0);
+
+	return (unsigned char*)(pointer)classdata;
 }
 
 #if defined(N_VM_FULLSTACKANANLYSER_GET_JAVA_STACK_ARRAY)

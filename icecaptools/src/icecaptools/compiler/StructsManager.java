@@ -21,6 +21,8 @@ public class StructsManager {
     private IDGenerator idGen;
     private HashMap<String, String> classToStructMap;
 
+    private String classFieldsTypedefName;
+    
     public StructsManager(FieldOffsetCalculator foCalc, IDGenerator idGen) {
         this.foCalc = foCalc;
         this.idGen = idGen;
@@ -73,7 +75,8 @@ public class StructsManager {
 
     private void endStruct(String className, StringBuffer buffer) {
         buffer.append("} ");
-        buffer.append(idGen.getUniqueId(className, "c", "s"));
+        this.classFieldsTypedefName = idGen.getUniqueId(className, "c", "s");
+        buffer.append(this.classFieldsTypedefName);
         buffer.append(";\n");
     }
 
@@ -123,7 +126,7 @@ public class StructsManager {
 
         Iterator<JavaClass> classes = classFieldsMap.keySet().iterator();
         HashSet<String> fieldsInStruct = new HashSet<String>();
-        String structName = startStruct(STATICCLASSFIELDS, classFieldStructs, false);
+        String classFieldsStructName = startStruct(STATICCLASSFIELDS, classFieldStructs, false);
         
         while (classes.hasNext()) {
             JavaClass clazz = classes.next();
@@ -136,7 +139,7 @@ public class StructsManager {
                 NativeFieldInfo nfi = observer.isNativeField(clazz.getClassName(), nextField);
                 if (nfi == null)
                 {
-                    addField(structName, nextField, fieldsInStruct, classFieldStructs);
+                    addField(classFieldsStructName, nextField, fieldsInStruct, classFieldStructs);
                 }
             }
         }
@@ -150,4 +153,8 @@ public class StructsManager {
     public String getStructName(String className) {
         return classToStructMap.get(className);
     }
+
+	public String getClassFieldsTypedefName() {
+		return this.classFieldsTypedefName;
+	}
 }
