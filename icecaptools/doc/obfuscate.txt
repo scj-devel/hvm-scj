@@ -1,5 +1,5 @@
 cd ~/git/hvm-scj/icecapvm/src/
-cp allocation_point.c allocation_point.h gc.c gc.h icecapvm.c methodinterpreter.c methodinterpreter.h natives_allOS.c natives_arduino.c natives_arm.c natives_avr.c natives_beaglebone.c natives_cr16c.c natives_ev3.c natives_i86.c natives_jml.c natives_necv850.c ostypes.h print.c rom_access.c rom_access.h rom_heap.c rom_heap.h types.h ../../icecaptools/resources/.
+cp allocation_point.c allocation_point.h gc.c gc.h icecapvm.c methodinterpreter.c methodinterpreter.h natives_allOS.c natives_arduino.c natives_arm.c natives_avr.c natives_beaglebone.c natives_cr16c.c natives_ev3.c natives_i86.c natives_jml.c natives_necv850.c ostypes.h print.c rom_access.c rom_access.h rom_heap.c rom_heap.h types.h arm7_interrupt.s ../../icecaptools/resources/.
 cd ~/git/hvm-scj
 git status
 

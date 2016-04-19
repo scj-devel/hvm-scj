@@ -29,7 +29,7 @@ import org.eclipse.ui.PlatformUI;
 
 public abstract class AbstractHVMPOSIXLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
 
-	private static final int COMPILATION_TIMEOUT = 20;
+	private static final int COMPILATION_TIMEOUT = 60;
 
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
