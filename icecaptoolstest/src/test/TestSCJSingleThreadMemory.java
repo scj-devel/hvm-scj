@@ -242,7 +242,7 @@ public class TestSCJSingleThreadMemory {
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
 				2002, 0, 0);
 		
-		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n********** TestSCJThreadMemory main.begin ******************");
 		new LaunchLevel2(new MyApp());

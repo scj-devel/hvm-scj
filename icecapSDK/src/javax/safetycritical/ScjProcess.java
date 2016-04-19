@@ -257,7 +257,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 //							2 * Const.IDLE_BACKING_STORE, 0, 0)
 					new StorageParameters(2 * Const.IDLE_BACKING_STORE, 
 							2 * Const.IDLE_BACKING_STORE, 0, 0),
-					new ConfigurationParameters (null, -1, -1, new long[] { Const.IDLE_PROCESS_STACK_SIZE })
+					new ConfigurationParameters (-1, -1, new long[] { Const.IDLE_PROCESS_STACK_SIZE })
 					) 
 				{
 					public void handleAsyncEvent() {

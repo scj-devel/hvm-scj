@@ -189,7 +189,7 @@ public class TestSCJMP_CustAffinitySet_Level2 implements Safelet<Mission> {
 				+ Const.MISSION_MEM - 150 * 1000, 
 				Const.PRIVATE_MEM, 0, Const.MISSION_MEM_DEFAULT - 150 * 1000);
 
-		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n***** test multicore affinity set5 main.begin ************");
 		new LaunchMulticore(new TestSCJMP_CustAffinitySet_Level2(), 2);

@@ -234,7 +234,7 @@ public class TestAll {
 		});
 		ICompilationRegistry cregistry;
 
-		cregistry = new TestCompilationRegistry();
+		cregistry = getCompilationRegistry();
 
 		// cregistry = new CompileAllRegistry();
 
@@ -244,6 +244,10 @@ public class TestAll {
 				cregistry, true);
 
 		compileAndExecute(outputFolder, testClass, testNo);
+	}
+
+	protected ICompilationRegistry getCompilationRegistry() {
+		return new TestCompilationRegistry();
 	}
 
 	protected void preCompile(String inputPackage, String testClass) throws Exception {

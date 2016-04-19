@@ -194,7 +194,7 @@ public class TestSCJMPWaitAndNotify {
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
 				Const.PRIVATE_MEM, 0, 0);
 
-		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n***** test multicore wait and notify main.begin *****");
 		new LaunchMulticore(new MyApp(), 2);

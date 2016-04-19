@@ -185,7 +185,7 @@ public class TestSCJSingleTwoMissions {
             Const.PRIVATE_MEM, 
             0, 
             0);
-	  configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+	  configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
  
       devices.Console.println("\n***** Two Missions main.begin ************");
       new LaunchLevel1(new MyApp());

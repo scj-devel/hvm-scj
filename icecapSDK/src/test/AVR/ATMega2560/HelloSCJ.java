@@ -213,7 +213,7 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 		storageParameters_Handlers = new StorageParameters(handlerMemorySize,
 				//new long[] { Const.HANDLER_STACK_SIZE },
 				handlerMemorySize, 0, 0);
-		configParameters = new ConfigurationParameters(null, -1, -1, new long[] { handlerStackSize });
+		configParameters = new ConfigurationParameters(-1, -1, new long[] { handlerStackSize });
 
 		MyApp app = new MyApp();
 

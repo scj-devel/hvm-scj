@@ -27,7 +27,7 @@ public class TestSCJStep0 {
 				PeriodicParameters periodicParameters,
 				StorageParameters storage, Mission owner) {
 			super(priority, periodicParameters, storage, 
-				  new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE }));
+				  new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE }));
 			this.count = 0;
 			this.owner = owner;
 		}
@@ -67,7 +67,7 @@ public class TestSCJStep0 {
 		TopLevelSequencer() {
 			super(new PriorityParameters(Priorities.PR94), 
 				  new StorageParameters(0, 0, 0, 0),
-				  new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE }));
+				  new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE }));
 			this.mission = new Mission1();
 		}
 

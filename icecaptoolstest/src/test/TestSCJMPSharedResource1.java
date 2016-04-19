@@ -204,7 +204,7 @@ public class TestSCJMPSharedResource1 {
             0, 
             0);
 	  
-	  configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+	  configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
         failed = true;
         
