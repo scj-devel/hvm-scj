@@ -160,7 +160,7 @@ public class TestSCJMPApevhAndOneShotAndThread implements Safelet<Mission> {
 				- 150 * 1000, Const.PRIVATE_MEM, 0,
 				Const.MISSION_MEM_DEFAULT - 150 * 1000);
 
-		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n***** test multicore aperiodic handler and thread main.begin ************");
 		new LaunchMulticore(new TestSCJMPApevhAndOneShotAndThread(), 1);

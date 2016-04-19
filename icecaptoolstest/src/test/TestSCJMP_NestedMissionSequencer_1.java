@@ -346,7 +346,7 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet<Mission> {
 		storageParameters_Handlers = new StorageParameters(0,
 				Const.PRIVATE_MEM - 10 * 1000, 0, 0);
 
-		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n***** test multicore nested mission sequencer1 main.begin ************");
 		new LaunchMulticore(new TestSCJMP_NestedMissionSequencer_1(), 2);

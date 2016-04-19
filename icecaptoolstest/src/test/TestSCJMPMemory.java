@@ -143,7 +143,7 @@ public class TestSCJMPMemory {
 				+ Const.MISSION_MEM, Const.PRIVATE_MEM, 0,
 				Const.MISSION_MEM_DEFAULT);
 
-		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n***** test multicore memory management main.begin ************");
 		new LaunchMulticore(new MyApp(), 1);
