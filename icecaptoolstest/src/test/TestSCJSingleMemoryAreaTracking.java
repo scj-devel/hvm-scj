@@ -170,7 +170,7 @@ public class TestSCJSingleMemoryAreaTracking {
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_MEM,
 				Const.PRIVATE_MEM, 0, 0);
 
-		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n***** TestSCJSingleMemoryAreaTracking begin *****");
 		new LaunchLevel1(new MyApp());

@@ -2629,7 +2629,7 @@ static unsigned short handlePutStatic(const unsigned char* method_code, int32* s
 
 	getFieldInfo(method_code, &offset, &size);
 
-	data = classData + (offset >> 3);
+	data = HEAP_REF(classData, unsigned char*) + (offset >> 3);
 
 	if ((size >> 3) > 4) {
 		msb = *(--sp);
@@ -2651,7 +2651,7 @@ static unsigned short handleGetStatic(const unsigned char* method_code, int32* s
 
 	getFieldInfo(method_code, &offset, &size);
 
-	data = classData + (offset >> 3);
+	data = HEAP_REF(classData, unsigned char*) + (offset >> 3);
 
 	return getField(data, size, sp);
 }

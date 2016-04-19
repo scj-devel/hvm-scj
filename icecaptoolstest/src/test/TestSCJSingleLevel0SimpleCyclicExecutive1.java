@@ -120,7 +120,7 @@ public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive i
 
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE, Const.PRIVATE_MEM, 0, 0);
 
-		configParameters = new ConfigurationParameters(null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+		configParameters = new ConfigurationParameters(-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		MachineFactory mFactory = new POSIX64BitMachineFactory();
 		

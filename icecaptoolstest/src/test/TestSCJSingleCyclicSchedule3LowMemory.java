@@ -198,7 +198,7 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 
 		storageParameters_Handlers = new StorageParameters(500, 500, 0, 0);
 		
-		configParameters = new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n****** TestSCJCyclicSchedule3LowMemory begin *********");
 		new LaunchLevel0(new MyApp());

@@ -417,7 +417,7 @@ int16 n_java_lang_System_getProperty(int32 *sp) {
 #if defined (N_JAVA_LANG_SYSTEM_SETOUT)
 extern unsigned char *classData;
 int16 n_java_lang_System_setOut(int32 *sp) {
-	((struct _staticClassFields_c *) classData)->out_f = (uint32) sp[0];
+	HEAP_REF(classData, struct _staticClassFields_c *)->out_f = (uint32) sp[0];
 	return -1;
 }
 #endif
@@ -1774,7 +1774,7 @@ extern void handleException(unsigned short classIndex);
 #endif
 
 #if defined(VM_PROCESS_EXECUTEWITHSTACK)
-extern void set_stack_pointer();
+extern void set_stack_pointer(void);
 #endif
 
 #if defined(VM_CLOCKINTERRUPTHANDLER_HANDLE) || defined(VM_PROCESS_INITIALIZE)
@@ -1788,8 +1788,8 @@ void _transfer(void) {
 	uint32 nextSpObject = nextProcess->sp_f;
 	uint32 currentSpObject = currentProcess->sp_f;
 
-	pointer* nextSp = (pointer*) ((unsigned char*) (pointer) nextSpObject + sizeof(Object));
-	pointer* currentSp = (pointer*) ((unsigned char*) (pointer) currentSpObject + sizeof(Object));
+	pointer* nextSp = (pointer*) (pointer)((unsigned char*) (pointer) nextSpObject + sizeof(Object));
+	pointer* currentSp = (pointer*) (pointer)((unsigned char*) (pointer) currentSpObject + sizeof(Object));
 
 	nextSp = HEAP_REF(nextSp, pointer*);
 	currentSp = HEAP_REF(currentSp, pointer*);
@@ -2854,22 +2854,31 @@ void unimplemented(int16 mid) {
 #if defined(TEST_TESTNATIVEFIELD_SUBCLASS_TESTFIELD_USED)
 int8 superByte;
 #endif
-
-static unsigned char java_stack[(JAVA_STACK_SIZE << 2) + sizeof(Object) + sizeof(uint16)];
+static uint32* java_stack_base;
 
 int32* get_java_stack_base(int16 size) {
-  Object* stackAsArray = (Object*)(pointer)&java_stack[0];
+	Object* stackAsArray;
 	int32* intStack;
 	uint16 length = JAVA_STACK_SIZE;
 	uint16 index;
+
+	stackAsArray = gc_allocateObject((JAVA_STACK_SIZE << 2) + sizeof(uint16), 0);
+
+	if (stackAsArray == 0)
+	{
+		printStr("Could not allocate java heap (out of heap memory)\n");
+	}
+
+	java_stack_base = (uint32*) (pointer) stackAsArray;
+
 #if defined(_I)
-	setClassIndex((Object*) stackAsArray, _I);
+	setClassIndex(stackAsArray, _I);
 #else
-	setClassIndex((Object*) stackAsArray, -1);
+	setClassIndex(stackAsArray, -1);
 #endif
 
-	*(uint16 *) (pointer) ((unsigned char*)stackAsArray + sizeof(Object)) = length;
-	intStack = (int32*) (pointer)&java_stack[4];
+	*(uint16 *) (pointer) (HEAP_REF(stackAsArray, unsigned char*) + sizeof(Object)) = length;
+	intStack = HEAP_REF(stackAsArray, int32*) + 1;
 
 	for (index = 0; index < length; index++)
 	{
@@ -2879,10 +2888,21 @@ int32* get_java_stack_base(int16 size) {
 	return intStack;
 }
 
+unsigned char* get_classdata_base(void)
+{
+	Object* classdata = gc_allocateObject(sizeof(struct _staticClassFields_c), 0);
+
+	if (classdata == 0)
+	{
+		printStr("Could not allocate static class data (out of heap memory)\n");
+	}
+	return (unsigned char*)(pointer)classdata;
+}
+
 #if defined(N_VM_FULLSTACKANANLYSER_GET_JAVA_STACK_ARRAY)
 int16 n_vm_FullStackAnanlyser_get_java_stack_array(int32 *sp)
 {
-	sp[0] = (int32)(pointer)&java_stack[0];
+	sp[0] = (int32)(pointer)java_stack_base;
 	return -1;
 }
 #endif

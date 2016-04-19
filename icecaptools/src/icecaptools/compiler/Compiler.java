@@ -108,8 +108,8 @@ public class Compiler {
 		RequiredFieldsManager fieldsManager = new RequiredFieldsManager(supportLoading);
 		RequiredEntryManager interfacesManager = new RequiredInterfacesManager(supportLoading);
 		ReferencesManager referencesManager = new ReferencesManager(foCalc);
-		classFieldsManager = new ClassFieldsManager();
 		StructsManager structsManager = new StructsManager(foCalc, idGen);
+		classFieldsManager = new ClassFieldsManager(structsManager);
 
 		HashMap<JavaClass, OffsetPair> objectSize = foCalc.getObjectSizes();
 		FileOutputStream classesSource = null;
@@ -177,6 +177,7 @@ public class Compiler {
 				"#include \"types.h\"\n#include \"methods.h\"\n#include \"ostypes.h\"\n#include \"classes.h\"\n\n");
 
 		fileSb.append("unsigned char initClasses(void);\n");
+		fileSb.append("unsigned char* get_classdata_base(void);\n");
 
 		classesSb.startProgmem();
 		classesSb.appendCode("static RANGE const ClassInfo _classes[" + classNumber + "] PROGMEM = {\n",
@@ -363,7 +364,7 @@ public class Compiler {
 		requieredFields.append("#define INHERITANCEMATRIXSIZE " + classMatrix.getMatrixSize() + "\n");
 		fileSb.append("unsigned char initClasses(void) {\n");
 		if (classFieldsManager.hasClassFields()) {
-			fileSb.append("   classData = &_classData[0];\n");
+			fileSb.append("   classData = get_classdata_base();\n");
 			if (staticReferenceOffsetsVariableUsed) {
 				fileSb.append("   staticReferenceOffsets = &_staticReferenceOffsets[0];\n");
 			}

@@ -68,7 +68,7 @@ public class MyApp implements Safelet {
 			super(
 					new PriorityParameters(Priorities.PR99),
 					new StorageParameters(Const.PRIVATE_MEM, 0, 0, 0),
-					new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE }));
+					new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE }));
 
 			devices.Console
 					.println("---- MySequencer.constructor: super finished");

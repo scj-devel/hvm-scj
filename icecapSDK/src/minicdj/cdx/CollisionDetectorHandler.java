@@ -59,7 +59,7 @@ public class CollisionDetectorHandler extends PeriodicEventHandler
         //new StorageParameters(memSize, null)
         super(new PriorityParameters(Priorities.PR98), null, 
               new StorageParameters(Constants.TRANSIENT_DETECTOR_SCOPE_SIZE, 0,0,0),
-              new ConfigurationParameters (null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE })); // HSO
+              new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE })); // HSO
         this.mission = mission; // added missSeq as parameter
     }
 

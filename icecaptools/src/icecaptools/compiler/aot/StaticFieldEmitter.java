@@ -111,7 +111,7 @@ public abstract class StaticFieldEmitter {
                 if ((fInfo != null) && (!fInfo.isFloat)) {
                 } else {
                     localVariables.print("   unsigned char* sdata;\n");
-                    output.append("      sdata = classData + " + (foffset >> 3) + ";\n");
+                    output.append("      sdata = HEAP_REF(classData, unsigned char*) + " + (foffset >> 3) + ";\n");
                 }
                 requiredIncludes.print("extern unsigned char *classData;\n");
 
@@ -122,13 +122,13 @@ public abstract class StaticFieldEmitter {
                 if ((fInfo != null) && (!fInfo.isFloat)) {
                     output.append("      ((struct ");
                     output.append(fInfo.getStructName());
-                    output.append(" *)(pointer)classData) -> ");
+                    output.append(" *)(pointer)HEAP_REF(classData, staticClassFields_c*)) -> ");
                     output.append(fInfo.getStructMemberName());
                     output.append(" = lsb_" + type + ";\n");
                     if ((fsize & 0xfc) > 32) {
                         output.append("      ((struct ");
                         output.append(fInfo.getStructName());
-                        output.append(" *)(pointer)classData) -> ");
+                        output.append(" *)(pointer)HEAP_REF(classData, staticClassFields_c*)) -> ");
                         output.append(fInfo.getStructMemberLSBName());
                         output.append(" = msb_int32;\n");
                     }
@@ -217,7 +217,7 @@ public abstract class StaticFieldEmitter {
                 if ((fInfo != null) && (!fInfo.isFloat)) {
                 } else {
                     localVariables.print("   unsigned char* sdata;\n");
-                    output.append("      sdata = classData + " + (foffset >> 3) + ";\n");
+                    output.append("      sdata = HEAP_REF(classData, unsigned char*) + " + (foffset >> 3) + ";\n");
                 }
                 requiredIncludes.print("extern unsigned char *classData;\n");
 
@@ -226,14 +226,14 @@ public abstract class StaticFieldEmitter {
                     if ((fsize & 0xfc) > 32) {
                         buffer.append("((struct ");
                         buffer.append(fInfo.getStructName());
-                        buffer.append(" *)(pointer)classData) -> ");
+                        buffer.append(" *)(pointer)HEAP_REF(classData, staticClassFields_c*)) -> ");
                         buffer.append(fInfo.getStructMemberLSBName());
                         sm.push(Size.INT, buffer.toString());
                         buffer = new StringBuffer();
                     }
                     buffer.append("((struct ");
                     buffer.append(fInfo.getStructName());
-                    buffer.append(" *)(pointer)classData) -> ");
+                    buffer.append(" *)(pointer)HEAP_REF(classData, staticClassFields_c*)) -> ");
                     buffer.append(fInfo.getStructMemberName());
 
                     sm.push(dstSize, buffer.toString());

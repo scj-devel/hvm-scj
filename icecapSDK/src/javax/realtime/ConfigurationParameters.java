@@ -38,13 +38,12 @@ import javax.safetycritical.annotate.SCJAllowed;
  */
 public class ConfigurationParameters {
 	
-	MemoryArea area;
 	int messageLength;
 	int stackTraceLength;
 	long[] sizes;
 	
 	@SCJAllowed
-	public ConfigurationParameters(MemoryArea area,
+	public ConfigurationParameters(
 		int messageLength,
 		int stackTraceLength,
 		long[] sizes)
@@ -53,7 +52,7 @@ public class ConfigurationParameters {
 			throw new IllegalArgumentException("messageLength not legal");
 		if (stackTraceLength < -1)
 			throw new IllegalArgumentException("maxIstackTraceLengthmmortal not legal");
-		this.area = area;
+		
 		this.messageLength = messageLength;
 		this.stackTraceLength = stackTraceLength;
 		this.sizes = sizes;

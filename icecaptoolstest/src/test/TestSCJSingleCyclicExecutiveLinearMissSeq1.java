@@ -134,7 +134,7 @@ public class TestSCJSingleCyclicExecutiveLinearMissSeq1 extends CyclicExecutive 
 
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE, Const.PRIVATE_MEM, 0, 0);
 
-		configParameters = new ConfigurationParameters(null, -1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+		configParameters = new ConfigurationParameters(-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		MachineFactory mFac = new POSIX64BitMachineFactory();
 		new LaunchLevel0(new TestSCJSingleCyclicExecutiveLinearMissSeq1(), mFac);

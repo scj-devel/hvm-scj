@@ -34,7 +34,7 @@ public class TestSCJPrioritySchedule2 {
 				PeriodicParameters periodic, long memSize, int n,
 				AperiodicEventHandler aevh) {
 			super(priority, periodic, new StorageParameters(memSize, 0, 0, 0), 
-				  new ConfigurationParameters (null, -1, -1, new long[] { 256 }));
+				  new ConfigurationParameters (-1, -1, new long[] { 256 }));
 			this.n = n;
 			this.aevh = aevh;
 		}
@@ -59,7 +59,7 @@ public class TestSCJPrioritySchedule2 {
 				AperiodicParameters release, long memSize, int n,
 				MissionSequencer<MyMission> missSeq) {
 			super(priority, release, new StorageParameters(memSize, 0, 0, 0), 
-				  new ConfigurationParameters (null, -1, -1, new long[] { 256 }));
+				  new ConfigurationParameters (-1, -1, new long[] { 256 }));
 			this.n = n;
 			this.missSeq = missSeq;
 		}
@@ -125,7 +125,7 @@ public class TestSCJPrioritySchedule2 {
 				super(
 						new PriorityParameters(Priorities.PR95),
 						new StorageParameters(3072, 0, 0, 0),
-						new ConfigurationParameters (null, -1, -1, new long[] { 768 })); // mission
+						new ConfigurationParameters (-1, -1, new long[] { 768 })); // mission
 				mission = new MyMission(this);
 			}
 

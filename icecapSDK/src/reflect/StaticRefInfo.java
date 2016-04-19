@@ -80,10 +80,10 @@ public class StaticRefInfo {
 		
 		switch (Machine.architecture) {
 		case Machine.X86_64:
-			adr = new Address64Bit(StaticRefInfo64.classData);
+			adr = new Address64Bit(StaticRefInfo64.getClassData());
 			break;
 		case Machine.X86_32:
-			adr = new Address64Bit(StaticRefInfo32.classData);
+			adr = new Address64Bit(StaticRefInfo32.getClassData());
 			break;
 		default:
 			adr = null;

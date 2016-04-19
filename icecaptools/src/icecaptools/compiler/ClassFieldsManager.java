@@ -20,8 +20,8 @@ public class ClassFieldsManager {
 
     private boolean staticReferenceOffsetsVariableUsed;
     public boolean NUMBEROFCLASSES_varUsed;
-    
-    ClassFieldsManager() {
+
+    ClassFieldsManager(StructsManager sMan) {
         classDataLength = 0;
         referenceFields = new ArrayList<FieldInfo>();
         staticReferenceOffsetsVariableUsed = false;
@@ -60,20 +60,6 @@ public class ClassFieldsManager {
     public boolean finalizeClassfieldDeclarations(MemorySegment buffer) {
         while (classDataLength % 8 > 0) {
             classDataLength++;
-        }
-
-        int numberOfBytes = classDataLength >> 3;
-
-        if (numberOfBytes > 0) {
-            buffer.appendData("static unsigned char " + classDataVariable + "[" + numberOfBytes + "] = {", 0);
-            while (numberOfBytes > 0) {
-                buffer.appendData(" 0", 1);
-                numberOfBytes--;
-                if (numberOfBytes > 0) {
-                    buffer.appendData(",", 0);
-                }
-            }
-            buffer.print("};\n\n");
         }
 
         if (staticReferenceOffsetsVariableUsed) {
