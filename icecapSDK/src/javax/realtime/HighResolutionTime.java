@@ -242,14 +242,9 @@ public abstract class HighResolutionTime<T extends HighResolutionTime<T>>
 			return 0;
 	}
 	
-	public Object clone()  {
+	public Object clone() throws CloneNotSupportedException  {
 		
-		try {
-		    return super.clone();  // shallow copy; not tested
-		}
-		catch (CloneNotSupportedException e) {
-			throw new Error ("HighResolutionTime.clone error");
-		}
+		return super.clone();  
 		
 	}
 
