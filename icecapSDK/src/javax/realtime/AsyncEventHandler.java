@@ -41,7 +41,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
 @SCJAllowed(javax.safetycritical.annotate.Level.LEVEL_0)
-public class AsyncEventHandler extends AbstractAsyncEventHandler {
+public class AsyncEventHandler extends AsyncBaseEventHandler {
 
 	
 	public void run() {

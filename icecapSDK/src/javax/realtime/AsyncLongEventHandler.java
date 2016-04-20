@@ -1,6 +1,6 @@
 package javax.realtime;
 
-public class AsyncLongEventHandler extends AbstractAsyncEventHandler {
+public class AsyncLongEventHandler extends AsyncBaseEventHandler {
 
 	protected long data = 0L;
 	
