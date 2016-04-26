@@ -54,13 +54,13 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 
 	boolean missionTerminate = false;
 
-	/*private*/ static Mission[] missionSet = null;
-	/*private*/ static boolean isMissionSetInit = false;
+	static Mission[] missionSet = null;
+	static boolean isMissionSetInit = false;
 
 	static MissionBehavior missionBehaviour;
 
 	ManagedSchedulableSet msSetForMission;
-	Phase phaseOfMission;
+	Phase phaseOfMission = Phase.STARTUP;
 
 	protected int missionIndex = -1;
 	boolean isMissionSetInitByThis = false;
@@ -170,6 +170,7 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 	}
 
 	void runInitialize() {
+		phaseOfMission = Phase.INITIALIZATION;
 		missionBehaviour.runInitialize(this);
 	}
 
@@ -179,6 +180,7 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 	//  For cyclic schedule execution, this method is overwritten in 
 	//  the subclass CyclicExecutive. 
 	{
+		phaseOfMission = Phase.RUN;
 		missionBehaviour.runExecute(this);
 	}
 
@@ -188,6 +190,7 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 	//  For cyclic schedule execution, this method is overwritten in 
 	//  the subclass CyclicExecutive. 
 	{
+		phaseOfMission = Phase.CLEANUP;
 		missionBehaviour.runCleanup(this, missMem);
 	}
 

@@ -44,6 +44,12 @@ public class CompilationManagerHSO {
 		//String inputFolder = "/home/hso/java/SCJ_Workspace/SCJJMLTest/bin/" +
 		// pathSeparator + "/home/hso/java/SCJ_Workspace/JML/jml4c.jar";
 
+
+		// For VIAEmbedded:
+		//String inputFolder = "/home/hso/workspace/VIAEmbedded/bin/"
+		//    + pathSeparator + "/home/hso/git/hvm-scj/icecapSDK/bin/";
+		
+
 		// For OpenJML test:
 		boolean hso = true;
 		String inputFolder;
@@ -119,6 +125,9 @@ public class CompilationManagerHSO {
 		//String inputClass = "TckTestPeriodicParameters";
 		//String inputClass = "TckTestAperiodicParameters";
 		//String inputClass = "TckTestPriorityScheduler";        
+
+		//String inputClass = "TckTestPriorityParameters";
+		//String inputClass = "TckTestHighResolutionTime";    
 		//String inputClass = "TckTestPriorityParameters";   
 		//String inputClass = "TckTestHighResolutionTime";
 		String inputClass = "TckTestAbsoluteTime";        
@@ -165,6 +174,14 @@ public class CompilationManagerHSO {
 		// String inputClass = "Issue";
 
 		/* JML tests end */
+		
+		/* VIA Embedded begin */
+		
+		//String inputPackage = "via.embedded.carcontrol.scjlevel0";
+		
+		//String inputClass = "CarSafelet";
+		
+		/* VIA Embedded end */
 
 		/* HSO end ************************************************** */
 

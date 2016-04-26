@@ -110,7 +110,7 @@ public final class TestPortalSC {
 //	}
 	
 	/**
-	 * Used by test programs to get the priority parameter of a periodic event handler.
+	 * Used by test programs to get the priority parameter of a managed event handler.
 	 * 
 	 * @param pevh is a periodic event handler.
 	 *  
