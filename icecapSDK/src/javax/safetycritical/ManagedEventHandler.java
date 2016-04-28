@@ -191,4 +191,17 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		return set;
 	}
 	
+//	// For OpenJML: not public
+//	public boolean isRegistered() {  
+//		return this.isRegistered;
+//	}
+//	
+//	// For OpenJML: not public
+//	public boolean isInMissionScope() {
+//		return this.isInMissionScope;
+//	}
+	
 }
+
+
+
