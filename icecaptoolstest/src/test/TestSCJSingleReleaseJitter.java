@@ -16,7 +16,6 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
-import vm.ClockInterruptHandler;
 import vm.VMTest;
 
 public class TestSCJSingleReleaseJitter {
