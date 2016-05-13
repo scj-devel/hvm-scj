@@ -20,7 +20,6 @@ final class SinglecoreMemoryBehavior extends MemoryBehavior {
 			Memory.switchToArea(mem);
 			mevh.privateMemory.getDelegate().reset(0);
 		} else if (ms instanceof ManagedThread) {
-			devices.Console.println("ManagedMemory.enter: managedThred should work");
 			ManagedThread mth = (ManagedThread) ms;
 			Memory mem = Memory.switchToArea(mth.privateMemory.getDelegate());
 			logic.run();
