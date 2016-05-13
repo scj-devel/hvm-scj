@@ -194,6 +194,21 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 			devices.System.delay(i);
 		}
 	}
+
+	@IcecapCompileMe
+	protected static void blinkPD21(int i) {
+		if (!initialized)
+		{
+			initialized = true;
+		}
+		
+		set_pd21_output();
+
+		while (true) {
+			toggle_pd21();
+			devices.System.delay(i);
+		}
+	}
 	
 	@IcecapInlineNative(functionBody = ""
 			+ "{\n"
@@ -213,6 +228,24 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 			)
 	protected static native void set_led_output();
 
+	@IcecapInlineNative(functionBody = ""
+			+ "{\n"
+			+ "   ioport_toggle_port_level(EXAMPLE_PD21_PORT, EXAMPLE_PD21_MASK);\n"
+			+ "   return -1;\n"
+			+ "}\n",
+			requiredIncludes = "#include \"asf.h\"\n"
+			)
+	protected static native void toggle_pd21();
+
+	@IcecapInlineNative(functionBody = ""
+			+ "{\n"
+			+ "   ioport_set_port_dir(EXAMPLE_PD21_PORT, EXAMPLE_PD21_MASK,IOPORT_DIR_OUTPUT);\n"
+			+ "   return -1;\n"
+			+ "}\n",
+			requiredIncludes = "#define EXAMPLE_PD21_PORT (3)\n#define EXAMPLE_PD21_MASK ((1 << 21))\n"
+			)
+	protected static native void set_pd21_output();
+	
 	@IcecapInlineNative(functionBody = "" + "{\n" + "   SysTick_Config(300000);\n" + "   return -1;\n" + "}\n")
 	protected static native void initSystemTick();
 	
