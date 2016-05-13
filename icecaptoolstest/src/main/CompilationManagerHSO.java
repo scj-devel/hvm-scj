@@ -23,8 +23,8 @@ import util.ICompilationRegistry;
 public class CompilationManagerHSO {
 
 	public static void main(String args[]) throws Throwable {
-		TestPortalRT.setupVM();  
-		
+		TestPortalRT.setupVM();
+
 		boolean aotCompile = false;
 		boolean includeJMLMethods = true;
 		String pathSeparator = System.getProperty("path.separator");
@@ -45,10 +45,24 @@ public class CompilationManagerHSO {
 		// pathSeparator + "/home/hso/java/SCJ_Workspace/JML/jml4c.jar";
 
 
+		// For VIAEmbedded:
+		//String inputFolder = "/home/hso/workspace/VIAEmbedded/bin/"
+		//    + pathSeparator + "/home/hso/git/hvm-scj/icecapSDK/bin/";
+		
+
 		// For OpenJML test:
-		String inputFolder = "/home/hso/workspace/OpenJMLTest/bin/" + pathSeparator
-				+ "/home/hso/workspace/OpenJMLTest/lib/jmlruntime.jar" + pathSeparator
-				+ "/home/hso/git/hvm-scj/icecapSDK/bin/";
+		boolean hso = true;
+		String inputFolder;
+
+		if (hso) {
+			inputFolder = "/home/hso/workspace/OpenJMLTest/bin/" + pathSeparator
+					+ "/home/hso/workspace/OpenJMLTest/lib/jmlruntime.jar" + pathSeparator
+					+ "/home/hso/git/hvm-scj/icecapSDK/bin/";
+		} else {
+			inputFolder = "/home/skr/workspace/OpenJMLTest/bin/" + pathSeparator
+					+ "/home/skr/workspace/OpenJMLTest/lib/jmlruntime.jar" + pathSeparator
+					+ "/home/skr/git/hvm-scj/icecapSDK/bin/";
+		}
 
 		String outputFolder = "";
 
@@ -64,24 +78,20 @@ public class CompilationManagerHSO {
 		// String inputPackage =
 		// "test.safetycritical.priorityscheduleMemAreaNesting";
 
+		//String inputPackage = "javax.realtime.test.clock";
+		//String inputPackage = "javax.realtime.test.priorityParameters";
+		//String inputPackage = "javax.realtime.test.releaseParameters";
+		//String inputPackage = "javax.realtime.test.timeClasses";
 
-         //String inputPackage = "javax.realtime.test.clock";
-         //String inputPackage = "javax.realtime.test.priorityParameters";
-         //String inputPackage = "javax.realtime.test.releaseParameters";
-         //String inputPackage = "javax.realtime.test.timeClasses";
-        
-         
-         //String inputPackage = "javax.safetycritical.test.priorityScheduling";
-         //String inputPackage = "javax.safetycritical.test.cyclicExecutive"; 
-         //String inputPackage = "javax.safetycritical.test.storageParameters";
-         //String inputClass = "AllTests";
-         
+		//String inputPackage = "javax.safetycritical.test.priorityScheduling";
+		//String inputPackage = "javax.safetycritical.test.cyclicExecutive"; 
+		//String inputPackage = "javax.safetycritical.test.storageParameters";
+		//String inputClass = "AllTests";
+
 		//String inputPackage = "test";
-         
-        //String inputClass = "Main2Clock";
-        //String inputClass = "Main2RealtimeClock";
 
-		
+		//String inputClass = "Main2Clock";
+		//String inputClass = "Main2RealtimeClock";
 
 		/* OpenJML tests */
 
@@ -100,9 +110,8 @@ public class CompilationManagerHSO {
 		//String inputPackage = "javax.safetycritical.test.priorityScheduling";
 		//String inputPackage = "javax.safetycritical.test.cyclicschedule1";
 		//String inputPackage = "javax.safetycritical.test.cyclicexecutive1";
-	    //String inputPackage = "javax.safetycritical.test.memoryAreas";
+		//String inputPackage = "javax.safetycritical.test.memoryAreas";
 		//String inputPackage = "javax.safetycritical.test.linearSequencer2";
-
 
 		String inputPackage = "javax.realtime.test";
 		//String inputPackage = "javax.safetycritical.test";
@@ -116,9 +125,12 @@ public class CompilationManagerHSO {
 		//String inputClass = "TckTestPeriodicParameters";
 		//String inputClass = "TckTestAperiodicParameters";
 		//String inputClass = "TckTestPriorityScheduler";        
+
+		//String inputClass = "TckTestPriorityParameters";
+		//String inputClass = "TckTestHighResolutionTime";    
 		//String inputClass = "TckTestPriorityParameters";   
-		String inputClass = "TckTestHighResolutionTime";
-		//String inputClass = "TckTestAbsoluteTime";        
+		//String inputClass = "TckTestHighResolutionTime";
+		String inputClass = "TckTestAbsoluteTime";        
 		//String inputClass = "TckTestRelativeTime";
 		//String inputClass = "TckTestClock";
 		//String inputClass = "TckTestRealtimeClock";
@@ -127,13 +139,13 @@ public class CompilationManagerHSO {
 		//String inputClass = "TckTestStorageParameters";
 		//String inputClass = "SafeletStub1"; 
 		//String inputClass = "TckTestFrame2";
-		
+
 		//String inputClass = "TckTestCyclicExecutive1";
 		//String inputClass = "TckTestCyclicSchedule0";  
 		//String inputClass = "TckTestCyclicSchedule3";
 		//String inputClass = "TckTestSafelet1";
 		//String inputClass = "TckTestSafelet22";   
-		
+
 		//String inputClass = "TckTestLinearSequencer2";
 		//String inputClass = "TestSCJSingleCyclicExecutiveLinearMissSeq1";
 
@@ -162,6 +174,14 @@ public class CompilationManagerHSO {
 		// String inputClass = "Issue";
 
 		/* JML tests end */
+		
+		/* VIA Embedded begin */
+		
+		//String inputPackage = "via.embedded.carcontrol.scjlevel0";
+		
+		//String inputClass = "CarSafelet";
+		
+		/* VIA Embedded end */
 
 		/* HSO end ************************************************** */
 

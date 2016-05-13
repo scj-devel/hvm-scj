@@ -1,5 +1,5 @@
 /**************************************************************************
- * File name  : AbstractAsyncEventHandler.java
+ * File name  : AsyncBaseEventHandler.java
  * 
  * This file is part a SCJ Level 0 and Level 1 implementation, 
  * based on SCJ Draft, Version 0.94 25 June 2013.
@@ -28,7 +28,7 @@ package javax.realtime;
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
- * <code>class AbstractAsyncEventHandler</code> is the base class for all 
+ * <code>class AsyncBaseEventHandler</code> is the base class for all 
  * asynchronous event handlers. In SCJ, this is an empty class.
  * 
  *  @version 1.2; - December 2013
@@ -39,6 +39,6 @@ import javax.safetycritical.annotate.SCJAllowed;
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
 @SCJAllowed(javax.safetycritical.annotate.Level.LEVEL_0)
-public abstract class AbstractAsyncEventHandler implements Schedulable {
+public abstract class AsyncBaseEventHandler implements Schedulable {
 
 }

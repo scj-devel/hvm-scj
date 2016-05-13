@@ -272,7 +272,7 @@ public class TestAll {
 
 		deleteIfExists(outputFolder, exe);
 
-		ShellCommand.executeCommand(gccCommand, System.out, true, outputFolder.getAbsolutePath(), null, 0,
+		ShellCommand.executeCommand(gccCommand, System.out, true, outputFolder.getAbsolutePath(), null, 1000,
 				new IcecapProgressMonitor() {
 
 					@Override
@@ -299,7 +299,7 @@ public class TestAll {
 		}
 
 		int returnValue = ShellCommand.executeCommand(prefix + executablePath, System.out, true,
-				outputFolder.getAbsolutePath(), null, 0, new IcecapProgressMonitor() {
+				outputFolder.getAbsolutePath(), null, 1000, new IcecapProgressMonitor() {
 
 					@Override
 					public void worked(String string) {

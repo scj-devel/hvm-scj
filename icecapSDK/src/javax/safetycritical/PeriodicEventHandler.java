@@ -25,7 +25,9 @@
  *************************************************************************/
 package javax.safetycritical;
 
+import javax.realtime.AbsoluteTime;
 import javax.realtime.ConfigurationParameters;
+import javax.realtime.HighResolutionTime;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.TestPortalRT;
@@ -86,6 +88,30 @@ public abstract class PeriodicEventHandler extends ManagedEventHandler {
 
 	public final void register() {
 		super.register();
+	}
+	
+	public <T extends HighResolutionTime<T>> T getActualStartTime() {
+		return null;
+	}
+		
+	public <T extends HighResolutionTime<T>> T getEffectiveStartTime() {
+		return null;
+	}
+	
+	public AbsoluteTime getLastReleaseTime() {
+		return null;
+	}
+	
+	public AbsoluteTime getNextReleaseTime() {
+		return null;
+	}
+	
+	public AbsoluteTime getNextReleaseTime(AbsoluteTime dest) {
+		return null;
+	}
+	
+	public <T extends HighResolutionTime<T>> T getRequestedStartTime() {
+		return null;
 	}
 	
 	long getStart() {

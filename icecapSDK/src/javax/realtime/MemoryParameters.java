@@ -21,14 +21,19 @@ public class MemoryParameters implements Cloneable, Serializable {
 		this.maxImmortal = maxImmortal;
 	}
 	
-	public Object clone() {
-		return new MemoryParameters (maxMemoryArea, maxImmortal);
+	public Object clone() throws CloneNotSupportedException { 
+//		try {
+			return super.clone();
+//		}
+//		catch (CloneNotSupportedException e) {
+//			throw new Error("Assertion failure");  // can't happen
+//		}
 	}
 
-	//used in JML annotation only (not public)
-	static long getNO_MAX() {
-		return MemoryParameters.NO_MAX;
-	}
+//	//used in JML annotation only (not public)
+//	static long getNO_MAX() {
+//		return MemoryParameters.NO_MAX;
+//	}
 
 	// used for JML annotation only (not public)
 	long getMaxMemoryArea() {
