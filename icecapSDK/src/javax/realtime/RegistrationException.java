@@ -1,4 +1,4 @@
-package javax.realtime.device;
+package javax.realtime;
 
 public class RegistrationException extends Exception {
 	

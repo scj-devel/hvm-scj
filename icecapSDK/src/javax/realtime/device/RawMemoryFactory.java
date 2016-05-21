@@ -1,5 +1,6 @@
 package javax.realtime.device;
 
+import javax.realtime.RegistrationException;
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
