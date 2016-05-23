@@ -4,10 +4,22 @@ public abstract class POSIXSCJTargetConfiguration extends POSIXTargetConfigurati
 
 	@Override
 	public String[][] getBuildCommands() {
-		StringBuffer command = new StringBuffer(super.getBuildCommands()[0][0]);
-		command.append(" x86_64_interrupt.s -l pthread");
+		String[][] defaultCommands = super.getBuildCommands();
+		String[] compileCommand = defaultCommands[0];
+		String[] newCompileCommand = new String[compileCommand.length + 3];
+		
+		int inx;
+		for (inx = 0; inx < compileCommand.length; inx++)
+		{
+			newCompileCommand[inx] = compileCommand[inx];
+		}
+			
+		newCompileCommand[inx++] = "x86_64_interrupt.s";
+		newCompileCommand[inx++] = "-l";
+		newCompileCommand[inx++] = "pthread";
 
-		return new String[][] { new String[] { command.toString() } };
+		defaultCommands[0] = newCompileCommand;
+		return defaultCommands;
 	}
 
 	@Override
