@@ -145,7 +145,14 @@ public class TestAll {
 	}
 
 	protected boolean includeFileInTest(String test) {
-		return test.endsWith(".java"); // && (!test.contains("TestTCPConnection"));
+		if (test.endsWith("TestSCJSingleInterrupt1.java"))
+		{
+			return false;
+		}
+		else
+		{
+			return test.endsWith(".java"); // && (!test.contains("TestTCPConnection"));
+		}
 	}
 
 	private static String[] skippedClasses = { "TestSCJWaitAndNotify2.java", "TestSCJLevel2Thread0.java",

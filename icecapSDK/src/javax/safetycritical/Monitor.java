@@ -46,8 +46,8 @@ final class Monitor extends vm.Monitor {
 	public void lock() {
 		clock.disable();
 		ScjProcess currentProcess = PriorityScheduler.instance().getCurrentProcess();
-		
-		if(currentProcess != null){
+
+		if (currentProcess != null) {
 			ManagedSchedulable msObj = currentProcess.getTarget();
 			//devices.Console.println(PriorityScheduler.instance().getCurrentProcess().index + " locks ");
 			if (owner == null) {
@@ -73,8 +73,7 @@ final class Monitor extends vm.Monitor {
 				clock.enable();
 				vm.ClockInterruptHandler.instance.yield();
 			}
-		}
-		else{
+		} else {
 			clock.enable();
 		}
 	}
@@ -84,8 +83,8 @@ final class Monitor extends vm.Monitor {
 	public void unlock() {
 		clock.disable();
 		ScjProcess currentProcess = PriorityScheduler.instance().getCurrentProcess();
-		
-		if(currentProcess != null){
+
+		if (currentProcess != null) {
 			ManagedSchedulable msObj = currentProcess.getTarget();
 
 			//devices.Console.println(PriorityScheduler.instance().getCurrentProcess().index + " unlocks");
@@ -119,11 +118,10 @@ final class Monitor extends vm.Monitor {
 				throw new IllegalMonitorStateException("Not owner on exit");
 			}
 			clock.enable();
-		}
-		else{
+		} else {
 			clock.enable();
 		}
-		
+
 	}
 
 	private void setOwner(ManagedSchedulable msObj) {

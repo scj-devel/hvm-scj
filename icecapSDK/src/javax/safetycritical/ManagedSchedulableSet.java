@@ -104,7 +104,7 @@ class ManagedSchedulableSet {
 		}
 	}
 
-	void removeMSObject(ManagedSchedulable ms) // called in Scj...Process.gotoNextState
+	void removeMSObject(ManagedSchedulable ms, Mission m) // called in Scj...Process.gotoNextState
 	{
 		for (int i = 0; i < noOfRegistered; i++) {
 			if (managedSchObjects[i] == ms) {
@@ -121,11 +121,12 @@ class ManagedSchedulableSet {
 			}
 		}
 		//devices.Console.println("MSSet.removeMSObject: msCount " + msCount);
-		if (msCount == 0)
-			ManagedSchedMethods.getMission(ms).getSequencer().seqNotify();
+		if (msCount == 0) {
+			m.getSequencer().seqNotify();
+		}
 	}
 
-	void removeAperiodicHandlers() // remove all aperiodic handlers; 
+	void removeAperiodicHandlers(Mission m) // remove all aperiodic handlers; 
 	// called in PriorityScheduler.move()
 	{
 		for (int i = 0; i < noOfRegistered; i++) {
@@ -135,8 +136,9 @@ class ManagedSchedulableSet {
 				msCount--;
 			}
 
-			if (msCount == 0)
-				ManagedSchedMethods.getMission(managedSchObjects[i]).getSequencer().seqNotify();
+		}
+		if (msCount == 0) {
+			m.getSequencer().seqNotify();
 		}
 	}
 

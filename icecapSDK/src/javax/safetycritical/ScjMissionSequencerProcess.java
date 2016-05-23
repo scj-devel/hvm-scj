@@ -18,7 +18,7 @@ class ScjMissionSequencerProcess extends ScjProcess {
 				Mission m = Mission.getMission();
 				if (m != null) {
 					msObject.cleanUp();
-					Mission.getMission().msSetForMission.removeMSObject(msObject);
+					Mission.getMission().removeMSObject(msObject);
 				}
 			}
 			state = ScjProcess.State.TERMINATED;

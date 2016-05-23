@@ -214,6 +214,13 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 		return phaseOfMission;
 	}
 
+	void removeMSObject(ManagedSchedulable msObject) {
+		msSetForMission.removeMSObject(msObject, this);
+	}
+
+	void removeAperiodicHandlers() {
+		msSetForMission.removeAperiodicHandlers(this);
+	}
 }
 
 

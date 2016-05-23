@@ -11,10 +11,11 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 
 	@Override
 	boolean oneshotHandlerDeschedule(OneShotEventHandler handler) {
-		ManagedSchedulableSet hs = Mission.getMission().msSetForMission;
+		Mission ms = Mission.getMission();
+		ManagedSchedulableSet hs = ms.msSetForMission;
 
 		if (hs.contains(handler)) {
-			hs.removeMSObject(handler);
+			hs.removeMSObject(handler, ms);
 			return true;
 		} else
 			return false;
@@ -54,7 +55,7 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 
 			vm.ClockInterruptHandler.instance.disable();
 			if (handler.outerSeq != null)
-				handler.outerSeq.currMission.msSetForMission.removeMSObject(handler);
+				handler.outerSeq.currMission.removeMSObject(handler);
 			vm.ClockInterruptHandler.instance.enable();
 		}
 	}

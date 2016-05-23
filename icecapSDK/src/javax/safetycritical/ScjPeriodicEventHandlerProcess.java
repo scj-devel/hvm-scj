@@ -12,7 +12,7 @@ class ScjPeriodicEventHandlerProcess extends ScjProcess {
 		if (state == ScjProcess.State.HANDLED) {
 			// finished executing handleAsyncEvent
 			if (Mission.getMission().terminationPending()) {
-				Mission.getMission().msSetForMission.removeMSObject(msObject);
+				Mission.getMission().removeMSObject(msObject);
 				state = ScjProcess.State.TERMINATED;
 			} else {
 				state = ScjProcess.State.SLEEPING;
