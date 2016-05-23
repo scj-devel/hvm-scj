@@ -175,9 +175,16 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 				else
 					next.set(releaseTime);
 			}
+		} else if (ms instanceof AperiodicEventHandler) {
+			
+			rtClock.getTime(this.next);  // has been done in constructor
 		}
-		// else
-		// devices.Console.println("UPS: ScjProcess.setRelease: more cases?");
+		else if (ms instanceof MissionSequencer) {
+			
+			;  // do nothing
+		}
+		else
+		devices.Console.println("UPS: ScjProcess.setRelease: more cases?");
 	}
 
 	private static class ExceptionReporter implements Runnable {
