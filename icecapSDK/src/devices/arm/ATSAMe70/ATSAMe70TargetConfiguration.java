@@ -39,11 +39,13 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 						"-I\"" +  trim(getASFLocation())+ "\"",
 						"-I\"" + ASF + "/sam/drivers/uart\"",
 						"-I\"" + ASF + "/sam/drivers/usart\"",
+						"-I\"" + ASF + "/sam/drivers/spi\"",
 						"-I\"" + ASF + "/common/utils/stdio/stdio_serial\"",
 						"-I\"" + ASF + "/common/services/serial\"",						
 						"-I\"" + ASF + "/thirdparty/CMSIS/Lib/GCC\"", "-I\"" + ASF + "/common/utils\"",
 						"-I\"" + ASF + "/sam/boards/same70_xplained\"", "-I\"" + ASF + "/sam/utils/fpu\"", "-I\"../src\"",
 						"-I\"" + ASF + "/common/services/clock\"",
+						"-I\"" + ASF + "/common/services/fifo\"",
 						"-I\"" + ASF + "/sam/utils/cmsis/same70/source/templates\"", "-I\"" + ASF + "/sam/drivers/pmc\"",
 						"-I\"" + ASF + "/common/services/delay\"", "-I\"" + ASF + "/sam/utils\"",
 						"-I\"" + ASF + "/sam/utils/preprocessor\"", "-I\"" + ASF + "/sam/boards\"",
@@ -67,7 +69,10 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 						"-o", 
 						"main.elf", 
 						"*.o", 
+						ASF + "/spi/iha_spi.o", 
+						ASF + "/car_driver/mpu_9520.o", 
 						ASF + "/common/services/clock/same70/sysclk.o", 
+						ASF + "/common/services/fifo/fifo.o", 
 						ASF + "/common/services/delay/sam/cycle_counter.o",
 						ASF + "/common/services/serial/usart_serial.o",
 						ASF + "/common/utils/interrupt/interrupt_sam_nvic.o",
@@ -81,6 +86,7 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 						ASF + "/sam/drivers/pmc/sleep.o",
 						ASF + "/sam/drivers/uart/uart.o",
 						ASF + "/sam/drivers/usart/usart.o",					
+						ASF + "/sam/drivers/spi/spi.o",					
 						ASF + "/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o",
 						ASF + "/sam/utils/cmsis/same70/source/templates/system_same70.o",
 						ASF + "/sam/utils/syscalls/gcc/syscalls.o",					
@@ -117,11 +123,13 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 			+ "{\n"
 			+ "   sysclk_init();\n"
 			+ "   board_init();\n"
+			+ "   mpu_9520_init();\n"
 			+ "   ioport_init();\n"
 			+ "   delay_init(sysclk_get_cpu_hz());\n"
 			+ "   return -1;\n"
-			+ "}\n"
-			)
+			+ "}\n",
+			requiredIncludes = ""
+					+ "#include \"car_driver/car_driver.h\"\n")
 	protected static native void initNative();
 
 	@IcecapInlineNative(functionBody = ""
@@ -261,6 +269,38 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 		systemTick++;
 		systemClock++;
 	}
+	
+	@IcecapInlineNative(functionBody = "" 
+			+ "{\n" 
+			+ "   poll_mpu_9520();\n" 
+			+ "   return -1;\n" 
+			+ "}\n", 
+			requiredIncludes = "#include \"car_driver/car_driver.h\"\n")
+	public static native void poll_mpu_9520();
+	
+	@IcecapInlineNative(functionBody = "" 
+			+ "{\n" 
+			+ "   sp[0] = get_raw_x_accel();\n" 
+			+ "   return -1;\n" 
+			+ "}\n", 
+			requiredIncludes = "#include \"car_driver/car_driver.h\"\n")
+	public static native short get_raw_x_accel();
+	
+	@IcecapInlineNative(functionBody = "" 
+			+ "{\n" 
+			+ "   sp[0] = get_raw_y_accel();\n" 
+			+ "   return -1;\n" 
+			+ "}\n", 
+			requiredIncludes = "#include \"car_driver/car_driver.h\"\n")
+	public static native short get_raw_y_accel();
+	
+	@IcecapInlineNative(functionBody = "" 
+			+ "{\n" 
+			+ "   sp[0] = get_raw_z_accel();\n" 
+			+ "   return -1;\n" 
+			+ "}\n", 
+			requiredIncludes = "#include \"car_driver/car_driver.h\"\n")
+	public static native short get_raw_z_accel();
 	
 	public static class ATSAMe70Writer implements Writer {
 

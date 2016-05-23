@@ -9,7 +9,7 @@ public class HelloATSAM extends ATSAMe70TargetConfiguration {
 
 		devices.Console.println("ZAPPA!");
 
-		blink(20000);
+		blink(10000);
 	}
 
 	@Override
