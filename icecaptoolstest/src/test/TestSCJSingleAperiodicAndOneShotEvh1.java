@@ -8,7 +8,6 @@ import javax.realtime.RelativeTime;
 
 import javax.safetycritical.AperiodicEventHandler;
 import javax.safetycritical.LaunchLevel1;
-import javax.safetycritical.ManagedInterruptServiceRoutine;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.OneShotEventHandler;
@@ -19,92 +18,61 @@ import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 import vm.VMTest;
 
-public class TestSCJSingleInterrupt1 {
+public class TestSCJSingleAperiodicAndOneShotEvh1 {
+	
 	private static int testCount;
+	
 	static {
 		testCount = 0;
 	}
 
 	private static class MyAperiodicEvh extends AperiodicEventHandler {
-		MissionSequencer<MyMission> missSeq;
 
 		public MyAperiodicEvh(PriorityParameters priority,
 				AperiodicParameters release,
-				StorageParameters storageParameters, 
-				MissionSequencer<MyMission> missSeq) {
+				StorageParameters storageParameters) {
 			super(priority, release, storageParameters, configParameters);
-			this.missSeq = missSeq;
 		}
 
 		public void handleAsyncEvent() {			
-			System.out.println("***** Running aperiodic handler");
-			missSeq.signalTermination();
-		}
-	}
-	
-	private static class ManagedISR extends ManagedInterruptServiceRoutine {
-		
-		AperiodicEventHandler apevh; 
-		
-		public ManagedISR(long sizes, AperiodicEventHandler apevh) {
-			super(sizes);
-			this.apevh = apevh;
-		}
-		
-		public void handle() {
-			
-			System.out.println("ManagedISR.handle calls apevh.release()");
-			apevh.release();
-
+			System.out.println("***** Aperiodic event handler: handleAsyncEvent");
+			testCount++;
+			Mission.getMission().requestTermination();
 		}
 	}
 	
 	private static class OneShotEvhStub extends OneShotEventHandler {
 		
-		ManagedISR isr;
+		AperiodicEventHandler apevh;
 		
 		public OneShotEvhStub(PriorityParameters priority, HighResolutionTime<?> releaseTime, AperiodicParameters release,
-				StorageParameters storage, ManagedISR isr) {
+				StorageParameters storage, AperiodicEventHandler apevh) {
 			super(priority, releaseTime, release, storage, new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE }));
-			this.isr = isr;
+			this.apevh = apevh;			
 		}
 
 		public void handleAsyncEvent() {
 			devices.Console.println("OneShotEvhStub.handleAsyncEvent: instead of interrupt \n");
-			isr.handle();
+			testCount++;
+			apevh.release();
 		}
 	}
 
-
 	private static class MyMission extends Mission {
-		MissionSequencer<MyMission> missSeq;
-
-		public MyMission(MissionSequencer<MyMission> missSeq) {
-			this.missSeq = missSeq;
-		}
-
+		
 		public void initialize() {
 			AperiodicEventHandler aevh = new MyAperiodicEvh(
 					new PriorityParameters(Priorities.PR98),
 					new AperiodicParameters(),
-					storageParameters_Handlers,
-					missSeq);
+					storageParameters_Handlers);
 			aevh.register();
-			
-			ManagedISR isr = new ManagedISR(Const.PRIVATE_MEM_DEFAULT, aevh);
-//			try {
-//				isr_Parking.register(1);
-//			}
-//			catch (RegistrationException e) {
-//				System.err.println("In MissionParking.initialize: RegistrationException: " + e.getMessage());
-//			}
 			
 			new OneShotEvhStub(
 					new PriorityParameters(Priorities.MAX_PRIORITY), 
-					new RelativeTime(2*1000, 0),  // release time = 2 mseecs
+					new RelativeTime(1000, 0),  // release time = 1000 msecs
 					new AperiodicParameters(new RelativeTime(500, 0), null), 
 					storageParameters_Handlers,
-					isr).register();
+					aevh).register();
 		}
 
 		public long missionMemorySize() {
@@ -113,6 +81,7 @@ public class TestSCJSingleInterrupt1 {
 	}
 
 	private static class MyApp implements Safelet<MyMission> {
+		
 		public MissionSequencer<MyMission> getSequencer() {
 			return new MySequencer();
 		}
@@ -130,7 +99,7 @@ public class TestSCJSingleInterrupt1 {
 			MySequencer() {
 				super(new PriorityParameters(Priorities.PR95),
 						storageParameters_Sequencer, configParameters);
-				mission = new MyMission(this);
+				mission = new MyMission();
 			}
 
 			public MyMission getNextMission() {
@@ -166,11 +135,10 @@ public class TestSCJSingleInterrupt1 {
 				0);
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
-		devices.Console.println("***** TestSCJSingleInterrupt1 begin *****");
+		devices.Console.println("***** TestSCJSingleAperiodicAndOneShotEvh1 begin *****");
 		new LaunchLevel1(new MyApp());
-		devices.Console
-				.println("***** TestSCJSingleInterrupt1 end *****");
-		if (testCount == 3) {
+		devices.Console.println("***** TestSCJSingleAperiodicAndOneShotEvh1 end *****");
+		if (testCount == 2) {
 			VMTest.markResult(false);
 		}
 	}

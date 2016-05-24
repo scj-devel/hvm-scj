@@ -219,7 +219,7 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 	}
 
 	void removeAperiodicHandlers() {
-		msSetForMission.removeAperiodicHandlers(this);
+		msSetForMission.removeAperiodicHandlers();
 	}
 }
 

@@ -142,6 +142,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	@SCJAllowed(Level.SUPPORT)
 	@SCJPhase(Phase.CLEANUP)
 	public void cleanUp() {
+		//System.out.println("ManagedEventHandler.cleanUp");
 		privateMemory.removeArea();
 	}
 

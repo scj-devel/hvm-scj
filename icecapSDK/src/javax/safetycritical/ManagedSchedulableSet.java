@@ -126,20 +126,24 @@ class ManagedSchedulableSet {
 		}
 	}
 
-	void removeAperiodicHandlers(Mission m) // remove all aperiodic handlers; 
-	// called in PriorityScheduler.move()
+	void removeAperiodicHandlers() // remove all aperiodic handlers; 
+	// called in ScjAperiodicEventHandlerProcess.gotoNextState()
 	{
+		ManagedSchedulable ms = null;
+		
 		for (int i = 0; i < noOfRegistered; i++) {
 			if (managedSchObjects[i] instanceof AperiodicEventHandler) {
 				managedSchObjects[i].cleanUp();
+				
+				ms = managedSchObjects[i];
+				managedSchObjects[i] = null;
+				
 				PriorityScheduler.instance().pFrame.readyQueue.remove(scjProcesses[i]);
 				msCount--;
 			}
-
 		}
-		if (msCount == 0) {
-			m.getSequencer().seqNotify();
-		}
+		if (msCount == 0 && ms != null)
+			ManagedSchedMethods.getMission(ms).getSequencer().seqNotify();		
 	}
 
 	int indexOf(ManagedSchedulable ms) {
