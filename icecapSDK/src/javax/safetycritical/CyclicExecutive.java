@@ -91,9 +91,10 @@ public abstract class CyclicExecutive extends Mission {
 	void runExecute()
 	// overrides the method in class Mission and is called in mission memory
 	{
+		Mission mission = Mission.getMission();
 		// The following four lines of code: to meet the precondition in getSchedule.
-		ManagedSchedulable[] msObjects = Mission.getMission().msSetForMission.managedSchObjects;
-		PeriodicEventHandler[] pevs = new PeriodicEventHandler[Mission.getMission().msSetForMission.noOfRegistered];
+		ManagedSchedulable[] msObjects = mission.getManagedSchedulables();
+		PeriodicEventHandler[] pevs = new PeriodicEventHandler[mission.msSetForMission.noOfRegistered];
 
 		for (int i = 0; i < pevs.length; i++)
 			pevs[i] = (PeriodicEventHandler) msObjects[i];

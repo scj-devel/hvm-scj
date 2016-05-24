@@ -54,7 +54,8 @@ import util.StringUtil;
  */
 @SCJAllowed(Level.INFRASTRUCTURE)
 class ManagedSchedulableSet {
-	ManagedSchedulable[] managedSchObjects = new ManagedSchedulable[Const.DEFAULT_HANDLER_NUMBER];
+	
+	private ManagedSchedulable[] managedSchObjects = new ManagedSchedulable[Const.DEFAULT_HANDLER_NUMBER];
 	int noOfRegistered = 0;
 
 	ScjProcess[] scjProcesses = new ScjProcess[Const.DEFAULT_HANDLER_NUMBER];
@@ -109,14 +110,14 @@ class ManagedSchedulableSet {
 		for (int i = 0; i < noOfRegistered; i++) {
 			if (managedSchObjects[i] == ms) {
 				managedSchObjects[i].cleanUp();
-				managedSchObjects[i] = null;
+				
 
 				//PriorityScheduler.instance().pFrame.readyQueue.remove(scjProcesses[i]);
 
 				PriorityScheduler.instance().pFrame.removeFromQueue(scjProcesses[i]);
 				//devices.Console.println("MSSet.removeMSObject " + scjProcesses[i].index);
-
-				scjProcesses[i] = null;
+				deleteSchedulable(i);
+				
 				msCount--;
 			}
 		}
@@ -158,5 +159,18 @@ class ManagedSchedulableSet {
 		StringBuffer buf = StringUtil.constructStringBuffer("Mission: ", noOfRegistered);
 		buf.append(" handlers");
 		return buf.toString();
+	}
+
+	ManagedSchedulable[] getManagedSchedulables() {
+		return managedSchObjects;
+	}
+
+	ManagedSchedulable getManagedSchedulable(int i) {
+		return managedSchObjects[i];
+	}
+
+	public void deleteSchedulable(int i) {
+		managedSchObjects[i] = null;
+		scjProcesses[i] = null;		
 	}
 }

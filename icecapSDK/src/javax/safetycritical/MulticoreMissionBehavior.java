@@ -40,15 +40,16 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 			mission.missionTerminate = true;
 
 			for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {
-				if (mission.msSetForMission.managedSchObjects[i] != null) {
-					if (mission.msSetForMission.managedSchObjects[i] instanceof AperiodicEventHandler) {
-						((AperiodicEventHandler) mission.msSetForMission.managedSchObjects[i]).fireNextRelease();
+				ManagedSchedulable schedulable = mission.getManagedSchedulable(i);
+				if (schedulable != null) {
+					if (schedulable instanceof AperiodicEventHandler) {
+						((AperiodicEventHandler) schedulable).fireNextRelease();
 					}
-					if (mission.msSetForMission.managedSchObjects[i] instanceof OneShotEventHandler) {
-						((OneShotEventHandler) mission.msSetForMission.managedSchObjects[i]).deschedule();
-						((OneShotEventHandler) mission.msSetForMission.managedSchObjects[i]).fireNextRelease();
+					if (schedulable instanceof OneShotEventHandler) {
+						((OneShotEventHandler) schedulable).deschedule();
+						((OneShotEventHandler) schedulable).fireNextRelease();
 					}
-					mission.msSetForMission.managedSchObjects[i].signalTermination();
+					schedulable.signalTermination();
 				}
 			}
 
@@ -89,7 +90,7 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 		int index = mission.missionIndex * Const.DEFAULT_HANDLER_NUMBER;
 
 		for (int i = 0; i < msSet.noOfRegistered; i++) {
-			ManagedSchedulable ms = msSet.managedSchObjects[i];
+			ManagedSchedulable ms = mission.getManagedSchedulable(i);
 			OSProcess process = new OSProcess(ms);
 			process.executable.id = index;
 			index++;
@@ -101,10 +102,11 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 
 		for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {
 			try {
-				if (mission.msSetForMission.managedSchObjects[i] instanceof ManagedThread)
-					((ManagedThread) mission.msSetForMission.managedSchObjects[i]).process.executable.join();
+				ManagedSchedulable ms = mission.getManagedSchedulable(i);
+				if (ms instanceof ManagedThread)
+					((ManagedThread) ms).process.executable.join();
 				else
-					((ManagedEventHandler) mission.msSetForMission.managedSchObjects[i]).process.executable.join();
+					((ManagedEventHandler) ms).process.executable.join();
 			} catch (InterruptedException e) {
 			}
 		}
@@ -119,12 +121,8 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 			throw new IllegalArgumentException();
 		}
 
-		for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {
-			mission.msSetForMission.managedSchObjects[i].cleanUp();
-			mission.msSetForMission.managedSchObjects[i] = null;
-			mission.msSetForMission.msCount--;
-		}
-
+		mission.terminateMSObjects();
+		
 		Mission.missionSet[mission.missionIndex] = null;
 		if (mission.isMissionSetInitByThis == true) {
 			Mission.isMissionSetInit = false;
@@ -154,7 +152,7 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 
 		int missionIndex = index / 20;
 		int managedSchdeulableIndex = index % 20;
-		return Mission.missionSet[missionIndex].msSetForMission.managedSchObjects[managedSchdeulableIndex];
+		return Mission.missionSet[missionIndex].getManagedSchedulable(managedSchdeulableIndex);
 	}
 }
 
