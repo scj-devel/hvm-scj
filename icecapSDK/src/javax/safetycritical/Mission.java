@@ -28,6 +28,8 @@ package javax.safetycritical;
 
 import icecaptools.IcecapCompileMe;
 
+import java.util.Iterator;
+
 import javax.realtime.AbsoluteTime;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
@@ -256,5 +258,9 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 
 	void terminateMSObjects() {
 		msSetForMission.terminateMSObjects();
+	}
+
+	public Iterator<ManagedSchedulable> getManagedSchedulables() {
+		return msSetForMission.iterator();
 	}
 }

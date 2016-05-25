@@ -32,6 +32,8 @@
 
 package javax.safetycritical;
 
+import java.util.Iterator;
+
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 import javax.scj.util.Const;
@@ -68,9 +70,35 @@ class ManagedSchedulableSet {
 	 */
 	private int msCount;
 	private int noOfRegistered = 0;
+	private SchedulableIterator sitr;
+	
+	private class SchedulableIterator implements Iterator<ManagedSchedulable>
+	{
+		private int index;
+		
+		SchedulableIterator()
+		{
+			reset();
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return index < noOfRegistered;
+		}
 
+		@Override
+		public ManagedSchedulable next() {
+			return schedulables[index++];
+		}
+
+		public void reset() {
+			index = 0;
+		}		
+	}
+	
 	ManagedSchedulableSet() {
 		schedulables = new ManagedSchedulable[Const.DEFAULT_HANDLER_NUMBER];
+		sitr = new SchedulableIterator();
 	}
 
 	/*@ 
@@ -155,5 +183,10 @@ class ManagedSchedulableSet {
 
 	int getNumberOfManagedSchedulables() {
 		return msCount;
+	}
+	
+	public Iterator<ManagedSchedulable> iterator() {
+		sitr.reset();
+		return sitr;
 	}
 }

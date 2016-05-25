@@ -26,6 +26,8 @@
 
 package javax.safetycritical;
 
+import java.util.Iterator;
+
 import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
 import javax.realtime.RelativeTime;
@@ -92,8 +94,13 @@ public abstract class CyclicExecutive extends Mission {
 		// The following four lines of code: to meet the precondition in getSchedule.
 		PeriodicEventHandler[] pevs = new PeriodicEventHandler[mission.getNumberOfManagedSchedulables()];
 
-		for (int i = 0; i < pevs.length; i++)
-			pevs[i] = (PeriodicEventHandler) mission.getManagedSchedulable(i);
+		Iterator<ManagedSchedulable> schedulables = mission.getManagedSchedulables();
+		
+		int index = 0;
+		while (schedulables.hasNext())
+		{
+			pevs[index++] = (PeriodicEventHandler) schedulables.next();
+		}
 
 		CyclicSchedule schedule = getSchedule(pevs);
 
