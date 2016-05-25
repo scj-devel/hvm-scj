@@ -56,7 +56,7 @@ import util.StringUtil;
 class ManagedSchedulableSet {
 	
 	private ManagedSchedulable[] managedSchObjects = new ManagedSchedulable[Const.DEFAULT_HANDLER_NUMBER];
-	int noOfRegistered = 0;
+	private int noOfRegistered = 0;
 
 	private ScjProcess[] scjProcesses = new ScjProcess[Const.DEFAULT_HANDLER_NUMBER];
 
@@ -180,5 +180,9 @@ class ManagedSchedulableSet {
 
 	public Process getScjProcess(int scjProcessIndex) {
 		return scjProcesses[scjProcessIndex];
+	}
+
+	public int getNumberOfManagedSchedulables() {
+		return noOfRegistered;
 	}
 }

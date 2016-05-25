@@ -39,7 +39,7 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 			// mission.
 			mission.missionTerminate = true;
 
-			for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {
+			for (int i = 0; i < mission.getNumberOfManagedSchedulables(); i++) {
 				ManagedSchedulable schedulable = mission.getManagedSchedulable(i);
 				if (schedulable != null) {
 					if (schedulable instanceof AperiodicEventHandler) {
@@ -85,11 +85,9 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 	@Override
 	void runExecute(Mission mission) {
 		mission.phaseOfMission = Phase.RUN;
-		ManagedSchedulableSet msSet = mission.msSetForMission;
-
 		int index = mission.missionIndex * Const.DEFAULT_HANDLER_NUMBER;
 
-		for (int i = 0; i < msSet.noOfRegistered; i++) {
+		for (int i = 0; i < mission.getNumberOfManagedSchedulables(); i++) {
 			ManagedSchedulable ms = mission.getManagedSchedulable(i);
 			OSProcess process = new OSProcess(ms);
 			process.executable.id = index;
@@ -100,7 +98,7 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 
 		mission.currMissSeq.seqWait();
 
-		for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {
+		for (int i = 0; i < mission.getNumberOfManagedSchedulables(); i++) {
 			try {
 				ManagedSchedulable ms = mission.getManagedSchedulable(i);
 				if (ms instanceof ManagedThread)

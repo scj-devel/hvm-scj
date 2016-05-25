@@ -29,7 +29,7 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 		if (mission.missionTerminate == false) { // called the first time during mission execution	
 
 			// terminate all the sequencer's MSObjects that were created by the mission.
-			for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {
+			for (int i = 0; i < mission.getNumberOfManagedSchedulables(); i++) {
 				ManagedSchedulable ms = mission.getManagedSchedulable(i);
 				if (ms != null) {
 					ms.signalTermination();
@@ -76,12 +76,11 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 		vm.ClockInterruptHandler.instance.disable();
 
 		mission.phaseOfMission = Phase.RUN;
-		ManagedSchedulableSet msSet = mission.msSetForMission;
 		PriorityFrame frame = PriorityScheduler.instance().pFrame;
 
 		int index = mission.missionIndex * 20;
 
-		for (int i = 0; i < msSet.noOfRegistered; i++) {
+		for (int i = 0; i < mission.getNumberOfManagedSchedulables(); i++) {
 
 			ManagedSchedulable ms = mission.getManagedSchedulable(i);
 
@@ -107,7 +106,7 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 		//			}
 
 		vm.ClockInterruptHandler.instance.disable();
-		for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {
+		for (int i = 0; i < mission.getNumberOfManagedSchedulables(); i++) {
 			mission.deleteSchedulable(i);
 		}
 
