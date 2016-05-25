@@ -1,7 +1,7 @@
 package javax.safetycritical;
 
 abstract class MissionBehavior {
-	
+
 	abstract Mission getMission();
 
 	abstract boolean requestTermination(Mission mission);
@@ -17,5 +17,3 @@ abstract class MissionBehavior {
 	abstract ManagedSchedulable getManageSched(int index);
 
 }
-
-

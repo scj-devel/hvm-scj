@@ -64,9 +64,7 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 		}
 		mission.missionIndex = addNewMission(mission);
 
-		mission.phaseOfMission = Phase.INITIALIZATION; // used by JML ??
-		mission.msSetForMission = new ManagedSchedulableSet();
-		mission.initialize();
+		mission.gotoInitPhase();
 
 		vm.ClockInterruptHandler.instance.enable();
 	}

@@ -3,7 +3,6 @@ package javax.safetycritical;
 import javax.safetycritical.annotate.Phase;
 import javax.scj.util.Const;
 
-
 final class MulticoreMissionBehavior extends MissionBehavior {
 
 	MulticoreMissionBehavior() {
@@ -76,10 +75,8 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 
 	@Override
 	void runInitialize(Mission mission) {
-		mission.phaseOfMission = Phase.INITIALIZATION;
 		mission.missionIndex = addNewMission(mission);
-		mission.msSetForMission = new ManagedSchedulableSet();
-		mission.initialize();
+		mission.gotoInitPhase();
 	}
 
 	@Override
@@ -120,7 +117,7 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 		}
 
 		mission.terminateMSObjects();
-		
+
 		Mission.missionSet[mission.missionIndex] = null;
 		if (mission.isMissionSetInitByThis == true) {
 			Mission.isMissionSetInit = false;
@@ -153,6 +150,3 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 		return Mission.missionSet[missionIndex].getManagedSchedulable(managedSchdeulableIndex);
 	}
 }
-
-
-

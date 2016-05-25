@@ -248,4 +248,10 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 	int getNumberOfManagedSchedulables() {
 		return msSetForMission.getNumberOfManagedSchedulables();
 	}
+
+	void gotoInitPhase() {
+		phaseOfMission = Phase.INITIALIZATION;
+		msSetForMission = new ManagedSchedulableSet();
+		initialize();
+	}
 }
