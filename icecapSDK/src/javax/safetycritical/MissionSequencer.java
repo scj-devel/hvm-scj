@@ -128,7 +128,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 
 	synchronized void seqWait() {
 		if (!Launcher.useOS) {
-			while (!currMission.terminationPending() && currMission.getNumberOfManagedSchedulables2() > 0) {
+			while (!currMission.terminationPending() && currMission.getNumberOfManagedSchedulables() > 0) {
 				//devices.Console.println("MS.seqWait msCount:" + currMission.msSetForMission.msCount);
 				try {
 					wait();
@@ -148,8 +148,8 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 
 	synchronized void seqNotify() {
 		if (!Launcher.useOS) {
-			devices.Console.println("MS.seqNotify msCount:" + currMission.getNumberOfManagedSchedulables2());
-			if (currMission.getNumberOfManagedSchedulables2() == 0) {
+			devices.Console.println("MS.seqNotify msCount:" + currMission.getNumberOfManagedSchedulables());
+			if (currMission.getNumberOfManagedSchedulables() == 0) {
 				notify();
 			}
 		} else {

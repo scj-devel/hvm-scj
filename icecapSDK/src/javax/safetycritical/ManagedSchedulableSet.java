@@ -64,8 +64,8 @@ class ManagedSchedulableSet {
 			this.p = p;
 		}
 	}
-	
-	ManagedSchedulableInfo[] msInfo;
+
+	private ManagedSchedulableInfo[] msInfo;
 
 	/**
 	 * Count of ManagedSchedulable objects for the mission. 
@@ -181,15 +181,11 @@ class ManagedSchedulableSet {
 		msInfo[i].p = p;
 	}
 
-	public Process getScjProcess(int scjProcessIndex) {
+	Process getScjProcess(int scjProcessIndex) {
 		return msInfo[scjProcessIndex].p;
 	}
 
-	public int getNumberOfManagedSchedulables1() {
-		return noOfRegistered;
-	}
-
-	public int getNumberOfManagedSchedulables2() {
+	int getNumberOfManagedSchedulables() {
 		return msCount;
 	}
 }

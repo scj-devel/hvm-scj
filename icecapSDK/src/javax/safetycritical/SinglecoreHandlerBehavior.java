@@ -77,7 +77,7 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 		if (Launcher.level > 0) {
 			handler.seqWait();
 		} else {
-			while (!handler.currMission.terminationPending() && handler.currMission.getNumberOfManagedSchedulables2() > 0) {
+			while (!handler.currMission.terminationPending() && handler.currMission.getNumberOfManagedSchedulables() > 0) {
 				vm.RealtimeClock.waitForNextTick();
 			}
 		}
