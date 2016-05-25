@@ -85,10 +85,12 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 
 			ManagedSchedulable ms = mission.getManagedSchedulable(i);
 
-			msSet.scjProcesses[i] = ManagedSchedMethods.createScjProcess(ms);
-			msSet.scjProcesses[i].setIndex(index);
+			ScjProcess p = ManagedSchedMethods.createScjProcess(ms);
+			
+			mission.setScjProcess(i, p);
+			p.setIndex(index);
 			index++;
-			frame.addProcess(msSet.scjProcesses[i]);
+			frame.addProcess(p);
 		}
 
 		vm.ClockInterruptHandler.instance.enable();
@@ -122,7 +124,8 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 	Process getProcess(int index) {
 		int missionIndex = index / 20;
 		int scjProcessIndex = index % 20;
-		return Mission.missionSet[missionIndex].msSetForMission.scjProcesses[scjProcessIndex];
+		
+		return Mission.missionSet[missionIndex].getScjProcess(scjProcessIndex);
 	}
 
 	@Override

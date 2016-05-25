@@ -194,15 +194,15 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 		missionBehaviour.runCleanup(this, missMem);
 	}
 
-//	// used for JML annotation only (not public)
-//	boolean isRegistered(ManagedSchedulable target) {
-//		return ManagedSchedMethods.isRegistered(target);
-//	}
-//
-//	// used for JML annotation only (not public)
-//	boolean inMissionScope(ManagedSchedulable target) {
-//		return ManagedSchedMethods.isInMissionScope(target);
-//	}
+	//	// used for JML annotation only (not public)
+	//	boolean isRegistered(ManagedSchedulable target) {
+	//		return ManagedSchedMethods.isRegistered(target);
+	//	}
+	//
+	//	// used for JML annotation only (not public)
+	//	boolean inMissionScope(ManagedSchedulable target) {
+	//		return ManagedSchedMethods.isInMissionScope(target);
+	//	}
 
 	// used for JML annotation only (not public)
 	boolean inMissionScope(CyclicSchedule cs) {
@@ -237,6 +237,12 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 	void deleteSchedulable(int i) {
 		msSetForMission.deleteSchedulable(i);
 	}
+
+	void setScjProcess(int i, ScjProcess p) {
+		msSetForMission.setScjProcess(i, p);
+	}
+
+	Process getScjProcess(int scjProcessIndex) {
+		return msSetForMission.getScjProcess(scjProcessIndex);
+	}
 }
-
-

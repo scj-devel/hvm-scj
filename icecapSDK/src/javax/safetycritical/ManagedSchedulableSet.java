@@ -58,7 +58,7 @@ class ManagedSchedulableSet {
 	private ManagedSchedulable[] managedSchObjects = new ManagedSchedulable[Const.DEFAULT_HANDLER_NUMBER];
 	int noOfRegistered = 0;
 
-	ScjProcess[] scjProcesses = new ScjProcess[Const.DEFAULT_HANDLER_NUMBER];
+	private ScjProcess[] scjProcesses = new ScjProcess[Const.DEFAULT_HANDLER_NUMBER];
 
 	/**
 	 * Count of ManagedSchedulable objects for the mission. 
@@ -169,8 +169,16 @@ class ManagedSchedulableSet {
 		return managedSchObjects[i];
 	}
 
-	public void deleteSchedulable(int i) {
+	void deleteSchedulable(int i) {
 		managedSchObjects[i] = null;
 		scjProcesses[i] = null;		
+	}
+
+	void setScjProcess(int i, ScjProcess p) {
+		scjProcesses[i] = p;
+	}
+
+	public Process getScjProcess(int scjProcessIndex) {
+		return scjProcesses[scjProcessIndex];
 	}
 }
