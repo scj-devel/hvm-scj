@@ -238,6 +238,10 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 		return msSetForMission.getNumberOfManagedSchedulables();
 	}
 
+	boolean hasSchedulables() {
+		return msSetForMission.hasSchedulables();
+	}
+	
 	void gotoInitPhase() {
 		phaseOfMission = Phase.INITIALIZATION;
 		msSetForMission = new ManagedSchedulableSet();

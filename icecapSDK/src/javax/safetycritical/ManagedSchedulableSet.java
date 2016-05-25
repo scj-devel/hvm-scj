@@ -189,4 +189,8 @@ class ManagedSchedulableSet {
 		sitr.reset();
 		return sitr;
 	}
+
+	public boolean hasSchedulables() {
+		return msCount > 0;
+	}
 }
