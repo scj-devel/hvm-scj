@@ -105,41 +105,38 @@ class ManagedSchedulableSet {
 
 	void removeMSObject(ManagedSchedulable ms, Mission m) // called in Scj...Process.gotoNextState
 	{
-		for (int i = 0; i < noOfRegistered; i++) {
-			if (schedulables[i] == ms) {
-				schedulables[i].cleanUp();
-
-				//PriorityScheduler.instance().pFrame.readyQueue.remove(scjProcesses[i]);
-
-				PriorityScheduler.instance().pFrame.removeFromQueue((ScjProcess) Process.getProcess(ms));
-				//devices.Console.println("MSSet.removeMSObject " + scjProcesses[i].index);
-				deleteSchedulable(i);
+		if (msCount > 0) {
+			for (int i = 0; i < noOfRegistered; i++) {
+				if (schedulables[i] == ms) {
+					schedulables[i].cleanUp();
+					PriorityScheduler.instance().pFrame.removeFromQueue((ScjProcess) Process.getProcess(ms));
+					//devices.Console.println("MSSet.removeMSObject " + scjProcesses[i].index);
+					deleteSchedulable(i);
+				}
 			}
-		}
-		//devices.Console.println("MSSet.removeMSObject: msCount " + msCount);
-		if (msCount == 0) {
-			m.getSequencer().seqNotify();
+			//devices.Console.println("MSSet.removeMSObject: msCount " + msCount);
+			if (msCount == 0) {
+				m.getSequencer().seqNotify();
+			}
 		}
 	}
 
-	void removeAperiodicHandlers(Mission m) // remove all aperiodic handlers; 
-	// called in ScjAperiodicEventHandlerProcess.gotoNextState()
-	{
-		ManagedSchedulable ms = null;
+	void removeAperiodicHandlers(Mission m) {
+		if (msCount > 0) {
+			for (int i = 0; i < noOfRegistered; i++) {
+				if (schedulables[i] instanceof AperiodicEventHandler) {
+					ManagedSchedulable ms = schedulables[i];
 
-		for (int i = 0; i < noOfRegistered; i++) {
-			if (schedulables[i] instanceof AperiodicEventHandler) {
-				schedulables[i].cleanUp();
+					schedulables[i].cleanUp();
 
-				ms = schedulables[i];
-				schedulables[i] = null;
+					deleteSchedulable(i);
 
-				PriorityScheduler.instance().pFrame.removeFromQueue((ScjProcess) Process.getProcess(ms));
-				msCount--;
+					PriorityScheduler.instance().pFrame.removeFromQueue((ScjProcess) Process.getProcess(ms));
+				}
 			}
+			if (msCount == 0)
+				m.getSequencer().seqNotify();
 		}
-		if (msCount == 0 && ms != null)
-			m.getSequencer().seqNotify();
 	}
 
 	public String toString() {
