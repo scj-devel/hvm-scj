@@ -54,11 +54,18 @@ import util.StringUtil;
  */
 @SCJAllowed(Level.INFRASTRUCTURE)
 class ManagedSchedulableSet {
-	
-	private ManagedSchedulable[] managedSchObjects = new ManagedSchedulable[Const.DEFAULT_HANDLER_NUMBER];
-	private int noOfRegistered = 0;
 
-	private ScjProcess[] scjProcesses = new ScjProcess[Const.DEFAULT_HANDLER_NUMBER];
+	private static class ManagedSchedulableInfo {
+		ManagedSchedulable ms;
+		ScjProcess p;
+
+		ManagedSchedulableInfo(ManagedSchedulable ms, ScjProcess p) {
+			this.ms = ms;
+			this.p = p;
+		}
+	}
+	
+	ManagedSchedulableInfo[] msInfo;
 
 	/**
 	 * Count of ManagedSchedulable objects for the mission. 
@@ -70,8 +77,10 @@ class ManagedSchedulableSet {
 	 * Mission.runCleanup is waiting until msCount == 0
 	 */
 	private int msCount;
+	private int noOfRegistered = 0;
 
 	ManagedSchedulableSet() {
+		msInfo = new ManagedSchedulableInfo[Const.DEFAULT_HANDLER_NUMBER];
 	}
 
 	/*@ 
@@ -81,7 +90,7 @@ class ManagedSchedulableSet {
 	  @*/
 	void addMS(ManagedSchedulable ms) {
 		if (!contains(ms)) {
-			managedSchObjects[noOfRegistered] = ms;
+			msInfo[noOfRegistered] = new ManagedSchedulableInfo(ms, null);
 			noOfRegistered++;
 			msCount++;
 		}
@@ -89,7 +98,7 @@ class ManagedSchedulableSet {
 
 	boolean contains(ManagedSchedulable ms) {
 		for (int i = 0; i < noOfRegistered; i++) {
-			if (managedSchObjects[i] == ms)
+			if (msInfo[i].ms == ms)
 				return true;
 		}
 		return false;
@@ -98,8 +107,8 @@ class ManagedSchedulableSet {
 	void terminateMSObjects() // stop all managed schedule objects; called in CyclicExecutive.runCleanup
 	{
 		for (int i = noOfRegistered; i > 0; i--) {
-			managedSchObjects[i - 1].cleanUp();
-			managedSchObjects[i - 1] = null;
+			msInfo[i - 1].ms.cleanUp();
+			msInfo[i - 1].ms = null;
 			msCount--;
 		}
 	}
@@ -107,16 +116,15 @@ class ManagedSchedulableSet {
 	void removeMSObject(ManagedSchedulable ms, Mission m) // called in Scj...Process.gotoNextState
 	{
 		for (int i = 0; i < noOfRegistered; i++) {
-			if (managedSchObjects[i] == ms) {
-				managedSchObjects[i].cleanUp();
-				
+			if (msInfo[i].ms == ms) {
+				msInfo[i].ms.cleanUp();
 
 				//PriorityScheduler.instance().pFrame.readyQueue.remove(scjProcesses[i]);
 
-				PriorityScheduler.instance().pFrame.removeFromQueue(scjProcesses[i]);
+				PriorityScheduler.instance().pFrame.removeFromQueue(msInfo[i].p);
 				//devices.Console.println("MSSet.removeMSObject " + scjProcesses[i].index);
 				deleteSchedulable(i);
-				
+
 				msCount--;
 			}
 		}
@@ -130,25 +138,25 @@ class ManagedSchedulableSet {
 	// called in ScjAperiodicEventHandlerProcess.gotoNextState()
 	{
 		ManagedSchedulable ms = null;
-		
+
 		for (int i = 0; i < noOfRegistered; i++) {
-			if (managedSchObjects[i] instanceof AperiodicEventHandler) {
-				managedSchObjects[i].cleanUp();
-				
-				ms = managedSchObjects[i];
-				managedSchObjects[i] = null;
-				
-				PriorityScheduler.instance().pFrame.readyQueue.remove(scjProcesses[i]);
+			if (msInfo[i].ms instanceof AperiodicEventHandler) {
+				msInfo[i].ms.cleanUp();
+
+				ms = msInfo[i].ms;
+				msInfo[i].ms = null;
+
+				PriorityScheduler.instance().pFrame.readyQueue.remove(msInfo[i].p);
 				msCount--;
 			}
 		}
 		if (msCount == 0 && ms != null)
-			ManagedSchedMethods.getMission(ms).getSequencer().seqNotify();		
+			ManagedSchedMethods.getMission(ms).getSequencer().seqNotify();
 	}
 
 	int indexOf(ManagedSchedulable ms) {
 		for (int i = 0; i < noOfRegistered; i++) {
-			if (managedSchObjects[i] == ms)
+			if (msInfo[i].ms == ms)
 				return i;
 		}
 		return -1;
@@ -160,31 +168,27 @@ class ManagedSchedulableSet {
 		return buf.toString();
 	}
 
-	ManagedSchedulable[] getManagedSchedulables() {
-		return managedSchObjects;
-	}
-
 	ManagedSchedulable getManagedSchedulable(int i) {
-		return managedSchObjects[i];
+		return msInfo[i].ms;
 	}
 
 	void deleteSchedulable(int i) {
-		managedSchObjects[i] = null;
-		scjProcesses[i] = null;		
+		msInfo[i].ms = null;
+		msInfo[i].p = null;
 	}
 
 	void setScjProcess(int i, ScjProcess p) {
-		scjProcesses[i] = p;
+		msInfo[i].p = p;
 	}
 
 	public Process getScjProcess(int scjProcessIndex) {
-		return scjProcesses[scjProcessIndex];
+		return msInfo[scjProcessIndex].p;
 	}
 
 	public int getNumberOfManagedSchedulables1() {
 		return noOfRegistered;
 	}
-	
+
 	public int getNumberOfManagedSchedulables2() {
 		return msCount;
 	}
