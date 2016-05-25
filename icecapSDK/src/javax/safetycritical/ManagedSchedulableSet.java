@@ -69,7 +69,7 @@ class ManagedSchedulableSet {
 	 * 
 	 * Mission.runCleanup is waiting until msCount == 0
 	 */
-	int msCount;
+	private int msCount;
 	int activeCount; // only for multiprocessor
 
 	ManagedSchedulableSet() {
@@ -182,7 +182,11 @@ class ManagedSchedulableSet {
 		return scjProcesses[scjProcessIndex];
 	}
 
-	public int getNumberOfManagedSchedulables() {
+	public int getNumberOfManagedSchedulables1() {
 		return noOfRegistered;
+	}
+	
+	public int getNumberOfManagedSchedulables2() {
+		return msCount;
 	}
 }

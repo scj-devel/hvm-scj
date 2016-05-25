@@ -94,7 +94,7 @@ public abstract class CyclicExecutive extends Mission {
 		Mission mission = Mission.getMission();
 		// The following four lines of code: to meet the precondition in getSchedule.
 		ManagedSchedulable[] msObjects = mission.getManagedSchedulables();
-		PeriodicEventHandler[] pevs = new PeriodicEventHandler[mission.getNumberOfManagedSchedulables()];
+		PeriodicEventHandler[] pevs = new PeriodicEventHandler[mission.getNumberOfManagedSchedulables1()];
 
 		for (int i = 0; i < pevs.length; i++)
 			pevs[i] = (PeriodicEventHandler) msObjects[i];
