@@ -150,14 +150,6 @@ class ManagedSchedulableSet {
 			ManagedSchedMethods.getMission(ms).getSequencer().seqNotify();
 	}
 
-	int indexOf(ManagedSchedulable ms) {
-		for (int i = 0; i < noOfRegistered; i++) {
-			if (msInfo[i].ms == ms)
-				return i;
-		}
-		return -1;
-	}
-
 	public String toString() {
 		StringBuffer buf = StringUtil.constructStringBuffer("Mission: ", noOfRegistered);
 		buf.append(" handlers");
