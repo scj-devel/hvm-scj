@@ -121,7 +121,7 @@ class ManagedSchedulableSet {
 
 				//PriorityScheduler.instance().pFrame.readyQueue.remove(scjProcesses[i]);
 
-				PriorityScheduler.instance().pFrame.removeFromQueue(msInfo[i].p);
+				PriorityScheduler.instance().pFrame.removeFromQueue((ScjProcess) Process.getProcess(ms));
 				//devices.Console.println("MSSet.removeMSObject " + scjProcesses[i].index);
 				deleteSchedulable(i);
 			}
@@ -144,7 +144,7 @@ class ManagedSchedulableSet {
 				ms = msInfo[i].ms;
 				msInfo[i].ms = null;
 
-				PriorityScheduler.instance().pFrame.readyQueue.remove(msInfo[i].p);
+				PriorityScheduler.instance().pFrame.readyQueue.remove((ScjProcess) Process.getProcess(ms));
 				msCount--;
 			}
 		}
@@ -181,7 +181,7 @@ class ManagedSchedulableSet {
 	}
 
 	Process getScjProcess(int scjProcessIndex) {
-		return msInfo[scjProcessIndex].p;
+		return Process.getProcess(msInfo[scjProcessIndex].ms);
 	}
 
 	int getNumberOfManagedSchedulables() {
