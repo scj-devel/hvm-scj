@@ -57,11 +57,9 @@ class ManagedSchedulableSet {
 
 	private static class ManagedSchedulableInfo {
 		ManagedSchedulable ms;
-		ScjProcess p;
 
-		ManagedSchedulableInfo(ManagedSchedulable ms, ScjProcess p) {
+		ManagedSchedulableInfo(ManagedSchedulable ms) {
 			this.ms = ms;
-			this.p = p;
 		}
 	}
 
@@ -90,7 +88,7 @@ class ManagedSchedulableSet {
 	  @*/
 	void addMSObject(ManagedSchedulable ms) {
 		if (!containMSObject(ms)) {
-			msInfo[noOfRegistered] = new ManagedSchedulableInfo(ms, null);
+			msInfo[noOfRegistered] = new ManagedSchedulableInfo(ms);
 			noOfRegistered++;
 			msCount++;
 		}
@@ -172,12 +170,10 @@ class ManagedSchedulableSet {
 
 	void deleteSchedulable(int i) {
 		msInfo[i].ms = null;
-		msInfo[i].p = null;
 		msCount--;
 	}
 
 	void setScjProcess(int i, ScjProcess p) {
-		msInfo[i].p = p;
 	}
 
 	Process getScjProcess(int scjProcessIndex) {
