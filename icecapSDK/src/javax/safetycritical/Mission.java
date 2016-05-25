@@ -217,7 +217,7 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 	}
 
 	void removeAperiodicHandlers() {
-		msSetForMission.removeAperiodicHandlers();
+		msSetForMission.removeAperiodicHandlers(this);
 	}
 
 	ManagedSchedulable getManagedSchedulable(int i) {

@@ -122,7 +122,7 @@ class ManagedSchedulableSet {
 		}
 	}
 
-	void removeAperiodicHandlers() // remove all aperiodic handlers; 
+	void removeAperiodicHandlers(Mission m) // remove all aperiodic handlers; 
 	// called in ScjAperiodicEventHandlerProcess.gotoNextState()
 	{
 		ManagedSchedulable ms = null;
@@ -139,7 +139,7 @@ class ManagedSchedulableSet {
 			}
 		}
 		if (msCount == 0 && ms != null)
-			ManagedSchedMethods.getMission(ms).getSequencer().seqNotify();
+			m.getSequencer().seqNotify();
 	}
 
 	public String toString() {
