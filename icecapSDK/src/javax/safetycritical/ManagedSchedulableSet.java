@@ -55,15 +55,7 @@ import util.StringUtil;
 @SCJAllowed(Level.INFRASTRUCTURE)
 class ManagedSchedulableSet {
 
-	private static class ManagedSchedulableInfo {
-		ManagedSchedulable ms;
-
-		ManagedSchedulableInfo(ManagedSchedulable ms) {
-			this.ms = ms;
-		}
-	}
-
-	private ManagedSchedulableInfo[] msInfo;
+	private ManagedSchedulable[] schedulables;
 
 	/**
 	 * Count of ManagedSchedulable objects for the mission. 
@@ -78,7 +70,7 @@ class ManagedSchedulableSet {
 	private int noOfRegistered = 0;
 
 	ManagedSchedulableSet() {
-		msInfo = new ManagedSchedulableInfo[Const.DEFAULT_HANDLER_NUMBER];
+		schedulables = new ManagedSchedulable[Const.DEFAULT_HANDLER_NUMBER];
 	}
 
 	/*@ 
@@ -88,7 +80,7 @@ class ManagedSchedulableSet {
 	  @*/
 	void addMSObject(ManagedSchedulable ms) {
 		if (!containMSObject(ms)) {
-			msInfo[noOfRegistered] = new ManagedSchedulableInfo(ms);
+			schedulables[noOfRegistered] = ms;
 			noOfRegistered++;
 			msCount++;
 		}
@@ -96,7 +88,7 @@ class ManagedSchedulableSet {
 
 	boolean containMSObject(ManagedSchedulable ms) {
 		for (int i = 0; i < noOfRegistered; i++) {
-			if (msInfo[i].ms == ms)
+			if (schedulables[i] == ms)
 				return true;
 		}
 		return false;
@@ -105,8 +97,8 @@ class ManagedSchedulableSet {
 	void terminateMSObjects() // stop all managed schedule objects; called in CyclicExecutive.runCleanup
 	{
 		for (int i = noOfRegistered; i > 0; i--) {
-			msInfo[i - 1].ms.cleanUp();
-			msInfo[i - 1].ms = null;
+			schedulables[i - 1].cleanUp();
+			schedulables[i - 1] = null;
 			msCount--;
 		}
 	}
@@ -114,8 +106,8 @@ class ManagedSchedulableSet {
 	void removeMSObject(ManagedSchedulable ms, Mission m) // called in Scj...Process.gotoNextState
 	{
 		for (int i = 0; i < noOfRegistered; i++) {
-			if (msInfo[i].ms == ms) {
-				msInfo[i].ms.cleanUp();
+			if (schedulables[i] == ms) {
+				schedulables[i].cleanUp();
 
 				//PriorityScheduler.instance().pFrame.readyQueue.remove(scjProcesses[i]);
 
@@ -136,11 +128,11 @@ class ManagedSchedulableSet {
 		ManagedSchedulable ms = null;
 
 		for (int i = 0; i < noOfRegistered; i++) {
-			if (msInfo[i].ms instanceof AperiodicEventHandler) {
-				msInfo[i].ms.cleanUp();
+			if (schedulables[i] instanceof AperiodicEventHandler) {
+				schedulables[i].cleanUp();
 
-				ms = msInfo[i].ms;
-				msInfo[i].ms = null;
+				ms = schedulables[i];
+				schedulables[i] = null;
 
 				PriorityScheduler.instance().pFrame.readyQueue.remove((ScjProcess) Process.getProcess(ms));
 				msCount--;
@@ -157,11 +149,11 @@ class ManagedSchedulableSet {
 	}
 
 	ManagedSchedulable getManagedSchedulable(int i) {
-		return msInfo[i].ms;
+		return schedulables[i];
 	}
 
 	void deleteSchedulable(int i) {
-		msInfo[i].ms = null;
+		schedulables[i] = null;
 		msCount--;
 	}
 
