@@ -98,8 +98,7 @@ class ManagedSchedulableSet {
 	{
 		for (int i = noOfRegistered; i > 0; i--) {
 			schedulables[i - 1].cleanUp();
-			schedulables[i - 1] = null;
-			msCount--;
+			deleteSchedulable(i - 1);
 		}
 	}
 
