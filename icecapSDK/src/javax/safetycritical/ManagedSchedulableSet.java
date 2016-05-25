@@ -173,10 +173,6 @@ class ManagedSchedulableSet {
 		msCount--;
 	}
 
-	Process getScjProcess(int scjProcessIndex) {
-		return Process.getProcess(msInfo[scjProcessIndex].ms);
-	}
-
 	int getNumberOfManagedSchedulables() {
 		return msCount;
 	}
