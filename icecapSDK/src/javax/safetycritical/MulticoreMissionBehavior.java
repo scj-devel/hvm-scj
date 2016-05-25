@@ -1,5 +1,7 @@
 package javax.safetycritical;
 
+import java.util.Iterator;
+
 import javax.safetycritical.annotate.Phase;
 import javax.scj.util.Const;
 
@@ -38,8 +40,10 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 			// mission.
 			mission.missionTerminate = true;
 
-			for (int i = 0; i < mission.getNumberOfManagedSchedulables(); i++) {
-				ManagedSchedulable schedulable = mission.getManagedSchedulable(i);
+			Iterator<ManagedSchedulable> schedulables = mission.getManagedSchedulables();
+			
+			while (schedulables.hasNext()) {
+				ManagedSchedulable schedulable = schedulables.next();
 				if (schedulable != null) {
 					if (schedulable instanceof AperiodicEventHandler) {
 						((AperiodicEventHandler) schedulable).fireNextRelease();
@@ -51,7 +55,6 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 					schedulable.signalTermination();
 				}
 			}
-
 			return false;
 		} else
 			return true; // called more than once: nothing done
@@ -84,8 +87,10 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 		mission.phaseOfMission = Phase.RUN;
 		int index = mission.missionIndex * Const.DEFAULT_HANDLER_NUMBER;
 
-		for (int i = 0; i < mission.getNumberOfManagedSchedulables(); i++) {
-			ManagedSchedulable ms = mission.getManagedSchedulable(i);
+		Iterator<ManagedSchedulable> schedulables = mission.getManagedSchedulables();
+		
+		while (schedulables.hasNext()) {
+			ManagedSchedulable ms = schedulables.next();
 			OSProcess process = new OSProcess(ms);
 			process.executable.id = index;
 			index++;
@@ -95,9 +100,11 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 
 		mission.currMissSeq.seqWait();
 
-		for (int i = 0; i < mission.getNumberOfManagedSchedulables(); i++) {
+		schedulables = mission.getManagedSchedulables();
+		
+		while (schedulables.hasNext()) {
 			try {
-				ManagedSchedulable ms = mission.getManagedSchedulable(i);
+				ManagedSchedulable ms = schedulables.next();
 				if (ms instanceof ManagedThread)
 					((ManagedThread) ms).process.executable.join();
 				else

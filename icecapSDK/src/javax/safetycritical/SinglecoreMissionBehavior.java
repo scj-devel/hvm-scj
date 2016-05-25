@@ -1,5 +1,7 @@
 package javax.safetycritical;
 
+import java.util.Iterator;
+
 import javax.safetycritical.annotate.Phase;
 import javax.scj.util.Const;
 
@@ -29,8 +31,9 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 		if (mission.missionTerminate == false) { // called the first time during mission execution	
 
 			// terminate all the sequencer's MSObjects that were created by the mission.
-			for (int i = 0; i < mission.getNumberOfManagedSchedulables(); i++) {
-				ManagedSchedulable ms = mission.getManagedSchedulable(i);
+			Iterator<ManagedSchedulable> schedulables = mission.getManagedSchedulables();
+			while (schedulables.hasNext()) {
+				ManagedSchedulable ms = schedulables.next();
 				if (ms != null) {
 					ms.signalTermination();
 				}
@@ -77,9 +80,11 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 
 		int index = mission.missionIndex * 20;
 
-		for (int i = 0; i < mission.getNumberOfManagedSchedulables(); i++) {
+		Iterator<ManagedSchedulable> schedulables = mission.getManagedSchedulables();
+		
+		while (schedulables.hasNext()) {
 
-			ManagedSchedulable ms = mission.getManagedSchedulable(i);
+			ManagedSchedulable ms = schedulables.next();
 
 			ScjProcess p = ManagedSchedMethods.createScjProcess(ms);
 			
@@ -102,6 +107,7 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 		//			}
 
 		vm.ClockInterruptHandler.instance.disable();
+
 		for (int i = 0; i < mission.getNumberOfManagedSchedulables(); i++) {
 			mission.deleteSchedulable(i);
 		}
