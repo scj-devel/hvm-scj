@@ -71,16 +71,14 @@ class ManagedSchedulableSet {
 	private int msCount;
 	private int noOfRegistered = 0;
 	private SchedulableIterator sitr;
-	
-	private class SchedulableIterator implements Iterator<ManagedSchedulable>
-	{
+
+	private class SchedulableIterator implements Iterator<ManagedSchedulable> {
 		private int index;
-		
-		SchedulableIterator()
-		{
+
+		SchedulableIterator() {
 			reset();
 		}
-		
+
 		@Override
 		public boolean hasNext() {
 			return index < noOfRegistered;
@@ -93,9 +91,9 @@ class ManagedSchedulableSet {
 
 		public void reset() {
 			index = 0;
-		}		
+		}
 	}
-	
+
 	ManagedSchedulableSet() {
 		schedulables = new ManagedSchedulable[Const.DEFAULT_HANDLER_NUMBER];
 		sitr = new SchedulableIterator();
@@ -176,7 +174,7 @@ class ManagedSchedulableSet {
 		return schedulables[i];
 	}
 
-	void deleteSchedulable(int i) {
+	private void deleteSchedulable(int i) {
 		schedulables[i] = null;
 		msCount--;
 	}
@@ -184,7 +182,7 @@ class ManagedSchedulableSet {
 	int getNumberOfManagedSchedulables() {
 		return msCount;
 	}
-	
+
 	public Iterator<ManagedSchedulable> iterator() {
 		sitr.reset();
 		return sitr;
@@ -192,5 +190,11 @@ class ManagedSchedulableSet {
 
 	public boolean hasSchedulables() {
 		return msCount > 0;
+	}
+
+	public void deleteSchedulables() {
+		for (int i = 0; i < noOfRegistered; i++) {
+			deleteSchedulable(i);
+		}
 	}
 }

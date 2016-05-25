@@ -226,10 +226,6 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 		return msSetForMission.getManagedSchedulable(i);
 	}
 
-	void deleteSchedulable(int i) {
-		msSetForMission.deleteSchedulable(i);
-	}
-
 	Process getScjProcess(int i) {
 		return Process.getProcess(msSetForMission.getManagedSchedulable(i));
 	}
@@ -266,5 +262,9 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 
 	public Iterator<ManagedSchedulable> getManagedSchedulables() {
 		return msSetForMission.iterator();
+	}
+
+	public void deleteSchedulables() {
+		msSetForMission.deleteSchedulables();
 	}
 }

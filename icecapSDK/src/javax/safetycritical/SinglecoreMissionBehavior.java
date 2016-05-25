@@ -108,9 +108,7 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 
 		vm.ClockInterruptHandler.instance.disable();
 
-		for (int i = 0; i < mission.getNumberOfManagedSchedulables(); i++) {
-			mission.deleteSchedulable(i);
-		}
+		mission.deleteSchedulables();
 
 		Mission.missionSet[mission.missionIndex] = null;
 		if (mission.isMissionSetInitByThis == true) {
