@@ -123,7 +123,7 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 	@SCJAllowed(Level.INFRASTRUCTURE)
 	@SCJPhase(Phase.INITIALIZATION)
 	public final void register() {
-		Mission.getMission().addMS(this);
+		Mission.getMission().addMSObject(this);
 
 		isRegistered = true;
 		isInMissionScope = true;

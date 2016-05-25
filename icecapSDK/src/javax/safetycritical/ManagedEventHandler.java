@@ -152,7 +152,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	@SCJAllowed(Level.INFRASTRUCTURE)
 	@SCJPhase(Phase.INITIALIZATION)
 	public void register() {
-		mission.addMS(this);
+		mission.addMSObject(this);
 		
 		isRegistered = true;
 		isInMissionScope = true;

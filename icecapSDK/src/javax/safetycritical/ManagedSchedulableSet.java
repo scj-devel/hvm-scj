@@ -88,15 +88,15 @@ class ManagedSchedulableSet {
 	    requires ms != null;
 	    ensures this.contains(ms);
 	  @*/
-	void addMS(ManagedSchedulable ms) {
-		if (!contains(ms)) {
+	void addMSObject(ManagedSchedulable ms) {
+		if (!containMSObject(ms)) {
 			msInfo[noOfRegistered] = new ManagedSchedulableInfo(ms, null);
 			noOfRegistered++;
 			msCount++;
 		}
 	}
 
-	boolean contains(ManagedSchedulable ms) {
+	boolean containMSObject(ManagedSchedulable ms) {
 		for (int i = 0; i < noOfRegistered; i++) {
 			if (msInfo[i].ms == ms)
 				return true;

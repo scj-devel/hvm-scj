@@ -246,12 +246,12 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 		initialize();
 	}
 
-	void addMS(ManagedSchedulable managedEventHandler) {
-		msSetForMission.addMS(managedEventHandler);
+	void addMSObject(ManagedSchedulable managedEventHandler) {
+		msSetForMission.addMSObject(managedEventHandler);
 	}
 
-	public boolean containsMS(ManagedSchedulable handler) {
-		return msSetForMission.contains(handler);
+	public boolean containMSObject(ManagedSchedulable handler) {
+		return msSetForMission.containMSObject(handler);
 	}
 	
 	void removeMSObject(ManagedSchedulable msObject) {

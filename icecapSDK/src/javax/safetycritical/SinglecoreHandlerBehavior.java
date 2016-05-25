@@ -13,7 +13,7 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 	boolean oneshotHandlerDeschedule(OneShotEventHandler handler) {
 		Mission ms = Mission.getMission();
 
-		if (ms.containsMS(handler)) {
+		if (ms.containMSObject(handler)) {
 			ms.removeMSObject(handler);
 			return true;
 		} else
