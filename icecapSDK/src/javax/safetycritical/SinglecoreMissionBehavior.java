@@ -63,7 +63,6 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 			Mission.isMissionSetInit = true;
 		}
 		mission.missionIndex = addNewMission(mission);
-
 		mission.gotoInitPhase();
 
 		vm.ClockInterruptHandler.instance.enable();

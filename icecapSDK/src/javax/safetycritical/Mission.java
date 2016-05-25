@@ -59,7 +59,7 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 
 	static MissionBehavior missionBehaviour;
 
-	ManagedSchedulableSet msSetForMission;
+	private ManagedSchedulableSet msSetForMission;
 	Phase phaseOfMission = Phase.STARTUP;
 
 	protected int missionIndex = -1;
@@ -173,7 +173,6 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 	}
 
 	void runInitialize() {
-		phaseOfMission = Phase.INITIALIZATION;
 		missionBehaviour.runInitialize(this);
 	}
 
@@ -217,20 +216,12 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 		return phaseOfMission;
 	}
 
-	void removeMSObject(ManagedSchedulable msObject) {
-		msSetForMission.removeMSObject(msObject, this);
-	}
-
 	void removeAperiodicHandlers() {
 		msSetForMission.removeAperiodicHandlers();
 	}
 
 	ManagedSchedulable getManagedSchedulable(int i) {
 		return msSetForMission.getManagedSchedulable(i);
-	}
-
-	void terminateMSObjects() {
-		msSetForMission.terminateMSObjects();
 	}
 
 	void deleteSchedulable(int i) {
@@ -253,5 +244,21 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 		phaseOfMission = Phase.INITIALIZATION;
 		msSetForMission = new ManagedSchedulableSet();
 		initialize();
+	}
+
+	void addMS(ManagedSchedulable managedEventHandler) {
+		msSetForMission.addMS(managedEventHandler);
+	}
+
+	public boolean containsMS(ManagedSchedulable handler) {
+		return msSetForMission.contains(handler);
+	}
+	
+	void removeMSObject(ManagedSchedulable msObject) {
+		msSetForMission.removeMSObject(msObject, this);
+	}
+
+	void terminateMSObjects() {
+		msSetForMission.terminateMSObjects();
 	}
 }

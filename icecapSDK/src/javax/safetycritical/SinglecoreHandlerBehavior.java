@@ -12,10 +12,9 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 	@Override
 	boolean oneshotHandlerDeschedule(OneShotEventHandler handler) {
 		Mission ms = Mission.getMission();
-		ManagedSchedulableSet hs = ms.msSetForMission;
 
-		if (hs.contains(handler)) {
-			hs.removeMSObject(handler, ms);
+		if (ms.containsMS(handler)) {
+			ms.removeMSObject(handler);
 			return true;
 		} else
 			return false;

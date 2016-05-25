@@ -30,7 +30,6 @@ import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.annotate.Level;
-import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
@@ -129,7 +128,7 @@ public abstract class CyclicExecutive extends Mission {
 	{
 		vm.ClockInterruptHandler.instance.disable();
 
-		Mission.getMission().msSetForMission.terminateMSObjects();
+		Mission.getMission().terminateMSObjects();
 
 		cleanUp();
 		missMem.resetArea();
