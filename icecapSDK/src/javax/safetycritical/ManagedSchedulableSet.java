@@ -173,9 +173,6 @@ class ManagedSchedulableSet {
 		msCount--;
 	}
 
-	void setScjProcess(int i, ScjProcess p) {
-	}
-
 	Process getScjProcess(int scjProcessIndex) {
 		return Process.getProcess(msInfo[scjProcessIndex].ms);
 	}

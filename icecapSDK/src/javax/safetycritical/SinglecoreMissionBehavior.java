@@ -83,7 +83,6 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 
 			ScjProcess p = ManagedSchedMethods.createScjProcess(ms);
 			
-			mission.setScjProcess(i, p);
 			p.setIndex(index);
 			index++;
 			frame.addProcess(p);

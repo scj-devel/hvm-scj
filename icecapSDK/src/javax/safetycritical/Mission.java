@@ -228,10 +228,6 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 		msSetForMission.deleteSchedulable(i);
 	}
 
-	void setScjProcess(int i, ScjProcess p) {
-		msSetForMission.setScjProcess(i, p);
-	}
-
 	Process getScjProcess(int scjProcessIndex) {
 		return msSetForMission.getScjProcess(scjProcessIndex);
 	}
