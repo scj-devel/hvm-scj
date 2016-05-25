@@ -65,6 +65,8 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 	protected int missionIndex = -1;
 	boolean isMissionSetInitByThis = false;
 
+	int activeCount; // only for multiprocessor
+
 	@SCJAllowed
 	public Mission(AbsoluteTime start) {
 		// ToDo: implement
@@ -72,6 +74,7 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 
 	@SCJAllowed
 	public Mission() {
+		activeCount = 0;
 	}
 
 	/** 

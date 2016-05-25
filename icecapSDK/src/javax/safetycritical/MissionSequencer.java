@@ -137,7 +137,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 				}
 			}
 		} else {
-			while (currMission.msSetForMission.activeCount > 0) {
+			while (currMission.activeCount > 0) {
 				try {
 					wait();
 				} catch (InterruptedException e) {
@@ -153,8 +153,8 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 				notify();
 			}
 		} else {
-			currMission.msSetForMission.activeCount--;
-			if (currMission.msSetForMission.activeCount == 0) {
+			currMission.activeCount--;
+			if (currMission.activeCount == 0) {
 				notify();
 			}
 		}

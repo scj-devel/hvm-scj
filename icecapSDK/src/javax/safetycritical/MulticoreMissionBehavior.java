@@ -92,7 +92,7 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 			OSProcess process = new OSProcess(ms);
 			process.executable.id = index;
 			index++;
-			mission.msSetForMission.activeCount++;
+			mission.activeCount++;
 			process.executable.start();
 		}
 
@@ -114,7 +114,7 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 	void runCleanup(Mission mission, MissionMemory missMem) {
 		mission.phaseOfMission = Phase.CLEANUP;
 
-		if (mission.msSetForMission.activeCount > 0) {
+		if (mission.activeCount > 0) {
 			devices.Console.println("still have SOs");
 			throw new IllegalArgumentException();
 		}
