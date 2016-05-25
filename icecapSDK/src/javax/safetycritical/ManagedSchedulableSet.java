@@ -124,8 +124,6 @@ class ManagedSchedulableSet {
 				PriorityScheduler.instance().pFrame.removeFromQueue(msInfo[i].p);
 				//devices.Console.println("MSSet.removeMSObject " + scjProcesses[i].index);
 				deleteSchedulable(i);
-
-				msCount--;
 			}
 		}
 		//devices.Console.println("MSSet.removeMSObject: msCount " + msCount);
@@ -175,6 +173,7 @@ class ManagedSchedulableSet {
 	void deleteSchedulable(int i) {
 		msInfo[i].ms = null;
 		msInfo[i].p = null;
+		msCount--;
 	}
 
 	void setScjProcess(int i, ScjProcess p) {
