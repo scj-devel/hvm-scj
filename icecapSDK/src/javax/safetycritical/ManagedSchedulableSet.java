@@ -134,7 +134,7 @@ class ManagedSchedulableSet {
 				ms = schedulables[i];
 				schedulables[i] = null;
 
-				PriorityScheduler.instance().pFrame.readyQueue.remove((ScjProcess) Process.getProcess(ms));
+				PriorityScheduler.instance().pFrame.removeFromQueue((ScjProcess) Process.getProcess(ms));
 				msCount--;
 			}
 		}
