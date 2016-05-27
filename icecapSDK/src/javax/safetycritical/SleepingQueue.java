@@ -63,17 +63,17 @@ import javax.scj.util.Const;
 class SleepingQueue {
 	int heapSize;
 
-	protected int[] tree; // index to ScjProcesses
+	protected ScjProcess[] tree; 
 
 	public SleepingQueue(int size) {
 		heapSize = 0;
-		tree = new int[size + 1];
+		tree = new ScjProcess[size + 1];
 		makeEmptyTree(this.tree);
 	}
 
-	private void makeEmptyTree(int[] tree) {
+	private void makeEmptyTree(ScjProcess[] tree) {
 		for (int i = 0; i < tree.length; i++)
-			tree[i] = -999;
+			tree[i] = null;
 	}
 
 	int parent(int i) {
@@ -89,7 +89,7 @@ class SleepingQueue {
 	}
 
 	void exchange(int a, int b) {
-		int temp = tree[a];
+		ScjProcess temp = tree[a];
 		tree[a] = tree[b];
 		tree[b] = temp;
 	}
@@ -100,12 +100,12 @@ class SleepingQueue {
 
 		int smallest;
 
-		if (l <= heapSize && getScjProcess(tree[l]).next.compareTo(getScjProcess(tree[r]).next) < 0)
+		if (l <= heapSize && tree[l].next.compareTo(tree[r].next) < 0)
 			smallest = l;
 		else
 			smallest = i;
 
-		if (r <= heapSize && getScjProcess(tree[r]).next.compareTo(getScjProcess(tree[smallest]).next) < 0)
+		if (r <= heapSize && tree[r].next.compareTo(tree[smallest].next) < 0)
 			smallest = r;
 
 		if (smallest != i) {
@@ -120,17 +120,17 @@ class SleepingQueue {
 
 		heapSize++;
 		int i = heapSize;
-		while (i > 1 && getScjProcess(tree[parent(i)]).next.compareTo(obj.next) > 0) {
+		while (i > 1 && tree[parent(i)].next.compareTo(obj.next) > 0) {
 			tree[i] = tree[parent(i)];
 			i = parent(i);
 		}
-		tree[i] = obj.index;
+		tree[i] = obj;
 	}
 
 	@IcecapCompileMe
 	public ScjProcess minimum() {
 		if (heapSize > 0)
-			return getScjProcess(tree[1]);
+			return tree[1];
 		else
 			return null;
 	}
@@ -140,7 +140,7 @@ class SleepingQueue {
 		if (heapSize < 1)
 			return null;
 
-		ScjProcess min = getScjProcess(tree[1]);
+		ScjProcess min = tree[1];
 		tree[1] = tree[heapSize];
 		heapSize--;
 		heapify(1);
@@ -176,7 +176,7 @@ class SleepingQueue {
 
 	private int find(int value) {
 		for (int i = 1; i <= heapSize; i++) {
-			if (tree[i] == value)
+			if (tree[i].index == value)
 				return i;
 		}
 		return -999;
@@ -189,7 +189,7 @@ class SleepingQueue {
 		devices.Console.println("sQueue size = " + heapSize);
 		for (int i = 1; i <= heapSize; i++) {
 			//devices.Console.println(tree[i].toString());
-			devices.Console.println(getScjProcess(tree[i]).toString());
+			devices.Console.println(tree[i].toString());
 			//System.out.println(tree[i].toString());
 		}
 
