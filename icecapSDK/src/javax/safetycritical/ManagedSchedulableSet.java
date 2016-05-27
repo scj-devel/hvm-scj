@@ -69,7 +69,7 @@ class ManagedSchedulableSet {
 	 * Mission.runCleanup is waiting until msCount == 0
 	 */
 	private int msCount;
-	private int noOfRegistered = 0;
+	private int noOfRegistered;
 	private SchedulableIterator sitr;
 
 	private class SchedulableIterator implements Iterator<ManagedSchedulable> {
@@ -97,6 +97,7 @@ class ManagedSchedulableSet {
 	ManagedSchedulableSet() {
 		schedulables = new ManagedSchedulable[Const.DEFAULT_HANDLER_NUMBER];
 		sitr = new SchedulableIterator();
+		msCount = noOfRegistered = 0;
 	}
 
 	/*@ 
