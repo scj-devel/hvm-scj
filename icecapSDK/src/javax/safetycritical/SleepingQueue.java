@@ -148,21 +148,6 @@ class SleepingQueue {
 		return min;
 	}
 
-	@IcecapCompileMe
-	private ScjProcess getScjProcess(int processIdx) {
-		if (processIdx == -999) {
-			return null;
-		}
-		if (processIdx == -2) {
-			return MissionSequencer.missSeqProcess;
-		}
-		if (processIdx == -1) {
-			return ScjProcess.idleProcess;
-		}
-
-		return (ScjProcess)Mission.missionBehaviour.getProcess(processIdx);
-	}
-
 	public void remove(ScjProcess obj) {
 		if (obj == null)
 			return;
