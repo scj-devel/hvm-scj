@@ -64,17 +64,17 @@ import javax.scj.util.Const;
 class PriorityQueue {
 	protected int heapSize;
 
-	protected int[] tree; // index to ScjProcesses
+	protected ScjProcess[] tree; // index to ScjProcesses
 
 	public PriorityQueue(int size) {
 		heapSize = 0;
-		tree = new int[size + 1];
+		tree = new ScjProcess[size + 1];
 		makeEmptyTree(this.tree);
 	}
 
-	private void makeEmptyTree(int[] tree) {
+	private void makeEmptyTree(ScjProcess[] tree) {
 		for (int i = 0; i < tree.length; i++)
-			tree[i] = -999;
+			tree[i] = null;
 	}
 
 	int parent(int i) {
@@ -90,7 +90,7 @@ class PriorityQueue {
 	}
 
 	void exchange(int a, int b) {
-		int temp = tree[a];
+		ScjProcess temp = tree[a];
 		tree[a] = tree[b];
 		tree[b] = temp;
 	}
@@ -101,12 +101,12 @@ class PriorityQueue {
 
 		int largest;
 
-		if (l <= heapSize && getScjProcess(tree[l]).compareTo(getScjProcess(tree[r])) > 0)
+		if (l <= heapSize && tree[l].compareTo(tree[r]) > 0)
 			largest = l;
 		else
 			largest = i;
 
-		if (r <= heapSize && getScjProcess(tree[r]).compareTo(getScjProcess(tree[largest])) > 0)
+		if (r <= heapSize && tree[r].compareTo(tree[largest]) > 0)
 			largest = r;
 
 		if (largest != i) {
@@ -123,11 +123,11 @@ class PriorityQueue {
 
 		heapSize++;
 		int i = heapSize;
-		while (i > 1 && getScjProcess(tree[parent(i)]).compareTo(obj) < 0) {
+		while (i > 1 && tree[parent(i)].compareTo(obj) < 0) {
 			tree[i] = tree[parent(i)];
 			i = parent(i);
 		}
-		tree[i] = obj.index;
+		tree[i] = obj;
 	}
 
 	@IcecapCompileMe
@@ -135,26 +135,12 @@ class PriorityQueue {
 		if (heapSize < 1)
 			return null;
 
-		ScjProcess max = getScjProcess(tree[1]);
+		ScjProcess max = tree[1];
 		tree[1] = tree[heapSize];
 		heapSize--;
 		heapify(1);
 
 		return max;
-	}
-
-	private ScjProcess getScjProcess(int processIdx) {
-		if (processIdx == -999) {
-			return null;
-		}
-		if (processIdx == -2) {
-			return PriorityScheduler.instance().outerMostSeqProcess;
-		}
-		if (processIdx == -1) {
-			return ScjProcess.idleProcess;
-		}
-
-		return (ScjProcess)Mission.missionBehaviour.getProcess(processIdx);
 	}
 
 	public void remove(ScjProcess obj) {
@@ -170,7 +156,7 @@ class PriorityQueue {
 
 	private int find(int value) {
 		for (int i = 1; i <= heapSize; i++) {
-			if (tree[i] == value)
+			if (tree[i].index == value)
 				return i;
 		}
 		return -999;
