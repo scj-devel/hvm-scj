@@ -5,21 +5,21 @@ package javax.safetycritical;
  * The infrastructure will use this class to model the wait set and lock set.
  */
 class PriorityQueueForLockAndWait {
-	int[] queue;
+	ScjProcess[] queue;
 	int tail;
 	int queueSize;
 
 	PriorityQueueForLockAndWait(int size) {
-		queue = new int[size];
+		queue = new ScjProcess[size];
 		tail = -1;
 		queueSize = 0;
 
 		makeEmptyQueue(queue);
 	}
 
-	private void makeEmptyQueue(int[] set) {
+	private void makeEmptyQueue(ScjProcess[] set) {
 		for (int i = 0; i < set.length; i++)
-			set[i] = -999;
+			set[i] = null;
 	}
 
 	/**
@@ -38,7 +38,7 @@ class PriorityQueueForLockAndWait {
 			int index = tail;
 			// find the place in the set for this process
 			for (int i = 0; i < tail; i++) {
-				ScjProcess temp = getScjProcess(queue[i]);
+				ScjProcess temp = queue[i];
 				if (temp == null)
 					throw new IllegalArgumentException("1");
 
@@ -56,7 +56,7 @@ class PriorityQueueForLockAndWait {
 			}
 			// add the index of the process into the set and set the required lock
 			process.monitorLock = monitor;
-			queue[index] = process.index;
+			queue[index] = process;
 			queueSize++;
 		} else {
 			throw new IndexOutOfBoundsException("set: too small");
@@ -77,7 +77,7 @@ class PriorityQueueForLockAndWait {
 	 */
 	protected/*synchronized*/ScjProcess getNextProcess(Object monitor) {
 		for (int i = 0; i <= tail; i++) {
-			ScjProcess process = getScjProcess(queue[i]);
+			ScjProcess process = queue[i];
 			if (process.monitorLock == monitor) {
 				process.monitorLock = null;
 				reorderSet(i);
@@ -90,7 +90,7 @@ class PriorityQueueForLockAndWait {
 
 	public/*synchronized*/void removeProcess(ScjProcess process) {
 		for (int i = 0; i <= tail; i++) {
-			if (queue[i] == process.index) {
+			if (queue[i] == process) {
 				reorderSet(i);
 				process.monitorLock = null;
 
@@ -103,22 +103,8 @@ class PriorityQueueForLockAndWait {
 		for (int i = index; i <= tail - 1; i++) {
 			queue[i] = queue[i + 1];
 		}
-		queue[tail] = -999;
+		queue[tail] = null;
 		tail--;
-	}
-
-	private ScjProcess getScjProcess(int processIdx) {
-		if (processIdx == -999) {
-			return null;
-		}
-		if (processIdx == -2) {
-			return PriorityScheduler.instance().outerMostSeqProcess;
-		}
-		if (processIdx == -1) {
-			return ScjProcess.idleProcess;
-		}
-
-		return (ScjProcess)Mission.missionBehaviour.getProcess(processIdx);
 	}
 
 	/**
