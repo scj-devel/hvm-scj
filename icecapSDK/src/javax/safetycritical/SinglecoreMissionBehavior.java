@@ -1,5 +1,7 @@
 package javax.safetycritical;
 
+import java.util.Iterator;
+
 import javax.safetycritical.annotate.Phase;
 import javax.scj.util.Const;
 
@@ -29,9 +31,11 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 		if (mission.missionTerminate == false) { // called the first time during mission execution	
 
 			// terminate all the sequencer's MSObjects that were created by the mission.
-			for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {
-				if (mission.msSetForMission.managedSchObjects[i] != null) {
-					mission.msSetForMission.managedSchObjects[i].signalTermination();
+			Iterator<ManagedSchedulable> schedulables = mission.getManagedSchedulables();
+			while (schedulables.hasNext()) {
+				ManagedSchedulable ms = schedulables.next();
+				if (ms != null) {
+					ms.signalTermination();
 				}
 			}
 			//System.out.println("Mission:SinglecoreBehavior.requestTermination");
@@ -62,10 +66,7 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 			Mission.isMissionSetInit = true;
 		}
 		mission.missionIndex = addNewMission(mission);
-
-		mission.phaseOfMission = Phase.INITIALIZATION; // used by JML ??
-		mission.msSetForMission = new ManagedSchedulableSet();
-		mission.initialize();
+		mission.gotoInitPhase();
 
 		vm.ClockInterruptHandler.instance.enable();
 	}
@@ -75,19 +76,21 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 		vm.ClockInterruptHandler.instance.disable();
 
 		mission.phaseOfMission = Phase.RUN;
-		ManagedSchedulableSet msSet = mission.msSetForMission;
 		PriorityFrame frame = PriorityScheduler.instance().pFrame;
 
 		int index = mission.missionIndex * 20;
 
-		for (int i = 0; i < msSet.noOfRegistered; i++) {
+		Iterator<ManagedSchedulable> schedulables = mission.getManagedSchedulables();
+		
+		while (schedulables.hasNext()) {
 
-			ManagedSchedulable ms = msSet.managedSchObjects[i];
+			ManagedSchedulable ms = schedulables.next();
 
-			msSet.scjProcesses[i] = ManagedSchedMethods.createScjProcess(ms);
-			msSet.scjProcesses[i].setIndex(index);
+			ScjProcess p = ManagedSchedMethods.createScjProcess(ms);
+			
+			p.setIndex(index);
 			index++;
-			frame.addProcess(msSet.scjProcesses[i]);
+			frame.addProcess(p);
 		}
 
 		vm.ClockInterruptHandler.instance.enable();
@@ -104,10 +107,8 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 		//			}
 
 		vm.ClockInterruptHandler.instance.disable();
-		for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {
-			mission.msSetForMission.scjProcesses[i] = null;
-			mission.msSetForMission.managedSchObjects[i] = null;
-		}
+
+		mission.deleteSchedulables();
 
 		Mission.missionSet[mission.missionIndex] = null;
 		if (mission.isMissionSetInitByThis == true) {
@@ -122,7 +123,8 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 	Process getProcess(int index) {
 		int missionIndex = index / 20;
 		int scjProcessIndex = index % 20;
-		return Mission.missionSet[missionIndex].msSetForMission.scjProcesses[scjProcessIndex];
+		
+		return Mission.missionSet[missionIndex].getScjProcess(scjProcessIndex);
 	}
 
 	@Override

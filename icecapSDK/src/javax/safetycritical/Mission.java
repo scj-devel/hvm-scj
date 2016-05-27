@@ -28,6 +28,8 @@ package javax.safetycritical;
 
 import icecaptools.IcecapCompileMe;
 
+import java.util.Iterator;
+
 import javax.realtime.AbsoluteTime;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
@@ -59,11 +61,13 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 
 	static MissionBehavior missionBehaviour;
 
-	ManagedSchedulableSet msSetForMission;
+	private ManagedSchedulableSet msSetForMission;
 	Phase phaseOfMission = Phase.STARTUP;
 
 	protected int missionIndex = -1;
 	boolean isMissionSetInitByThis = false;
+
+	int activeCount; // only for multiprocessor
 
 	@SCJAllowed
 	public Mission(AbsoluteTime start) {
@@ -72,6 +76,7 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 
 	@SCJAllowed
 	public Mission() {
+		activeCount = 0;
 	}
 
 	/** 
@@ -170,7 +175,6 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 	}
 
 	void runInitialize() {
-		phaseOfMission = Phase.INITIALIZATION;
 		missionBehaviour.runInitialize(this);
 	}
 
@@ -194,15 +198,15 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 		missionBehaviour.runCleanup(this, missMem);
 	}
 
-//	// used for JML annotation only (not public)
-//	boolean isRegistered(ManagedSchedulable target) {
-//		return ManagedSchedMethods.isRegistered(target);
-//	}
-//
-//	// used for JML annotation only (not public)
-//	boolean inMissionScope(ManagedSchedulable target) {
-//		return ManagedSchedMethods.isInMissionScope(target);
-//	}
+	//	// used for JML annotation only (not public)
+	//	boolean isRegistered(ManagedSchedulable target) {
+	//		return ManagedSchedMethods.isRegistered(target);
+	//	}
+	//
+	//	// used for JML annotation only (not public)
+	//	boolean inMissionScope(ManagedSchedulable target) {
+	//		return ManagedSchedMethods.isInMissionScope(target);
+	//	}
 
 	// used for JML annotation only (not public)
 	boolean inMissionScope(CyclicSchedule cs) {
@@ -214,13 +218,53 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 		return phaseOfMission;
 	}
 
+	void removeAperiodicHandlers() {
+		msSetForMission.removeAperiodicHandlers(this);
+	}
+
+	ManagedSchedulable getManagedSchedulable(int i) {
+		return msSetForMission.getManagedSchedulable(i);
+	}
+
+	Process getScjProcess(int i) {
+		return Process.getProcess(msSetForMission.getManagedSchedulable(i));
+	}
+
+	int getNumberOfManagedSchedulables() {
+		return msSetForMission.getNumberOfManagedSchedulables();
+	}
+
+	boolean hasSchedulables() {
+		return msSetForMission.hasSchedulables();
+	}
+	
+	void gotoInitPhase() {
+		phaseOfMission = Phase.INITIALIZATION;
+		msSetForMission = new ManagedSchedulableSet();
+		initialize();
+	}
+
+	void addMSObject(ManagedSchedulable managedEventHandler) {
+		msSetForMission.addMSObject(managedEventHandler);
+	}
+
+	public boolean containMSObject(ManagedSchedulable handler) {
+		return msSetForMission.containMSObject(handler);
+	}
+	
 	void removeMSObject(ManagedSchedulable msObject) {
 		msSetForMission.removeMSObject(msObject, this);
 	}
 
-	void removeAperiodicHandlers() {
-		msSetForMission.removeAperiodicHandlers();
+	void terminateMSObjects() {
+		msSetForMission.terminateMSObjects();
+	}
+
+	public Iterator<ManagedSchedulable> getManagedSchedulables() {
+		return msSetForMission.iterator();
+	}
+
+	public void deleteSchedulables() {
+		msSetForMission.deleteSchedulables();
 	}
 }
-
-

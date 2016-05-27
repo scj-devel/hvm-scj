@@ -128,7 +128,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 
 	synchronized void seqWait() {
 		if (!Launcher.useOS) {
-			while (!currMission.terminationPending() && currMission.msSetForMission.msCount > 0) {
+			while (!currMission.terminationPending() && currMission.hasSchedulables()) {
 				//devices.Console.println("MS.seqWait msCount:" + currMission.msSetForMission.msCount);
 				try {
 					wait();
@@ -137,7 +137,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 				}
 			}
 		} else {
-			while (currMission.msSetForMission.activeCount > 0) {
+			while (currMission.activeCount > 0) {
 				try {
 					wait();
 				} catch (InterruptedException e) {
@@ -148,13 +148,12 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 
 	synchronized void seqNotify() {
 		if (!Launcher.useOS) {
-			devices.Console.println("MS.seqNotify msCount:" + currMission.msSetForMission.msCount);
-			if (currMission.msSetForMission.msCount == 0) {
+			if (!currMission.hasSchedulables()) {
 				notify();
 			}
 		} else {
-			currMission.msSetForMission.activeCount--;
-			if (currMission.msSetForMission.activeCount == 0) {
+			currMission.activeCount--;
+			if (currMission.activeCount == 0) {
 				notify();
 			}
 		}

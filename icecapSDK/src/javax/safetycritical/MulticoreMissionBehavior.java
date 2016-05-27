@@ -1,8 +1,9 @@
 package javax.safetycritical;
 
+import java.util.Iterator;
+
 import javax.safetycritical.annotate.Phase;
 import javax.scj.util.Const;
-
 
 final class MulticoreMissionBehavior extends MissionBehavior {
 
@@ -39,19 +40,21 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 			// mission.
 			mission.missionTerminate = true;
 
-			for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {
-				if (mission.msSetForMission.managedSchObjects[i] != null) {
-					if (mission.msSetForMission.managedSchObjects[i] instanceof AperiodicEventHandler) {
-						((AperiodicEventHandler) mission.msSetForMission.managedSchObjects[i]).fireNextRelease();
+			Iterator<ManagedSchedulable> schedulables = mission.getManagedSchedulables();
+			
+			while (schedulables.hasNext()) {
+				ManagedSchedulable schedulable = schedulables.next();
+				if (schedulable != null) {
+					if (schedulable instanceof AperiodicEventHandler) {
+						((AperiodicEventHandler) schedulable).fireNextRelease();
 					}
-					if (mission.msSetForMission.managedSchObjects[i] instanceof OneShotEventHandler) {
-						((OneShotEventHandler) mission.msSetForMission.managedSchObjects[i]).deschedule();
-						((OneShotEventHandler) mission.msSetForMission.managedSchObjects[i]).fireNextRelease();
+					if (schedulable instanceof OneShotEventHandler) {
+						((OneShotEventHandler) schedulable).deschedule();
+						((OneShotEventHandler) schedulable).fireNextRelease();
 					}
-					mission.msSetForMission.managedSchObjects[i].signalTermination();
+					schedulable.signalTermination();
 				}
 			}
-
 			return false;
 		} else
 			return true; // called more than once: nothing done
@@ -75,36 +78,37 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 
 	@Override
 	void runInitialize(Mission mission) {
-		mission.phaseOfMission = Phase.INITIALIZATION;
 		mission.missionIndex = addNewMission(mission);
-		mission.msSetForMission = new ManagedSchedulableSet();
-		mission.initialize();
+		mission.gotoInitPhase();
 	}
 
 	@Override
 	void runExecute(Mission mission) {
 		mission.phaseOfMission = Phase.RUN;
-		ManagedSchedulableSet msSet = mission.msSetForMission;
-
 		int index = mission.missionIndex * Const.DEFAULT_HANDLER_NUMBER;
 
-		for (int i = 0; i < msSet.noOfRegistered; i++) {
-			ManagedSchedulable ms = msSet.managedSchObjects[i];
+		Iterator<ManagedSchedulable> schedulables = mission.getManagedSchedulables();
+		
+		while (schedulables.hasNext()) {
+			ManagedSchedulable ms = schedulables.next();
 			OSProcess process = new OSProcess(ms);
 			process.executable.id = index;
 			index++;
-			mission.msSetForMission.activeCount++;
+			mission.activeCount++;
 			process.executable.start();
 		}
 
 		mission.currMissSeq.seqWait();
 
-		for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {
+		schedulables = mission.getManagedSchedulables();
+		
+		while (schedulables.hasNext()) {
 			try {
-				if (mission.msSetForMission.managedSchObjects[i] instanceof ManagedThread)
-					((ManagedThread) mission.msSetForMission.managedSchObjects[i]).process.executable.join();
+				ManagedSchedulable ms = schedulables.next();
+				if (ms instanceof ManagedThread)
+					((ManagedThread) ms).process.executable.join();
 				else
-					((ManagedEventHandler) mission.msSetForMission.managedSchObjects[i]).process.executable.join();
+					((ManagedEventHandler) ms).process.executable.join();
 			} catch (InterruptedException e) {
 			}
 		}
@@ -114,16 +118,12 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 	void runCleanup(Mission mission, MissionMemory missMem) {
 		mission.phaseOfMission = Phase.CLEANUP;
 
-		if (mission.msSetForMission.activeCount > 0) {
+		if (mission.activeCount > 0) {
 			devices.Console.println("still have SOs");
 			throw new IllegalArgumentException();
 		}
 
-		for (int i = 0; i < mission.msSetForMission.noOfRegistered; i++) {
-			mission.msSetForMission.managedSchObjects[i].cleanUp();
-			mission.msSetForMission.managedSchObjects[i] = null;
-			mission.msSetForMission.msCount--;
-		}
+		mission.terminateMSObjects();
 
 		Mission.missionSet[mission.missionIndex] = null;
 		if (mission.isMissionSetInitByThis == true) {
@@ -154,9 +154,6 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 
 		int missionIndex = index / 20;
 		int managedSchdeulableIndex = index % 20;
-		return Mission.missionSet[missionIndex].msSetForMission.managedSchObjects[managedSchdeulableIndex];
+		return Mission.missionSet[missionIndex].getManagedSchedulable(managedSchdeulableIndex);
 	}
 }
-
-
-

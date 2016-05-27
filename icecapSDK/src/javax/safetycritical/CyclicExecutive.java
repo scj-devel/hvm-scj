@@ -26,11 +26,12 @@
 
 package javax.safetycritical;
 
+import java.util.Iterator;
+
 import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.annotate.Level;
-import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
@@ -79,9 +80,7 @@ public abstract class CyclicExecutive extends Mission {
 
 	void runInitialize() {
 		// overrides the method in class Mission and is called in mission memory
-		phaseOfMission = Phase.INITIALIZATION;
-		msSetForMission = new ManagedSchedulableSet();
-		initialize();
+		gotoInitPhase();
 	}
 
 	/**
@@ -91,12 +90,17 @@ public abstract class CyclicExecutive extends Mission {
 	void runExecute()
 	// overrides the method in class Mission and is called in mission memory
 	{
+		Mission mission = Mission.getMission();
 		// The following four lines of code: to meet the precondition in getSchedule.
-		ManagedSchedulable[] msObjects = Mission.getMission().msSetForMission.managedSchObjects;
-		PeriodicEventHandler[] pevs = new PeriodicEventHandler[Mission.getMission().msSetForMission.noOfRegistered];
+		PeriodicEventHandler[] pevs = new PeriodicEventHandler[mission.getNumberOfManagedSchedulables()];
 
-		for (int i = 0; i < pevs.length; i++)
-			pevs[i] = (PeriodicEventHandler) msObjects[i];
+		Iterator<ManagedSchedulable> schedulables = mission.getManagedSchedulables();
+		
+		int index = 0;
+		while (schedulables.hasNext())
+		{
+			pevs[index++] = (PeriodicEventHandler) schedulables.next();
+		}
 
 		CyclicSchedule schedule = getSchedule(pevs);
 
@@ -131,7 +135,7 @@ public abstract class CyclicExecutive extends Mission {
 	{
 		vm.ClockInterruptHandler.instance.disable();
 
-		Mission.getMission().msSetForMission.terminateMSObjects();
+		Mission.getMission().terminateMSObjects();
 
 		cleanUp();
 		missMem.resetArea();
