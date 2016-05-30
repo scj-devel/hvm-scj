@@ -15,7 +15,7 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 	Mission getMission() {
 		Mission m = null;
 
-		ManagedSchedulable ms = Services.currentManagedSchedulable();
+		ManagedSchedulable ms = MulticoreServicesBehavior.currentManagedSchedulable();
 		if (ms != null) {
 			if (ms instanceof ManagedEventHandler) {
 				if (ms instanceof MissionSequencer<?>) {

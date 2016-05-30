@@ -50,16 +50,6 @@ public class Services {
 		// not implemented
 	}
 
-	/**
-	 * 
-	 * @return The current schedulable object.
-	 */
-	@SCJAllowed
-	public static ManagedSchedulable currentManagedSchedulable() {
-		// not tested
-		return servicesBehavior.currentManagedSchedulable();
-	}
-
 	//	@SCJAllowed
 	//	public static Level getDeploymentLevel()
 	//	{

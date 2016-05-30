@@ -226,10 +226,6 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 		return msSetForMission.getManagedSchedulable(i);
 	}
 
-	Process getScjProcess(int i) {
-		return Process.getProcess(msSetForMission.getManagedSchedulable(i));
-	}
-
 	int getNumberOfManagedSchedulables() {
 		return msSetForMission.getNumberOfManagedSchedulables();
 	}

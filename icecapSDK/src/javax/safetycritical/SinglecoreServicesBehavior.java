@@ -3,14 +3,6 @@ package javax.safetycritical;
 final class SinglecoreServicesBehavior extends ServicesBehavior {
 
 	@Override
-	ManagedSchedulable currentManagedSchedulable() {
-		if (Launcher.level == 0)
-			return CyclicScheduler.instance().seq;
-		else
-			return PriorityScheduler.instance().current.getTarget();
-	}
-
-	@Override
 	int getDefaultCeiling() {
 		return PriorityScheduler.instance().getMaxPriority();
 	}

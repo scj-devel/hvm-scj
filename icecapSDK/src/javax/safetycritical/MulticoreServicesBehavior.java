@@ -1,9 +1,8 @@
 package javax.safetycritical;
 
 final class MulticoreServicesBehavior extends ServicesBehavior {
-
-	@Override
-	ManagedSchedulable currentManagedSchedulable() {
+	
+	static ManagedSchedulable currentManagedSchedulable() {
 		return ((MulticoreMissionBehavior)Mission.missionBehaviour).getManageSched(OSProcess.getThreadID());
 	}
 

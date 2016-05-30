@@ -1199,7 +1199,7 @@ int16 n_java_lang_Thread_toString(int32 *sp) {
 #include <pthread.h>
 #include <sched.h>
 
-pthread_key_t key_schedulable_object;
+static pthread_key_t key_schedulable_object;
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETMAXPRIORITY)
 int16 n_javax_safetycritical_OSProcess_getMaxPriority(int32 *sp){

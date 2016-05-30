@@ -50,7 +50,7 @@ final class MulticoreMemoryBehavior extends MemoryBehavior {
 		} else {
 			ManagedMemory outer;
 
-			ManagedSchedulable ms = Services.currentManagedSchedulable();
+			ManagedSchedulable ms = MulticoreServicesBehavior.currentManagedSchedulable();
 			if (ms instanceof ManagedEventHandler) {
 				outer = ((ManagedEventHandler) ms).getCurrentMemory();
 				((ManagedEventHandler) ms).setCurrentMemory(memory);
@@ -77,7 +77,7 @@ final class MulticoreMemoryBehavior extends MemoryBehavior {
 		if (logic == null)
 			throw ManagedMemory.exception;
 
-		ManagedSchedulable ms = Services.currentManagedSchedulable();
+		ManagedSchedulable ms = MulticoreServicesBehavior.currentManagedSchedulable();
 		devices.Console.println("enterPrivateMemory");
 		runEnterPrivateMemoryMulticore(ms, size, logic);
 	}
@@ -125,7 +125,7 @@ final class MulticoreMemoryBehavior extends MemoryBehavior {
 		ManagedMemory outer;
 		ManagedMemory memAreaOfObject = (ManagedMemory) MemoryArea.getMemoryArea(obj);
 
-		ManagedSchedulable ms = Services.currentManagedSchedulable();
+		ManagedSchedulable ms = MulticoreServicesBehavior.currentManagedSchedulable();
 		if (ms instanceof ManagedEventHandler) {
 			outer = ((ManagedEventHandler) ms).getCurrentMemory();
 			((ManagedEventHandler) ms).setCurrentMemory(memAreaOfObject);
@@ -150,7 +150,7 @@ final class MulticoreMemoryBehavior extends MemoryBehavior {
 		if (logic == null)
 			throw ManagedMemory.exception;
 
-		ManagedSchedulable ms = Services.currentManagedSchedulable();
+		ManagedSchedulable ms = MulticoreServicesBehavior.currentManagedSchedulable();
 
 		ManagedMemory currentMem;
 		if (ms instanceof ManagedEventHandler) {
