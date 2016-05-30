@@ -222,10 +222,6 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 		msSetForMission.removeAperiodicHandlers(this);
 	}
 
-	ManagedSchedulable getManagedSchedulable(int i) {
-		return msSetForMission.getManagedSchedulable(i);
-	}
-
 	int getNumberOfManagedSchedulables() {
 		return msSetForMission.getNumberOfManagedSchedulables();
 	}

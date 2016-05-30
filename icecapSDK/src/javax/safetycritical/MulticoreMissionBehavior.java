@@ -27,7 +27,6 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 				m = ((ManagedThread) ms).mission;
 			}
 		}
-
 		return m;
 	}
 
@@ -132,16 +131,5 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 
 		mission.cleanUp();
 		missMem.resetArea();
-	}
-
-	ManagedSchedulable getManageSched(int index) {
-		if (index == -99)
-			return null;
-		if (index == -11)
-			return MissionSequencer.outerMostSeq;
-
-		int missionIndex = index / 20;
-		int managedSchdeulableIndex = index % 20;
-		return Mission.missionSet[missionIndex].getManagedSchedulable(managedSchdeulableIndex);
 	}
 }

@@ -171,10 +171,6 @@ class ManagedSchedulableSet {
 		return buf.toString();
 	}
 
-	ManagedSchedulable getManagedSchedulable(int i) {
-		return schedulables[i];
-	}
-
 	private void deleteSchedulable(int i) {
 		schedulables[i] = null;
 		msCount--;
