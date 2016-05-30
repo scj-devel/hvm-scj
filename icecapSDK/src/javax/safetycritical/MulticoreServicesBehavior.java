@@ -4,7 +4,7 @@ final class MulticoreServicesBehavior extends ServicesBehavior {
 
 	@Override
 	ManagedSchedulable currentManagedSchedulable() {
-		return Mission.missionBehaviour.getManageSched(OSProcess.getThreadID());
+		return ((MulticoreMissionBehavior)Mission.missionBehaviour).getManageSched(OSProcess.getThreadID());
 	}
 
 	@Override
@@ -22,7 +22,6 @@ final class MulticoreServicesBehavior extends ServicesBehavior {
 	String getNameOfCurrentMemoryArea() {
 		return OSProcess.getCurrentMemoryArea().getName();
 	}
-	
 }
 
 

@@ -126,12 +126,6 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 		
 		return Mission.missionSet[missionIndex].getScjProcess(scjProcessIndex);
 	}
-
-	@Override
-	ManagedSchedulable getManageSched(int index) {
-		return getProcess(index).msObject;
-	}
-
 }
 
 

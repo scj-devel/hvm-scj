@@ -13,7 +13,4 @@ abstract class MissionBehavior {
 	abstract void runCleanup(Mission mission, MissionMemory missMem);
 
 	abstract Process getProcess(int index);
-
-	abstract ManagedSchedulable getManageSched(int index);
-
 }
