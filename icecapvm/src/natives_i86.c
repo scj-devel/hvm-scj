@@ -6,6 +6,11 @@
 
 #include <stdio.h>
 
+#if defined(N_THREAD_JAVALANGTHREADSCHEDULER_JAVALANGTHREADMONITOR_INITIALIZEMUTEX)
+extern int16 initializeException(int32* sp, int16 exceptionClass,
+		int16 exceptionInitMethod);
+#endif
+
 void initNatives(void) {
 }
 
@@ -262,9 +267,10 @@ int16 n_thread_JavaLangThreadScheduler_JavaLangThreadMonitor_initializeMutex(int
 	/*Behaviours for multicore version*/
 #if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
 	pthread_mutexattr_t mattr;
+	int ret;
 	pthread_mutexattr_init(&mattr);
 
-	int ret = pthread_mutexattr_settype(&mattr, PTHREAD_MUTEX_ERRORCHECK);
+	ret = pthread_mutexattr_settype(&mattr, PTHREAD_MUTEX_ERRORCHECK);
 	if(ret != 0) {
 		printf("pthread_mutexattr_settype error %d\n", ret);
 	}

@@ -11,6 +11,12 @@
 #include <stdio.h>
 #endif
 
+#if defined(PC64)
+typedef long uint64;
+#else
+typedef long long uint64;
+#endif
+
 extern const ClassInfo *classes;
 
 #if defined(N_JAVA_LANG_CLASS_NEWINSTANCE) || defined(N_JAVA_LANG_REFLECT_METHOD_INVOKE) || defined(N_JAVA_LANG_REFLECT_CONSTRUCTOR_NEWINSTANCE) || defined(N_JAVA_LANG_CLASS_GETMETHOD) || defined(N_JAVA_LANG_CLASS_GETCONSTRUCTOR) || defined(ENABLE_DEBUG)
@@ -78,8 +84,7 @@ int16 n_java_lang_String_init_(int32 *sp);
 int16 n_java_lang_Class_getName0(int32 *sp);
 #endif
 #ifdef N_DEVICES_DEFAULTWRITER_NWRITE
-static void print_to_stdout(unsigned char* src, unsigned char* buffer,
-		int32 buffersize, int32 nb);
+static void print_to_stdout(unsigned char* src, unsigned char* buffer, int32 buffersize, int32 nb);
 int16 n_devices_DefaultWriter_nwrite(int32 *sp);
 #endif
 #if defined(N_JAVA_LANG_THROWABLE_CLINIT_)
@@ -113,8 +118,7 @@ int16 n_java_lang_System_currentTimeMillis(int32 *sp);
 #endif
 void* getPointer(int32 val);
 #ifdef N_JAVA_LANG_SYSTEM_ARRAYCOPY
-static void arraycopy(Object* osrc, unsigned short srcPos,
-		Object* odst, unsigned short dstPos, unsigned short length);
+static void arraycopy(Object* osrc, unsigned short srcPos, Object* odst, unsigned short dstPos, unsigned short length);
 int16 n_java_lang_System_arraycopy(int32 *sp);
 #endif
 #ifdef N_JAVA_LANG_OBJECT_GETCLASS
@@ -129,12 +133,10 @@ static Object* initializeStringObject(int32* sp, Object *charArrayObject);
 Object* createStringObject(int32 size, const char* data, int32* sp);
 #endif
 
-
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0) || defined(LDC_CLASS) || defined(GETCLASS_USED) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(N_JAVA_LANG_CLASS_GETCONSTRUCTOR)
 static void pushDefaultArea(void);
 static void popDefaultArea(void);
 #endif
-
 
 #if defined(LDC_CLASS) || defined(GETCLASS_USED) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(N_JAVA_LANG_CLASS_GETCONSTRUCTOR)
 static Object* gc_allocateObjectInArea(unsigned short dobjectSize, unsigned short pobjectSize);
@@ -212,14 +214,14 @@ int16 n_javax_safetycritical_OSProcess_initSpecificID(int32 *sp);
 #endif
 /*Periodic Parameters*/
 struct periodic_info {
-    int timer_fd;
+	int timer_fd;
 };
 /*Initialize Periodic Parameters*/
 int make_periodic(long period, struct periodic_info *info);
 void wait_period(struct periodic_info *info);
 void open_file_cleanup_handler(void *arg);
 void scj_multicore_thread_executor(void* arg);
-void scj_multicore_thread_starter(int32 *sp);
+int16 scj_multicore_thread_starter(int32 *sp);
 #endif
 #if defined(N_JAVA_LANG_THREAD_START)
 int16 n_java_lang_Thread_join(int32 *sp);
@@ -528,7 +530,7 @@ int16 n_java_lang_Class_getName0(int32 *sp) {
 	classIndex = getClassIndex(this);
 
 	if (classIndex == JAVA_LANG_CLASS) {
-		classIndex = ((java_lang_Class_c *)HEAP_REF(this, Object*))-> cachedConstructor_f;
+		classIndex = ((java_lang_Class_c *) HEAP_REF(this, Object*))->cachedConstructor_f;
 
 		className = (char*) pgm_read_pointer(&classes[classIndex].name, char**);
 
@@ -545,8 +547,7 @@ int16 n_java_lang_Class_getName0(int32 *sp) {
  * return: void
  */
 #ifdef N_DEVICES_DEFAULTWRITER_NWRITE
-static void print_to_stdout(unsigned char* src, unsigned char* buffer,
-		int32 buffersize, int32 nb) {
+static void print_to_stdout(unsigned char* src, unsigned char* buffer, int32 buffersize, int32 nb) {
 	int32 count;
 	int32 length;
 
@@ -678,8 +679,7 @@ static int32 _streq(const char* str1, const char* str2) {
 	}
 }
 
-extern unsigned char getField(unsigned char *data, unsigned char size,
-		int32* sp);
+extern unsigned char getField(unsigned char *data, unsigned char size, int32* sp);
 
 #if defined(N_JAVA_LANG_CLASS_GETMETHOD) || defined(N_JAVA_LANG_CLASS_FORNAME)
 #define BUFFER_LENGTH 128
@@ -697,8 +697,7 @@ static char* getCString(unsigned char* strObj) {
 	unsigned char* string_value = 0;
 
 	offset = offsetof(struct _java_lang_String_c, value_f);
-	getField(HEAP_REF(strObj + offset, unsigned char*), 32,
-			(int32*) &string_valuep);
+	getField(HEAP_REF(strObj + offset, unsigned char*), 32, (int32*) &string_valuep);
 	string_value = (unsigned char*) (pointer) string_valuep;
 
 #if defined(JAVA_LANG_STRING_OFFSET_offset)
@@ -712,8 +711,7 @@ static char* getCString(unsigned char* strObj) {
 	offset = offsetof(struct _java_lang_String_c, count_f);
 	getField(HEAP_REF(strObj + offset, unsigned char*), 32, &string_count);
 #else
-	string_count = *((uint16*) (pointer) HEAP_REF(string_valuep, unsigned char*)
-			+ 1);
+	string_count = *((uint16*) (pointer) HEAP_REF(string_valuep, unsigned char*) + 1);
 #endif
 
 	if (string_count >= BUFFER_LENGTH - 1) {
@@ -792,8 +790,7 @@ void* getPointer(int32 val) {
  * return: void
  */
 #ifdef N_JAVA_LANG_SYSTEM_ARRAYCOPY
-static void arraycopy(Object* osrc, unsigned short srcPos,
-		Object* odst, unsigned short dstPos, unsigned short length) {
+static void arraycopy(Object* osrc, unsigned short srcPos, Object* odst, unsigned short dstPos, unsigned short length) {
 	unsigned char elementSize;
 	unsigned short count;
 	unsigned char* src;
@@ -807,10 +804,8 @@ static void arraycopy(Object* osrc, unsigned short srcPos,
 
 	count = imul(length, elementSize);
 #else
-	src = (unsigned char*)HEAP_REF(osrc, unsigned char*) + sizeof(Object) + 2
-	+ (srcPos * elementSize);
-	dst = (unsigned char*)HEAP_REF(odst, unsigned char*) + sizeof(Object) + 2
-	+ (dstPos * elementSize);
+	src = (unsigned char*) HEAP_REF(osrc, unsigned char*) + sizeof(Object) + 2 + (srcPos * elementSize);
+	dst = (unsigned char*) HEAP_REF(odst, unsigned char*) + sizeof(Object) + 2 + (dstPos * elementSize);
 
 	count = length * elementSize;
 #endif
@@ -882,8 +877,7 @@ extern pthread_key_t key;
 #endif
 
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED) || defined(N_JAVA_LANG_CLASS_GETNAME0)
-extern Object* createArray(unsigned short classIndex,
-		uint16 count FLASHARG(uint8 flash));
+extern Object* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash));
 static Object* initializeStringObject(int32* sp, Object *charArrayObject) {
 	unsigned short dobjectSize, pobjectSize, classIndex;
 	Object* stringObject;
@@ -908,15 +902,12 @@ Object* createStringObject(int32 size, const char* data, int32* sp) {
 	Object* object;
 
 	pushDefaultArea();
-	charArrayObject = createArray((unsigned short) _C_var,
-			(uint16) size FLASHARG(0));
+	charArrayObject = createArray((unsigned short) _C_var, (uint16) size FLASHARG(0));
 
 	if (charArrayObject != 0) {
 
 		for (count = 0; count < size; count++) {
-			*((uint8 *) (HEAP_REF(charArrayObject, unsigned char *)
-							+ sizeof(Object) + 2) + count) = pgm_read_byte(
-					data + count);
+			*((uint8 *) (HEAP_REF(charArrayObject, unsigned char *) + sizeof(Object) + 2) + count) = pgm_read_byte(data + count);
 		}
 		object = initializeStringObject(sp, charArrayObject);
 	} else {
@@ -932,13 +923,13 @@ Object* createStringObject(int32 size, const char* data, int32* sp) {
 static void pushDefaultArea(void) {
 	if (heapArea != 0) {
 		if (scopeCount == 0) {
-			#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
-				current = pthread_getspecific(key);
-			    pthread_setspecific(key, heapArea);
-			#else
-				current = currentMemoryArea;
-				currentMemoryArea = heapArea;
-			#endif
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+			current = pthread_getspecific(key);
+			pthread_setspecific(key, heapArea);
+#else
+			current = currentMemoryArea;
+			currentMemoryArea = heapArea;
+#endif
 
 		}
 		scopeCount++;
@@ -948,11 +939,11 @@ static void pushDefaultArea(void) {
 static void popDefaultArea(void) {
 	if (heapArea != 0) {
 		if (scopeCount == 1) {
-			#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
-			 	pthread_setspecific(key, current);
-			#else
-			    currentMemoryArea = current;
-			#endif
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+			pthread_setspecific(key, current);
+#else
+			currentMemoryArea = current;
+#endif
 
 		}
 		scopeCount--;
@@ -961,8 +952,7 @@ static void popDefaultArea(void) {
 #endif
 
 #if defined(LDC_CLASS) || defined(GETCLASS_USED) || defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(N_JAVA_LANG_CLASS_GETCONSTRUCTOR)
-static Object* gc_allocateObjectInArea(unsigned short dobjectSize,
-		unsigned short pobjectSize) {
+static Object* gc_allocateObjectInArea(unsigned short dobjectSize, unsigned short pobjectSize) {
 	Object *obj = 0;
 
 	pushDefaultArea();
@@ -976,14 +966,13 @@ static Object* gc_allocateObjectInArea(unsigned short dobjectSize,
 #endif
 
 #if defined(N_JAVA_LANG_CLASS_GETPRIMITIVECLASS) || defined(N_JAVA_LANG_OBJECT_GETCLASS) || defined(N_JAVA_LANG_CLASS_GETSUPERCLASS) || defined(N_JAVA_LANG_CLASS_GETCOMPONENTTYPE) || defined(N_JAVA_LANG_CLASS_FORNAME) || defined(LDC_CLASS)
-Object* getClass(unsigned short classIndex)
-{
+Object* getClass(unsigned short classIndex) {
 	Object *class = head;
 	while (class != 0) {
-	  if ((unsigned short)((java_lang_Class_c *)(pointer)HEAP_REF(class, Object*))-> cachedConstructor_f == classIndex) {
+		if ((unsigned short) ((java_lang_Class_c *) (pointer) HEAP_REF(class, Object*))->cachedConstructor_f == classIndex) {
 			return class;
 		} else {
-	    class = (Object *)(pointer)(((java_lang_Class_c *)(pointer)HEAP_REF(class, Object*))-> reflectionData_f);
+			class = (Object *) (pointer) (((java_lang_Class_c *) (pointer) HEAP_REF(class, Object*))->reflectionData_f);
 		}
 	}
 	{
@@ -997,8 +986,8 @@ Object* getClass(unsigned short classIndex)
 		if (class != 0) {
 			setClassIndex(class, (unsigned short) JAVA_LANG_CLASS_var);
 
-			((java_lang_Class_c *)(pointer)HEAP_REF(class, Object*))-> cachedConstructor_f = classIndex;
-			((java_lang_Class_c *)(pointer)HEAP_REF(class, Object*))-> reflectionData_f = (uint32)(pointer)head;
+			((java_lang_Class_c *) (pointer) HEAP_REF(class, Object*))->cachedConstructor_f = classIndex;
+			((java_lang_Class_c *) (pointer) HEAP_REF(class, Object*))->reflectionData_f = (uint32) (pointer) head;
 
 			head = class;
 		} else {
@@ -1053,7 +1042,7 @@ int16 n_java_lang_Class_getComponentType(int32 *sp) {
 	classIndex = getClassIndex(obj);
 	componentType = 0;
 	if (classIndex == (unsigned short) JAVA_LANG_CLASS_var) {
-		classIndex = (unsigned short)((java_lang_Class_c *)HEAP_REF(obj, Object*))-> cachedConstructor_f;
+		classIndex = (unsigned short) ((java_lang_Class_c *) HEAP_REF(obj, Object*))->cachedConstructor_f;
 		if (pgm_read_byte(&classes[classIndex].dimension) != 0) {
 			signed short componentTypeClasIndex;
 			componentTypeClasIndex = pgm_read_word(&classes[classIndex].dobjectSize);
@@ -1140,13 +1129,12 @@ int16 n_java_security_AccessController_doPrivileged(int32 *sp) {
  * return: java.lang.Object
  */
 #ifdef N_JAVA_LANG_REFLECT_ARRAY_NEWARRAY
-extern Object* createArrayFromElementSize(unsigned short classIndex,
-		unsigned char elementSize, uint16 count FLASHARG(uint8 flash));
+extern Object* createArrayFromElementSize(unsigned short classIndex, unsigned char elementSize, uint16 count FLASHARG(uint8 flash));
 
 int16 n_java_lang_reflect_Array_newArray(int32 *sp) {
 	Object* class = (Object*) (pointer) sp[0];
 	int32 size = sp[1];
-	unsigned short classIndex = (unsigned short)((java_lang_Class_c *)HEAP_REF(class, Object*))-> cachedConstructor_f;
+	unsigned short classIndex = (unsigned short) ((java_lang_Class_c *) HEAP_REF(class, Object*))->cachedConstructor_f;
 	Object* array = 0;
 	unsigned char elementSize = 0;
 
@@ -1202,10 +1190,10 @@ int16 n_java_lang_Thread_toString(int32 *sp) {
 static pthread_key_t key_schedulable_object;
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETMAXPRIORITY)
-int16 n_javax_safetycritical_OSProcess_getMaxPriority(int32 *sp){
+int16 n_javax_safetycritical_OSProcess_getMaxPriority(int32 *sp) {
 	int max_priority = sched_get_priority_max(SCHED_FIFO);
 
-	if(max_priority < 0){
+	if(max_priority < 0) {
 		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
 	}
 
@@ -1215,124 +1203,124 @@ int16 n_javax_safetycritical_OSProcess_getMaxPriority(int32 *sp){
 #endif
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETAFFINITY)
-int16 n_javax_safetycritical_OSProcess_setAffinity(int32 *sp){
+int16 n_javax_safetycritical_OSProcess_setAffinity(int32 *sp) {
 	int i;
 	int size = sp[0]+1;
- 	int *p = HEAP_REF((int* ) (pointer ) sp[1], int*);
+	int *p = HEAP_REF((int* ) (pointer ) sp[1], int*);
 
- 	cpu_set_t cs;
- 	CPU_ZERO(&cs);
- 	i = 1;
- 	for(; i<size;i++){
- 		CPU_SET(p[i], &cs);
- 	}
- 	pthread_setaffinity_np(pthread_self(), sizeof(cs), &cs);
+	cpu_set_t cs;
+	CPU_ZERO(&cs);
+	i = 1;
+	for(; i<size;i++) {
+		CPU_SET(p[i], &cs);
+	}
+	pthread_setaffinity_np(pthread_self(), sizeof(cs), &cs);
 
- 	printf("p[0-4]: %d, %d, %d, %d, %d\n", p[0], p[1], p[2], p[3], p[4]);
-    return -1;
+	printf("p[0-4]: %d, %d, %d, %d, %d\n", p[0], p[1], p[2], p[3], p[4]);
+	return -1;
 }
 #endif
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETOMMSAFFINITYSET)
-int16 n_javax_safetycritical_OSProcess_setOMMSAffinitySet(int32 *sp){
- 	int level = sp[0];
- 	if(level != 2){
- 		int ret;
- 		int processor = sched_getcpu();
- 		cpu_set_t cs;
- 		CPU_ZERO(&cs);
- 		CPU_SET(processor, &cs);
- 		ret = pthread_setaffinity_np(pthread_self(), sizeof(cs), &cs);
- 		if( ret != 0 ){
- 			printf("pthread_setaffinity_np ret: %d. \n",ret);
-        	return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
- 		}
- 	}
-    return -1;
+int16 n_javax_safetycritical_OSProcess_setOMMSAffinitySet(int32 *sp) {
+	int level = sp[0];
+	if(level != 2) {
+		int ret;
+		int processor = sched_getcpu();
+		cpu_set_t cs;
+		CPU_ZERO(&cs);
+		CPU_SET(processor, &cs);
+		ret = pthread_setaffinity_np(pthread_self(), sizeof(cs), &cs);
+		if( ret != 0 ) {
+			printf("pthread_setaffinity_np ret: %d. \n",ret);
+			return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+		}
+	}
+	return -1;
 }
 #endif
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_ISPROCESSORINSET)
-int16 n_javax_safetycritical_OSProcess_isProcessorInSet(int32 *sp){
- 	int processor = sp[0];
- 	cpu_set_t cs;
- 	CPU_ZERO(&cs);
- 	pthread_getaffinity_np(pthread_self(), sizeof(cs), &cs);
+int16 n_javax_safetycritical_OSProcess_isProcessorInSet(int32 *sp) {
+	int processor = sp[0];
+	cpu_set_t cs;
+	CPU_ZERO(&cs);
+	pthread_getaffinity_np(pthread_self(), sizeof(cs), &cs);
 
- 	sp[0] = CPU_ISSET(processor, &cs);
-    return -1;
+	sp[0] = CPU_ISSET(processor, &cs);
+	return -1;
 }
 #endif
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETALLCPUCOUNT)
 #include <sys/sysinfo.h>
-int16 n_javax_safetycritical_OSProcess_getAllCPUCount(int32 *sp){
- 	sp[0] = get_nprocs_conf();
-    return -1;
+int16 n_javax_safetycritical_OSProcess_getAllCPUCount(int32 *sp) {
+	sp[0] = get_nprocs_conf();
+	return -1;
 }
 #endif
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETAVAILABLECPUCOUNT)
-int16 n_javax_safetycritical_OSProcess_getAvailableCPUCount(int32 *sp){
+int16 n_javax_safetycritical_OSProcess_getAvailableCPUCount(int32 *sp) {
 	cpu_set_t cs;
- 	CPU_ZERO(&cs);
- 	pthread_getaffinity_np(pthread_self(), sizeof(cs), &cs);
- 	sp[0] = CPU_COUNT(&cs);
-    return -1;
+	CPU_ZERO(&cs);
+	pthread_getaffinity_np(pthread_self(), sizeof(cs), &cs);
+	sp[0] = CPU_COUNT(&cs);
+	return -1;
 }
 #endif
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETCURRENTCPUID)
-int16 n_javax_safetycritical_OSProcess_getCurrentCPUID(int32 *sp){
+int16 n_javax_safetycritical_OSProcess_getCurrentCPUID(int32 *sp) {
 	sp[0] = sched_getcpu();
-    return -1;
+	return -1;
 }
 #endif
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETCURRENTMSOBJECT)
-int16 n_javax_safetycritical_OSProcess_getCurrentMSObject(int32 *sp){
+int16 n_javax_safetycritical_OSProcess_getCurrentMSObject(int32 *sp) {
 	sp[0] = (int32)(pointer) pthread_getspecific(key_schedulable_object);
-    return -1;
+	return -1;
 }
 #endif
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_REQUESTTERMINATION_C)
-int16 n_javax_safetycritical_OSProcess_requestTermination_c(int32 *sp){
+int16 n_javax_safetycritical_OSProcess_requestTermination_c(int32 *sp) {
 	struct _java_lang_Thread_c* thread = HEAP_REF((struct _java_lang_Thread_c* ) (pointer ) sp[0], struct _java_lang_Thread_c*);
-    pthread_t *thr = HEAP_REF((pthread_t *)(pointer)thread->name_f, pthread_t *);
-    int ret = pthread_cancel(*thr);
-    if ( ret != 0 ){
-        printf("pcancel errno: %d. ret: %d. \n",errno,ret);
-        return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
-    }
-    return -1;
+	pthread_t *thr = HEAP_REF((pthread_t *)(pointer)thread->name_f, pthread_t *);
+	int ret = pthread_cancel(*thr);
+	if ( ret != 0 ) {
+		printf("pcancel errno: %d. ret: %d. \n",errno,ret);
+		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+	}
+	return -1;
 }
 #endif
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_TESTCANCEL_C)
-int16 n_javax_safetycritical_OSProcess_testCancel_c(int32 *sp){
-    pthread_testcancel();
-    return -1;
+int16 n_javax_safetycritical_OSProcess_testCancel_c(int32 *sp) {
+	pthread_testcancel();
+	return -1;
 }
 #endif
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETTIMERFD)
-int16 n_javax_safetycritical_OSProcess_setTimerfd(int32 *sp){
-	long long start_time;
+int16 n_javax_safetycritical_OSProcess_setTimerfd(int32 *sp) {
+	uint64 start_time;
 	unsigned int ns;
 	unsigned int sec;
 	struct itimerspec itval;
 	int ret;
 
-	if(sp[0] < 1){
+	if(sp[0] < 1) {
 		return -1;
 	}
 
-	start_time  =  (long long) sp[1] << 32 | sp[2];
+	start_time = (uint64) sp[1] << 32 | sp[2];
 
 	sec = start_time / 1000000000;
 	ns = start_time % 1000000000;
-	if(ns == 0 && sec == 0){
+	if(ns == 0 && sec == 0) {
 		ns++;
 	}
 
@@ -1342,27 +1330,27 @@ int16 n_javax_safetycritical_OSProcess_setTimerfd(int32 *sp){
 	itval.it_value.tv_nsec = ns;
 
 	ret = timerfd_settime(sp[0], 0, &itval, NULL);
-    if(ret != 0 && errno != EBADF){
-        printf("timer set errno: %d. file: %d.\n",errno, sp[0]);
-        return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
-    }
-    return -1;
+	if(ret != 0 && errno != EBADF) {
+		printf("timer set errno: %d. file: %d.\n",errno, sp[0]);
+		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+	}
+	return -1;
 }
 #endif
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETMEMORYAREA )
-int16 n_javax_safetycritical_OSProcess_setMemoryArea(int32 *sp){
-    VMMemory* currMem;
-    currMem = (VMMemory*)(pointer)(*(sp + 0));
+int16 n_javax_safetycritical_OSProcess_setMemoryArea(int32 *sp) {
+	VMMemory* currMem;
+	currMem = (VMMemory*)(pointer)(*(sp + 0));
 	pthread_setspecific(key, currMem);
 	return -1;
 }
 #endif
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETCURRENTMEMORYAREA)
-int16 n_javax_safetycritical_OSProcess_getCurrentMemoryArea(int32 *sp){
+int16 n_javax_safetycritical_OSProcess_getCurrentMemoryArea(int32 *sp) {
 	int32 *currentMemory = (int32 *) pthread_getspecific(key);
-    sp[0] = currentMemory;
+	sp[0] = currentMemory;
 	return -1;
 }
 #endif
@@ -1370,17 +1358,18 @@ int16 n_javax_safetycritical_OSProcess_getCurrentMemoryArea(int32 *sp){
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETOUTERMOSTMISSIONSEQUENCER)
 int16 n_javax_safetycritical_OSProcess_setOuterMostMissionSequencer(int32 *sp)
 {
-	pthread_setspecific(key_schedulable_object, sp[1]);
-    int policyformain = SCHED_FIFO;
-    struct sched_param parammain;
-    parammain.sched_priority = sp[0];
+	int policyformain = SCHED_FIFO;
+	struct sched_param parammain;
+	parammain.sched_priority = sp[0];
 
-    if ( pthread_setschedparam(pthread_self(), policyformain, &parammain) != 0 ){
-        printf("psetmain errno: %d.\n",errno);
-        return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
-    }
+	pthread_setspecific(key_schedulable_object, (void*)(pointer)sp[1]);
 
-    return -1;
+	if ( pthread_setschedparam(pthread_self(), policyformain, &parammain) != 0 ) {
+		printf("psetmain errno: %d.\n",errno);
+		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+	}
+
+	return -1;
 }
 #endif
 
@@ -1389,7 +1378,7 @@ int16 n_javax_safetycritical_OSProcess_initSpecificID(int32 *sp)
 {
 	pthread_key_create(&key_schedulable_object, NULL);
 	pthread_setspecific(key_schedulable_object, NULL);
-    return -1;
+	return -1;
 }
 #endif
 
@@ -1404,8 +1393,8 @@ int make_periodic(long period, struct periodic_info *info) {
 	fd = timerfd_create(CLOCK_MONOTONIC, 0);
 
 	info->timer_fd = fd;
-	if (fd == -1){
-        printf("timercreate errno: %d.\n",errno);
+	if (fd == -1) {
+		printf("timercreate errno: %d.\n",errno);
 		return fd;
 	}
 
@@ -1417,16 +1406,16 @@ int make_periodic(long period, struct periodic_info *info) {
 	itval.it_value.tv_sec = sec;
 	itval.it_value.tv_nsec = ns;
 	ret = timerfd_settime(fd, 0, &itval, NULL);
-    if(ret != 0){
-        printf("timer set errno: %d. ret: %d.\n",errno, ret);
-    }
+	if(ret != 0) {
+		printf("timer set errno: %d. ret: %d.\n",errno, ret);
+	}
 
 	return ret;
 }
 
 /*Make thread wait for the given period*/
 void wait_period(struct periodic_info *info) {
-	long long missed;
+	uint64 missed;
 	int ret;
 
 	/* Wait for the next timer event. If we have missed any the
@@ -1439,103 +1428,108 @@ void wait_period(struct periodic_info *info) {
 
 /*Thread args, holds the info of a thread*/
 struct thread_args {
-    int isPeriodic;
-    long long start;
-    long long period;
-    Object* target;
-    VMMemory* memory;
-    Object* msObject;
-    struct _javax_safetycritical_OSProcess_MyThread_c* thread;
+	int isPeriodic;
+	uint64 start;
+	uint64 period;
+	Object* target;
+	VMMemory* memory;
+	Object* msObject;
+	struct _javax_safetycritical_OSProcess_MyThread_c* thread;
 };
 
 /*close open file for timer*/
 void open_file_cleanup_handler(void *arg) {
 	int *fd = (int*)arg;
-	if ( close(*fd) != 0 ){
-        printf("close errno: %d.\n",errno);
-    }
+	if ( close(*fd) != 0 ) {
+		printf("close errno: %d.\n",errno);
+	}
 }
 
 extern int16 thread_ThreadUtils_dispatchRunnable(int32 *fp);
-void scj_multicore_thread_executor(void* arg){
-		/*get thread args*/
+void scj_multicore_thread_executor(void* arg) {
+	/*get thread args*/
+	int32 *threadJavaStack;
 	struct thread_args* args = (struct thread_args*) arg;
 
 	/*set thread current memory area : should be a mission memory*/
-	if ( pthread_setspecific(key,args->memory) != 0 ){
-        printf("getspec errno: %d.\n",errno);
-    }
+	if ( pthread_setspecific(key,args->memory) != 0 ) {
+		printf("getspec errno: %d.\n",errno);
+	}
 
-    /*set thread id*/
-    pthread_setspecific(key_schedulable_object, args->msObject);
+	/*set thread id*/
+	pthread_setspecific(key_schedulable_object, args->msObject);
 
-    /*create thread stack*/
-	int32 *threadJavaStack = HEAP_REF((int32 *) gc_allocateObject(/*16384*/8*1024, 0), int32 *);
+	/*create thread stack*/
+	threadJavaStack = HEAP_REF((int32 *) gc_allocateObject(/*16384*/8*1024, 0), int32 *);
 	threadJavaStack[0] = (int32) (pointer) args->target;
 
-    /*Periodic Event Handler*/
-	if(args->isPeriodic == 99){
+	/*Periodic Event Handler*/
+	if(args->isPeriodic == 99) {
 		struct periodic_info info;
 		struct periodic_info startInfo;
 		int started = 1;
 
-		if(args->start > 0){
-			if(make_periodic(args->start, &startInfo) != 0){
-				printf("make_periodic start errno: %d. fd: %d.\n",errno);
+		if(args->start > 0) {
+			if(make_periodic(args->start, &startInfo) != 0) {
+				printf("make_periodic start errno: %d. fd: %d.\n",errno, 0);
 			}
 		}
 
-		if(make_periodic(args->period, &info) != 0){
-			printf("make_periodic period errno: %d. fd: %d.\n",errno);
+		if(make_periodic(args->period, &info) != 0) {
+			printf("make_periodic period errno: %d. fd: %d.\n",errno, 0);
 		}
 
 		pthread_cleanup_push(open_file_cleanup_handler, &info.timer_fd);
 		while (1) {
-			if(args->start>0 && started){
+			if(args->start>0 && started) {
 				wait_period(&startInfo);
 				started = 0;
 				close(startInfo.timer_fd);
 			}
-    		thread_ThreadUtils_dispatchRunnable(threadJavaStack);
+			thread_ThreadUtils_dispatchRunnable(threadJavaStack);
 			wait_period(&info);
 		}
 		pthread_cleanup_pop(1);
 	}
 	/*OneShot Event handler*/
-	else if(args->isPeriodic == 98){
+	else if(args->isPeriodic == 98) {
 		struct periodic_info startInfo;
 		struct itimerspec old_value;
 		make_periodic(args->start, &startInfo);
 		args->thread->startTimer_c_f = startInfo.timer_fd;
 
 		pthread_cleanup_push(open_file_cleanup_handler, &startInfo.timer_fd);
-        while(1){
-        	timerfd_gettime(startInfo.timer_fd, &old_value);
-        	if(old_value.it_value.tv_sec != 0 || old_value.it_value.tv_nsec != 0){
+		while(1) {
+			timerfd_gettime(startInfo.timer_fd, &old_value);
+			if(old_value.it_value.tv_sec != 0 || old_value.it_value.tv_nsec != 0) {
 				wait_period(&startInfo);
-        	}
+			}
 
-            pthread_testcancel();
-            thread_ThreadUtils_dispatchRunnable(threadJavaStack);
-            pthread_testcancel();
-        }
-        pthread_cleanup_pop(1);
+			pthread_testcancel();
+			thread_ThreadUtils_dispatchRunnable(threadJavaStack);
+			pthread_testcancel();
+		}
+		pthread_cleanup_pop(1);
 	}
 	/*Aperiodic Event handler*/
-	else if (args->isPeriodic == 97){
-        while(1){
-            thread_ThreadUtils_dispatchRunnable(threadJavaStack);
-            pthread_testcancel();
-        }
-    }
-    /*Mission Sequencer and Managed Thread*/
-    else{
-    	thread_ThreadUtils_dispatchRunnable(threadJavaStack);
+	else if (args->isPeriodic == 97) {
+		while(1) {
+			thread_ThreadUtils_dispatchRunnable(threadJavaStack);
+			pthread_testcancel();
+		}
+	}
+	/*Mission Sequencer and Managed Thread*/
+	else {
+		thread_ThreadUtils_dispatchRunnable(threadJavaStack);
 	}
 }
 
 static void *startThread(void* arg);
-void scj_multicore_thread_starter(int32 *sp){
+int16 scj_multicore_thread_starter(int32 *sp) {
+	pthread_attr_t t1_attr;
+	int priority;
+	int policy = SCHED_FIFO;
+	struct sched_param param;
 	/*Get scj thread and its info object*/
 	struct _javax_safetycritical_OSProcess_MyThread_c* thread = HEAP_REF((struct _javax_safetycritical_OSProcess_MyThread_c* ) (pointer ) sp[0], struct _javax_safetycritical_OSProcess_MyThread_c*);
 	struct _javax_safetycritical_OSProcess_ThreadInfo_c* threadInfo = HEAP_REF((struct _javax_safetycritical_OSProcess_ThreadInfo_c* ) (pointer ) thread->info_f, struct _javax_safetycritical_OSProcess_ThreadInfo_c*);
@@ -1543,21 +1537,18 @@ void scj_multicore_thread_starter(int32 *sp){
 	/*set thread args info*/
 	struct thread_args* args = HEAP_REF((struct thread_args*) gc_allocateObject(sizeof(struct thread_args), 0), struct thread_args*);
 	args->target = (Object*) (pointer) thread->target_f;
-	args->msObject = threadInfo->msObject_f;
+	args->msObject = (Object*) (pointer) threadInfo->msObject_f;
 	args->thread = thread;
 	args->isPeriodic = threadInfo->isPeriodic_f;
-	args->start = (long long) threadInfo->lsbstart_f << 32 | threadInfo->start_f;
-	args->period = (long long) threadInfo->lsbperiod_f << 32 | threadInfo->period_f;
+	args->start = (uint64) threadInfo->lsbstart_f << 32 | threadInfo->start_f;
+	args->period = (uint64) threadInfo->lsbperiod_f << 32 | threadInfo->period_f;
 	args->memory = pthread_getspecific(key);
 
 	/*get thread priority*/
-	int priority = threadInfo->priority_f;
+	priority = threadInfo->priority_f;
 
 	/*Set thread attrs*/
-	int policy = SCHED_FIFO;
-	struct sched_param param;
 	param.sched_priority = priority;
-	pthread_attr_t t1_attr;
 	pthread_attr_init(&t1_attr);
 
 	/*Set scheduling policy*/
@@ -1567,40 +1558,45 @@ void scj_multicore_thread_starter(int32 *sp){
 	}
 
 	/*set thread priority*/
-	if ( pthread_attr_setschedparam(&t1_attr, &param) != 0 ){
+	if ( pthread_attr_setschedparam(&t1_attr, &param) != 0 ) {
 		printf("psetschparam errno: %d.\n",errno);
 		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
 	}
 
 	/*set pthread inheritance attribute*/
-	if ( pthread_attr_setinheritsched(&t1_attr, PTHREAD_EXPLICIT_SCHED) != 0 ){
+	if ( pthread_attr_setinheritsched(&t1_attr, PTHREAD_EXPLICIT_SCHED) != 0 ) {
 		printf("psetinherit errno: %d.\n",errno);
 		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
 	}
 
 	/*set affinity*/
-	cpu_set_t cs;
-	CPU_ZERO(&cs);
-	int *p = HEAP_REF((int* ) (pointer ) thread->processors_f, int*);
-	int size = thread->sizeOfProcessor_f + 1;
-	int i = 1;
-	for(;i<size; i++){
-		CPU_SET(p[i], &cs);
-	}
-	int ret = pthread_attr_setaffinity_np(&t1_attr, sizeof(cs), &cs);
-	if(ret != 0){
-		printf("pthread_attr_setaffinity_np errno: %d.\n",ret);
-		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
-	}
+	{
+		pthread_t *thr;
+		int ret;
+		cpu_set_t cs;
+		int *p = HEAP_REF((int* ) (pointer ) thread->processors_f, int*);
+		int size = thread->sizeOfProcessor_f + 1;
+		int i = 1;
+		CPU_ZERO(&cs);
+		for(;i<size; i++) {
+			CPU_SET(p[i], &cs);
+		}
+		ret = pthread_attr_setaffinity_np(&t1_attr, sizeof(cs), &cs);
+		if(ret != 0) {
+			printf("pthread_attr_setaffinity_np errno: %d.\n",ret);
+			return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+		}
 
-	/*Start thread*/
-	pthread_t *thr = (pthread_t *) gc_allocateObject(sizeof(pthread_t), 0);
-	thread->name_f = (uint32) (pointer) thr; /* hack: store the thread data in the object at some unused spot */
+		/*Start thread*/
+		thr = (pthread_t *) gc_allocateObject(sizeof(pthread_t), 0);
+		thread->name_f = (uint32) (pointer) thr; /* hack: store the thread data in the object at some unused spot */
 
-	if (pthread_create(HEAP_REF(thr, pthread_t *), &t1_attr, startThread, (void*)args) != 0) {
-		printf("pcreate errno: %d.\n",errno);
-		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+		if (pthread_create(HEAP_REF(thr, pthread_t *), &t1_attr, startThread, (void*)args) != 0) {
+			printf("pcreate errno: %d.\n",errno);
+			return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+		}
 	}
+	return -1;
 }
 
 #endif
@@ -1621,33 +1617,32 @@ int16 n_java_lang_Thread_join(int32 *sp) {
 
 extern int16 thread_ThreadUtils_dispatchRunnable(int32 *fp);
 static void *startThread(void* arg) {
-	#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
-		scj_multicore_thread_executor(arg);
-	#else
-		int32 *threadJavaStack = HEAP_REF((int32 *) gc_allocateObject(16384, 0), int32 *);
-		threadJavaStack[0] = (int32) (pointer) arg;
-		thread_ThreadUtils_dispatchRunnable(threadJavaStack);
-	#endif
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+	scj_multicore_thread_executor(arg);
+#else
+	int32 *threadJavaStack = HEAP_REF((int32 *) gc_allocateObject(16384, 0), int32 *);
+	threadJavaStack[0] = (int32) (pointer) arg;
+	thread_ThreadUtils_dispatchRunnable(threadJavaStack);
+#endif
 
 	return 0;
 }
 
 int16 n_java_lang_Thread_start(int32 *sp) {
-	#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
-		scj_multicore_thread_starter(sp);
-	#else
-		struct _java_lang_Thread_c* thread = HEAP_REF((struct _java_lang_Thread_c* ) (pointer ) sp[0], struct _java_lang_Thread_c*);
-		Object* target = (Object*) (pointer) thread->target_f;
-		pthread_t *thr = (pthread_t *) gc_allocateObject(sizeof(pthread_t), 0);
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+	return scj_multicore_thread_starter(sp);
+#else
+	struct _java_lang_Thread_c* thread = HEAP_REF((struct _java_lang_Thread_c* ) (pointer ) sp[0], struct _java_lang_Thread_c*);
+	Object* target = (Object*) (pointer) thread->target_f;
+	pthread_t *thr = (pthread_t *) gc_allocateObject(sizeof(pthread_t), 0);
 
-		thread->name_f = (uint32) (pointer) thr; /* hack: store the thread data in the object at some unused spot */
+	thread->name_f = (uint32) (pointer) thr; /* hack: store the thread data in the object at some unused spot */
 
-		if (pthread_create(HEAP_REF(thr, pthread_t *), 0, startThread, target) != 0) {
-			return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
-		}
-	#endif
-
+	if (pthread_create(HEAP_REF(thr, pthread_t *), 0, startThread, target) != 0) {
+		return initializeException(sp, JAVA_LANG_NULLPOINTEREXCEPTION_var, JAVA_LANG_NULLPOINTEREXCEPTION_INIT__var);
+	}
 	return -1;
+#endif
 }
 #endif
 
@@ -1751,11 +1746,7 @@ int16 n_test_TestCVar1_getSVar(int32 *sp)
  * param :
  * return: int
  */
-#if defined(PC64)
-unsigned long lvar;
-#else
-unsigned long long lvar;
-#endif
+uint64 lvar;
 
 int16 n_test_TestCVar1_getLVar(int32 *sp)
 {
@@ -1904,7 +1895,7 @@ int16 yieldToScheduler(int32 *sp) {
 #if defined(VM_INTERRUPTDISPATCHER_INTERRUPT_USED)
 #if defined(JAVA_LANG_THROWABLE_INIT_)
 				int16 excep;
-				excep = 
+				excep =
 #endif
 				vm_InterruptDispatcher_interrupt(sp, HVM_CLOCK);
 #if defined(JAVA_LANG_THROWABLE_INIT_)
@@ -2093,9 +2084,7 @@ int16 initializeStringConstant(const ConstantInfo* constant, int32* sp) {
 		Object *stringObject;
 
 		uint16 length = pgm_read_dword(&constant->value) & 0xffff;
-		stringObject = createStringObject(length,
-				(const char *) pgm_read_pointer(&constant->data, const void**),
-				sp);
+		stringObject = createStringObject(length, (const char *) pgm_read_pointer(&constant->data, const void**), sp);
 
 		if (stringObject != 0) {
 			stringConstants[stringID] = stringObject;
@@ -2124,8 +2113,7 @@ int16 invokeClassInitializers(int32* sp) {
 
 	while (currentClassInitializer < NUMBEROFCLASSINITIALIZERS_var) {
 		int16 excep;
-		excep = invokeClassInitializer(
-				pgm_read_word(classInitializerSequence + currentClassInitializer), sp);
+		excep = invokeClassInitializer(pgm_read_word(classInitializerSequence + currentClassInitializer), sp);
 		if (excep > -1) {
 			return excep;
 		}
@@ -2180,11 +2168,11 @@ int16 n_devices_System_resetMemory(int32 *sp) {
 #endif
 	initGC();
 
-	#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
-		HEAP_REF(pthread_getspecific(key),VMMemory*)->free = JAVA_STACK_SIZE;
-	#else
-        HEAP_REF(currentMemoryArea,VMMemory*)->free = JAVA_STACK_SIZE;
-	#endif
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_)
+	HEAP_REF(pthread_getspecific(key),VMMemory*)->free = JAVA_STACK_SIZE;
+#else
+	HEAP_REF(currentMemoryArea,VMMemory*)->free = JAVA_STACK_SIZE;
+#endif
 
 #if defined(LDC2_W_OPCODE_USED) || defined(LDC_W_OPCODE_USED) || defined(LDC_OPCODE_USED) || defined(HANDLELDCWITHINDEX_USED)
 	initializeConstants(sp);
@@ -2325,24 +2313,24 @@ int16 n_java_lang_reflect_Method_invoke(int32 *sp) {
 			fp[index + 1] = *args;
 			reflect_Unboxing_unbox(&fp[index + 1]);
 			switch (classIndex) {
-				case JAVA_LANG_INTEGER:
+			case JAVA_LANG_INTEGER:
 				fp[index + 1] = intValue;
 				break;
-				case JAVA_LANG_BYTE:
+			case JAVA_LANG_BYTE:
 				fp[index + 1] = byteValue;
 				break;
-				case JAVA_LANG_SHORT:
+			case JAVA_LANG_SHORT:
 				fp[index + 1] = shortValue;
 				break;
-				case JAVA_LANG_BOOLEAN:
+			case JAVA_LANG_BOOLEAN:
 				fp[index + 1] = booleanValue;
 				break;
-				case JAVA_LANG_LONG:
+			case JAVA_LANG_LONG:
 				fp[index + 1] = longValueLsb;
 				fp[index + 2] = longValueMsb;
 				index++;
 				break;
-				case JAVA_LANG_CHARACTER:
+			case JAVA_LANG_CHARACTER:
 				fp[index + 1] = characterValue;
 				break;
 			}
@@ -2354,22 +2342,22 @@ int16 n_java_lang_reflect_Method_invoke(int32 *sp) {
 		unsigned char numReturnArgs = methods[methodIndex].minfo & 0x3;
 		if (numReturnArgs > 0) {
 			switch ((methods[methodIndex].minfo >> 2) & 0xF) {
-				case 0:
+			case 0:
 				reflect_Unboxing_boxBoolean(&fp[0]);
 				break;
-				case 1:
+			case 1:
 				reflect_Unboxing_boxByte(&fp[0]);
 				break;
-				case 2:
+			case 2:
 				reflect_Unboxing_boxShort(&fp[0]);
 				break;
-				case 3:
+			case 3:
 				reflect_Unboxing_boxCharacter(&fp[0]);
 				break;
-				case 4:
+			case 4:
 				reflect_Unboxing_boxInteger(&fp[0]);
 				break;
-				case 5:
+			case 5:
 				reflect_Unboxing_boxLong(&fp[0]);
 				break;
 			}
@@ -2473,7 +2461,7 @@ int16 n_java_lang_Class_getConstructor(int32 *sp) {
 	Object *cls = HEAP_REF((Object* )(pointer )sp[0], Object*);
 	Object *argsarray = HEAP_REF((Object* )(pointer )sp[1], Object*);
 
-	uint16 classIndex = (uint16)((java_lang_Class_c *)cls)-> cachedConstructor_f;
+	uint16 classIndex = (uint16) ((java_lang_Class_c *) cls)->cachedConstructor_f;
 	uint16 count = *((uint16*) argsarray + 1);
 
 	uint16 i;
@@ -2485,24 +2473,17 @@ int16 n_java_lang_Class_getConstructor(int32 *sp) {
 			if ((minfo & 0x1) && (methodInfo->numArgs == count)) {
 				unsigned short dobjectSize =
 				pgm_read_word(
-						&classes[JAVA_LANG_REFLECT_CONSTRUCTOR].dobjectSize)
-				>> 3;
+						&classes[JAVA_LANG_REFLECT_CONSTRUCTOR].dobjectSize) >> 3;
 				unsigned short pobjectSize =
 				pgm_read_word(
-						&classes[JAVA_LANG_REFLECT_CONSTRUCTOR].pobjectSize)
-				>> 3;
+						&classes[JAVA_LANG_REFLECT_CONSTRUCTOR].pobjectSize) >> 3;
 
-				Object* constructor = gc_allocateObjectInArea(dobjectSize,
-						pobjectSize);
+				Object* constructor = gc_allocateObjectInArea(dobjectSize, pobjectSize);
 
 				if (constructor != 0) {
-					setClassIndex(constructor,
-							(unsigned short) JAVA_LANG_REFLECT_CONSTRUCTOR);
-					*(unsigned short *) ((unsigned char*) HEAP_REF(constructor,
-									Object*) + sizeof(Object)) = i;
-					*(unsigned short *) ((unsigned char*) HEAP_REF(constructor,
-									Object*) + sizeof(Object) + sizeof(unsigned short)) =
-					classIndex;
+					setClassIndex(constructor, (unsigned short) JAVA_LANG_REFLECT_CONSTRUCTOR);
+					*(unsigned short *) ((unsigned char*) HEAP_REF(constructor, Object*) + sizeof(Object)) = i;
+					*(unsigned short *) ((unsigned char*) HEAP_REF(constructor, Object*) + sizeof(Object) + sizeof(unsigned short)) = classIndex;
 					sp[0] = (int32) (pointer) constructor;
 				}
 				return -1;
@@ -2811,37 +2792,28 @@ void breakPointHit(unsigned short methodNumber, unsigned short pc)
 #endif
 
 #if defined (N_JAVA_LANG_CLASS_ISASSIGNABLEFROM)
-static int32 isAssignableFrom(unsigned short super, unsigned short sub)
-{
-	if (super == sub)
-	{
+static int32 isAssignableFrom(unsigned short super, unsigned short sub) {
+	if (super == sub) {
 		return 1;
-	}
-	else if (sub == JAVA_LANG_OBJECT)
-	{
+	} else if (sub == JAVA_LANG_OBJECT) {
 		return 0;
-	}
-	else
-	{
+	} else {
 		return isAssignableFrom(super, pgm_read_word(&classes[sub].superClass));
 	}
 }
 
-int16 n_java_lang_Class_isAssignableFrom(int32 *sp)
-{
-	Object* class1 = (Object*)(pointer)sp[0];
-	Object* class2 = (Object*)(pointer)sp[1];
+int16 n_java_lang_Class_isAssignableFrom(int32 *sp) {
+	Object* class1 = (Object*) (pointer) sp[0];
+	Object* class2 = (Object*) (pointer) sp[1];
 
-	unsigned short classIndex1 = *(unsigned short *) ((unsigned char*) HEAP_REF(class1, Object*)	+ sizeof(Object));
-	unsigned short classIndex2 = *(unsigned short *) ((unsigned char*) HEAP_REF(class2, Object*)	+ sizeof(Object));
-
+	unsigned short classIndex1 = *(unsigned short *) ((unsigned char*) HEAP_REF(class1, Object*) + sizeof(Object));
+	unsigned short classIndex2 = *(unsigned short *) ((unsigned char*) HEAP_REF(class2, Object*) + sizeof(Object));
 
 	sp[0] = isAssignableFrom(classIndex1, classIndex2);
 
 	return -1;
 }
 #endif
-
 
 void unimplemented(int16 mid) {
 	if (mid > 0) {
@@ -2864,8 +2836,7 @@ int32* get_java_stack_base(int16 size) {
 
 	stackAsArray = gc_allocateObject((JAVA_STACK_SIZE << 2) + sizeof(uint16), 0);
 
-	if (stackAsArray == 0)
-	{
+	if (stackAsArray == 0) {
 		printStr("Could not allocate java heap (out of heap memory)\n");
 	}
 
@@ -2880,23 +2851,20 @@ int32* get_java_stack_base(int16 size) {
 	*(uint16 *) (pointer) (HEAP_REF(stackAsArray, unsigned char*) + sizeof(Object)) = length;
 	intStack = HEAP_REF((pointer)stackAsArray, int32*) + 1;
 
-	for (index = 0; index < length; index++)
-	{
+	for (index = 0; index < length; index++) {
 		intStack[index] = index;
 	}
 
 	return intStack;
 }
 
-unsigned char* get_classdata_base(void)
-{
+unsigned char* get_classdata_base(void) {
 	Object* classdata = gc_allocateObject(sizeof(struct _staticClassFields_c), 0);
 
-	if (classdata == 0)
-	{
+	if (classdata == 0) {
 		printStr("Could not allocate static class data (out of heap memory)\n");
 	}
-	return (unsigned char*)(pointer)classdata;
+	return (unsigned char*) (pointer) classdata;
 }
 
 #if defined(N_VM_FULLSTACKANANLYSER_GET_JAVA_STACK_ARRAY)
