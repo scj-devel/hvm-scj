@@ -1291,8 +1291,7 @@ int16 n_javax_safetycritical_OSProcess_getCurrentCPUID(int32 *sp){
 
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETTHREADID)
 int16 n_javax_safetycritical_OSProcess_getThreadID(int32 *sp){
-	int id = (int)(pointer) pthread_getspecific(key_schedulable_object);
-	sp[0] = id;
+	sp[0] = (int32)(pointer) pthread_getspecific(key_schedulable_object);
     return -1;
 }
 #endif
@@ -1371,7 +1370,7 @@ int16 n_javax_safetycritical_OSProcess_getCurrentMemoryArea(int32 *sp){
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_SETOUTERMOSTMISSIONSEQUENCER)
 int16 n_javax_safetycritical_OSProcess_setOuterMostMissionSequencer(int32 *sp)
 {
-	pthread_setspecific(key_schedulable_object, -11);
+	pthread_setspecific(key_schedulable_object, sp[1]);
     int policyformain = SCHED_FIFO;
     struct sched_param parammain;
     parammain.sched_priority = sp[0];
@@ -1389,7 +1388,7 @@ int16 n_javax_safetycritical_OSProcess_setOuterMostMissionSequencer(int32 *sp)
 int16 n_javax_safetycritical_OSProcess_initSpecificID(int32 *sp)
 {
 	pthread_key_create(&key_schedulable_object, NULL);
-	pthread_setspecific(key_schedulable_object, -99);
+	pthread_setspecific(key_schedulable_object, NULL);
     return -1;
 }
 #endif
@@ -1445,7 +1444,7 @@ struct thread_args {
     long long period;
     Object* target;
     VMMemory* memory;
-    int id;
+    Object* msObject;
     struct _javax_safetycritical_OSProcess_MyThread_c* thread;
 };
 
@@ -1468,7 +1467,7 @@ void scj_multicore_thread_executor(void* arg){
     }
 
     /*set thread id*/
-    pthread_setspecific(key_schedulable_object, args->id);
+    pthread_setspecific(key_schedulable_object, args->msObject);
 
     /*create thread stack*/
 	int32 *threadJavaStack = HEAP_REF((int32 *) gc_allocateObject(/*16384*/8*1024, 0), int32 *);
@@ -1544,7 +1543,7 @@ void scj_multicore_thread_starter(int32 *sp){
 	/*set thread args info*/
 	struct thread_args* args = HEAP_REF((struct thread_args*) gc_allocateObject(sizeof(struct thread_args), 0), struct thread_args*);
 	args->target = (Object*) (pointer) thread->target_f;
-	args->id = thread->id_f;
+	args->msObject = threadInfo->msObject_f;
 	args->thread = thread;
 	args->isPeriodic = threadInfo->isPeriodic_f;
 	args->start = (long long) threadInfo->lsbstart_f << 32 | threadInfo->start_f;

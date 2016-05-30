@@ -34,12 +34,15 @@ class OSProcess extends Process {
 		private long start;
 		@SuppressWarnings("unused")
 		private long period;
+		@SuppressWarnings("unused")
+		private ManagedSchedulable msObject;
 
-		public ThreadInfo(int priority, int isPeriodic, long start, long period) {
+		public ThreadInfo(int priority, int isPeriodic, long start, long period, ManagedSchedulable ms) {
 			this.priority = priority;
 			this.isPeriodic = isPeriodic;
 			this.start = start;
 			this.period = period;
+			this.msObject = ms;
 		}
 	}
 
@@ -98,7 +101,7 @@ class OSProcess extends Process {
 			priority = ((ManagedLongEventHandler) ms).getPriorityParam().getPriority();
 		}
 
-		return new ThreadInfo(priority, isPeriodic, start, period);
+		return new ThreadInfo(priority, isPeriodic, start, period, ms);
 	}
 
 	static native void requestTermination_c(Thread thread);
@@ -109,13 +112,13 @@ class OSProcess extends Process {
 
 	static native Memory getCurrentMemoryArea();
 
-	static native void setOuterMostMissionSequencer(int priority);
+	static native void setOuterMostMissionSequencer(int priority, MissionSequencer<?> handler);
 
 	static native void setTimerfd(int timerfd, long start);
 
 	static native void initSpecificID();
 
-	public static native int getThreadID();
+	public static native ManagedEventHandler getThreadID();
 
 	public static native int getCurrentCPUID();
 
