@@ -186,8 +186,8 @@ int16 n_javax_safetycritical_OSProcess_getAvailableCPUCount(int32 *sp);
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETCURRENTCPUID)
 int16 n_javax_safetycritical_OSProcess_getCurrentCPUID(int32 *sp);
 #endif
-#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETTHREADID)
-int16 n_javax_safetycritical_OSProcess_getThreadID(int32 *sp);
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETCURRENTMSOBJECT)
+int16 n_javax_safetycritical_OSProcess_getCurrentMSObject(int32 *sp);
 #endif
 #if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_REQUESTTERMINATION_C)
 int16 n_javax_safetycritical_OSProcess_requestTermination_c(int32 *sp);
@@ -1289,8 +1289,8 @@ int16 n_javax_safetycritical_OSProcess_getCurrentCPUID(int32 *sp){
 }
 #endif
 
-#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETTHREADID)
-int16 n_javax_safetycritical_OSProcess_getThreadID(int32 *sp){
+#if defined(N_JAVAX_SAFETYCRITICAL_OSPROCESS_GETCURRENTMSOBJECT)
+int16 n_javax_safetycritical_OSProcess_getCurrentMSObject(int32 *sp){
 	sp[0] = (int32)(pointer) pthread_getspecific(key_schedulable_object);
     return -1;
 }

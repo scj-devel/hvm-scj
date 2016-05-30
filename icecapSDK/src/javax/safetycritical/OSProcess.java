@@ -118,7 +118,7 @@ class OSProcess extends Process {
 
 	static native void initSpecificID();
 
-	public static native ManagedEventHandler getThreadID();
+	public static native ManagedEventHandler getCurrentMSObject();
 
 	public static native int getCurrentCPUID();
 
