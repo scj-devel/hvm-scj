@@ -11,6 +11,4 @@ abstract class MissionBehavior {
 	abstract void runExecute(Mission mission);
 
 	abstract void runCleanup(Mission mission, MissionMemory missMem);
-
-	abstract Process getProcess(int index);
 }

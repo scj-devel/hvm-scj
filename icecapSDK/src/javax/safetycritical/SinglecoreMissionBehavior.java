@@ -118,14 +118,6 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 		missMem.resetArea();
 		vm.ClockInterruptHandler.instance.enable();
 	}
-
-	@Override
-	Process getProcess(int index) {
-		int missionIndex = index / 20;
-		int scjProcessIndex = index % 20;
-		
-		return Mission.missionSet[missionIndex].getScjProcess(scjProcessIndex);
-	}
 }
 
 

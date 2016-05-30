@@ -134,17 +134,6 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 		missMem.resetArea();
 	}
 
-	@Override
-	Process getProcess(int index) {
-		ManagedSchedulable ms = getManageSched(index);
-
-		if (ms instanceof ManagedEventHandler)
-			return ((ManagedEventHandler) ms).process;
-		else
-			return ((ManagedThread) ms).process;
-
-	}
-
 	ManagedSchedulable getManageSched(int index) {
 		if (index == -99)
 			return null;
