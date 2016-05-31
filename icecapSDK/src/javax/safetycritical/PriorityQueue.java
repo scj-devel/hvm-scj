@@ -61,57 +61,29 @@ import javax.scj.util.Const;
  *  - implementation issue: infrastructure class; not part of the SCJ specification.
  */
 @SCJAllowed(Level.INFRASTRUCTURE)
-class PriorityQueue {
-	protected int heapSize;
-
-	protected ScjProcess[] tree; // index to ScjProcesses
+class PriorityQueue extends Queue {
 
 	public PriorityQueue(int size) {
-		heapSize = 0;
-		tree = new ScjProcess[size + 1];
-		makeEmptyTree(this.tree);
-	}
-
-	private void makeEmptyTree(ScjProcess[] tree) {
-		for (int i = 0; i < tree.length; i++)
-			tree[i] = null;
-	}
-
-	int parent(int i) {
-		return i / 2;
-	}
-
-	int left(int i) {
-		return 2 * i;
-	}
-
-	int right(int i) {
-		return 2 * i + 1;
-	}
-
-	void exchange(int a, int b) {
-		ScjProcess temp = tree[a];
-		tree[a] = tree[b];
-		tree[b] = temp;
+		super(size);
 	}
 
 	void heapify(int i) {
 		int l = left(i);
 		int r = right(i);
 
-		int largest;
+		int target;
 
 		if (l <= heapSize && tree[l].compareTo(tree[r]) > 0)
-			largest = l;
+			target = l;
 		else
-			largest = i;
+			target = i;
 
-		if (r <= heapSize && tree[r].compareTo(tree[largest]) > 0)
-			largest = r;
+		if (r <= heapSize && tree[r].compareTo(tree[target]) > 0)
+			target = r;
 
-		if (largest != i) {
-			exchange(i, largest);
-			heapify(largest);
+		if (target != i) {
+			exchange(i, target);
+			heapify(target);
 		}
 	}
 

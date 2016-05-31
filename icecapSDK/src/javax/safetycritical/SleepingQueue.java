@@ -60,57 +60,29 @@ import javax.scj.util.Const;
  *  - implementation issue: infrastructure class; not part of the SCJ specification.
  */
 @SCJAllowed(Level.INFRASTRUCTURE)
-class SleepingQueue {
-	int heapSize;
-
-	protected ScjProcess[] tree; 
+class SleepingQueue extends Queue {
 
 	public SleepingQueue(int size) {
-		heapSize = 0;
-		tree = new ScjProcess[size + 1];
-		makeEmptyTree(this.tree);
-	}
-
-	private void makeEmptyTree(ScjProcess[] tree) {
-		for (int i = 0; i < tree.length; i++)
-			tree[i] = null;
-	}
-
-	int parent(int i) {
-		return i / 2;
-	}
-
-	int left(int i) {
-		return 2 * i;
-	}
-
-	int right(int i) {
-		return 2 * i + 1;
-	}
-
-	void exchange(int a, int b) {
-		ScjProcess temp = tree[a];
-		tree[a] = tree[b];
-		tree[b] = temp;
+		super(size);
 	}
 
 	void heapify(int i) {
 		int l = left(i);
 		int r = right(i);
 
-		int smallest;
+		int target;
 
 		if (l <= heapSize && tree[l].next.compareTo(tree[r].next) < 0)
-			smallest = l;
+			target = l;
 		else
-			smallest = i;
+			target = i;
 
-		if (r <= heapSize && tree[r].next.compareTo(tree[smallest].next) < 0)
-			smallest = r;
+		if (r <= heapSize && tree[r].next.compareTo(tree[target].next) < 0)
+			target = r;
 
-		if (smallest != i) {
-			exchange(i, smallest);
-			heapify(smallest);
+		if (target != i) {
+			exchange(i, target);
+			heapify(target);
 		}
 	}
 
