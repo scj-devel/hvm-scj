@@ -4,22 +4,22 @@ import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 
 @SCJAllowed(Level.INFRASTRUCTURE)
-class Queue {
+abstract class Queue {
 	protected int heapSize;
 
 	protected ScjProcess[] tree;
-	
+
 	public Queue(int size) {
 		heapSize = 0;
 		tree = new ScjProcess[size + 1];
-		makeEmptyTree(this.tree);		
+		makeEmptyTree(this.tree);
 	}
-	
+
 	private void makeEmptyTree(ScjProcess[] tree) {
 		for (int i = 0; i < tree.length; i++)
 			tree[i] = null;
 	}
-	
+
 	int parent(int i) {
 		return i / 2;
 	}
@@ -38,4 +38,25 @@ class Queue {
 		tree[b] = temp;
 	}
 
+	void heapify(int i) {
+		int l = left(i);
+		int r = right(i);
+
+		int target;
+
+		if (l <= heapSize && compare(tree[l].compareTo(tree[r]), 0))
+			target = l;
+		else
+			target = i;
+
+		if (r <= heapSize && compare(tree[r].compareTo(tree[target]), 0))
+			target = r;
+
+		if (target != i) {
+			exchange(i, target);
+			heapify(target);
+		}
+	}
+
+	protected abstract boolean compare(int a, int b);
 }

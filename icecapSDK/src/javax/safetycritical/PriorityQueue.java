@@ -67,24 +67,8 @@ class PriorityQueue extends Queue {
 		super(size);
 	}
 
-	void heapify(int i) {
-		int l = left(i);
-		int r = right(i);
-
-		int target;
-
-		if (l <= heapSize && tree[l].compareTo(tree[r]) > 0)
-			target = l;
-		else
-			target = i;
-
-		if (r <= heapSize && tree[r].compareTo(tree[target]) > 0)
-			target = r;
-
-		if (target != i) {
-			exchange(i, target);
-			heapify(target);
-		}
+	protected boolean compare(int a, int b) {
+		return a > b;
 	}
 
 	@IcecapCompileMe
