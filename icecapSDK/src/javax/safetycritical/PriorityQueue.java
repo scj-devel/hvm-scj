@@ -35,12 +35,11 @@
 
 package javax.safetycritical;
 
-import icecaptools.IcecapCompileMe;
-import util.StringUtil;
-
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 import javax.scj.util.Const;
+
+import util.StringUtil;
 
 /**
  * This <code>PriorityQueue</code> class holds the ready processes
@@ -75,36 +74,8 @@ class PriorityQueue extends Queue {
 		return tree[parent(i)].compareTo(obj) < 0;
 	}
 
-	@IcecapCompileMe
 	public ScjProcess extractMax() {
-		if (heapSize < 1)
-			return null;
-
-		ScjProcess max = tree[1];
-		tree[1] = tree[heapSize];
-		heapSize--;
-		heapify(1);
-
-		return max;
-	}
-
-	public void remove(ScjProcess obj) {
-		if (obj == null)
-			return;
-		int i = find(obj.index);
-		if (i != -999) {
-			tree[i] = tree[heapSize];
-			heapSize--;
-			heapify(i);
-		}
-	}
-
-	private int find(int value) {
-		for (int i = 1; i <= heapSize; i++) {
-			if (tree[i].index == value)
-				return i;
-		}
-		return -999;
+		return extract();
 	}
 
 	/**

@@ -71,6 +71,36 @@ abstract class Queue {
 		tree[i] = obj;
 	}
 	
+	protected ScjProcess extract() {
+		if (heapSize < 1)
+			return null;
+
+		ScjProcess target = tree[1];
+		tree[1] = tree[heapSize];
+		heapSize--;
+		heapify(1);
+
+		return target;
+	}
+	
+	public void remove(ScjProcess obj) {
+		if (obj == null)
+			return;
+		int i = find(obj.index);
+		if (i != -999) {
+			tree[i] = tree[heapSize];
+			heapSize--;
+			heapify(i);
+		}
+	}
+
+	private int find(int value) {
+		for (int i = 1; i <= heapSize; i++) {
+			if (tree[i].index == value)
+				return i;
+		}
+		return -999;
+	}
 	protected abstract boolean heapifyCompare(int a, int b);
 	
 	protected abstract boolean insertCompare(int i, ScjProcess obj);
