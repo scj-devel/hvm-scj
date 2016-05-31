@@ -58,7 +58,20 @@ abstract class Queue {
 		}
 	}
 
+	public void insert(ScjProcess obj) {
+		if (heapSize + 1 == tree.length)
+			throw new IndexOutOfBoundsException();
+
+		heapSize++;
+		int i = heapSize;
+		while (i > 1 && insertCompare(i, obj)) {
+			tree[i] = tree[parent(i)];
+			i = parent(i);
+		}
+		tree[i] = obj;
+	}
+	
 	protected abstract boolean heapifyCompare(int a, int b);
 	
-	protected abstract boolean insertCompare(int a, int b);
+	protected abstract boolean insertCompare(int i, ScjProcess obj);
 }

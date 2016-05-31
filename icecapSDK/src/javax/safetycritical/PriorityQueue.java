@@ -71,22 +71,8 @@ class PriorityQueue extends Queue {
 		return a > b;
 	}
 	
-	protected boolean insertCompare(int a, int b) {
-		return a < b;
-	}
-
-	@IcecapCompileMe
-	public void insert(ScjProcess obj) {
-		if (heapSize + 1 == tree.length)
-			throw new IndexOutOfBoundsException();
-
-		heapSize++;
-		int i = heapSize;
-		while (i > 1 && insertCompare(tree[parent(i)].compareTo(obj), 0)) {
-			tree[i] = tree[parent(i)];
-			i = parent(i);
-		}
-		tree[i] = obj;
+	protected boolean insertCompare(int i, ScjProcess obj) {
+		return tree[parent(i)].compareTo(obj) < 0;
 	}
 
 	@IcecapCompileMe

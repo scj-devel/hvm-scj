@@ -71,24 +71,10 @@ class SleepingQueue extends Queue {
 	}
 
 	@Override
-	protected boolean insertCompare(int a, int b) {
-		return a > b;
+	protected boolean insertCompare(int i, ScjProcess obj) {
+		return tree[parent(i)].next.compareTo(obj.next) > 0;
 	}
 	
-	@IcecapCompileMe
-	public void insert(ScjProcess obj) {
-		if (heapSize + 1 == tree.length)
-			throw new IndexOutOfBoundsException();
-
-		heapSize++;
-		int i = heapSize;
-		while (i > 1 && insertCompare(tree[parent(i)].next.compareTo(obj.next), 0)) {
-			tree[i] = tree[parent(i)];
-			i = parent(i);
-		}
-		tree[i] = obj;
-	}
-
 	@IcecapCompileMe
 	public ScjProcess minimum() {
 		if (heapSize > 0)
