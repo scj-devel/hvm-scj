@@ -101,6 +101,7 @@ abstract class Queue {
 		}
 		return -999;
 	}
+	
 	protected abstract boolean heapifyCompare(int a, int b);
 	
 	protected abstract boolean insertCompare(int i, ScjProcess obj);

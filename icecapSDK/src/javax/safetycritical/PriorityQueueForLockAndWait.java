@@ -5,19 +5,20 @@ package javax.safetycritical;
  * The infrastructure will use this class to model the wait set and lock set.
  */
 class PriorityQueueForLockAndWait {
-	ScjProcess[] queue;
+	protected int heapSize;
+	
+	protected ScjProcess[] tree;
+	
 	int tail;
-	int queueSize;
 
 	PriorityQueueForLockAndWait(int size) {
-		queue = new ScjProcess[size];
+		heapSize = 0;
+		tree = new ScjProcess[size];
+		makeEmptyTree(tree);
 		tail = -1;
-		queueSize = 0;
-
-		makeEmptyQueue(queue);
 	}
 
-	private void makeEmptyQueue(ScjProcess[] set) {
+	private void makeEmptyTree(ScjProcess[] set) {
 		for (int i = 0; i < set.length; i++)
 			set[i] = null;
 	}
@@ -33,12 +34,12 @@ class PriorityQueueForLockAndWait {
 	protected void addProcess(Object monitor, ScjProcess process) {
 		vm.ClockInterruptHandler.instance.disable();
 
-		if (tail < queue.length - 1) {
+		if (tail < tree.length - 1) {
 			tail++;
 			int index = tail;
 			// find the place in the set for this process
 			for (int i = 0; i < tail; i++) {
-				ScjProcess temp = queue[i];
+				ScjProcess temp = tree[i];
 				if (temp == null)
 					throw new IllegalArgumentException("1");
 
@@ -51,13 +52,13 @@ class PriorityQueueForLockAndWait {
 			// reserve the place in the set for this process
 			if (index != tail) {
 				for (int i = tail; i > index; i--) {
-					queue[i] = queue[i - 1];
+					tree[i] = tree[i - 1];
 				}
 			}
 			// add the index of the process into the set and set the required lock
 			process.monitorLock = monitor;
-			queue[index] = process;
-			queueSize++;
+			tree[index] = process;
+			heapSize++;
 		} else {
 			throw new IndexOutOfBoundsException("set: too small");
 		}
@@ -77,11 +78,11 @@ class PriorityQueueForLockAndWait {
 	 */
 	protected/*synchronized*/ScjProcess getNextProcess(Object monitor) {
 		for (int i = 0; i <= tail; i++) {
-			ScjProcess process = queue[i];
+			ScjProcess process = tree[i];
 			if (process.monitorLock == monitor) {
 				process.monitorLock = null;
 				reorderSet(i);
-				queueSize--;
+				heapSize--;
 				return process;
 			}
 		}
@@ -90,20 +91,20 @@ class PriorityQueueForLockAndWait {
 
 	public/*synchronized*/void removeProcess(ScjProcess process) {
 		for (int i = 0; i <= tail; i++) {
-			if (queue[i] == process) {
+			if (tree[i] == process) {
 				reorderSet(i);
 				process.monitorLock = null;
 
-				queueSize--;
+				heapSize--;
 			}
 		}
 	}
 
 	private void reorderSet(int index) {
 		for (int i = index; i <= tail - 1; i++) {
-			queue[i] = queue[i + 1];
+			tree[i] = tree[i + 1];
 		}
-		queue[tail] = null;
+		tree[tail] = null;
 		tail--;
 	}
 
@@ -118,8 +119,8 @@ class PriorityQueueForLockAndWait {
 		//				devices.Console.println(temp.print());
 		//		}
 
-		for (int i = 0; i < queue.length; i++) {
-			devices.Console.print("[ " + queue[i] + " ] ");
+		for (int i = 0; i < tree.length; i++) {
+			devices.Console.print("[ " + tree[i] + " ] ");
 		}
 		devices.Console.println("");
 	}
