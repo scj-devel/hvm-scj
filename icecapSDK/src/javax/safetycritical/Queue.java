@@ -44,12 +44,12 @@ abstract class Queue {
 
 		int target;
 
-		if (l <= heapSize && compare(tree[l].compareTo(tree[r]), 0))
+		if (l <= heapSize && heapifyCompare(tree[l].compareTo(tree[r]), 0))
 			target = l;
 		else
 			target = i;
 
-		if (r <= heapSize && compare(tree[r].compareTo(tree[target]), 0))
+		if (r <= heapSize && heapifyCompare(tree[r].compareTo(tree[target]), 0))
 			target = r;
 
 		if (target != i) {
@@ -58,5 +58,7 @@ abstract class Queue {
 		}
 	}
 
-	protected abstract boolean compare(int a, int b);
+	protected abstract boolean heapifyCompare(int a, int b);
+	
+	protected abstract boolean insertCompare(int a, int b);
 }

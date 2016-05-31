@@ -66,17 +66,23 @@ class SleepingQueue extends Queue {
 		super(size);
 	}
 
-	protected boolean compare(int a, int b) {
+	protected boolean heapifyCompare(int a, int b) {
 		return a < b;
 	}
 
+	@Override
+	protected boolean insertCompare(int a, int b) {
+		return a > b;
+	}
+	
+	@IcecapCompileMe
 	public void insert(ScjProcess obj) {
 		if (heapSize + 1 == tree.length)
 			throw new IndexOutOfBoundsException();
 
 		heapSize++;
 		int i = heapSize;
-		while (i > 1 && tree[parent(i)].next.compareTo(obj.next) > 0) {
+		while (i > 1 && insertCompare(tree[parent(i)].next.compareTo(obj.next), 0)) {
 			tree[i] = tree[parent(i)];
 			i = parent(i);
 		}
