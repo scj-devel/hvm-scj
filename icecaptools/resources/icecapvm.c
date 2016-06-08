@@ -38,7 +38,7 @@ int16 initializeConstants(int32* sp);
 #if defined(VM_CLOCKINTERRUPTHANDLER_HANDLE)
 pointer mainStackPointer;
 extern pointer stackPointer;
-extern void set_stack_pointer();
+extern void set_stack_pointer(void);
 extern pointer get_stack_pointer(void);
 #endif
 

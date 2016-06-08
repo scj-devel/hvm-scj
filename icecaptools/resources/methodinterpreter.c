@@ -23,6 +23,10 @@ extern void sendbyte(unsigned char byte);
 extern void printAddress(uint32 addr);
 #endif
 
+#if defined(LREM_OPCODE_USED) || defined(LDIV_OPCODE_USED) || defined(LMUL_OPCODE_USED) || defined(HANDLELMULLDIVLREM_USED) || defined(N_VM_REALTIMECLOCK_DELAYNATIVEUNTIL)
+int32 ldiv32(int32* sp, uint32 xmsb, uint32 xlsb, uint32 ymsb, uint32 ylsb);
+unsigned char lrem32(int32* sp, uint32 xmsb, uint32 xlsb, uint32 ymsb, uint32 ylsb);
+#endif
 
 #if defined(PUTSTATIC_OPCODE_USED) || defined(GETSTATIC_OPCODE_USED)
 extern unsigned char *classData;
