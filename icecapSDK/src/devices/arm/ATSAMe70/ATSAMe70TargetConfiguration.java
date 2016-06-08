@@ -264,7 +264,7 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 	@IcecapCVar(expression = "systemClock", requiredIncludes = "extern volatile uint32 systemClock;")
 	protected static int systemClock;
 	
-	@IcecapCFunc(signature = "void SysTick_Handler(void)")
+	@IcecapCFunc(signature = "void SysTick_Handler(void)", requiredIncludes = "void SysTick_Handler(void);\n")
 	private static void handleSystemTick() {
 		systemTick++;
 		systemClock++;

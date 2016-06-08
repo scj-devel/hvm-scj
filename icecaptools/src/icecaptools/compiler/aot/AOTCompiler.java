@@ -1362,7 +1362,7 @@ public abstract class AOTCompiler implements SPManipulator {
 				sm.push(Size.INT, "(int32) (pointer) narray");
 				pc += 3;
 				requiredIncludes
-						.print("extern unsigned char* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash));\n");
+						.print("extern Object* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash));\n");
 				requiredIncludes.print("extern unsigned short getClassIndex(Object* obj);\n");
 				break;
 			}
