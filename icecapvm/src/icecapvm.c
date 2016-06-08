@@ -39,7 +39,7 @@ int16 initializeConstants(int32* sp);
 pointer mainStackPointer;
 extern pointer stackPointer;
 extern void set_stack_pointer();
-extern pointer* get_stack_pointer(void);
+extern pointer get_stack_pointer(void);
 #endif
 
 #if defined(REPORTCYCLES)
@@ -103,7 +103,7 @@ int run_vm(void) {
 	 * In this case we save the current C stack so we may restore it later. This
 	 * is required to terminate the process properly.
 	 */
-	mainStackPointer = (pointer) get_stack_pointer();
+	mainStackPointer = get_stack_pointer();
 
 	/* mainMethodJavaStack contains both Java and C stack. Java stack grows
 	 * upwards from the beginning, C stack downwards from the end. */
