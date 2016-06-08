@@ -2199,7 +2199,8 @@ extern int16 vm_Monitor_getDefaultMonitor(int32 *sp);
 
 unsigned char handleNewClassIndex(int32* sp, unsigned short classIndex) {
 	unsigned short dobjectSize, pobjectSize;
-	Object* object;
+	Object* o;
+	uint32 object;
 	unsigned char hasLock = pgm_read_byte(&classes[classIndex].hasLock);
 
 	dobjectSize = pgm_read_word(&classes[classIndex].dobjectSize) >> 3;
@@ -2208,26 +2209,27 @@ unsigned char handleNewClassIndex(int32* sp, unsigned short classIndex) {
 	if (hasLock) {
 		dobjectSize += 4;
 	}
-	object = gc_allocateObject(dobjectSize, pobjectSize);
+	o = gc_allocateObject(dobjectSize, pobjectSize);
+	object = (uint32)(pointer)o;
 
 	if (object != 0) {
 		if (hasLock) {
 #if defined(VM_MACHINE_SETCURRENTSCHEDULER)
 			int16 res = vm_Monitor_getDefaultMonitor(sp);
-			object = (Object*) (((unsigned char*) object) + 4);
+			object = object + 4;
 			if (res == -1) {
-				sp[1] = (int32) (pointer) object;
+				sp[1] = (int32) object;
 				n_vm_Monitor_attachMonitor(sp);
 			}
 #else
-			object = (Object*)(pointer)(((unsigned char*) object) + 4);
+			object = object + 4;
 #endif
 		}
-		setClassIndex(object, classIndex);
-		sp[0] = (int32) (pointer) object;
+		setClassIndex((Object*)(pointer)object, classIndex);
+		sp[0] = (int32) object;
 
 #if defined(GC_GARBAGECOLLECTOR_NEWBARRIER_USED)
-		gc_GarbageCollector_newBarrier(sp, (int32)(pointer)object);
+		gc_GarbageCollector_newBarrier(sp, (int32)object);
 #endif
 		return 1;
 	}
