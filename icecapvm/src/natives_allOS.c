@@ -1807,18 +1807,18 @@ int16 n_vm_Process_transfer(int32 *sp) {
 
 #if defined(VM_PROCESS_EXECUTEWITHSTACK)
 static int32* stack;
-extern pointer* get_stack_pointer(void);
+extern pointer get_stack_pointer(void);
 extern int16 vm_Process_ProcessExecutor_run(int32 *fp);
 
-static pointer *tcsp;
-static pointer *csp;
+static pointer tcsp;
+static pointer csp;
 
 static void executeWithStack(uint16 stackSize) {
 #ifndef AVR
 	if (sizeof(pointer) == 4) {
 #endif
-		csp = (pointer*) (stack + stackSize - 2);
-		csp -= 14;
+		csp = (pointer) (stack + stackSize - 2);
+		csp -= 14 * sizeof(pointer);
 #ifndef AVR
 	} else {
 		unsigned long SP;
@@ -1826,17 +1826,17 @@ static void executeWithStack(uint16 stackSize) {
 		while ((SP - sizeof(pointer)) % 16) {
 			SP--;
 		}
-		csp = (pointer*) SP;
+		csp = (pointer) SP;
 	}
 #endif
 	tcsp = get_stack_pointer();
 
-	stackPointer = (pointer) csp;
+	stackPointer = csp;
 	set_stack_pointer();
 
 	vm_Process_ProcessExecutor_run(stack);
 
-	stackPointer = (pointer) tcsp;
+	stackPointer = tcsp;
 	set_stack_pointer();
 
 	return;
