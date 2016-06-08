@@ -22,11 +22,11 @@ public class Level1RegisterAllocator extends StackManager {
     }
 
     @Override
-    public void popRef(String dst) {
+    protected void popRef(String dst, String dstType) {
         if (top == null) {
-            super.popRef(dst);
+            super.popRef(dst, dstType);
         } else {
-            output.append(dst + " = (unsigned char *) (pointer)" + top.v_name + ";\n");
+            output.append(dst + " = (" + dstType + ") (pointer)" + top.v_name + ";\n");
             top = null;
         }
     }

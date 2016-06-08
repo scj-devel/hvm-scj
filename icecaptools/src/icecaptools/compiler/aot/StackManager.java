@@ -55,9 +55,13 @@ public class StackManager {
     }
 
     public void popRef(String dst) {
+        popRef(dst, "unsigned char *");
+    }
+
+    protected void popRef(String dst, String dstType) {
         spManipulator.setSPUsed(true);
         output.append("   sp--;\n");
-        output.append(dst + " = (unsigned char *) (pointer) *sp;\n");
+        output.append(dst + " = (" + dstType + ") (pointer) *sp;\n");
     }
 
     public String peekTop(int index, int srcSize) {

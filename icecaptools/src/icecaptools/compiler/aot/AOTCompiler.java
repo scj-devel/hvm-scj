@@ -809,11 +809,11 @@ public abstract class AOTCompiler implements SPManipulator {
 
 				superType = superType >> 1;
 
-				localVariables.print("   unsigned char *object;\n");
+				localVariables.print("   Object *object;\n");
 				if (currentMethodCode[pc] == RawByteCodes.instanceof_opcode) {
 					localVariables.print("   uint8 i_res;\n");
 				}
-				sm.popRef("object");
+				sm.popRef("object", "Object *");
 
 				if (currentMethodCode[pc] == RawByteCodes.instanceof_opcode) {
 					output.append("      excep = 1;\n");
@@ -827,7 +827,7 @@ public abstract class AOTCompiler implements SPManipulator {
 					int JAVA_LANG_OBJECT = toolBox.getPatcher().getClassNumber("java.lang.Object");
 					if (superType != JAVA_LANG_OBJECT) {
 						localVariables.print("   signed short subClassIndex;\n");
-						output.append("         subClassIndex = getClassIndex((Object*)object);\n");
+						output.append("         subClassIndex = getClassIndex(object);\n");
 						output.append("         excep = !isSubClassOf(subClassIndex, " + superType + ");\n");
 						requiredIncludes.print("extern unsigned short getClassIndex(Object* obj);\n");
 					} else {
@@ -835,7 +835,7 @@ public abstract class AOTCompiler implements SPManipulator {
 					}
 
 				} else {
-					output.append("         excep = checkImplements((Object*)object, " + superType + ");\n");
+					output.append("         excep = checkImplements(object, " + superType + ");\n");
 					requiredIncludes
 							.print("unsigned char checkImplements(Object* object, unsigned short interfaceIndex);\n");
 				}

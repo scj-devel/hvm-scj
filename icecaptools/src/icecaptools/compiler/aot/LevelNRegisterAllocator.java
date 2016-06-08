@@ -130,14 +130,14 @@ public class LevelNRegisterAllocator extends StackManager {
     }
 
     @Override
-    public void popRef(String dst) {
+    protected void popRef(String dst, String dstType) {
         StackCell top = findTop();
 
         if (top != null) {
-            output.append(dst + " = (unsigned char *) (pointer)" + top.v_name + ";\n");
+            output.append(dst + " = (" + dstType + ") (pointer)" + top.v_name + ";\n");
             top.inUse = false;
         } else {
-            super.popRef(dst);
+            super.popRef(dst, dstType);
         }
     }
 
