@@ -1355,9 +1355,8 @@ public abstract class AOTCompiler implements SPManipulator {
 				} else {
 				}
 
-				output.append("      " + arrayName + " = (" + elementType + "*)(pointer)(" + topName
-						+ " + sizeof(Object) + 2);\n");
-				output.append("      " + arrayName + " = HEAP_REF(" + arrayName + ", " + elementType + "*);\n");
+				output.append("      " + arrayName + " = HEAP_REF((pointer)(" + topName + " + sizeof(Object) + 2)" + ", "
+						+ elementType + "*);\n");
 
 				switch (elementSize) {
 				case 1:
