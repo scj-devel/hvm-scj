@@ -1429,6 +1429,7 @@ public abstract class AOTCompiler implements SPManipulator {
 			case RawByteCodes.iastore_opcode: {
 				ProducerConsumerStack entryStack = bnode.getAinfo().entryStack;
 				int indexStackCellIndex;
+				int elementSize = getElementSize(pc);
 				if ((currentMethodCode[pc] != RawByteCodes.lastore_opcode)
 						&& (currentMethodCode[pc] != RawByteCodes.dastore_opcode)) {
 					indexStackCellIndex = entryStack.size() - 2;
@@ -1464,8 +1465,8 @@ public abstract class AOTCompiler implements SPManipulator {
 						|| (currentMethodCode[pc] == RawByteCodes.dastore_opcode)) {
 					localVariables.print("   int32 msb_int32;\n");
 				}
-				localVariables.print("   " + indexCast + " index_" + indexCast + ";\n");
-				localVariables.print("   unsigned char* cobj;\n");
+				String indexName = "index_" + indexCast;
+				localVariables.print("   " + indexCast + " " + indexName + ";\n");
 
 				sm.pop("      lsb_" + valueCast + "", valueSize);
 
@@ -1474,8 +1475,35 @@ public abstract class AOTCompiler implements SPManipulator {
 					sm.pop("      msb_int32", Size.INT);
 				}
 
-				sm.pop("      index_" + indexCast + "", indexSize);
-				sm.popRef("      cobj");
+				String elementType;
+
+				switch (elementSize) {
+				case 1:
+				        elementType = "signed char";
+				        break;
+				case 2:
+				        elementType = "signed short";
+				        break;
+				default:
+				        elementType = "uint32";
+				        break;
+				}
+
+				String arrayName = "cobj_" + pc;
+
+				localVariables.print("   " + elementType + "* " + arrayName + ";\n");
+
+				sm.pop("      " + indexName + "", indexSize);
+
+				String topName = sm.peekTop(1, Size.INT);
+
+				if (!topName.contains("_")) {
+				        localVariables.print("   int32 _rawArray_;\n");
+				        sm.popRef("_rawArray_", "int32");
+				        topName = "_rawArray_";
+				} else {
+				        sm.popRef(null, null);
+				}
 
 				int indexIndex;
 				if ((currentMethodCode[pc] == RawByteCodes.lastore_opcode)
@@ -1488,27 +1516,26 @@ public abstract class AOTCompiler implements SPManipulator {
 				StackCell cell = stack.getAt(stack.getSize() - indexIndex);
 
 				if (((RefType) cell.content).getState() != RefState.NONNULL) {
-					checkObject(output, localVariables, pc, labelsManager, null, "", sm, "cobj");
+					checkObject(output, localVariables, pc, labelsManager, null, "", sm, topName);
 				}
 
-				int elementSize = getElementSize(pc);
+				output.append("      " + arrayName + " = HEAP_REF((pointer)(" + topName + " + sizeof(Object) + 2)" + ", "
+		                + elementType + "*);\n");
+				// adjustArrayPointer(output, elementSize, "cobj", "index_" + indexCast);
 
-				adjustArrayPointer(output, elementSize, "cobj", "index_" + indexCast);
-
-				output.append("      cobj = HEAP_REF(cobj, unsigned char*);\n");
 				switch (elementSize) {
 				case 1:
-					output.append("      *cobj = lsb_" + valueCast + ";\n");
+					output.append("      " + arrayName + "[" + indexName + "] = lsb_" + valueCast + ";\n");
 					break;
 				case 2:
-					output.append("      *((unsigned short *) cobj) = lsb_" + valueCast + ";\n");
+					output.append("      " + arrayName + "[" + indexName + "] = lsb_" + valueCast + ";\n");
 					break;
 				case 4:
-					output.append("      *((uint32 *) cobj) = lsb_" + valueCast + ";\n");
+					output.append("      " + arrayName + "[" + indexName + "] = lsb_" + valueCast + ";\n");
 					break;
 				case 8:
-					output.append("      *((uint32 *) cobj) = msb_int32;\n");
-					output.append("      *((uint32 *) (cobj + 4)) = lsb_" + valueCast + ";\n");
+					output.append("      " + arrayName + "[" + indexName + " << 1] = msb_int32;\n");
+					output.append("      " + arrayName + "[(" + indexName + " << 1) + 1] = lsb_" + valueCast + ";\n");
 					break;
 				}
 				pc++;
