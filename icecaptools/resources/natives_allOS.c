@@ -11,10 +11,12 @@
 #include <stdio.h>
 #endif
 
+#if defined(JAVAX_SAFETYCRITICAL_LAUNCHMULTICORE_INIT_) || defined(N_TEST_TESTCVAR1_GETLVAR)
 #if defined(PC64)
 typedef long uint64;
 #else
 typedef long long uint64;
+#endif
 #endif
 
 extern const ClassInfo *classes;
