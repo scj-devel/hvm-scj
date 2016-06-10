@@ -54,7 +54,7 @@ public abstract class AOTCompiler implements SPManipulator {
 	private CFuncInfo cfunc;
 
 	private MethodEntryPoints entrypoints;
-	
+
 	public AOTCompiler(Method javaMethod, byte[] methodCode, String uniqueMethodId, int methodNumber,
 			NoDuplicatesMemorySegment requiredIncludes, AOTToolBox toolBox) {
 		this.javaMethod = javaMethod;
@@ -74,8 +74,7 @@ public abstract class AOTCompiler implements SPManipulator {
 		String methodName = javaMethod.getName();
 		String methodSignature = javaMethod.getSignature();
 
-		entrypoints = toolBox.getDependencyExtent().getMethod(currentClassName, methodName,
-				methodSignature);
+		entrypoints = toolBox.getDependencyExtent().getMethod(currentClassName, methodName, methodSignature);
 
 		StringBuffer prelude = new StringBuffer();
 		prelude.append("/* " + javaMethod.getName() + "\n");
@@ -103,8 +102,8 @@ public abstract class AOTCompiler implements SPManipulator {
 			TargetAddressMap tMap = entrypoints.getJumpTargets();
 
 			StringBuffer exceptionSwitch = new StringBuffer();
-			LabelsManager labelsManager = new LabelsManager(entrypoints, methodNumber, localVariables,
-					requiredIncludes, this);
+			LabelsManager labelsManager = new LabelsManager(entrypoints, methodNumber, localVariables, requiredIncludes,
+					this);
 
 			compileByteCode(sm, labelsManager, tMap, body, localVariables, 0, false, entrypoints);
 
@@ -239,8 +238,8 @@ public abstract class AOTCompiler implements SPManipulator {
 		while (pc < currentMethodCode.length) {
 			bnode = toolBox.getDependencyExtent().getBNodeFromMethod(toolBox.getCurrentClassName(),
 					javaMethod.getName(), javaMethod.getSignature(), pc);
-			toolBox.getTool().getSourceCodeLinker()
-					.getSourceCode(toolBox.getCurrentClassName(), javaMethod, bnode.getOriginalAddress(), output);
+			toolBox.getTool().getSourceCodeLinker().getSourceCode(toolBox.getCurrentClassName(), javaMethod,
+					bnode.getOriginalAddress(), output);
 			if (tMap.isJumpTarget(bnode) || isExceptionHandler(javaMethod, pc)) {
 				handleLabel(sm);
 				output.append("   L" + pc + ":\n");
@@ -264,8 +263,8 @@ public abstract class AOTCompiler implements SPManipulator {
 
 				if (synchronizedSupported(javaMethod)) {
 					if (entrypoints.canCallWithArgs()) {
-						NoDuplicatesMemorySegment thisName = new NoDuplicatesMemorySegment(toolBox.getTool()
-								.getProperties());
+						NoDuplicatesMemorySegment thisName = new NoDuplicatesMemorySegment(
+								toolBox.getTool().getProperties());
 						sm.getLocalVariableManager().generateLocalInitialization(thisName, 0, 1, "", true);
 
 						StringTokenizer tokenizer = new StringTokenizer(thisName.toString());
@@ -274,13 +273,13 @@ public abstract class AOTCompiler implements SPManipulator {
 							lastToken = tokenizer.nextToken();
 						}
 
-						output.append("   handleMonitorEnterExit((Object*)(pointer)" + lastToken
-								+ ", 0, fp + 1, \"\");\n");
+						output.append(
+								"   handleMonitorEnterExit((Object*)(pointer)" + lastToken + ", 0, fp + 1, \"\");\n");
 					} else {
 						output.append("   handleMonitorEnterExit((Object*)(pointer)fp[0], 0, fp + 1, \"\");\n");
 					}
-					requiredIncludes
-							.print("extern unsigned char handleMonitorEnterExit(Object* lockObj, unsigned char isEnter, int32* sp, const char* fromMethod);\n");
+					requiredIncludes.print(
+							"extern unsigned char handleMonitorEnterExit(Object* lockObj, unsigned char isEnter, int32* sp, const char* fromMethod);\n");
 				}
 
 				boolean returnHandled = false;
@@ -298,8 +297,8 @@ public abstract class AOTCompiler implements SPManipulator {
 								output.append("   return (u" + getTypeCast(rsize) + ")" + top + ";\n");
 							} else {
 								String rval = "rval_m_" + pc;
-								localVariables.print("   " + getTypeCast(entrypoints.getReturnTypeSize()) + " " + rval
-										+ ";\n");
+								localVariables.print(
+										"   " + getTypeCast(entrypoints.getReturnTypeSize()) + " " + rval + ";\n");
 								sm.pop("   " + rval, getReturntypeSize(javaMethod));
 
 								output.append("   return (u" + getTypeCast(getReturntypeSize(javaMethod)) + ")" + rval
@@ -327,8 +326,8 @@ public abstract class AOTCompiler implements SPManipulator {
 				output.append("   spm2 = " + sm.peekTop(2, Size.INT) + ";\n");
 				if (synchronizedSupported(javaMethod)) {
 					output.append("   handleMonitorEnterExit((Object*)(pointer)fp[0], 0, fp + 2, \"\");\n");
-					requiredIncludes
-							.print("extern unsigned char handleMonitorEnterExit(Object* lockObj, unsigned char isEnter, int32* sp, const char* fromMethod);\n");
+					requiredIncludes.print(
+							"extern unsigned char handleMonitorEnterExit(Object* lockObj, unsigned char isEnter, int32* sp, const char* fromMethod);\n");
 				}
 				output.append("   fp[0] = spm2;\n");
 				output.append("   fp[1] = spm1;\n");
@@ -414,7 +413,8 @@ public abstract class AOTCompiler implements SPManipulator {
 				output.append("   if (handleNewClassIndex(sp, " + classIndex + ") == 0) {\n");
 				setSPUsed(true);
 				if (hasExceptionHandlers(javaMethod)) {
-					gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowOutOfMemory, null);
+					gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowOutOfMemory,
+							null);
 					labelsManager.generateOutOfMemory();
 				} else {
 					output.append("      fp[0] = " + sm.peekTop(0, Size.INT) + ";\n");
@@ -497,7 +497,8 @@ public abstract class AOTCompiler implements SPManipulator {
 					MethodOrFieldDesc methodDesc = toolBox.getPatcher().getMethodDescriptor(methodNumber);
 
 					AOTInvokeSpecialEmitter emitter = new AOTInvokeSpecialEmitter(sm, output, localVariables, pc,
-							labelsManager, bnode, currentMethodCode, requiredIncludes, methodDesc, toolBox, entrypoints);
+							labelsManager, bnode, currentMethodCode, requiredIncludes, methodDesc, toolBox,
+							entrypoints);
 
 					InvokeEmitter worker = emitter.getEmitter();
 
@@ -565,8 +566,8 @@ public abstract class AOTCompiler implements SPManipulator {
 					localVariables.print("   unsigned char methodVtableIndex;\n");
 
 					String exceptionVariable = "rval_m_" + pc;
-					localVariables.print("   " + getTypeCast(entrypoints.getReturnTypeSize()) + " " + exceptionVariable
-							+ ";\n");
+					localVariables.print(
+							"   " + getTypeCast(entrypoints.getReturnTypeSize()) + " " + exceptionVariable + ";\n");
 
 					sm.flush(true);
 					adjustStackAndCheckObject(output, localVariables, pc, labelsManager, numArgs + 1,
@@ -603,8 +604,8 @@ public abstract class AOTCompiler implements SPManipulator {
 					handleExceptionOccurred(output, localVariables, pc, labelsManager, returnValueString, "   ", sm,
 							null, exceptionVariable, entrypoints, exceptionVariable + " == -1", false);
 
-					requiredIncludes
-							.print("extern signed short dispatchInterface(unsigned short methodIndex, unsigned char *vTableIndex, int32* sp);\n");
+					requiredIncludes.print(
+							"extern signed short dispatchInterface(unsigned short methodIndex, unsigned char *vTableIndex, int32* sp);\n");
 				}
 				pc += bnode.getRawBytes().length;
 				break;
@@ -613,10 +614,8 @@ public abstract class AOTCompiler implements SPManipulator {
 				localVariables.print("   Object* ex_ception;\n");
 				output.append("   ex_ception = (Object*) (pointer) " + sm.peekTop(1, Size.INT) + ";\n");
 				output.append("   excep = getClassIndex(ex_ception);\n");
-				
-				
+
 				gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, true, LabelsManager.LThrowIt, null);
-				
 
 				labelsManager.generateThrowIt();
 				localVariables.print("   " + getTypeCast(entrypoints.getReturnTypeSize()) + " excep;\n");
@@ -851,7 +850,8 @@ public abstract class AOTCompiler implements SPManipulator {
 
 				output.append("      if (excep) {\n");
 				if (currentMethodCode[pc] == RawByteCodes.checkcast_opcode) {
-					gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowClassCast, null);
+					gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowClassCast,
+							null);
 				} else {
 					output.append("      i_res = 0;\n");
 				}
@@ -869,8 +869,8 @@ public abstract class AOTCompiler implements SPManipulator {
 					localVariables.print("#if defined(JAVA_LANG_THROWABLE_INIT_)\n   unsigned short pc;\n#endif\n");
 				}
 				localVariables.print("   " + getTypeCast(entrypoints.getReturnTypeSize()) + " excep;\n");
-				requiredIncludes
-						.print("extern unsigned char isSubClassOf(unsigned short subClass, unsigned short superClass);\n");
+				requiredIncludes.print(
+						"extern unsigned char isSubClassOf(unsigned short subClass, unsigned short superClass);\n");
 				pc += 3;
 				break;
 			}
@@ -995,12 +995,14 @@ public abstract class AOTCompiler implements SPManipulator {
 				} else if (currentMethodCode[pc] == RawByteCodes.puthwfield_opcode) {
 					int classIndex = (currentMethodCode[pc + 1] << 8) & 0xffff;
 					classIndex |= (currentMethodCode[pc + 2] & 0xff);
-					output.append("      hwObject = (struct _vm_HardwareObject_c*)HEAP_REF(cobj, struct _vm_HardwareObject_c*);\n");
-					output.append("      addressObj = (struct _vm_Address32Bit_c*)HEAP_REF((pointer)(hwObject->address_f), struct _vm_Address32Bit_c*);\n");
+					output.append(
+							"      hwObject = (struct _vm_HardwareObject_c*)HEAP_REF(cobj, struct _vm_HardwareObject_c*);\n");
+					output.append(
+							"      addressObj = (struct _vm_Address32Bit_c*)HEAP_REF((pointer)(hwObject->address_f), struct _vm_Address32Bit_c*);\n");
 					output.append("      hw_address = (unsigned char*) (pointer) (addressObj->address_f);\n");
 
-					int referenceAddressIndex = toolBox.getPatcher().getClassNumber(
-							FieldOffsetCalculator.ReferenceAddressClassName);
+					int referenceAddressIndex = toolBox.getPatcher()
+							.getClassNumber(FieldOffsetCalculator.ReferenceAddressClassName);
 
 					ClassInheritanceMatrix classMatrix = toolBox.getClassMatrix();
 
@@ -1012,33 +1014,33 @@ public abstract class AOTCompiler implements SPManipulator {
 
 					switch (fsize & 0xfc) {
 					case 64:
-						output.append("      writeLongToIO((pointer)hw_address, " + foffset + ", msb_int32, lsb_"
-								+ type + ");\n");
-						requiredIncludes
-								.print("extern void writeLongToIO(pointer address, unsigned short offset, int32 msb, int32 lsb);\n");
+						output.append("      writeLongToIO((pointer)hw_address, " + foffset + ", msb_int32, lsb_" + type
+								+ ");\n");
+						requiredIncludes.print(
+								"extern void writeLongToIO(pointer address, unsigned short offset, int32 msb, int32 lsb);\n");
 						break;
 					case 32:
 						output.append("      writeIntToIO((pointer)hw_address, " + foffset + ", lsb_" + type + ");\n");
-						requiredIncludes
-								.print("extern void writeIntToIO(pointer address, unsigned short offset, int32 lsb);\n");
+						requiredIncludes.print(
+								"extern void writeIntToIO(pointer address, unsigned short offset, int32 lsb);\n");
 						break;
 					case 16:
 						output.append("      writeShortToIO((pointer)hw_address, " + foffset + ", lsb_" + type
 								+ " & 0xffff);\n");
-						requiredIncludes
-								.print("extern void writeShortToIO(pointer address, unsigned short offset, unsigned short lsb);\n");
+						requiredIncludes.print(
+								"extern void writeShortToIO(pointer address, unsigned short offset, unsigned short lsb);\n");
 						break;
 					case 8:
 						output.append("      writeByteToIO((pointer)hw_address, " + foffset + ", lsb_" + type
 								+ " & 0xff);\n");
-						requiredIncludes
-								.print("extern void writeByteToIO(pointer address, unsigned short offset, unsigned char lsb);\n");
+						requiredIncludes.print(
+								"extern void writeByteToIO(pointer address, unsigned short offset, unsigned char lsb);\n");
 						break;
 					case 1:
-						output.append("      writeBitToIO((pointer)hw_address, " + foffset + ", lsb_" + type
-								+ " & 0x1);\n");
-						requiredIncludes
-								.print("extern void writeBitToIO(pointer address, unsigned short offset, unsigned char bit);\n");
+						output.append(
+								"      writeBitToIO((pointer)hw_address, " + foffset + ", lsb_" + type + " & 0x1);\n");
+						requiredIncludes.print(
+								"extern void writeBitToIO(pointer address, unsigned short offset, unsigned char bit);\n");
 						break;
 					}
 				}
@@ -1135,7 +1137,8 @@ public abstract class AOTCompiler implements SPManipulator {
 				} else if (currentMethodCode[pc] == RawByteCodes.gethwfield_opcode) {
 					int classIndex = (currentMethodCode[pc + 1] << 8) & 0xffff;
 					classIndex |= (currentMethodCode[pc + 2] & 0xff);
-					output.append("      hwObject = (struct _vm_HardwareObject_c*)HEAP_REF(cobj, struct _vm_HardwareObject_c*);\n");
+					output.append(
+							"      hwObject = (struct _vm_HardwareObject_c*)HEAP_REF(cobj, struct _vm_HardwareObject_c*);\n");
 					output.append("#if defined(VM_ADDRESS64BIT_INIT_)\n");
 					output.append("      _addressObj_ = (Object*)HEAP_REF((pointer)(hwObject->address_f), Object*);\n");
 					output.append("      if (*_addressObj_ == VM_ADDRESS64BIT) {\n");
@@ -1148,13 +1151,14 @@ public abstract class AOTCompiler implements SPManipulator {
 					output.append("          hw_address = (unsigned char*) (pointer) address;\n");
 					output.append("      } else {\n");
 					output.append("#endif\n");
-					output.append("          addressObj32bit = (struct _vm_Address32Bit_c*) HEAP_REF((pointer )(hwObject->address_f), struct _vm_Address32Bit_c*);\n");
+					output.append(
+							"          addressObj32bit = (struct _vm_Address32Bit_c*) HEAP_REF((pointer )(hwObject->address_f), struct _vm_Address32Bit_c*);\n");
 					output.append("          hw_address = (unsigned char*) (pointer) (addressObj32bit->address_f);\n");
 					output.append("#if defined(VM_ADDRESS64BIT_INIT_)\n");
 					output.append("      }\n");
 					output.append("#endif\n");
-					int referenceAddressIndex = toolBox.getPatcher().getClassNumber(
-							FieldOffsetCalculator.ReferenceAddressClassName);
+					int referenceAddressIndex = toolBox.getPatcher()
+							.getClassNumber(FieldOffsetCalculator.ReferenceAddressClassName);
 
 					ClassInheritanceMatrix classMatrix = toolBox.getClassMatrix();
 
@@ -1170,8 +1174,8 @@ public abstract class AOTCompiler implements SPManipulator {
 								+ ", &msb_int32, &lsb_int32);\n");
 						sm.push(Size.INT, "msb_int32");
 						sm.push(Size.INT, "lsb_int32");
-						requiredIncludes
-								.print("extern void readLongFromIO(pointer address, unsigned short offset, int32* msb, int32* lsb);\n");
+						requiredIncludes.print(
+								"extern void readLongFromIO(pointer address, unsigned short offset, int32* msb, int32* lsb);\n");
 						break;
 					case 32:
 						sm.push(valueSize, "readIntFromIO((pointer)hw_address, " + foffset + ")");
@@ -1217,8 +1221,8 @@ public abstract class AOTCompiler implements SPManipulator {
 
 					requiredIncludes.print("extern Object* stringConstants[];\n");
 					requiredIncludes.print("extern const ConstantInfo *constants;\n");
-					requiredIncludes
-							.print("#ifndef PRE_INITIALIZE_CONSTANTS\nextern int16 initializeStringConstant(const ConstantInfo* constant, int32* sp);\n#endif\n");
+					requiredIncludes.print(
+							"#ifndef PRE_INITIALIZE_CONSTANTS\nextern int16 initializeStringConstant(const ConstantInfo* constant, int32* sp);\n#endif\n");
 
 					sm.push(Size.INT, "(int32) (pointer) stringConstants[pgm_read_dword(&constant_->value) >> 16]");
 				} else if (constant.getType() == LDCConstant.CLASS) {
@@ -1235,7 +1239,8 @@ public abstract class AOTCompiler implements SPManipulator {
 					output.append("   constant_ = &constants[" + index + "];\n");
 					requiredIncludes.print("extern const ConstantInfo *constants;\n");
 
-					output.append("   data_ = (const unsigned char *) pgm_read_pointer(&constant_->data, const void **);\n");
+					output.append(
+							"   data_ = (const unsigned char *) pgm_read_pointer(&constant_->data, const void **);\n");
 					output.append("   msi = ((int32) pgm_read_byte(data_)) << 24;\n");
 					output.append("   msi |= ((int32) pgm_read_byte(data_ +1)) << 16;\n");
 					output.append("   msi |= pgm_read_byte(data_ + 2) << 8;\n");
@@ -1295,6 +1300,10 @@ public abstract class AOTCompiler implements SPManipulator {
 			case RawByteCodes.saload_opcode:
 			case RawByteCodes.laload_opcode:
 			case RawByteCodes.iaload_opcode: {
+				int elementSize = 0;
+
+				elementSize = getElementSize(pc);
+
 				int valueSize = getConsumerSize(pc, 0);
 
 				if (valueSize == Size.DONTCARE) {
@@ -1304,39 +1313,64 @@ public abstract class AOTCompiler implements SPManipulator {
 				ProducerConsumerStack entryStack = bnode.getAinfo().entryStack;
 				int size = normalizeProducersSize(bnode, entryStack.size() - 1);
 				String type = getTypeCast(size);
-				localVariables.print("   " + type + " index_" + type + ";\n");
-				localVariables.print("   unsigned char* cobj;\n");
+				String indexName = "index_" + type;
 
-				sm.pop("      index_" + type + "", size);
-				sm.popRef("      cobj");
+				localVariables.print("   " + type + " " + indexName + ";\n");
+
+				String elementType;
+
+				switch (elementSize) {
+				case 1:
+					elementType = "signed char";
+					break;
+				case 2:
+					elementType = "signed short";
+					break;
+				default:
+					elementType = "uint32";
+					break;
+				}
+
+				String arrayName = "cobj_" + pc;
+
+				localVariables.print("   " + elementType + "* " + arrayName + ";\n");
+
+				sm.pop("      " + indexName, size);
+
+				String topName = sm.peekTop(1, Size.INT);
+
+				if (!topName.contains("_")) {
+					localVariables.print("   int32 _rawArray_;\n");
+					sm.popRef("_rawArray_", "int32");
+					topName = "_rawArray_";
+				} else {
+					sm.popRef(null, null);
+				}
 
 				AbstractStack stack = bnode.getStackLayout();
 				StackCell cell = stack.getAt(stack.getSize() - 2);
 
 				if (((RefType) cell.content).getState() != RefState.NONNULL) {
-					checkObject(output, localVariables, pc, labelsManager, null, "", sm, "cobj");
+					checkObject(output, localVariables, pc, labelsManager, null, "", sm, topName);
 				} else {
 				}
 
-				int elementSize = 0;
+				output.append("      " + arrayName + " = HEAP_REF((pointer)(" + topName + " + sizeof(Object) + 2)" + ", "
+						+ elementType + "*);\n");
 
-				elementSize = getElementSize(pc);
-
-				adjustArrayPointer(output, elementSize, "cobj", "index_" + type + "");
-				output.append("      cobj = HEAP_REF(cobj, unsigned char*);\n");
 				switch (elementSize) {
 				case 1:
-					sm.push(valueSize, "*(signed char *)cobj");
+					sm.push(valueSize, arrayName + "[" + indexName + "]");
 					break;
 				case 2:
-					sm.push(valueSize, "*((signed short *) cobj)");
+					sm.push(valueSize, arrayName + "[" + indexName + "]");
 					break;
 				case 4:
-					sm.push(valueSize, "*((uint32 *) cobj)");
+					sm.push(valueSize, arrayName + "[" + indexName + "]");
 					break;
 				case 8:
-					sm.push(Size.INT, "*((uint32 *) cobj)");
-					sm.push(Size.INT, "*((uint32 *) (cobj + 4))");
+					sm.push(Size.INT, arrayName + "[" + indexName + " << 1]");
+					sm.push(Size.INT, arrayName + "[(" + indexName + " << 1) + 1]");
 					break;
 				}
 				pc++;
@@ -1351,18 +1385,19 @@ public abstract class AOTCompiler implements SPManipulator {
 				localVariables.print("   Object* narray;\n");
 				localVariables.print("   uint16 _count_;\n");
 				sm.pop("      _count_", Size.SHORT);
-				output.append("      narray = (Object*) createArray(" + classIndex
-						+ ", (uint16) _count_ FLASHARG((0)));\n");
+				output.append(
+						"      narray = (Object*) createArray(" + classIndex + ", (uint16) _count_ FLASHARG((0)));\n");
 				output.append("      if (narray == 0) {\n");
-				
-				gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowOutOfMemory, null);
-				
+
+				gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowOutOfMemory,
+						null);
+
 				labelsManager.generateOutOfMemory();
 				output.append("      }\n");
 				sm.push(Size.INT, "(int32) (pointer) narray");
 				pc += 3;
-				requiredIncludes
-						.print("extern Object* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash));\n");
+				requiredIncludes.print(
+						"extern Object* createArray(unsigned short classIndex, uint16 count FLASHARG(uint8 flash));\n");
 				requiredIncludes.print("extern unsigned short getClassIndex(Object* obj);\n");
 				break;
 			}
@@ -1380,8 +1415,8 @@ public abstract class AOTCompiler implements SPManipulator {
 				}
 				sm.push(Size.INT, "(int32) (pointer) narray");
 				pc += 4;
-				requiredIncludes
-						.print("extern Object* createMultiDimensionalArrays(int32* sp, unsigned char dimensions, unsigned short classIndex);\n");
+				requiredIncludes.print(
+						"extern Object* createMultiDimensionalArrays(int32* sp, unsigned char dimensions, unsigned short classIndex);\n");
 				break;
 			}
 			case RawByteCodes.aastore_opcode:
@@ -1394,6 +1429,7 @@ public abstract class AOTCompiler implements SPManipulator {
 			case RawByteCodes.iastore_opcode: {
 				ProducerConsumerStack entryStack = bnode.getAinfo().entryStack;
 				int indexStackCellIndex;
+				int elementSize = getElementSize(pc);
 				if ((currentMethodCode[pc] != RawByteCodes.lastore_opcode)
 						&& (currentMethodCode[pc] != RawByteCodes.dastore_opcode)) {
 					indexStackCellIndex = entryStack.size() - 2;
@@ -1429,8 +1465,8 @@ public abstract class AOTCompiler implements SPManipulator {
 						|| (currentMethodCode[pc] == RawByteCodes.dastore_opcode)) {
 					localVariables.print("   int32 msb_int32;\n");
 				}
-				localVariables.print("   " + indexCast + " index_" + indexCast + ";\n");
-				localVariables.print("   unsigned char* cobj;\n");
+				String indexName = "index_" + indexCast;
+				localVariables.print("   " + indexCast + " " + indexName + ";\n");
 
 				sm.pop("      lsb_" + valueCast + "", valueSize);
 
@@ -1439,8 +1475,35 @@ public abstract class AOTCompiler implements SPManipulator {
 					sm.pop("      msb_int32", Size.INT);
 				}
 
-				sm.pop("      index_" + indexCast + "", indexSize);
-				sm.popRef("      cobj");
+				String elementType;
+
+				switch (elementSize) {
+				case 1:
+				        elementType = "signed char";
+				        break;
+				case 2:
+				        elementType = "signed short";
+				        break;
+				default:
+				        elementType = "uint32";
+				        break;
+				}
+
+				String arrayName = "cobj_" + pc;
+
+				localVariables.print("   " + elementType + "* " + arrayName + ";\n");
+
+				sm.pop("      " + indexName + "", indexSize);
+
+				String topName = sm.peekTop(1, Size.INT);
+
+				if (!topName.contains("_")) {
+				        localVariables.print("   int32 _rawArray_;\n");
+				        sm.popRef("_rawArray_", "int32");
+				        topName = "_rawArray_";
+				} else {
+				        sm.popRef(null, null);
+				}
 
 				int indexIndex;
 				if ((currentMethodCode[pc] == RawByteCodes.lastore_opcode)
@@ -1453,27 +1516,26 @@ public abstract class AOTCompiler implements SPManipulator {
 				StackCell cell = stack.getAt(stack.getSize() - indexIndex);
 
 				if (((RefType) cell.content).getState() != RefState.NONNULL) {
-					checkObject(output, localVariables, pc, labelsManager, null, "", sm, "cobj");
+					checkObject(output, localVariables, pc, labelsManager, null, "", sm, topName);
 				}
 
-				int elementSize = getElementSize(pc);
+				output.append("      " + arrayName + " = HEAP_REF((pointer)(" + topName + " + sizeof(Object) + 2)" + ", "
+		                + elementType + "*);\n");
+				// adjustArrayPointer(output, elementSize, "cobj", "index_" + indexCast);
 
-				adjustArrayPointer(output, elementSize, "cobj", "index_" + indexCast);
-
-				output.append("      cobj = HEAP_REF(cobj, unsigned char*);\n");
 				switch (elementSize) {
 				case 1:
-					output.append("      *cobj = lsb_" + valueCast + ";\n");
+					output.append("      " + arrayName + "[" + indexName + "] = lsb_" + valueCast + ";\n");
 					break;
 				case 2:
-					output.append("      *((unsigned short *) cobj) = lsb_" + valueCast + ";\n");
+					output.append("      " + arrayName + "[" + indexName + "] = lsb_" + valueCast + ";\n");
 					break;
 				case 4:
-					output.append("      *((uint32 *) cobj) = lsb_" + valueCast + ";\n");
+					output.append("      " + arrayName + "[" + indexName + "] = lsb_" + valueCast + ";\n");
 					break;
 				case 8:
-					output.append("      *((uint32 *) cobj) = msb_int32;\n");
-					output.append("      *((uint32 *) (cobj + 4)) = lsb_" + valueCast + ";\n");
+					output.append("      " + arrayName + "[" + indexName + " << 1] = msb_int32;\n");
+					output.append("      " + arrayName + "[(" + indexName + " << 1) + 1] = lsb_" + valueCast + ";\n");
 					break;
 				}
 				pc++;
@@ -1519,16 +1581,15 @@ public abstract class AOTCompiler implements SPManipulator {
 				output.append("      excep = handleCloneOnArray(sp);\n");
 
 				output.append("      if (excep < 0) {\n");
-				
-				gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowNullPointer, null);
 
-				
+				gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowNullPointer,
+						null);
+
 				output.append("      } else if (excep > 0) {\n");
-				
-				
-				gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowOutOfMemory, null);
 
-				
+				gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowOutOfMemory,
+						null);
+
 				output.append("      }\n");
 				labelsManager.generateOutOfMemory();
 				labelsManager.generateThrowNullPointer();
@@ -1713,9 +1774,10 @@ public abstract class AOTCompiler implements SPManipulator {
 					sm.pop("      res_" + dstType + "", src1Size);
 					sm.pop("      lsb_" + lsb_type + "", src2Size);
 					output.append("      if (res_" + dstType + " == 0) {\n");
-					
-					gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowArithmeticException, null);
-					
+
+					gotoExceptionHandler(localVariables, output, pc, labelsManager, sm,
+							LabelsManager.LThrowArithmeticException, null);
+
 					labelsManager.generateArithmeticException();
 					output.append("      }\n");
 					// output.append("#if defined(GLIBC_DOES_NOT_SUPPORT_MUL)\n");
@@ -1737,9 +1799,10 @@ public abstract class AOTCompiler implements SPManipulator {
 					sm.pop("      res_" + dst_type + "", src1Size);
 					sm.pop("      lsb_" + lsb_type + "", src2Size);
 					output.append("      if (res_" + dst_type + " == 0) {\n");
-					
-					gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowArithmeticException, null);
-					
+
+					gotoExceptionHandler(localVariables, output, pc, labelsManager, sm,
+							LabelsManager.LThrowArithmeticException, null);
+
 					labelsManager.generateArithmeticException();
 					output.append("      }\n");
 					output.append("#if defined(GLIBC_DOES_NOT_SUPPORT_MUL)\n");
@@ -1841,9 +1904,10 @@ public abstract class AOTCompiler implements SPManipulator {
 				output.append("      topInc = handleLMULLDIVLREM(sp, " + (currentMethodCode[pc] & 0xff) + ");\n");
 				output.append("      sp -= 4;\n");
 				output.append("      if (topInc == 0) {\n");
-				
-				gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowArithmeticException, null);
-				
+
+				gotoExceptionHandler(localVariables, output, pc, labelsManager, sm,
+						LabelsManager.LThrowArithmeticException, null);
+
 				labelsManager.generateArithmeticException();
 				output.append("      }\n");
 				output.append("      sp += topInc;\n");
@@ -2128,8 +2192,8 @@ public abstract class AOTCompiler implements SPManipulator {
 				}
 				output.append("   handleMonitorEnterExit((Object*)cobj, " + isEnter + ", sp, \"\");\n");
 				pc++;
-				requiredIncludes
-						.print("extern unsigned char handleMonitorEnterExit(Object* lockObj, unsigned char isEnter, int32* sp, const char* fromMethod);\n");
+				requiredIncludes.print(
+						"extern unsigned char handleMonitorEnterExit(Object* lockObj, unsigned char isEnter, int32* sp, const char* fromMethod);\n");
 				break;
 			case RawByteCodes.fconst_0_opcode:
 			case RawByteCodes.fconst_1_opcode:
@@ -2303,23 +2367,23 @@ public abstract class AOTCompiler implements SPManipulator {
 		}
 	}
 
-	private static void gotoExceptionHandler(NoDuplicatesMemorySegment localVariables, StringBuffer output, int pc, LabelsManager labelsManager,
-			StackManager sm, String lthrowexception, String object) throws Exception {
+	private static void gotoExceptionHandler(NoDuplicatesMemorySegment localVariables, StringBuffer output, int pc,
+			LabelsManager labelsManager, StackManager sm, String lthrowexception, String object) throws Exception {
 		gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, false, lthrowexception, object);
 	}
-	
-	private static void gotoExceptionHandler(NoDuplicatesMemorySegment localVariables, StringBuffer output, int pc, LabelsManager labelsManager,
-			StackManager sm, boolean b, String lthrowexception, String object) throws Exception {
+
+	private static void gotoExceptionHandler(NoDuplicatesMemorySegment localVariables, StringBuffer output, int pc,
+			LabelsManager labelsManager, StackManager sm, boolean b, String lthrowexception, String object)
+			throws Exception {
 		output.append("#if defined(JAVA_LANG_THROWABLE_INIT_)\n");
 		output.append("      pc = " + pc + ";\n");
 		output.append("#endif\n");
 		labelsManager.jumpTo(sm, b);
-		
-		if (object != null)
-		{
+
+		if (object != null) {
 			output.append(object);
 		}
-		
+
 		output.append("      goto " + lthrowexception + ";\n");
 		localVariables.print("#if defined(JAVA_LANG_THROWABLE_INIT_)\n   unsigned short pc;\n#endif\n");
 	}
@@ -2482,8 +2546,9 @@ public abstract class AOTCompiler implements SPManipulator {
 			referredMethod = ((VirtualMethodCallBNode) consumer).getCallee();
 		} else if (consumer.getOpCode() == RawByteCodes.invokeinterface_opcode) {
 			MethodOrFieldDesc methodDesc = ((InterfaceMethodCallBNode) consumer).getMethodDescriptor();
-			referredMethod = ClassfileUtils.findDeclaringInterface(methodDesc.getClassName(), methodDesc.getName(),
-					methodDesc.getSignature()).getMethod();
+			referredMethod = ClassfileUtils
+					.findDeclaringInterface(methodDesc.getClassName(), methodDesc.getName(), methodDesc.getSignature())
+					.getMethod();
 		} else {
 			int methodNumber;
 
@@ -2492,8 +2557,8 @@ public abstract class AOTCompiler implements SPManipulator {
 
 			MethodOrFieldDesc methodDesc = toolBox.getPatcher().getMethodDescriptor(methodNumber);
 
-			referredMethod = ClassfileUtils.findMethod(methodDesc.getClassName(), methodDesc.getName(),
-					methodDesc.getSignature()).getMethod();
+			referredMethod = ClassfileUtils
+					.findMethod(methodDesc.getClassName(), methodDesc.getName(), methodDesc.getSignature()).getMethod();
 		}
 		return referredMethod;
 	}
@@ -3087,8 +3152,9 @@ public abstract class AOTCompiler implements SPManipulator {
 		if (hasExceptionHandlers(javaMethod)) {
 			output.append(indent + "      sp++;\n");
 
-			gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, true, LabelsManager.LThrowIt, indent + "      excep = " + exceptionVariable + ";\n");
-			
+			gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, true, LabelsManager.LThrowIt,
+					indent + "      excep = " + exceptionVariable + ";\n");
+
 			labelsManager.generateThrowIt();
 		} else {
 			output.append(indent + "      fp[0] = *sp;\n");
@@ -3144,7 +3210,7 @@ public abstract class AOTCompiler implements SPManipulator {
 			LabelsManager labelsManager, String getObjectInfo, String indent, StackManager sm, String obj)
 			throws Exception {
 		output.append(indent + "      if (" + obj + " == 0) {\n");
-		
+
 		gotoExceptionHandler(localVariables, output, pc, labelsManager, sm, LabelsManager.LThrowNullPointer, null);
 
 		output.append(indent + "      }\n");
@@ -3363,8 +3429,8 @@ public abstract class AOTCompiler implements SPManipulator {
 				LabelsManager labelsManager, BNode bnode, byte[] currentMethodCode,
 				NoDuplicatesMemorySegment requiredIncludes, MethodOrFieldDesc methodDesc, AOTToolBox toolBox,
 				MethodEntryPoints entrypoints) {
-			super(sm, output, localVariables, pc, labelsManager, bnode, currentMethodCode, requiredIncludes,
-					methodDesc, toolBox, entrypoints);
+			super(sm, output, localVariables, pc, labelsManager, bnode, currentMethodCode, requiredIncludes, methodDesc,
+					toolBox, entrypoints);
 		}
 
 		@Override
@@ -3398,9 +3464,8 @@ public abstract class AOTCompiler implements SPManipulator {
 					methodDesc, exceptionVariable, entrypoints, noExceptionCondition, negateExceptionValue);
 		}
 	}
-	
-	public MethodEntryPoints getMethodEntryPoints()
-	{
+
+	public MethodEntryPoints getMethodEntryPoints() {
 		return this.entrypoints;
 	}
 }
