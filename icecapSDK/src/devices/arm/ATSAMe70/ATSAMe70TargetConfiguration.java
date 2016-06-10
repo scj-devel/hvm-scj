@@ -254,7 +254,8 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 			)
 	protected static native void set_pd21_output();
 	
-	@IcecapInlineNative(functionBody = "" + "{\n" + "   SysTick_Config(300000);\n" + "   return -1;\n" + "}\n")
+	@IcecapInlineNative(functionBody = "" + "{\n" + "   SysTick_Config(300000);\n" + "   return -1;\n" + "}\n",
+			requiredIncludes = "uint32 SysTick_Config(uint32 ticks);\n")
 	protected static native void initSystemTick();
 	
 	@IcecapCVar(expression = "systemTick", requiredIncludes = "extern volatile uint8 systemTick;")

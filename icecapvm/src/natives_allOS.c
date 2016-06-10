@@ -420,7 +420,7 @@ int16 n_java_lang_System_getProperty(int32 *sp) {
 #endif
 
 #if defined (N_JAVA_LANG_SYSTEM_SETOUT)
-extern unsigned char *classData;
+extern struct staticClassFields_c *classData;
 int16 n_java_lang_System_setOut(int32 *sp) {
 	HEAP_REF(classData, struct _staticClassFields_c *)->out_f = (uint32) sp[0];
 	return -1;
@@ -532,7 +532,7 @@ int16 n_java_lang_Class_getName0(int32 *sp) {
 	classIndex = getClassIndex(this);
 
 	if (classIndex == JAVA_LANG_CLASS) {
-		classIndex = ((java_lang_Class_c *) HEAP_REF(this, Object*))->cachedConstructor_f;
+	  classIndex = ((java_lang_Class_c *) HEAP_REF((pointer)this, java_lang_Class_c *))->cachedConstructor_f;
 
 		className = (char*) pgm_read_pointer(&classes[classIndex].name, char**);
 
@@ -847,7 +847,8 @@ int16 n_java_lang_Object_getClass(int32 *sp) {
 	unsigned short classIndex = getClassIndex(obj);
 	obj = getClass(classIndex);
 	if (obj != 0) {
-		sp[0] = (int32) (pointer) getClass(classIndex);
+	  Object *clazz = getClass(classIndex);
+	  sp[0] = (int32) (pointer) clazz;
 		return -1;
 	} else {
 		return JAVA_LANG_OUTOFMEMORYERROR_var;
@@ -1044,7 +1045,7 @@ int16 n_java_lang_Class_getComponentType(int32 *sp) {
 	classIndex = getClassIndex(obj);
 	componentType = 0;
 	if (classIndex == (unsigned short) JAVA_LANG_CLASS_var) {
-		classIndex = (unsigned short) ((java_lang_Class_c *) HEAP_REF(obj, Object*))->cachedConstructor_f;
+	  classIndex = (unsigned short) ((java_lang_Class_c *) HEAP_REF((pointer)obj, java_lang_Class_c *))->cachedConstructor_f;
 		if (pgm_read_byte(&classes[classIndex].dimension) != 0) {
 			signed short componentTypeClasIndex;
 			componentTypeClasIndex = pgm_read_word(&classes[classIndex].dobjectSize);
@@ -1136,7 +1137,7 @@ extern Object* createArrayFromElementSize(unsigned short classIndex, unsigned ch
 int16 n_java_lang_reflect_Array_newArray(int32 *sp) {
 	Object* class = (Object*) (pointer) sp[0];
 	int32 size = sp[1];
-	unsigned short classIndex = (unsigned short) ((java_lang_Class_c *) HEAP_REF(class, Object*))->cachedConstructor_f;
+	unsigned short classIndex = (unsigned short) ((java_lang_Class_c *) HEAP_REF((pointer)class, java_lang_Class_c *))->cachedConstructor_f;
 	Object* array = 0;
 	unsigned char elementSize = 0;
 
@@ -1920,7 +1921,7 @@ int16 n_vm_Monitor_attachMonitor(int32 *sp) {
 	Object* target = (Object*) (pointer) sp[1];
 	Object* monitor = (Object*) (pointer) sp[0];
 
-	ptr = (uint32*) ((unsigned char*) HEAP_REF(target, unsigned char*) - 4);
+	ptr = (uint32*) (pointer) ((unsigned char*) HEAP_REF(target, unsigned char*) - 4);
 	*ptr = (uint32) (pointer) monitor;
 	return -1;
 }
@@ -1931,7 +1932,7 @@ int16 n_vm_Monitor_getAttachedMonitor(int32 *sp) {
 	uint32* ptr;
 	Object* target = (Object*) (pointer) sp[0];
 
-	ptr = (uint32*) ((unsigned char*) HEAP_REF(target, unsigned char*) - 4);
+	ptr = (uint32*) (pointer) ((unsigned char*) HEAP_REF(target, unsigned char*) - 4);
 	sp[0] = (int32)*ptr;
 	return -1;
 }
