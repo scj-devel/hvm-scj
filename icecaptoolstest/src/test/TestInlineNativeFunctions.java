@@ -26,13 +26,14 @@ public class TestInlineNativeFunctions {
 	private static native int baz();
 	
 	@IcecapCFunc(
-			signature = "uint32 doo(void)",	requiredIncludes = "uint32 doo(void);\n")
+			signature = "uint32 doo(void)",	requiredIncludes = "uint32 doo(void);\n#define COW 1\n")
 	@IcecapInlineNative(
 			functionBody = ""
 			+ "{\n"
 			+ "   printf(\"calling native method body again\\n\");\n" 
-			+ "   return 43;\n"
-			+ "}\n")
+			+ "   return HEST + COW;\n"
+			+ "}\n",	
+			requiredIncludes = "#define HEST 42\n")
 	private static native int daa();
 	
 	public static void main(String[] args) {

@@ -85,6 +85,11 @@ public class NativeFileManager {
 				signature = "int16 " + uniqueMethodId + "(int32* sp)";
 			} else {
 				signature = cfunc.signature();
+				String includes = cfunc.requiredIncludes();
+				if ((includes != null) && (includes.trim().length() > 0))
+				{
+					this.requiredIncludes.print(includes);
+				}
 			}
 
 			if (skipMethod) {
