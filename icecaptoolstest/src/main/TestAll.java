@@ -251,8 +251,6 @@ public class TestAll {
 	}
 
 	protected void preCompile(String inputPackage, String testClass) throws Exception {
-		// TODO Auto-generated method stub
-
 	}
 
 	protected String getInputPackage(File testsDirectory) {

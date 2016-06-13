@@ -8,6 +8,7 @@ import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.Type;
 
 import icecaptools.Activator;
+import icecaptools.IcecapCFunc;
 import icecaptools.IcecapInlineNative;
 
 public class NativeFileManager {
@@ -77,7 +78,15 @@ public class NativeFileManager {
 			sourceFileContent.append(" * param : " + getParameters(javaMethod) + "\n");
 			sourceFileContent.append(" * return: " + javaMethod.getReturnType().toString() + "\n");
 			sourceFileContent.append(" */\n");
-			String signature = "int16 " + uniqueMethodId + "(int32* sp)";
+			String signature;
+
+			IcecapCFunc cfunc = Compiler.hasAnnotation(javaMethod, IcecapCFunc.class);
+			if (cfunc == null) {
+				signature = "int16 " + uniqueMethodId + "(int32* sp)";
+			} else {
+				signature = cfunc.signature();
+			}
+
 			if (skipMethod) {
 				sourceFileContent.append("#ifndef EXCLUDESTUB_" + uniqueMethodId.toUpperCase() + "\n");
 				sourceFileContent.append(signature + "\n");
@@ -86,20 +95,20 @@ public class NativeFileManager {
 				sourceFileContent.append("   return -1;\n");
 				sourceFileContent.append("}\n");
 				sourceFileContent.append("#else\n");
-				
+
 				StringBuffer prototype = new StringBuffer();
 				prototype.append("#ifndef EXCLUDESTUB_" + uniqueMethodId.toUpperCase() + "\n");
 				prototype.append(signature + ";\n");
 				prototype.append("#endif\n");
 				this.requiredIncludes.print(prototype.toString());
 			}
-			IcecapInlineNative annotation = Compiler.hasAnnotation(javaMethod, IcecapInlineNative.class);
-			if (annotation != null) {
+			IcecapInlineNative inline = Compiler.hasAnnotation(javaMethod, IcecapInlineNative.class);
+			if (inline != null) {
 				sourceFileContent.append(signature + "\n");
-				sourceFileContent.append(annotation.functionBody());
+				sourceFileContent.append(inline.functionBody());
 				sourceFileContent.append("\n");
 
-				String requiredIncludes = annotation.requiredIncludes();
+				String requiredIncludes = inline.requiredIncludes();
 				if ((requiredIncludes != null) && (requiredIncludes.trim().length() > 0)) {
 					this.requiredIncludes.print(requiredIncludes);
 				}
@@ -111,8 +120,10 @@ public class NativeFileManager {
 				sourceFileContent.append("#endif\n\n");
 			}
 
-			nativeFunctions.add(uniqueMethodId);
-			
+			if (cfunc == null) {
+				nativeFunctions.add(uniqueMethodId);
+			}	
+
 			headerFileContent.append("#define ");
 			headerFileContent.append(uniqueMethodId.toUpperCase());
 			headerFileContent.append(" " + methodNumber);
