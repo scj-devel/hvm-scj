@@ -10,6 +10,7 @@ import org.apache.bcel.generic.Type;
 import icecaptools.Activator;
 import icecaptools.IcecapCFunc;
 import icecaptools.IcecapInlineNative;
+import icecaptools.compiler.utils.StringUtils;
 
 public class NativeFileManager {
 	private StringBuffer sourceFileContent;
@@ -88,7 +89,7 @@ public class NativeFileManager {
 				String includes = cfunc.requiredIncludes();
 				if ((includes != null) && (includes.trim().length() > 0))
 				{
-					this.requiredIncludes.print(includes);
+					StringUtils.forEachLine(includes, (include) -> this.requiredIncludes.print(include + "\n"));
 				}
 			}
 
@@ -115,7 +116,7 @@ public class NativeFileManager {
 
 				String requiredIncludes = inline.requiredIncludes();
 				if ((requiredIncludes != null) && (requiredIncludes.trim().length() > 0)) {
-					this.requiredIncludes.print(requiredIncludes);
+					StringUtils.forEachLine(requiredIncludes, (include) -> this.requiredIncludes.print(include + "\n"));
 				}
 				this.requiredIncludes.print(signature + ";\n");
 			} else {

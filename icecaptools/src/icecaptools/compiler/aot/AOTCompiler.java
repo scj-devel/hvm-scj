@@ -21,6 +21,7 @@ import icecaptools.compiler.LDCConstant;
 import icecaptools.compiler.NativeFileManager;
 import icecaptools.compiler.NoDuplicatesMemorySegment;
 import icecaptools.compiler.utils.ClassInheritanceMatrix;
+import icecaptools.compiler.utils.StringUtils;
 import icecaptools.conversion.TargetAddressMap;
 import icecaptools.stackanalyser.AbstractStack;
 import icecaptools.stackanalyser.AbstractStack.StackCell;
@@ -195,7 +196,7 @@ public abstract class AOTCompiler implements SPManipulator {
 				if (!decls.endsWith("\n")) {
 					decls = decls + "\n";
 				}
-				requiredIncludes.print(decls);
+				StringUtils.forEachLine(decls, (include) -> requiredIncludes.print(include + "\n"));
 			}
 		} else {
 			prelude.append(getTypeCast(returnTypeSize) + " " + uniqueMethodId + "(int32 *fp");

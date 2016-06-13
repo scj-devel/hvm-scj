@@ -9,11 +9,11 @@ public class TestInlineNativeFunctions {
 	@IcecapInlineNative(
 			functionBody = ""
 			+ "{\n"
-			+ "   sp[0] = 42;\n"
+			+ "   sp[0] = xx;\n"
 			+ "   printf(\"calling native method body\\n\");\n" 
 			+ "   return -1;\n"
 			+ "}\n",
-			requiredIncludes = "#include <stdio.h>\n")
+			requiredIncludes = "#include <stdio.h>\nstatic int xx = 42;\nstatic int xx = 42;\n")
 	private static native int foo();
 	
 	@IcecapInlineNative(
