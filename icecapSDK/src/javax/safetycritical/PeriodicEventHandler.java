@@ -94,7 +94,11 @@ public abstract class PeriodicEventHandler extends ManagedEventHandler {
 		return null;
 	}
 		
-	public <T extends HighResolutionTime<T>> T getEffectiveStartTime() {
+	//public <T extends HighResolutionTime<T>> T getEffectiveStartTime() 
+	public <T extends HighResolutionTime<T>> HighResolutionTime<?> getEffectiveStartTime() 
+	//public HighResolutionTime<T extends HighResolutionTime<T>> getEffectiveStartTime()
+	
+	{
 		return null;
 	}
 	
