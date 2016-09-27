@@ -1,5 +1,5 @@
 /**************************************************************************
- * File name  : SCJPhase.java
+ * File name  : SCJMaySelfSuspend.java
  * 
  * This file is part a SCJ Level 0 and Level 1 implementation, 
  * based on SCJ Draft, Version 0.94 25 June 2013.
@@ -26,28 +26,24 @@
 
 package javax.safetycritical.annotate;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation distinguishes methods that may be called only from code running
- * in a certain mission phase (e.g. Initialization or Clean Up).
+ * This annotation distinguishes methods that may be restricted from blocking
+ * during execution.
  */
 @SCJAllowed
-@Retention(RetentionPolicy.CLASS)
-@Target({ ElementType.TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR })
-public @interface SCJPhase {
-	/**
-	 * The phase of the mission in which a method may run.
-	 */
+@Retention(java.lang.annotation.RetentionPolicy.CLASS)
+@Target({
+java.lang.annotation.ElementType.TYPE,
+java.lang.annotation.ElementType.METHOD,
+java.lang.annotation.ElementType.CONSTRUCTOR})
+
+public @interface SCJMaySelfSuspend {
 	@SCJAllowed
-	public Phase[] value() default {
-		Phase.STARTUP,
-		Phase.INITIALIZATION,
-		Phase.RUN,
-		Phase.CLEANUP		
-	};
+	public boolean value () default false;
 }
+
 

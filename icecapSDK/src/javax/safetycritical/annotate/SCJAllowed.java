@@ -22,26 +22,52 @@
  * @authors  Anders P. Ravn, Aalborg University, DK
  *           Stephan E. Korsholm and Hans S&oslash;ndergaard, 
  *             VIA University College, DK
- *   
- * Description: 
- * 
- * Revision history:
- *   date   init  comment
- *
+ *             
  *************************************************************************/
 
 package javax.safetycritical.annotate;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Documented
-@Retention(RetentionPolicy.CLASS)
-@Target({ ElementType.TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR })
+/** This annotation distinguishes methods, classes, and fields that may be accessed
+* from within safety-critical Java programs. In some implementations
+* of the safety-critical Java specification, elements which are not declared with
+* the <code>@SCJAllowed</code> annotation (and are therefore not allowed in safety-critical
+* application software) are present within the declared class hierarchy. These
+* are necessary for full compatibility with standard edition Java, the Real-Time
+* Specification for Java, and/or for use by the implementation of infrastructure
+* software.
+* 
+* The value field equals LEVEL 0 for elements that may be used within safety-critical
+* Java applications targeting Level 0, Level 1, or Level 2.
+* 
+* The value field equals LEVEL 1 for elements that may be used within safety-critical
+* Java applications targeting Level 1 or Level 2.
+* 
+* The value field equals LEVEL 2 for elements that may be used within safety-critical
+* Java applications targeting Level 2.
+* 
+* Absence of this annotation on a given Class, Field, Method, or Constructor
+* declaration indicates that the corresponding element may not be accessed from
+* within a compliant safety-critical Java application.
+*/
+@SCJAllowed
+@Retention(java.lang.annotation.RetentionPolicy.CLASS)
+@Target({
+java.lang.annotation.ElementType.TYPE,
+java.lang.annotation.ElementType.FIELD,
+java.lang.annotation.ElementType.METHOD,
+java.lang.annotation.ElementType.CONSTRUCTOR})
+
 public @interface SCJAllowed {
+	
+	@SCJAllowed
+	public boolean members() default false;
+
+	@SCJAllowed
 	public Level value() default Level.LEVEL_0;
 
 }
+
+
