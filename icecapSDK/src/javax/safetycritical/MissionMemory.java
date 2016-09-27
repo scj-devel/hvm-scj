@@ -25,7 +25,6 @@
  *************************************************************************/
 package javax.safetycritical;
 
-import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
@@ -46,7 +45,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  * @scjComment 
  *  - SCJ issue: This class should not be public.     
  */
-@SCJAllowed(Level.INFRASTRUCTURE)
+@SCJAllowed
 public final class MissionMemory extends ManagedMemory // HSO: not public
 {
 	Runnable runInitialize;

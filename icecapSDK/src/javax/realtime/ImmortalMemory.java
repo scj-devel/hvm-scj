@@ -26,7 +26,6 @@
 
 package javax.realtime;
 
-import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
@@ -40,7 +39,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  * Hans S&oslash;ndergaard, VIA University College, Denmark, 
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
-@SCJAllowed(Level.INFRASTRUCTURE)
+@SCJAllowed
 public final class ImmortalMemory extends MemoryArea {
 
 	//	ImmortalMemory(int sizeOfArea) {

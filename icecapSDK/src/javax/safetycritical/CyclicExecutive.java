@@ -75,7 +75,7 @@ public abstract class CyclicExecutive extends Mission {
 	 * The handler objects must reside in an enclosing scope of <code>this</code>.
 	 * @return A cyclic schedule for the handlers.
 	 */
-	@SCJAllowed(Level.INFRASTRUCTURE)
+	@SCJAllowed(Level.SUPPORT)
 	public abstract CyclicSchedule getSchedule(PeriodicEventHandler[] handlers);
 
 	void runInitialize() {

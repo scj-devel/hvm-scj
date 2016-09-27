@@ -35,8 +35,6 @@
 
 package javax.safetycritical;
 
-import javax.safetycritical.annotate.Level;
-import javax.safetycritical.annotate.SCJAllowed;
 import javax.scj.util.Const;
 
 import util.StringUtil;
@@ -59,7 +57,6 @@ import util.StringUtil;
  * @scjComment 
  *  - implementation issue: infrastructure class; not part of the SCJ specification.
  */
-@SCJAllowed(Level.INFRASTRUCTURE)
 class PriorityQueue extends Queue {
 
 	public PriorityQueue(int size) {

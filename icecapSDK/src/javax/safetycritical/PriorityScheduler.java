@@ -26,7 +26,6 @@
 package javax.safetycritical;
 
 import icecaptools.IcecapCompileMe;
-import vm.ClockInterruptHandler;
 import vm.MachineFactory;
 
 import javax.realtime.AbsoluteTime;

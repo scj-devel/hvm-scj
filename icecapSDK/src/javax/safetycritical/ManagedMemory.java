@@ -29,7 +29,6 @@ package javax.safetycritical;
 import icecaptools.IcecapCompileMe;
 
 import javax.realtime.MemoryArea;
-import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 
 import vm.Memory;
@@ -99,7 +98,6 @@ public abstract class ManagedMemory extends MemoryArea {
 	 *    is the <code>Runnable</code> object whose <code>run()</code>
 	 *    method shall be executed.
 	 */
-	@SCJAllowed(Level.INFRASTRUCTURE)
 	@IcecapCompileMe
 	void enter(Runnable logic) throws IllegalArgumentException {
 		memoryBehavior.enter(logic,this);

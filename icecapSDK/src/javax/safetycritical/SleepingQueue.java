@@ -37,8 +37,6 @@ package javax.safetycritical;
 
 import icecaptools.IcecapCompileMe;
 
-import javax.safetycritical.annotate.Level;
-import javax.safetycritical.annotate.SCJAllowed;
 import javax.scj.util.Const;
 
 /**
@@ -59,7 +57,6 @@ import javax.scj.util.Const;
  * @scjComment 
  *  - implementation issue: infrastructure class; not part of the SCJ specification.
  */
-@SCJAllowed(Level.INFRASTRUCTURE)
 class SleepingQueue extends Queue {
 
 	public SleepingQueue(int size) {

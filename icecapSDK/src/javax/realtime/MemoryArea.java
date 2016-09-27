@@ -28,7 +28,6 @@ package javax.realtime;
 
 import icecaptools.IcecapCompileMe;
 
-import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 
 import reflect.ObjectInfo;
@@ -47,7 +46,7 @@ import vm.Memory;
  *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
 
-@SCJAllowed(Level.INFRASTRUCTURE)
+@SCJAllowed
 public abstract class MemoryArea extends Object {
 
 	/* The global over all backing store area. This is the root area of 

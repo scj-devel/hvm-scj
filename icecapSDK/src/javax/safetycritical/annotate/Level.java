@@ -44,7 +44,5 @@ public enum Level {
 	LEVEL_2, 
 	
 	@SCJAllowed
-	SUPPORT, 
-	
-	INFRASTRUCTURE;
+	SUPPORT
 }
