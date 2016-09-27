@@ -46,8 +46,8 @@ public class CompilationManagerHSO {
 
 
 		// For VIAEmbedded:
-		//String inputFolder = "/home/hso/workspace/VIAEmbedded/bin/"
-		//    + pathSeparator + "/home/hso/git/hvm-scj/icecapSDK/bin/";
+//		String inputFolder = "/home/hso/workspace/VIAEmbedded/bin/"
+//		    + pathSeparator + "/home/hso/git/hvm-scj/icecapSDK/bin/";
 		
 
 		// For OpenJML test:
@@ -112,9 +112,10 @@ public class CompilationManagerHSO {
 		//String inputPackage = "javax.safetycritical.test.cyclicexecutive1";
 		//String inputPackage = "javax.safetycritical.test.memoryAreas";
 		//String inputPackage = "javax.safetycritical.test.linearSequencer2";
+		//String inputPackage = "javax.safetycritical.test.periodicEventHandler1";
 
-		String inputPackage = "javax.realtime.test";
-		//String inputPackage = "javax.safetycritical.test";
+		//String inputPackage = "javax.realtime.test";
+		String inputPackage = "javax.safetycritical.test";
 
 		//String inputClass = "AllTests";
 
@@ -130,7 +131,7 @@ public class CompilationManagerHSO {
 		//String inputClass = "TckTestHighResolutionTime";    
 		//String inputClass = "TckTestPriorityParameters";   
 		//String inputClass = "TckTestHighResolutionTime";
-		String inputClass = "TckTestAbsoluteTime";        
+		//String inputClass = "TckTestAbsoluteTime";        
 		//String inputClass = "TckTestRelativeTime";
 		//String inputClass = "TckTestClock";
 		//String inputClass = "TckTestRealtimeClock";
@@ -139,6 +140,8 @@ public class CompilationManagerHSO {
 		//String inputClass = "TckTestStorageParameters";
 		//String inputClass = "SafeletStub1"; 
 		//String inputClass = "TckTestFrame2";
+		
+		String inputClass = "TckTestMissionLifeCycle";
 
 		//String inputClass = "TckTestCyclicExecutive1";
 		//String inputClass = "TckTestCyclicSchedule0";  
@@ -148,6 +151,8 @@ public class CompilationManagerHSO {
 
 		//String inputClass = "TckTestLinearSequencer2";
 		//String inputClass = "TestSCJSingleCyclicExecutiveLinearMissSeq1";
+		
+		//String inputClass = "TckTestPeriodicEventHandler1";
 
 		//String inputClass = "TckTestPriorityCeilingEmulation";
 		//String inputClass = "TckTestPreemptiveScheduling1";
@@ -178,8 +183,11 @@ public class CompilationManagerHSO {
 		/* VIA Embedded begin */
 		
 		//String inputPackage = "via.embedded.carcontrol.scjlevel0";
-		
 		//String inputClass = "CarSafelet";
+		
+		//String inputPackage = "test";		
+		//String inputClass = "TestSCJSingleInterrupt1";
+		//String inputClass = "TestSCJSingleAperiodicAndOneShotEvh2";
 		
 		/* VIA Embedded end */
 
