@@ -20,6 +20,7 @@ import javax.scj.util.Priorities;
 import vm.VMTest;
 
 public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet {
+	// Warning: Safelet is a raw type. References to generic type Safelet<M> should be parameterized
 
     private static class MyPeriodicEvh extends PeriodicEventHandler {
         int n;
@@ -48,7 +49,7 @@ public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet {
     private static class MyAperiodicEvh extends AperiodicEventHandler {
         int n;
         int count = 0;
-        Mission mission;
+        Mission mission;  
 
         public MyAperiodicEvh(PriorityParameters priority, 
         		 			  AperiodicParameters release, 
@@ -67,7 +68,7 @@ public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet {
         }
     }
 
-    private static class MyMission1 extends Mission {
+    private static class MyMission1 extends Mission<MyMission1> {
     	
         public void initialize() {
 
@@ -94,7 +95,7 @@ public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet {
         }
     }
 
-    private static class MyMission0 extends Mission {
+    private static class MyMission0 extends Mission<MyMission0> {
     	
         public void initialize() {
 
@@ -119,11 +120,11 @@ public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet {
         }
     }
 
-    // Safelet<Mission> methods implementation    
+    // Safelet methods implementation    
     
-    public MissionSequencer<Mission> getSequencer() {  
+    public MissionSequencer getSequencer() {  
     	
-        return new LinearMissionSequencer<Mission>(
+        return new LinearMissionSequencer(
 		          new PriorityParameters(Priorities.SEQUENCER_PRIORITY), 
 		          storageParameters_Sequencer,
 		          configParameters,
@@ -159,9 +160,9 @@ public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet {
             0);
 	  configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
  
-      devices.Console.println("\n***** TestSCJSingleLinearMissSeqWithTwoMissions main.begin ************");
+      System.out.println("\n***** TestSCJSingleLinearMissSeqWithTwoMissions main.begin ************");
       new LaunchLevel1(new TestSCJSingleLinearMissSeqWithTwoMissions());
-      devices.Console.println("***** TestSCJSingleLinearMissSeqWithTwoMissions main.end **************");
+      System.out.println("***** TestSCJSingleLinearMissSeqWithTwoMissions main.end **************");
       
       VMTest.markResult(false);
     }
