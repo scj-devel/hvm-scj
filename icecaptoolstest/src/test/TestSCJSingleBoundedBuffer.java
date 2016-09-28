@@ -237,7 +237,7 @@ public class TestSCJSingleBoundedBuffer {
 		}
 	}
 
-	private static class MyMission extends Mission {
+	private static class MyMission extends Mission<MyMission> {
 
 		public void initialize() {
 			BoundedBuffer buffer = new BoundedBuffer(10);

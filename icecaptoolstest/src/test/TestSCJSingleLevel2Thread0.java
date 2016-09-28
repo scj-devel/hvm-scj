@@ -60,7 +60,7 @@ public class TestSCJSingleLevel2Thread0 {
 		}
 	}
 
-	private static class MyMission extends Mission {
+	private static class MyMission extends Mission<MyMission> {
 
 		public void initialize() {
 			MyThread th = new MyThread(new PriorityParameters(Priorities.PR97), storageParameters_Handlers);

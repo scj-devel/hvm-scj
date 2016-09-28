@@ -51,8 +51,8 @@ import javax.safetycritical.annotate.SCJAllowed;
  * @scjComment 
  */
 @SCJAllowed
-public abstract class Mission/*<MissionType extends Mission>*/ {
-	MissionSequencer<?> currMissSeq;
+public abstract class Mission<M extends Mission<M>> {
+	MissionSequencer<M> currMissSeq;
 
 	boolean missionTerminate = false;
 
@@ -93,12 +93,12 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 
 	@SCJAllowed
 	@IcecapCompileMe
-	public static Mission/*<MissionType>*/ getMission() {
+	public static /*<M extends Mission<M>> M*/ Mission getMission() {
 		return missionBehaviour.getMission();
 	}
 
 	@SCJAllowed
-	public MissionSequencer<?> getSequencer() {
+	public MissionSequencer<M> getSequencer() {
 		return currMissSeq;
 	}
 
@@ -127,7 +127,7 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 	protected abstract void initialize();
 
 	// used in MissionSequencer.handleAsyncEvent: case State.INITIALIZE
-	void setMissionSeq(MissionSequencer<?> missSeq) {
+	void setMissionSeq(MissionSequencer<M> missSeq) {
 		currMissSeq = missSeq;
 	}
 
@@ -240,7 +240,7 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 		msSetForMission.addMSObject(managedEventHandler);
 	}
 
-	public boolean containMSObject(ManagedSchedulable handler) {
+	boolean containMSObject(ManagedSchedulable handler) {
 		return msSetForMission.containMSObject(handler);
 	}
 	
@@ -252,11 +252,11 @@ public abstract class Mission/*<MissionType extends Mission>*/ {
 		msSetForMission.terminateMSObjects();
 	}
 
-	public Iterator<ManagedSchedulable> getManagedSchedulables() {
+	Iterator<ManagedSchedulable> getManagedSchedulables() {
 		return msSetForMission.iterator();
 	}
 
-	public void deleteSchedulables() {
+	void deleteSchedulables() {
 		msSetForMission.deleteSchedulables();
 	}
 }

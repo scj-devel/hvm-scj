@@ -22,7 +22,7 @@ import javax.scj.util.Const;
 import vm.VMTest;
 
 
-public class TestSCJMPApevhAndOneShotAndThread implements Safelet<Mission> {
+public class TestSCJMPApevhAndOneShotAndThread implements Safelet {
 	static StorageParameters storageParameters_Sequencer;
 	static StorageParameters storageParameters_Handlers;
 	static StorageParameters storageParameters_InnerSequencer;

@@ -58,7 +58,7 @@ public class TestSCJSingleAperiodicAndOneShotEvh1 {
 		}
 	}
 
-	private static class MyMission extends Mission {
+	private static class MyMission extends Mission<MyMission> {
 		
 		public void initialize() {
 			AperiodicEventHandler aevh = new MyAperiodicEvh(

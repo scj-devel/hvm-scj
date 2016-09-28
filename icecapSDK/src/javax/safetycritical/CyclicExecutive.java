@@ -46,7 +46,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A> 
  */
 @SCJAllowed
-public abstract class CyclicExecutive extends Mission {
+public abstract class CyclicExecutive extends Mission<CyclicExecutive> {
 	Clock rtClock;
 	AbsoluteTime next;
 	//RelativeTime deltaTime;  HSO: not used

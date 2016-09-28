@@ -19,7 +19,7 @@ import javax.scj.util.Priorities;
 
 import vm.VMTest;
 
-public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet<Mission> {
+public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet {
 
     private static class MyPeriodicEvh extends PeriodicEventHandler {
         int n;

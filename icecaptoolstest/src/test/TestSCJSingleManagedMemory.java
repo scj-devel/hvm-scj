@@ -119,7 +119,7 @@ public class TestSCJSingleManagedMemory {
 		}
 	}
 
-	static class MissionStub extends Mission {
+	static class MissionStub extends Mission<MissionStub> {
 		private MissionSequencer<MissionStub> missSeq;
 
 		public MissionStub(MissionSequencer<MissionStub> missSeq) {

@@ -20,7 +20,7 @@ import vm.VMTest;
 
 public class TestSCJSingleMemoryModel3 {
 
-	private static class TopMission2 extends Mission {
+	private static class TopMission2 extends Mission<TopMission2> {
 		protected void initialize() {
 			AperiodicEventHandler myAEH = new MyAEH(new PriorityParameters(10), new AperiodicParameters(
 					new RelativeTime(50, 0, Clock.getRealtimeClock()), null), storageParameters_Handlers, this);
@@ -73,7 +73,7 @@ public class TestSCJSingleMemoryModel3 {
 		}
 	}
 
-	private static class InnerMission2 extends Mission {
+	private static class InnerMission2 extends Mission<InnerMission2> {
 		protected void initialize() {
 			AperiodicEventHandler myAEH = new MyAEH(new PriorityParameters(10), new AperiodicParameters(
 					new RelativeTime(50, 0, Clock.getRealtimeClock()), null), storageParameters_Handlers, this);
@@ -225,7 +225,7 @@ public class TestSCJSingleMemoryModel3 {
 		}
 	}
 
-	private static class TopMission1 extends Mission {
+	private static class TopMission1 extends Mission<TopMission1> {
 
 		protected void initialize() {
 			devices.Console.println("TopMission1.initialize");
@@ -274,7 +274,7 @@ public class TestSCJSingleMemoryModel3 {
 		}
 	}
 
-	private static class MyApp implements Safelet<Mission> {
+	private static class MyApp implements Safelet {
 
 		@Override
 		public MissionSequencer<Mission> getSequencer() {

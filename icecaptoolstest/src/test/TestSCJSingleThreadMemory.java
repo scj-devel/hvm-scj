@@ -155,7 +155,7 @@ public class TestSCJSingleThreadMemory {
 		}
 	}
 
-	private static class MyMission extends Mission {
+	private static class MyMission extends Mission<MyMission> {
 		public void initialize() {
 			devices.Console.println("** MyMission.initialize");
 
