@@ -19,7 +19,7 @@ import javax.scj.util.Priorities;
 
 import vm.VMTest;
 
-public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet {
+public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet  {
 	// Warning: Safelet is a raw type. References to generic type Safelet<M> should be parameterized
 
     private static class MyPeriodicEvh extends PeriodicEventHandler {

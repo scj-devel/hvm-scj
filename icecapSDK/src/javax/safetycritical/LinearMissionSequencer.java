@@ -42,7 +42,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  *         Hans S&oslash;ndergaard, VIA University College, Denmark, <A
  *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
-public class LinearMissionSequencer<MissionType extends Mission> extends MissionSequencer<MissionType> {
+public class LinearMissionSequencer<MissionType extends Mission<MissionType>> extends MissionSequencer {
 	
 	boolean repeat;
 	MissionType[] missions;

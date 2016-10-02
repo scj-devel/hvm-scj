@@ -126,7 +126,7 @@ public class TestSCJSingleMemoryModel3 {
 		}
 	}
 
-	private static class InnerSequencer2 extends MissionSequencer<Mission> {
+	private static class InnerSequencer2 extends MissionSequencer {
 		private int count = 0;
 
 		public InnerSequencer2(PriorityParameters priority, StorageParameters storage) {
@@ -202,7 +202,7 @@ public class TestSCJSingleMemoryModel3 {
 		}
 	}
 
-	private static class InnerSequencer1 extends MissionSequencer<Mission> {
+	private static class InnerSequencer1 extends MissionSequencer {
 		private int count = 0;
 
 		public InnerSequencer1(PriorityParameters priority, StorageParameters storage) {
@@ -243,7 +243,7 @@ public class TestSCJSingleMemoryModel3 {
 		}
 	}
 
-	private static class OuterMostSequencer extends MissionSequencer<Mission> {
+	private static class OuterMostSequencer extends MissionSequencer {
 		private Mission[] missionArray;
 		private int count = 0;
 
@@ -277,7 +277,7 @@ public class TestSCJSingleMemoryModel3 {
 	private static class MyApp implements Safelet {
 
 		@Override
-		public MissionSequencer<Mission> getSequencer() {
+		public MissionSequencer getSequencer() {
 			return new OuterMostSequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
 					storageParameters_OuterMostSequencer);
 		}

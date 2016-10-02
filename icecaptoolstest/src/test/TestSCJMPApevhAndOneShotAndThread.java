@@ -29,7 +29,7 @@ public class TestSCJMPApevhAndOneShotAndThread implements Safelet {
 	static ConfigurationParameters configParameters;
 	
 	public static Mission m;
-	MissionSequencer<Mission> ms;
+	MissionSequencer ms;
 	public static AffinitySet[] sets;
 	
 	private static class TenThread extends Mission {
@@ -115,7 +115,7 @@ public class TestSCJMPApevhAndOneShotAndThread implements Safelet {
 		}
 	}
 	
-	public MissionSequencer<Mission> getSequencer() {
+	public MissionSequencer getSequencer() {
 		ms = new MySequencer();
 		return ms;
 	}
@@ -127,7 +127,7 @@ public class TestSCJMPApevhAndOneShotAndThread implements Safelet {
 	public void initializeApplication() {
 	}
 
-	private class MySequencer extends MissionSequencer<Mission> {
+	private class MySequencer extends MissionSequencer {
 		
 		int count = 0;
 

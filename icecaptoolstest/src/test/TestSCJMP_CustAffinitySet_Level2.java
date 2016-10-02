@@ -30,7 +30,7 @@ public class TestSCJMP_CustAffinitySet_Level2 implements Safelet {
 	static ConfigurationParameters configParameters;
 
 	public static Mission m;
-	MissionSequencer<Mission> ms;
+	MissionSequencer ms;
 	public static AffinitySet[] sets;
 	static int count = 0;
 	static OneShotEventHandler one;
@@ -143,7 +143,7 @@ public class TestSCJMP_CustAffinitySet_Level2 implements Safelet {
 
 	}
 
-	public MissionSequencer<Mission> getSequencer() {
+	public MissionSequencer getSequencer() {
 		ms = new MySequencer();
 		return ms;
 	}
@@ -156,7 +156,7 @@ public class TestSCJMP_CustAffinitySet_Level2 implements Safelet {
 		Configuration.processors = new int[][] { { 0, 1, 2, 3 }, { 0, 1, 2 }, { 0, 1 }, { 0 } };
 	}
 
-	private class MySequencer extends MissionSequencer<Mission> {
+	private class MySequencer extends MissionSequencer {
 
 		int count = 0;
 

@@ -22,7 +22,7 @@ public class TestSCJMP_NestedMissionSequencer_2 implements Safelet {
 	static ConfigurationParameters configParameters;
 
 	public static int count = 0;
-	MissionSequencer<Mission> ms;
+	MissionSequencer ms;
 	
 	private static class InnerMission3rd extends Mission {
 		public void initialize() {
@@ -174,7 +174,7 @@ public class TestSCJMP_NestedMissionSequencer_2 implements Safelet {
 		}
 	}
 
-	private static class InnerSeq3rd extends MissionSequencer<Mission> {
+	private static class InnerSeq3rd extends MissionSequencer {
 		private int count = 0;
 
 		public InnerSeq3rd(PriorityParameters priority, StorageParameters storage) {
@@ -193,7 +193,7 @@ public class TestSCJMP_NestedMissionSequencer_2 implements Safelet {
 		}
 	}
 
-	private static class InnerSeq2nd extends MissionSequencer<Mission> {
+	private static class InnerSeq2nd extends MissionSequencer {
 		private int count = 0;
 
 		public InnerSeq2nd(PriorityParameters priority, StorageParameters storage) {
@@ -212,7 +212,7 @@ public class TestSCJMP_NestedMissionSequencer_2 implements Safelet {
 		}
 	}
 
-	private static class InnerSeq1st extends MissionSequencer<Mission> {
+	private static class InnerSeq1st extends MissionSequencer {
 		private int count = 0;
 
 		public InnerSeq1st(PriorityParameters priority, StorageParameters storage) {
@@ -255,7 +255,7 @@ public class TestSCJMP_NestedMissionSequencer_2 implements Safelet {
 		}
 	}
 
-	public MissionSequencer<Mission> getSequencer() {
+	public MissionSequencer getSequencer() {
 		ms = new MySequencer();
 		return ms;
 	}
@@ -267,7 +267,7 @@ public class TestSCJMP_NestedMissionSequencer_2 implements Safelet {
 	public void initializeApplication() {
 	}
 
-	private class MySequencer extends MissionSequencer<Mission> {
+	private class MySequencer extends MissionSequencer {
 		Mission m;
 
 		MySequencer() {
