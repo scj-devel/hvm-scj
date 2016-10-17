@@ -53,13 +53,13 @@ public class TestSCJSinglePrioritySchedule2 {
 
 	private static class MyAperiodicEvh extends AperiodicEventHandler {
 		int n;
-		MissionSequencer<MyMission> missSeq;
+		MissionSequencer missSeq;
 		int count = 0;
 
 		public MyAperiodicEvh(PriorityParameters priority,
 				AperiodicParameters release,
 				StorageParameters storageParameters, int n,
-				MissionSequencer<MyMission> missSeq) {
+				MissionSequencer missSeq) {
 			super(priority, release, storageParameters, configParameters);
 			this.n = n;
 			this.missSeq = missSeq;
@@ -77,10 +77,10 @@ public class TestSCJSinglePrioritySchedule2 {
 		}
 	}
 
-	private static class MyMission extends Mission<MyMission> {
-		MissionSequencer<MyMission> missSeq;
+	private static class MyMission extends Mission {
+		MissionSequencer missSeq;
 
-		public MyMission(MissionSequencer<MyMission> missSeq) {
+		public MyMission(MissionSequencer missSeq) {
 			this.missSeq = missSeq;
 		}
 
@@ -107,8 +107,8 @@ public class TestSCJSinglePrioritySchedule2 {
 		}
 	}
 
-	private static class MyApp implements Safelet<MyMission> {
-		public MissionSequencer<MyMission> getSequencer() {
+	private static class MyApp implements Safelet {
+		public MissionSequencer getSequencer() {
 			return new MySequencer();
 		}
 
@@ -119,7 +119,7 @@ public class TestSCJSinglePrioritySchedule2 {
 		public void initializeApplication() {
 		}
 
-		private class MySequencer extends MissionSequencer<MyMission> {
+		private class MySequencer extends MissionSequencer {
 			private MyMission mission;
 
 			MySequencer() {

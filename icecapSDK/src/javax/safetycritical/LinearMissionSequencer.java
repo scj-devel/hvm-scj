@@ -42,10 +42,10 @@ import javax.safetycritical.annotate.SCJAllowed;
  *         Hans S&oslash;ndergaard, VIA University College, Denmark, <A
  *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
-public class LinearMissionSequencer<MissionType extends Mission<MissionType>> extends MissionSequencer {
+public class LinearMissionSequencer extends MissionSequencer {
 	
 	boolean repeat;
-	MissionType[] missions;
+	Mission[] missions;
 	int active = 0;
 
 	@SuppressWarnings("unchecked")
@@ -53,13 +53,13 @@ public class LinearMissionSequencer<MissionType extends Mission<MissionType>> ex
 	public LinearMissionSequencer(PriorityParameters priority, StorageParameters storage, 
 			ConfigurationParameters config, 
 			boolean repeat,
-			MissionType mission,
+			Mission mission,
 			String name)
 			throws IllegalArgumentException, IllegalStateException {
 		
 		super(priority, storage, config, name);
 		this.repeat = repeat;		
-		this.missions = (MissionType[])new Object[1];
+		this.missions = (Mission[])new Object[1];
 		missions[0] = mission;
 		
 		// ToDo: exceptions: not finished; but the Draft is unclear, scj139.pdf from AP
@@ -69,7 +69,7 @@ public class LinearMissionSequencer<MissionType extends Mission<MissionType>> ex
 	public LinearMissionSequencer(PriorityParameters priority, StorageParameters storage, 
 			ConfigurationParameters config, 
 			boolean repeat,
-			MissionType mission)
+			Mission mission)
 			throws IllegalArgumentException, IllegalStateException {
 		
 		this(priority, storage, config, repeat, mission, "LinearMS");
@@ -80,13 +80,13 @@ public class LinearMissionSequencer<MissionType extends Mission<MissionType>> ex
 	public LinearMissionSequencer(PriorityParameters priority, StorageParameters storage, 
 			ConfigurationParameters config, 
 			boolean repeat,
-			MissionType[] missions,
+			Mission[] missions,
 			String name)
 			throws IllegalArgumentException, IllegalStateException {
 		
 		super(priority, storage, config, name);
 		this.repeat = repeat;
-		this.missions = (MissionType[])new Object[missions.length];
+		this.missions = (Mission[])new Object[missions.length];
 		for (int i = 0; i < missions.length; i++)
 			this.missions[i] = missions[i];
 		
@@ -97,16 +97,16 @@ public class LinearMissionSequencer<MissionType extends Mission<MissionType>> ex
 	public LinearMissionSequencer(PriorityParameters priority, StorageParameters storage, 
 			ConfigurationParameters config, 
 			boolean repeat,
-			MissionType[] missions)
+			Mission[] missions)
 			throws IllegalArgumentException, IllegalStateException {
 		
 		this(priority, storage, config, repeat, missions, "LinearMSs");		
 	}
 	
 	@SCJAllowed(Level.SUPPORT)
-	protected final MissionType getNextMission() { 
+	protected final Mission getNextMission() { 
 		if (repeat) {
-			MissionType miss = missions[active];
+			Mission miss = missions[active];
             active = (active + 1) % missions.length;
             return miss;
 		}

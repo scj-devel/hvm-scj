@@ -68,7 +68,7 @@ public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet  {
         }
     }
 
-    private static class MyMission1 extends Mission<MyMission1> {
+    private static class MyMission1 extends Mission {
     	
         public void initialize() {
 
@@ -95,7 +95,7 @@ public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet  {
         }
     }
 
-    private static class MyMission0 extends Mission<MyMission0> {
+    private static class MyMission0 extends Mission {
     	
         public void initialize() {
 
@@ -123,7 +123,8 @@ public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet  {
     // Safelet methods implementation    
     
     public MissionSequencer getSequencer() {  
-    	
+    	 System.out.println("MissionSequencer getSequencer");
+    			 
         return new LinearMissionSequencer(
 		          new PriorityParameters(Priorities.SEQUENCER_PRIORITY), 
 		          storageParameters_Sequencer,

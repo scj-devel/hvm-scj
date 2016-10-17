@@ -46,10 +46,10 @@ public class TestSCJSingleMemoryAreaTracking {
 
 	private static class MyAperiodicEvh extends AperiodicEventHandler {
 		Light light;
-		MissionSequencer<MyMission> missSeq;
+		MissionSequencer missSeq;
 
 		public MyAperiodicEvh(PriorityParameters priority, AperiodicParameters release,
-				StorageParameters storageParameters, Light light, MissionSequencer<MyMission> missSeq) {
+				StorageParameters storageParameters, Light light, MissionSequencer missSeq) {
 			super(priority, release, storageParameters, configParameters);
 			this.light = light;
 			this.missSeq = missSeq;
@@ -88,10 +88,10 @@ public class TestSCJSingleMemoryAreaTracking {
 		}
 	}
 
-	private static class MyMission extends Mission<MyMission> {
-		MissionSequencer<MyMission> missSeq;
+	private static class MyMission extends Mission {
+		MissionSequencer missSeq;
 
-		public MyMission(MissionSequencer<MyMission> missSeq) {
+		public MyMission(MissionSequencer missSeq) {
 			this.missSeq = missSeq;
 		}
 
@@ -115,8 +115,8 @@ public class TestSCJSingleMemoryAreaTracking {
 		}
 	}
 
-	private static class MyApp implements Safelet<MyMission> {
-		public MissionSequencer<MyMission> getSequencer() {
+	private static class MyApp implements Safelet {
+		public MissionSequencer getSequencer() {
 			devices.Console.println("MyApp.getSeq");
 			return new MySequencer();
 		}
@@ -128,7 +128,7 @@ public class TestSCJSingleMemoryAreaTracking {
 		public void initializeApplication() {
 		}
 
-		private static class MySequencer extends MissionSequencer<MyMission> {
+		private static class MySequencer extends MissionSequencer {
 			private MyMission mission;
 
 			MySequencer() {

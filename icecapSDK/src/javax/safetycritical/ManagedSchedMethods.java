@@ -55,7 +55,7 @@ final class ManagedSchedMethods {
 			return new ScjPeriodicEventHandlerProcess(target, ps);
 		} else if (target instanceof OneShotEventHandler) {
 			return new ScjOneShotEventHandlerProcess(target, ps);
-		} else if (target instanceof MissionSequencer<?>) {
+		} else if (target instanceof MissionSequencer) {
 			return new ScjMissionSequencerProcess(target, ps);
 		} else if (target instanceof AperiodicEventHandler) {
 			return new ScjAperiodicEventHandlerProcess(target, ps);

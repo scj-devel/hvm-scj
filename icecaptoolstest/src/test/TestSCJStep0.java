@@ -44,7 +44,7 @@ public class TestSCJStep0 {
 		}
 	}
 
-	private static class Mission1 extends Mission<Mission1> {
+	private static class Mission1 extends Mission {
 		public void initialize() {
 			Clock clk = Clock.getRealtimeClock();
 
@@ -60,7 +60,7 @@ public class TestSCJStep0 {
 		}
 	}
 
-	private static class TopLevelSequencer extends MissionSequencer<Mission1> {
+	private static class TopLevelSequencer extends MissionSequencer {
 		@SuppressWarnings("unused")
 		private Mission1 mission;
 
@@ -76,8 +76,8 @@ public class TestSCJStep0 {
 		}
 	}
 
-	private static class Application implements Safelet<Mission1> {
-		public MissionSequencer<Mission1> getSequencer() {
+	private static class Application implements Safelet {
+		public MissionSequencer getSequencer() {
 			return new TopLevelSequencer();
 		}
 

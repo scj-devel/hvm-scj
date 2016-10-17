@@ -71,10 +71,10 @@ public class TestSCJSingleManagedMemory {
 		}
 	}
 
-	static class SafeletStub implements Safelet<MissionStub> {
-		public MissionSequencer<MissionStub> getSequencer() {
+	static class SafeletStub implements Safelet {
+		public MissionSequencer getSequencer() {
 			// seq in immortal memory
-			MissionSequencer<MissionStub> seq = new SequencerStub();
+			MissionSequencer seq = new SequencerStub();
 
 			Work.doWork("1 SafeletStub");
 
@@ -95,7 +95,7 @@ public class TestSCJSingleManagedMemory {
 		}
 	}
 
-	static class SequencerStub extends MissionSequencer<MissionStub> {
+	static class SequencerStub extends MissionSequencer {
 		private MissionStub mission;
 
 		SequencerStub() {
@@ -119,10 +119,10 @@ public class TestSCJSingleManagedMemory {
 		}
 	}
 
-	static class MissionStub extends Mission<MissionStub> {
-		private MissionSequencer<MissionStub> missSeq;
+	static class MissionStub extends Mission {
+		private MissionSequencer missSeq;
 
-		public MissionStub(MissionSequencer<MissionStub> missSeq) {
+		public MissionStub(MissionSequencer missSeq) {
 			this.missSeq = missSeq;
 		}
 
@@ -224,10 +224,10 @@ public class TestSCJSingleManagedMemory {
 	}
 
 	static class PeriodicEvhStub extends PeriodicEventHandler {
-		MissionSequencer<MissionStub> missSeq;
+		MissionSequencer missSeq;
 
 		protected PeriodicEvhStub(PriorityParameters priority, PeriodicParameters periodic, StorageParameters storage,
-				MissionSequencer<MissionStub> missSeq) {
+				MissionSequencer missSeq) {
 			super(priority, periodic, storage, configParameters);
 			this.missSeq = missSeq;
 		}

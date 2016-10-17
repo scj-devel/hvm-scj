@@ -32,9 +32,9 @@ import vm.VMTest;
  *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
 
-public class TestSCJSingleCyclicExecutiveLinearMissSeq1 extends CyclicExecutive implements Safelet<CyclicExecutive> {
+public class TestSCJSingleCyclicExecutiveLinearMissSeq1 extends CyclicExecutive implements Safelet {
 
-	private static MissionSequencer<CyclicExecutive> sequencer;
+	private static MissionSequencer sequencer;
 
 	private static class MyPEH extends PeriodicEventHandler {
 		static final int priority = 13;
@@ -106,12 +106,12 @@ public class TestSCJSingleCyclicExecutiveLinearMissSeq1 extends CyclicExecutive 
 
 	// Safelet methods
 
-	public MissionSequencer<CyclicExecutive> getSequencer() {
+	public MissionSequencer getSequencer() {
 
 		/* Signature of: LinearMissionSequencer(PriorityParameters priority, 
 		                   StorageParameters storage, ConfigurationParameters config, 
 		                   boolean repeat, MissionType mission) */
-		sequencer = new LinearMissionSequencer<CyclicExecutive>(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
+		sequencer = new LinearMissionSequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
 				storageParameters_Sequencer, configParameters, true, this);
 		return sequencer;
 	}

@@ -50,7 +50,7 @@ final class MulticoreHandlerBehavior extends HandlerBehavior {
 	}
 
 	@Override
-	void initMissionSequencer(MissionSequencer<?> handler) {
+	void initMissionSequencer(MissionSequencer handler) {
 		if (MissionSequencer.isOuterMostSeq) {
 
 			MissionSequencer.outerMostSeq = handler;
@@ -74,18 +74,18 @@ final class MulticoreHandlerBehavior extends HandlerBehavior {
 	}
 
 	@Override
-	void cleanOuterMissionSequencer(MissionSequencer<?> handler) {
+	void cleanOuterMissionSequencer(MissionSequencer handler) {
 
 	}
 
 	@Override
-	void missionSequencerSingleTermination(MissionSequencer<?> handler) {
+	void missionSequencerSingleTermination(MissionSequencer handler) {
 		handler.terminateSeq = true;
 		handler.currMission.requestTermination();
 	}
 
 	@Override
-	void missionSequencerExecutePhase(MissionSequencer<?> handler) {
+	void missionSequencerExecutePhase(MissionSequencer handler) {
 		handler.missionMemory.enterToExecute(handler.currMission);
 	}
 }

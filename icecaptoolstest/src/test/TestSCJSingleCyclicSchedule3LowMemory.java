@@ -135,10 +135,10 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 		}
 	}
 
-	private static class MyApp implements Safelet<CyclicExecutive> {
+	private static class MyApp implements Safelet {
 		public static int count = 0;
 
-		public MissionSequencer<CyclicExecutive> getSequencer() {
+		public MissionSequencer getSequencer() {
 			devices.Console.println("** MyApp.getSequencer");
 			return new MySequencer();
 		}
@@ -150,7 +150,7 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 		public void initializeApplication() {
 		}
 
-		private static class MySequencer extends MissionSequencer<CyclicExecutive> {
+		private static class MySequencer extends MissionSequencer {
 			private CyclicExecutive[] missions;
 			private int active = 0;
 

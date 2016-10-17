@@ -19,9 +19,9 @@ import vm.MachineFactory;
 import vm.POSIX64BitMachineFactory;
 import vm.VMTest;
 
-public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive implements Safelet<CyclicExecutive> {
+public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive implements Safelet {
 
-	private static MissionSequencer<CyclicExecutive> sequencer;
+	private static MissionSequencer sequencer;
 
 	private static class MyPEH extends PeriodicEventHandler {
 		static final int priority = 13;
@@ -93,8 +93,8 @@ public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive i
 		return VendorCyclicSchedule.generate(pehs, this);
 	}
 
-	public MissionSequencer<CyclicExecutive> getSequencer() {
-		sequencer = new MissionSequencer<CyclicExecutive>(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
+	public MissionSequencer getSequencer() {
+		sequencer = new MissionSequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
 				storageParameters_Sequencer, configParameters) {
 
 			@Override

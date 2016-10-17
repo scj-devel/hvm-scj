@@ -8,11 +8,11 @@ import vm.POSIX64BitMachineFactory;
 
 public final class LaunchMulticore extends Launcher {
 
-	public LaunchMulticore(Safelet<?> app, int level) {
+	public LaunchMulticore(Safelet app, int level) {
 		this(app, level, new POSIX64BitMachineFactory());
 	}
 
-	public LaunchMulticore(Safelet<?> app, int level, MachineFactory mFactory) {
+	public LaunchMulticore(Safelet app, int level, MachineFactory mFactory) {
 		super(true, mFactory);
 		initAndRun(app, level);
 	}
@@ -31,7 +31,7 @@ public final class LaunchMulticore extends Launcher {
 		Machine.setCurrentScheduler(new MultiprocessorHelpingScheduler());
 		
 		OSProcess.initSpecificID();
-		MissionSequencer<?> outerMostMS = app.getSequencer();
+		MissionSequencer outerMostMS = app.getSequencer();
 		outerMostMS.privateMemory.enter(outerMostMS);
 		outerMostMS.cleanUp();
 	}

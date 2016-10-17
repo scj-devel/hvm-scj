@@ -112,7 +112,7 @@ class OSProcess extends Process {
 
 	static native Memory getCurrentMemoryArea();
 
-	static native void setOuterMostMissionSequencer(int priority, MissionSequencer<?> handler);
+	static native void setOuterMostMissionSequencer(int priority, MissionSequencer handler);
 
 	static native void setTimerfd(int timerfd, long start);
 

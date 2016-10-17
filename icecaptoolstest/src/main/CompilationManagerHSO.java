@@ -114,8 +114,9 @@ public class CompilationManagerHSO {
 		//String inputPackage = "javax.safetycritical.test.linearSequencer2";
 		//String inputPackage = "javax.safetycritical.test.periodicEventHandler1";
 
-		//String inputPackage = "javax.realtime.test";
-		String inputPackage = "javax.safetycritical.test";
+		String inputPackage = "javax.realtime.test";
+		//String inputPackage = "javax.safetycritical.test";
+		//String inputPackage = "scj.examples.twomissionsWithSuper";
 
 		//String inputClass = "AllTests";
 
@@ -135,13 +136,15 @@ public class CompilationManagerHSO {
 		//String inputClass = "TckTestRelativeTime";
 		//String inputClass = "TckTestClock";
 		//String inputClass = "TckTestRealtimeClock";
+		
+		String inputClass = "TckSafeletTestPriorityParameters"; 
 
 		/* --- TCKs of javax.safetycritical.test --- : */
 		//String inputClass = "TckTestStorageParameters";
 		//String inputClass = "SafeletStub1"; 
 		//String inputClass = "TckTestFrame2";
 		
-		String inputClass = "TckTestMissionLifeCycle";
+		//String inputClass = "TckTestMissionLifeCycle";
 
 		//String inputClass = "TckTestCyclicExecutive1";
 		//String inputClass = "TckTestCyclicSchedule0";  
@@ -158,6 +161,8 @@ public class CompilationManagerHSO {
 		//String inputClass = "TckTestPreemptiveScheduling1";
 		//String inputClass = "TckTestManagedMemory";
 
+		//String inputClass = "Main";
+		
 		/* OpenJML tests end */
 
 		/* JML tests */

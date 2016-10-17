@@ -44,11 +44,11 @@ public class TestSCJSingleReleaseJitter {
 	}
 
 	private static class MyAperiodicEvh extends AperiodicEventHandler {
-		MissionSequencer<MyMission> missSeq;
+		MissionSequencer missSeq;
 
 		public MyAperiodicEvh(PriorityParameters priority,
 				AperiodicParameters release,
-				StorageParameters storageParameters, MissionSequencer<MyMission> missSeq) {
+				StorageParameters storageParameters, MissionSequencer missSeq) {
 			super(priority, release, storageParameters, configParameters);
 			this.missSeq = missSeq;
 		}
@@ -67,10 +67,10 @@ public class TestSCJSingleReleaseJitter {
 		}
 	}
 
-	private static class MyMission extends Mission<MyMission> {
-		MissionSequencer<MyMission> missSeq;
+	private static class MyMission extends Mission {
+		MissionSequencer missSeq;
 
-		public MyMission(MissionSequencer<MyMission> missSeq) {
+		public MyMission(MissionSequencer missSeq) {
 			this.missSeq = missSeq;
 		}
 
@@ -95,8 +95,8 @@ public class TestSCJSingleReleaseJitter {
 		}
 	}
 
-	private static class MyApp implements Safelet<MyMission> {
-		public MissionSequencer<MyMission> getSequencer() {
+	private static class MyApp implements Safelet {
+		public MissionSequencer getSequencer() {
 			return new MySequencer();
 		}
 
@@ -107,7 +107,7 @@ public class TestSCJSingleReleaseJitter {
 		public void initializeApplication() {
 		}
 
-		private class MySequencer extends MissionSequencer<MyMission> {
+		private class MySequencer extends MissionSequencer {
 			private MyMission mission;
 
 			MySequencer() {

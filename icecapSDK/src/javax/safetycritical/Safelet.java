@@ -49,7 +49,7 @@ import javax.safetycritical.annotate.SCJPhase;
 @SuppressWarnings("unused")
 @SCJAllowed(Level.SUPPORT)
 @SCJPhase(Phase.INITIALIZATION)
-public interface Safelet<M extends Mission<M>> {
+public interface Safelet {
 	/**
 	 * The infrastructure invokes <code>getSequencer</code> to obtain the 
 	 * <code>MissionSequencer</code> object that oversees execution of missions 
@@ -61,7 +61,7 @@ public interface Safelet<M extends Mission<M>> {
 	 */
 	@SCJAllowed(Level.SUPPORT)
 	@SCJPhase(Phase.INITIALIZATION)
-	public MissionSequencer<M> getSequencer();
+	public MissionSequencer getSequencer();
 
 	/**
 	 *  @return the amount of immortal memory that must be available for 

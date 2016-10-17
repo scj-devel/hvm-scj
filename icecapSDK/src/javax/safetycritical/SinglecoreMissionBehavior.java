@@ -17,7 +17,7 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 		} else if (Launcher.level > 0 && PriorityScheduler.instance().getCurrentProcess() != null) {
 
 			if (PriorityScheduler.instance().getCurrentProcess().getTarget() instanceof MissionSequencer) {
-				mission = ((MissionSequencer<?>) PriorityScheduler.instance().getCurrentProcess().getTarget()).currMission;
+				mission = ((MissionSequencer) PriorityScheduler.instance().getCurrentProcess().getTarget()).currMission;
 			} else {
 				mission = ManagedSchedMethods.getMission(PriorityScheduler.instance().getCurrentProcess()
 						.getTarget());
