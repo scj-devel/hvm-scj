@@ -96,7 +96,7 @@ public class TestSCJSingleSimpleLowMemory {
         }
     }
 
-    private static class MyMission extends Mission {
+    private static class MyMission extends Mission<MyMission> {
         MissionSequencer<MyMission> missSeq;
 
         public MyMission(MissionSequencer<MyMission> missSeq) {

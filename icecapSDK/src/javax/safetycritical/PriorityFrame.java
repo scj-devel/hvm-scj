@@ -29,8 +29,6 @@ package javax.safetycritical;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.RelativeTime;
 import javax.realtime.TestPortalRT;
-import javax.safetycritical.annotate.Level;
-import javax.safetycritical.annotate.SCJAllowed;
 
 /**
  * This frame class holds a ready queue and a sleeping queue 
@@ -48,7 +46,6 @@ import javax.safetycritical.annotate.SCJAllowed;
  * @scjComment  
  *  - implementation issue: infrastructure class; not part of the SCJ specification.
  */
-@SCJAllowed(Level.INFRASTRUCTURE)
 class PriorityFrame {
 	PriorityQueue readyQueue;
 

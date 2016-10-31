@@ -75,7 +75,7 @@ public class TestSCJPrioritySchedule2 {
 		}
 	}
 
-	private static class MyMission extends Mission {
+	private static class MyMission extends Mission<MyMission> {
 		@SuppressWarnings("rawtypes")
 		MissionSequencer missSeq;
 

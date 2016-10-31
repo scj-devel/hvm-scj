@@ -10,6 +10,7 @@ import icecaptools.IcecapCVar;
 import icecaptools.IcecapCompileMe;
 import icecaptools.IcecapInlineNative;
 import util.BaseTargetConfiguration;
+import util.StringUtil;
 import vm.Machine;
 import vm.RealtimeClock.DefaultRealtimeClock;
 
@@ -40,6 +41,7 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 						"-I\"" + ASF + "/sam/drivers/uart\"",
 						"-I\"" + ASF + "/sam/drivers/usart\"",
 						"-I\"" + ASF + "/sam/drivers/spi\"",
+						"-I\"" + ASF + "/sam/drivers/pwm\"",
 						"-I\"" + ASF + "/common/utils/stdio/stdio_serial\"",
 						"-I\"" + ASF + "/common/services/serial\"",						
 						"-I\"" + ASF + "/thirdparty/CMSIS/Lib/GCC\"", "-I\"" + ASF + "/common/utils\"",
@@ -70,7 +72,10 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 						"main.elf", 
 						"*.o", 
 						ASF + "/spi/iha_spi.o", 
+						ASF + "/serial/iha_serial.o", 
+						ASF + "/dialog_handler/dialog_handler.o", 
 						ASF + "/car_driver/mpu_9520.o", 
+						ASF + "/car_driver/bt_module.o", 						
 						ASF + "/common/services/clock/same70/sysclk.o", 
 						ASF + "/common/services/fifo/fifo.o", 
 						ASF + "/common/services/delay/sam/cycle_counter.o",
@@ -80,6 +85,7 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 						ASF + "/common/utils/stdio/write.o",
 						ASF + "/sam/boards/same70_xplained/init.o",
 						ASF + "/sam/drivers/mpu/mpu.o",
+						ASF + "/sam/drivers/pwm/pwm.o",
 						ASF + "/sam/drivers/pio/pio.o",
 						ASF + "/sam/drivers/pio/pio_handler.o",
 						ASF + "/sam/drivers/pmc/pmc.o",
@@ -118,12 +124,40 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 				};		
 	}
 
+	@IcecapCFunc(signature = "void bt_uart_init(void)", 
+			 requiredIncludes = "void bt_uart_init(void);\n")
+	@IcecapInlineNative(functionBody = "" + 
+		"{\n" + 
+		"   pio_configure (PIOD, PIO_PERIPH_A, (PIO_PD28A_URXD3 | PIO_PD30A_UTXD3), PIO_DEFAULT);\n" +
+		"   bt_serial = serial_new_instance (UART3, 115200L, ser_NO_PARITY, 32, NULL);\n" +
+		"   NVIC_ClearPendingIRQ (UART3_IRQn);\n" +
+		"   NVIC_DisableIRQ (UART3_IRQn);\n" +
+		"   NVIC_SetPriority (UART3_IRQn, 1);\n" +
+		"   NVIC_EnableIRQ (UART3_IRQn);\n" + 
+		"}\n",
+		requiredIncludes = "static serial_p bt_serial = NULL;\n")
+	private static native void bt_uart_init();
+	
+	@IcecapCFunc(signature = "void bluetooth_call_back (uint8_t status, uint8_t byte)", 
+			 requiredIncludes = "void bluetooth_call_back (uint8_t status, uint8_t byte);\n")
+	@IcecapInlineNative(functionBody = "" + 
+		"{\n" + 
+		"   if (status == BT_CONNECTED) {\n" +
+	    "   } else if (status == DIALOG_OK_STOP) {\n" +
+		"      bt_initialised = 1;\n" + 
+		"   } else if (status == DIALOG_ERROR_STOP) {\n" +
+		"   }\n" + 
+		"}\n",
+		requiredIncludes = "static serial_p bt_serial = NULL;\n")
+	private static native void bluetooth_call_back();
 	
 	@IcecapInlineNative(functionBody = ""
 			+ "{\n"
 			+ "   sysclk_init();\n"
 			+ "   board_init();\n"
 			+ "   mpu_9520_init();\n"
+			+ "   bt_uart_init();\n"
+			+ "   bt_module_init (bluetooth_call_back, bt_serial);\n"
 			+ "   ioport_init();\n"
 			+ "   delay_init(sysclk_get_cpu_hz());\n"
 			+ "   return -1;\n"
@@ -161,15 +195,20 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 			+ "} while (0)\n")
 	protected static native void initUart();
 
+	@IcecapCompileMe
 	protected static void init()
 	{
 		if (!initialized)
 		{
 			initNative();
 			initUart();
+			bt_initialised = 0;
+			systemTick = 0;
+			systemClock = 0;
 			initialized = true;
 		}
 	}
+	
 	private String trim(String asfLocation) {
 		if (asfLocation.endsWith(File.separator)) {
 			return trim(asfLocation.substring(0, asfLocation.length() - 1));
@@ -265,11 +304,25 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 	@IcecapCVar(expression = "systemClock", requiredIncludes = "extern volatile uint32 systemClock;")
 	protected static int systemClock;
 	
-	@IcecapCFunc(signature = "void SysTick_Handler(void)", requiredIncludes = "void SysTick_Handler(void);\n")
-	private static void handleSystemTick() {
-		systemTick++;
-		systemClock++;
-	}
+	@IcecapCVar(expression = "bt_initialised", requiredIncludes = "static volatile uint8 bt_initialised;")
+	protected static byte bt_initialised;
+
+	@IcecapCFunc(signature = "void SysTick_Handler(void)", 
+				 requiredIncludes = "#include \"car_driver/bt_module.h\"\n")
+	@IcecapInlineNative(functionBody = "" + 
+			"{\n" + 
+			"   static uint8_t ms100_count = 100;\n" +
+			"   if (!bt_initialised) {\n" +
+			"      if (--ms100_count == 0) {\n" +
+			"	      ms100_count = 100;\n" +
+			"		  bt_tick();\n" +
+			"      }\n" +
+		    "   }\n" +
+			"   systemTick++;\n" + 
+			"   systemClock++;\n" + 
+			"}\n",
+	requiredIncludes = "#include \"asf.h\"\n")
+	private static native void handleSystemTick();
 	
 	@IcecapInlineNative(functionBody = "" 
 			+ "{\n" 
@@ -303,6 +356,20 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 			requiredIncludes = "#include \"car_driver/car_driver.h\"\n")
 	public static native short get_raw_z_accel();
 	
+	public static void bt_send_bytes(String string) {
+		byte[] bytes = StringUtil.getBytes(string, false); 
+		blue_tooth_send(bytes, bytes.length);
+	}
+	
+	@IcecapInlineNative(functionBody = "" 
+			+ "{\n" 
+			+ "   char* str = (char*)(pointer)sp[0]\n;"
+			+ "   bt_send_bytes((uint8_t*)(str + sizeof(Object) + 2), sp[1]);\n"
+			+ "   return -1;\n" 
+			+ "}\n", 
+			requiredIncludes = "#include \"car_driver/bt_module.h\"\n")
+	private static native void blue_tooth_send(byte[] bytes, int length);
+
 	public static class ATSAMe70Writer implements Writer {
 
 		@Override

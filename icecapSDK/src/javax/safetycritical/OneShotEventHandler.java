@@ -119,7 +119,7 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 		super.cleanUp();
 	}
 
-	@SCJAllowed(Level.INFRASTRUCTURE)
+	@SCJAllowed
 	@SCJPhase(Phase.INITIALIZATION)
 	public final void register() {
 		super.register();

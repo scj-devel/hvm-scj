@@ -46,7 +46,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A> 
  */
 @SCJAllowed
-public abstract class CyclicExecutive extends Mission {
+public abstract class CyclicExecutive extends Mission<CyclicExecutive> {
 	Clock rtClock;
 	AbsoluteTime next;
 	//RelativeTime deltaTime;  HSO: not used
@@ -75,7 +75,7 @@ public abstract class CyclicExecutive extends Mission {
 	 * The handler objects must reside in an enclosing scope of <code>this</code>.
 	 * @return A cyclic schedule for the handlers.
 	 */
-	@SCJAllowed(Level.INFRASTRUCTURE)
+	@SCJAllowed(Level.SUPPORT)
 	public abstract CyclicSchedule getSchedule(PeriodicEventHandler[] handlers);
 
 	void runInitialize() {

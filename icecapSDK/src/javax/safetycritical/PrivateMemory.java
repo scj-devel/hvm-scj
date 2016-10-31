@@ -28,7 +28,6 @@ package javax.safetycritical;
 import icecaptools.IcecapCompileMe;
 
 import javax.realtime.MemoryArea;
-import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
@@ -54,7 +53,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  * @scjComment 
  *  SCJ issue: This class should not be public.
  */
-@SCJAllowed(Level.INFRASTRUCTURE)
+@SCJAllowed
 public final class PrivateMemory extends ManagedMemory // HSO: not public
 {
 	@IcecapCompileMe

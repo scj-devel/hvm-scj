@@ -59,7 +59,7 @@ public class TestSCJMPMemory {
 		}
 	}
 
-	private static class MyMission0 extends Mission {
+	private static class MyMission0 extends Mission<MyMission0> {
 		public void initialize() {
 			if (Services.getNameOfCurrentMemoryArea().equals("outer-ms")) {
 				devices.Console.println("0");

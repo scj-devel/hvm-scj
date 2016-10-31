@@ -112,7 +112,7 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 		}
 	}
 
-	private static class MyMission1 extends CyclicExecutive {
+	private static class MyMission1 extends CyclicExecutive{
 		public void initialize() {
 			new MyPeriodicEvh(
 				new PriorityParameters(Priorities.MIN_PRIORITY), 
@@ -135,10 +135,10 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 		}
 	}
 
-	private static class MyApp implements Safelet<Mission> {
+	private static class MyApp implements Safelet<CyclicExecutive> {
 		public static int count = 0;
 
-		public MissionSequencer<Mission> getSequencer() {
+		public MissionSequencer<CyclicExecutive> getSequencer() {
 			devices.Console.println("** MyApp.getSequencer");
 			return new MySequencer();
 		}
@@ -150,22 +150,22 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 		public void initializeApplication() {
 		}
 
-		private static class MySequencer extends MissionSequencer<Mission> {
-			private Mission[] missions;
+		private static class MySequencer extends MissionSequencer<CyclicExecutive> {
+			private CyclicExecutive[] missions;
 			private int active = 0;
 
-			private Mission miss;
+			private CyclicExecutive miss;
 
 			MySequencer() {
 				super(new PriorityParameters(Priorities.PR95), storageParameters_Sequencer, configParameters);
-				missions = new Mission[2];
+				missions = new CyclicExecutive[2];
 				missions[0] = new MyMission0();
 				missions[1] = new MyMission1();
 
 				miss = missions[0];
 			}
 
-			public Mission getNextMission() {
+			public CyclicExecutive getNextMission() {
 				MyApp.count++;
 				if (missions[active].terminationPending() && MyApp.count > 5) {
 					devices.Console.println("MySeq.getNextMission: null");

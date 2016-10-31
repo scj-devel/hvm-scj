@@ -17,7 +17,7 @@ import javax.scj.util.Const;
 
 import vm.VMTest;
 
-public class TestSCJMP_AffinitySet_Level2_1 implements Safelet<Mission> {
+public class TestSCJMP_AffinitySet_Level2_1 implements Safelet {
 	static StorageParameters storageParameters_Sequencer;
 	static StorageParameters storageParameters_Handlers;
 	static StorageParameters storageParameters_InnerSequencer;

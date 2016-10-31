@@ -1,5 +1,5 @@
 /**************************************************************************
- * File name  : ImmortalMemory.java
+ * File name  : SCJMayAllocate.java
  * 
  * This file is part a SCJ Level 0 and Level 1 implementation, 
  * based on SCJ Draft, Version 0.94 25 June 2013.
@@ -24,35 +24,31 @@
  *             VIA University College, DK
  *************************************************************************/
 
-package javax.realtime;
+package javax.safetycritical.annotate;
 
-import javax.safetycritical.annotate.SCJAllowed;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 
 /**
- * This class represents immortal memory. Objects allocated in immortal 
- * memory are never reclaimed during the lifetime of the application.
- * 
- * @version 1.2; - December 2013
- * 
- * @author Anders P. Ravn, Aalborg University, 
- * <A HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
- * Hans S&oslash;ndergaard, VIA University College, Denmark, 
- * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
+ * This annotation distinguishes methods that may be restricted from allocating 
+ * memory in certain memory areas.
  */
 @SCJAllowed
-public final class ImmortalMemory extends MemoryArea {
+@Retention(RetentionPolicy.CLASS)
+@Target({
+java.lang.annotation.ElementType.TYPE,
+java.lang.annotation.ElementType.METHOD,
+java.lang.annotation.ElementType.CONSTRUCTOR})
 
-	//	ImmortalMemory(int sizeOfArea) {
-	//		super(sizeOfArea, sizeOfArea, MemoryArea.overAllBackingStore, "Imm");
-	//	}
-	//
-	//	public static ImmortalMemory instance() {
-	//		MemoryArea result = MemoryArea.getNamedMemoryArea("Imm");
-	//		if (result != null)
-	//		{
-	//			return (ImmortalMemory)result;
-	//		}
-	//		return null;
-	//	}
+public @interface SCJMayAllocate {
 
+@SCJAllowed
+public AllocatePermission[] value ()
+	default {
+		AllocatePermission.CurrentContext, 
+		AllocatePermission.OuterContext, 
+		AllocatePermission.InnerContext};
 }
+

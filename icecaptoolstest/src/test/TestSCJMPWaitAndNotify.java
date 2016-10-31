@@ -115,7 +115,7 @@ public class TestSCJMPWaitAndNotify {
 		}
 	}
 
-	private static class MyMission extends Mission {
+	private static class MyMission extends Mission<MyMission> {
 
 		@Override
 		protected void initialize() {
@@ -144,8 +144,8 @@ public class TestSCJMPWaitAndNotify {
 
 	}
 
-	private static class MySequencer extends MissionSequencer<Mission> {
-		private Mission mission;
+	private static class MySequencer extends MissionSequencer<MyMission> {
+		private MyMission mission;
 		private int count = 0;
 
 		public MySequencer(PriorityParameters priority, StorageParameters storage) {
@@ -154,7 +154,7 @@ public class TestSCJMPWaitAndNotify {
 		}
 
 		@Override
-		protected Mission getNextMission() {
+		protected MyMission getNextMission() {
 			if (count == 1000) {
 				devices.Console.println("MySeq.count: " + count + "; null");
 				return null;
@@ -166,10 +166,10 @@ public class TestSCJMPWaitAndNotify {
 		}
 	}
 
-	private static class MyApp implements Safelet<Mission> {
+	private static class MyApp implements Safelet<MyMission> {
 
 		@Override
-		public MissionSequencer<Mission> getSequencer() {
+		public MissionSequencer<MyMission> getSequencer() {
 			return new MySequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY), storageParameters_Sequencer);
 		}
 

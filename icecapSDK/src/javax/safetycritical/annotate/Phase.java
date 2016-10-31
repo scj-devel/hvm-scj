@@ -32,6 +32,18 @@
 
 package javax.safetycritical.annotate;
 
-public enum Phase {
-	INITIALIZATION, RUN, CLEANUP, STARTUP
+@SCJAllowed
+public enum Phase {	
+	
+	@SCJAllowed
+	CLEANUP, 
+	
+	@SCJAllowed
+	INITIALIZATION, 	
+	
+	@SCJAllowed
+	RUN, 
+	
+	@SCJAllowed
+	STARTUP
 }

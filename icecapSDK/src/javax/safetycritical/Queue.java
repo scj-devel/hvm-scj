@@ -1,9 +1,5 @@
 package javax.safetycritical;
 
-import javax.safetycritical.annotate.Level;
-import javax.safetycritical.annotate.SCJAllowed;
-
-@SCJAllowed(Level.INFRASTRUCTURE)
 abstract class Queue {
 	protected int heapSize;
 

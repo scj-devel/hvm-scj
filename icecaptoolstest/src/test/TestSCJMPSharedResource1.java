@@ -111,7 +111,7 @@ public class TestSCJMPSharedResource1 {
         }
     }
 
-    private static class MyMission extends Mission {
+    private static class MyMission extends Mission<MyMission> {
         static final int NumberOfPeriodicEvhs = 2;
 
         MissionSequencer<MyMission> missSeq;

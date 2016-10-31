@@ -165,7 +165,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	 * This method performs all of the activities that correspond to sequencing
 	 * of <code>Mission</code>s by this <code>MissionSequencer</code>.
 	 */
-	@SCJAllowed(Level.INFRASTRUCTURE)
+	@SCJAllowed
 	public final void handleAsyncEvent() {
 		do {
 			// the main actions of the sequencer governed by currState
