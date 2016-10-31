@@ -155,7 +155,7 @@ public class TestSCJSingleThreadMemory {
 		}
 	}
 
-	private static class MyMission extends Mission<MyMission> {
+	private static class MyMission extends Mission  {
 		public void initialize() {
 			devices.Console.println("** MyMission.initialize");
 
@@ -170,7 +170,7 @@ public class TestSCJSingleThreadMemory {
 
 	}
 
-	private static class MySequencer extends MissionSequencer<MyMission> {
+	private static class MySequencer extends MissionSequencer {
 
 		private MyMission mission;
 
@@ -196,9 +196,9 @@ public class TestSCJSingleThreadMemory {
 
 	}
 
-	private static class MyApp implements Safelet<MyMission> {
+	private static class MyApp implements Safelet {
 
-		public MissionSequencer<MyMission> getSequencer() {
+		public MissionSequencer getSequencer() {
 			devices.Console.println("MyApp.getSequencer");
 			return new MySequencer();
 		}

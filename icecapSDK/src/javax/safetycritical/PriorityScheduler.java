@@ -103,7 +103,7 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 		scheduler = this;
 	}
 
-	void addOuterMostSeq(MissionSequencer<?> seq) {
+	void addOuterMostSeq(MissionSequencer seq) {
 		ScjProcess process = ManagedSchedMethods.createScjProcess(seq);
 		process.index = -2;
 		MissionSequencer.missSeqProcess = process;

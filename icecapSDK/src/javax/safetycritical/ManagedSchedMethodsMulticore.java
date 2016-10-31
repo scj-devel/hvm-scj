@@ -6,7 +6,7 @@ public class ManagedSchedMethodsMulticore {
 		if (ms instanceof ManagedThread) {
 			runManagedThread((ManagedThread) ms);
 		} else if (ms instanceof MissionSequencer) {
-			runMissionSequencer((MissionSequencer<?>) ms);
+			runMissionSequencer((MissionSequencer) ms);
 		} else if (ms instanceof PeriodicEventHandler) {
 			runPeriodicHandler((PeriodicEventHandler) ms);
 		} else if (ms instanceof AperiodicEventHandler) {
@@ -71,7 +71,7 @@ public class ManagedSchedMethodsMulticore {
 		handler.state = 0;
 	}
 
-	private static void runMissionSequencer(MissionSequencer<?> ms) {
+	private static void runMissionSequencer(MissionSequencer ms) {
 		ms.privateMemory.enter(ms);
 		ms.mission.currMissSeq.seqNotify();
 	}

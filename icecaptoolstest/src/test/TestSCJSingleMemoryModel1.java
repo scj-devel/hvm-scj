@@ -73,7 +73,7 @@ public class TestSCJSingleMemoryModel1
     }
   }
   
-  private static class MyMission extends Mission<MyMission> {
+  private static class MyMission extends Mission {
 
     @Override
     protected void initialize() {
@@ -96,7 +96,7 @@ public class TestSCJSingleMemoryModel1
     }
   }
   
-  private static class MySequencer extends MissionSequencer<MyMission> {
+  private static class MySequencer extends MissionSequencer {
     private MyMission mission;
 
     public MySequencer(PriorityParameters priority, StorageParameters storage) {
@@ -121,10 +121,10 @@ public class TestSCJSingleMemoryModel1
     }
   }
 
-  private static class MyApp implements Safelet<MyMission>{
+  private static class MyApp implements Safelet{
     
     @Override
-    public MissionSequencer<MyMission> getSequencer() {
+    public MissionSequencer getSequencer() {
       return new MySequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
                              storageParameters_Sequencer);
     }

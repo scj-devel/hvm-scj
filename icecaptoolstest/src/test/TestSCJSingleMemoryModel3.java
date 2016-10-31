@@ -20,7 +20,7 @@ import vm.VMTest;
 
 public class TestSCJSingleMemoryModel3 {
 
-	private static class TopMission2 extends Mission<TopMission2> {
+	private static class TopMission2 extends Mission {
 		protected void initialize() {
 			AperiodicEventHandler myAEH = new MyAEH(new PriorityParameters(10), new AperiodicParameters(
 					new RelativeTime(50, 0, Clock.getRealtimeClock()), null), storageParameters_Handlers, this);
@@ -73,7 +73,7 @@ public class TestSCJSingleMemoryModel3 {
 		}
 	}
 
-	private static class InnerMission2 extends Mission<InnerMission2> {
+	private static class InnerMission2 extends Mission {
 		protected void initialize() {
 			AperiodicEventHandler myAEH = new MyAEH(new PriorityParameters(10), new AperiodicParameters(
 					new RelativeTime(50, 0, Clock.getRealtimeClock()), null), storageParameters_Handlers, this);
@@ -126,7 +126,7 @@ public class TestSCJSingleMemoryModel3 {
 		}
 	}
 
-	private static class InnerSequencer2 extends MissionSequencer<Mission> {
+	private static class InnerSequencer2 extends MissionSequencer {
 		private int count = 0;
 
 		public InnerSequencer2(PriorityParameters priority, StorageParameters storage) {
@@ -202,7 +202,7 @@ public class TestSCJSingleMemoryModel3 {
 		}
 	}
 
-	private static class InnerSequencer1 extends MissionSequencer<Mission> {
+	private static class InnerSequencer1 extends MissionSequencer {
 		private int count = 0;
 
 		public InnerSequencer1(PriorityParameters priority, StorageParameters storage) {
@@ -225,7 +225,7 @@ public class TestSCJSingleMemoryModel3 {
 		}
 	}
 
-	private static class TopMission1 extends Mission<TopMission1> {
+	private static class TopMission1 extends Mission {
 
 		protected void initialize() {
 			devices.Console.println("TopMission1.initialize");
@@ -243,7 +243,7 @@ public class TestSCJSingleMemoryModel3 {
 		}
 	}
 
-	private static class OuterMostSequencer extends MissionSequencer<Mission> {
+	private static class OuterMostSequencer extends MissionSequencer {
 		private Mission[] missionArray;
 		private int count = 0;
 
@@ -277,7 +277,7 @@ public class TestSCJSingleMemoryModel3 {
 	private static class MyApp implements Safelet {
 
 		@Override
-		public MissionSequencer<Mission> getSequencer() {
+		public MissionSequencer getSequencer() {
 			return new OuterMostSequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
 					storageParameters_OuterMostSequencer);
 		}

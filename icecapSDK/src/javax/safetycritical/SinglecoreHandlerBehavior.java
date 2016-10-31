@@ -27,7 +27,7 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 	}
 
 	@Override
-	void initMissionSequencer(MissionSequencer<?> handler) {
+	void initMissionSequencer(MissionSequencer handler) {
 		if (MissionSequencer.isOuterMostSeq) {
 			MissionSequencer.outerMostSeq = handler;
 			if (Launcher.level != 0) {
@@ -47,7 +47,7 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 	}
 
 	@Override
-	void cleanOuterMissionSequencer(MissionSequencer<?> handler) {
+	void cleanOuterMissionSequencer(MissionSequencer handler) {
 		if (Launcher.level == 2) {
 			//devices.Console.println("MS.T: " + handler.name + "; #Missions: " + MissionSequencer.howManyMissions
 			//		+ "; outerSeq: " + handler.outerSeq);
@@ -60,7 +60,7 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 	}
 
 	@Override
-	void missionSequencerSingleTermination(MissionSequencer<?> handler) {
+	void missionSequencerSingleTermination(MissionSequencer handler) {
 		vm.ClockInterruptHandler.instance.disable();
 		//devices.Console.println("------ MS.signalTermination: " + handler.name);
 		handler.terminateSeq = true;
@@ -69,7 +69,7 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 	}
 
 	@Override
-	void missionSequencerExecutePhase(MissionSequencer<?> handler) {
+	void missionSequencerExecutePhase(MissionSequencer handler) {
 		handler.missionMemory.enterToExecute(handler.currMission);
 		//System.out.println("SinglecoreBehavior.missionSequencerExecutePhase");
 		// the ms will wait here until it is notified

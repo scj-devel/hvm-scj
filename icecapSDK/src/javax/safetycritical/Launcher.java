@@ -51,7 +51,7 @@ import vm.Memory;
  * @scjComment - The class is not part of the SCJ specification.
  */
 public abstract class Launcher implements Runnable {
-	Safelet<?> app;
+	Safelet app;
 	static int level = 0;
 	static boolean useOS = false;
 	protected MachineFactory mFactory;
@@ -62,7 +62,7 @@ public abstract class Launcher implements Runnable {
 		this.mFactory = mFactory;
 	}
 
-	protected void initAndRun(Safelet<?> app, int level) {
+	protected void initAndRun(Safelet app, int level) {
 		if (level < 0 || level > 2 || app == null) {
 			throw new IllegalArgumentException();
 		}

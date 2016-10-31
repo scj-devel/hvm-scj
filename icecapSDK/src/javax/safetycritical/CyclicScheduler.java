@@ -47,7 +47,7 @@ import vm.Process;
  *   not part of the SCJ specification.
  */
 final class CyclicScheduler extends Scheduler implements vm.Scheduler {
-	MissionSequencer<?> seq;
+	MissionSequencer seq;
 
 	private ScjProcess current;
 
@@ -73,8 +73,8 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 	public Process getNextProcess() {
 		ScjProcess scjProcess = CyclicScheduler.instance().getCurrentProcess();
 
-		if (scjProcess.getTarget() instanceof MissionSequencer<?>
-				&& ((MissionSequencer<?>) (scjProcess.getTarget())).currState == State.END) {
+		if (scjProcess.getTarget() instanceof MissionSequencer
+				&& ((MissionSequencer) (scjProcess.getTarget())).currState == State.END) {
 			scjProcess.getTarget().cleanUp();
 			stop(scjProcess.process);
 		}
@@ -88,7 +88,7 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 		terminateScheduler(current);
 	}
 
-	void start(MissionSequencer<?> seq, MachineFactory mFactory) {
+	void start(MissionSequencer seq, MachineFactory mFactory) {
 		this.seq = seq;
 		current = ManagedSchedMethods.createScjProcess(seq);
 		startScheduler(mFactory);

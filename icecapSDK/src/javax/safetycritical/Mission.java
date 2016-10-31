@@ -51,8 +51,8 @@ import javax.safetycritical.annotate.SCJAllowed;
  * @scjComment 
  */
 @SCJAllowed
-public abstract class Mission<M extends Mission<M>> {
-	MissionSequencer<M> currMissSeq;
+public abstract class Mission {
+	MissionSequencer currMissSeq;
 
 	boolean missionTerminate = false;
 
@@ -98,7 +98,7 @@ public abstract class Mission<M extends Mission<M>> {
 	}
 
 	@SCJAllowed
-	public MissionSequencer<M> getSequencer() {
+	public MissionSequencer getSequencer() {
 		return currMissSeq;
 	}
 
@@ -127,7 +127,7 @@ public abstract class Mission<M extends Mission<M>> {
 	protected abstract void initialize();
 
 	// used in MissionSequencer.handleAsyncEvent: case State.INITIALIZE
-	void setMissionSeq(MissionSequencer<M> missSeq) {
+	void setMissionSeq(MissionSequencer missSeq) {
 		currMissSeq = missSeq;
 	}
 

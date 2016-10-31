@@ -17,7 +17,7 @@ import javax.scj.util.Const;
 import vm.VMTest;
 
 public class TestSCJMPMemory {
-	public static MissionSequencer<MyMission0> ms;
+	public static MissionSequencer ms;
 
 	private static class MyPeriodicEvh extends PeriodicEventHandler {
 		int i = 0;
@@ -59,7 +59,7 @@ public class TestSCJMPMemory {
 		}
 	}
 
-	private static class MyMission0 extends Mission<MyMission0> {
+	private static class MyMission0 extends Mission {
 		public void initialize() {
 			if (Services.getNameOfCurrentMemoryArea().equals("outer-ms")) {
 				devices.Console.println("0");
@@ -86,8 +86,8 @@ public class TestSCJMPMemory {
 		}
 	}
 
-	private static class MyApp implements Safelet<MyMission0> {
-		public MissionSequencer<MyMission0> getSequencer() {
+	private static class MyApp implements Safelet {
+		public MissionSequencer getSequencer() {
 			ms = new MySequencer();
 			return ms;
 		}
@@ -99,7 +99,7 @@ public class TestSCJMPMemory {
 		public void initializeApplication() {
 		}
 
-		private class MySequencer extends MissionSequencer<MyMission0> {
+		private class MySequencer extends MissionSequencer {
 			MyMission0 m;
 			int count = 0;
 

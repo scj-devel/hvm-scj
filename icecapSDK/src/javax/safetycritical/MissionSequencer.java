@@ -59,10 +59,10 @@ import javax.safetycritical.annotate.SCJPhase;
  * @scjComment 
  */
 @SCJAllowed
-public abstract class MissionSequencer<MissionType extends Mission> extends ManagedEventHandler {
+public abstract class MissionSequencer extends ManagedEventHandler {
 
 	MissionMemory missionMemory;
-	MissionType currMission;
+	Mission currMission;
 
 	interface State {
 		public final static int START = 1;
@@ -85,8 +85,8 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	static int howManyMissions = -1; // for testing only
 
 	// Level2 only: a reference to the nearest outer sequencer
-	MissionSequencer<?> outerSeq = null;
-	static MissionSequencer<?> outerMostSeq = null; // for multiprocessor only
+	MissionSequencer outerSeq = null;
+	static MissionSequencer outerMostSeq = null; // for multiprocessor only
 	
 	Monitor lock;
 
@@ -237,7 +237,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 	 *         <code>MissionSequencer</code>.
 	 */
 	@SCJAllowed(Level.SUPPORT)
-	protected abstract MissionType getNextMission();
+	protected abstract Mission getNextMission();
 
 //	public final void register() {
 //		super.register();
@@ -254,7 +254,7 @@ public abstract class MissionSequencer<MissionType extends Mission> extends Mana
 		missionMemory.removeArea();
 	}
 
-	MissionSequencer<?> getOuterSeq() {
+	MissionSequencer getOuterSeq() {
 		return outerSeq;
 	}
 

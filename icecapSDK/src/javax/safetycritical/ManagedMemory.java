@@ -127,7 +127,7 @@ public abstract class ManagedMemory extends MemoryArea {
 
 		else if (mem instanceof MissionMemory) {
 			// return nearest outermost memory
-			MissionSequencer<?> missSeq = Mission.getMission().getSequencer();
+			MissionSequencer missSeq = Mission.getMission().getSequencer();
 			if (missSeq.outerSeq == null)
 				return ImmortalMemory.instance();
 			else

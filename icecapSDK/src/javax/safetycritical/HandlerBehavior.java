@@ -10,13 +10,13 @@ abstract class HandlerBehavior {
 
 	abstract void oneshotHandlerScheduleNextReleaseTime(OneShotEventHandler handler, HighResolutionTime<?> time);
 
-	abstract void initMissionSequencer(MissionSequencer<?> handler);
+	abstract void initMissionSequencer(MissionSequencer handler);
 
-	abstract void cleanOuterMissionSequencer(MissionSequencer<?> handler);
+	abstract void cleanOuterMissionSequencer(MissionSequencer handler);
 
-	abstract void missionSequencerSingleTermination(MissionSequencer<?> handler);
+	abstract void missionSequencerSingleTermination(MissionSequencer handler);
 
-	abstract void missionSequencerExecutePhase(MissionSequencer<?> handler);
+	abstract void missionSequencerExecutePhase(MissionSequencer handler);
 	
 }
 

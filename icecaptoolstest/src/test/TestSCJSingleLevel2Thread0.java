@@ -60,7 +60,7 @@ public class TestSCJSingleLevel2Thread0 {
 		}
 	}
 
-	private static class MyMission extends Mission<MyMission> {
+	private static class MyMission extends Mission {
 
 		public void initialize() {
 			MyThread th = new MyThread(new PriorityParameters(Priorities.PR97), storageParameters_Handlers);
@@ -72,7 +72,7 @@ public class TestSCJSingleLevel2Thread0 {
 		}
 	}
 
-	private static class MySequencer extends MissionSequencer<MyMission> {
+	private static class MySequencer extends MissionSequencer {
 
 		private MyMission mission;
 
@@ -94,9 +94,9 @@ public class TestSCJSingleLevel2Thread0 {
 		}
 	}
 
-	private static class MyApp implements Safelet<MyMission> {
+	private static class MyApp implements Safelet {
 
-		public MissionSequencer<MyMission> getSequencer() {
+		public MissionSequencer getSequencer() {
 			devices.Console.println("MyApp.getSequencer");
 			return new MySequencer();
 		}

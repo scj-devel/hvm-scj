@@ -90,7 +90,7 @@ public class TestSCJSingleCyclicSchedule4 {
         }
     }
 
-    public static class MySequencer extends MissionSequencer<CyclicExecutive> {
+    public static class MySequencer extends MissionSequencer {
         private MyMission mission;
 
         public MySequencer() {
@@ -111,8 +111,8 @@ public class TestSCJSingleCyclicSchedule4 {
         }
     }
 
-    public static class MyApp implements Safelet<CyclicExecutive> {
-        public MissionSequencer<CyclicExecutive> getSequencer() {
+    public static class MyApp implements Safelet {
+        public MissionSequencer getSequencer() {
             devices.Console.println("** MyApp.getSequencer");
             return new MySequencer();
         }

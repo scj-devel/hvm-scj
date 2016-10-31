@@ -58,7 +58,7 @@ public class TestSCJSingleAperiodicAndOneShotEvh1 {
 		}
 	}
 
-	private static class MyMission extends Mission<MyMission> {
+	private static class MyMission extends Mission {
 		
 		public void initialize() {
 			AperiodicEventHandler aevh = new MyAperiodicEvh(
@@ -80,9 +80,9 @@ public class TestSCJSingleAperiodicAndOneShotEvh1 {
 		}
 	}
 
-	private static class MyApp implements Safelet<MyMission> {
+	private static class MyApp implements Safelet {
 		
-		public MissionSequencer<MyMission> getSequencer() {
+		public MissionSequencer getSequencer() {
 			return new MySequencer();
 		}
 
@@ -93,7 +93,7 @@ public class TestSCJSingleAperiodicAndOneShotEvh1 {
 		public void initializeApplication() {
 		}
 
-		private class MySequencer extends MissionSequencer<MyMission> {
+		private class MySequencer extends MissionSequencer {
 			private MyMission mission;
 
 			MySequencer() {

@@ -52,12 +52,12 @@ public class TestSCJPrioritySchedule2 {
 
 	private static class MyAperiodicEvh extends AperiodicEventHandler {
 		int n;
-		MissionSequencer<MyMission> missSeq;
+		MissionSequencer missSeq;
 		int count = 0;
 
 		public MyAperiodicEvh(PriorityParameters priority,
 				AperiodicParameters release, long memSize, int n,
-				MissionSequencer<MyMission> missSeq) {
+				MissionSequencer missSeq) {
 			super(priority, release, new StorageParameters(memSize, 0, 0, 0), 
 				  new ConfigurationParameters (-1, -1, new long[] { 256 }));
 			this.n = n;
@@ -75,7 +75,7 @@ public class TestSCJPrioritySchedule2 {
 		}
 	}
 
-	private static class MyMission extends Mission<MyMission> {
+	private static class MyMission extends Mission {
 		@SuppressWarnings("rawtypes")
 		MissionSequencer missSeq;
 
@@ -108,8 +108,8 @@ public class TestSCJPrioritySchedule2 {
 		}
 	}
 
-	private static class MyApp implements Safelet<MyMission> {
-		public MissionSequencer<MyMission> getSequencer() {
+	private static class MyApp implements Safelet {
+		public MissionSequencer getSequencer() {
 			// devices.Console.println("   ** MyApp.getSequencer");
 			return new MySequencer();
 		}
@@ -118,7 +118,7 @@ public class TestSCJPrioritySchedule2 {
 			return Const.IMMORTAL_MEM;
 		}
 
-		private class MySequencer extends MissionSequencer<MyMission> {
+		private class MySequencer extends MissionSequencer {
 			private MyMission mission;
 
 			MySequencer() {

@@ -36,7 +36,7 @@ public class TestSCJMPSharedResource1 {
     private static class MyPeriodicEvh extends PeriodicEventHandler {
         int n;
         Mission mission;
-        MissionSequencer<?> missSeq;
+        MissionSequencer missSeq;
 
         Resource res;
 
@@ -46,7 +46,7 @@ public class TestSCJMPSharedResource1 {
         		PeriodicParameters periodic, 
         		StorageParameters storageParameters, 
                 int n, 
-                Resource res, Mission mission, MissionSequencer<?> missSeq) {
+                Resource res, Mission mission, MissionSequencer missSeq) {
             super(priority, periodic, storageParameters, configParameters);
             this.n = n;
             this.res = res;
@@ -111,12 +111,12 @@ public class TestSCJMPSharedResource1 {
         }
     }
 
-    private static class MyMission extends Mission<MyMission> {
+    private static class MyMission extends Mission {
         static final int NumberOfPeriodicEvhs = 2;
 
-        MissionSequencer<MyMission> missSeq;
+        MissionSequencer missSeq;
 
-        public MyMission(MissionSequencer<MyMission> missSeq) {
+        public MyMission(MissionSequencer missSeq) {
             this.missSeq = missSeq;
         }
 
@@ -149,8 +149,8 @@ public class TestSCJMPSharedResource1 {
         }
     }
 
-    private static class MyApp implements Safelet<MyMission> {
-        public MissionSequencer<MyMission> getSequencer() {
+    private static class MyApp implements Safelet {
+        public MissionSequencer getSequencer() {
             devices.Console.println("MyApp.getSequencer");
             return new MySequencer();
         }
@@ -162,7 +162,7 @@ public class TestSCJMPSharedResource1 {
         public void initializeApplication() {
         }
 
-        private class MySequencer extends MissionSequencer<MyMission> {
+        private class MySequencer extends MissionSequencer {
             private MyMission mission;
             private int howManyTimes;
 

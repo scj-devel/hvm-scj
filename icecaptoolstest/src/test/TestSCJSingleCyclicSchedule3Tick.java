@@ -80,9 +80,9 @@ public class TestSCJSingleCyclicSchedule3Tick
         }
     }
 
-    private static class MyApp implements Safelet<CyclicExecutive> {
+    private static class MyApp implements Safelet {
 
-        public MissionSequencer<CyclicExecutive> getSequencer() {
+        public MissionSequencer getSequencer() {
             devices.Console.println("** MyApp.getSequencer");
             return new MySequencer();
         }
@@ -94,7 +94,7 @@ public class TestSCJSingleCyclicSchedule3Tick
         public void initializeApplication() {
         }
 
-        private static class MySequencer extends MissionSequencer<CyclicExecutive> {
+        private static class MySequencer extends MissionSequencer {
             private CyclicExecutive[] missions;
             private boolean started;
 
