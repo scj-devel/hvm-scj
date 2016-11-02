@@ -3,7 +3,7 @@ Main-Class: icecaptools.compiler.CompilationManager
 Bundle-ManifestVersion: 2
 Bundle-Name: Icecaptools
 Bundle-SymbolicName: icecaptools;singleton:=true
-Bundle-Version: 3.0.5
+Bundle-Version: 3.0.6
 Bundle-Activator: icecaptools.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
@@ -61,6 +61,21 @@ Bundle-NativeCode: lib/Linux/x86_64-unknown-linux-gnu/librxtxSerial.so;
  processor=x86,
  lib/Windows/win-x64/rxtxSerial.dll;
  osname=Windows 8;
+ processor=x86,
+ lib/Windows/win-x64/rxtxSerial.dll;
+ osname=Win10;
+ processor=x86_64,
+ lib/Windows/win-x64/rxtxSerial.dll;
+ osname=Windows10;
+ processor=x86_64,
+ lib/Windows/win-x64/rxtxSerial.dll;
+ osname=Windows 10;
+ processor=x86_64,
+ lib/Windows/win-x64/rxtxSerial.dll;
+ osname=Windows10;
+ processor=x86,
+ lib/Windows/win-x64/rxtxSerial.dll;
+ osname=Windows 10;
  processor=x86,
  lib/Mac/x86_64/librxtxSerial.jnilib;
  osname=macosx;
