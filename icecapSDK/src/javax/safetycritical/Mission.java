@@ -198,15 +198,15 @@ public abstract class Mission {
 		missionBehaviour.runCleanup(this, missMem);
 	}
 
-	//	// used for JML annotation only (not public)
-	//	boolean isRegistered(ManagedSchedulable target) {
-	//		return ManagedSchedMethods.isRegistered(target);
-	//	}
-	//
-	//	// used for JML annotation only (not public)
-	//	boolean inMissionScope(ManagedSchedulable target) {
-	//		return ManagedSchedMethods.isInMissionScope(target);
-	//	}
+	// used for JML annotation only (not public)
+	public boolean isRegistered(ManagedSchedulable target) {
+		return ManagedSchedMethods.isRegistered(target);
+	}
+
+	// used for JML annotation only (not public)
+	public boolean inMissionScope(ManagedSchedulable target) {
+		return ManagedSchedMethods.isInMissionScope(target);
+	}
 
 	// used for JML annotation only (not public)
 	boolean inMissionScope(CyclicSchedule cs) {
