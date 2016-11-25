@@ -25,6 +25,7 @@ public class MemoryParameters implements Cloneable, Serializable {
 	{ 
 		// Implementation: Bloch: Effective Java, p. 46
 		try {
+			System.out.println("MemoryParameters.clone");
 			return super.clone();
 		}
 		catch (CloneNotSupportedException e) {

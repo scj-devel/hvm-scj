@@ -102,6 +102,13 @@ public class RelativeTime extends HighResolutionTime<RelativeTime> {
 		} else
 			throw new IllegalArgumentException();
 	}
+	
+	public Object clone()
+	{ 
+		System.out.println("RelativeTime.clone");
+		return super.clone();
+		
+	}
 
 	/**
 	 * Creates a new object representing the result of adding <code>millis</code> and <code>nanos</code> to the values

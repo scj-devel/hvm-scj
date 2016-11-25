@@ -71,10 +71,17 @@ public abstract class ReleaseParameters implements Cloneable {
 		this.deadline = (deadline == null ? null : new RelativeTime(deadline));
 		this.missHandler = missHandler;
 	}
-
-	public Object clone() throws CloneNotSupportedException {
-		ReleaseParameters clone = (ReleaseParameters) super.clone();
-		return clone;
+	
+	public Object clone()
+	{ 
+		// Implementation: Bloch: Effective Java, p. 46
+		try {
+			System.out.println("ReleaseParameters.clone");
+			return super.clone();
+		}
+		catch (CloneNotSupportedException e) {
+			throw new Error("ReleaseParameters.clone: Assertion failure");  // can't happen
+		}
 	}
 	
 }

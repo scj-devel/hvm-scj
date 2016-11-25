@@ -242,10 +242,16 @@ public abstract class HighResolutionTime<T extends HighResolutionTime<T>>
 			return 0;
 	}
 	
-	public Object clone() throws CloneNotSupportedException  {
-		
-		return super.clone();  
-		
+	public Object clone()
+	{ 
+		// Implementation: Bloch: Effective Java, p. 46
+		try {
+			System.out.println("HighResolutionTime.clone");
+			return super.clone();
+		}
+		catch (CloneNotSupportedException e) {
+			throw new Error("HighResolutionTime.clone: Assertion failure");  // can't happen
+		}
 	}
 
 	public String toString() {
