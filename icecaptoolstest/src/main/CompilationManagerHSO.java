@@ -114,11 +114,15 @@ public class CompilationManagerHSO {
 		//String inputPackage = "javax.safetycritical.test.linearSequencer2";
 		//String inputPackage = "javax.safetycritical.test.periodicEventHandler1";
 
-		String inputPackage = "javax.realtime.test";
+		//String inputPackage = "javax.realtime.test";
 		//String inputPackage = "javax.safetycritical.test";
 		//String inputPackage = "scj.examples.twomissionsWithSuper";
-
+		
 		//String inputClass = "AllTests";
+		
+		
+
+		
 
 		/* --- TCKs of javax.realtime.test --- : */
 		//String inputClass = "TckTestMemoryParameters";
@@ -137,7 +141,7 @@ public class CompilationManagerHSO {
 		//String inputClass = "TckTestClock";
 		//String inputClass = "TckTestRealtimeClock";
 		
-		String inputClass = "TckSafeletTestPriorityParameters"; 
+		//String inputClass = "TckSafeletTestPriorityParameters"; 
 
 		/* --- TCKs of javax.safetycritical.test --- : */
 		//String inputClass = "TckTestStorageParameters";
@@ -160,8 +164,18 @@ public class CompilationManagerHSO {
 		//String inputClass = "TckTestPriorityCeilingEmulation";
 		//String inputClass = "TckTestPreemptiveScheduling1";
 		//String inputClass = "TckTestManagedMemory";
+		
+		
+		// TckSafelet tests ==============================================
 
-		//String inputClass = "Main";
+		String inputPackage = "tckSafelet.realtime";
+		//String inputPackage = "tckSafelet.safetycritical";
+		
+		//String inputClass = "TckSafeletReleaseParameters";
+		String inputClass = "TckSafeletMemoryParameters";
+		//String inputClass = "TckSafeletPeriodicEventHandler1";
+		
+		// TckSafelet tests end ==========================================
 		
 		/* OpenJML tests end */
 
