@@ -65,8 +65,6 @@ public abstract class Clock {
 	// The nominal interval between ticks.
 	private RelativeTime resolution;
 
-	boolean active;
-
 	/**
 	 * This constructor for the abstract class may allocate objects within 
 	 * the current allocation context.
@@ -76,8 +74,7 @@ public abstract class Clock {
 	 *   When false, indicates that the clock can only be queried for the current time.
 	 * 
 	 */
-	protected Clock(boolean active) {
-		this.active = active;
+	protected Clock() {
 	}
 
 	protected RelativeTime ensureResolution() {
@@ -157,11 +154,6 @@ public abstract class Clock {
 	 */
 	@SCJAllowed
 	public abstract AbsoluteTime getTime(AbsoluteTime dest);
-
-	// used for JML annotation only (not public)
-	boolean getAct() {
-		return active;
-	}
 
 	// used for JML annotation only (not public)
 	RelativeTime getResol() {

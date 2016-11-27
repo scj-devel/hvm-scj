@@ -39,14 +39,12 @@ import icecaptools.IcecapCompileMe;
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
 class RealtimeClock extends Clock {
-	//	private static vm.RealtimeClock nativeClock = 
-	//		vm.RealtimeClock.getRealtimeClock();
+	
 	static Clock rtClock;
 	
 	private static boolean initInProgess;
 
-	private RealtimeClock() {
-		super(true);
+	private RealtimeClock() {		
 	}
 
 	@IcecapCompileMe
@@ -64,12 +62,12 @@ class RealtimeClock extends Clock {
 		return rtClock;
 	}
 
-	/*@ 
-	  public behaviour
-	    requires true;
-	    assignable \nothing;
-	    ensures \result.equals(new RelativeTime(0, 0, this));
-	  @*/
+//	/*@ 
+//	  public behaviour
+//	    requires true;
+//	    assignable \nothing;
+//	    ensures \result.equals(new RelativeTime(0, 0, this));
+//	  @*/
 	@Override
 	public RelativeTime getEpochOffset() {
 		return new RelativeTime(0, 0, this);

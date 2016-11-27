@@ -96,9 +96,9 @@ public final class TestPortalRT {
 		return clck.getResol();
 	}
 	
-	public static final boolean getAct(Clock clck) {
-		return clck.getAct();
-	}
+//	public static final boolean getAct(Clock clck) {
+//		return clck.getAct();
+//	}
 	
 	
 	/**
