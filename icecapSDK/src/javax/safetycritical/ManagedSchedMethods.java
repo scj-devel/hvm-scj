@@ -83,8 +83,10 @@ final class ManagedSchedMethods {
 	}
 
 	static boolean isRegistered(ManagedSchedulable target) {
-		if (target instanceof ManagedEventHandler)
+		if (target instanceof ManagedEventHandler) {
+			System.out.println("ManagedSchedMethods. isRegistered: " + target);
 			return ((ManagedEventHandler) target).isRegistered;
+		}			
 		else if (target instanceof ManagedThread)
 			return ((ManagedThread) target).isRegistered;
 		else if (target instanceof ManagedLongEventHandler)

@@ -118,12 +118,6 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	public final void cleanUp() {
 		super.cleanUp();
 	}
-
-	@SCJAllowed
-	@SCJPhase(Phase.INITIALIZATION)
-	public final void register() {
-		super.register();
-	}
 	
 	long getStart() {
 		return releaseTime.getNanoseconds() + releaseTime.getMilliseconds() * 1000000;

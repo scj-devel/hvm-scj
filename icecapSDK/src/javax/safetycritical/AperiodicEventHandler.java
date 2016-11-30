@@ -77,12 +77,6 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 		if(Launcher.useOS)
 			Services.setCeiling(this, this.priority.getPriority());
 	}
-
-	@SCJAllowed
-	@SCJPhase(Phase.INITIALIZATION)
-	public final void register() {
-		super.register();
-	}
 	
 	/**
 	 * Release this aperiodic event handler

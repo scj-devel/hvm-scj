@@ -185,6 +185,15 @@ public final class TestPortalSC {
 	public static Phase getPhase(Mission m) {
 		return m.getPhase();
 	}
+	
+	public static boolean isRegistered(Mission m, ManagedSchedulable target) {
+		return m.isRegistered(target);
+	}
+	
+	public static boolean inMissionScope(Mission m, ManagedSchedulable target) {
+		return m.inMissionScope(target);
+	}
+	
 }
 
 

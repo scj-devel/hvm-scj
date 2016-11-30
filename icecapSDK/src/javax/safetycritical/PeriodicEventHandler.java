@@ -85,10 +85,6 @@ public abstract class PeriodicEventHandler extends ManagedEventHandler {
 		super(priority, release, storage, config, name);
 		releaseP = release;
 	}
-
-	public final void register() {
-		super.register();
-	}
 	
 	public <T extends HighResolutionTime<T>> T getActualStartTime() {
 		return null;

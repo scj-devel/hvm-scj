@@ -26,6 +26,8 @@
  *************************************************************************/
 package javax.realtime;
 
+import icecaptools.IcecapCompileMe;
+
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 
@@ -71,7 +73,8 @@ public abstract class ReleaseParameters implements Cloneable {
 		this.deadline = (deadline == null ? null : new RelativeTime(deadline));
 		this.missHandler = missHandler;
 	}
-	
+	 
+	@IcecapCompileMe
 	public Object clone()
 	{ 
 		// Implementation: Bloch: Effective Java, p. 46

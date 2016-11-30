@@ -199,12 +199,12 @@ public abstract class Mission {
 	}
 
 	// used for JML annotation only (not public)
-	public boolean isRegistered(ManagedSchedulable target) {
+	boolean isRegistered(ManagedSchedulable target) {
 		return ManagedSchedMethods.isRegistered(target);
 	}
 
 	// used for JML annotation only (not public)
-	public boolean inMissionScope(ManagedSchedulable target) {
+	boolean inMissionScope(ManagedSchedulable target) {
 		return ManagedSchedMethods.isInMissionScope(target);
 	}
 
