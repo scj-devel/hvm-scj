@@ -175,6 +175,7 @@ public abstract class Mission {
 	}
 
 	void runInitialize() {
+		phaseOfMission = Phase.INITIALIZATION;
 		missionBehaviour.runInitialize(this);
 	}
 

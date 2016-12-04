@@ -191,6 +191,7 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 
 			case State.INITIALIZE:
 				//devices.Console.println("MS.I: " + name);
+				phase = Phase.INITIALIZATION;
 				currMission.setMissionSeq(this);
 				missionMemory.enterToInitialize(currMission);
 				currState = State.EXECUTE;

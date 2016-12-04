@@ -44,7 +44,7 @@ import javax.safetycritical.annotate.SCJAllowed;
 public class AsyncEventHandler extends AsyncBaseEventHandler {
 
 	
-	public void run() {
+	public final void run() {
 		handleAsyncEvent();
 	}
 	

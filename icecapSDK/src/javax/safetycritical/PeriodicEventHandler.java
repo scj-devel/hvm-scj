@@ -81,8 +81,9 @@ public abstract class PeriodicEventHandler extends ManagedEventHandler {
 
 	public PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, 
 			StorageParameters storage, ConfigurationParameters config,
-			String name) {
+			String name) {		
 		super(priority, release, storage, config, name);
+		
 		releaseP = release;
 	}
 	

@@ -142,8 +142,9 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	@SCJAllowed(Level.SUPPORT)
 	@SCJPhase(Phase.CLEANUP)
 	public void cleanUp() {
-		//System.out.println("ManagedEventHandler.cleanUp");
+		System.out.println("ManagedEventHandler.cleanUp");
 		privateMemory.removeArea();
+		isRegistered = false;
 	}
 
 	/**
@@ -160,7 +161,11 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 	@SCJAllowed(Level.SUPPORT)
 	public void signalTermination() {
-		// ToDo: implementation
+		// ToDo: implement
+//        Mission m = Mission.getMission();
+//        System.out.println("ManagedEventHandler.signalTermination; mission is: " + m);
+//        if (m != null)
+//        	m.requestTermination();
 	}
 
 	public String getName() {

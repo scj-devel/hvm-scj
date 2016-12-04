@@ -91,8 +91,10 @@ final class ManagedSchedMethods {
 			return ((ManagedThread) target).isRegistered;
 		else if (target instanceof ManagedLongEventHandler)
 			return ((ManagedLongEventHandler) target).isRegistered;
-		else
+		else {
+			System.out.println("ManagedSchedMethods. is not Registered: " + target);
 			return false;
+		}
 	}
 
 	static boolean isInMissionScope(ManagedSchedulable target) {
