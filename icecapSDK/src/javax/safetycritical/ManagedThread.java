@@ -26,6 +26,7 @@
 package javax.safetycritical;
 
 import javax.realtime.AbsoluteTime;
+import javax.realtime.Affinity;
 //import javax.realtime.Clock;
 import javax.realtime.HighResolutionTime;
 import javax.realtime.MemoryArea;
@@ -118,6 +119,11 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 
 	Mission getMission() {
 		return mission;
+	}
+	
+	@SCJPhase(Phase.INITIALIZATION)
+	public void register(Affinity affinity) throws IllegalStateException {
+		// ToDO: implement
 	}
 
 	@SCJAllowed

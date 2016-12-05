@@ -1,6 +1,8 @@
 package javax.safetycritical;
 
 //import javax.realtime.ImmortalMemory;
+import javax.realtime.Clock;
+import javax.realtime.HighResolutionTime;
 import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
@@ -192,6 +194,10 @@ public final class TestPortalSC {
 	
 	public static boolean inMissionScope(Mission m, ManagedSchedulable target) {
 		return m.inMissionScope(target);
+	}
+	
+	public static final String getHandlerName(ManagedEventHandler evh) {
+		return evh.getHandlerName();
 	}
 	
 }

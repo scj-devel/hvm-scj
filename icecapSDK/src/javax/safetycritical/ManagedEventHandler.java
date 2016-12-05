@@ -25,7 +25,9 @@
  *************************************************************************/
 package javax.safetycritical;
 
+import javax.realtime.Affinity;
 import javax.realtime.BoundAsyncEventHandler;
+import javax.realtime.Clock;
 import javax.realtime.ConfigurationParameters;
 import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
@@ -147,6 +149,11 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		isRegistered = false;
 	}
 
+	@SCJPhase(Phase.INITIALIZATION)
+	public void register(Affinity affinity) throws IllegalStateException {
+		// ToDO: implement
+	}
+	
 	/**
 	 * Registers this event handler with the current mission.
 	 */
@@ -161,11 +168,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 	@SCJAllowed(Level.SUPPORT)
 	public void signalTermination() {
-		// ToDo: implement
-//        Mission m = Mission.getMission();
-//        System.out.println("ManagedEventHandler.signalTermination; mission is: " + m);
-//        if (m != null)
-//        	m.requestTermination();
+		// Default behavior: no action
 	}
 
 	public String getName() {
@@ -196,15 +199,10 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		return set;
 	}
 	
-//	// For OpenJML: not public
-//	public boolean isRegistered() {  
-//		return this.isRegistered;
-//	}
-//	
-//	// For OpenJML: not public
-//	public boolean isInMissionScope() {
-//		return this.isInMissionScope;
-//	}
+	// used for JML annotation only (not public)
+	String getHandlerName() {
+		return name;
+	}
 	
 }
 

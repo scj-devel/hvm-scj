@@ -25,6 +25,7 @@
  *************************************************************************/
 package javax.safetycritical;
 
+import javax.realtime.Affinity;
 import javax.realtime.Schedulable;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
@@ -43,17 +44,24 @@ import javax.safetycritical.annotate.SCJPhase;
  */
 @SCJAllowed
 public interface ManagedSchedulable extends Schedulable {
-	/**
-	 * Registers this schedulable object with the current mission.
-	 */
-	@SCJPhase(Phase.INITIALIZATION)
-	public void register();
-
+	
 	/**
 	 * Runs end-of-mission clean up associated with this schedulable object.
 	 */
 	@SCJAllowed(Level.SUPPORT)
 	public void cleanUp();
+	
+	/**
+	 * Registers this schedulable object with the current mission.
+	 */
+	@SCJPhase(Phase.INITIALIZATION)
+	public void register(Affinity affinity) throws IllegalStateException;
+	
+	/**
+	 * Registers this schedulable object with the current mission.
+	 */
+	@SCJPhase(Phase.INITIALIZATION)
+	public void register();
 
 	/**
 	 * Indicates that the enclosing mission has been instructed to terminate.
