@@ -39,13 +39,13 @@ import java.lang.annotation.Target;
 * Specification for Java, and/or for use by the implementation of infrastructure
 * software.
 * 
-* The value field equals LEVEL 0 for elements that may be used within safety-critical
+* The value field equals <code>LEVEL_0</code> for elements that may be used within safety-critical
 * Java applications targeting Level 0, Level 1, or Level 2.
 * 
-* The value field equals LEVEL 1 for elements that may be used within safety-critical
+* The value field equals <code>LEVEL_1</code> for elements that may be used within safety-critical
 * Java applications targeting Level 1 or Level 2.
 * 
-* The value field equals LEVEL 2 for elements that may be used within safety-critical
+* The value field equals <code>LEVEL_2</code> for elements that may be used within safety-critical
 * Java applications targeting Level 2.
 * 
 * Absence of this annotation on a given Class, Field, Method, or Constructor

@@ -18,10 +18,13 @@
  * along with this SCJ Level 0 and Level 1 implementation.  
  * If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2012 
+ * Copyright 2016
  * @authors  Anders P. Ravn, Aalborg University, DK
  *           Stephan E. Korsholm and Hans S&oslash;ndergaard, 
  *             VIA University College, DK
+ *             
+ *  @version 1.1 2016-10-17
+ *  
  *************************************************************************/
 
 package javax.safetycritical.annotate;
@@ -44,11 +47,11 @@ java.lang.annotation.ElementType.CONSTRUCTOR})
 
 public @interface SCJMayAllocate {
 
-@SCJAllowed
-public AllocatePermission[] value ()
-	default {
-		AllocatePermission.CurrentContext, 
-		AllocatePermission.OuterContext, 
-		AllocatePermission.InnerContext};
+	@SCJAllowed
+	public AllocationContext[] value () default {
+		AllocationContext.CURRENT, 
+		AllocationContext.OUTER, 
+		AllocationContext.INNER
+	};
 }
 

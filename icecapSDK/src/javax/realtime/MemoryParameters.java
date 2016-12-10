@@ -21,7 +21,7 @@ public class MemoryParameters implements Cloneable, Serializable {
 		this.maxImmortal = maxImmortal;
 	}
 	
-	public Object clone()
+	public Object clone() 
 	{ 
 		// Implementation: Bloch: Effective Java, p. 46
 		try {

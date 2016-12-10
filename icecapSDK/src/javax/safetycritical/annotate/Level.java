@@ -34,15 +34,8 @@ package javax.safetycritical.annotate;
 
 @SCJAllowed
 public enum Level {
-	@SCJAllowed
-	LEVEL_0, 
-	
-	@SCJAllowed
-	LEVEL_1, 
-	
-	@SCJAllowed
+	LEVEL_0, 	
+	LEVEL_1,
 	LEVEL_2, 
-	
-	@SCJAllowed
 	SUPPORT
 }
