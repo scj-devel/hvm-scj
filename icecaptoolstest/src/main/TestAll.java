@@ -149,7 +149,7 @@ public class TestAll {
 	}
 
 	private static String[] skippedClasses = { "TestSCJWaitAndNotify2.java", "TestSCJLevel2Thread0.java",
-			"TestSCJStep0.java", /* "TestCalculator.java",
+			"TestSCJStep0.java", "TestGC1.java", "TestGCSimple.java", /* "TestCalculator.java",
 									 "TestNewFloat.java",
 									 */"TestLong.java", "TestMiniTests.java", "TestCAS.java" };
 
