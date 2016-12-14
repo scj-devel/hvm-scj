@@ -49,9 +49,8 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 						((OneShotEventHandler) schedulable).deschedule();
 						((OneShotEventHandler) schedulable).fireNextRelease();
 					}
-					// only call signalTermination at Level 2
-					if (TestPortalSC.getLevel() == 2) 
-						schedulable.signalTermination();
+					
+					schedulable.signalTermination();
 				}
 			}
 			return false;

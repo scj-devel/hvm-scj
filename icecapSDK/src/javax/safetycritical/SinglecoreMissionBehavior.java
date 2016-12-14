@@ -29,22 +29,20 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 	@Override
 	boolean requestTermination(Mission mission) {
 		if (mission.missionTerminate == false) { // called the first time during mission execution	
-			
-			// only call signalTermination at Level 2
-			if (TestPortalSC.getLevel() == 2) {
 
-				// terminate all the sequencer's MSObjects that were created by the mission.
-				Iterator<ManagedSchedulable> schedulables = mission.getManagedSchedulables();
-				while (schedulables.hasNext()) {
-					ManagedSchedulable ms = schedulables.next();
-					if (ms != null) {
-						ms.signalTermination();
-					}
+			mission.missionTerminate = true; // ensure that no further calls have effect
+			
+			// terminate all the sequencer's MSObjects that were created by the mission.
+			Iterator<ManagedSchedulable> schedulables = mission.getManagedSchedulables();
+			while (schedulables.hasNext()) {
+				ManagedSchedulable ms = schedulables.next();
+				if (ms != null) {
+					ms.signalTermination();
 				}
 			}
-			//System.out.println("Mission:SinglecoreBehavior.requestTermination");
+			
+			System.out.println("Mission:SinglecoreBehavior.requestTermination");
 
-			mission.missionTerminate = true;
 			return false;
 		} else
 			return true; // called more than once: nothing done
