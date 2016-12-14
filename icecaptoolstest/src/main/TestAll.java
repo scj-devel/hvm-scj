@@ -43,7 +43,24 @@ public class TestAll {
 		new TestAll().performTest();
 	}
 
-	protected void performTest() throws Exception, Throwable {
+	protected static class TestInformation
+	{
+		public String test;
+		public String inputFolder;
+		public File outputFolder;
+		public File testsDirectory;
+
+		public TestInformation(String test, String inputFolder, File outputFolder, File testsDirectory) {
+			this.test = test;
+			this.inputFolder = inputFolder;
+			this.outputFolder = outputFolder;
+			this.testsDirectory = testsDirectory;
+		}
+	}
+
+	private ArrayList<TestInformation> testinformation;
+	
+	protected final void collectTests() throws Exception, Throwable {
 		File testsDirectory;
 		String cwd = new File(".").getAbsolutePath();
 		StringTokenizer strt = new StringTokenizer(cwd, File.separatorChar + "");
@@ -110,22 +127,31 @@ public class TestAll {
 				 * testlist.add("TestBug3.java");
 				 * testlist.add("ANTTestInvokeVirtual.java");
 				 */
-
-				int testNo = 0;
+				testinformation = new ArrayList<TestInformation>();
+				
 				for (String test : testlist) {
 					if (includeFileInTest(test)) {
 						if (!skipIt(test)) {
-							System.out.println("------------------ " + test + " ------------------");
-							testIt(test, inputFolder, outputFolder, testNo++, testsDirectory);
+							TestInformation ti = new TestInformation(test, inputFolder, outputFolder, testsDirectory);
+							testinformation.add(ti);
 						}
 					}
 				}
-
 			}
 		}
-		System.out.println("------------------ done ------------------");
 	}
 
+	protected final void performTest() throws Exception, Throwable
+	{
+		collectTests();
+		int testNo = 0;
+		for (TestInformation ti: testinformation)
+		{
+			testIt(ti.test, ti.inputFolder, ti.outputFolder, testNo++, ti.testsDirectory);
+		}
+		System.out.println("------------------------------ Done ------------------------------------");
+	}
+	
 	protected Iterator<File> getTestDirectories(StringBuffer path) {
 		File testsDirectory;
 		path.append("src");
