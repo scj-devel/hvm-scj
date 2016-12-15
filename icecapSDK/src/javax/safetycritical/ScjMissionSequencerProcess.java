@@ -12,9 +12,10 @@ class ScjMissionSequencerProcess extends ScjProcess {
 		if (state == ScjProcess.State.HANDLED) {
 			// missionSequencer terminates
 			if (index == -2) { // outer sequencer
+				//devices.Console.println("---- ScjMissionSequencerProcess: outer sequencer " + index + "; " + msObject);
 				msObject.cleanUp();
 			} else {
-				//devices.Console.println("---- ScjMissionSequencerProcess: " + index + ";target: " + target);
+				//devices.Console.println("---- ScjMissionSequencerProcess: " + index + ";: " + msObject);
 				Mission m = Mission.getMission();
 				if (m != null) {
 					msObject.cleanUp();

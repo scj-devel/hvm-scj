@@ -32,11 +32,9 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 
 	@Override
 	boolean requestTermination(Mission mission) {
-		if (mission.missionTerminate == false) { // called the first time during mission
-			// execution
+		if (mission.missionTerminate == false) { // called the first time during mission execution
 
-			// terminate all the sequencer's MSObjects that were created by the
-			// mission.
+			// terminate all the sequencer's MSObjects that were created by the mission.
 			mission.missionTerminate = true;
 
 			Iterator<ManagedSchedulable> schedulables = mission.getManagedSchedulables();
@@ -51,6 +49,7 @@ final class MulticoreMissionBehavior extends MissionBehavior {
 						((OneShotEventHandler) schedulable).deschedule();
 						((OneShotEventHandler) schedulable).fireNextRelease();
 					}
+					
 					schedulable.signalTermination();
 				}
 			}

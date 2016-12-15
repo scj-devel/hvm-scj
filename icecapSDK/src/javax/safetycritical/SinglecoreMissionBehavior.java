@@ -30,6 +30,8 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 	boolean requestTermination(Mission mission) {
 		if (mission.missionTerminate == false) { // called the first time during mission execution	
 
+			mission.missionTerminate = true; // ensure that no further calls have effect
+			
 			// terminate all the sequencer's MSObjects that were created by the mission.
 			Iterator<ManagedSchedulable> schedulables = mission.getManagedSchedulables();
 			while (schedulables.hasNext()) {
@@ -38,9 +40,9 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 					ms.signalTermination();
 				}
 			}
-			//System.out.println("Mission:SinglecoreBehavior.requestTermination");
+			
+			System.out.println("Mission:SinglecoreBehavior.requestTermination");
 
-			mission.missionTerminate = true;
 			return false;
 		} else
 			return true; // called more than once: nothing done

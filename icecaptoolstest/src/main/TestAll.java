@@ -58,9 +58,9 @@ public class TestAll {
 		}
 	}
 
-	private ArrayList<TestInformation> testinformation;
+	protected ArrayList<TestInformation> testinformation;
 	
-	protected final void collectTests() throws Exception, Throwable {
+	protected void collectTests() throws Exception, Throwable {
 		File testsDirectory;
 		String cwd = new File(".").getAbsolutePath();
 		StringTokenizer strt = new StringTokenizer(cwd, File.separatorChar + "");
@@ -79,32 +79,12 @@ public class TestAll {
 
 		String inputFolder = getInputFolder(path);
 
-		StringBuffer outputFolderPath = new StringBuffer(System.getProperty("java.io.tmpdir"));
-		outputFolderPath.append(File.separatorChar);
-		outputFolderPath.append("hvm");
-
-		File outputFolder = new File(outputFolderPath.toString());
-		outputFolder.mkdir();
-
-		File[] files = outputFolder.listFiles();
-		for (File file : files) {
-			if (file.isDirectory()) {
-				File[] loaderFiles = file.listFiles();
-				for (File lfile : loaderFiles) {
-					lfile.delete();
-					if (lfile.exists()) {
-						throw new Exception("Cannot delete: " + lfile.getAbsolutePath());
-					}
-				}
-			}
-			file.delete();
-			if (file.exists()) {
-				throw new Exception("Cannot delete: " + file.getAbsolutePath());
-			}
-		}
+		File outputFolder = prepareOutputFolder();
 
 		Iterator<File> testsDirectories = getTestDirectories(path);
 
+		testinformation = new ArrayList<TestInformation>();
+		
 		while (testsDirectories.hasNext()) {
 			testsDirectory = testsDirectories.next();
 			if (testsDirectory.isDirectory()) {
@@ -127,8 +107,7 @@ public class TestAll {
 				 * testlist.add("TestBug3.java");
 				 * testlist.add("ANTTestInvokeVirtual.java");
 				 */
-				testinformation = new ArrayList<TestInformation>();
-				
+
 				for (String test : testlist) {
 					if (includeFileInTest(test)) {
 						if (!skipIt(test)) {
@@ -141,7 +120,33 @@ public class TestAll {
 		}
 	}
 
-	protected final void performTest() throws Exception, Throwable
+	protected File prepareOutputFolder() throws Exception {
+		StringBuffer outputFolderPath = new StringBuffer(System.getProperty("java.io.tmpdir"));
+		outputFolderPath.append(File.separatorChar);
+		outputFolderPath.append("hvm");
+		File outputFolder = new File(outputFolderPath.toString());
+		outputFolder.mkdir();
+
+		File[] files = outputFolder.listFiles();
+		for (File file : files) {
+			if (file.isDirectory()) {
+				File[] loaderFiles = file.listFiles();
+				for (File lfile : loaderFiles) {
+					lfile.delete();
+					if (lfile.exists()) {
+						throw new Exception("Cannot delete: " + lfile.getAbsolutePath());
+					}
+				}
+			}
+			file.delete();
+			if (file.exists()) {
+				throw new Exception("Cannot delete: " + file.getAbsolutePath());
+			}
+		}
+		return outputFolder;
+	}
+
+	public final void performTest() throws Exception, Throwable
 	{
 		collectTests();
 		int testNo = 0;
