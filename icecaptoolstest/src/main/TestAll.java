@@ -62,22 +62,9 @@ public class TestAll {
 	
 	protected void collectTests() throws Exception, Throwable {
 		File testsDirectory;
-		String cwd = new File(".").getAbsolutePath();
-		StringTokenizer strt = new StringTokenizer(cwd, File.separatorChar + "");
 		StringBuffer path = new StringBuffer();
-		path.append(File.separatorChar);
-		String nextToken = strt.nextToken();
-
-		while (strt.hasMoreTokens()) {
-			path.append(nextToken);
-			path.append(File.separatorChar);
-			nextToken = strt.nextToken();
-		}
-
-		icecapvmSrcPath = getVMSource(path);
-		icecapvmSrcPath = icecapvmSrcPath + "src";
-
-		String inputFolder = getInputFolder(path);
+		
+		String inputFolder = setup(path);
 
 		File outputFolder = prepareOutputFolder();
 
@@ -118,6 +105,25 @@ public class TestAll {
 				}
 			}
 		}
+	}
+
+	private String setup(StringBuffer path) {
+		String cwd = new File(".").getAbsolutePath();
+		StringTokenizer strt = new StringTokenizer(cwd, File.separatorChar + "");
+		path.append(File.separatorChar);
+		String nextToken = strt.nextToken();
+
+		while (strt.hasMoreTokens()) {
+			path.append(nextToken);
+			path.append(File.separatorChar);
+			nextToken = strt.nextToken();
+		}
+
+		icecapvmSrcPath = getVMSource(path);
+		icecapvmSrcPath = icecapvmSrcPath + "src";
+
+		String inputFolder = getInputFolder(path);
+		return inputFolder;
 	}
 
 	protected File prepareOutputFolder() throws Exception {
