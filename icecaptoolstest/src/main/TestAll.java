@@ -107,7 +107,7 @@ public class TestAll {
 		}
 	}
 
-	private String setup(StringBuffer path) {
+	protected String setup(StringBuffer path) {
 		String cwd = new File(".").getAbsolutePath();
 		StringTokenizer strt = new StringTokenizer(cwd, File.separatorChar + "");
 		path.append(File.separatorChar);
