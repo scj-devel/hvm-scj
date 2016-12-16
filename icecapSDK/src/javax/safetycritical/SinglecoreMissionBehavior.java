@@ -41,7 +41,7 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 				}
 			}
 			
-			System.out.println("Mission:SinglecoreBehavior.requestTermination");
+			System.out.println("SinglecoreBehavior.requestTermination(Mission)");
 
 			return false;
 		} else

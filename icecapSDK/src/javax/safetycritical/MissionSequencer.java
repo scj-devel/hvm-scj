@@ -86,7 +86,7 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 
 	// Level2 only: a reference to the nearest outer sequencer
 	MissionSequencer outerSeq = null;
-	static MissionSequencer outerMostSeq = null; // for multiprocessor only
+	static MissionSequencer outerMostSeq = null; // for multiprocessor only; also used in single-processor
 	
 	Monitor lock;
 
@@ -271,7 +271,7 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 
 	// used for JML annotation only (not public)
 	boolean isOuterMostSeq() {
-		return isOuterMostSeq;
+		return outerMostSeq == this;
 	}
 	
 	// used for JML annotation only (not public)
