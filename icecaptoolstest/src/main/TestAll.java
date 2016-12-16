@@ -43,51 +43,35 @@ public class TestAll {
 		new TestAll().performTest();
 	}
 
-	protected void performTest() throws Exception, Throwable {
+	protected static class TestInformation
+	{
+		public String test;
+		public String inputFolder;
+		public File outputFolder;
+		public File testsDirectory;
+
+		public TestInformation(String test, String inputFolder, File outputFolder, File testsDirectory) {
+			this.test = test;
+			this.inputFolder = inputFolder;
+			this.outputFolder = outputFolder;
+			this.testsDirectory = testsDirectory;
+		}
+	}
+
+	protected ArrayList<TestInformation> testinformation;
+	
+	protected void collectTests() throws Exception, Throwable {
 		File testsDirectory;
-		String cwd = new File(".").getAbsolutePath();
-		StringTokenizer strt = new StringTokenizer(cwd, File.separatorChar + "");
 		StringBuffer path = new StringBuffer();
-		path.append(File.separatorChar);
-		String nextToken = strt.nextToken();
+		
+		String inputFolder = setup(path);
 
-		while (strt.hasMoreTokens()) {
-			path.append(nextToken);
-			path.append(File.separatorChar);
-			nextToken = strt.nextToken();
-		}
-
-		icecapvmSrcPath = getVMSource(path);
-		icecapvmSrcPath = icecapvmSrcPath + "src";
-
-		String inputFolder = getInputFolder(path);
-
-		StringBuffer outputFolderPath = new StringBuffer(System.getProperty("java.io.tmpdir"));
-		outputFolderPath.append(File.separatorChar);
-		outputFolderPath.append("hvm");
-
-		File outputFolder = new File(outputFolderPath.toString());
-		outputFolder.mkdir();
-
-		File[] files = outputFolder.listFiles();
-		for (File file : files) {
-			if (file.isDirectory()) {
-				File[] loaderFiles = file.listFiles();
-				for (File lfile : loaderFiles) {
-					lfile.delete();
-					if (lfile.exists()) {
-						throw new Exception("Cannot delete: " + lfile.getAbsolutePath());
-					}
-				}
-			}
-			file.delete();
-			if (file.exists()) {
-				throw new Exception("Cannot delete: " + file.getAbsolutePath());
-			}
-		}
+		File outputFolder = prepareOutputFolder();
 
 		Iterator<File> testsDirectories = getTestDirectories(path);
 
+		testinformation = new ArrayList<TestInformation>();
+		
 		while (testsDirectories.hasNext()) {
 			testsDirectory = testsDirectories.next();
 			if (testsDirectory.isDirectory()) {
@@ -111,21 +95,74 @@ public class TestAll {
 				 * testlist.add("ANTTestInvokeVirtual.java");
 				 */
 
-				int testNo = 0;
 				for (String test : testlist) {
 					if (includeFileInTest(test)) {
 						if (!skipIt(test)) {
-							System.out.println("------------------ " + test + " ------------------");
-							testIt(test, inputFolder, outputFolder, testNo++, testsDirectory);
+							TestInformation ti = new TestInformation(test, inputFolder, outputFolder, testsDirectory);
+							testinformation.add(ti);
 						}
 					}
 				}
-
 			}
 		}
-		System.out.println("------------------ done ------------------");
 	}
 
+	protected String setup(StringBuffer path) {
+		String cwd = new File(".").getAbsolutePath();
+		StringTokenizer strt = new StringTokenizer(cwd, File.separatorChar + "");
+		path.append(File.separatorChar);
+		String nextToken = strt.nextToken();
+
+		while (strt.hasMoreTokens()) {
+			path.append(nextToken);
+			path.append(File.separatorChar);
+			nextToken = strt.nextToken();
+		}
+
+		icecapvmSrcPath = getVMSource(path);
+		icecapvmSrcPath = icecapvmSrcPath + "src";
+
+		String inputFolder = getInputFolder(path);
+		return inputFolder;
+	}
+
+	protected File prepareOutputFolder() throws Exception {
+		StringBuffer outputFolderPath = new StringBuffer(System.getProperty("java.io.tmpdir"));
+		outputFolderPath.append(File.separatorChar);
+		outputFolderPath.append("hvm");
+		File outputFolder = new File(outputFolderPath.toString());
+		outputFolder.mkdir();
+
+		File[] files = outputFolder.listFiles();
+		for (File file : files) {
+			if (file.isDirectory()) {
+				File[] loaderFiles = file.listFiles();
+				for (File lfile : loaderFiles) {
+					lfile.delete();
+					if (lfile.exists()) {
+						throw new Exception("Cannot delete: " + lfile.getAbsolutePath());
+					}
+				}
+			}
+			file.delete();
+			if (file.exists()) {
+				throw new Exception("Cannot delete: " + file.getAbsolutePath());
+			}
+		}
+		return outputFolder;
+	}
+
+	public final void performTest() throws Exception, Throwable
+	{
+		collectTests();
+		int testNo = 0;
+		for (TestInformation ti: testinformation)
+		{
+			testIt(ti.test, ti.inputFolder, ti.outputFolder, testNo++, ti.testsDirectory);
+		}
+		System.out.println("------------------------------ Done ------------------------------------");
+	}
+	
 	protected Iterator<File> getTestDirectories(StringBuffer path) {
 		File testsDirectory;
 		path.append("src");
