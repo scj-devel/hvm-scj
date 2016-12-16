@@ -168,12 +168,12 @@ public class CompilationManagerHSO {
 		
 		// TckSafelet tests ==============================================
 
-		String inputPackage = "tckSafelet.realtime";
-		//String inputPackage = "tckSafelet.safetycritical";
+		//String inputPackage = "tckSafelet.realtime";
+		String inputPackage = "tckSafelet.safetycritical";
 		
 		//String inputClass = "TckSafeletReleaseParameters";
-		String inputClass = "TckSafeletMemoryParameters";
-		//String inputClass = "TckSafeletPeriodicEventHandler1";
+		//String inputClass = "TckSafeletMemoryParameters";
+		String inputClass = "TckSafeletPeriodicEventHandler1";
 		
 		// TckSafelet tests end ==========================================
 		
