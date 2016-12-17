@@ -170,7 +170,7 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 		if (current == ScjProcess.idleProcess && pFrame.sleepingQueue.heapSize == 0 && pFrame.waitQueue.heapSize == 0
 				&& pFrame.lockQueue.heapSize == 0) {
 			//devices.Console.println("PrioritySch.move: " + current.getTarget());
-			//current.getTarget().cleanUp();  // HSO: is this call of cleanUp() necessary ?
+			//current.getTarget().cleanUp();  // HSO: is this call of cleanUp() necessary ? Then the TCK-test does not work
 			return null;
 		} else {
 
