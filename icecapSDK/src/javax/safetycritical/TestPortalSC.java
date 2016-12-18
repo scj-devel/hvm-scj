@@ -129,8 +129,8 @@ public final class TestPortalSC {
 	 *  
 	 * @return the release parameter of <code>pevh</code>.
 	 */
-	public static ReleaseParameters getReleaseParam (PeriodicEventHandler pevh) {
-		return pevh.release;
+	public static ReleaseParameters getReleaseParam (ManagedEventHandler evh) {
+		return evh.release;
 	}
 	
 	/**

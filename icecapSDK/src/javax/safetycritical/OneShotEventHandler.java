@@ -83,15 +83,10 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	 * @throws IllegalArgumentException if priority, release (or storage ?) is null.
 	 * 
 	 *
-	 */
+	 */	
 	@SCJAllowed(Level.LEVEL_1)
 	@SCJPhase(Phase.INITIALIZATION)
 	public OneShotEventHandler(PriorityParameters priority, HighResolutionTime<?> releaseTime,
-			AperiodicParameters release, StorageParameters storage, ConfigurationParameters config) {
-		this(priority, releaseTime, release, storage, config, null);
-	}
-	
-	OneShotEventHandler(PriorityParameters priority, HighResolutionTime<?> releaseTime,
 			AperiodicParameters release, StorageParameters storage, ConfigurationParameters config, String name) {
 		super(priority, release, storage, config, name);
 
@@ -105,6 +100,16 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 		if(Launcher.useOS)
 			Services.setCeiling(this, this.priority.getPriority());
 	}
+	
+	public OneShotEventHandler(PriorityParameters priority, HighResolutionTime<?> releaseTime,
+			AperiodicParameters release, StorageParameters storage, ConfigurationParameters config) {
+		this(priority, releaseTime, release, storage, config, null);
+	}
+	
+	public OneShotEventHandler(PriorityParameters priority,
+			AperiodicParameters release, StorageParameters storage, ConfigurationParameters config) {
+		this(priority, null, release, storage, config, null);
+	}
 
 	/**
 	 * Deschedules the release of the handler.
@@ -115,12 +120,13 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 		return ManagedEventHandler.handlerBehavior.oneshotHandlerDeschedule(this);
 	}
 
-	public final void cleanUp() {
-		super.cleanUp();
-	}
+//	public final void cleanUp() {
+//		super.cleanUp();
+//	}	
 	
-	long getStart() {
-		return releaseTime.getNanoseconds() + releaseTime.getMilliseconds() * 1000000;
+	public AbsoluteTime getNextReleaseTime(AbsoluteTime dest) {
+		// ToDo: implement
+		return null;
 	}
 	
 	public void scheduleNextReleaseTime(HighResolutionTime<?> time) {
@@ -152,6 +158,10 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 		notify();
 	}
 
+	long getStart() {
+		return releaseTime.getNanoseconds() + releaseTime.getMilliseconds() * 1000000;
+	}
+	
 	int getTimerfd() {
 		return this.process.executable.startTimer_c;
 	}

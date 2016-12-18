@@ -100,8 +100,8 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 			String name) {
 		if (priority == null)
 			throw new IllegalArgumentException("priority is null");
-		if (release == null)
-			throw new IllegalArgumentException("release is null");
+//		if (release == null)  // release == null is allowed in OneShotEventHandler
+//			throw new IllegalArgumentException("release is null");
 		if (storage == null)
 			throw new IllegalArgumentException("storage is null");
 		this.priority = priority;
