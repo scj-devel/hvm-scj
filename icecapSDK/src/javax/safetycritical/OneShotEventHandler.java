@@ -119,10 +119,6 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	public boolean deschedule() {
 		return ManagedEventHandler.handlerBehavior.oneshotHandlerDeschedule(this);
 	}
-
-//	public final void cleanUp() {
-//		super.cleanUp();
-//	}	
 	
 	public AbsoluteTime getNextReleaseTime(AbsoluteTime dest) {
 		// ToDo: implement

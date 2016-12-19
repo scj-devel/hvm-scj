@@ -200,6 +200,10 @@ public final class TestPortalSC {
 		return evh.getHandlerName();
 	}
 	
+	public static Phase getPhase(MissionSequencer seq) {
+		return seq.getPhase();
+	}
+	
 	public static final boolean isOuterMostSeq (MissionSequencer seq) {
 		return seq.isOuterMostSeq();
 	}
