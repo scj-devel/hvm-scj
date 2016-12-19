@@ -99,8 +99,8 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 	public MissionSequencer(PriorityParameters priority, StorageParameters storage, 
 			ConfigurationParameters config, String name)
 			throws IllegalStateException {
-		super(priority, new AperiodicParameters(), storage, config);
-		this.name = name;
+		super(priority, new AperiodicParameters(), storage, config, name);
+		//this.name = name;
 
 //		System.out.println("MissSeq.constr: " + name 
 //			+ "; maxMissionMemory " + storage.maxMissionMemory 
@@ -123,7 +123,7 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 	@SCJPhase(Phase.INITIALIZATION)
 	public MissionSequencer(PriorityParameters priority, StorageParameters storage,
 			ConfigurationParameters config) throws IllegalStateException {
-		this(priority, storage, config, "MisMem");
+		this(priority, storage, config, "MissSeq");
 	}
 
 	synchronized void seqWait() {
