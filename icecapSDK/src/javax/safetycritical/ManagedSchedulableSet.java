@@ -97,11 +97,6 @@ class ManagedSchedulableSet {
 		msCount = noOfRegistered = 0;
 	}
 
-	/*@ 
-	  behavior
-	    requires ms != null;
-	    ensures this.contains(ms);
-	  @*/
 	void addMSObject(ManagedSchedulable ms) {
 		if (!containMSObject(ms)) {
 			schedulables[noOfRegistered] = ms;

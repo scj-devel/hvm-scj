@@ -76,9 +76,10 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 	int currState;
 	
 	Phase phase;  // used for JML test
+	boolean currentSeqIsOuterMost = false;  // used for JML test
 	
 	boolean terminateSeq = false;
-	static volatile boolean isOuterMostSeq = true;
+	static volatile boolean isOuterMostSeq = true; 
 
 	static ScjProcess missSeqProcess = null;
 
@@ -100,7 +101,6 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 			ConfigurationParameters config, String name)
 			throws IllegalStateException {
 		super(priority, new AperiodicParameters(), storage, config, name);
-		//this.name = name;
 
 //		System.out.println("MissSeq.constr: " + name 
 //			+ "; maxMissionMemory " + storage.maxMissionMemory 
@@ -116,7 +116,9 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 		if(Launcher.level != 0)
 			Services.setCeiling(this, this.priority.getPriority());
 		ManagedEventHandler.handlerBehavior.initMissionSequencer(this);
-		//System.out.println("MissSeq.constr");
+		
+		if  ( TestPortalSC.getLevel() < 2 && ! currentSeqIsOuterMost )
+			throw new IllegalStateException ("MissionSequencer not in appropriate phase)") ;
 	}
 
 	@SCJAllowed
@@ -271,7 +273,7 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 
 	// used for JML annotation only (not public)
 	boolean isOuterMostSeq() {
-		return outerMostSeq == this;
+		return currentSeqIsOuterMost;
 	}
 	
 	// used for JML annotation only (not public)

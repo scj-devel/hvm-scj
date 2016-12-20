@@ -31,6 +31,9 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 		if (MissionSequencer.isOuterMostSeq) {
 			MissionSequencer.outerMostSeq = handler;
 			MissionSequencer.isOuterMostSeq = false;
+			
+			handler.currentSeqIsOuterMost = true;
+			
 			if (Launcher.level != 0) {
 				PriorityScheduler.instance().addOuterMostSeq(handler);
 			}
