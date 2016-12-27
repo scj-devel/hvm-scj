@@ -27,6 +27,7 @@ package javax.safetycritical;
 
 import javax.realtime.AperiodicParameters;
 import javax.realtime.ConfigurationParameters;
+import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
@@ -173,11 +174,13 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 			// the main actions of the sequencer governed by currState
 			switch (currState) {
 			case State.START:
-				//devices.Console.println("MS.S: " + name);
+				//devices.Console.println("MS.S: " + this.getName() );
 				phase = Phase.STARTUP;
+				
 				currMission = getNextMission();
 
 				if (currMission != null) {
+					//devices.Console.println("MS.S: " + currMission + "; memArea is: " + MemoryArea.getMemoryArea(currMission));
 					howManyMissions++;
 				} else
 					howManyMissions--;
@@ -241,10 +244,6 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 	 */
 	@SCJAllowed(Level.SUPPORT)
 	protected abstract Mission getNextMission();
-
-//	public final void register() {
-//		super.register();
-//	}
 
 	@Override
 	public final void signalTermination() {
