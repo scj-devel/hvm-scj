@@ -208,6 +208,9 @@ public final class TestPortalSC {
 		return seq.isOuterMostSeq();
 	}
 	
+	public static final boolean waitForObject(PriorityScheduler prScheduler, Object target, HighResolutionTime<?> time)  {
+		return prScheduler.waitForObject(target, time);
+	}
 }
 
 

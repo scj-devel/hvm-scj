@@ -30,6 +30,7 @@ import vm.MachineFactory;
 
 import javax.realtime.AbsoluteTime;
 import javax.realtime.Clock;
+import javax.realtime.HighResolutionTime;
 import javax.realtime.RelativeTime;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
@@ -225,6 +226,10 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 	void notifyAll(Object target) {
 		prioritySchedulerImpl.notifyAll(target);
 	}
+	
+	boolean waitForObject(Object target, HighResolutionTime<?> time) {
+		return prioritySchedulerImpl.waitForObject(target, time);
+	}
 
 	void moveToNext() {
 		ScjProcess nextProcess = pFrame.readyQueue.extractMax();
@@ -232,10 +237,6 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 		current = nextProcess;
 		//devices.Console.println("<<< From readyQueue to current: " + nextProcess.index);
 	}
-
-	//	public static boolean waitForObject(Object target, HighResolutionTime time) {
-	//		return PrioritySchedulerImpl.waitForObject(target, time);
-	//	}
 
 	/**
 	 * Print out the contents of the queues.
