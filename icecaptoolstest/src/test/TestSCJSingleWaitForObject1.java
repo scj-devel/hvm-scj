@@ -40,26 +40,26 @@ public class TestSCJSingleWaitForObject1 {
 
 	private static class SharedResource {		
 		
-		private final int MAX = 3;
-		private int count = 0;
+		private final int MAX = 2;
+		private int count = 1;
 		
 		public synchronized void inc() {
 			
-			devices.Console.println("> before wait; count = " + count);
+			devices.Console.println("> before wait; count = " + count); // + "; this: " + this);
 			
-			while (count >= MAX) 
-//			try {
-			//	HighResolutionTime.waitForObject(this, new RelativeTime (1000, 0));
+			//while (count >= MAX) 
+			//try {
+				HighResolutionTime.waitForObject(this, new RelativeTime (1000, 0));
 			
 //			} catch (InterruptedException e) {
 //				e.printStackTrace();
 //			}
 			
-			count++;
-			if (count > MAX)
-				count = 0;
+			devices.Console.println("< after wait; count = " + count + "\n");
 			
-			devices.Console.println("< after wait; count = " + count);
+			count++;
+//			if (count > MAX)
+//				count = 0;
 		}
 
 		public synchronized void dec()  {
@@ -75,11 +75,11 @@ public class TestSCJSingleWaitForObject1 {
 		private int count = 0;
 		Mission m;
 
-		SharedResource shared;
+		TestSCJSingleWaitForObject1.SharedResource shared;
 
 		@IcecapCompileMe
 		public MyPEH1(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
-				SharedResource shared, Mission m) {
+				TestSCJSingleWaitForObject1.SharedResource shared, Mission m) {
 			super(priority, release, storage, configParameters);
 			this.m = m;
 			this.shared = shared;
@@ -88,14 +88,14 @@ public class TestSCJSingleWaitForObject1 {
 		@Override
 		@IcecapCompileMe
 		public void handleAsyncEvent() {
-			devices.Console.println("---------- PEH1.handleAsyncEvent");
+			//devices.Console.println("---------- PEH1.handleAsyncEvent");
 
 			shared.inc();
 
 			count++;
 			devices.Console.println("      PEH1: " + count);
 
-			if (count == 5) {
+			if (count == 4) {
 				m.requestTermination();
 				devices.Console.println(" ==>  Mission requestTermination");
 			}
@@ -103,24 +103,24 @@ public class TestSCJSingleWaitForObject1 {
 	}
 
 	private static class MyPEH2 extends PeriodicEventHandler {
-		private int count = 0;
+		//private int count = 0;
 
-		SharedResource shared;
+		TestSCJSingleWaitForObject1.SharedResource shared;
 
 		public MyPEH2(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
-				SharedResource shared) {
+				TestSCJSingleWaitForObject1.SharedResource shared) {
 			super(priority, release, storage, configParameters);
 			this.shared = shared;
 		}
 
 		@Override
 		public void handleAsyncEvent() {
-			devices.Console.println("---------- PEH2.handleAsyncEvent");
+			//devices.Console.println("---------- PEH2.handleAsyncEvent");
 
 			shared.dec();
 
-			devices.Console.println("     PEH2: " + count);
-			count++;
+			//devices.Console.println("     PEH2: " + count);
+			//count++;
 		}
 	}
 
@@ -129,23 +129,23 @@ public class TestSCJSingleWaitForObject1 {
 		@Override
 		protected void initialize() {
 
-			SharedResource shared = new SharedResource();
+			TestSCJSingleWaitForObject1.SharedResource shared = new TestSCJSingleWaitForObject1.SharedResource();
 
 			MyPEH1 myPEH1 = new MyPEH1(
 					new PriorityParameters(12), 
 					new PeriodicParameters(
 							new RelativeTime(0, 0, Clock.getRealtimeClock()), 
-							new RelativeTime(300, 0, Clock.getRealtimeClock())),
+							new RelativeTime(3000, 0, Clock.getRealtimeClock())),
 					storageParameters_Handlers, shared, this);
 			myPEH1.register();
 
-//			PeriodicEventHandler myPEH2 = new MyPEH2(
-//					new PriorityParameters(12),
-//					new PeriodicParameters(
-//							new RelativeTime(0, 0, Clock.getRealtimeClock()), 
-//							new RelativeTime(10000, 0, Clock.getRealtimeClock())), 
-//					storageParameters_Handlers, shared);
-//			myPEH2.register();
+			PeriodicEventHandler myPEH2 = new MyPEH2(
+					new PriorityParameters(12),
+					new PeriodicParameters(
+							new RelativeTime(0, 0, Clock.getRealtimeClock()), 
+							new RelativeTime(5000, 0, Clock.getRealtimeClock())), 
+					storageParameters_Handlers, shared);
+			myPEH2.register();
 
 			Services.setCeiling(shared, 12);
 		}
@@ -169,11 +169,11 @@ public class TestSCJSingleWaitForObject1 {
 		@Override
 		protected MyMission getNextMission() {
 			if (count == 1) {
-				devices.Console.println("MySeq.count: " + count + "; null");
+				devices.Console.println("MySequencer.getNextMission: null");
 				return null;
 			} else {
 				count++;
-				devices.Console.println("MySequencer.getNextMission.count: " + count);
+				devices.Console.println("MySequencer.getNextMission: " + mission);
 				return mission;
 			}
 		}
