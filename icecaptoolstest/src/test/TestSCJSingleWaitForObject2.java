@@ -1,5 +1,5 @@
 /**************************************************************************
- * File name  : TestSCJSingleWaitForObject1.java
+ * File name  : TestSCJSingleWaitForObject2.java
  * 
  * This code is available under the license:
  * Creative Commons, http://creativecommons.org/licenses/by-nc-nd/3.0/
@@ -36,38 +36,30 @@ import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
-public class TestSCJSingleWaitForObject1 {
+public class TestSCJSingleWaitForObject2 {
 
 	private static class SharedResource {		
 		
-		private final int MAX = 2;
-		private int count = 1;
+		private int count = 0;
 		
-		public synchronized void inc() {
+		public synchronized void method1() {
+			count++;
+			devices.Console.println("==> before wait; count = " + count + " =========="); 
 			
-			devices.Console.println("> before wait; count = " + count); // + "; this: " + this);
-			
-			//while (count >= MAX) 
 			//try {
-				//HighResolutionTime.waitForObject(this, new RelativeTime (1000, 0));
+				//HighResolutionTime.waitForObject(this, new RelativeTime (1500, 0));
 			
 //			} catch (InterruptedException e) {
 //				e.printStackTrace();
 //			}
 			
-			devices.Console.println("< after wait; count = " + count + "\n");
-			
-			count++;
-//			if (count > MAX)
-//				count = 0;
+			devices.Console.println("==< after wait; count = " + count + " ========== \n");
 		}
 
-		public synchronized void dec()  {
+		public synchronized void method2()  {
 			
-			devices.Console.println("    before notify; count = " + count);
-			count--;
-			notify();
-			devices.Console.println("    after notify; count = " + count);
+			devices.Console.println("  ==>  method2");
+			//notify();
 		}
 	}
 
@@ -75,11 +67,11 @@ public class TestSCJSingleWaitForObject1 {
 		private int count = 0;
 		Mission m;
 
-		TestSCJSingleWaitForObject1.SharedResource shared;
+		TestSCJSingleWaitForObject2.SharedResource shared;
 
 		@IcecapCompileMe
 		public MyPEH1(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
-				TestSCJSingleWaitForObject1.SharedResource shared, Mission m) {
+				TestSCJSingleWaitForObject2.SharedResource shared, Mission m) {
 			super(priority, release, storage, configParameters);
 			this.m = m;
 			this.shared = shared;
@@ -88,8 +80,8 @@ public class TestSCJSingleWaitForObject1 {
 		@Override
 		@IcecapCompileMe
 		public void handleAsyncEvent() {
-			
-			shared.inc();
+
+			shared.method1();
 
 			count++;
 
@@ -101,24 +93,19 @@ public class TestSCJSingleWaitForObject1 {
 	}
 
 	private static class MyPEH2 extends PeriodicEventHandler {
-		//private int count = 0;
 
-		TestSCJSingleWaitForObject1.SharedResource shared;
+		TestSCJSingleWaitForObject2.SharedResource shared;
 
 		public MyPEH2(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
-				TestSCJSingleWaitForObject1.SharedResource shared) {
+				TestSCJSingleWaitForObject2.SharedResource shared) {
 			super(priority, release, storage, configParameters);
 			this.shared = shared;
 		}
 
 		@Override
 		public void handleAsyncEvent() {
-			//devices.Console.println("---------- PEH2.handleAsyncEvent");
 
-			shared.dec();
-
-			//devices.Console.println("     PEH2: " + count);
-			//count++;
+			shared.method2();
 		}
 	}
 
@@ -127,25 +114,25 @@ public class TestSCJSingleWaitForObject1 {
 		@Override
 		protected void initialize() {
 
-			TestSCJSingleWaitForObject1.SharedResource shared = new TestSCJSingleWaitForObject1.SharedResource();
+			TestSCJSingleWaitForObject2.SharedResource shared = new TestSCJSingleWaitForObject2.SharedResource();
 
 			MyPEH1 myPEH1 = new MyPEH1(
 					new PriorityParameters(12), 
 					new PeriodicParameters(
 							new RelativeTime(0, 0, Clock.getRealtimeClock()), 
-							new RelativeTime(1000, 0, Clock.getRealtimeClock())),
+							new RelativeTime(2000, 0, Clock.getRealtimeClock())),
 					storageParameters_Handlers, shared, this);
 			myPEH1.register();
 
 			PeriodicEventHandler myPEH2 = new MyPEH2(
-					new PriorityParameters(12),
+					new PriorityParameters(13),
 					new PeriodicParameters(
 							new RelativeTime(0, 0, Clock.getRealtimeClock()), 
-							new RelativeTime(2000, 0, Clock.getRealtimeClock())), 
+							new RelativeTime(1000, 0, Clock.getRealtimeClock())), 
 					storageParameters_Handlers, shared);
 			myPEH2.register();
 
-			Services.setCeiling(shared, 12);
+			Services.setCeiling(shared, 13);
 		}
 
 		@Override
@@ -207,9 +194,9 @@ public class TestSCJSingleWaitForObject1 {
 		
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
-		devices.Console.println("\n***** TestSCJWaitForObject1 main.begin *****");
+		devices.Console.println("\n***** TestSCJWaitForObject2 main.begin *****");
 		new LaunchLevel2(new MyApp());
-		devices.Console.println("***** TestSCJWaitForObject1 main.end *****");
+		devices.Console.println("***** TestSCJWaitForObject2 main.end *****");
 
 		VMTest.markResult(false);
 	}

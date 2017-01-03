@@ -74,6 +74,8 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 	Object monitorLock = null;
 	AbsoluteTime next_temp = null;
 	boolean isNotified = false;
+	
+	boolean waitForObjectLock = false;  // HSO
 
 	private ExceptionReporter exceptionReporter;
 

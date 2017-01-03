@@ -115,6 +115,8 @@ final class PrioritySchedulerImpl implements vm.Scheduler {
 		Monitor monitor = Monitor.getMonitor(target);
 		monitor.unlock();
 
+		PriorityScheduler.instance().current.isNotified = false; 
+		
 		// process WAITING
 		PriorityScheduler.instance().current.state = ScjProcess.State.WAITING;
 		PriorityScheduler.instance().pFrame.waitQueue.addProcess(monitor, PriorityScheduler.instance().current);
@@ -138,15 +140,16 @@ final class PrioritySchedulerImpl implements vm.Scheduler {
 			
 			wait(target);
 			
-			return true;
+			return false;
 		}
 		else {
-			System.out.println("waitForObject - else");
+			System.out.println("waitForObject - else 0");  // HSO: not finished
 			
 			vm.ClockInterruptHandler.instance.disable();
 			
-			//Monitor monitor = Monitor.getMonitor(target);  // HSO: does not work; why ?
+			Monitor monitor = Monitor.getMonitor(target);  
 			//monitor.unlock();	
+			monitor.unlockWithOutEnable();
 			
 			// get current process and reset the boolean value
 			ScjProcess current = PriorityScheduler.instance().current;
@@ -167,16 +170,39 @@ final class PrioritySchedulerImpl implements vm.Scheduler {
 			}
 			
 			// process SLEEPING
-			PriorityScheduler.instance().current.state = ScjProcess.State.SLEEPING;
-			PriorityScheduler.instance().pFrame.sleepingQueue.insert(PriorityScheduler.instance().current);
+			current.waitForObjectLock = true;  // HSO
+			
+			current.state = ScjProcess.State.SLEEPING;
+			PriorityScheduler.instance().pFrame.sleepingQueue.insert(current);
+			
+			// and process in waitQueue
+			PriorityScheduler.instance().pFrame.waitQueue.addProcess(monitor, current);  // HSO
 
 			// move to next process in readyQueue
 			PriorityScheduler.instance().moveToNext();
-
+			System.out.println("waitForObject - else 1"); 
+			
 			vm.ClockInterruptHandler.instance.enable();
 			vm.ClockInterruptHandler.instance.yield();
 			
-			return false;
-		}		
+			System.out.println("waitForObject - else 2"); 
+			// if it is notified by time, then the process should get the lock
+			// again to execute, and delete the copy in the waitSet.
+//			vm.ClockInterruptHandler.instance.disable();
+//			System.out.println("waitForObject - else 3");  
+//			if (PriorityScheduler.instance().current.isNotified) {
+//				
+//				System.out.println("waitForObject - else 4");  
+//				PriorityScheduler.instance().current.next_temp = null;
+//				PriorityScheduler.instance().current.state = ScjProcess.State.REQUIRELOCK;
+//				PriorityScheduler.instance().pFrame.waitQueue.removeProcess(PriorityScheduler.instance().current);
+//				monitor.lockWithOutEnable();
+//			}
+//			vm.ClockInterruptHandler.instance.enable();
+			
+			return PriorityScheduler.instance().current.isNotified;
+		}	
+		
+		
 	}
 }

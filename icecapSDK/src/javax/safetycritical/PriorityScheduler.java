@@ -69,12 +69,6 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 	 * 
 	 * @return The priority scheduler.
 	 */
-	/*@ 
-	  behaviour
-	    requires true;
-	    assignable \nothing;
-	    ensures \result != null ; 
-	  @*/
 	@SCJAllowed(Level.LEVEL_1)
 	public static PriorityScheduler instance() {
 		/* Do not remove lines below to change initialization of the 
@@ -153,14 +147,42 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 		rtClock.getTime(now);
 
 		while (process != null && process.next.compareTo(now) <= 0) {
-			process.state = ScjProcess.State.READY;
-			ScjProcess t = pFrame.sleepingQueue.extractMin();
-			//devices.Console.println("PrSch.move:sleep --> ready: " + t.index);
+			
+			ScjProcess p = pFrame.sleepingQueue.extractMin();
+			
+			//devices.Console.println("PrSch.move: sleepingQueue.extractMin; process: " + p + "\n");
+			
+			if (p.waitForObjectLock) {
+				
+				p.waitForObjectLock = false;
+								
+				if (! p.isNotified) {
+					
+					p.isNotified = true;					
 
-			pFrame.readyQueue.insert(t);
-			// look at "next" process in sleeping queue with smallest
-			// activationTime
+					devices.Console.println("PrSch.move: t.isNotified: " + p.isNotified);
+					
+					p.next_temp = null;
+					p.state = ScjProcess.State.REQUIRELOCK;
+					PriorityScheduler.instance().pFrame.waitQueue.removeProcess(p);
+					
+					Monitor monitor = Monitor.getMonitor(p);  
+					devices.Console.println("PrSch.move: p.monitorLock: " + monitor);
+					
+					monitor.lockWithOutEnable();
+				}
+			}
+			else {
+				p.state = ScjProcess.State.READY;				
+				
+				//devices.Console.println("PrSch.move: sleep --> ready: ; process: " + p);
+	
+				pFrame.readyQueue.insert(p);
+			}
+			
+			// look at "next" process in sleeping queue with smallest activationTime
 			process = pFrame.sleepingQueue.minimum();
+			
 		}
 
 		// get next process from readyQueue
