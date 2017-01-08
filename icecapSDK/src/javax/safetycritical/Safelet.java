@@ -22,33 +22,31 @@
  * @authors  Anders P. Ravn, Aalborg University, DK
  *           Stephan E. Korsholm and Hans S&oslash;ndergaard, 
  *             VIA University College, DK
+ *             
+ * @version 1.3 2016-10-18  
  *************************************************************************/
 package javax.safetycritical;
 
-import javax.realtime.MemoryArea;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
 import javax.safetycritical.annotate.SCJPhase;
+import javax.safetycritical.annotate.SCJMayAllocate;
+import javax.safetycritical.annotate.AllocationContext;
+import javax.safetycritical.annotate.SCJMaySelfSuspend;
 
-/**
+/** 
  * A safety-critical application consists of one or more missions, executed 
- * concurrently or in sequence. Every safety-critical application is 
- * represented by an implementation of <code>Safelet</code> which identifies 
- * the outer-most <code>MissionSequencer</code>.
- * This outer-most <code>MissionSequencer</code> takes responsibility for 
- * running the sequence of missions that comprise this safety-critical application.
+ * concurrently or in sequence. Every safety-critical application must implement 
+ * <code>Safelet</code> which identifies  the outer-most <code>MissionSequencer</code>.
+ * This outer-most <code>MissionSequencer</code> runs the sequence of missions 
+ * that comprise this safety-critical application.
  * 
- * @version 1.2; - December 2013
- * 
- * @author Anders P. Ravn, Aalborg University, 
- * <A HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
- * Hans S&oslash;ndergaard, VIA University College, Denmark, 
- * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
+ * The mechanism used to identify the <code>Safelet</code> to a particular SCJ environment 
+ * is implementation defined.
  */
 @SuppressWarnings("unused")
-@SCJAllowed(Level.SUPPORT)
-@SCJPhase(Phase.INITIALIZATION)
+@SCJAllowed
 public interface Safelet {
 	/**
 	 * The infrastructure invokes <code>getSequencer</code> to obtain the 
@@ -56,22 +54,38 @@ public interface Safelet {
 	 * for this application. The returned sequencer must reside in immortal memory.
 	 * 
 	 * @return The <code>MissionSequencer</code> responsible for selecting
-	 *   the sequence of <code>Mission</code>s that represent this safety-critical 
-	 *   application.
+	 *   the sequence of <code>Mission</code>s that represent this application.
 	 */
 	@SCJAllowed(Level.SUPPORT)
-	@SCJPhase(Phase.INITIALIZATION)
+	@SCJPhase({Phase.STARTUP})
+	@SCJMayAllocate({AllocationContext.CURRENT})
+	@SCJMaySelfSuspend(false)
 	public MissionSequencer getSequencer();
-
+	
+	
+	//public long globalBackingStoreSize();  // new: since SCJ 152
+	
 	/**
-	 *  @return the amount of immortal memory that must be available for 
-	 *    allocations to be performed by this application.
+	 *  @return the amount of additional immortal memory that must be available for allocations to be 
+	 *  performed by this application. If the amount of memory remaining in immortal memory is less 
+	 *  than this requested size, the infrastructure halts execution of the application upon return from 
+	 *  this method.
 	 */
 	@SCJAllowed(Level.SUPPORT)
+	@SCJPhase({Phase.STARTUP})
+	@SCJMayAllocate({})
+	@SCJMaySelfSuspend(false)
 	public long immortalMemorySize();
 
+	/**
+	 *  The infrastructure shall invoke <code>initializeApplication</code> in the allocation context of
+	 *  immortal memory. The application can use this method to allocate data structures in immortal memory. 
+	 *  This method shall be called exactly once by the infrastructure.
+	 */
 	@SCJAllowed(Level.SUPPORT)
-	@SCJPhase(Phase.INITIALIZATION)
+	@SCJPhase({Phase.STARTUP})
+	@SCJMayAllocate({AllocationContext.CURRENT})
+	@SCJMaySelfSuspend(true)
 	public void initializeApplication();
 
 }
