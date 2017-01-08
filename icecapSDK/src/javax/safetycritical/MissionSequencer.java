@@ -22,42 +22,34 @@
  * @authors  Anders P. Ravn, Aalborg University, DK
  *           Stephan E. Korsholm and Hans S&oslash;ndergaard, 
  *             VIA University College, DK
+ *             
+ *  @version 1.3 2016-10-18           
  *************************************************************************/
 package javax.safetycritical;
 
 import javax.realtime.AperiodicParameters;
 import javax.realtime.ConfigurationParameters;
-import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
+import javax.safetycritical.annotate.AllocationContext;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
+import javax.safetycritical.annotate.SCJMayAllocate;
+import javax.safetycritical.annotate.SCJMaySelfSuspend;
 import javax.safetycritical.annotate.SCJPhase;
 
 /**
  * A <code>MissionSequencer</code> oversees a sequence of Mission executions. 
  * The sequence may include interleaved execution of independent missions 
  * and repeated executions of missions.<p>
- * As a subclass of <code>ManagedEventHandler</code>, <code>MissionSequencer</code> 
- * has an execution priority and memory budget as specified by constructor parameters. <p>
- * The <code>MissionSequencer</code> executes vendor-supplied infrastructure code which
- * invokes user-defined implementations of the method <code>getNextMission</code>, and for each mission
- * the user-defined <code>initialize</code> and <code>cleanUp</code> methods. <p>
- * During execution of an inner-nested mission, the <code>MissionSequencer</code> remains blocked waiting for
- * the mission to terminate. An invocation of <code>requestSequenceTermination</code> will unblock it
- * so that it can perform an invocation of the running mission's <code>requestTermination</code> method,
- * if the mission is still running and its termination has not already been requested. <p>
- * Note that if a <code>MissionSequencer</code> object is preallocated by the application, it
- * must be allocated in the same scope as its corresponding <code>Mission</code>s.
- * 
- * @version 1.2; - December 2013
- * 
- * @author Anders P. Ravn, Aalborg University, <A
- *         HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
- *         Hans S&oslash;ndergaard, VIA University College, Denmark, <A
- *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
- * 
- * @scjComment 
+ * As a subclass of <code>ManagedEventHandler</code>, <code>MissionSequencer</code>'s 
+ * execution priority and memory budget are specified by constructor parameters. <p>
+ * This <code>MissionSequencer</code> executes vendor-supplied infrastructure code which
+ * invokes user-defined implementations of <code>getNextMission</code>,
+ * <code>Mission.initialize</code> and <code>Mission.cleanUp</code>.
+ * During execution of a mission, the <code>MissionSequencer</code> remains blocked waiting for
+ * the mission to terminate. An invocation of <code>signalTermination</code> will unblock it
+ * to invoke the running mission's <code>requestTermination</code> method,
  */
 @SCJAllowed
 public abstract class MissionSequencer extends ManagedEventHandler {
@@ -93,11 +85,22 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 	Monitor lock;
 
 	/**
-	 * Constructs a <code>MissionSequencer</code> to run at the priority and
-	 * with the memory resources specified by its parameters.
+	 * Construct a <code>MissionSequencer</code> object to oversee a sequence of mission executions.
+	 * 
+	 * @param priority - The priority at which the <code>MissionSequencer</code> executes.
+	 * @param storage - specifies the <code>ScopeParameters</code> for this handler.
+	 * @param config - specifies the <code>ConfigurationParameters</code> for this handler.
+	 * @param name - The name by which this <code>MissionSequencer</code> will be identified.
+	 * 
+	 * @throws <code>IllegalStateException</code> if invoked in an inappropriate phase.
 	 */
 	@SCJAllowed
-	@SCJPhase(Phase.INITIALIZATION)
+	@SCJPhase({Phase.STARTUP, Phase.INITIALIZATION})
+	@SCJMaySelfSuspend(false)
+	@SCJMayAllocate({
+		AllocationContext.CURRENT,
+		AllocationContext.INNER,
+		AllocationContext.OUTER})
 	public MissionSequencer(PriorityParameters priority, StorageParameters storage, 
 			ConfigurationParameters config, String name)
 			throws IllegalStateException {
@@ -122,11 +125,19 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 			throw new IllegalStateException ("MissionSequencer not in appropriate phase)") ;
 	}
 
+	/** 
+	 * This constructor behaves the same as calling <code>MissionSequencer(priority, storage, null)</code>.
+	 */
 	@SCJAllowed
-	@SCJPhase(Phase.INITIALIZATION)
+	@SCJPhase({Phase.STARTUP, Phase.INITIALIZATION})
+	@SCJMaySelfSuspend(false)
+	@SCJMayAllocate({
+		AllocationContext.CURRENT,
+		AllocationContext.INNER,
+		AllocationContext.OUTER})
 	public MissionSequencer(PriorityParameters priority, StorageParameters storage,
 			ConfigurationParameters config) throws IllegalStateException {
-		this(priority, storage, config, "MissSeq");
+		this(priority, storage, config, null); //default name: "MissSeq" ; used internal by icecap utility tool ??
 	}
 
 	synchronized void seqWait() {
@@ -163,12 +174,16 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 	}
 
 	/**
-	 * This method is declared final because the implementation is provided by
-	 * the infrastructure of the SCJ implementation and shall not be overridden. <br>
-	 * This method performs all of the activities that correspond to sequencing
-	 * of <code>Mission</code>s by this <code>MissionSequencer</code>.
+	 * This method is used in the implementation of SCJ infrastructure. 
+	 * The method is not to be invoked by application code 
+	 * and it is not to be overridden by application code.
 	 */
-	@SCJAllowed
+	@SCJAllowed(javax.safetycritical.annotate.Level.SUPPORT)
+	@Override
+	@SCJMaySelfSuspend(true)
+	@SCJMayAllocate({
+	    AllocationContext.CURRENT, AllocationContext.INNER, AllocationContext.OUTER})
+	@SCJPhase({ Phase.STARTUP, Phase.INITIALIZATION, Phase.RUN, Phase.CLEANUP })
 	public final void handleAsyncEvent() {
 		do {
 			// the main actions of the sequencer governed by currState
@@ -231,23 +246,44 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 	}
 
 	/**
-	 * This method is called by the infrastructure to select the next
-	 * <code>Mission</code> to execute. <br>
-	 * Prior to each invocation of <code>getNextMission</code> by the
-	 * infrastructure, the infrastructure instantiates and enters a <code>
-	 * MissionMemory</code>, initially sized to represent all available backing
-	 * store.
+	 * This method is called by the infrastructure to select the initial mission to execute,
+	 * and subsequently, each time one mission terminates, to determine the next mission to execute.
+	 * <br>
+	 * Prior to each invocation of <code>getNextMission</code>,
+	 * infrastructure initializes and enters the mission memory allocation area.
+	 * The <code>getNextMission</code> method may allocate the returned mission within this newly 
+	 * instantiated mission memory allocation area, or it may return a reference to a <code>Mission</code> object 
+	 * that was allocated in some outer-nested mission memory area or in the <code>ImmortalMemory</code> area.
 	 * 
-	 * @return The next <code>Mission</code> to run, or null if no further
-	 *         <code>Mission</code>s are to run under the control of this
+	 * @return the next mission to run, or null if no further missions are to run under the control of this
 	 *         <code>MissionSequencer</code>.
 	 */
 	@SCJAllowed(Level.SUPPORT)
+	@SCJPhase({Phase.STARTUP, Phase.INITIALIZATION, Phase.CLEANUP})
+	@SCJMaySelfSuspend(false)
+	@SCJMayAllocate({
+		AllocationContext.CURRENT,
+		AllocationContext.INNER,
+		AllocationContext.OUTER})
 	protected abstract Mission getNextMission();
 
+	/** 
+	 * Called by the infrastructure to indicate that the enclosing mission has been 
+	 * instructed to terminate.<br> 
+	 * The sole responsibility of this method is to call <code>requestTermination</code> on the currently 
+	 * running mission.<br> 
+	 * <code>signalTermination</code> will never be called by a Level 0 or Level 1 infrastructure.
+	 */
 	@Override
+	@SCJAllowed(Level.SUPPORT)
+	@SCJMayAllocate({})
+	@SCJMaySelfSuspend(false)
+	@SCJPhase({Phase.STARTUP, Phase.INITIALIZATION, Phase.RUN, Phase.CLEANUP })
 	public final void signalTermination() {
-		super.signalTermination(); 
+		super.signalTermination();
+		
+		if (currMission != null) currMission.requestTermination();
+		
 		ManagedEventHandler.handlerBehavior.missionSequencerSingleTermination(this);
 	}
 
