@@ -148,11 +148,6 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		privateMemory.removeArea();
 		isRegistered = false;
 	}
-
-	@SCJPhase(Phase.INITIALIZATION)
-	public void register(Affinity affinity) throws IllegalStateException {
-		// ToDO: implement
-	}
 	
 	/**
 	 * Registers this event handler with the current mission.

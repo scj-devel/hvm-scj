@@ -120,11 +120,6 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 	Mission getMission() {
 		return mission;
 	}
-	
-	@SCJPhase(Phase.INITIALIZATION)
-	public void register(Affinity affinity) throws IllegalStateException {
-		// ToDO: implement
-	}
 
 	@SCJAllowed
 	@SCJPhase(Phase.INITIALIZATION)

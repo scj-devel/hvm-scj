@@ -200,6 +200,10 @@ public final class TestPortalSC {
 		return evh.getHandlerName();
 	}
 	
+	public static final MemoryArea getMissionMemory(MissionSequencer seq) {
+		return seq.getMissionMemory();
+	}
+	
 	public static Phase getPhase(MissionSequencer seq) {
 		return seq.getPhase();
 	}

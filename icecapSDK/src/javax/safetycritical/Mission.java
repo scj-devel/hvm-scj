@@ -93,7 +93,7 @@ public abstract class Mission {
 
 	@SCJAllowed
 	@IcecapCompileMe
-	public static /*<M extends Mission<M>> M*/ Mission getMission() {
+	public static Mission getMission() {
 		return missionBehaviour.getMission();
 	}
 
