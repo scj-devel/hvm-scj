@@ -307,7 +307,7 @@ public abstract class HighResolutionTime<T extends HighResolutionTime<T>>
 
 	// used for JML annotation only (not public)
 	Clock getClck() {
-		return clock;
+		return (Clock)clock;
 	}
 		
 	// used for JML annotation only (not public)

@@ -49,7 +49,7 @@ public class RelativeTime extends HighResolutionTime<RelativeTime> {
 	 * Equivalent to <code>RelativeTime(0,0)</code>.
 	 */
 	public RelativeTime() {
-		this(0, 0);
+		this(0, 0, null);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class RelativeTime extends HighResolutionTime<RelativeTime> {
 	 * @param nanos is the nanoseconds.
 	 */
 	public RelativeTime(long millis, int nanos) {
-		this(millis, nanos, Clock.getRealtimeClock());
+		this(millis, nanos, null); //Clock.getRealtimeClock());
 	}
 
 	/**

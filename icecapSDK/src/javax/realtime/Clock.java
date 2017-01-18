@@ -58,7 +58,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  *   </ul>
  */
 @SCJAllowed
-public abstract class Clock {
+public abstract class Clock /*implements Chronograph*/ {
 
 	protected static vm.RealtimeClock nativeClockInstance;
 
@@ -104,7 +104,9 @@ public abstract class Clock {
 	 *    The returned object is associated with this clock.
 	 */
 	@SCJAllowed
-	public abstract RelativeTime getEpochOffset();
+	public final RelativeTime getEpochOffset(){
+		return new RelativeTime(0, 0, this);
+	}
 
 	/**
 	 * @return The singleton instance of the default <code>Clock</code>.
