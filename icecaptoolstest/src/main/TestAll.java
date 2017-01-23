@@ -151,7 +151,32 @@ public class TestAll {
 		}
 		return outputFolder;
 	}
+	
+	
+	// HSO added:
+	public final void performPreCompile() throws Exception, Throwable
+	{
+		collectTests();	
+	
+		int testNo = 0;
+		for (TestInformation ti: testinformation)
+		{
+			makePreCompile(ti.test, ti.inputFolder, ti.outputFolder, testNo++, ti.testsDirectory);
+		}
+		System.out.println("------------------------------ PreCompile Done ------------------------------------");
+	}
+	
+	private void makePreCompile(String testClass, String inputFolder, File outputFolder, int testNo, File testsDirectory)
+			throws Throwable {
 
+		String inputPackage = getInputPackage(testsDirectory);
+
+		preCompile(inputPackage, testClass);
+	}
+	
+	// HSO end
+
+	
 	public final void performTest() throws Exception, Throwable
 	{
 		collectTests();
@@ -237,7 +262,7 @@ public class TestAll {
 
 		String inputPackage = getInputPackage(testsDirectory);
 
-		preCompile(inputPackage, testClass);
+		//preCompile(inputPackage, testClass);
 
 		config.setInputSourceFileName(null);
 		config.setClassPath(inputFolder);
