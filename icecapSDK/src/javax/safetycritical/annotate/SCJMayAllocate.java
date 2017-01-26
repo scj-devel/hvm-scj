@@ -2,7 +2,7 @@
  * File name  : SCJMayAllocate.java
  * 
  * This file is part a SCJ Level 0 and Level 1 implementation, 
- * based on SCJ Draft, Version 0.94 25 June 2013.
+ * based on SCJ Draft, Version 0.108 6. January 2017.
  *
  * It is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as  
@@ -18,12 +18,10 @@
  * along with this SCJ Level 0 and Level 1 implementation.  
  * If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright 2016
+ * Copyright 2017
  * @authors  Anders P. Ravn, Aalborg University, DK
  *           Stephan E. Korsholm and Hans S&oslash;ndergaard, 
  *             VIA University College, DK
- *             
- *  @version 1.1 2016-10-17
  *  
  *************************************************************************/
 

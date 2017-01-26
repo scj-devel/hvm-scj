@@ -164,7 +164,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	@SCJAllowed(Level.SUPPORT)
 	public void signalTermination() {
 		// Default behavior: no action
-		System.out.println("ManagedEventHandler.signalTermination is called");
+		//System.out.println("ManagedEventHandler.signalTermination is called");
 	}
 
 	public String getName() {
