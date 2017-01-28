@@ -163,7 +163,7 @@ public class TestAll {
 		{
 			makePreCompile(ti.test, ti.inputFolder, ti.outputFolder, testNo++, ti.testsDirectory);
 		}
-		System.out.println("------------------------------ PreCompile Done ------------------------------------");
+		//System.out.println("------------------------------ PreCompile Done ------------------------------------");
 	}
 	
 	private void makePreCompile(String testClass, String inputFolder, File outputFolder, int testNo, File testsDirectory)
