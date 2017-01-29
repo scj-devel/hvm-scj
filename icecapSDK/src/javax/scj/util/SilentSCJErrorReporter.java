@@ -3,6 +3,7 @@ package javax.scj.util;
 public class SilentSCJErrorReporter implements SCJErrorReporter {
 	@Override
 	public void processExecutionError(Throwable e) {
+		System.out.println ("SilentSCJErrorReporter.processExecutionError: " + e);
 	}
 
 	@Override
