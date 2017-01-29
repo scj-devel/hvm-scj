@@ -242,7 +242,6 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 			default:
 			}
 		} while (currState < State.END);
-
 	}
 
 	/**
@@ -281,7 +280,6 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 	@SCJPhase({Phase.STARTUP, Phase.INITIALIZATION, Phase.RUN, Phase.CLEANUP })
 	public final void signalTermination() {
 		super.signalTermination();
-		
 		if (currMission != null) currMission.requestTermination();
 		
 		ManagedEventHandler.handlerBehavior.missionSequencerSingleTermination(this);

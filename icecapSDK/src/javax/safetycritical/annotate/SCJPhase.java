@@ -1,7 +1,7 @@
 /**************************************************************************
  * File name  : SCJPhase.java
  * 
- * This file is part a SCJ implementation, 
+ * This file is part of an SCJ implementation, 
  * based on SCJ Draft, Version 0.108 6. January 2017.
  *
  * It is free software: you can redistribute it and/or modify
