@@ -116,6 +116,10 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 				} catch (Throwable e) {
 					System.out.println ("ScjProcess.run.catch: " + e);
 					Const.reporter.processExecutionError(e);
+					if (msObject instanceof MissionSequencer) {	
+						((MissionSequencer)msObject).currState = MissionSequencer.State.END;
+						throw e;
+					}
 				} finally {
 					//System.out.println ("ScjProcess.run.finally: ??? " + ", msObject: " + msObject);
 					if (msObject instanceof PeriodicEventHandler) {
@@ -123,12 +127,6 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 						
 						state = State.HANDLED;
 					}
-//					else if (msObject instanceof MissionSequencer) {
-//						msObject.cleanUp();
-//						msObject.signalTermination();
-//						
-//						//((MissionSequencer)msObject).currState = MissionSequencer.State.TERMINATE;						
-//					}
 					
 					else
 					
