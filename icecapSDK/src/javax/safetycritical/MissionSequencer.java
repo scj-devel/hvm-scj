@@ -242,6 +242,8 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 			default:
 			}
 		} while (currState < State.END);
+		
+		//CyclicScheduler.instance().stop(missSeqProcess.process);
 	}
 
 	/**
