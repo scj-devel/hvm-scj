@@ -116,6 +116,14 @@ public final class Const {
 	public static void setDefaultErrorReporter() {
 		reporter = new DefaultSCJErrorReporter();
 	}
+	
+	/**
+	 * Sets an application defined reporter.
+	 * @param rep the desired reporter.
+	 */
+	public static void setErrorReporter(SCJErrorReporter rep) {
+		reporter = rep;
+	}
 
 	/* Dont re-add these definitions. They get loaded even though the program never use them.
 	 * 

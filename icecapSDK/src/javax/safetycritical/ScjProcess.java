@@ -114,15 +114,11 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 					runLogic(msObject);
 
 				} catch (Throwable e) {
-					//System.out.println ("ScjProcess.run.catch: " + e);
+					Const.reporter.processExecutionError(e);
 					
-					if (msObject instanceof MissionSequencer) {	
+					if (msObject instanceof MissionSequencer) 
 						((MissionSequencer)msObject).currState = MissionSequencer.State.END;
-						throw e;
-					}
-					else {
-						Const.reporter.processExecutionError(e);
-					}
+					
 				} finally {
 					if (msObject instanceof PeriodicEventHandler) {
 						next.add(period, next); // next = next + period
