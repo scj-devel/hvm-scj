@@ -65,7 +65,7 @@ public final class Const {
 	public static int OVERALL_BACKING_STORE = OVERALL_BACKING_STORE_DEFAULT;
 	public static int IDLE_BACKING_STORE = IDLE_BACKING_STORE_DEFAULT;
 	public static int IMMORTAL_MEM = IMMORTAL_MEM_DEFAULT;
-	public static int OUTERMOST_SEQ_BACKING_STORE = //OUTERMOST_SEQ_BACKING_STORE_DEFAULT;
+	public static int OUTERMOST_SEQ_BACKING_STORE = 
 			OVERALL_BACKING_STORE - IMMORTAL_MEM - IDLE_BACKING_STORE;
 			
 
@@ -76,9 +76,9 @@ public final class Const {
 
 	/* Stacks */
 
-	public static final int STACK_UNIT = 1024; // 256
+	public static final int STACK_UNIT = 1024 * 2; // 256
 
-	public static final int PRIORITY_SCHEDULER_STACK_SIZE_DEFAULT = 1 * STACK_UNIT; // 2*1024
+	public static final int PRIORITY_SCHEDULER_STACK_SIZE_DEFAULT = 2 * STACK_UNIT; // 2*1024
 	public static final int CYCLIC_SCHEDULER_STACK_SIZE_DEFAULT = 2 * STACK_UNIT;;
 	public static final int IDLE_PROCESS_STACK_SIZE_DEFAULT = STACK_UNIT; // 1*256;
 	public static final int HANDLER_STACK_SIZE_DEFAULT = 2 * STACK_UNIT; // 2*1024

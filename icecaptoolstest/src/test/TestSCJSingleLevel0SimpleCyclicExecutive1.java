@@ -8,10 +8,12 @@ import javax.safetycritical.CyclicExecutive;
 import javax.safetycritical.CyclicSchedule;
 import javax.safetycritical.Frame;
 import javax.safetycritical.LaunchLevel0;
+import javax.safetycritical.LauncherAP;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
 import javax.safetycritical.StorageParameters;
+import javax.safetycritical.annotate.Level;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -121,10 +123,16 @@ public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive i
 		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE, Const.PRIVATE_MEM, 0, 0);
 
 		configParameters = new ConfigurationParameters(-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
-
-		MachineFactory mFactory = new POSIX64BitMachineFactory();
 		
-		new LaunchLevel0(new TestSCJSingleLevel0SimpleCyclicExecutive1(), mFactory);
+
+		MachineFactory mFactory = new POSIX64BitMachineFactory();	
+		
+		new LaunchLevel0(new TestSCJSingleLevel0SimpleCyclicExecutive1(), mFactory);  // original: works
+		
+		//new LauncherAP(Level.LEVEL_0, TestSCJSingleLevel0SimpleCyclicExecutive1.class, mFactory);  // using .class: does not work
+		
+		//new LauncherAP(Level.LEVEL_0, new TestSCJSingleLevel0SimpleCyclicExecutive1(), mFactory);  // using instance. does not work
+		
 		VMTest.markResult(false);
 	}
 }

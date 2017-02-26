@@ -102,7 +102,7 @@ final class Monitor extends vm.Monitor {
 					// and assign the lock to this process.
 					ScjProcess process = PriorityScheduler.instance().getProcessFromLockQueue(this);
 					
-					if (process != null) devices.Console.println("getProcessFromLockQueue: " + process.index);
+					//if (process != null) devices.Console.println("Monitor.getProcessFromLockQueue: " + process.index);
 
 					if (process != null) {
 						setOwner(process.getTarget());
@@ -113,7 +113,7 @@ final class Monitor extends vm.Monitor {
 						// process READY
 						process.state = State.READY;
 						PriorityScheduler.instance().insertReadyQueue(process);
-						devices.Console.println("insertReadyQueue: " + process.index);
+						//devices.Console.println("Monitor.insertReadyQueue: " + process.index);
 					} else {
 						setOwner(null);
 					}
