@@ -69,7 +69,9 @@ public abstract class Launcher implements Runnable {
 		this.app = app;
 		Launcher.level = level;
 		init();
-		createImmortalMemory();
+		//createImmortalMemory();
+		
+		createImmortalMemory().executeInArea(this);
 	}
 
 	public void run() {
@@ -77,7 +79,7 @@ public abstract class Launcher implements Runnable {
 		start();
 	}
 
-	private void createImmortalMemory() {
+	private /*void*/ ImmortalMemory createImmortalMemory() {
 		ManagedMemory.allocateBackingStore(Const.OVERALL_BACKING_STORE);
 
 		if (Memory.memoryAreaTrackingEnabled) {
@@ -85,9 +87,10 @@ public abstract class Launcher implements Runnable {
 					MemoryArea.overAllBackingStore, "MemTrk");
 		}
 
-		ManagedMemory immortalMem = new ImmortalMemory(Const.IMMORTAL_MEM);
-		immortalMem.executeInArea(this);
-		//immortalMem.removeArea();
+//		ManagedMemory immortalMem = new ImmortalMemory(Const.IMMORTAL_MEM);
+//		immortalMem.executeInArea(this);
+		
+		return new ImmortalMemory(Const.IMMORTAL_MEM);
 	}
 
 	protected abstract void init();

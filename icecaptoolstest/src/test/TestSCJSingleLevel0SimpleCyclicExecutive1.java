@@ -4,11 +4,11 @@ import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
+import javax.realtime.TestPortalRT;
 import javax.safetycritical.CyclicExecutive;
 import javax.safetycritical.CyclicSchedule;
 import javax.safetycritical.Frame;
 import javax.safetycritical.LaunchLevel0;
-import javax.safetycritical.LauncherAP;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
@@ -125,13 +125,11 @@ public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive i
 		configParameters = new ConfigurationParameters(-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 		
 
-		MachineFactory mFactory = new POSIX64BitMachineFactory();	
-		
+		MachineFactory mFactory = new POSIX64BitMachineFactory();		
 		new LaunchLevel0(new TestSCJSingleLevel0SimpleCyclicExecutive1(), mFactory);  // original: works
 		
-		//new LauncherAP(Level.LEVEL_0, TestSCJSingleLevel0SimpleCyclicExecutive1.class, mFactory);  // using .class: does not work
-		
-		//new LauncherAP(Level.LEVEL_0, new TestSCJSingleLevel0SimpleCyclicExecutive1(), mFactory);  // using instance. does not work
+		//TestPortalRT.setupVM();
+		//new LauncherAP(Level.LEVEL_0, new TestSCJSingleLevel0SimpleCyclicExecutive1());  // using AP version with instance; works
 		
 		VMTest.markResult(false);
 	}

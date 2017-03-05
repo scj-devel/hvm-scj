@@ -1,10 +1,7 @@
 package javax.safetycritical;
 
 
-import java.lang.reflect.Constructor;
-
 import javax.realtime.MemoryArea;
-import javax.safetycritical.ManagedMemory;
 import javax.safetycritical.annotate.Level;
 import javax.scj.util.Const;
 
@@ -18,82 +15,85 @@ public class LauncherAP implements Runnable {
 	
 	protected static boolean useOS = false;
 	protected static Level level;
-	//protected static MachineFactory mFactory;
-	protected static Class<? extends Safelet> app;
+	protected static MachineFactory mFactory;
+	protected static Safelet app;
 	
-	protected MachineFactory mFactory;
-	//protected Safelet app;
-
-	public LauncherAP(Level level, Class<? extends Safelet> app, MachineFactory mFactory) 
-	
-	//public LauncherAP(Level level, Safelet app, MachineFactory mFactory) 
-	
-	{
-		useOS = false;
-		
-		//mFactory = new POSIX64BitMachineFactory();		
-		this.mFactory = mFactory;
+	public LauncherAP(Level level, Safelet app)	
+	{ 		
+		useOS = false;		
+		mFactory = Machine.getMachineFactory();
 		
 		LauncherAP.level = level;
 		LauncherAP.app = app;
 		
-		//this.app = app;
-		
+		// init()
 	    Mission.missionBehaviour = new SinglecoreMissionBehavior();
 		ManagedEventHandler.handlerBehavior = new SinglecoreHandlerBehavior();
 		Services.servicesBehavior = new SinglecoreServicesBehavior();
 		ManagedMemory.memoryBehavior = new SinglecoreMemoryBehavior();
 		
-		ManagedMemory.allocateBackingStore(Const.OVERALL_BACKING_STORE);
+		System.out.println("\nLauncherAP.constructor");
 		
-		createImmortalMemory();		
-		ImmortalMemory.instance().executeInArea(this);
+		createImmortalMemory().executeInArea(this);	
+		
+		//ImmortalMemory.instance().executeInArea(this);
+		
+		System.out.println("\nLauncherAP.constructor end");
 	}
 	
-	private void createImmortalMemory() {
+	private ImmortalMemory createImmortalMemory() {
 		ManagedMemory.allocateBackingStore(Const.OVERALL_BACKING_STORE);
 		if (Memory.memoryAreaTrackingEnabled) {
 			new PrivateMemory(Const.MEMORY_TRACKER_AREA_SIZE, Const.MEMORY_TRACKER_AREA_SIZE,
 					MemoryArea.overAllBackingStore, "MemTrk");
 		}
-		new ImmortalMemory(Const.IMMORTAL_MEM);
+		return new ImmortalMemory(Const.IMMORTAL_MEM);
 	}
 
 	@Override
 	public void run() {
 		// create object in Immortal Memory
-		try {
-			Constructor<? extends Safelet> constructor = app.getConstructor(new Class[0]);
-			Safelet obj = (Safelet) constructor.newInstance(new Object[0]);
-			
-			obj.initializeApplication();
+		try {			
+			app.initializeApplication();
 			
 			// Level_0
 			if (level == Level.LEVEL_0) {
 				
-			  //MissionSequencer seq = obj.getSequencer();
-				
+			  MissionSequencer seq = app.getSequencer();
+				 
 			  CyclicScheduler sch = CyclicScheduler.instance();
 			  Machine.setCurrentScheduler(sch);
 			  
-			  MissionSequencer seq = obj.getSequencer();
-			  
+			  System.out.println("\nLauncherAP.run 0_1: " + seq);
 			  
 			  sch.start(seq, mFactory);
-			} else
+			  
+			  System.out.println("\nLauncherAP.run 0_2");
+			} 
+			else
 			// Level_1 or Level_2
 			{
-//			  PriorityScheduler sch = PriorityScheduler.instance();
-//			  Machine.setCurrentScheduler(sch.prioritySchedulerImpl);
-//			  sch.insertReadyQueue(ScjProcess.createIdleProcess());
-//// APR: Det følgende virker sært
-//			  obj.getSequencer();
-//// er sagen den at den erklærede initial MissionSequencer ikke bruges??
-//// Nej den indsætter sig selv ved oprettelsen gennem xxHandlerBehaviour!!
-//			  PriorityScheduler.instance().start(mFactory);
+			  PriorityScheduler sch = PriorityScheduler.instance();
+			  System.out.println("\nLauncherAP.run 1_1");
+			  Machine.setCurrentScheduler(sch.prioritySchedulerImpl);
+			  System.out.println("\nLauncherAP.run 1_2");
+			  sch.insertReadyQueue(ScjProcess.createIdleProcess());
+			  System.out.println("\nLauncherAP.run 1_3");
+			  
+			  // APR: Det følgende virker sært
+			  app.getSequencer();
+			  System.out.println("\nLauncherAP.run 1_4");
+			  
+			  // er sagen den at den erklærede initial MissionSequencer ikke bruges??
+			  // Nej den indsætter sig selv ved oprettelsen gennem xxHandlerBehaviour!!
+			  PriorityScheduler.instance().start(mFactory);
+			  System.out.println("\nLauncherAP.run 1_5");
 			}
 		} catch (Throwable e){
-			System.out.println("Initialization error: "+ e.getMessage());
+			System.out.println("*** LauncherAP.Initialization error: "+ e.getMessage());
+			System.out.println("*** LauncherAP.Initialization error: ToDo: report should be updated");
+			//if (app instanceof Test)
+			
 		}
 	}
 }
