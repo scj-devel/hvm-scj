@@ -5,17 +5,20 @@ import javax.realtime.ConfigurationParameters;
 import javax.realtime.HighResolutionTime;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
-
+import javax.realtime.TestPortalRT;
 import javax.safetycritical.AperiodicEventHandler;
 import javax.safetycritical.LaunchLevel1;
+import javax.safetycritical.LauncherAP;
+import javax.safetycritical.LauncherAP1;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.OneShotEventHandler;
 import javax.safetycritical.Safelet;
 import javax.safetycritical.StorageParameters;
-
+import javax.safetycritical.annotate.Level;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
+
 import vm.VMTest;
 
 public class TestSCJSingleAperiodicAndOneShotEvh1 {
@@ -136,7 +139,13 @@ public class TestSCJSingleAperiodicAndOneShotEvh1 {
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("***** TestSCJSingleAperiodicAndOneShotEvh1 begin *****");
-		new LaunchLevel1(new MyApp());
+		
+		new LaunchLevel1(new MyApp());  // original: works
+		
+		//TestPortalRT.setupVM();
+		//new LauncherAP(Level.LEVEL_1, new MyApp());  // using AP version with instance; does not work
+		//new LauncherAP1(Level.LEVEL_1, MyApp.class);  // using AP1 version with .class; does not work
+		
 		devices.Console.println("***** TestSCJSingleAperiodicAndOneShotEvh1 end *****");
 		if (testCount == 2) {
 			VMTest.markResult(false);

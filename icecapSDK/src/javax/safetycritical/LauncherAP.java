@@ -26,19 +26,20 @@ public class LauncherAP implements Runnable {
 		LauncherAP.level = level;
 		LauncherAP.app = app;
 		
-		// init()
-	    Mission.missionBehaviour = new SinglecoreMissionBehavior();
-		ManagedEventHandler.handlerBehavior = new SinglecoreHandlerBehavior();
-		Services.servicesBehavior = new SinglecoreServicesBehavior();
-		ManagedMemory.memoryBehavior = new SinglecoreMemoryBehavior();
+		setHandlers();
 		
 		System.out.println("\nLauncherAP.constructor");
 		
 		createImmortalMemory().executeInArea(this);	
 		
-		//ImmortalMemory.instance().executeInArea(this);
-		
 		System.out.println("\nLauncherAP.constructor end");
+	}
+	
+	private void setHandlers() {
+		Mission.missionBehaviour = new SinglecoreMissionBehavior();
+		ManagedEventHandler.handlerBehavior = new SinglecoreHandlerBehavior();
+		Services.servicesBehavior = new SinglecoreServicesBehavior();
+		ManagedMemory.memoryBehavior = new SinglecoreMemoryBehavior();	
 	}
 	
 	private ImmortalMemory createImmortalMemory() {

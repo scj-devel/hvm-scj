@@ -25,27 +25,29 @@ public class LauncherAP1 implements Runnable {
 		LauncherAP1.app = app;
 		LauncherAP1.level = level;
 		
-	    Mission.missionBehaviour = new SinglecoreMissionBehavior();
-		ManagedEventHandler.handlerBehavior = new SinglecoreHandlerBehavior();
-		Services.servicesBehavior = new SinglecoreServicesBehavior();
-		ManagedMemory.memoryBehavior = new SinglecoreMemoryBehavior();
+		setHandlers();	
 		
-		createImmortalMemory();
+		System.out.println("\nLauncherAP1.constructor ...");
 		
-		System.out.println("\nLauncherAP1.constructor 5");
-		
-		ImmortalMemory.instance().executeInArea(this);
+		createImmortalMemory().executeInArea(this);
 		
 		System.out.println("\nLauncherAP1.constructor end");
 	}
 	
-	private void createImmortalMemory() {
+	private void setHandlers() {
+		Mission.missionBehaviour = new SinglecoreMissionBehavior();
+		ManagedEventHandler.handlerBehavior = new SinglecoreHandlerBehavior();
+		Services.servicesBehavior = new SinglecoreServicesBehavior();
+		ManagedMemory.memoryBehavior = new SinglecoreMemoryBehavior();	
+	}
+	
+	private ImmortalMemory createImmortalMemory() {
 		ManagedMemory.allocateBackingStore(Const.OVERALL_BACKING_STORE);
 		if (Memory.memoryAreaTrackingEnabled) {
 			new PrivateMemory(Const.MEMORY_TRACKER_AREA_SIZE, Const.MEMORY_TRACKER_AREA_SIZE,
 					MemoryArea.overAllBackingStore, "MemTrk");
 		}
-		new ImmortalMemory(Const.IMMORTAL_MEM);
+		return new ImmortalMemory(Const.IMMORTAL_MEM);
 	}
 
 	@Override
@@ -57,7 +59,7 @@ public class LauncherAP1 implements Runnable {
 			System.out.println ("nLauncherAP1.run:constructor: " + constructor.toString());
 			
 			obj = (Safelet) constructor.newInstance();
-			System.out.println ("nLauncherAP1.run: newInstance: " + obj);
+			System.out.println ("LauncherAP1.run: newInstance: " + obj);
 
 		} catch (Throwable e){
 			System.out.println("Safelet cannot be created: "+ e.getMessage());
@@ -69,14 +71,15 @@ public class LauncherAP1 implements Runnable {
 		  obj.initializeApplication();
 		  
 		  System.out.println("\nLauncherAP1.run 2");
-		  MissionSequencer seq = obj.getSequencer();
+		  //MissionSequencer seq = obj.getSequencer();
 		  
 		  System.out.println("\nLauncherAP1.run 3");
-		  if (seq == null) throw new Exception("*** run: Sequencer missing");
+		  //if (seq == null) throw new Exception("*** run: Sequencer missing");
 		  
 		  // Level_0
 		  if (level == Level.LEVEL_0) {
-			  //MissionSequencer seq = obj.getSequencer();
+			  MissionSequencer seq = obj.getSequencer();
+			  if (seq == null) throw new Exception("*** run: Sequencer missing");
 			  
 			  CyclicScheduler sch = CyclicScheduler.instance();
 			  System.out.println("\nLauncherAP1.run 04");
@@ -93,9 +96,13 @@ public class LauncherAP1 implements Runnable {
 			  System.out.println("\nLauncherAP1.run 18");
 			  sch.insertReadyQueue(ScjProcess.createIdleProcess());
 			  System.out.println("\nLauncherAP1.run 19");
+			  
 			  // APR: Det følgende virker sært
-			  obj.getSequencer();
+			  MissionSequencer seq = obj.getSequencer();
+			  if (seq == null) throw new Exception("*** run: Sequencer missing");
+			  
 			  System.out.println("\nLauncherAP1.run 110");
+			  
 			  // er sagen den at den erklærede initial MissionSequencer ikke bruges??
 			  // Nej den indsætter sig selv ved oprettelsen gennem xxHandlerBehaviour!!
 			  PriorityScheduler.instance().start(mFactory);
@@ -103,7 +110,7 @@ public class LauncherAP1 implements Runnable {
 		  }
 	    } 
 		catch (Throwable e) {
-			System.out.println("*** Launcher initialization error: "+ e.getMessage());  
+			System.out.println("*** UPS: Launcher initialization error: "+ e.getMessage());  
 		}
 	}
 }
