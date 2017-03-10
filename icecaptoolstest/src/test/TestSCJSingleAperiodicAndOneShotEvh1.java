@@ -86,7 +86,9 @@ public class TestSCJSingleAperiodicAndOneShotEvh1 {
 	private static class MyApp implements Safelet {
 		
 		public MissionSequencer getSequencer() {
-			return new MySequencer();
+			MissionSequencer seq = new MySequencer();
+			System.out.println("MyApp.getSequencer: " + seq);
+			return seq;
 		}
 
 		public long immortalMemorySize() {
@@ -102,6 +104,7 @@ public class TestSCJSingleAperiodicAndOneShotEvh1 {
 			MySequencer() {
 				super(new PriorityParameters(Priorities.PR95),
 						storageParameters_Sequencer, configParameters);
+				System.out.println("MySequencer called");
 				mission = new MyMission();
 			}
 
@@ -144,7 +147,7 @@ public class TestSCJSingleAperiodicAndOneShotEvh1 {
 		
 		//TestPortalRT.setupVM();
 		//new LauncherAP(Level.LEVEL_1, new MyApp());  // using AP version with instance; does not work
-		//new LauncherAP1(Level.LEVEL_1, MyApp.class);  // using AP1 version with .class; does not work
+		//new LauncherAP1(Level.LEVEL_1, TestSCJSingleAperiodicAndOneShotEvh1.MyApp.class);  // using AP1 version with .class; does not work
 		
 		devices.Console.println("***** TestSCJSingleAperiodicAndOneShotEvh1 end *****");
 		if (testCount == 2) {

@@ -55,9 +55,11 @@ public class LauncherAP1 implements Runnable {
 		// create object in Immortal Memory
 		Safelet obj;
 		try {
+			//Constructor<? extends Safelet> constructor = app.getConstructor(new Class[0]);  // ??; see OpenJMLTest: test.TckTest
 			Constructor<? extends Safelet> constructor = app.getConstructor();
-			System.out.println ("nLauncherAP1.run:constructor: " + constructor.toString());
+			System.out.println ("\nLauncherAP1.run:constructor: " + constructor.toString());
 			
+			//obj = (Safelet) constructor.newInstance(new Object[0]);  // ??; see OpenJMLTest: test.TckTest
 			obj = (Safelet) constructor.newInstance();
 			System.out.println ("LauncherAP1.run: newInstance: " + obj);
 
@@ -70,11 +72,7 @@ public class LauncherAP1 implements Runnable {
 		  System.out.println("\nLauncherAP1.run 1");
 		  obj.initializeApplication();
 		  
-		  System.out.println("\nLauncherAP1.run 2");
-		  //MissionSequencer seq = obj.getSequencer();
-		  
-		  System.out.println("\nLauncherAP1.run 3");
-		  //if (seq == null) throw new Exception("*** run: Sequencer missing");
+		  System.out.println("\nLauncherAP1.run 2");		 
 		  
 		  // Level_0
 		  if (level == Level.LEVEL_0) {
@@ -90,22 +88,21 @@ public class LauncherAP1 implements Runnable {
 		  } 
 		  else	// Level_1 or Level_2
 		  {
-			  PriorityScheduler sch = PriorityScheduler.instance();
-			  System.out.println("\nLauncherAP1.run 17");
-			  Machine.setCurrentScheduler(sch.prioritySchedulerImpl);
-			  System.out.println("\nLauncherAP1.run 18");
+			  PriorityScheduler sch = PriorityScheduler.instance();			 
+			  Machine.setCurrentScheduler(sch.prioritySchedulerImpl);			  
 			  sch.insertReadyQueue(ScjProcess.createIdleProcess());
-			  System.out.println("\nLauncherAP1.run 19");
+			  System.out.println("\nLauncherAP1.run 19, before obj.getSequencer()");
 			  
 			  // APR: Det følgende virker sært
 			  MissionSequencer seq = obj.getSequencer();
-			  if (seq == null) throw new Exception("*** run: Sequencer missing");
+			  if (seq == null) throw new Exception(" ==> run: Sequencer missing");
 			  
-			  System.out.println("\nLauncherAP1.run 110");
+			  System.out.println("\nLauncherAP1.run, after obj.getSequencer(); seq: " + seq);
 			  
 			  // er sagen den at den erklærede initial MissionSequencer ikke bruges??
 			  // Nej den indsætter sig selv ved oprettelsen gennem xxHandlerBehaviour!!
 			  PriorityScheduler.instance().start(mFactory);
+			  
 			  System.out.println("\nLauncherAP1.run 111");
 		  }
 	    } 

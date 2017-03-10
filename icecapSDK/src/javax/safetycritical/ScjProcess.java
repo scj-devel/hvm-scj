@@ -202,7 +202,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 	}
 
 	public String toString() {
-		return StringUtil.constructString("ScjProcess:" + msObject + " index: ", index);
+		return StringUtil.constructString("ScjProcess:" + msObject + " index: ", this.index);
 	}
 
 	/**
