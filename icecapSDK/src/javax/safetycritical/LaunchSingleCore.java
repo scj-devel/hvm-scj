@@ -35,10 +35,8 @@ public abstract class LaunchSingleCore extends Launcher {
 		Machine.setCurrentScheduler(sch.prioritySchedulerImpl);
 		
 		sch.insertReadyQueue(ScjProcess.createIdleProcess());
-		System.out.println("*** LaunchSingleCore.startLevel1_2: before app.getSequencer()");
 		app.getSequencer();
 		
-		System.out.println("*** LaunchSingleCore.startLevel1_2: after app.getSequencer()");
 		PriorityScheduler.instance().start(mFactory);
 	}
 	

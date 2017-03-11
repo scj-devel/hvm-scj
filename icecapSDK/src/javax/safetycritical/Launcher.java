@@ -51,9 +51,11 @@ import vm.Memory;
  * @scjComment - The class is not part of the SCJ specification.
  */
 public abstract class Launcher implements Runnable {
+	
+	static int level = 0;  // notice: level is used in several classes
+	static boolean useOS = false;  // notice: useOS is used in several classes
+	
 	Safelet app;
-	static int level = 0;
-	static boolean useOS = false;
 	protected MachineFactory mFactory;
 
 	Launcher(boolean useOS, MachineFactory mFactory) {
@@ -69,7 +71,6 @@ public abstract class Launcher implements Runnable {
 		this.app = app;
 		Launcher.level = level;
 		init();
-		//createImmortalMemory();
 		
 		createImmortalMemory().executeInArea(this);
 	}
@@ -79,17 +80,13 @@ public abstract class Launcher implements Runnable {
 		start();
 	}
 
-	private /*void*/ ImmortalMemory createImmortalMemory() {
+	private ImmortalMemory createImmortalMemory() {
 		ManagedMemory.allocateBackingStore(Const.OVERALL_BACKING_STORE);
 
 		if (Memory.memoryAreaTrackingEnabled) {
 			new PrivateMemory(Const.MEMORY_TRACKER_AREA_SIZE, Const.MEMORY_TRACKER_AREA_SIZE,
 					MemoryArea.overAllBackingStore, "MemTrk");
 		}
-
-//		ManagedMemory immortalMem = new ImmortalMemory(Const.IMMORTAL_MEM);
-//		immortalMem.executeInArea(this);
-		
 		return new ImmortalMemory(Const.IMMORTAL_MEM);
 	}
 

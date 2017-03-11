@@ -5,11 +5,9 @@ import javax.realtime.ConfigurationParameters;
 import javax.realtime.HighResolutionTime;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
-import javax.realtime.TestPortalRT;
 import javax.safetycritical.AperiodicEventHandler;
 import javax.safetycritical.LaunchLevel1;
-import javax.safetycritical.LauncherAP;
-import javax.safetycritical.LauncherAP1;
+import javax.safetycritical.LauncherTCK;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.OneShotEventHandler;
@@ -145,9 +143,7 @@ public class TestSCJSingleAperiodicAndOneShotEvh1 {
 		
 		new LaunchLevel1(new MyApp());  // original: works
 		
-		//TestPortalRT.setupVM();
-		//new LauncherAP(Level.LEVEL_1, new MyApp());  // using AP version with instance; does not work
-		//new LauncherAP1(Level.LEVEL_1, TestSCJSingleAperiodicAndOneShotEvh1.MyApp.class);  // using AP1 version with .class; does not work
+		//new LauncherTCK(Level.LEVEL_1, TestSCJSingleAperiodicAndOneShotEvh1.MyApp.class);  // using Launcher version with .class; works
 		
 		devices.Console.println("***** TestSCJSingleAperiodicAndOneShotEvh1 end *****");
 		if (testCount == 2) {
