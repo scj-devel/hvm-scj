@@ -99,14 +99,12 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 	}
 
 	void addOuterMostSeq(MissionSequencer seq) {
-		System.out.println("\nPrScheduler.addOuterMostSeq: seq: " + seq);
 		
 		ScjProcess process = ManagedSchedMethods.createScjProcess(seq);
 		process.index = -2;
 		MissionSequencer.missSeqProcess = process;
 		outerMostSeqProcess = (ScjProcess) seq.process;
 		pFrame.addProcess(process);
-		System.out.println("\nPrScheduler.addOuterMostSeq done: outerMostSeqProcess: " + outerMostSeqProcess);
 	}
 
     void stop(vm.Process current) {
@@ -115,9 +113,7 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 
 	void start(MachineFactory mFactory) {
 		current = pFrame.readyQueue.extractMax();
-		System.out.println("\nPrScheduler.start. current: " + current);
 		startScheduler(mFactory);
-		System.out.println("\nPrScheduler.start finished");
 	}
 
 	void release(AperiodicEventHandler handler) {

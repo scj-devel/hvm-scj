@@ -83,7 +83,7 @@ class PriorityFrame {
 		}
 
 		else if (process.getTarget() instanceof MissionSequencer) {
-			devices.Console.println("PrFrame.addProcess, missSeq " + process+ ", index " + process.index);
+			//devices.Console.println("PrFrame.addProcess, missSeq " + process+ ", index " + process.index);
 			process.state = ScjProcess.State.READY;
 			readyQueue.insert(process);
 		}

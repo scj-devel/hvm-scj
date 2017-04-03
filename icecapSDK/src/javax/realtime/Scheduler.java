@@ -55,9 +55,7 @@ public abstract class Scheduler {
 		vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
 		mainProcess = new vm.Process(null, null);
 		this.mFactory = mFactory;
-		System.out.println("\nScheduler.startScheduler 3; mainProcess: " + mainProcess + "; mFactory: " + this.mFactory);
 		clockHandler.startClockHandler(mainProcess, mFactory);
-		System.out.println("\nScheduler.startScheduler 4");
 	}
 	
 	@IcecapCompileMe
