@@ -28,6 +28,8 @@ public class LauncherTCK implements Runnable {
 		
 		setHandlers();	
 		
+		//System.out.println("LauncherTCK.constructor");
+		
 		createImmortalMemory().executeInArea(this);
 	}
 	
@@ -54,39 +56,37 @@ public class LauncherTCK implements Runnable {
 		try {
 			Constructor<? extends Safelet> constructor = app.getConstructor();			
 			safelet = (Safelet) constructor.newInstance();
+			//System.out.println("LauncherTCK.run 2");
 
 		} catch (Throwable e){
 			System.out.println("LauncherTCK: safelet cannot be created: "+ e.getMessage());
-			return;
+			throw new Error("LauncherTCK: Safelet cannot be created: " + e.getMessage());
+			//return;
 		}
 		
-		try {
-		  safelet.initializeApplication();
+		
+	    safelet.initializeApplication();
+	  
+	    // Level_0
+	    if (Launcher.level == 0) {
+		  MissionSequencer seq = safelet.getSequencer();
+		  if (seq == null) throw new Error("*** LauncherTCK: run: Sequencer missing \n");
 		  
-		  // Level_0
-		  if (Launcher.level == 0) {
-			  MissionSequencer seq = safelet.getSequencer();
-			  if (seq == null) throw new Exception("*** LauncherTCK: run: Sequencer missing");
-			  
-			  CyclicScheduler sch = CyclicScheduler.instance();
-			  Machine.setCurrentScheduler(sch);	
-			  sch.start(seq, mFactory);
-		  } 
-		  else	// Level_1 or Level_2
-		  {
-			  PriorityScheduler sch = PriorityScheduler.instance();			 
-			  Machine.setCurrentScheduler(sch.prioritySchedulerImpl);			  
-			  sch.insertReadyQueue(ScjProcess.createIdleProcess());
-			  
-			  MissionSequencer seq = safelet.getSequencer();
-			  // The sequencer inserts itself in PriorityScheduler
-			  if (seq == null) throw new Exception("LauncherTCK: run: Sequencer missing");
-			  
-			  PriorityScheduler.instance().start(mFactory);
-		  }
+		  CyclicScheduler sch = CyclicScheduler.instance();
+		  Machine.setCurrentScheduler(sch);	
+		  sch.start(seq, mFactory);
 	    } 
-		catch (Throwable e) {
-			System.out.println("LauncherTCK: UPS: Launcher initialization error: "+ e.getMessage());  
-		}
+	    else	// Level_1 or Level_2
+	    {
+		  PriorityScheduler sch = PriorityScheduler.instance();			 
+		  Machine.setCurrentScheduler(sch.prioritySchedulerImpl);			  
+		  sch.insertReadyQueue(ScjProcess.createIdleProcess());
+		  
+		  MissionSequencer seq = safelet.getSequencer();
+		  // The sequencer inserts itself in PriorityScheduler
+		  if (seq == null) throw new Error("LauncherTCK: run: Sequencer missing");
+		  
+		  PriorityScheduler.instance().start(mFactory);
+	    }
 	}
 }
