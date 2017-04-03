@@ -129,8 +129,8 @@ public final class TestPortalSC {
 	 *  
 	 * @return the release parameter of <code>pevh</code>.
 	 */
-	public static ReleaseParameters getReleaseParam (PeriodicEventHandler pevh) {
-		return pevh.release;
+	public static ReleaseParameters getReleaseParam (ManagedEventHandler evh) {
+		return evh.release;
 	}
 	
 	/**
@@ -200,6 +200,21 @@ public final class TestPortalSC {
 		return evh.getHandlerName();
 	}
 	
+	public static final MemoryArea getMissionMemory(MissionSequencer seq) {
+		return seq.getMissionMemory();
+	}
+	
+	public static Phase getPhase(MissionSequencer seq) {
+		return seq.getPhase();
+	}
+	
+	public static final boolean isOuterMostSeq (MissionSequencer seq) {
+		return seq.isOuterMostSeq();
+	}
+	
+	public static final boolean waitForObject(PriorityScheduler prScheduler, Object target, HighResolutionTime<?> time)  {
+		return prScheduler.waitForObject(target, time);
+	}
 }
 
 

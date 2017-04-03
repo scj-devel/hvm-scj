@@ -30,6 +30,10 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 	void initMissionSequencer(MissionSequencer handler) {
 		if (MissionSequencer.isOuterMostSeq) {
 			MissionSequencer.outerMostSeq = handler;
+			MissionSequencer.isOuterMostSeq = false;
+			
+			handler.currentSeqIsOuterMost = true;
+			
 			if (Launcher.level != 0) {
 				PriorityScheduler.instance().addOuterMostSeq(handler);
 			}
@@ -40,7 +44,7 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 				handler.outerSeq = Mission.getMission().currMissSeq;
 
 		}
-		MissionSequencer.isOuterMostSeq = false;
+		//MissionSequencer.isOuterMostSeq = false;
 		/* Line below commented out - since cyclic sheduling tests fail */
 		// handler.lock = Monitor.getMonitor(handler);
 		//System.out.println("SinglecoreBehavior.initMissionSequencer");

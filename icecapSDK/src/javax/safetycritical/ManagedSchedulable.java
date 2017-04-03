@@ -55,12 +55,6 @@ public interface ManagedSchedulable extends Schedulable {
 	 * Registers this schedulable object with the current mission.
 	 */
 	@SCJPhase(Phase.INITIALIZATION)
-	public void register(Affinity affinity) throws IllegalStateException;
-	
-	/**
-	 * Registers this schedulable object with the current mission.
-	 */
-	@SCJPhase(Phase.INITIALIZATION)
 	public void register();
 
 	/**

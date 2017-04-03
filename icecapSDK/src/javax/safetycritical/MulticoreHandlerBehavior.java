@@ -55,12 +55,13 @@ final class MulticoreHandlerBehavior extends HandlerBehavior {
 
 			MissionSequencer.outerMostSeq = handler;
 			MissionSequencer.isOuterMostSeq = false;
+			
+			handler.currentSeqIsOuterMost = true;
 
 			OSProcess.setOuterMostMissionSequencer(handler.priority.getPriority(), handler);
 			handler.set = Launcher.level == 1 ? findAffinitySetForLevel1()
 					: AffinitySet.AFFINITY_SET[0];
 		}
-
 	}
 	
 	private AffinitySet findAffinitySetForLevel1() {

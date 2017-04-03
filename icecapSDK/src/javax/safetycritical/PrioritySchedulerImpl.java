@@ -25,6 +25,11 @@
  *************************************************************************/
 package javax.safetycritical;
 
+import javax.realtime.HighResolutionTime;
+import javax.realtime.AbsoluteTime;
+import javax.realtime.RelativeTime;
+import javax.realtime.Clock;
+
 import vm.Process;
 
 final class PrioritySchedulerImpl implements vm.Scheduler {
@@ -47,23 +52,7 @@ final class PrioritySchedulerImpl implements vm.Scheduler {
 		return null;
 	}
 
-	public void wait(Object target) {
-		vm.ClockInterruptHandler.instance.disable();
-
-		Monitor monitor = Monitor.getMonitor(target);
-		monitor.unlock();
-
-		// process WAITING
-		PriorityScheduler.instance().current.state = ScjProcess.State.WAITING;
-		PriorityScheduler.instance().pFrame.waitQueue.addProcess(monitor, PriorityScheduler.instance().current);
-		//devices.Console.println(">>> To waitQueue: " + PriorityScheduler.instance().current.index);
-
-		// move to next process in readyQueue
-		PriorityScheduler.instance().moveToNext();
-
-		vm.ClockInterruptHandler.instance.enable();
-		vm.ClockInterruptHandler.instance.yield();
-	}
+	
 
 	public void notify(Object target) {
 		vm.ClockInterruptHandler.instance.disable();
@@ -73,6 +62,7 @@ final class PrioritySchedulerImpl implements vm.Scheduler {
 		ScjProcess process = PriorityScheduler.instance().pFrame.waitQueue.getNextProcess(monitor);
 
 		if (process != null) {
+			process.isNotified = true;
 			// process in REQUIRELOCK state
 			process.state = ScjProcess.State.REQUIRELOCK;
 			//devices.Console.println("ScjProcess.State.REQUIRELOCK");
@@ -100,6 +90,7 @@ final class PrioritySchedulerImpl implements vm.Scheduler {
 			//					process.isNotified = true;
 			//				}
 			//			}
+			process.isNotified = true;
 			// process in REQUIRELOCK state
 			process.state = ScjProcess.State.REQUIRELOCK;
 			PriorityScheduler.instance().pFrame.lockQueue.addProcess(monitor, process);
@@ -111,76 +102,107 @@ final class PrioritySchedulerImpl implements vm.Scheduler {
 	}
 
 	public Monitor getDefaultMonitor() {
-//		devices.Console.println("default null");
-//		return null;
 		return new Monitor(Services.getDefaultCeiling());
 	}
 
 	@Override
 	public void terminated() {
 	}
+	
+	public void wait(Object target) {
+		vm.ClockInterruptHandler.instance.disable();
 
-	//	public static boolean waitForObject(Object target, HighResolutionTime time) {
-	//		vm.ClockInterruptHandler.instance.disable();
-	//
-	//		if (time instanceof RelativeTime && 
-	//			(time.getMilliseconds() < 0L || 
-	//			 time.getMilliseconds() == 0L && time.getNanoseconds() < 0))
-	//			throw new IllegalArgumentException("relative time is not vaild");
-	//
-	//		if ((time instanceof RelativeTime && 
-	//			 time.getMilliseconds() == 0 && time.getNanoseconds() == 0) ||
-	//			 time == null) {
-	//			vm.Monitor.wait(target);
-	//			return false;
-	//		} else {
-	//			// release the lock.
-	//			Monitor monitor = Monitor.getMonitor(target);
-	//			monitor.unlockWithOutEnable();
-	//			
-	//			// get current process and reset the boolean value
-	//			ScjProcess current = PriorityScheduler.instance().current;
-	//			current.isNotified = false;
-	//			// save the next release time
-	//			current.next_temp = new AbsoluteTime(current.next);
-	//
-	//			// get current time.
-	//			AbsoluteTime abs = Clock.getRealtimeClock().getTime(current.next);
-	//
-	//			// set the next release time for current process
-	//			if (time instanceof RelativeTime) {
-	//				current.next = abs.add((RelativeTime) time, abs);
-	//			} else if (time instanceof AbsoluteTime) {
-	//				current.next = new AbsoluteTime((AbsoluteTime) time);
-	//			} else {
-	//				throw new UnsupportedOperationException();
-	//			}
-	//
-	//			// get the next process and set appropriate state.
-	//			ScjProcess nextProcess = PriorityScheduler.instance().pFrame.readyQueue.extractMax();
-	//			nextProcess.state = ScjProcess.State.EXECUTING;
-	//			PriorityScheduler.instance().current = nextProcess;
-	//
-	//			// insert the current process into the the release queue 
-	//			// and wait queue.
-	//			PriorityScheduler.instance().pFrame.sleepingQueue.insert(current);  // ??
-	//			PriorityScheduler.instance().pFrame.waitQueue.addProcess(monitor, current);
-	//			
-	//			// transfer to the current process
-	//			vm.ClockInterruptHandler.instance.enable();
-	//			vm.ClockInterruptHandler.instance.yield();
-	//
-	//			// if it is notified by time, then the process should get the lock
-	//			// again to execute and delete the copy in the waitSet.
-	//			vm.ClockInterruptHandler.instance.disable();
-	//			if (!PriorityScheduler.instance().current.isNotified) {
-	//				PriorityScheduler.instance().current.next_temp = null;
-	//				PriorityScheduler.instance().pFrame.waitQueue.removeProcess(PriorityScheduler.instance().current);
-	//				monitor.lockWithOutEnable();
-	//			}
-	//			vm.ClockInterruptHandler.instance.enable();
-	//
-	//			return PriorityScheduler.instance().current.isNotified;
-	//		}
-	//	}
+		Monitor monitor = Monitor.getMonitor(target);
+		monitor.unlock();
+
+		PriorityScheduler.instance().current.isNotified = false; 
+		
+		// process WAITING
+		PriorityScheduler.instance().current.state = ScjProcess.State.WAITING;
+		PriorityScheduler.instance().pFrame.waitQueue.addProcess(monitor, PriorityScheduler.instance().current);
+		//devices.Console.println(">>> To waitQueue: " + PriorityScheduler.instance().current.index);
+
+		// move to next process in readyQueue
+		PriorityScheduler.instance().moveToNext();
+
+		vm.ClockInterruptHandler.instance.enable();
+		vm.ClockInterruptHandler.instance.yield();
+	}
+	
+	boolean waitForObject (Object target, HighResolutionTime<?> time) {  // tested, but is it correct?
+				
+		if ( time instanceof RelativeTime && 
+			 (time.getMilliseconds() < 0L || time.getMilliseconds() == 0L && time.getNanoseconds() < 0))
+			throw new IllegalArgumentException("relative time is not vaild");	
+		
+		if ((time instanceof RelativeTime && time.getMilliseconds() == 0 && time.getNanoseconds() == 0) ||
+			 time == null) {
+			
+			wait(target);
+			
+			return false;
+		}
+		else {
+			System.out.println("waitForObject - else 0");  // HSO: not finished
+			
+			vm.ClockInterruptHandler.instance.disable();
+			
+			Monitor monitor = Monitor.getMonitor(target);  
+			//monitor.unlock();	
+			monitor.unlockWithOutEnable();
+			
+			// get current process and reset the boolean value
+			ScjProcess current = PriorityScheduler.instance().current;
+			current.isNotified = false;
+			// save the next release time
+			current.next_temp = new AbsoluteTime(current.next);
+
+			// get current time.
+			AbsoluteTime abs = Clock.getRealtimeClock().getTime(current.next);
+
+			// set the next release time for current process
+			if (time instanceof RelativeTime) {
+				current.next = abs.add((RelativeTime) time, abs);
+			} else if (time instanceof AbsoluteTime) {
+				current.next = new AbsoluteTime((AbsoluteTime) time);
+			} else {
+				throw new UnsupportedOperationException();
+			}
+			
+			// process SLEEPING
+			current.waitForObjectLock = true;  // HSO
+			
+			current.state = ScjProcess.State.SLEEPING;
+			PriorityScheduler.instance().pFrame.sleepingQueue.insert(current);
+			
+			// and process in waitQueue
+			PriorityScheduler.instance().pFrame.waitQueue.addProcess(monitor, current);  // HSO
+
+			// move to next process in readyQueue
+			PriorityScheduler.instance().moveToNext();
+			System.out.println("waitForObject - else 1"); 
+			
+			vm.ClockInterruptHandler.instance.enable();
+			vm.ClockInterruptHandler.instance.yield();
+			
+			System.out.println("waitForObject - else 2"); 
+			// if it is notified by time, then the process should get the lock
+			// again to execute, and delete the copy in the waitSet.
+//			vm.ClockInterruptHandler.instance.disable();
+//			System.out.println("waitForObject - else 3");  
+//			if (PriorityScheduler.instance().current.isNotified) {
+//				
+//				System.out.println("waitForObject - else 4");  
+//				PriorityScheduler.instance().current.next_temp = null;
+//				PriorityScheduler.instance().current.state = ScjProcess.State.REQUIRELOCK;
+//				PriorityScheduler.instance().pFrame.waitQueue.removeProcess(PriorityScheduler.instance().current);
+//				monitor.lockWithOutEnable();
+//			}
+//			vm.ClockInterruptHandler.instance.enable();
+			
+			return PriorityScheduler.instance().current.isNotified;
+		}	
+		
+		
+	}
 }

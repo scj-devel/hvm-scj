@@ -155,28 +155,28 @@ public class TestSCJSingleMemoryAreaTracking {
 	static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
-		Const.OUTERMOST_SEQ_BACKING_STORE = 140 * 1000;
-		Const.IMMORTAL_MEM = 20 * 1000;
-		Const.MISSION_MEM = 23 * 1000;
-		Const.PRIVATE_MEM = 2 * 1000;
+		Const.OUTERMOST_SEQ_BACKING_STORE = 140 * 1000 + 40 * 1000;
+		Const.IMMORTAL_MEM = 20 * 1000 +3 * 1000;;
+		Const.MISSION_MEM = 23 * 1000 + 3 * 1000;
+		Const.PRIVATE_MEM = 2 * 1000 + 2 * 1000;;
 		Const.HANDLER_STACK_SIZE = Const.STACK_UNIT;
-		Const.MEMORY_TRACKER_AREA_SIZE = 30000;
+		Const.MEMORY_TRACKER_AREA_SIZE = 30 * 1000 + 20 * 1000;;
 
-		Memory.startMemoryAreaTracking();
+		//Memory.startMemoryAreaTracking();
 
 		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
 				Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
 
-		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_MEM,
+		storageParameters_Handlers = new StorageParameters(2 * Const.PRIVATE_MEM,
 				Const.PRIVATE_MEM, 0, 0);
 
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n***** TestSCJSingleMemoryAreaTracking begin *****");
-		new LaunchLevel1(new MyApp());
+		//new LaunchLevel1(new MyApp());
 		devices.Console.println("\n***** TestSCJSingleMemoryAreaTracking end *****");
 
-		Memory.reportMemoryUsage();
+		//Memory.reportMemoryUsage();
 		VMTest.markResult(false);
 	}
 

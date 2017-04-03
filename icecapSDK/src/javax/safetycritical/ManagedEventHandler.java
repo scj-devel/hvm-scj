@@ -100,8 +100,8 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 			String name) {
 		if (priority == null)
 			throw new IllegalArgumentException("priority is null");
-		if (release == null)
-			throw new IllegalArgumentException("release is null");
+//		if (release == null)  // release == null is allowed in OneShotEventHandler
+//			throw new IllegalArgumentException("release is null");
 		if (storage == null)
 			throw new IllegalArgumentException("storage is null");
 		this.priority = priority;
@@ -148,11 +148,6 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		privateMemory.removeArea();
 		isRegistered = false;
 	}
-
-	@SCJPhase(Phase.INITIALIZATION)
-	public void register(Affinity affinity) throws IllegalStateException {
-		// ToDO: implement
-	}
 	
 	/**
 	 * Registers this event handler with the current mission.
@@ -169,7 +164,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	@SCJAllowed(Level.SUPPORT)
 	public void signalTermination() {
 		// Default behavior: no action
-		System.out.println("ManagedEventHandler.signalTermination is called");
+		//System.out.println("ManagedEventHandler.signalTermination is called");
 	}
 
 	public String getName() {

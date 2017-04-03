@@ -214,6 +214,27 @@ public class AbsoluteTime extends HighResolutionTime<AbsoluteTime> {
 
 		return add(time.getMilliseconds(), time.getNanoseconds(), dest);
 	}
+	
+	public int compareTo(AbsoluteTime time) {
+		
+		if (time == null)
+			throw new IllegalArgumentException("time is null");		
+		if (this.getClass() != time.getClass())
+			throw new ClassCastException("class mismatch");		
+		if (this.clock != time.getClock())
+			throw new IllegalArgumentException("clock mismatch");
+
+		if (this.millis < time.getMilliseconds())
+			return -1;
+		else if (this.millis > time.getMilliseconds())
+			return 1;
+		else if (this.nanos < time.getNanoseconds())
+			return -1;
+		else if (this.nanos > time.getNanoseconds())
+			return 1;
+		else
+			return 0;
+	}
 
 	/**
 	 * Creates a new instance of <code>RelativeTime</code> representing the result of subtracting <code>time</code>

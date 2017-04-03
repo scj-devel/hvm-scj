@@ -74,6 +74,8 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 	Object monitorLock = null;
 	AbsoluteTime next_temp = null;
 	boolean isNotified = false;
+	
+	boolean waitForObjectLock = false;  // HSO
 
 	private ExceptionReporter exceptionReporter;
 
@@ -111,14 +113,18 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 				try {
 					runLogic(msObject);
 
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					Const.reporter.processExecutionError(e);
+					
+					if (msObject instanceof MissionSequencer) 
+						((MissionSequencer)msObject).currState = MissionSequencer.State.END;
+					
 				} finally {
 					if (msObject instanceof PeriodicEventHandler) {
 						next.add(period, next); // next = next + period
-					}
+					}	
+										
 					state = State.HANDLED;
-					//devices.Console.println("ScjProcess: " + process + ", HANDLED");
 				}
 			}
 
@@ -196,7 +202,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 	}
 
 	public String toString() {
-		return StringUtil.constructString("ScjProcess:" + msObject + " index: ", index);
+		return StringUtil.constructString("ScjProcess:" + msObject + " index: ", this.index);
 	}
 
 	/**

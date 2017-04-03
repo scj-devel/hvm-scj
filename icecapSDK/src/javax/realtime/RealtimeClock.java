@@ -68,10 +68,10 @@ class RealtimeClock extends Clock {
 //	    assignable \nothing;
 //	    ensures \result.equals(new RelativeTime(0, 0, this));
 //	  @*/
-	@Override
-	public RelativeTime getEpochOffset() {
-		return new RelativeTime(0, 0, this);
-	}
+//	@Override
+//	public RelativeTime getEpochOffset() {
+//		return new RelativeTime(0, 0, this);
+//	}
 
 	/**
 	 * Returns a newly allocated RelativeTime object that indicates the nominal
@@ -100,13 +100,25 @@ class RealtimeClock extends Clock {
 			return dest;
 		}
 	}
+	
+	//@Override
+	public RelativeTime getQueryPrecision(RelativeTime dest) {
+		// ToDo: implement
+		return null;
+	}
+	
+	//@Override
+	public RelativeTime getQueryPrecision() {
+		// ToDo: implement
+		return null;		
+	}	 
 
-	@Override
+	//@Override
 	public AbsoluteTime getTime() {
 		return getTime(new AbsoluteTime(0, 0, this));
 	}
 
-	@Override
+	//@Override
 	@IcecapCompileMe
 	public AbsoluteTime getTime(AbsoluteTime dest) {
 		if (dest == null)

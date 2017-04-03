@@ -28,6 +28,8 @@ package javax.realtime;
 import icecaptools.IcecapCompileMe;
 import util.StringUtil;
 
+import javax.safetycritical.PriorityScheduler;
+import javax.safetycritical.TestPortalSC;
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
@@ -295,24 +297,17 @@ public abstract class HighResolutionTime<T extends HighResolutionTime<T>>
 		}
 	}
 
-	//public static boolean waitForObject(Object target, HighResolutionTime time) 
-	public static boolean waitForObject(Object target, HighResolutionTime<?> time) 
-	//public static boolean waitForObject(Object target, HighResolutionTime<? extends Object> time) 
-	//public static boolean waitForObject(Object target, HighResolutionTime<? extends HighResolutionTime> time)
-	//public static boolean waitForObject(Object target, HighResolutionTime<T> time)
-	//public static boolean waitForObject(Object target, HighResolutionTime<? extends HighResolutionTime<?>>  time) 
-	
-	//public static boolean waitForObject(Object target, <? extends HighResolutionTime> time) 
-	
-	{
-		return false;
+
+	public static boolean waitForObject(Object target, HighResolutionTime<?> time)  {
 		
-		//return javax.safetycritical.PriorityScheduler.waitForObject(target, time);
+		// ToDo: test it
+				
+		return TestPortalSC.waitForObject(PriorityScheduler.instance(), target, time);
 	}
 
 	// used for JML annotation only (not public)
 	Clock getClck() {
-		return clock;
+		return (Clock)clock;
 	}
 		
 	// used for JML annotation only (not public)

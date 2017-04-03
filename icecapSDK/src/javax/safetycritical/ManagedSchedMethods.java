@@ -84,7 +84,7 @@ final class ManagedSchedMethods {
 
 	static boolean isRegistered(ManagedSchedulable target) {
 		if (target instanceof ManagedEventHandler) {
-			System.out.println("ManagedSchedMethods. isRegistered: " + target);
+			//System.out.println("ManagedSchedMethods. isRegistered: " + target + "; " + ((ManagedEventHandler) target).isRegistered);
 			return ((ManagedEventHandler) target).isRegistered;
 		}			
 		else if (target instanceof ManagedThread)
@@ -98,8 +98,10 @@ final class ManagedSchedMethods {
 	}
 
 	static boolean isInMissionScope(ManagedSchedulable target) {
-		if (target instanceof ManagedEventHandler)
+		if (target instanceof ManagedEventHandler){
+			//System.out.println("ManagedSchedMethods. isInMissionScope: " + target + "; " + ((ManagedEventHandler) target).isInMissionScope);
 			return ((ManagedEventHandler) target).isInMissionScope;
+		}
 		else if (target instanceof ManagedThread)
 			return ((ManagedThread) target).isInMissionScope;
 		else if (target instanceof ManagedLongEventHandler)
