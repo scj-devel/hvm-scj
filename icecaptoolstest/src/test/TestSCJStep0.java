@@ -87,6 +87,17 @@ public class TestSCJStep0 {
 
 		public void initializeApplication() {
 		}
+		
+		public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
+		}
 	}
 
 	public static void main(String[] args) {

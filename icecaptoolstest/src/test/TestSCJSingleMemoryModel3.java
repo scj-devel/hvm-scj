@@ -291,6 +291,16 @@ public class TestSCJSingleMemoryModel3 {
 		public void initializeApplication() {
 		}
 
+		public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
+		}
 	}
 
 	static StorageParameters storageParameters_OuterMostSequencer;

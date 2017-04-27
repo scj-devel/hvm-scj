@@ -93,6 +93,17 @@ public class TestSCJSingleManagedMemory {
 
 		public void initializeApplication() {
 		}
+		
+		public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
+		}
 	}
 
 	static class SequencerStub extends MissionSequencer {

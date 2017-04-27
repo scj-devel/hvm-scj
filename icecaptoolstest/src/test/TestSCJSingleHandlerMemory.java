@@ -217,6 +217,17 @@ public class TestSCJSingleHandlerMemory {
 
 		public void initializeApplication() {
 		}
+		
+		public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
+		}
 	}
 
 	public static StorageParameters storageParameters_Sequencer;

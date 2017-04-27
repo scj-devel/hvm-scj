@@ -192,6 +192,17 @@ public class TestSCJSingleWaitForObject1 {
 		@Override
 		public void initializeApplication() {
 		}
+		
+		public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
+		}
 	}
 
 	static StorageParameters storageParameters_Sequencer;

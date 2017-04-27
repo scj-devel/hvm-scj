@@ -155,6 +155,17 @@ public class TestSCJMP_CustAffinitySet_Level2 implements Safelet {
 	public void initializeApplication() {
 		Configuration.processors = new int[][] { { 0, 1, 2, 3 }, { 0, 1, 2 }, { 0, 1 }, { 0 } };
 	}
+	
+	public long managedMemoryBackingStoreSize() {
+		return 0;
+	}
+	
+	public final boolean handleStartupError(int cause, long val) {
+		return false;
+	}
+	
+	public void cleanUp() {
+	}
 
 	private class MySequencer extends MissionSequencer {
 

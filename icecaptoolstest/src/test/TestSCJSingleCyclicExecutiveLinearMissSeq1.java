@@ -32,7 +32,7 @@ import vm.VMTest;
  *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
 
-public class TestSCJSingleCyclicExecutiveLinearMissSeq1 extends CyclicExecutive implements Safelet {
+public class TestSCJSingleCyclicExecutiveLinearMissSeq1 extends CyclicExecutive  {
 
 	private static MissionSequencer sequencer;
 
@@ -103,25 +103,39 @@ public class TestSCJSingleCyclicExecutiveLinearMissSeq1 extends CyclicExecutive 
 	public CyclicSchedule getSchedule(PeriodicEventHandler[] pehs) {
 		return VendorCyclicSchedule.generate(pehs, this);
 	}
+	
+	
+	private static class MyApp implements Safelet {
+        public static int count = 0;
 
-	// Safelet methods
+        public MissionSequencer getSequencer() {
 
-	public MissionSequencer getSequencer() {
-
-		/* Signature of: LinearMissionSequencer(PriorityParameters priority, 
-		                   StorageParameters storage, ConfigurationParameters config, 
-		                   boolean repeat, MissionType mission) */
-		sequencer = new LinearMissionSequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
-				storageParameters_Sequencer, configParameters, true, this);
-		return sequencer;
-	}
-
-	@Override
-	public long immortalMemorySize() {
-		return Const.IMMORTAL_MEM;
-	}
-
-	public void initializeApplication() {
+    		/* Signature of: LinearMissionSequencer(PriorityParameters priority, 
+    		                   StorageParameters storage, ConfigurationParameters config, 
+    		                   boolean repeat, MissionType mission) */
+    		sequencer = new LinearMissionSequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
+    				storageParameters_Sequencer, configParameters, true, new TestSCJSingleCyclicExecutiveLinearMissSeq1());
+    		return sequencer;
+    	}
+        
+        public long immortalMemorySize()
+        {
+          return Const.IMMORTAL_MEM;
+        }
+        
+        public void initializeApplication() {
+        }
+        
+        public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
+		}
 	}
 
 	static StorageParameters storageParameters_Sequencer;
@@ -137,7 +151,7 @@ public class TestSCJSingleCyclicExecutiveLinearMissSeq1 extends CyclicExecutive 
 		configParameters = new ConfigurationParameters(-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		MachineFactory mFac = new POSIX64BitMachineFactory();
-		new LaunchLevel0(new TestSCJSingleCyclicExecutiveLinearMissSeq1(), mFac);
+		new LaunchLevel0 ( new MyApp(), mFac);
 		VMTest.markResult(false);
 	}
 }

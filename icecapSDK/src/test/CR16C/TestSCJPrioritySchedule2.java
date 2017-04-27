@@ -117,6 +117,17 @@ public class TestSCJPrioritySchedule2 {
 		public long immortalMemorySize() {
 			return Const.IMMORTAL_MEM;
 		}
+		
+		public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
+		}
 
 		private class MySequencer extends MissionSequencer {
 			private MyMission mission;

@@ -1,11 +1,14 @@
 package javax.safetycritical;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.realtime.MemoryArea;
 import javax.safetycritical.ManagedMemory;
 import javax.safetycritical.annotate.Level;
 import javax.scj.util.Const;
+
+//import org.jmlspecs.utils.JmlAssertionError;
 
 import vm.Machine;
 import vm.MachineFactory;
@@ -27,8 +30,6 @@ public class LauncherTCK implements Runnable {
 		this.app = app;
 		
 		setHandlers();	
-		
-		//System.out.println("LauncherTCK.constructor");
 		
 		createImmortalMemory().executeInArea(this);
 	}
@@ -56,37 +57,61 @@ public class LauncherTCK implements Runnable {
 		try {
 			Constructor<? extends Safelet> constructor = app.getConstructor();			
 			safelet = (Safelet) constructor.newInstance();
-			//System.out.println("LauncherTCK.run 2");
+			System.out.println("LauncherTCK.run 2");
+			
+			safelet.immortalMemorySize();
+			System.out.println("LauncherTCK.run 3");
+			safelet.managedMemoryBackingStoreSize();
+			System.out.println("LauncherTCK.run 4");
+		    safelet.initializeApplication();
+		    
+		    System.out.println("LauncherTCK.run 5");
+		    
+		    // Level_0
+		    if (Launcher.level == 0) {
+			  MissionSequencer seq = safelet.getSequencer();
+			  if (seq == null) throw new Error("*** LauncherTCK: run: Sequencer missing \n");
+			  
+			  CyclicScheduler sch = CyclicScheduler.instance();
+			  Machine.setCurrentScheduler(sch);	
+			  sch.start(seq, mFactory);
+		    } 
+		    else	// Level_1 or Level_2
+		    {
+			  PriorityScheduler sch = PriorityScheduler.instance();			 
+			  Machine.setCurrentScheduler(sch.prioritySchedulerImpl);			  
+			  sch.insertReadyQueue(ScjProcess.createIdleProcess());
+			  
+			  MissionSequencer seq = safelet.getSequencer();
+			  // The sequencer inserts itself in PriorityScheduler
+			  if (seq == null) throw new Error("LauncherTCK: run: Sequencer missing");
+			  
+			  PriorityScheduler.instance().start(mFactory);
+		    }
 
-		} catch (Throwable e){
-			System.out.println("LauncherTCK: safelet cannot be created: "+ e.getMessage());
-			throw new Error("LauncherTCK: Safelet cannot be created: " + e.getMessage());
-			//return;
+		} 
+		catch (Throwable e){
+			//System.out.println("LauncherTCK: safelet cannot be created: "+ e.getMessage());
+			throw new Error("** LauncherTCK: Safelet: " + e.getMessage());
 		}
 		
-		
-	    safelet.initializeApplication();
-	  
-	    // Level_0
-	    if (Launcher.level == 0) {
-		  MissionSequencer seq = safelet.getSequencer();
-		  if (seq == null) throw new Error("*** LauncherTCK: run: Sequencer missing \n");
-		  
-		  CyclicScheduler sch = CyclicScheduler.instance();
-		  Machine.setCurrentScheduler(sch);	
-		  sch.start(seq, mFactory);
-	    } 
-	    else	// Level_1 or Level_2
-	    {
-		  PriorityScheduler sch = PriorityScheduler.instance();			 
-		  Machine.setCurrentScheduler(sch.prioritySchedulerImpl);			  
-		  sch.insertReadyQueue(ScjProcess.createIdleProcess());
-		  
-		  MissionSequencer seq = safelet.getSequencer();
-		  // The sequencer inserts itself in PriorityScheduler
-		  if (seq == null) throw new Error("LauncherTCK: run: Sequencer missing");
-		  
-		  PriorityScheduler.instance().start(mFactory);
-	    }
+//		catch (IllegalAccessException e){
+//			System.out.println("LauncherTCK: safelet cannot be created: "+ e.getMessage());
+//			throw new Error("** LauncherTCK: Safelet: " + e.getMessage());
+//		}
+//		catch (InstantiationException e){
+//			System.out.println("LauncherTCK: safelet cannot be created: "+ e.getMessage());
+//			throw e; //new Error("** LauncherTCK: Safelet: " + e.getMessage());
+//		}	
+//		catch (NoSuchMethodException e){
+//			System.out.println("LauncherTCK: safelet cannot be created: "+ e.getMessage());
+//			throw e; //new Error("** LauncherTCK: Safelet: " + e.getMessage());
+//		}	
+//		catch (InvocationTargetException e){
+//			System.out.println("LauncherTCK: safelet cannot be created: "+ e.getMessage());
+//			throw e; //new Error("** LauncherTCK: Safelet: " + e.getMessage());
+//		}	
+			
+
 	}
 }

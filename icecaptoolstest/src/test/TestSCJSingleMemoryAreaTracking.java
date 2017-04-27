@@ -127,6 +127,17 @@ public class TestSCJSingleMemoryAreaTracking {
 
 		public void initializeApplication() {
 		}
+		
+		public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
+		}
 
 		private static class MySequencer extends MissionSequencer {
 			private MyMission mission;

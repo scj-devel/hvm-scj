@@ -98,6 +98,18 @@ public class TestSCJMPMemory {
 
 		public void initializeApplication() {
 		}
+		
+		public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
+		}
+
 
 		private class MySequencer extends MissionSequencer {
 			MyMission0 m;

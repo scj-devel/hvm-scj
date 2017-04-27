@@ -138,6 +138,17 @@ public class TestSCJSingleMemoryModel1
     public void initializeApplication() {
         // TODO Auto-generated method stub        
     }
+    
+    public long managedMemoryBackingStoreSize() {
+		return 0;
+	}
+	
+	public final boolean handleStartupError(int cause, long val) {
+		return false;
+	}
+	
+	public void cleanUp() {
+	}
   }
   
   static StorageParameters storageParameters_Sequencer;

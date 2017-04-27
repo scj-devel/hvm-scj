@@ -22,7 +22,7 @@ import vm.MachineFactory;
 import vm.POSIX64BitMachineFactory;
 import vm.VMTest;
 
-public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive implements Safelet {
+public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive  {
 
 	private static MissionSequencer sequencer;
 
@@ -78,39 +78,56 @@ public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive i
 			}
 		}
 	}
-
-	public void initializeApplication() {
-	}
-
-	public long missionMemorySize() {
-		return Const.MISSION_MEM;
-	}
+		
 
 	public void initialize() {
 		(new MyPEH("A", new RelativeTime(0, 0), new RelativeTime(500, 0))).register();
 		(new MyPEH("B", new RelativeTime(0, 0), new RelativeTime(1000, 0))).register();
 		(new MyPEH("C", new RelativeTime(0, 0), new RelativeTime(500, 0))).register();
 	}
+	
+	public long missionMemorySize() {
+		return Const.MISSION_MEM;
+	}
 
 	public CyclicSchedule getSchedule(PeriodicEventHandler[] pehs) {
 		return VendorCyclicSchedule.generate(pehs, this);
 	}
+	
+	
+	private static class MyApp implements Safelet {
+        public static int count = 0;
 
-	public MissionSequencer getSequencer() {
-		sequencer = new MissionSequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
-				storageParameters_Sequencer, configParameters) {
+        public MissionSequencer getSequencer() {
+    		sequencer = new MissionSequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
+    				storageParameters_Sequencer, configParameters) {
 
-			@Override
-			protected CyclicExecutive getNextMission() {
-				return new TestSCJSingleLevel0SimpleCyclicExecutive1();
-			}
-		};
-		return sequencer;
-	}
-
-	@Override
-	public long immortalMemorySize() {
-		return Const.IMMORTAL_MEM_DEFAULT;
+    			@Override
+    			protected CyclicExecutive getNextMission() {
+    				return new TestSCJSingleLevel0SimpleCyclicExecutive1();
+    			}
+    		};
+    		return sequencer;
+    	}
+        
+        public long immortalMemorySize()
+        {
+          return Const.IMMORTAL_MEM;
+        }
+        
+        public void initializeApplication() {
+        }
+        
+        public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
+		}
 	}
 
 	public static StorageParameters storageParameters_Sequencer;
@@ -127,9 +144,7 @@ public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive i
 		
 
 		MachineFactory mFactory = new POSIX64BitMachineFactory();		
-		new LaunchLevel0(new TestSCJSingleLevel0SimpleCyclicExecutive1(), mFactory);  // original: works
-		
-		//new LauncherTCK(Level.LEVEL_0, TestSCJSingleLevel0SimpleCyclicExecutive1.class);  // using version with .class; works
+		new LaunchLevel0 (new MyApp(), mFactory);  // original: works
 		
 		VMTest.markResult(false);
 	}
