@@ -12,13 +12,14 @@ final class SinglecoreMemoryBehavior extends MemoryBehavior {
 			throw new IllegalArgumentException();
 
 		ManagedSchedulable ms = (ManagedSchedulable) logic;
-
+		
 		if (ms instanceof ManagedEventHandler) {
-			ManagedEventHandler mevh = (ManagedEventHandler) ms;
-			Memory mem = Memory.switchToArea(mevh.privateMemory.getDelegate());
-			logic.run();
+			ManagedEventHandler mevh = (ManagedEventHandler) ms;			
+			Memory mem = Memory.switchToArea(mevh.privateMemory.getDelegate());			
+			logic.run();			
 			Memory.switchToArea(mem);
 			mevh.privateMemory.getDelegate().reset(0);
+			
 		} else if (ms instanceof ManagedThread) {
 			ManagedThread mth = (ManagedThread) ms;
 			Memory mem = Memory.switchToArea(mth.privateMemory.getDelegate());
@@ -72,6 +73,10 @@ final class SinglecoreMemoryBehavior extends MemoryBehavior {
 		 */
 		if (logic == null)
 			throw ManagedMemory.exception;
+		if (ManagedMemory.getCurrentAllocationArea() instanceof ImmortalMemory)  {
+			throw new IllegalStateException("from enterPrivateMemory: allocation area is ImmortalMemory: not allowed to enterPrivateMemory");
+		}
+		
 
 		vm.ClockInterruptHandler.instance.disable(); // atomic operation ??
 

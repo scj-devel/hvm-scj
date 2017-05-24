@@ -76,7 +76,7 @@ public final class Const {
 
 	/* Stacks */
 
-	public static final int STACK_UNIT = 1024 * 2; // 256
+	public static final int STACK_UNIT = 1024 * 3; // 256
 
 	public static final int PRIORITY_SCHEDULER_STACK_SIZE_DEFAULT = 2 * STACK_UNIT; // 2*1024
 	public static final int CYCLIC_SCHEDULER_STACK_SIZE_DEFAULT = 2 * STACK_UNIT;;

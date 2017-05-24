@@ -182,10 +182,12 @@ public class TestSCJSingleSimpleLowMemory {
 	static ConfigurationParameters configParameters;
 	
     public static void main(String[] args) {
-        Const.OUTERMOST_SEQ_BACKING_STORE = 140 * 1000;
-        Const.IMMORTAL_MEM = 50 * 1000;
-        Const.MISSION_MEM = 35 * 1000;
-        Const.PRIVATE_MEM = 2 * 1000;
+//        Const.OUTERMOST_SEQ_BACKING_STORE = 240 * 1000;
+//        Const.IMMORTAL_MEM = 50 * 1000;
+//        Const.MISSION_MEM = 20 * 1000;
+//        Const.PRIVATE_MEM = 10 * 1000;
+//        
+//        Const.HANDLER_STACK_SIZE = Const.STACK_UNIT;
 
 	  storageParameters_Sequencer = 
         new StorageParameters(

@@ -112,7 +112,6 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 			public void run() {
 				try {
 					runLogic(msObject);
-
 				} catch (Throwable e) {
 					Const.reporter.processExecutionError(e);
 					
@@ -153,6 +152,8 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 	}
 
 	private void runLogic(ManagedSchedulable ms) {
+		//System.out.println ("ScjProcess.runLogic: ms: " + ms);
+		
 		if (ms instanceof ManagedEventHandler)
 			((ManagedEventHandler) ms).privateMemory.enter(ms); // execute logic;  
 		else if (ms instanceof ManagedThread)
