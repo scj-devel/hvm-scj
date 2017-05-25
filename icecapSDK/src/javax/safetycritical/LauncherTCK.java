@@ -81,15 +81,14 @@ public class LauncherTCK implements Runnable {
 			safeletApp.managedMemoryBackingStoreSize();
 			
 			System.out.println("LauncherTCK.run 5");
-		    safeletApp.initializeApplication();
-		    
-		    System.out.println("LauncherTCK.run 6");
 		    
 		    // Level_0
 		    if (Launcher.level == 0) {
+		    	
+			  safeletApp.initializeApplication();
 			  MissionSequencer seq = safeletApp.getSequencer();
 			  if (seq == null) throw new Error("*** LauncherTCK: run: Sequencer missing \n");
-			  
+			
 			  CyclicScheduler sch = CyclicScheduler.instance();
 			  Machine.setCurrentScheduler(sch);	
 			  sch.start(seq, mFactory);
@@ -101,6 +100,8 @@ public class LauncherTCK implements Runnable {
 			  sch.insertReadyQueue(ScjProcess.createIdleProcess());
 			  
 			  System.out.println("LauncherTCK.run: safelet.getSequencer() ...");
+			  
+			  safeletApp.initializeApplication();
 			  MissionSequencer seq = safeletApp.getSequencer();
 			  System.out.println("LauncherTCK.run: safelet.getSequencer() end");
 			  

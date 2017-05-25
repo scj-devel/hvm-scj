@@ -128,7 +128,7 @@ public abstract class HighResolutionTime<T extends HighResolutionTime<T>>
 	 *    the <code>time</code> parameter is null.
 	 */
 	public void set(T time) {
-		System.out.println ("HighResolutionTime.set");
+		//System.out.println ("HighResolutionTime.set");
 		if (time == null)
 			throw new IllegalArgumentException("null parameter");
 		if (this.getClass() != time.getClass())
