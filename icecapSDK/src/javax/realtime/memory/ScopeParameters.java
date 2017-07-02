@@ -29,22 +29,25 @@ import javax.realtime.MemoryParameters;
 
 public class ScopeParameters extends MemoryParameters {
 	
+	long maxContainingArea;
+	long maxInitialBackingStore;
+	
 	public ScopeParameters(long maxInitialArea, long maxImmortal,
-						   long maxInitialBackingStore, long maxContainingArea)
+						   long maxContainingArea, long maxInitialBackingStore)
 		throws java.lang.IllegalArgumentException {
 		
-		super(maxInitialArea, maxImmortal); // ??
+		super(maxInitialArea, maxImmortal); 
 		
-		//ToDo: implement
-		
+		this.maxContainingArea = maxContainingArea;
+		this.maxInitialBackingStore = maxInitialBackingStore;		
 	}
 	
 	public ScopeParameters(long maxInitialArea, long maxImmortal,
 						   long maxInitialBackingStore)
 		throws java.lang.IllegalArgumentException  {
 		
-		//Same as ScopeParameters(maxInitialArea, maxImmortal, MemoryParameters.UNREFERENCED,
-		//	maxParentBackingStore, MemoryParameters.UNLIMITED)
+		//Same as ScopeParameters(maxInitialArea, maxImmortal, 
+		//	maxParentBackingStore, MemoryParameters.UNLIMITED)  ??
 		
 		this(maxInitialArea, maxImmortal, 0, 0); // ??
 		
