@@ -87,7 +87,7 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	@SCJAllowed(Level.LEVEL_1)
 	@SCJPhase(Phase.INITIALIZATION)
 	public OneShotEventHandler(PriorityParameters priority, HighResolutionTime<?> releaseTime,
-			AperiodicParameters release, StorageParameters storage, ConfigurationParameters config, String name) {
+			AperiodicParameters release, ScopeParameters storage, ConfigurationParameters config, String name) {
 		super(priority, release, storage, config, name);
 
 		if (releaseTime == null)
@@ -102,12 +102,12 @@ public abstract class OneShotEventHandler extends ManagedEventHandler {
 	}
 	
 	public OneShotEventHandler(PriorityParameters priority, HighResolutionTime<?> releaseTime,
-			AperiodicParameters release, StorageParameters storage, ConfigurationParameters config) {
+			AperiodicParameters release, ScopeParameters storage, ConfigurationParameters config) {
 		this(priority, releaseTime, release, storage, config, null);
 	}
 	
 	public OneShotEventHandler(PriorityParameters priority,
-			AperiodicParameters release, StorageParameters storage, ConfigurationParameters config) {
+			AperiodicParameters release, ScopeParameters storage, ConfigurationParameters config) {
 		this(priority, null, release, storage, config, null);
 	}
 

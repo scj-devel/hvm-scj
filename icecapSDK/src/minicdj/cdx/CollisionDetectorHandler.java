@@ -28,7 +28,7 @@ import javax.realtime.ConfigurationParameters;
 import javax.realtime.PriorityParameters;
 import javax.safetycritical.Mission;
 import javax.safetycritical.PeriodicEventHandler;
-import javax.safetycritical.StorageParameters;
+import javax.safetycritical.ScopeParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -58,7 +58,7 @@ public class CollisionDetectorHandler extends PeriodicEventHandler
         // PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, StorageParameters storage)
         //new StorageParameters(memSize, null)
         super(new PriorityParameters(Priorities.PR98), null, 
-              new StorageParameters(Constants.TRANSIENT_DETECTOR_SCOPE_SIZE, 0,0,0),
+              new ScopeParameters(Constants.TRANSIENT_DETECTOR_SCOPE_SIZE, 0,0,0),
               new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE })); // HSO
         this.mission = mission; // added missSeq as parameter
     }
@@ -147,7 +147,7 @@ public class CollisionDetectorHandler extends PeriodicEventHandler
     }*/
 
     //@Override
-    public StorageParameters getThreadConfigurationParameters() {
+    public ScopeParameters getThreadConfigurationParameters() {
         // TODO Auto-generated method stub
         return null;
     }

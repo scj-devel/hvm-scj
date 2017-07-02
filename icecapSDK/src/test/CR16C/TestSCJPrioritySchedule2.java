@@ -12,7 +12,7 @@ import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
+import javax.safetycritical.ScopeParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -33,7 +33,7 @@ public class TestSCJPrioritySchedule2 {
 		protected MyPeriodicEvh(PriorityParameters priority,
 				PeriodicParameters periodic, long memSize, int n,
 				AperiodicEventHandler aevh) {
-			super(priority, periodic, new StorageParameters(memSize, 0, 0, 0), 
+			super(priority, periodic, new ScopeParameters(memSize, 0, 0, 0), 
 				  new ConfigurationParameters (-1, -1, new long[] { 256 }));
 			this.n = n;
 			this.aevh = aevh;
@@ -58,7 +58,7 @@ public class TestSCJPrioritySchedule2 {
 		public MyAperiodicEvh(PriorityParameters priority,
 				AperiodicParameters release, long memSize, int n,
 				MissionSequencer missSeq) {
-			super(priority, release, new StorageParameters(memSize, 0, 0, 0), 
+			super(priority, release, new ScopeParameters(memSize, 0, 0, 0), 
 				  new ConfigurationParameters (-1, -1, new long[] { 256 }));
 			this.n = n;
 			this.missSeq = missSeq;
@@ -135,7 +135,7 @@ public class TestSCJPrioritySchedule2 {
 			MySequencer() {
 				super(
 						new PriorityParameters(Priorities.PR95),
-						new StorageParameters(3072, 0, 0, 0),
+						new ScopeParameters(3072, 0, 0, 0),
 						new ConfigurationParameters (-1, -1, new long[] { 768 })); // mission
 				mission = new MyMission(this);
 			}

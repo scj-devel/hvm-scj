@@ -101,7 +101,7 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 		AllocationContext.CURRENT,
 		AllocationContext.INNER,
 		AllocationContext.OUTER})
-	public MissionSequencer(PriorityParameters priority, StorageParameters storage, 
+	public MissionSequencer(PriorityParameters priority, ScopeParameters storage, 
 			ConfigurationParameters config, String name)
 			throws IllegalStateException {
 		super(priority, new AperiodicParameters(), storage, config, name);
@@ -135,7 +135,7 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 		AllocationContext.CURRENT,
 		AllocationContext.INNER,
 		AllocationContext.OUTER})
-	public MissionSequencer(PriorityParameters priority, StorageParameters storage,
+	public MissionSequencer(PriorityParameters priority, ScopeParameters storage,
 			ConfigurationParameters config) throws IllegalStateException {
 		this(priority, storage, config, null); //default name: "MissSeq" ; used internal by icecap utility tool ??
 	}

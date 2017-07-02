@@ -60,7 +60,7 @@ import vm.Memory;
 public abstract class ManagedEventHandler extends BoundAsyncEventHandler implements ManagedSchedulable {
 
 	PriorityParameters priority;
-	StorageParameters storage;
+	ScopeParameters storage;
 	ConfigurationParameters config;
 	
 	Process process = null;
@@ -91,12 +91,12 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	 * @throws <code>IllegalArgumentException</code> if priority or release or storage parameters are null.
 	 */
 	ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, 
-		StorageParameters storage, ConfigurationParameters config) {
+		ScopeParameters storage, ConfigurationParameters config) {
 		this(priority, release, storage, config, null);
 	}
 
 	ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, 
-			StorageParameters storage, ConfigurationParameters config,
+			ScopeParameters storage, ConfigurationParameters config,
 			String name) {
 		if (priority == null)
 			throw new IllegalArgumentException("priority is null");

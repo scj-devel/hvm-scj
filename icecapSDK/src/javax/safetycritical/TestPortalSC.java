@@ -140,7 +140,7 @@ public final class TestPortalSC {
 	 *  
 	 * @return the storage parameter of <code>pevh</code>.
 	 */
-	public static StorageParameters getStorageParam (PeriodicEventHandler pevh) {
+	public static ScopeParameters getStorageParam (PeriodicEventHandler pevh) {
 		return pevh.storage;
 	}
 

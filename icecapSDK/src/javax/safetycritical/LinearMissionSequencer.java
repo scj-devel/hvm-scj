@@ -50,7 +50,7 @@ public class LinearMissionSequencer extends MissionSequencer {
 
 	@SuppressWarnings("unchecked")
 	@SCJAllowed
-	public LinearMissionSequencer(PriorityParameters priority, StorageParameters storage, 
+	public LinearMissionSequencer(PriorityParameters priority, ScopeParameters storage, 
 			ConfigurationParameters config, 
 			boolean repeat,
 			Mission mission,
@@ -66,7 +66,7 @@ public class LinearMissionSequencer extends MissionSequencer {
 	}
 	
 	@SCJAllowed
-	public LinearMissionSequencer(PriorityParameters priority, StorageParameters storage, 
+	public LinearMissionSequencer(PriorityParameters priority, ScopeParameters storage, 
 			ConfigurationParameters config, 
 			boolean repeat,
 			Mission mission)
@@ -77,7 +77,7 @@ public class LinearMissionSequencer extends MissionSequencer {
 	
 	@SuppressWarnings("unchecked")
 	@SCJAllowed
-	public LinearMissionSequencer(PriorityParameters priority, StorageParameters storage, 
+	public LinearMissionSequencer(PriorityParameters priority, ScopeParameters storage, 
 			ConfigurationParameters config, 
 			boolean repeat,
 			Mission[] missions,
@@ -94,7 +94,7 @@ public class LinearMissionSequencer extends MissionSequencer {
 	}
 	
 	@SCJAllowed
-	public LinearMissionSequencer(PriorityParameters priority, StorageParameters storage, 
+	public LinearMissionSequencer(PriorityParameters priority, ScopeParameters storage, 
 			ConfigurationParameters config, 
 			boolean repeat,
 			Mission[] missions)

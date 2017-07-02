@@ -28,7 +28,7 @@ final class ManagedSchedMethods {
 		return (ScjProcess) process;
 	}
 
-	static StorageParameters getStorage(ManagedSchedulable target) {
+	static ScopeParameters getStorage(ManagedSchedulable target) {
 		if (target instanceof ManagedEventHandler)
 			return ((ManagedEventHandler) target).storage;
 		else if (target instanceof ManagedThread)

@@ -13,7 +13,7 @@ import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
+import javax.safetycritical.ScopeParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -52,7 +52,7 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 		int n;
 
 		protected MyPeriodicEvh1(PriorityParameters priority, PeriodicParameters periodic,
-				StorageParameters storageParameters, int n, MissionSequencer missSeq) {
+				ScopeParameters storageParameters, int n, MissionSequencer missSeq) {
 			super(priority, periodic, storageParameters, configParameters);
 			this.n = n;
 		}
@@ -70,7 +70,7 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 		int count = 0;
 
 		public MyPeriodicEvh2(PriorityParameters priority, PeriodicParameters periodicParameters,
-				StorageParameters storageParameters, Mission mission) {
+				ScopeParameters storageParameters, Mission mission) {
 			super(priority, periodicParameters, storageParameters, configParameters);
 			this.mission = mission;
 		}
@@ -165,8 +165,8 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 		}
 	}
 
-	public static StorageParameters storageParameters_Sequencer;
-	public static StorageParameters storageParameters_Handlers;
+	public static ScopeParameters storageParameters_Sequencer;
+	public static ScopeParameters storageParameters_Handlers;
 	public static ConfigurationParameters configParameters;
 
 	
@@ -217,13 +217,13 @@ public class HelloSCJ extends ATMega2560SCJTargetConfiguration /* POSIXSCJTarget
 			Memory.startMemoryAreaTracking();
 			vm.Process.enableStackAnalysis();
 		}
-		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				//new long[] { Const.HANDLER_STACK_SIZE },
-				0, Const.IMMORTAL_MEM, Const.MISSION_MEM);
+		storageParameters_Sequencer = new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
+				Const.IMMORTAL_MEM, //new long[] { Const.HANDLER_STACK_SIZE },
+				0, Const.MISSION_MEM);
 
-		storageParameters_Handlers = new StorageParameters(handlerMemorySize,
-				//new long[] { Const.HANDLER_STACK_SIZE },
-				handlerMemorySize, 0, 0);
+		storageParameters_Handlers = new ScopeParameters(handlerMemorySize,
+				0, //new long[] { Const.HANDLER_STACK_SIZE },
+				handlerMemorySize, 0);
 		configParameters = new ConfigurationParameters(-1, -1, new long[] { handlerStackSize });
 
 		MyApp app = new MyApp();

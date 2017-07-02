@@ -40,7 +40,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  *    are vendor specific, thus might be included in <code>sizes</code>. 
  */
 @SCJAllowed
-public final class StorageParameters extends javax.realtime.MemoryParameters {
+public final class ScopeParameters extends javax.realtime.MemoryParameters {
 
 	private static final long serialVersionUID = 123456789987654101L;
 	
@@ -49,25 +49,24 @@ public final class StorageParameters extends javax.realtime.MemoryParameters {
 
 	/**
 	 * 
-	 * @param totalBackingStore size of the backing store reservation for 
+	 * @param maxInitialArea size of the backing store reservation for 
 	 *   worst-case scope usage by the associated <code> ManagedSchedulable</code> object, in bytes
-	 * 
 	 * @param sizes is an array of parameters for configuring VM resources 
 	 *   such as native stack or java stack size. The meanings of the entries
 	 *   in the array are vendor specific.
 	 *   The array passed in is not stored in the object. <p>
 	 */
 	@SCJAllowed
-	public StorageParameters(long totalBackingStore, long maxMemoryArea, long maxImmortal,
+	public ScopeParameters(long maxInitialArea, long maxImmortal, long maxMemoryArea,
 			long maxMissionMemory) {
 		super(maxMemoryArea, maxImmortal);
 
-		this.totalBackingStore = totalBackingStore;
+		this.totalBackingStore = maxInitialArea;
 		this.maxMissionMemory = maxMissionMemory;
 	}
 
 	long getMaximalMemoryArea() {
-		return maxMemoryArea;
+		return maxInitialArea;
 	}
 
 	long getMaximalImmortal() {

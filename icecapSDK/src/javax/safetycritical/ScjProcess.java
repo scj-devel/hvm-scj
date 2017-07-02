@@ -269,8 +269,8 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 							INFINITE_TIME), // period
 //					new StorageParameters(2 * Const.IDLE_BACKING_STORE, new long[] { Const.IDLE_PROCESS_STACK_SIZE },
 //							2 * Const.IDLE_BACKING_STORE, 0, 0)
-					new StorageParameters(2 * Const.IDLE_BACKING_STORE, 
-							2 * Const.IDLE_BACKING_STORE, 0, 0),
+					new ScopeParameters(2 * Const.IDLE_BACKING_STORE, 
+							0, 2 * Const.IDLE_BACKING_STORE, 0),
 					new ConfigurationParameters (-1, -1, new long[] { Const.IDLE_PROCESS_STACK_SIZE })
 					) 
 				{

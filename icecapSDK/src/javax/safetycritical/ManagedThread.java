@@ -58,7 +58,7 @@ import vm.Memory;
 public class ManagedThread extends RealtimeThread implements ManagedSchedulable {
 
 	PriorityParameters priority;
-	StorageParameters storage;
+	ScopeParameters storage;
 	ConfigurationParameters config;
 	
 	Process process = null;
@@ -74,17 +74,17 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 	boolean isRegistered;
 	boolean isInMissionScope;
 
-	public ManagedThread(PriorityParameters priority, StorageParameters storage,
+	public ManagedThread(PriorityParameters priority, ScopeParameters storage,
 			ConfigurationParameters config) { 
 		this(priority, storage, config, null);
 	}
 
-	public ManagedThread(PriorityParameters priority, StorageParameters storage, 
+	public ManagedThread(PriorityParameters priority, ScopeParameters storage, 
 			ConfigurationParameters config, Runnable logic) {
 		this(priority, storage, config, logic, null);
 	}
 
-	ManagedThread(PriorityParameters priority, StorageParameters storage, 
+	ManagedThread(PriorityParameters priority, ScopeParameters storage, 
 			ConfigurationParameters config, Runnable logic, String name) {
 		super(priority, logic);
 		this.priority = priority;

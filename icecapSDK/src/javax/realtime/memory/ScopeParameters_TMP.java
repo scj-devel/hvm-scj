@@ -27,12 +27,12 @@ package javax.realtime.memory;
 
 import javax.realtime.MemoryParameters;
 
-public class ScopeParameters extends MemoryParameters {
+public class ScopeParameters_TMP extends MemoryParameters {
 	
 	long maxContainingArea;
 	long maxInitialBackingStore;
 	
-	public ScopeParameters(long maxInitialArea, long maxImmortal,
+	public ScopeParameters_TMP(long maxInitialArea, long maxImmortal,
 						   long maxContainingArea, long maxInitialBackingStore)
 		throws java.lang.IllegalArgumentException {
 		
@@ -42,7 +42,7 @@ public class ScopeParameters extends MemoryParameters {
 		this.maxInitialBackingStore = maxInitialBackingStore;		
 	}
 	
-	public ScopeParameters(long maxInitialArea, long maxImmortal,
+	public ScopeParameters_TMP(long maxInitialArea, long maxImmortal,
 						   long maxInitialBackingStore)
 		throws java.lang.IllegalArgumentException  {
 		

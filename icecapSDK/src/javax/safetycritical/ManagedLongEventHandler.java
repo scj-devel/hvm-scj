@@ -12,7 +12,7 @@ public abstract class ManagedLongEventHandler extends BoundAsyncLongEventHandler
 
 	String name;
 
-	StorageParameters storage;
+	ScopeParameters storage;
 	ConfigurationParameters config;
 	Mission mission = null;
 
