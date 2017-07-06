@@ -16,17 +16,17 @@ import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.OneShotEventHandler;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
+import javax.safetycritical.ScopeParameters;
 import javax.safetycritical.Services;
-import javax.safetycritical.StorageParameters;
 import javax.scj.util.Configuration;
 import javax.scj.util.Const;
 
 import vm.VMTest;
 
 public class TestSCJMP_CustAffinitySet_Level2 implements Safelet {
-	static StorageParameters storageParameters_Sequencer;
-	static StorageParameters storageParameters_Handlers;
-	static StorageParameters storageParameters_InnerSequencer;
+	static ScopeParameters storageParameters_Sequencer;
+	static ScopeParameters storageParameters_Handlers;
+	static ScopeParameters storageParameters_InnerSequencer;
 	static ConfigurationParameters configParameters;
 
 	public static Mission m;
@@ -38,7 +38,7 @@ public class TestSCJMP_CustAffinitySet_Level2 implements Safelet {
 	private static class MyAperiodicEvh extends AperiodicEventHandler {
 
 		public MyAperiodicEvh(PriorityParameters priority, AperiodicParameters release,
-				StorageParameters storage) {
+				ScopeParameters storage) {
 			super(priority, release, storage, configParameters);
 		}
 
@@ -60,7 +60,7 @@ public class TestSCJMP_CustAffinitySet_Level2 implements Safelet {
 		Mission m;
 
 		public MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodicParameters,
-				StorageParameters storage, Mission m, AperiodicEventHandler han) {
+				ScopeParameters storage, Mission m, AperiodicEventHandler han) {
 			super(priority, periodicParameters, storage, configParameters);
 			this.han = han;
 			this.m = m;
@@ -189,16 +189,16 @@ public class TestSCJMP_CustAffinitySet_Level2 implements Safelet {
 	}
 
 	public static void main(String[] args) {
-		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				Const.PRIVATE_MEM,
-				Const.IMMORTAL_MEM - 30 * 1000, Const.MISSION_MEM);
+		storageParameters_Sequencer = new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
+				Const.IMMORTAL_MEM - 30 * 1000,
+				Const.PRIVATE_MEM, Const.MISSION_MEM);
 
-		storageParameters_Handlers = new StorageParameters(0,
-				Const.PRIVATE_MEM - 10 * 1000, 0, 0);
+		storageParameters_Handlers = new ScopeParameters(0,
+				0, Const.PRIVATE_MEM - 10 * 1000, 0);
 
-		storageParameters_InnerSequencer = new StorageParameters(Const.PRIVATE_BACKING_STORE * 3
+		storageParameters_InnerSequencer = new ScopeParameters(Const.PRIVATE_BACKING_STORE * 3
 				+ Const.MISSION_MEM - 150 * 1000, 
-				Const.PRIVATE_MEM, 0, Const.MISSION_MEM_DEFAULT - 150 * 1000);
+				0, Const.PRIVATE_MEM, Const.MISSION_MEM_DEFAULT - 150 * 1000);
 
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 

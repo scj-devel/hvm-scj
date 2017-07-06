@@ -10,7 +10,7 @@ import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
+import javax.safetycritical.ScopeParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -27,7 +27,7 @@ public class TestSCJSinglePeriodicSimple1 {
 	private static class MyPeriodicEvh extends PeriodicEventHandler {
 
         public MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodicParameters, 
-                StorageParameters storageParameters) {
+                ScopeParameters storageParameters) {
             super(priority, periodicParameters, storageParameters, configParameters);
         }
 
@@ -104,17 +104,21 @@ public class TestSCJSinglePeriodicSimple1 {
 		}
 	}
 
-	static StorageParameters storageParameters_Sequencer;
-	static StorageParameters storageParameters_Handlers;
+	static ScopeParameters storageParameters_Sequencer;
+	static ScopeParameters storageParameters_Handlers;
 	static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
-		storageParameters_Sequencer = new StorageParameters(
-				Const.OUTERMOST_SEQ_BACKING_STORE, Const.PRIVATE_MEM,
-				Const.IMMORTAL_MEM, Const.MISSION_MEM);
-		storageParameters_Handlers = new StorageParameters(
-				Const.PRIVATE_BACKING_STORE, Const.PRIVATE_MEM, 0,
-				0);
+//		storageParameters_Sequencer = new ScopeParameters(
+//				Const.OUTERMOST_SEQ_BACKING_STORE, Const.IMMORTAL_MEM,
+//				Const.PRIVATE_MEM, Const.MISSION_MEM);
+//		storageParameters_Handlers = new ScopeParameters(
+//				Const.PRIVATE_BACKING_STORE, 0, Const.PRIVATE_MEM,
+//				0);
+		
+		storageParameters_Sequencer = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO		
+		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO
+		
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("***** TestSCJSinglePeriodicSimple1 begin *****");

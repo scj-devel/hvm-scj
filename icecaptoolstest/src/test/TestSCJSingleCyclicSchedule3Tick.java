@@ -13,7 +13,7 @@ import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
+import javax.safetycritical.ScopeParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -46,7 +46,7 @@ public class TestSCJSingleCyclicSchedule3Tick
 
         public MyPeriodicEvh(PriorityParameters priority, 
         		PeriodicParameters periodicParameters, 
-        		StorageParameters storageParameters,
+        		ScopeParameters storageParameters,
                 Mission mission) {
             super(priority, periodicParameters, storageParameters,configParameters);
             this.mission = mission;
@@ -130,32 +130,35 @@ public class TestSCJSingleCyclicSchedule3Tick
         }
     }
 
-    public static StorageParameters storageParameters_Sequencer;
-    public static StorageParameters storageParameters_Handlers;
+    public static ScopeParameters storageParameters_Sequencer;
+    public static ScopeParameters storageParameters_Handlers;
     public static ConfigurationParameters configParameters;
 
     public static void main(String[] args) {
-        Const.OUTERMOST_SEQ_BACKING_STORE = 32 * 1000 + 80 * 1000;
-        Const.IMMORTAL_MEM = 23 * 1000 + 20 * 1000;
-        Const.MISSION_MEM  =  3 * 1000 + 10 * 1000;
-        Const.PRIVATE_MEM  =  1 * 1000 + 8 * 1000;
-        Const.HANDLER_STACK_SIZE = Const.STACK_UNIT;
-        
-  	  storageParameters_Sequencer = 
-          new StorageParameters(
-              Const.OUTERMOST_SEQ_BACKING_STORE,
-              Const.PRIVATE_MEM, 
-              Const.IMMORTAL_MEM, 
-              Const.MISSION_MEM);
+//        Const.OUTERMOST_SEQ_BACKING_STORE = 32 * 1000 + 80 * 1000;
+//        Const.IMMORTAL_MEM = 23 * 1000 + 20 * 1000;
+//        Const.MISSION_MEM  =  3 * 1000 + 10 * 1000;
+//        Const.PRIVATE_MEM  =  1 * 1000 + 8 * 1000;
+//        Const.HANDLER_STACK_SIZE = Const.STACK_UNIT;
+//        
+//  	  storageParameters_Sequencer = 
+//          new ScopeParameters(
+//              Const.OUTERMOST_SEQ_BACKING_STORE,
+//              Const.IMMORTAL_MEM, 
+//              Const.PRIVATE_MEM, 
+//              Const.MISSION_MEM);
+//  	  
+//  	  storageParameters_Handlers = 
+//          new ScopeParameters(
+//          	Const.PRIVATE_MEM, 
+//              0, 
+//              Const.PRIVATE_MEM, 
+//              0);
+    	
+    	storageParameters_Sequencer = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO		
+		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO
   	  
-  	  storageParameters_Handlers = 
-          new StorageParameters(
-          	Const.PRIVATE_MEM, 
-              Const.PRIVATE_MEM, 
-              0, 
-              0);
-  	  
-  	  configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+  	    configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
           
         devices.Console.println("\n****** TestSCJCyclicSchedule3Tick begin *********" );        
         new LaunchLevel0(new MyApp());

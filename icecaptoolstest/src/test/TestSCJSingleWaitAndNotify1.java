@@ -30,8 +30,8 @@ import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
+import javax.safetycritical.ScopeParameters;
 import javax.safetycritical.Services;
-import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -69,7 +69,7 @@ public class TestSCJSingleWaitAndNotify1 {
 		SharedResource shared;
 
 		@IcecapCompileMe
-		public MyPEH1(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
+		public MyPEH1(PriorityParameters priority, PeriodicParameters release, ScopeParameters storage,
 				SharedResource shared, Mission m) {
 			super(priority, release, storage, configParameters);
 			this.m = m;
@@ -86,7 +86,7 @@ public class TestSCJSingleWaitAndNotify1 {
 			count++;
 			devices.Console.println("      PEH1: " + count);
 
-			if (count == 3) {
+			if (count >= 3) {
 				m.requestTermination();
 				devices.Console.println("     Mission T");
 			}
@@ -98,7 +98,7 @@ public class TestSCJSingleWaitAndNotify1 {
 
 		SharedResource shared;
 
-		public MyPEH2(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
+		public MyPEH2(PriorityParameters priority, PeriodicParameters release, ScopeParameters storage,
 				SharedResource shared) {
 			super(priority, release, storage, configParameters);
 			this.shared = shared;
@@ -146,14 +146,14 @@ public class TestSCJSingleWaitAndNotify1 {
 		private MyMission mission;
 		private int count = 0;
 
-		public MySequencer(PriorityParameters priority, StorageParameters storage) {
+		public MySequencer(PriorityParameters priority, ScopeParameters storage) {
 			super(priority, storage, configParameters);
 			mission = new MyMission();
 		}
 
 		@Override
 		protected MyMission getNextMission() {
-			if (count == 10) {
+			if (count == 1) {
 				devices.Console.println("MySeq.count: " + count + "; null");
 				return null;
 			} else {
@@ -192,16 +192,19 @@ public class TestSCJSingleWaitAndNotify1 {
 		}
 	}
 
-	static StorageParameters storageParameters_Sequencer;
-	static StorageParameters storageParameters_Handlers;
+	static ScopeParameters storageParameters_Sequencer;
+	static ScopeParameters storageParameters_Handlers;
 	static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
-		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
-
-		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
-				Const.PRIVATE_MEM, 0, 0);
+//		storageParameters_Sequencer = new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
+//				Const.IMMORTAL_MEM, Const.PRIVATE_MEM, Const.MISSION_MEM);
+//
+//		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_BACKING_STORE,
+//				0, Const.PRIVATE_MEM, 0);
+		
+		storageParameters_Sequencer = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO		
+		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO
 		
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
@@ -209,7 +212,7 @@ public class TestSCJSingleWaitAndNotify1 {
 		new LaunchLevel2(new MyApp());
 		devices.Console.println("***** TestSCJWaitAndNotify1 main.end *****");
 
-		if (count == 0)
+		//if (count == 0)
 			VMTest.markResult(false);
 	}
 }

@@ -10,8 +10,8 @@ import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
+import javax.safetycritical.ScopeParameters;
 import javax.safetycritical.Services;
-import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 
 import vm.VMTest;
@@ -24,7 +24,7 @@ public class TestSCJMPMemory {
 		Mission m;
 
 		public MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodicParameters,
-				StorageParameters storage, Mission m, String name) {
+				ScopeParameters storage, Mission m, String name) {
 			super(priority, periodicParameters, storage, configParameters);
 			this.m = m;
 		}
@@ -46,7 +46,7 @@ public class TestSCJMPMemory {
 	private static class MyPeriodicEvh1 extends PeriodicEventHandler {
 
 		public MyPeriodicEvh1(PriorityParameters priority, PeriodicParameters periodicParameters,
-				StorageParameters storage, String name) {
+				ScopeParameters storage, String name) {
 			super(priority, periodicParameters, storage, configParameters);
 		}
 
@@ -138,21 +138,21 @@ public class TestSCJMPMemory {
 		}
 	}
 
-	static StorageParameters storageParameters_Sequencer;
-	static StorageParameters storageParameters_Handlers;
-	static StorageParameters storageParameters_InnerSequencer;
+	static ScopeParameters storageParameters_Sequencer;
+	static ScopeParameters storageParameters_Handlers;
+	static ScopeParameters storageParameters_InnerSequencer;
 	static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
-		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				Const.PRIVATE_MEM, Const.IMMORTAL_MEM,
+		storageParameters_Sequencer = new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
+				Const.IMMORTAL_MEM, Const.PRIVATE_MEM,
 				Const.MISSION_MEM);
 
-		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
-				Const.PRIVATE_MEM, 0, 0);
+		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_BACKING_STORE,
+				0, Const.PRIVATE_MEM, 0);
 
-		storageParameters_InnerSequencer = new StorageParameters(Const.PRIVATE_BACKING_STORE * 3
-				+ Const.MISSION_MEM, Const.PRIVATE_MEM, 0,
+		storageParameters_InnerSequencer = new ScopeParameters(Const.PRIVATE_BACKING_STORE * 3
+				+ Const.MISSION_MEM, 0, Const.PRIVATE_MEM,
 				Const.MISSION_MEM_DEFAULT);
 
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });

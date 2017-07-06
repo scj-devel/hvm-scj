@@ -12,13 +12,13 @@ import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
+import javax.safetycritical.ScopeParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
 import vm.VMTest;
 
-public class TestSCJSingleMemoryModel3 {
+public class HSO_TestSCJSingleMemoryModel3 {
 
 	private static class TopMission2 extends Mission {
 		protected void initialize() {
@@ -33,14 +33,14 @@ public class TestSCJSingleMemoryModel3 {
 		}
 
 		public long missionMemorySize() {
-			return 50000;
+			return 50 *1000;
 		}
 
 		private class MyPEH extends PeriodicEventHandler {
 			private int count = 0;
 			private AperiodicEventHandler myAEH;
 
-			public MyPEH(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
+			public MyPEH(PriorityParameters priority, PeriodicParameters release, ScopeParameters storage,
 					AperiodicEventHandler myAEH) {
 				super(priority, release, storage, configParameters);
 				this.myAEH = myAEH;
@@ -60,7 +60,7 @@ public class TestSCJSingleMemoryModel3 {
 		private class MyAEH extends AperiodicEventHandler {
 			private Mission m;
 
-			public MyAEH(PriorityParameters priority, AperiodicParameters release, StorageParameters storage, Mission m) {
+			public MyAEH(PriorityParameters priority, AperiodicParameters release, ScopeParameters storage, Mission m) {
 				super(priority, release, storage, configParameters);
 				this.m = m;
 			}
@@ -87,14 +87,14 @@ public class TestSCJSingleMemoryModel3 {
 
 		@Override
 		public long missionMemorySize() {
-			return 50000;
+			return 50 * 1000;
 		}
 
 		private class MyPEH extends PeriodicEventHandler {
 			private int count = 0;
 			private AperiodicEventHandler myAEH;
 
-			public MyPEH(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
+			public MyPEH(PriorityParameters priority, PeriodicParameters release, ScopeParameters storage,
 					AperiodicEventHandler myAEH) {
 				super(priority, release, storage, configParameters);
 				this.myAEH = myAEH;
@@ -113,7 +113,7 @@ public class TestSCJSingleMemoryModel3 {
 		private class MyAEH extends AperiodicEventHandler {
 			private Mission m;
 
-			public MyAEH(PriorityParameters priority, AperiodicParameters release, StorageParameters storage, Mission m) {
+			public MyAEH(PriorityParameters priority, AperiodicParameters release, ScopeParameters storage, Mission m) {
 				super(priority, release, storage, configParameters);
 				this.m = m;
 			}
@@ -129,7 +129,7 @@ public class TestSCJSingleMemoryModel3 {
 	private static class InnerSequencer2 extends MissionSequencer {
 		private int count = 0;
 
-		public InnerSequencer2(PriorityParameters priority, StorageParameters storage) {
+		public InnerSequencer2(PriorityParameters priority, ScopeParameters storage) {
 			super(priority, storage, configParameters, "InnerSeq2");
 		}
 
@@ -170,7 +170,7 @@ public class TestSCJSingleMemoryModel3 {
 			private int count = 0;
 			private AperiodicEventHandler myAEH;
 
-			public MyPEH(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
+			public MyPEH(PriorityParameters priority, PeriodicParameters release, ScopeParameters storage,
 					AperiodicEventHandler myAEH) {
 				super(priority, release, storage, configParameters);
 				this.myAEH = myAEH;
@@ -189,7 +189,7 @@ public class TestSCJSingleMemoryModel3 {
 		private class MyAEH extends AperiodicEventHandler {
 			private Mission m;
 
-			public MyAEH(PriorityParameters priority, AperiodicParameters release, StorageParameters storage, Mission m) {
+			public MyAEH(PriorityParameters priority, AperiodicParameters release, ScopeParameters storage, Mission m) {
 				super(priority, release, storage, configParameters);
 				this.m = m;
 			}
@@ -205,7 +205,7 @@ public class TestSCJSingleMemoryModel3 {
 	private static class InnerSequencer1 extends MissionSequencer {
 		private int count = 0;
 
-		public InnerSequencer1(PriorityParameters priority, StorageParameters storage) {
+		public InnerSequencer1(PriorityParameters priority, ScopeParameters storage) {
 			super(priority, storage, configParameters, "InnerSeq1");
 		}
 
@@ -233,9 +233,9 @@ public class TestSCJSingleMemoryModel3 {
 					storageParameters_InnerSequencer);
 			firstSeq.register();
 
-			InnerSequencer2 secondSeq = new InnerSequencer2(new PriorityParameters(Priorities.SEQUENCER_PRIORITY + 1),
-					storageParameters_InnerSequencer);
-			secondSeq.register();
+//			InnerSequencer2 secondSeq = new InnerSequencer2(new PriorityParameters(Priorities.SEQUENCER_PRIORITY + 1),
+//					storageParameters_InnerSequencer);
+//			secondSeq.register();
 		}
 
 		public long missionMemorySize() {
@@ -247,7 +247,7 @@ public class TestSCJSingleMemoryModel3 {
 		private Mission[] missionArray;
 		private int count = 0;
 
-		public OuterMostSequencer(PriorityParameters priority, StorageParameters storage) {
+		public OuterMostSequencer(PriorityParameters priority, ScopeParameters storage) {
 			super(priority, storage, configParameters, "OuterMostSeq");
 			// initialize missions here
 			missionArray = new Mission[2];
@@ -284,7 +284,7 @@ public class TestSCJSingleMemoryModel3 {
 
 		@Override
 		public long immortalMemorySize() {
-			return 50 * 1000;
+			return Const.IMMORTAL_MEM; //50 * 1000;
 		}
 
 		@Override
@@ -303,21 +303,23 @@ public class TestSCJSingleMemoryModel3 {
 		}
 	}
 
-	static StorageParameters storageParameters_OuterMostSequencer;
-	static StorageParameters storageParameters_InnerSequencer;
-	static StorageParameters storageParameters_Handlers;
+	static ScopeParameters storageParameters_OuterMostSequencer;
+	static ScopeParameters storageParameters_InnerSequencer;
+	static ScopeParameters storageParameters_Handlers;
 	static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
-		storageParameters_OuterMostSequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				Const.PRIVATE_MEM, 0, Const.MISSION_MEM);
+		storageParameters_OuterMostSequencer = 
+			//new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE, 0, Const.PRIVATE_MEM, Const.MISSION_MEM);
+			new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE, Const.IMMORTAL_MEM, Const.PRIVATE_MEM, Const.MISSION_MEM);
 
-		storageParameters_InnerSequencer = new StorageParameters(150 * 1000, 
-				30 * 1000, 0, 50 * 1000);
+		storageParameters_InnerSequencer = 
+			new ScopeParameters(100 * 1000, 0, 30 * 1000, 50 * 1000);
 
-		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_MEM, // PRIVATE_BACKING_STORE, 
-				Const.PRIVATE_MEM, 0, 0);
-
+		storageParameters_Handlers = 
+			//new ScopeParameters(Const.PRIVATE_MEM, 0, Const.PRIVATE_MEM, 0);
+			new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0);
+		
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n***** MemoryModelTest3 main.begin ******************");

@@ -29,7 +29,7 @@ import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
+import javax.safetycritical.ScopeParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -42,7 +42,7 @@ public class TestSCJSingleMemoryModel1
     private AperiodicEventHandler myAEH;
 
     public MyPEH(PriorityParameters priority, PeriodicParameters release, 
-                 StorageParameters storage, AperiodicEventHandler myAEH) {
+                 ScopeParameters storage, AperiodicEventHandler myAEH) {
       super(priority, release, storage, configParameters);
       this.myAEH = myAEH;
     }
@@ -61,7 +61,7 @@ public class TestSCJSingleMemoryModel1
     private Mission m;
 
     public MyAEH(PriorityParameters priority, AperiodicParameters release, 
-                 StorageParameters storage, Mission m) {
+                 ScopeParameters storage, Mission m) {
       super(priority, release, storage, configParameters);
       this.m = m;
     }
@@ -99,7 +99,7 @@ public class TestSCJSingleMemoryModel1
   private static class MySequencer extends MissionSequencer {
     private MyMission mission;
 
-    public MySequencer(PriorityParameters priority, StorageParameters storage) {
+    public MySequencer(PriorityParameters priority, ScopeParameters storage) {
       super(priority, storage, configParameters, "MySeq");
       // initialize missions here
       mission = new MyMission();
@@ -151,25 +151,28 @@ public class TestSCJSingleMemoryModel1
 	}
   }
   
-  static StorageParameters storageParameters_Sequencer;
-  static StorageParameters storageParameters_Handlers;
+  static ScopeParameters storageParameters_Sequencer;
+  static ScopeParameters storageParameters_Handlers;
   static ConfigurationParameters configParameters;
   
   public static void main(String[] args) 
   {   
-    storageParameters_Sequencer = 
-        new StorageParameters(
-            Const.OUTERMOST_SEQ_BACKING_STORE,
-            Const.PRIVATE_MEM, 
-            Const.IMMORTAL_MEM, 
-            Const.MISSION_MEM);
-    
-    storageParameters_Handlers = 
-        new StorageParameters(
-            Const.PRIVATE_BACKING_STORE,
-            Const.PRIVATE_MEM, 
-            0, 
-            0);
+//    storageParameters_Sequencer = 
+//        new ScopeParameters(
+//            Const.OUTERMOST_SEQ_BACKING_STORE,
+//            Const.IMMORTAL_MEM, 
+//            Const.PRIVATE_MEM, 
+//            Const.MISSION_MEM);
+//    
+//    storageParameters_Handlers = 
+//        new ScopeParameters(
+//            Const.PRIVATE_BACKING_STORE,
+//            0, 
+//            Const.PRIVATE_MEM, 
+//            0);
+	  
+	storageParameters_Sequencer = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO		
+	storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO
     
     configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 

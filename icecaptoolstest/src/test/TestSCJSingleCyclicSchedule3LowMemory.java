@@ -13,7 +13,7 @@ import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
+import javax.safetycritical.ScopeParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -63,7 +63,7 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 
 	private static class MyPeriodicEvh1 extends PeriodicEventHandler {
 		protected MyPeriodicEvh1(PriorityParameters priority, PeriodicParameters periodic,
-				StorageParameters storageParameters) {
+				ScopeParameters storageParameters) {
 			super(priority, periodic, storageParameters, configParameters);
 		}
 
@@ -78,7 +78,7 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 		int count = 0;
 
 		public MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodicParameters,
-				StorageParameters storageParameters, Mission mission) {
+				ScopeParameters storageParameters, Mission mission) {
 			super(priority, periodicParameters, storageParameters, configParameters);
 			this.mission = mission;
 		}
@@ -191,8 +191,8 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 		}
 	}
 
-	public static StorageParameters storageParameters_Sequencer;
-	public static StorageParameters storageParameters_Handlers;
+	public static ScopeParameters storageParameters_Sequencer;
+	public static ScopeParameters storageParameters_Handlers;
 	public static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
@@ -204,10 +204,13 @@ public class TestSCJSingleCyclicSchedule3LowMemory {
 //		Const.MISSION_MEM = 1000;
 //		Const.HANDLER_STACK_SIZE = 1024;
 		
-		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				1000, Const.IMMORTAL_MEM, Const.MISSION_MEM);
-
-		storageParameters_Handlers = new StorageParameters(500, 500, 0, 0);
+//		storageParameters_Sequencer = new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
+//				Const.IMMORTAL_MEM, 1000, Const.MISSION_MEM);
+//
+//		storageParameters_Handlers = new ScopeParameters(500, 0, 500, 0);
+		
+		storageParameters_Sequencer = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO		
+		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO
 		
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
