@@ -101,13 +101,15 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 			throw new IllegalArgumentException("mission is null");
 
 		int backingStoreOfThisMemory = mission == null ? MemoryArea.getRemainingMemorySize()
-				: (int) this.storage.totalBackingStore;
+				//: (int) this.storage.totalBackingStore;
+				: (int) mission.missionMemorySize();  // HSO
+		
 		MemoryArea backingStoreProvider = mission == null ? MemoryArea.overAllBackingStore
 				: mission.currMissSeq.missionMemory;
 
 		String privateMemoryName = Memory.getNextMemoryName("PvtMem");
 
-		privateMemory = new PrivateMemory((int) storage.getMaximalMemoryArea(), backingStoreOfThisMemory,
+		privateMemory = new PrivateMemory((int) storage.getMaxInitialArea(), backingStoreOfThisMemory,
 				backingStoreProvider, privateMemoryName);
 		
 		this.currentMemory = mission.currMissSeq.missionMemory;

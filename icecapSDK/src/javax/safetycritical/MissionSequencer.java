@@ -110,9 +110,13 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 //			+ "; maxMissionMemory " + storage.maxMissionMemory 
 //			+ "; backingstore: " + this.privateMemory + "; isOuterMost: " + isOuterMostSeq);
 		
-		missionMemory = new MissionMemory((int) storage.maxMissionMemory, // mission memory
-				privateMemory, //backingstore of sequencer
-				name);
+//		missionMemory = new MissionMemory((int) storage.maxMissionMemory, // mission memory
+//				privateMemory, //backingstore of sequencer
+//				name);
+		
+//		missionMemory = new MissionMemory((int)privateMemory.size(), // mission memory  HSO
+//				privateMemory, //backingstore provider
+//				name);
 		
 		currState = State.START;
 		phase = Phase.INITIALIZATION;
@@ -189,11 +193,17 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 			// the main actions of the sequencer governed by currState
 			switch (currState) {
 			case State.START:
-				//devices.Console.println("MS.S: " + this.getName() );
+				devices.Console.println("MS.S: " + this.getName() );
 				phase = Phase.STARTUP;
 				
+				// See Draft Section 3.6.4
+				if (missionMemory == null) {
+					missionMemory = new MissionMemory((int)this.getCurrentMemory().getRemainingBackingStore(), // mission memory  HSO
+						privateMemory, //backingstore provider
+						name);
+				}
 				currMission = getNextMission();
-
+				
 				if (currMission != null) {
 					//devices.Console.println("MS.S: " + currMission + "; memArea is: " + MemoryArea.getMemoryArea(currMission));
 					howManyMissions++;
@@ -204,6 +214,9 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 					terminateSeq = true;
 					currState = State.TERMINATE;
 				} else {
+					// See Draft 3.6.4
+					missionMemory.resizeArea(currMission.missionMemorySize());  // HSO
+
 					currMission.missionTerminate = false;
 					currState = State.INITIALIZE;
 				}
@@ -229,8 +242,7 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 
 				phase = Phase.CLEANUP;
 				
-				missionMemory.enterToCleanup(currMission);
-				missionMemory.resizeArea(storage.maxMissionMemory);
+				missionMemory.enterToCleanup(currMission);				
 
 				// handleAsyncEvent continues
 				currState = State.START;

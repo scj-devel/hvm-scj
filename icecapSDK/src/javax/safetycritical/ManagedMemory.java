@@ -75,8 +75,8 @@ public abstract class ManagedMemory extends MemoryArea {
 	 * @param size  is the number of free bytes in the memory area
 	 */
 	@IcecapCompileMe
-	ManagedMemory(int size, int BackingStoreOfThisMemory, MemoryArea backingStoreProvider, String label) {
-		super(size, BackingStoreOfThisMemory, backingStoreProvider, label);
+	ManagedMemory(int size, int backingStoreSizeOfThisMemory, MemoryArea backingStoreProvider, String label) {
+		super(size, backingStoreSizeOfThisMemory, backingStoreProvider, label);
 	}
 
 	/**
@@ -212,7 +212,6 @@ public abstract class ManagedMemory extends MemoryArea {
 
 	void resizeArea(long newSize) {
 		this.resizeMemArea(newSize);
-
 	}
 
 	protected Memory getDelegate() {

@@ -44,44 +44,67 @@ public final class ScopeParameters extends javax.realtime.MemoryParameters {
 
 	private static final long serialVersionUID = 123456789987654101L;
 	
-	long totalBackingStore;
-	long maxMissionMemory;
+//	long totalBackingStore;
+//	long maxMissionMemory;
+	
+	long maxContainingArea; // HSO
+	long maxInitialBackingStore; // HSO
 
 	/**
+	 * Create a ScopeParameters instance with the given values.
 	 * 
-	 * @param maxInitialArea size of the backing store reservation for 
-	 *   worst-case scope usage by the associated <code> ManagedSchedulable</code> object, in bytes
-	 * @param sizes is an array of parameters for configuring VM resources 
-	 *   such as native stack or java stack size. The meanings of the entries
-	 *   in the array are vendor specific.
-	 *   The array passed in is not stored in the object. <p>
+	 * @param maxInitialArea a limit on the amount of memory the schedulable may allocate
+	 * 		in its initial scoped memory area <p>
 	 */
 	@SCJAllowed
-	public ScopeParameters(long maxInitialArea, long maxImmortal, long maxMemoryArea,
-			long maxMissionMemory) {
-		super(maxMemoryArea, maxImmortal);
+//	public ScopeParameters(long maxInitialArea, long maxImmortal, long maxMemoryArea, long maxMissionMemory) {  // HSO: old
+//	
+//		super(maxMemoryArea, maxImmortal);
+//
+//		this.totalBackingStore = maxInitialArea;
+//		this.maxMissionMemory = maxMissionMemory;
+//	}
+	
+	public ScopeParameters(long maxInitialArea, long maxImmortal, long maxContainingArea, long maxInitialBackingStore) // HSO
+			throws java.lang.IllegalArgumentException { 
 
-		this.totalBackingStore = maxInitialArea;
-		this.maxMissionMemory = maxMissionMemory;
+		super(maxInitialArea, maxImmortal);
+		this.maxContainingArea = maxContainingArea;
+		this.maxInitialBackingStore = maxInitialBackingStore;
+	}
+	
+	public ScopeParameters(long maxInitialArea, long maxImmortal, long maxInitialBackingStore) // HSO
+			throws java.lang.IllegalArgumentException { 
+
+		this(maxInitialArea, maxImmortal, 0, maxInitialBackingStore);
 	}
 
-	long getMaximalMemoryArea() {
+	long getMaxInitialArea() {
 		return maxInitialArea;
 	}
 
 	long getMaximalImmortal() {
 		return maxImmortal;
 	}
-
-	//used in JML annotation only (not public)
-	long getBackingStoreSize() {
-		return totalBackingStore;
-	}
 	
-	//used in JML annotation only (not public)
-	long getMaxMissionMemory() {
-		return maxMissionMemory;
+	public long getMaxContainingArea() {
+		return maxContainingArea;
 	}
+
+	long getMaxInitialBackingStore() {
+		return maxInitialBackingStore;
+	}
+
+
+//	//used in JML annotation only (not public)
+//	long getBackingStoreSize() {
+//		return totalBackingStore;
+//	}
+//	
+//	//used in JML annotation only (not public)
+//	long getMaxMissionMemory() {
+//		return maxMissionMemory;
+//	}
 
 }
 

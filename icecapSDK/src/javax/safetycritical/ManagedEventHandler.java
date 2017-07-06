@@ -66,7 +66,8 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	Process process = null;
 	Mission mission = null;
 	
-	ManagedMemory privateMemory;
+	ManagedMemory privateMemory;    // backing store of this handler ??
+	
 	ManagedMemory currentMemory;	// for multicore only
 	
 	ReleaseParameters release;
@@ -117,8 +118,9 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 			backingStoreOfThisMemory = MemoryArea.getRemainingMemorySize();
 			currentMemory = ImmortalMemory.instance();
 		} else {
-			backingStoreOfThisMemory = (int) this.storage.totalBackingStore;
-			if(mission !=null){
+			//backingStoreOfThisMemory = (int) this.storage.totalBackingStore;
+			backingStoreOfThisMemory = (int) this.storage.getMaxInitialArea() + (int) this.storage.getMaxInitialBackingStore(); // HSO
+   			if(mission !=null){
 				this.currentMemory = mission.currMissSeq.missionMemory;
 				this.set = mission.currMissSeq.set;
 			}
@@ -130,7 +132,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 		String privateMemoryName = Memory.getNextMemoryName("PvtMem");		
 		
-		privateMemory = new PrivateMemory((int) this.storage.getMaximalMemoryArea(),
+		privateMemory = new PrivateMemory((int) this.storage.getMaxInitialArea(),
 		           backingStoreOfThisMemory,
 	               backingStoreProvider, 
 	               privateMemoryName);	

@@ -45,16 +45,17 @@ public final class TestPortalSC {
 	}
 	
 	
+	// HSO: not used any more ??
 	/**
 	 * Used by test programs to initialize and set up the behaviour of a
 	 * single core test, including allocating backing store memory.
 	 * 
 	 * @param totalBackingStore is the size of the backing store allocated for this TCK test.
 	 */
-	public static void singleCoreSetup (int totalBackingStore) {
-		LaunchSingleCore.initSingleCoreBehaviour();
-		ManagedMemory.allocateBackingStore(totalBackingStore);		
-	}
+//	public static void singleCoreSetup (int totalBackingStore) {
+//		LaunchSingleCore.initSingleCoreBehaviour();
+//		ManagedMemory.allocateBackingStore(totalBackingStore);		
+//	}
 
 	/**
 	 * Used by test programs to get  .
