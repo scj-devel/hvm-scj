@@ -29,6 +29,7 @@ package javax.safetycritical;
 
 import javax.realtime.AperiodicParameters;
 import javax.realtime.ConfigurationParameters;
+import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
 import javax.safetycritical.annotate.AllocationContext;
 import javax.safetycritical.annotate.Level;
@@ -54,7 +55,7 @@ import javax.safetycritical.annotate.SCJPhase;
 @SCJAllowed
 public abstract class MissionSequencer extends ManagedEventHandler {
 
-	MissionMemory missionMemory;
+	MissionMemory missionMemory = null;
 	Mission currMission;
 
 	interface State {
@@ -114,9 +115,9 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 //				privateMemory, //backingstore of sequencer
 //				name);
 		
-//		missionMemory = new MissionMemory((int)privateMemory.size(), // mission memory  HSO
-//				privateMemory, //backingstore provider
-//				name);
+		missionMemory = new MissionMemory((int)privateMemory.size(), // mission memory  HSO
+				privateMemory, //backingstore provider
+				name);
 		
 		currState = State.START;
 		phase = Phase.INITIALIZATION;
@@ -193,15 +194,15 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 			// the main actions of the sequencer governed by currState
 			switch (currState) {
 			case State.START:
-				devices.Console.println("MS.S: " + this.getName() );
+				//devices.Console.println("MS.S: " + this.getName() );
 				phase = Phase.STARTUP;
 				
 				// See Draft Section 3.6.4
-				if (missionMemory == null) {
-					missionMemory = new MissionMemory((int)this.getCurrentMemory().getRemainingBackingStore(), // mission memory  HSO
-						privateMemory, //backingstore provider
-						name);
-				}
+//				if (missionMemory == null) {
+//					missionMemory = new MissionMemory((int)this.getCurrentMemory().getRemainingBackingStore(), // mission memory  HSO
+//						privateMemory, //backingstore provider
+//						name);
+//				}
 				currMission = getNextMission();
 				
 				if (currMission != null) {

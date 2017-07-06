@@ -16,9 +16,10 @@ import javax.safetycritical.ScopeParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
+import vm.Memory;
 import vm.VMTest;
 
-public class HSO_TestSCJSingleMemoryModel3 {
+public class TestSCJSingleMemoryModel3 {
 
 	private static class TopMission2 extends Mission {
 		protected void initialize() {
@@ -33,7 +34,8 @@ public class HSO_TestSCJSingleMemoryModel3 {
 		}
 
 		public long missionMemorySize() {
-			return 50 *1000;
+			//return 50 *1000;
+			return Const.MISSION_MEM;
 		}
 
 		private class MyPEH extends PeriodicEventHandler {
@@ -163,7 +165,7 @@ public class HSO_TestSCJSingleMemoryModel3 {
 
 		@Override
 		public long missionMemorySize() {
-			return 100 * 1000;
+			return 50 * 1000;
 		}
 
 		private class MyPEH extends PeriodicEventHandler {
@@ -233,13 +235,14 @@ public class HSO_TestSCJSingleMemoryModel3 {
 					storageParameters_InnerSequencer);
 			firstSeq.register();
 
-//			InnerSequencer2 secondSeq = new InnerSequencer2(new PriorityParameters(Priorities.SEQUENCER_PRIORITY + 1),
-//					storageParameters_InnerSequencer);
-//			secondSeq.register();
+			InnerSequencer2 secondSeq = new InnerSequencer2(new PriorityParameters(Priorities.SEQUENCER_PRIORITY + 1),
+					storageParameters_InnerSequencer);
+			secondSeq.register();
 		}
 
 		public long missionMemorySize() {
-			return 100 * 1000;
+			//return 100 * 1000;
+			return Const.MISSION_MEM;
 		}
 	}
 
@@ -284,7 +287,7 @@ public class HSO_TestSCJSingleMemoryModel3 {
 
 		@Override
 		public long immortalMemorySize() {
-			return Const.IMMORTAL_MEM; //50 * 1000;
+			return Const.IMMORTAL_MEM; 
 		}
 
 		@Override
@@ -309,16 +312,27 @@ public class HSO_TestSCJSingleMemoryModel3 {
 	static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
-		storageParameters_OuterMostSequencer = 
-			//new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE, 0, Const.PRIVATE_MEM, Const.MISSION_MEM);
-			new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE, Const.IMMORTAL_MEM, Const.PRIVATE_MEM, Const.MISSION_MEM);
-
-		storageParameters_InnerSequencer = 
-			new ScopeParameters(100 * 1000, 0, 30 * 1000, 50 * 1000);
-
-		storageParameters_Handlers = 
-			//new ScopeParameters(Const.PRIVATE_MEM, 0, Const.PRIVATE_MEM, 0);
-			new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0);
+		
+		Const.MEMORY_TRACKER_AREA_SIZE = 30000;
+		Memory.startMemoryAreaTracking();
+		//vm.Process.enableStackAnalysis();
+		
+//		storageParameters_OuterMostSequencer = 
+//			//new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE, 0, Const.PRIVATE_MEM, Const.MISSION_MEM);
+//			new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE, Const.IMMORTAL_MEM, Const.PRIVATE_MEM, Const.MISSION_MEM);
+//
+//		storageParameters_InnerSequencer = 
+//			new ScopeParameters(100 * 1000, 0, 30 * 1000, 50 * 1000);
+//
+//		storageParameters_Handlers = 
+//			//new ScopeParameters(Const.PRIVATE_MEM, 0, Const.PRIVATE_MEM, 0);
+//			new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0);
+		
+		storageParameters_OuterMostSequencer = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 100 * 1000); // HSO	
+		
+		storageParameters_InnerSequencer = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 100 * 1000); // HSO	
+		
+		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO
 		
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
@@ -326,6 +340,9 @@ public class HSO_TestSCJSingleMemoryModel3 {
 		new LaunchLevel2(new MyApp());
 		devices.Console.println("***** MemoryModelTest3 main.end *******************");
 
+		//vm.Process.reportStackUsage();
+		Memory.reportMemoryUsage();
+		
 		VMTest.markResult(false);
 	}
 
