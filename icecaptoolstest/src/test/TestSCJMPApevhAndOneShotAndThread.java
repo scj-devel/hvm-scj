@@ -6,6 +6,7 @@ import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.AffinitySet;
 import javax.safetycritical.AperiodicEventHandler;
 import javax.safetycritical.LaunchMulticore;
@@ -15,7 +16,6 @@ import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.OneShotEventHandler;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.ScopeParameters;
 import javax.safetycritical.Services;
 import javax.scj.util.Const;
 

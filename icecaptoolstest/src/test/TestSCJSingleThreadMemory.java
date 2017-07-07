@@ -20,12 +20,12 @@ package test;
 import javax.realtime.ConfigurationParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.LaunchLevel2;
 import javax.safetycritical.ManagedThread;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.ScopeParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
