@@ -31,6 +31,7 @@ import javax.realtime.HighResolutionTime;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.TestPortalRT;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**

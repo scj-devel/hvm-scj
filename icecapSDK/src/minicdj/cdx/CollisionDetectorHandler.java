@@ -26,9 +26,9 @@ import icecaptools.IcecapCompileMe;
 
 import javax.realtime.ConfigurationParameters;
 import javax.realtime.PriorityParameters;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.Mission;
 import javax.safetycritical.PeriodicEventHandler;
-import javax.safetycritical.ScopeParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 

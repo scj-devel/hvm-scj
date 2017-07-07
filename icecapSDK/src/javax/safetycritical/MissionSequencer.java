@@ -31,6 +31,7 @@ import javax.realtime.AperiodicParameters;
 import javax.realtime.ConfigurationParameters;
 import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.annotate.AllocationContext;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;

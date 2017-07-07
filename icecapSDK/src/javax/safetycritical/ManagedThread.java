@@ -33,6 +33,7 @@ import javax.realtime.MemoryArea;
 import javax.realtime.RealtimeThread;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
+import javax.realtime.memory.ScopeParameters;
 import javax.realtime.ConfigurationParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;

@@ -23,7 +23,7 @@
  *           Stephan E. Korsholm and Hans S&oslash;ndergaard, 
  *             VIA University College, DK
  *************************************************************************/
-package javax.safetycritical;
+package javax.realtime.memory;
 
 import javax.safetycritical.annotate.SCJAllowed;
 
@@ -79,7 +79,7 @@ public final class ScopeParameters extends javax.realtime.MemoryParameters {
 		this(maxInitialArea, maxImmortal, 0, maxInitialBackingStore);
 	}
 
-	long getMaxInitialArea() {
+	public  long getMaxInitialArea() {
 		return maxInitialArea;
 	}
 
@@ -91,7 +91,7 @@ public final class ScopeParameters extends javax.realtime.MemoryParameters {
 		return maxContainingArea;
 	}
 
-	long getMaxInitialBackingStore() {
+	public long getMaxInitialBackingStore() {
 		return maxInitialBackingStore;
 	}
 

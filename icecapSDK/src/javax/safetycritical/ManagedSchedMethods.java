@@ -1,6 +1,7 @@
 package javax.safetycritical;
 
 import javax.realtime.PriorityParameters;
+import javax.realtime.memory.ScopeParameters;
 import javax.realtime.ConfigurationParameters;
 
 final class ManagedSchedMethods {

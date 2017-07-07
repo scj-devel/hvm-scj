@@ -42,6 +42,7 @@ import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.realtime.TestPortalRT;
+import javax.realtime.memory.ScopeParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 

@@ -32,6 +32,7 @@ import javax.realtime.ConfigurationParameters;
 import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
 import javax.realtime.ReleaseParameters;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
