@@ -25,6 +25,7 @@
  *************************************************************************/
 package javax.realtime;
 
+import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
@@ -74,7 +75,8 @@ public abstract class Clock implements Chronograph {
 	 *   When false, indicates that the clock can only be queried for the current time.
 	 * 
 	 */
-	protected Clock() {
+	@SCJAllowed(Level.LEVEL_1)
+	public Clock() {
 	}
 
 	protected RelativeTime ensureResolution() {
@@ -95,6 +97,18 @@ public abstract class Clock implements Chronograph {
 		}
 		return nativeClockInstance;
 	}
+	
+	
+//	protected abstract void clearAlarm();
+//	
+//	public abstract RelativeTime getDrivePrecision();
+//	
+//	public abstract RelativeTime getDrivePrecision(RelativeTime dest);
+//	
+//	protected abstract void setAlarm(long milliseconds, int nanoseconds);
+//	
+//	protected abstract void triggerAlarm(); 
+
 	
 	/**
 	 * @return The singleton instance of the default <code>Clock</code>.
@@ -156,7 +170,8 @@ public abstract class Clock implements Chronograph {
 	 */
 	@SCJAllowed
 	public abstract AbsoluteTime getTime(AbsoluteTime dest);
-
+	
+	
 	// used for JML annotation only (not public)
 	RelativeTime getResol() {
 		return ensureResolution();
