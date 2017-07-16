@@ -58,7 +58,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  *   </ul>
  */
 @SCJAllowed
-public abstract class Clock /*implements Chronograph*/ {
+public abstract class Clock implements Chronograph {
 
 	protected static vm.RealtimeClock nativeClockInstance;
 
@@ -95,6 +95,13 @@ public abstract class Clock /*implements Chronograph*/ {
 		}
 		return nativeClockInstance;
 	}
+	
+	/**
+	 * @return The singleton instance of the default <code>Clock</code>.
+	 */
+	public static Clock getRealtimeClock() {
+		return RealtimeClock.instance();
+	}
 
 	/**
 	 * Returns the relative time of the offset of the epoch of this clock 
@@ -104,17 +111,10 @@ public abstract class Clock /*implements Chronograph*/ {
 	 *    The returned object is associated with this clock.
 	 */
 	@SCJAllowed
-	public final RelativeTime getEpochOffset(){
+	public final RelativeTime getEpochOffset() {
 		return new RelativeTime(0, 0, this);
 	}
-
-	/**
-	 * @return The singleton instance of the default <code>Clock</code>.
-	 */
-	public static Clock getRealtimeClock() {
-		return RealtimeClock.instance();
-	}
-
+	
 	/**
 	 * Gets the resolution of the clock, the nominal interval between ticks.
 	 * 
@@ -122,7 +122,7 @@ public abstract class Clock /*implements Chronograph*/ {
 	 *    is associated with this clock.
 	 */
 	@SCJAllowed
-	public abstract RelativeTime getResolution();
+	public abstract RelativeTime getQueryPrecision();
 
 	/**
 	 * Gets the resolution of the clock, the nominal interval between ticks 
@@ -136,7 +136,7 @@ public abstract class Clock /*implements Chronograph*/ {
 	 *    returned. The returned object is associated with <code></code>this clock.
 	 */
 	@SCJAllowed
-	public abstract RelativeTime getResolution(RelativeTime dest);
+	public abstract RelativeTime getQueryPrecision(RelativeTime dest);
 
 	/**
 	 * Creates a new object representing <i>now</i> of this clock. 

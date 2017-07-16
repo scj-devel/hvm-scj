@@ -94,7 +94,7 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 		rtClock.getTime(this.now);
 
 		this.timeGrain = new RelativeTime(0, 0, this.rtClock);
-		rtClock.getResolution(this.timeGrain);
+		rtClock.getQueryPrecision(this.timeGrain);
 		scheduler = this;
 	}
 

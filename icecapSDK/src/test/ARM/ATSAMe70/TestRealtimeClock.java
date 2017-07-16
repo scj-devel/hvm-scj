@@ -22,7 +22,7 @@ public class TestRealtimeClock extends ATSAMe70SCJTargetConfiguration {
 
 		Clock rtClock = Clock.getRealtimeClock();
 
-		RelativeTime granularity = rtClock.getResolution();
+		RelativeTime granularity = rtClock.getQueryPrecision();
 
 		AbsoluteTime start = rtClock.getTime();
 

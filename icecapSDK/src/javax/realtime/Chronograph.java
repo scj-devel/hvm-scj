@@ -31,11 +31,11 @@ import javax.safetycritical.annotate.SCJAllowed;
 @SCJAllowed
 public interface Chronograph {
 	
-	public RelativeTime getEpochOffset( );
+	public RelativeTime getEpochOffset();
 	public RelativeTime getQueryPrecision(RelativeTime dest);
-	public RelativeTime getQueryPrecision( );
+	public RelativeTime getQueryPrecision();
 	public AbsoluteTime getTime(AbsoluteTime dest);
-	public AbsoluteTime getTime( );
+	public AbsoluteTime getTime();
 
 }
 

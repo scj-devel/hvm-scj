@@ -150,6 +150,16 @@ public abstract class MemoryArea extends Object {
 			backingStoreProvider.removeContainedMemory(this);
 		}
 	}
+	
+	@SCJAllowed
+	public boolean mayHoldReferenceTo(Object value) {
+		return false; // not implemented
+	}
+	
+	@SCJAllowed
+	public boolean mayHoldReferenceTo() {
+		return false; // not implemented
+	}
 
 	/**
 	 * @return The memory consumed (in bytes) in this memory area.

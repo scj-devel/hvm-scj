@@ -82,7 +82,7 @@ class RealtimeClock extends Clock {
 	 * @return clock resolution.
 	 */
 	@Override
-	public RelativeTime getResolution() {
+	public RelativeTime getQueryPrecision() {
 		RelativeTime rt = new RelativeTime(ensureResolution());
 		if (rt.clock == null)
 			rt.clock = rtClock;
@@ -90,9 +90,9 @@ class RealtimeClock extends Clock {
 	}
 
 	@Override
-	public RelativeTime getResolution(RelativeTime dest) {
+	public RelativeTime getQueryPrecision(RelativeTime dest) {
 		if (dest == null)
-			return getResolution();
+			return getQueryPrecision();
 		else {
 			RelativeTime resolution = ensureResolution();
 			dest.set(resolution.getMilliseconds(), resolution.getNanoseconds());
@@ -100,18 +100,7 @@ class RealtimeClock extends Clock {
 			return dest;
 		}
 	}
-	
-	//@Override
-	public RelativeTime getQueryPrecision(RelativeTime dest) {
-		// ToDo: implement
-		return null;
-	}
-	
-	//@Override
-	public RelativeTime getQueryPrecision() {
-		// ToDo: implement
-		return null;		
-	}	 
+	 
 
 	//@Override
 	public AbsoluteTime getTime() {
