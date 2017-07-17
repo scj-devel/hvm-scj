@@ -128,8 +128,8 @@ public class TestSCJSingleLinearMissSeqWithTwoMissions implements Safelet  {
 		          new PriorityParameters(Priorities.SEQUENCER_PRIORITY), 
 		          storageParameters_Sequencer,
 		          configParameters,
-		          false,
-		          new Mission[] {new MyMission0(), new MyMission1()});
+		          new Mission[] {new MyMission0(), new MyMission1()},
+		          false);
     }
 
     public long immortalMemorySize() {

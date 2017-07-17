@@ -114,7 +114,7 @@ public class TestSCJSingleCyclicExecutiveLinearMissSeq1 extends CyclicExecutive 
     		                   StorageParameters storage, ConfigurationParameters config, 
     		                   boolean repeat, MissionType mission) */
     		sequencer = new LinearMissionSequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
-    				storageParameters_Sequencer, configParameters, true, new TestSCJSingleCyclicExecutiveLinearMissSeq1());
+    				storageParameters_Sequencer, configParameters, new TestSCJSingleCyclicExecutiveLinearMissSeq1(), true);
     		return sequencer;
     	}
         

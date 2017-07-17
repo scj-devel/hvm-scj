@@ -53,8 +53,8 @@ public class LinearMissionSequencer extends MissionSequencer {
 	@SCJAllowed
 	public LinearMissionSequencer(PriorityParameters priority, ScopeParameters storage, 
 			ConfigurationParameters config, 
-			boolean repeat,
 			Mission mission,
+			boolean repeat,
 			String name)
 			throws IllegalArgumentException, IllegalStateException {
 		
@@ -69,19 +69,19 @@ public class LinearMissionSequencer extends MissionSequencer {
 	@SCJAllowed
 	public LinearMissionSequencer(PriorityParameters priority, ScopeParameters storage, 
 			ConfigurationParameters config, 
-			boolean repeat,
-			Mission mission)
+			Mission mission,
+			boolean repeat)
 			throws IllegalArgumentException, IllegalStateException {
 		
-		this(priority, storage, config, repeat, mission, "LinearMS");
+		this(priority, storage, config, mission, repeat, "LinearMS");
 	}
 	
 	@SuppressWarnings("unchecked")
 	@SCJAllowed
 	public LinearMissionSequencer(PriorityParameters priority, ScopeParameters storage, 
 			ConfigurationParameters config, 
-			boolean repeat,
 			Mission[] missions,
+			boolean repeat,
 			String name)
 			throws IllegalArgumentException, IllegalStateException {
 		
@@ -97,11 +97,11 @@ public class LinearMissionSequencer extends MissionSequencer {
 	@SCJAllowed
 	public LinearMissionSequencer(PriorityParameters priority, ScopeParameters storage, 
 			ConfigurationParameters config, 
-			boolean repeat,
-			Mission[] missions)
+			Mission[] missions,
+			boolean repeat)
 			throws IllegalArgumentException, IllegalStateException {
 		
-		this(priority, storage, config, repeat, missions, "LinearMSs");		
+		this(priority, storage, config, missions, repeat, "LinearMSs");		
 	}
 	
 	@SCJAllowed(Level.SUPPORT)
