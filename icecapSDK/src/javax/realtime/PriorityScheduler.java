@@ -42,7 +42,7 @@ import javax.scj.util.Priorities;
  *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
 @SCJAllowed(Level.LEVEL_1)
-public class PriorityScheduler extends Scheduler {
+public abstract class PriorityScheduler extends Scheduler {
 
 	/**
 	 * 
@@ -50,19 +50,15 @@ public class PriorityScheduler extends Scheduler {
 	 *         scheduler.
 	 */
 	@SCJAllowed(Level.LEVEL_1)
-	public int getMaxPriority() {
-		return Priorities.MAX_PRIORITY;
-	}
-
+	public abstract int getMaxPriority();
+	
 	/**
 	 * 
 	 * @return The minimum software real-time priority supported by this
 	 *         scheduler.
 	 */
 	@SCJAllowed(Level.LEVEL_1)
-	public int getMinPriority() {
-		return Priorities.MIN_PRIORITY;
-	}
+	public abstract int getMinPriority();
 
 	/**
 	 * 
@@ -70,9 +66,7 @@ public class PriorityScheduler extends Scheduler {
 	 *         scheduler.
 	 */
 	@SCJAllowed(Level.LEVEL_1)
-	public int getNormPriority() {
-		return (Priorities.MIN_PRIORITY + Priorities.MAX_PRIORITY) / 2;
-	}
+	public abstract int getNormPriority();
 
 	// used for JML annotation only (not public)
 	int getMaxPr() {

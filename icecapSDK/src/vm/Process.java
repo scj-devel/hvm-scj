@@ -67,7 +67,7 @@ public class Process {
 				try {
 					thisProcess.logic.run();
 				} catch (Throwable t) {
-					System.out.println ("P3: " + t);
+					System.out.println ("Process: " + t);
 					thisProcess.logic.catchError(t);
 				}
 				vm.ClockInterruptHandler.instance.yield();
