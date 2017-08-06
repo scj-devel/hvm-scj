@@ -41,7 +41,7 @@ public class MemoryParameters implements Cloneable, Serializable {
 	}
 
 	// used for JML annotation only in TestPortalRT (not public)
-	long getMaxMemoryArea() {
+	long getMaxInitialArea() {
 		return maxInitialArea;
 	}
 

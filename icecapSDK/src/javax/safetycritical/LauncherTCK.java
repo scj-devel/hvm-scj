@@ -21,13 +21,13 @@ public class LauncherTCK implements Runnable {
 	
 	MachineFactory mFactory;  // we use POSIX64BitMachineFactory() in this version
 	
-	Class /*<? extends Safelet>*/ app;
+	Class <? extends Safelet> app;
 	
 	ImmortalMemory immMem;
 	
 	Safelet safeletApp;
 
-	public LauncherTCK(Level level, Class/*<? extends Safelet>*/ app) {
+	public LauncherTCK(Level level, Class<? extends Safelet> app) {
 		
 		Launcher.useOS = false;		
 		Launcher.level = level.ordinal();
@@ -65,11 +65,13 @@ public class LauncherTCK implements Runnable {
 	@Override
 	public void run() {
 		// create object in Immortal Memory
-		try {			
-			Constructor/*<? extends Safelet>*/ constructor = app.getConstructor(); 			
-			safeletApp = (Safelet) constructor.newInstance();	
-			
+		try {	
+			System.out.println("LauncherTCK.run 1");
+			Constructor<? extends Safelet> constructor = app.getConstructor(); 
+			safeletApp = /*(Safelet)*/ constructor.newInstance();	
+			System.out.println("LauncherTCK.run 1.2: safeletApp: " + safeletApp);
 			long immSizeMustHave = safeletApp.immortalMemorySize();
+			System.out.println("LauncherTCK.run 1.3");
 			long remainingSize = immMem.memoryRemaining();
 			System.out.println("LauncherTCK.run 3.1. ImmSize: " + immSizeMustHave + "; ImmRemaining: " + remainingSize);
 			

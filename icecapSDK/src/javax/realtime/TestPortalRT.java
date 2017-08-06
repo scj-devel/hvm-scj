@@ -201,8 +201,8 @@ public final class TestPortalRT {
 	 * 
 	 * @return the maximum memory area of the parameter <code>mp</code>.
 	 */	
-	public static long getMaxMemoryArea(MemoryParameters mp) {
-		return mp.getMaxMemoryArea();
+	public static long getMaxInitialArea(MemoryParameters mp) {
+		return mp.getMaxInitialArea();
 	}
 
 	/**
