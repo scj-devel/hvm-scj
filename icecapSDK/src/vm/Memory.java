@@ -40,6 +40,13 @@ public class Memory {
 			buffer.append("]");
 			buffer.append(StringUtil.constructString(": ", size));
 			buffer.append(StringUtil.constructString(", used = ", maxUsed));
+			
+			//HSO:
+			if (size > 1.15 * maxUsed) {
+				buffer.append(", - maybe reduce size to ");
+				buffer.append( (((11 * maxUsed + 10)/10) / 10) * 10);
+			}
+			
 			return buffer.toString();
 		}
 
@@ -56,7 +63,7 @@ public class Memory {
 
 	@IcecapCompileMe
 	private MemoryInfo addMemoryArea(Memory m) {
-
+		
 		Memory current;
 		if (areaToUseForTracking == null) {
 			areaToUseForTracking = m;
@@ -81,6 +88,7 @@ public class Memory {
 		switchToArea(current);
 		return memory;
 	}
+	
 
 	@IcecapCompileMe
 	public static void reportMemoryUsage() {
@@ -192,6 +200,14 @@ public class Memory {
 	}
 
 	public void resize(int newSize) {
+		//System.out.println("Memory.resize from: " + size + " to: " + newSize);
+		
+		// HSO:
+		if (memoryAreaTrackingEnabled) {
+			if (this.memoryInfo != null)
+				this.memoryInfo.size = newSize;
+		}
+		
 		size = newSize;
 	}
 	

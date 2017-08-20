@@ -69,7 +69,7 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 	
 	@SCJAllowed(Level.LEVEL_1)
 	@SCJPhase(Phase.INITIALIZATION)
-	AperiodicEventHandler(PriorityParameters priority, AperiodicParameters release,
+	protected AperiodicEventHandler(PriorityParameters priority, AperiodicParameters release,
 			ScopeParameters storage, ConfigurationParameters config, String name) {
 		super(priority, release, storage, config, name);
 		if (priority == null || release == null)

@@ -75,10 +75,10 @@ public class LauncherTCK implements Runnable {
 			long remainingSize = immMem.memoryRemaining();
 			System.out.println("LauncherTCK.run 3.1. ImmSize: " + immSizeMustHave + "; ImmRemaining: " + remainingSize);
 			
-			if (remainingSize < immSizeMustHave){ // the amount of remaining immortalMemory < immSizeMustHave
-				
-				safeletApp.handleStartupError(Safelet.INSUFFICIENT_IMMORTAL_MEMORY, immSizeMustHave - immMem.memoryRemaining());
-			}	
+//			if (remainingSize < immSizeMustHave){ // the amount of remaining immortalMemory < immSizeMustHave
+//				
+//				safeletApp.handleStartupError(Safelet.INSUFFICIENT_IMMORTAL_MEMORY, immSizeMustHave - immMem.memoryRemaining());
+//			}	
 			System.out.println("LauncherTCK.run 4");
 			safeletApp.managedMemoryBackingStoreSize();
 			
@@ -86,12 +86,16 @@ public class LauncherTCK implements Runnable {
 		    
 		    // Level_0
 		    if (Launcher.level == 0) {
-		    	
+		      System.out.println("LauncherTCK.run 6.0");
 			  safeletApp.initializeApplication();
+			  System.out.println("LauncherTCK.run 6.1");
 			  MissionSequencer seq = safeletApp.getSequencer();
 			  if (seq == null) throw new Error("*** LauncherTCK: run: Sequencer missing \n");
-			
+			  
+			  System.out.println("LauncherTCK.run 6.2");
 			  CyclicScheduler sch = CyclicScheduler.instance();
+			  
+			  System.out.println("LauncherTCK.run 6.3");
 			  Machine.setCurrentScheduler(sch);	
 			  sch.start(seq, mFactory);
 		    } 

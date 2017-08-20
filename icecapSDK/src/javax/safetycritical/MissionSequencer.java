@@ -40,6 +40,8 @@ import javax.safetycritical.annotate.SCJMayAllocate;
 import javax.safetycritical.annotate.SCJMaySelfSuspend;
 import javax.safetycritical.annotate.SCJPhase;
 
+import vm.Memory;
+
 /**
  * A <code>MissionSequencer</code> oversees a sequence of Mission executions. 
  * The sequence may include interleaved execution of independent missions 
@@ -116,9 +118,17 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 //				privateMemory, //backingstore of sequencer
 //				name);
 		
+		String missionMemoryName = Memory.getNextMemoryName("MissionMem");	
+		
+//		missionMemory = new MissionMemory((int)privateMemory.size(), // mission memory  HSO
+//				privateMemory, //backingstore provider
+//				//name);
+//				missionMemoryName);
+		
 		missionMemory = new MissionMemory((int)privateMemory.size(), // mission memory  HSO
 				privateMemory, //backingstore provider
-				name);
+				//name);
+				missionMemoryName);
 		
 		currState = State.START;
 		phase = Phase.INITIALIZATION;
@@ -198,7 +208,7 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 				//devices.Console.println("MS.S: " + this.getName() );
 				phase = Phase.STARTUP;
 				
-				// See Draft Section 3.6.4
+				// See Draft Section 3.6.3
 //				if (missionMemory == null) {
 //					missionMemory = new MissionMemory((int)this.getCurrentMemory().getRemainingBackingStore(), // mission memory  HSO
 //						privateMemory, //backingstore provider
@@ -216,8 +226,9 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 					terminateSeq = true;
 					currState = State.TERMINATE;
 				} else {
-					// See Draft 3.6.4
+					// See Draft 3.6.3
 					missionMemory.resizeArea(currMission.missionMemorySize());  // HSO
+					//System.out.println ("MissionSequencer.handleAsyncEven: resize missionMemory to : " + currMission.missionMemorySize());
 
 					currMission.missionTerminate = false;
 					currState = State.INITIALIZE;

@@ -196,7 +196,7 @@ public abstract class MemoryArea extends Object {
 			}
 		}
 		throw new OutOfMemoryError("thrown from MemoryArea :: resizeMem : Out of backingstore exception, memoryConsumed: "
-		        + memoryConsumed() + "; newSize: " + newSize);
+		        + memoryConsumed() + "; newSize: " + newSize + "; \n");
 	}
 
 	/**
