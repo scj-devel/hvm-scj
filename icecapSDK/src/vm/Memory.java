@@ -42,9 +42,10 @@ public class Memory {
 			buffer.append(StringUtil.constructString(", used = ", maxUsed));
 			
 			//HSO:
-			if (size > 1.15 * maxUsed) {
+			// MemTrk is the name of the MEMORY_TRACKER_AREA_
+			if (size > 1.20 * maxUsed + 10 && ! name.equals("MemTrk")) {
 				buffer.append(", - maybe reduce size to ");
-				buffer.append( (((11 * maxUsed + 10)/10) / 10) * 10);
+				buffer.append( ((12 * ((maxUsed + 9)) / 10) / 10) * 10);  // reduce to about 120% of maxUsed
 			}
 			
 			return buffer.toString();
