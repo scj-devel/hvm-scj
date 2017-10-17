@@ -105,7 +105,7 @@ public class TestSCJSingleLevel2Thread0 {
 			return Const.IMMORTAL_MEM;
 		}
 
-		public void initializeApplication() {
+		public void initializeApplication(String[] args) {
 		}
 		
 		public long managedMemoryBackingStoreSize() {

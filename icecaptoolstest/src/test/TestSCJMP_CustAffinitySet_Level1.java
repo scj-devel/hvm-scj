@@ -162,7 +162,7 @@ public class TestSCJMP_CustAffinitySet_Level1 implements Safelet {
 	public void cleanUp() {
 	}
 
-	public void initializeApplication() {
+	public void initializeApplication(String[] args) {
 	}
 
 	private class MySequencer extends MissionSequencer {

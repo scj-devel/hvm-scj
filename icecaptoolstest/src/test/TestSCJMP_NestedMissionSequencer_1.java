@@ -316,7 +316,7 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 		return Const.IMMORTAL_MEM;
 	}
 
-	public void initializeApplication() {
+	public void initializeApplication(String[] args) {
 	}
 	
 	public long managedMemoryBackingStoreSize() {

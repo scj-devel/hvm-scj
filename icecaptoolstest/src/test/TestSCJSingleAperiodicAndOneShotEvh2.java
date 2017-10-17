@@ -164,7 +164,7 @@ public class TestSCJSingleAperiodicAndOneShotEvh2 {
 			return Const.IMMORTAL_MEM;
 		}
 
-		public void initializeApplication() {
+		public void initializeApplication(String[] args) {
 		}
 		
 		public long managedMemoryBackingStoreSize() {

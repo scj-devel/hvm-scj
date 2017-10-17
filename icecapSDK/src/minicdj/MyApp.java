@@ -98,7 +98,7 @@ public class MyApp implements Safelet {
 	}
 
 	@Override
-	public void initializeApplication() {
+	public void initializeApplication(String[] args) {
 
 	}
 	

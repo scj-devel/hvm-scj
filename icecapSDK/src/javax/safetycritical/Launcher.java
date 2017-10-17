@@ -76,7 +76,7 @@ public abstract class Launcher implements Runnable {
 	}
 
 	public void run() {
-		app.initializeApplication();
+		app.initializeApplication(null);
 		start();
 	}
 

@@ -13,9 +13,10 @@ import vm.HardwareObject;
  */
 public class RawByteMM implements RawByte {
 
-	long base;
-	int count;
-	int stride;
+	long base;   // The starting physical address
+	int count;   // The number of memory elements
+	int stride;  // The distance to the next element in mulitple of element count, 
+	             // where a value of 1 means the elements are adjacent in memory.
 
 	private static class ByteHWO extends HardwareObject {
 

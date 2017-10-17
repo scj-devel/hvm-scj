@@ -121,7 +121,7 @@ public class TestSCJSingleCyclicSchedule4 {
             return Const.IMMORTAL_MEM;
         }
         
-        public void initializeApplication() {
+        public void initializeApplication(String[] args) {
         }
         
         public long managedMemoryBackingStoreSize() {

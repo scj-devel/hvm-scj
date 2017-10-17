@@ -124,7 +124,7 @@ public class TestSCJMPApevhAndOneShotAndThread implements Safelet {
 		return Const.IMMORTAL_MEM;
 	}
 
-	public void initializeApplication() {
+	public void initializeApplication(String[] args) {
 	}
 	
 	public long managedMemoryBackingStoreSize() {

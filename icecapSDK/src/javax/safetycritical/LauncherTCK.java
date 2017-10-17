@@ -87,7 +87,7 @@ public class LauncherTCK implements Runnable {
 		    // Level_0
 		    if (Launcher.level == 0) {
 		      System.out.println("LauncherTCK.run 6.0");
-			  safeletApp.initializeApplication();
+			  safeletApp.initializeApplication(null);
 			  System.out.println("LauncherTCK.run 6.1");
 			  MissionSequencer seq = safeletApp.getSequencer();
 			  if (seq == null) throw new Error("*** LauncherTCK: run: Sequencer missing \n");
@@ -107,7 +107,7 @@ public class LauncherTCK implements Runnable {
 			  
 			  System.out.println("LauncherTCK.run: safelet.getSequencer() ...");
 			  
-			  safeletApp.initializeApplication();
+			  safeletApp.initializeApplication(null);
 			  MissionSequencer seq = safeletApp.getSequencer();
 			  System.out.println("LauncherTCK.run: safelet.getSequencer() end");
 			  

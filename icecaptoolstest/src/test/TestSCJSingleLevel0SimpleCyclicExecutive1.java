@@ -115,7 +115,7 @@ public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive  
           return Const.IMMORTAL_MEM;
         }
         
-        public void initializeApplication() {
+        public void initializeApplication(String[] args) {
         }
         
         public long managedMemoryBackingStoreSize() {

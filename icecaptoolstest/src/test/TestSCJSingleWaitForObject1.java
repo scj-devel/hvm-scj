@@ -190,7 +190,7 @@ public class TestSCJSingleWaitForObject1 {
 		}
 
 		@Override
-		public void initializeApplication() {
+		public void initializeApplication(String[] args) {
 		}
 		
 		public long managedMemoryBackingStoreSize() {

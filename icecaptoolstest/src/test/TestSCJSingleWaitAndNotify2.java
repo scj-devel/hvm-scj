@@ -204,7 +204,7 @@ public class TestSCJSingleWaitAndNotify2 {
 		}
 
 		@Override
-		public void initializeApplication() {
+		public void initializeApplication(String[] args) {
 			// TODO Auto-generated method stub
 		}
 		

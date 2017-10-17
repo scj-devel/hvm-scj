@@ -152,7 +152,7 @@ public class TestSCJMP_CustAffinitySet_Level2 implements Safelet {
 		return Const.IMMORTAL_MEM;
 	}
 
-	public void initializeApplication() {
+	public void initializeApplication(String[] args) {
 		Configuration.processors = new int[][] { { 0, 1, 2, 3 }, { 0, 1, 2 }, { 0, 1 }, { 0 } };
 	}
 	

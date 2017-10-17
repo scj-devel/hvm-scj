@@ -209,7 +209,7 @@ public class TestSCJSingleSharedResource1 {
             return Const.IMMORTAL_MEM;
         }
         
-        public void initializeApplication() {
+        public void initializeApplication(String[] args) {
         }
         
         public long managedMemoryBackingStoreSize() {

@@ -149,7 +149,7 @@ public class TestSCJMP_AffinitySet_Level1 implements Safelet {
 		return Const.IMMORTAL_MEM;
 	}
 
-	public void initializeApplication() {
+	public void initializeApplication(String[] args) {
 	}
 	
 	public long managedMemoryBackingStoreSize() {
