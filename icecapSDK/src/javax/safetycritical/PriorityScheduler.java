@@ -64,6 +64,40 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 	private static PriorityScheduler scheduler; 
 
 	ScjProcess outerMostSeqProcess = null;
+	
+	/**
+	 * 
+	 * @return The maximum software real-time priority supported by this
+	 *         scheduler.
+	 */
+	@SCJAllowed(Level.LEVEL_1)
+	public int getMaxPriority()
+	{
+		return Priorities.MAX_PRIORITY;
+	}
+
+	/**
+	 * 
+	 * @return The minimum software real-time priority supported by this
+	 *         scheduler.
+	 */
+	@SCJAllowed(Level.LEVEL_1)
+	public int getMinPriority()
+	{
+		return Priorities.MIN_PRIORITY;
+	}
+
+	/**
+	 * 
+	 * @return The normal software real-time priority supported by this
+	 *         scheduler.
+	 */
+	@SCJAllowed(Level.LEVEL_1)
+	public int getNormPriority()
+	{
+		return (Priorities.MIN_PRIORITY + Priorities.MAX_PRIORITY) / 2;
+	}
+
 
 	/**
 	 * 
@@ -94,7 +128,7 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 		rtClock.getTime(this.now);
 
 		this.timeGrain = new RelativeTime(0, 0, this.rtClock);
-		rtClock.getResolution(this.timeGrain);
+		rtClock.getQueryPrecision(this.timeGrain);
 		scheduler = this;
 	}
 

@@ -33,6 +33,7 @@ import javax.realtime.MemoryArea;
 import javax.realtime.RealtimeThread;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
+import javax.realtime.memory.ScopeParameters;
 import javax.realtime.ConfigurationParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
@@ -58,7 +59,7 @@ import vm.Memory;
 public class ManagedThread extends RealtimeThread implements ManagedSchedulable {
 
 	PriorityParameters priority;
-	StorageParameters storage;
+	ScopeParameters storage;
 	ConfigurationParameters config;
 	
 	Process process = null;
@@ -74,17 +75,17 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 	boolean isRegistered;
 	boolean isInMissionScope;
 
-	public ManagedThread(PriorityParameters priority, StorageParameters storage,
+	public ManagedThread(PriorityParameters priority, ScopeParameters storage,
 			ConfigurationParameters config) { 
 		this(priority, storage, config, null);
 	}
 
-	public ManagedThread(PriorityParameters priority, StorageParameters storage, 
+	public ManagedThread(PriorityParameters priority, ScopeParameters storage, 
 			ConfigurationParameters config, Runnable logic) {
 		this(priority, storage, config, logic, null);
 	}
 
-	ManagedThread(PriorityParameters priority, StorageParameters storage, 
+	ManagedThread(PriorityParameters priority, ScopeParameters storage, 
 			ConfigurationParameters config, Runnable logic, String name) {
 		super(priority, logic);
 		this.priority = priority;
@@ -101,13 +102,15 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 			throw new IllegalArgumentException("mission is null");
 
 		int backingStoreOfThisMemory = mission == null ? MemoryArea.getRemainingMemorySize()
-				: (int) this.storage.totalBackingStore;
+				//: (int) this.storage.totalBackingStore;
+				: (int) mission.missionMemorySize();  // HSO
+		
 		MemoryArea backingStoreProvider = mission == null ? MemoryArea.overAllBackingStore
 				: mission.currMissSeq.missionMemory;
 
 		String privateMemoryName = Memory.getNextMemoryName("PvtMem");
 
-		privateMemory = new PrivateMemory((int) storage.getMaximalMemoryArea(), backingStoreOfThisMemory,
+		privateMemory = new PrivateMemory((int) storage.getMaxInitialArea(), backingStoreOfThisMemory,
 				backingStoreProvider, privateMemoryName);
 		
 		this.currentMemory = mission.currMissSeq.missionMemory;

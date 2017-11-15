@@ -71,7 +71,7 @@ public class RelativeTime extends HighResolutionTime<RelativeTime> {
 	 * If <code>clock</code> is null the association is made with the real-time clock.
 	 * @param clock is the clock argument.
 	 */
-	public RelativeTime(Clock clock) {
+	public RelativeTime(Chronograph /*Clock*/ clock) {
 		this(0, 0, clock == null ? Clock.getRealtimeClock() : clock);
 	}
 
@@ -82,7 +82,7 @@ public class RelativeTime extends HighResolutionTime<RelativeTime> {
 	 * @param nanos is the nanoseconds
 	 * @param clock is the clock
 	 */
-	public RelativeTime(long millis, int nanos, Clock clock) {
+	public RelativeTime(long millis, int nanos, Chronograph /*Clock*/ clock) {
 		super(millis, nanos, clock == null ? Clock.getRealtimeClock() : clock);
 	}
 

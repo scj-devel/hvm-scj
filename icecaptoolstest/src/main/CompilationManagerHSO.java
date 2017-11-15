@@ -46,23 +46,23 @@ public class CompilationManagerHSO {
 
 
 		// For VIAEmbedded:
-//		String inputFolder = "/home/hso/workspace/VIAEmbedded/bin/"
-//		    + pathSeparator + "/home/hso/git/hvm-scj/icecapSDK/bin/";
+		String inputFolder = "/home/hso/workspace/CarControlSystem/bin/"
+		    + pathSeparator + "/home/hso/git/hvm-scj/icecapSDK/bin/";
 		
 
 		// For OpenJML test:
-		boolean hso = true;
-		String inputFolder;
-
-		if (hso) {
-			inputFolder = "/home/hso/workspace/OpenJMLTest/bin/" + pathSeparator
-					+ "/home/hso/workspace/OpenJMLTest/lib/jmlruntime.jar" + pathSeparator
-					+ "/home/hso/git/hvm-scj/icecapSDK/bin/";
-		} else {
-			inputFolder = "/home/skr/workspace/OpenJMLTest/bin/" + pathSeparator
-					+ "/home/skr/workspace/OpenJMLTest/lib/jmlruntime.jar" + pathSeparator
-					+ "/home/skr/git/hvm-scj/icecapSDK/bin/";
-		}
+//		boolean hso = true;
+//		String inputFolder;
+//
+//		if (hso) {
+//			inputFolder = "/home/hso/workspace/OpenJMLTest/bin/" + pathSeparator
+//					+ "/home/hso/workspace/OpenJMLTest/lib/jmlruntime.jar" + pathSeparator
+//					+ "/home/hso/git/hvm-scj/icecapSDK/bin/";
+//		} else {
+//			inputFolder = "/home/skr/workspace/OpenJMLTest/bin/" + pathSeparator
+//					+ "/home/skr/workspace/OpenJMLTest/lib/jmlruntime.jar" + pathSeparator
+//					+ "/home/skr/git/hvm-scj/icecapSDK/bin/";
+//		}
 
 		String outputFolder = "";
 
@@ -169,11 +169,11 @@ public class CompilationManagerHSO {
 		// TckSafelet tests ==============================================
 
 		//String inputPackage = "tckSafelet.realtime";
-		String inputPackage = "tckSafelet.safetycritical";
+		//String inputPackage = "tckSafelet.safetycritical";
 		
 		//String inputClass = "TckSafeletReleaseParameters";
 		//String inputClass = "TckSafeletMemoryParameters";
-		String inputClass = "TckSafeletPeriodicEventHandler1";
+		//String inputClass = "TckSafeletPeriodicEventHandler1";
 		
 		// TckSafelet tests end ==========================================
 		
@@ -199,16 +199,16 @@ public class CompilationManagerHSO {
 
 		/* JML tests end */
 		
-		/* VIA Embedded begin */
+		/* Car Control System begin */
 		
-		//String inputPackage = "via.embedded.carcontrol.scjlevel0";
-		//String inputClass = "CarSafelet";
+		String inputPackage = "carcontrol.scjlevel0";
+		String inputClass = "Car";
 		
 		//String inputPackage = "test";		
 		//String inputClass = "TestSCJSingleInterrupt1";
 		//String inputClass = "TestSCJSingleAperiodicAndOneShotEvh2";
 		
-		/* VIA Embedded end */
+		/* Car Control System end */
 
 		/* HSO end ************************************************** */
 

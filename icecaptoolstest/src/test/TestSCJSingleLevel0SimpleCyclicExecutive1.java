@@ -5,6 +5,7 @@ import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.realtime.TestPortalRT;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.CyclicExecutive;
 import javax.safetycritical.CyclicSchedule;
 import javax.safetycritical.Frame;
@@ -13,7 +14,6 @@ import javax.safetycritical.LauncherTCK;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
 import javax.safetycritical.annotate.Level;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
@@ -22,7 +22,7 @@ import vm.MachineFactory;
 import vm.POSIX64BitMachineFactory;
 import vm.VMTest;
 
-public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive implements Safelet {
+public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive  {
 
 	private static MissionSequencer sequencer;
 
@@ -78,58 +78,76 @@ public class TestSCJSingleLevel0SimpleCyclicExecutive1 extends CyclicExecutive i
 			}
 		}
 	}
-
-	public void initializeApplication() {
-	}
-
-	public long missionMemorySize() {
-		return Const.MISSION_MEM;
-	}
+		
 
 	public void initialize() {
 		(new MyPEH("A", new RelativeTime(0, 0), new RelativeTime(500, 0))).register();
 		(new MyPEH("B", new RelativeTime(0, 0), new RelativeTime(1000, 0))).register();
 		(new MyPEH("C", new RelativeTime(0, 0), new RelativeTime(500, 0))).register();
 	}
+	
+	public long missionMemorySize() {
+		return Const.MISSION_MEM;
+	}
 
 	public CyclicSchedule getSchedule(PeriodicEventHandler[] pehs) {
 		return VendorCyclicSchedule.generate(pehs, this);
 	}
+	
+	
+	private static class MyApp implements Safelet {
+        public static int count = 0;
 
-	public MissionSequencer getSequencer() {
-		sequencer = new MissionSequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
-				storageParameters_Sequencer, configParameters) {
+        public MissionSequencer getSequencer() {
+    		sequencer = new MissionSequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
+    				storageParameters_Sequencer, configParameters) {
 
-			@Override
-			protected CyclicExecutive getNextMission() {
-				return new TestSCJSingleLevel0SimpleCyclicExecutive1();
-			}
-		};
-		return sequencer;
+    			@Override
+    			protected CyclicExecutive getNextMission() {
+    				return new TestSCJSingleLevel0SimpleCyclicExecutive1();
+    			}
+    		};
+    		return sequencer;
+    	}
+        
+        public long immortalMemorySize()
+        {
+          return Const.IMMORTAL_MEM;
+        }
+        
+        public void initializeApplication(String[] args) {
+        }
+        
+        public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
+		}
 	}
 
-	@Override
-	public long immortalMemorySize() {
-		return Const.IMMORTAL_MEM_DEFAULT;
-	}
-
-	public static StorageParameters storageParameters_Sequencer;
-	public static StorageParameters storageParameters_Handlers;
+	public static ScopeParameters storageParameters_Sequencer;
+	public static ScopeParameters storageParameters_Handlers;
 	public static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
-		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE, Const.PRIVATE_MEM,
-				Const.IMMORTAL_MEM, Const.MISSION_MEM);
-
-		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE, Const.PRIVATE_MEM, 0, 0);
+//		storageParameters_Sequencer = new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE, Const.IMMORTAL_MEM,
+//				Const.PRIVATE_MEM, Const.MISSION_MEM);
+//
+//		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_BACKING_STORE, 0, Const.PRIVATE_MEM, 0);
+		
+		storageParameters_Sequencer = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO		
+		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO
 
 		configParameters = new ConfigurationParameters(-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 		
 
 		MachineFactory mFactory = new POSIX64BitMachineFactory();		
-		new LaunchLevel0(new TestSCJSingleLevel0SimpleCyclicExecutive1(), mFactory);  // original: works
-		
-		//new LauncherTCK(Level.LEVEL_0, TestSCJSingleLevel0SimpleCyclicExecutive1.class);  // using version with .class; works
+		new LaunchLevel0 (new MyApp(), mFactory);  // original: works
 		
 		VMTest.markResult(false);
 	}

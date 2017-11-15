@@ -1,11 +1,16 @@
 package javax.safetycritical;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.realtime.MemoryArea;
 import javax.safetycritical.ManagedMemory;
 import javax.safetycritical.annotate.Level;
 import javax.scj.util.Const;
+
+//import org.jmlspecs.utils.JmlAssertionError;
+
+
 
 import vm.Machine;
 import vm.MachineFactory;
@@ -15,7 +20,12 @@ import vm.POSIX64BitMachineFactory;
 public class LauncherTCK implements Runnable {
 	
 	MachineFactory mFactory;  // we use POSIX64BitMachineFactory() in this version
-	Class<? extends Safelet> app;
+	
+	Class <? extends Safelet> app;
+	
+	ImmortalMemory immMem;
+	
+	Safelet safeletApp;
 
 	public LauncherTCK(Level level, Class<? extends Safelet> app) {
 		
@@ -28,11 +38,12 @@ public class LauncherTCK implements Runnable {
 		
 		setHandlers();	
 		
-		//System.out.println("LauncherTCK.constructor");
+		immMem = createImmortalMemory(); 
 		
-		createImmortalMemory().executeInArea(this);
+		immMem.executeInArea(this);
+		System.out.println("LauncherTCK.constructor end");
 	}
-	
+		
 	private void setHandlers() {
 		Mission.missionBehaviour = new SinglecoreMissionBehavior();
 		ManagedEventHandler.handlerBehavior = new SinglecoreHandlerBehavior();
@@ -46,47 +57,90 @@ public class LauncherTCK implements Runnable {
 			new PrivateMemory(Const.MEMORY_TRACKER_AREA_SIZE, Const.MEMORY_TRACKER_AREA_SIZE,
 					MemoryArea.overAllBackingStore, "MemTrk");
 		}
+		
+		System.out.println("LauncherTCK.createImmortalMemory: " + Const.IMMORTAL_MEM);
 		return new ImmortalMemory(Const.IMMORTAL_MEM);
 	}
 
 	@Override
 	public void run() {
 		// create object in Immortal Memory
-		Safelet safelet;
-		try {
-			Constructor<? extends Safelet> constructor = app.getConstructor();			
-			safelet = (Safelet) constructor.newInstance();
-			//System.out.println("LauncherTCK.run 2");
+		try {	
+			System.out.println("LauncherTCK.run 1");
+			Constructor<? extends Safelet> constructor = app.getConstructor(); 
+			safeletApp = /*(Safelet)*/ constructor.newInstance();	
+			System.out.println("LauncherTCK.run 1.2: safeletApp: " + safeletApp);
+			long immSizeMustHave = safeletApp.immortalMemorySize();
+			System.out.println("LauncherTCK.run 1.3");
+			long remainingSize = immMem.memoryRemaining();
+			System.out.println("LauncherTCK.run 3.1. ImmSize: " + immSizeMustHave + "; ImmRemaining: " + remainingSize);
+			
+//			if (remainingSize < immSizeMustHave){ // the amount of remaining immortalMemory < immSizeMustHave
+//				
+//				safeletApp.handleStartupError(Safelet.INSUFFICIENT_IMMORTAL_MEMORY, immSizeMustHave - immMem.memoryRemaining());
+//			}	
+			System.out.println("LauncherTCK.run 4");
+			safeletApp.managedMemoryBackingStoreSize();
+			
+			System.out.println("LauncherTCK.run 5");
+		    
+		    // Level_0
+		    if (Launcher.level == 0) {
+		      System.out.println("LauncherTCK.run 6.0");
+			  safeletApp.initializeApplication(null);
+			  System.out.println("LauncherTCK.run 6.1");
+			  MissionSequencer seq = safeletApp.getSequencer();
+			  if (seq == null) throw new Error("*** LauncherTCK: run: Sequencer missing \n");
+			  
+			  System.out.println("LauncherTCK.run 6.2");
+			  CyclicScheduler sch = CyclicScheduler.instance();
+			  
+			  System.out.println("LauncherTCK.run 6.3");
+			  Machine.setCurrentScheduler(sch);	
+			  sch.start(seq, mFactory);
+		    } 
+		    else	// Level_1 or Level_2
+		    {
+			  PriorityScheduler sch = PriorityScheduler.instance();			 
+			  Machine.setCurrentScheduler(sch.prioritySchedulerImpl);			  
+			  sch.insertReadyQueue(ScjProcess.createIdleProcess());
+			  
+			  System.out.println("LauncherTCK.run: safelet.getSequencer() ...");
+			  
+			  safeletApp.initializeApplication(null);
+			  MissionSequencer seq = safeletApp.getSequencer();
+			  System.out.println("LauncherTCK.run: safelet.getSequencer() end");
+			  
+			  // The sequencer inserts itself in PriorityScheduler
+			  if (seq == null) throw new Error("LauncherTCK: run: Sequencer missing");
+			  
+			  PriorityScheduler.instance().start(mFactory);
+		    }
+		} 
 
-		} catch (Throwable e){
-			System.out.println("LauncherTCK: safelet cannot be created: "+ e.getMessage());
-			throw new Error("LauncherTCK: Safelet cannot be created: " + e.getMessage());
-			//return;
+		catch (InstantiationException e){
+			System.out.println("LauncherTCK.run: InstantiationException: "+ e.getMessage());
+			//throw e; //new Error("** LauncherTCK: Safelet: " + e.getMessage());
 		}
-		
-		
-	    safelet.initializeApplication();
-	  
-	    // Level_0
-	    if (Launcher.level == 0) {
-		  MissionSequencer seq = safelet.getSequencer();
-		  if (seq == null) throw new Error("*** LauncherTCK: run: Sequencer missing \n");
-		  
-		  CyclicScheduler sch = CyclicScheduler.instance();
-		  Machine.setCurrentScheduler(sch);	
-		  sch.start(seq, mFactory);
-	    } 
-	    else	// Level_1 or Level_2
-	    {
-		  PriorityScheduler sch = PriorityScheduler.instance();			 
-		  Machine.setCurrentScheduler(sch.prioritySchedulerImpl);			  
-		  sch.insertReadyQueue(ScjProcess.createIdleProcess());
-		  
-		  MissionSequencer seq = safelet.getSequencer();
-		  // The sequencer inserts itself in PriorityScheduler
-		  if (seq == null) throw new Error("LauncherTCK: run: Sequencer missing");
-		  
-		  PriorityScheduler.instance().start(mFactory);
-	    }
+		catch (IllegalAccessException e){
+			System.out.println("LauncherTCK.run: IllegalAccessException: "+ e.getMessage());
+			//throw new Error("** LauncherTCK: Safelet: " + e.getMessage());
+	    }	
+		catch (InvocationTargetException e){
+			System.out.println("LauncherTCK.run: InvocationTargetException: "+ e.getMessage());
+			new Error("** LauncherTCK.run: NoSuchMethodException: " + e.getMessage());
+		}
+		catch (NoSuchMethodException e){
+			System.out.println("LauncherTCK.run: NoSuchMethodException: safelet cannot be created: "+ e.getMessage());
+			new Error("** LauncherTCK: Safelet: " + e.getMessage());
+		}
+		catch (Throwable e){
+			System.out.println("***LauncherTCK.run: Throwable: safelet cannot be created: "+ e.getMessage());
+			throw new Error("** LauncherTCK.run: Throwable: " + e.getMessage());
+		}
+	}
+	
+	public Safelet getTestApplication() {
+		return safeletApp;
 	}
 }

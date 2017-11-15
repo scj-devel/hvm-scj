@@ -23,27 +23,31 @@ import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.AperiodicEventHandler;
 import javax.safetycritical.LaunchLevel1;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
+import vm.Memory;
 import vm.VMTest;
 
 @SuppressWarnings("rawtypes")
 public class TestSCJSingleSleepingQueue1 {
+	
+	static boolean failed;
+	
     private static class MyAperiodicEvh extends AperiodicEventHandler {
         Mission mission;
 
         public MyAperiodicEvh(
         		PriorityParameters priority, 
         		AperiodicParameters release, 
-        		StorageParameters storageParameters, 
+        		ScopeParameters storageParameters, 
                 Mission m) {
             super(priority, release, storageParameters, configParameters);
             this.mission = m;
@@ -61,7 +65,7 @@ public class TestSCJSingleSleepingQueue1 {
         public MyPeriodicEvh(
         		PriorityParameters priority, 
         		PeriodicParameters periodicParameters, 
-        		StorageParameters storageParameters, 
+        		ScopeParameters storageParameters, 
                 AperiodicEventHandler aevh) {
             super(priority, periodicParameters, storageParameters, configParameters);
             this.aevh = aevh;
@@ -82,7 +86,7 @@ public class TestSCJSingleSleepingQueue1 {
         public MyPeriodicEvh1(
         		PriorityParameters priority, 
         		PeriodicParameters periodicParameters, 
-        		StorageParameters storageParameters) 
+        		ScopeParameters storageParameters) 
         {
             super(priority, periodicParameters, storageParameters, configParameters);
         }
@@ -155,8 +159,19 @@ public class TestSCJSingleSleepingQueue1 {
             return Const.IMMORTAL_MEM;
         }
         
-        public void initializeApplication() {
+        public void initializeApplication(String[] args) {
         }
+        
+        public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
+		}
 
         private class MySequencer extends MissionSequencer {
             private Mission[] missions;
@@ -182,6 +197,7 @@ public class TestSCJSingleSleepingQueue1 {
                 }
                 if (missions[active].terminationPending() && MyApp.count > 4) {
                     devices.Console.println("MySeq.getNextMission: null");
+                    failed = false;
                     return null;
                 } else {
                     active = (active + 1) % missions.length;
@@ -192,31 +208,43 @@ public class TestSCJSingleSleepingQueue1 {
         }
     }
 
-    static StorageParameters storageParameters_Sequencer;
-	static StorageParameters storageParameters_Handlers;
+    static ScopeParameters storageParameters_Sequencer;
+	static ScopeParameters storageParameters_Handlers;
 	static ConfigurationParameters configParameters;
   
 	public static void main(String[] args) {
-	  storageParameters_Sequencer = 
-        new StorageParameters(
-            Const.OUTERMOST_SEQ_BACKING_STORE,
-            Const.PRIVATE_MEM, 
-            Const.IMMORTAL_MEM, 
-            Const.MISSION_MEM);
+		Const.MEMORY_TRACKER_AREA_SIZE = 30000;
+		Memory.startMemoryAreaTracking();
+		//vm.Process.enableStackAnalysis();
+		
+//	  storageParameters_Sequencer = 
+//        new ScopeParameters(
+//            Const.OUTERMOST_SEQ_BACKING_STORE,
+//            Const.IMMORTAL_MEM, 
+//            Const.PRIVATE_MEM, 
+//            Const.MISSION_MEM);
+//	  
+//	  storageParameters_Handlers = 
+//        new ScopeParameters(
+//            Const.PRIVATE_BACKING_STORE, 
+//            0, 
+//            Const.PRIVATE_MEM, 
+//            0);
+		
+		storageParameters_Sequencer = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO		
+		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO
 	  
-	  storageParameters_Handlers = 
-        new StorageParameters(
-            Const.PRIVATE_BACKING_STORE, 
-            Const.PRIVATE_MEM, 
-            0, 
-            0);
-	  
-	  configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
+	    configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
+	    failed = true;
+	    
         devices.Console.println("\n***** Sleeping queue begin ************");
         // executes in heap memory
         new LaunchLevel1(new MyApp());
         devices.Console.println("***** Sleeping queue end **************");
-        VMTest.markResult(false);
+        
+        //vm.Process.reportStackUsage();
+		Memory.reportMemoryUsage();
+		VMTest.markResult(failed);
     }
 }

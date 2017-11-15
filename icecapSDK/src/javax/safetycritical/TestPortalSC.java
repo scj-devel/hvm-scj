@@ -7,6 +7,7 @@ import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.realtime.ReleaseParameters;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.SCJAllowed;
 import javax.safetycritical.annotate.Phase;
@@ -45,16 +46,17 @@ public final class TestPortalSC {
 	}
 	
 	
+	// HSO: not used any more ??
 	/**
 	 * Used by test programs to initialize and set up the behaviour of a
 	 * single core test, including allocating backing store memory.
 	 * 
 	 * @param totalBackingStore is the size of the backing store allocated for this TCK test.
 	 */
-	public static void singleCoreSetup (int totalBackingStore) {
-		LaunchSingleCore.initSingleCoreBehaviour();
-		ManagedMemory.allocateBackingStore(totalBackingStore);		
-	}
+//	public static void singleCoreSetup (int totalBackingStore) {
+//		LaunchSingleCore.initSingleCoreBehaviour();
+//		ManagedMemory.allocateBackingStore(totalBackingStore);		
+//	}
 
 	/**
 	 * Used by test programs to get  .
@@ -140,7 +142,7 @@ public final class TestPortalSC {
 	 *  
 	 * @return the storage parameter of <code>pevh</code>.
 	 */
-	public static StorageParameters getStorageParam (PeriodicEventHandler pevh) {
+	public static ScopeParameters getStorageParam (PeriodicEventHandler pevh) {
 		return pevh.storage;
 	}
 

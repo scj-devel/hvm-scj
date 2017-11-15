@@ -5,19 +5,19 @@ import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.LaunchMulticore;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 
 import vm.VMTest;
 
 public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
-	static StorageParameters storageParameters_Sequencer;
-	static StorageParameters storageParameters_Handlers;
+	static ScopeParameters storageParameters_Sequencer;
+	static ScopeParameters storageParameters_Handlers;
 	static ConfigurationParameters configParameters;
 
 	MissionSequencer ms;	
@@ -45,7 +45,7 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 			int count = 0;
 
 			public MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodicParameters,
-					StorageParameters storage, Mission m) {
+					ScopeParameters storage, Mission m) {
 				super(priority, periodicParameters, storage, configParameters);
 				this.m = m;
 			}
@@ -61,7 +61,7 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 		private static class MyPeriodicEvh1 extends PeriodicEventHandler {
 
 			public MyPeriodicEvh1(PriorityParameters priority, PeriodicParameters periodicParameters,
-					StorageParameters storage) {
+					ScopeParameters storage) {
 				super(priority, periodicParameters, storage, configParameters);
 			}
 
@@ -75,8 +75,8 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 	
 	private static class InnerMission2nd extends Mission {
 		
-		public static StorageParameters storageParameters_InnerSequencer3 = new StorageParameters(
-				100 * 1000, Const.PRIVATE_MEM, 0,
+		public static ScopeParameters storageParameters_InnerSequencer3 = new ScopeParameters(
+				100 * 1000, 0, Const.PRIVATE_MEM,
 				Const.MISSION_MEM_DEFAULT - 150 * 1000);
 
 		public void initialize() {
@@ -105,7 +105,7 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 			int count = 0;
 
 			public MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodicParameters,
-					StorageParameters storage, Mission m) {
+					ScopeParameters storage, Mission m) {
 				super(priority, periodicParameters, storage, configParameters);
 				this.m = m;
 			}
@@ -121,7 +121,7 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 		private static class MyPeriodicEvh1 extends PeriodicEventHandler {
 
 			public MyPeriodicEvh1(PriorityParameters priority, PeriodicParameters periodicParameters,
-					StorageParameters storage) {
+					ScopeParameters storage) {
 				super(priority, periodicParameters, storage, configParameters);
 			}
 
@@ -134,8 +134,8 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 
 	
 	private static class InnerMission1st extends Mission {
-		public static StorageParameters storageParameters_InnerSequencer2 = new StorageParameters(
-				200 * 1000, Const.PRIVATE_MEM, 0,
+		public static ScopeParameters storageParameters_InnerSequencer2 = new ScopeParameters(
+				200 * 1000, 0, Const.PRIVATE_MEM,
 				Const.MISSION_MEM_DEFAULT - 130 * 1000);
 		
 		public void initialize() {
@@ -164,7 +164,7 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 			int count = 0;
 
 			public MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodicParameters,
-					StorageParameters storage, Mission m) {
+					ScopeParameters storage, Mission m) {
 				super(priority, periodicParameters, storage, configParameters);
 				this.m = m;
 			}
@@ -180,7 +180,7 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 		private static class MyPeriodicEvh1 extends PeriodicEventHandler {
 
 			public MyPeriodicEvh1(PriorityParameters priority, PeriodicParameters periodicParameters,
-					StorageParameters storage) {
+					ScopeParameters storage) {
 				super(priority, periodicParameters, storage, configParameters);
 			}
 
@@ -194,7 +194,7 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 	private static class InnerSeq3rd extends MissionSequencer {
 		private int count = 0;
 
-		public InnerSeq3rd(PriorityParameters priority, StorageParameters storage) {
+		public InnerSeq3rd(PriorityParameters priority, ScopeParameters storage) {
 			super(priority, storage, configParameters, "InnerSeq 3nd");
 		}
 
@@ -213,7 +213,7 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 	private static class InnerSeq2nd extends MissionSequencer {
 		private int count = 0;
 
-		public InnerSeq2nd(PriorityParameters priority, StorageParameters storage) {
+		public InnerSeq2nd(PriorityParameters priority, ScopeParameters storage) {
 			super(priority, storage, configParameters, "InnerSeq 2nd");
 		}
 
@@ -232,7 +232,7 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 	private static class InnerSeq1st extends MissionSequencer {
 		private int count = 0;
 
-		public InnerSeq1st(PriorityParameters priority, StorageParameters storage) {
+		public InnerSeq1st(PriorityParameters priority, ScopeParameters storage) {
 			super(priority, storage, configParameters, "InnerSeq 1st");
 		}
 
@@ -251,8 +251,8 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 	
 	private static class TopLevelMission extends Mission {
 
-		public static StorageParameters storageParameters_InnerSequencer1 = new StorageParameters(
-				350 * 1000, Const.PRIVATE_MEM, 0,
+		public static ScopeParameters storageParameters_InnerSequencer1 = new ScopeParameters(
+				350 * 1000, 0, Const.PRIVATE_MEM,
 				Const.MISSION_MEM_DEFAULT - 150 * 1000);
 
 		public void initialize() {
@@ -280,7 +280,7 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 			int count = 0;
 
 			public MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodicParameters,
-					StorageParameters storage, Mission m) {
+					ScopeParameters storage, Mission m) {
 				super(priority, periodicParameters, storage, configParameters);
 				this.m = m;
 			}
@@ -296,7 +296,7 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 		private static class MyPeriodicEvh1 extends PeriodicEventHandler {
 
 			public MyPeriodicEvh1(PriorityParameters priority, PeriodicParameters periodicParameters,
-					StorageParameters storage) {
+					ScopeParameters storage) {
 				super(priority, periodicParameters, storage, configParameters);
 			}
 
@@ -316,7 +316,18 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 		return Const.IMMORTAL_MEM;
 	}
 
-	public void initializeApplication() {
+	public void initializeApplication(String[] args) {
+	}
+	
+	public long managedMemoryBackingStoreSize() {
+		return 0;
+	}
+	
+	public final boolean handleStartupError(int cause, long val) {
+		return false;
+	}
+	
+	public void cleanUp() {
 	}
 
 	private class MySequencer extends MissionSequencer {
@@ -339,12 +350,12 @@ public class TestSCJMP_NestedMissionSequencer_1 implements Safelet {
 	}
 
 	public static void main(String[] args) {
-		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				Const.PRIVATE_MEM,
-				Const.IMMORTAL_MEM - 30 * 1000, Const.MISSION_MEM - 130 * 1000);
+		storageParameters_Sequencer = new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
+				Const.IMMORTAL_MEM - 30 * 1000,
+				Const.PRIVATE_MEM, Const.MISSION_MEM - 130 * 1000);
 
-		storageParameters_Handlers = new StorageParameters(0,
-				Const.PRIVATE_MEM - 10 * 1000, 0, 0);
+		storageParameters_Handlers = new ScopeParameters(0,
+				0, Const.PRIVATE_MEM - 10 * 1000, 0);
 
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 

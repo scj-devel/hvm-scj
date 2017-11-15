@@ -19,11 +19,11 @@ package minicdj;
 
 import javax.realtime.ConfigurationParameters;
 import javax.realtime.PriorityParameters;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.LaunchLevel0;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -67,7 +67,7 @@ public class MyApp implements Safelet {
 		MySequencer() {
 			super(
 					new PriorityParameters(Priorities.PR99),
-					new StorageParameters(Const.PRIVATE_MEM, 0, 0, 0),
+					new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0),
 					new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE }));
 
 			devices.Console
@@ -98,7 +98,18 @@ public class MyApp implements Safelet {
 	}
 
 	@Override
-	public void initializeApplication() {
+	public void initializeApplication(String[] args) {
 
+	}
+	
+	public long managedMemoryBackingStoreSize() {
+		return 0;
+	}
+	
+	public final boolean handleStartupError(int cause, long val) {
+		return false;
+	}
+	
+	public void cleanUp() {
 	}
 }

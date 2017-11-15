@@ -40,6 +40,14 @@ public class Memory {
 			buffer.append("]");
 			buffer.append(StringUtil.constructString(": ", size));
 			buffer.append(StringUtil.constructString(", used = ", maxUsed));
+			
+			//HSO:
+			// MemTrk is the name of the MEMORY_TRACKER_AREA_
+			if (size > 1.20 * maxUsed + 10 && ! name.equals("MemTrk")) {
+				buffer.append(", - maybe reduce size to ");
+				buffer.append( ((12 * ((maxUsed + 9)) / 10) / 10) * 10);  // reduce to about 120% of maxUsed
+			}
+			
 			return buffer.toString();
 		}
 
@@ -56,7 +64,7 @@ public class Memory {
 
 	@IcecapCompileMe
 	private MemoryInfo addMemoryArea(Memory m) {
-
+		
 		Memory current;
 		if (areaToUseForTracking == null) {
 			areaToUseForTracking = m;
@@ -81,6 +89,7 @@ public class Memory {
 		switchToArea(current);
 		return memory;
 	}
+	
 
 	@IcecapCompileMe
 	public static void reportMemoryUsage() {
@@ -192,6 +201,14 @@ public class Memory {
 	}
 
 	public void resize(int newSize) {
+		//System.out.println("Memory.resize from: " + size + " to: " + newSize);
+		
+		// HSO:
+		if (memoryAreaTrackingEnabled) {
+			if (this.memoryInfo != null)
+				this.memoryInfo.size = newSize;
+		}
+		
 		size = newSize;
 	}
 	

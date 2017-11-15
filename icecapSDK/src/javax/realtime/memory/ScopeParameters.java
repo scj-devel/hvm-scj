@@ -25,47 +25,84 @@
  *************************************************************************/
 package javax.realtime.memory;
 
-import javax.realtime.MemoryParameters;
+import javax.safetycritical.annotate.SCJAllowed;
 
-public class ScopeParameters extends MemoryParameters {
+/**
+ * @version 1.2; - December 2013
+ * 
+ * @author Anders P. Ravn, Aalborg University, 
+ * <A HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
+ * Hans S&oslash;ndergaard, VIA University College, Denmark, 
+ * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
+ * 
+ * @scjComment
+ *  - The suggested arguments <code>messageLength</code> and <code>stackTraceLength</code>
+ *    are vendor specific, thus might be included in <code>sizes</code>. 
+ */
+@SCJAllowed
+public final class ScopeParameters extends javax.realtime.MemoryParameters {
+
+	private static final long serialVersionUID = 123456789987654101L;
 	
-	public ScopeParameters(long maxInitialArea, long maxImmortal,
-						   long maxInitialBackingStore, long maxContainingArea)
-		throws java.lang.IllegalArgumentException {
-		
-		super(maxInitialArea, maxImmortal); // ??
-		
-		//ToDo: implement
-		
+//	long totalBackingStore;
+//	long maxMissionMemory;
+	
+	long maxContainingArea; // HSO
+	long maxInitialBackingStore; // HSO
+
+	/**
+	 * Create a ScopeParameters instance with the given values.
+	 * 
+	 * @param maxInitialArea a limit on the amount of memory the schedulable may allocate
+	 * 		in its initial scoped memory area <p>
+	 */
+	@SCJAllowed
+//	public ScopeParameters(long maxInitialArea, long maxImmortal, long maxMemoryArea, long maxMissionMemory) {  // HSO: old
+//	
+//		super(maxMemoryArea, maxImmortal);
+//
+//		this.totalBackingStore = maxInitialArea;
+//		this.maxMissionMemory = maxMissionMemory;
+//	}
+	
+	public ScopeParameters(long maxInitialArea, long maxImmortal, long maxContainingArea, long maxInitialBackingStore) // HSO
+			throws java.lang.IllegalArgumentException { 
+
+		super(maxInitialArea, maxImmortal);
+		this.maxContainingArea = maxContainingArea;
+		this.maxInitialBackingStore = maxInitialBackingStore;
 	}
 	
-	public ScopeParameters(long maxInitialArea, long maxImmortal,
-						   long maxInitialBackingStore)
-		throws java.lang.IllegalArgumentException  {
-		
-		//Same as ScopeParameters(maxInitialArea, maxImmortal, MemoryParameters.UNREFERENCED,
-		//	maxParentBackingStore, MemoryParameters.UNLIMITED)
-		
-		this(maxInitialArea, maxImmortal, 0, 0); // ??
-		
-		//ToDo: implement
-		
+	public ScopeParameters(long maxInitialArea, long maxImmortal, long maxInitialBackingStore) // HSO
+			throws java.lang.IllegalArgumentException { 
+
+		this(maxInitialArea, maxImmortal, 0, maxInitialBackingStore);
 	}
-	
-	public long getMaxBackingStore() {
-		
-		//ToDo: implement
-		return -1;
+
+	public  long getMaxInitialArea() {
+		return maxInitialArea;
 	}
 	
 	public long getMaxContainingArea() {
-		
-		//ToDo: implement
-		return -1;
+		return maxContainingArea;
 	}
 
-}
+	public long getMaxInitialBackingStore() {
+		return maxInitialBackingStore;
+	}
 
+
+//	//used in JML annotation only (not public)
+//	long getBackingStoreSize() {
+//		return totalBackingStore;
+//	}
+//	
+//	//used in JML annotation only (not public)
+//	long getMaxMissionMemory() {
+//		return maxMissionMemory;
+//	}
+
+}
 
 
 

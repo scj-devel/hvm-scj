@@ -150,6 +150,16 @@ public abstract class MemoryArea extends Object {
 			backingStoreProvider.removeContainedMemory(this);
 		}
 	}
+	
+	@SCJAllowed
+	public boolean mayHoldReferenceTo(Object value) {
+		return false; // not implemented
+	}
+	
+	@SCJAllowed
+	public boolean mayHoldReferenceTo() {
+		return false; // not implemented
+	}
 
 	/**
 	 * @return The memory consumed (in bytes) in this memory area.
@@ -185,7 +195,8 @@ public abstract class MemoryArea extends Object {
 				}
 			}
 		}
-		throw new OutOfMemoryError("thrown from MemoryArea :: resizeMem : Out of backingstore exception ");
+		throw new OutOfMemoryError("thrown from MemoryArea :: resizeMem : Out of backingstore exception, memoryConsumed: "
+		        + memoryConsumed() + "; newSize: " + newSize + "; \n");
 	}
 
 	/**

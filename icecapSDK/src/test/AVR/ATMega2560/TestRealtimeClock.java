@@ -19,7 +19,7 @@ public class TestRealtimeClock extends ATMega2560TargetConfiguration {
 
 		Clock rtClock = Clock.getRealtimeClock();
 
-		RelativeTime granularity = rtClock.getResolution();
+		RelativeTime granularity = rtClock.getQueryPrecision();
 
 		AbsoluteTime start = rtClock.getTime();
 

@@ -32,6 +32,7 @@ import javax.realtime.ConfigurationParameters;
 import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
 import javax.realtime.ReleaseParameters;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
@@ -60,13 +61,14 @@ import vm.Memory;
 public abstract class ManagedEventHandler extends BoundAsyncEventHandler implements ManagedSchedulable {
 
 	PriorityParameters priority;
-	StorageParameters storage;
+	ScopeParameters storage;
 	ConfigurationParameters config;
 	
 	Process process = null;
 	Mission mission = null;
 	
-	ManagedMemory privateMemory;
+	ManagedMemory privateMemory;    // backing store of this handler ??
+	
 	ManagedMemory currentMemory;	// for multicore only
 	
 	ReleaseParameters release;
@@ -91,12 +93,12 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	 * @throws <code>IllegalArgumentException</code> if priority or release or storage parameters are null.
 	 */
 	ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, 
-		StorageParameters storage, ConfigurationParameters config) {
+		ScopeParameters storage, ConfigurationParameters config) {
 		this(priority, release, storage, config, null);
 	}
 
 	ManagedEventHandler(PriorityParameters priority, ReleaseParameters release, 
-			StorageParameters storage, ConfigurationParameters config,
+			ScopeParameters storage, ConfigurationParameters config,
 			String name) {
 		if (priority == null)
 			throw new IllegalArgumentException("priority is null");
@@ -117,8 +119,9 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 			backingStoreOfThisMemory = MemoryArea.getRemainingMemorySize();
 			currentMemory = ImmortalMemory.instance();
 		} else {
-			backingStoreOfThisMemory = (int) this.storage.totalBackingStore;
-			if(mission !=null){
+			//backingStoreOfThisMemory = (int) this.storage.totalBackingStore;
+			backingStoreOfThisMemory = (int) this.storage.getMaxInitialArea() + (int) this.storage.getMaxInitialBackingStore(); // HSO
+   			if(mission !=null){
 				this.currentMemory = mission.currMissSeq.missionMemory;
 				this.set = mission.currMissSeq.set;
 			}
@@ -130,7 +133,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 
 		String privateMemoryName = Memory.getNextMemoryName("PvtMem");		
 		
-		privateMemory = new PrivateMemory((int) this.storage.getMaximalMemoryArea(),
+		privateMemory = new PrivateMemory((int) this.storage.getMaxInitialArea(),
 		           backingStoreOfThisMemory,
 	               backingStoreProvider, 
 	               privateMemoryName);	
@@ -144,7 +147,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	@SCJAllowed(Level.SUPPORT)
 	@SCJPhase(Phase.CLEANUP)
 	public void cleanUp() {
-		System.out.println("ManagedEventHandler.cleanUp: " + this);
+		//System.out.println("ManagedEventHandler.cleanUp: " + this);
 		privateMemory.removeArea();
 		isRegistered = false;
 	}

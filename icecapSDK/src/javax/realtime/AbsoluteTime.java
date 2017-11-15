@@ -116,7 +116,7 @@ public class AbsoluteTime extends HighResolutionTime<AbsoluteTime> {
 	 * 
 	 * @param clock is the desired value for the clock.
 	 */
-	public AbsoluteTime(long millis, int nanos, Clock clock) {
+	public AbsoluteTime(long millis, int nanos, Chronograph /*Clock*/ clock) {
 		super(millis, nanos, clock);
 	}
 
@@ -125,7 +125,7 @@ public class AbsoluteTime extends HighResolutionTime<AbsoluteTime> {
 	 * 
 	 * @param clock is the desired value for the clock.
 	 */
-	public AbsoluteTime(Clock clock) {
+	public AbsoluteTime(Chronograph /*Clock */ clock) {
 		this(0, 0, clock);
 	}
 

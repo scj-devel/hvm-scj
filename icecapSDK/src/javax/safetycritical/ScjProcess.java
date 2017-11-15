@@ -42,6 +42,7 @@ import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
 import javax.realtime.TestPortalRT;
+import javax.realtime.memory.ScopeParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -112,7 +113,6 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 			public void run() {
 				try {
 					runLogic(msObject);
-
 				} catch (Throwable e) {
 					Const.reporter.processExecutionError(e);
 					
@@ -153,6 +153,8 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 	}
 
 	private void runLogic(ManagedSchedulable ms) {
+		//System.out.println ("ScjProcess.runLogic: ms: " + ms);
+		
 		if (ms instanceof ManagedEventHandler)
 			((ManagedEventHandler) ms).privateMemory.enter(ms); // execute logic;  
 		else if (ms instanceof ManagedThread)
@@ -268,8 +270,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 							INFINITE_TIME), // period
 //					new StorageParameters(2 * Const.IDLE_BACKING_STORE, new long[] { Const.IDLE_PROCESS_STACK_SIZE },
 //							2 * Const.IDLE_BACKING_STORE, 0, 0)
-					new StorageParameters(2 * Const.IDLE_BACKING_STORE, 
-							2 * Const.IDLE_BACKING_STORE, 0, 0),
+					new ScopeParameters(2 * Const.IDLE_BACKING_STORE, 0, 0, 0),
 					new ConfigurationParameters (-1, -1, new long[] { Const.IDLE_PROCESS_STACK_SIZE })
 					) 
 				{

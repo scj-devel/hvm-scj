@@ -60,11 +60,11 @@ import javax.safetycritical.annotate.SCJAllowed;
 public abstract class HighResolutionTime<T extends HighResolutionTime<T>> 
   implements Comparable<T>, Cloneable {
 	
-	Clock clock;
+	Chronograph /*Clock*/ clock;
 	long millis;
 	int nanos;
 
-	HighResolutionTime(long millis, int nanos, Clock clock) {
+	HighResolutionTime(long millis, int nanos, Chronograph /*Clock*/ clock) {
 		/* overflow */
         if ( (millis >= 0 && nanos/1000000 > Long.MAX_VALUE - millis) || 
         	 (millis < 0 && nanos/1000000 < Long.MIN_VALUE - millis) ) {
@@ -89,7 +89,7 @@ public abstract class HighResolutionTime<T extends HighResolutionTime<T>>
 	 * @return a reference to the chronograph associated with <code>this</code>.
 	 */
 	public final Chronograph getChronograph() {
-		return null;
+		return this.clock;
 	}
 	
 	/**
@@ -97,7 +97,7 @@ public abstract class HighResolutionTime<T extends HighResolutionTime<T>>
 	 * @return a reference to the clock associated with <code>this</code>.
 	 */
 	public final Clock getClock() {
-		return this.clock;
+		return (Clock)this.clock;
 	}
 
 	/**
@@ -128,7 +128,7 @@ public abstract class HighResolutionTime<T extends HighResolutionTime<T>>
 	 *    the <code>time</code> parameter is null.
 	 */
 	public void set(T time) {
-		
+		//System.out.println ("HighResolutionTime.set");
 		if (time == null)
 			throw new IllegalArgumentException("null parameter");
 		if (this.getClass() != time.getClass())

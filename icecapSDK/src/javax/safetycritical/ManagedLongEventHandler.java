@@ -4,6 +4,7 @@ import javax.realtime.BoundAsyncLongEventHandler;
 import javax.realtime.ConfigurationParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.ReleaseParameters;
+import javax.realtime.memory.ScopeParameters;
 
 public abstract class ManagedLongEventHandler extends BoundAsyncLongEventHandler implements ManagedSchedulable {
 
@@ -12,7 +13,7 @@ public abstract class ManagedLongEventHandler extends BoundAsyncLongEventHandler
 
 	String name;
 
-	StorageParameters storage;
+	ScopeParameters storage;
 	ConfigurationParameters config;
 	Mission mission = null;
 

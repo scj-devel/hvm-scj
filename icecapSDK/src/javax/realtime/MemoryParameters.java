@@ -2,22 +2,29 @@ package javax.realtime;
 
 import java.io.Serializable;
 
+import javax.safetycritical.annotate.SCJAllowed;
+
 public class MemoryParameters implements Cloneable, Serializable {
 
 	private static final long serialVersionUID = 123456789987654100L;
 	
-	protected long maxMemoryArea;
+	protected long maxInitialArea;  // maximum amount of memory in the per-release private memory area.
 	protected long maxImmortal;
 
 	public static final long NO_MAX = -1L;
+	
+	@SCJAllowed
+	public static final long UNLIMITED = -2L;
+	@SCJAllowed
+	public static final long UNREFERENCED = -3L;
 
-	public MemoryParameters(long maxMemoryArea, long maxImmortal) {
-		if (maxMemoryArea <= -1L)
-			throw new IllegalArgumentException("maxMemoryArea not legal");
+	public MemoryParameters(long maxInitialArea, long maxImmortal) {
+		if (maxInitialArea <= -1L)
+			throw new IllegalArgumentException("maxInitialArea not legal");
 		if (maxImmortal <= -1L)
 			throw new IllegalArgumentException("maxImmortal not legal");
 
-		this.maxMemoryArea = maxMemoryArea;
+		this.maxInitialArea = maxInitialArea;
 		this.maxImmortal = maxImmortal;
 	}
 	
@@ -34,8 +41,8 @@ public class MemoryParameters implements Cloneable, Serializable {
 	}
 
 	// used for JML annotation only in TestPortalRT (not public)
-	long getMaxMemoryArea() {
-		return maxMemoryArea;
+	long getMaxInitialArea() {
+		return maxInitialArea;
 	}
 
 	// used for JML annotation only (not public)

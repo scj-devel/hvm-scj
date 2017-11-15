@@ -4,6 +4,7 @@ import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.CyclicExecutive;
 import javax.safetycritical.CyclicSchedule;
 import javax.safetycritical.Frame;
@@ -11,7 +12,6 @@ import javax.safetycritical.LaunchLevel0;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
 import javax.safetycritical.LinearMissionSequencer;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
@@ -32,7 +32,7 @@ import vm.VMTest;
  *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
  */
 
-public class TestSCJSingleCyclicExecutiveLinearMissSeq1 extends CyclicExecutive implements Safelet {
+public class TestSCJSingleCyclicExecutiveLinearMissSeq1 extends CyclicExecutive  {
 
 	private static MissionSequencer sequencer;
 
@@ -103,41 +103,58 @@ public class TestSCJSingleCyclicExecutiveLinearMissSeq1 extends CyclicExecutive 
 	public CyclicSchedule getSchedule(PeriodicEventHandler[] pehs) {
 		return VendorCyclicSchedule.generate(pehs, this);
 	}
+	
+	
+	private static class MyApp implements Safelet {
+        public static int count = 0;
 
-	// Safelet methods
+        public MissionSequencer getSequencer() {
 
-	public MissionSequencer getSequencer() {
-
-		/* Signature of: LinearMissionSequencer(PriorityParameters priority, 
-		                   StorageParameters storage, ConfigurationParameters config, 
-		                   boolean repeat, MissionType mission) */
-		sequencer = new LinearMissionSequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
-				storageParameters_Sequencer, configParameters, true, this);
-		return sequencer;
+    		/* Signature of: LinearMissionSequencer(PriorityParameters priority, 
+    		                   StorageParameters storage, ConfigurationParameters config, 
+    		                   boolean repeat, MissionType mission) */
+    		sequencer = new LinearMissionSequencer(new PriorityParameters(Priorities.SEQUENCER_PRIORITY),
+    				storageParameters_Sequencer, configParameters, new TestSCJSingleCyclicExecutiveLinearMissSeq1(), true);
+    		return sequencer;
+    	}
+        
+        public long immortalMemorySize()
+        {
+          return Const.IMMORTAL_MEM;
+        }
+        
+        public void initializeApplication(String[] args) {
+        }
+        
+        public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
+		}
 	}
 
-	@Override
-	public long immortalMemorySize() {
-		return Const.IMMORTAL_MEM;
-	}
-
-	public void initializeApplication() {
-	}
-
-	static StorageParameters storageParameters_Sequencer;
-	static StorageParameters storageParameters_Handlers;
+	static ScopeParameters storageParameters_Sequencer;
+	static ScopeParameters storageParameters_Handlers;
 	static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
-		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE, Const.PRIVATE_MEM,
-				Const.IMMORTAL_MEM, Const.MISSION_MEM);
-
-		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE, Const.PRIVATE_MEM, 0, 0);
+//		storageParameters_Sequencer = new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE, Const.IMMORTAL_MEM,
+//				Const.PRIVATE_MEM, Const.MISSION_MEM);
+//
+//		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_BACKING_STORE, 0, Const.PRIVATE_MEM, 0);
+		
+		storageParameters_Sequencer = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO		
+		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO
 
 		configParameters = new ConfigurationParameters(-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		MachineFactory mFac = new POSIX64BitMachineFactory();
-		new LaunchLevel0(new TestSCJSingleCyclicExecutiveLinearMissSeq1(), mFac);
+		new LaunchLevel0 ( new MyApp(), mFac);
 		VMTest.markResult(false);
 	}
 }

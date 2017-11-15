@@ -28,6 +28,7 @@ package javax.safetycritical;
 import javax.realtime.AperiodicParameters;
 import javax.realtime.ConfigurationParameters;
 import javax.realtime.PriorityParameters;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
@@ -62,14 +63,14 @@ public abstract class AperiodicEventHandler extends ManagedEventHandler {
 	 * @throws <code>IllegalArgumentException</code> if <code>priority</code> or <code> release</code> is null.
 	 */
 	public AperiodicEventHandler(PriorityParameters priority, AperiodicParameters release,
-			StorageParameters storage, ConfigurationParameters config) {
+			ScopeParameters storage, ConfigurationParameters config) {
 		this(priority, release, storage, config, null);
 	}
 	
 	@SCJAllowed(Level.LEVEL_1)
 	@SCJPhase(Phase.INITIALIZATION)
-	AperiodicEventHandler(PriorityParameters priority, AperiodicParameters release,
-			StorageParameters storage, ConfigurationParameters config, String name) {
+	protected AperiodicEventHandler(PriorityParameters priority, AperiodicParameters release,
+			ScopeParameters storage, ConfigurationParameters config, String name) {
 		super(priority, release, storage, config, name);
 		if (priority == null || release == null)
 			throw new IllegalArgumentException("null argument");

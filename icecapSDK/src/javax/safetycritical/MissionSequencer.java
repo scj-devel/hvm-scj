@@ -29,7 +29,9 @@ package javax.safetycritical;
 
 import javax.realtime.AperiodicParameters;
 import javax.realtime.ConfigurationParameters;
+import javax.realtime.MemoryArea;
 import javax.realtime.PriorityParameters;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.annotate.AllocationContext;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
@@ -37,6 +39,8 @@ import javax.safetycritical.annotate.SCJAllowed;
 import javax.safetycritical.annotate.SCJMayAllocate;
 import javax.safetycritical.annotate.SCJMaySelfSuspend;
 import javax.safetycritical.annotate.SCJPhase;
+
+import vm.Memory;
 
 /**
  * A <code>MissionSequencer</code> oversees a sequence of Mission executions. 
@@ -54,7 +58,7 @@ import javax.safetycritical.annotate.SCJPhase;
 @SCJAllowed
 public abstract class MissionSequencer extends ManagedEventHandler {
 
-	MissionMemory missionMemory;
+	MissionMemory missionMemory = null;
 	Mission currMission;
 
 	interface State {
@@ -101,7 +105,7 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 		AllocationContext.CURRENT,
 		AllocationContext.INNER,
 		AllocationContext.OUTER})
-	public MissionSequencer(PriorityParameters priority, StorageParameters storage, 
+	public MissionSequencer(PriorityParameters priority, ScopeParameters storage, 
 			ConfigurationParameters config, String name)
 			throws IllegalStateException {
 		super(priority, new AperiodicParameters(), storage, config, name);
@@ -110,9 +114,21 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 //			+ "; maxMissionMemory " + storage.maxMissionMemory 
 //			+ "; backingstore: " + this.privateMemory + "; isOuterMost: " + isOuterMostSeq);
 		
-		missionMemory = new MissionMemory((int) storage.maxMissionMemory, // mission memory
-				privateMemory, //backingstore of sequencer
-				name);
+//		missionMemory = new MissionMemory((int) storage.maxMissionMemory, // mission memory
+//				privateMemory, //backingstore of sequencer
+//				name);
+		
+		String missionMemoryName = Memory.getNextMemoryName("MissionMem");	
+		
+//		missionMemory = new MissionMemory((int)privateMemory.size(), // mission memory  HSO
+//				privateMemory, //backingstore provider
+//				//name);
+//				missionMemoryName);
+		
+		missionMemory = new MissionMemory((int)privateMemory.size(), // mission memory  HSO
+				privateMemory, //backingstore provider
+				//name);
+				missionMemoryName);
 		
 		currState = State.START;
 		phase = Phase.INITIALIZATION;
@@ -135,7 +151,7 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 		AllocationContext.CURRENT,
 		AllocationContext.INNER,
 		AllocationContext.OUTER})
-	public MissionSequencer(PriorityParameters priority, StorageParameters storage,
+	public MissionSequencer(PriorityParameters priority, ScopeParameters storage,
 			ConfigurationParameters config) throws IllegalStateException {
 		this(priority, storage, config, null); //default name: "MissSeq" ; used internal by icecap utility tool ??
 	}
@@ -192,8 +208,14 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 				//devices.Console.println("MS.S: " + this.getName() );
 				phase = Phase.STARTUP;
 				
+				// See Draft Section 3.6.3
+//				if (missionMemory == null) {
+//					missionMemory = new MissionMemory((int)this.getCurrentMemory().getRemainingBackingStore(), // mission memory  HSO
+//						privateMemory, //backingstore provider
+//						name);
+//				}
 				currMission = getNextMission();
-
+				
 				if (currMission != null) {
 					//devices.Console.println("MS.S: " + currMission + "; memArea is: " + MemoryArea.getMemoryArea(currMission));
 					howManyMissions++;
@@ -204,6 +226,10 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 					terminateSeq = true;
 					currState = State.TERMINATE;
 				} else {
+					// See Draft 3.6.3
+					missionMemory.resizeArea(currMission.missionMemorySize());  // HSO
+					//System.out.println ("MissionSequencer.handleAsyncEven: resize missionMemory to : " + currMission.missionMemorySize());
+
 					currMission.missionTerminate = false;
 					currState = State.INITIALIZE;
 				}
@@ -229,8 +255,7 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 
 				phase = Phase.CLEANUP;
 				
-				missionMemory.enterToCleanup(currMission);
-				missionMemory.resizeArea(storage.maxMissionMemory);
+				missionMemory.enterToCleanup(currMission);				
 
 				// handleAsyncEvent continues
 				currState = State.START;

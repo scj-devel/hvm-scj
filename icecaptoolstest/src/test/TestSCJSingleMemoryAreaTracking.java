@@ -6,13 +6,13 @@ import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.AperiodicEventHandler;
 import javax.safetycritical.LaunchLevel1;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -49,7 +49,7 @@ public class TestSCJSingleMemoryAreaTracking {
 		MissionSequencer missSeq;
 
 		public MyAperiodicEvh(PriorityParameters priority, AperiodicParameters release,
-				StorageParameters storageParameters, Light light, MissionSequencer missSeq) {
+				ScopeParameters storageParameters, Light light, MissionSequencer missSeq) {
 			super(priority, release, storageParameters, configParameters);
 			this.light = light;
 			this.missSeq = missSeq;
@@ -69,7 +69,7 @@ public class TestSCJSingleMemoryAreaTracking {
 		int count = 0;
 
 		protected MyPeriodicEvh(PriorityParameters priority, PeriodicParameters periodic,
-				StorageParameters storageParameters, Light light, AperiodicEventHandler aevh) {
+				ScopeParameters storageParameters, Light light, AperiodicEventHandler aevh) {
 			super(priority, periodic, storageParameters, configParameters);
 			this.light = light;
 			this.aevh = aevh;
@@ -125,7 +125,18 @@ public class TestSCJSingleMemoryAreaTracking {
 			return Const.IMMORTAL_MEM;
 		}
 
-		public void initializeApplication() {
+		public void initializeApplication(String[] args) {
+		}
+		
+		public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
 		}
 
 		private static class MySequencer extends MissionSequencer {
@@ -150,33 +161,36 @@ public class TestSCJSingleMemoryAreaTracking {
 		}
 	}
 
-	static StorageParameters storageParameters_Sequencer;
-	static StorageParameters storageParameters_Handlers;
+	static ScopeParameters storageParameters_Sequencer;
+	static ScopeParameters storageParameters_Handlers;
 	static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
-		Const.OUTERMOST_SEQ_BACKING_STORE = 140 * 1000 + 40 * 1000;
-		Const.IMMORTAL_MEM = 20 * 1000 +3 * 1000;;
-		Const.MISSION_MEM = 23 * 1000 + 3 * 1000;
-		Const.PRIVATE_MEM = 2 * 1000 + 2 * 1000;;
-		Const.HANDLER_STACK_SIZE = Const.STACK_UNIT;
-		Const.MEMORY_TRACKER_AREA_SIZE = 30 * 1000 + 20 * 1000;;
+//		Const.OUTERMOST_SEQ_BACKING_STORE = 140 * 1000 + 40 * 1000;
+//		Const.IMMORTAL_MEM = 20 * 1000 +3 * 1000;;
+//		Const.MISSION_MEM = 23 * 1000 + 3 * 1000;
+//		Const.PRIVATE_MEM = 2 * 1000 + 2 * 1000;;
+//		Const.HANDLER_STACK_SIZE = Const.STACK_UNIT;
+//		Const.MEMORY_TRACKER_AREA_SIZE = 30 * 1000 + 20 * 1000;;
 
-		//Memory.startMemoryAreaTracking();
+		Memory.startMemoryAreaTracking();
 
-		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
+//		storageParameters_Sequencer = new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
+//				Const.IMMORTAL_MEM, Const.PRIVATE_MEM, Const.MISSION_MEM);
+//
+//		storageParameters_Handlers = new ScopeParameters(2 * Const.PRIVATE_MEM,
+//				0, Const.PRIVATE_MEM, 0);
 
-		storageParameters_Handlers = new StorageParameters(2 * Const.PRIVATE_MEM,
-				Const.PRIVATE_MEM, 0, 0);
-
+		storageParameters_Sequencer = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO		
+		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO
+		
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("\n***** TestSCJSingleMemoryAreaTracking begin *****");
-		//new LaunchLevel1(new MyApp());
+		new LaunchLevel1(new MyApp());
 		devices.Console.println("\n***** TestSCJSingleMemoryAreaTracking end *****");
 
-		//Memory.reportMemoryUsage();
+		Memory.reportMemoryUsage();
 		VMTest.markResult(false);
 	}
 

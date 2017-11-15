@@ -26,13 +26,13 @@ import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.HighResolutionTime;
 import javax.realtime.RelativeTime;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.LaunchLevel2;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
 import javax.safetycritical.Services;
-import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -70,7 +70,7 @@ public class TestSCJSingleWaitForObject2 {
 		TestSCJSingleWaitForObject2.SharedResource shared;
 
 		@IcecapCompileMe
-		public MyPEH1(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
+		public MyPEH1(PriorityParameters priority, PeriodicParameters release, ScopeParameters storage,
 				TestSCJSingleWaitForObject2.SharedResource shared, Mission m) {
 			super(priority, release, storage, configParameters);
 			this.m = m;
@@ -96,7 +96,7 @@ public class TestSCJSingleWaitForObject2 {
 
 		TestSCJSingleWaitForObject2.SharedResource shared;
 
-		public MyPEH2(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
+		public MyPEH2(PriorityParameters priority, PeriodicParameters release, ScopeParameters storage,
 				TestSCJSingleWaitForObject2.SharedResource shared) {
 			super(priority, release, storage, configParameters);
 			this.shared = shared;
@@ -146,7 +146,7 @@ public class TestSCJSingleWaitForObject2 {
 		private MyMission mission;
 		private int count = 0;
 
-		public MySequencer(PriorityParameters priority, StorageParameters storage) {
+		public MySequencer(PriorityParameters priority, ScopeParameters storage) {
 			super(priority, storage, configParameters);
 			mission = new MyMission();
 		}
@@ -177,20 +177,34 @@ public class TestSCJSingleWaitForObject2 {
 		}
 
 		@Override
-		public void initializeApplication() {
+		public void initializeApplication(String[] args) {
+		}
+		
+		public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
 		}
 	}
 
-	static StorageParameters storageParameters_Sequencer;
-	static StorageParameters storageParameters_Handlers;
+	static ScopeParameters storageParameters_Sequencer;
+	static ScopeParameters storageParameters_Handlers;
 	static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
-		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				Const.PRIVATE_MEM, Const.IMMORTAL_MEM, Const.MISSION_MEM);
-
-		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
-				Const.PRIVATE_MEM, 0, 0);
+//		storageParameters_Sequencer = new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
+//				Const.IMMORTAL_MEM, Const.PRIVATE_MEM, Const.MISSION_MEM);
+//
+//		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_BACKING_STORE,
+//				0, Const.PRIVATE_MEM, 0);
+		
+		storageParameters_Sequencer = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO		
+		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO
 		
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 

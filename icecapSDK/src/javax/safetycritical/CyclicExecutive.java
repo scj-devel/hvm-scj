@@ -90,6 +90,15 @@ public abstract class CyclicExecutive extends Mission {
 	void runExecute()
 	// overrides the method in class Mission and is called in mission memory
 	{
+		if (start != null) {  // see class Mission
+			Clock clck = Clock.getRealtimeClock();
+			AbsoluteTime time = clck.getTime();
+			if (start.compareTo(time) > 0) {
+				RelativeTime delta = start.subtract(time);
+				// delay (delta);  // delay is not implemented
+			}				
+		}
+		
 		Mission mission = Mission.getMission();
 		// The following four lines of code: to meet the precondition in getSchedule.
 		PeriodicEventHandler[] pevs = new PeriodicEventHandler[mission.getNumberOfManagedSchedulables()];

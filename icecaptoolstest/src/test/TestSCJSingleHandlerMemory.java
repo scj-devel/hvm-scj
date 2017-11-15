@@ -23,13 +23,13 @@ import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
 import javax.realtime.RelativeTime;
+import javax.realtime.memory.ScopeParameters;
 import javax.safetycritical.AperiodicEventHandler;
 import javax.safetycritical.LaunchLevel1;
 import javax.safetycritical.Mission;
 import javax.safetycritical.MissionSequencer;
 import javax.safetycritical.PeriodicEventHandler;
 import javax.safetycritical.Safelet;
-import javax.safetycritical.StorageParameters;
 import javax.scj.util.Const;
 import javax.scj.util.Priorities;
 
@@ -62,7 +62,7 @@ public class TestSCJSingleHandlerMemory {
 		private int count = 0;
 		private AperiodicEventHandler myAEH;
 
-		public MyPEH1(PriorityParameters priority, PeriodicParameters release, StorageParameters storage,
+		public MyPEH1(PriorityParameters priority, PeriodicParameters release, ScopeParameters storage,
 				AperiodicEventHandler myAEH) {
 			super(priority, release, storage, configParameters);
 			this.myAEH = myAEH;
@@ -105,7 +105,7 @@ public class TestSCJSingleHandlerMemory {
 	private static class MyPEH2 extends PeriodicEventHandler {
 		private int count = 0;
 
-		public MyPEH2(PriorityParameters priority, PeriodicParameters release, StorageParameters storage) {
+		public MyPEH2(PriorityParameters priority, PeriodicParameters release, ScopeParameters storage) {
 			super(priority, release, storage, configParameters);
 		}
 
@@ -143,7 +143,7 @@ public class TestSCJSingleHandlerMemory {
 	private static class MyAEH extends AperiodicEventHandler {
 		private Mission m;
 
-		public MyAEH(PriorityParameters priority, AperiodicParameters release, StorageParameters storage, Mission m) {
+		public MyAEH(PriorityParameters priority, AperiodicParameters release, ScopeParameters storage, Mission m) {
 			super(priority, release, storage, configParameters);
 			this.m = m;
 		}
@@ -215,12 +215,23 @@ public class TestSCJSingleHandlerMemory {
 			return Const.IMMORTAL_MEM;
 		}
 
-		public void initializeApplication() {
+		public void initializeApplication(String[] args) {
+		}
+		
+		public long managedMemoryBackingStoreSize() {
+			return 0;
+		}
+		
+		public final boolean handleStartupError(int cause, long val) {
+			return false;
+		}
+		
+		public void cleanUp() {
 		}
 	}
 
-	public static StorageParameters storageParameters_Sequencer;
-	public static StorageParameters storageParameters_Handlers;
+	public static ScopeParameters storageParameters_Sequencer;
+	public static ScopeParameters storageParameters_Handlers;
 	public static ConfigurationParameters configParameters;
 
 	public static void main(String[] args) {
@@ -245,12 +256,15 @@ public class TestSCJSingleHandlerMemory {
 		Const.setDefaultErrorReporter();
 		vm.Memory.startMemoryAreaTracking();
 
-		storageParameters_Sequencer = new StorageParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
-				2 * Const.PRIVATE_MEM, 2 * Const.IMMORTAL_MEM,
-				Const.MISSION_MEM);
-
-		storageParameters_Handlers = new StorageParameters(Const.PRIVATE_BACKING_STORE,
-				2002, 0, 0);
+//		storageParameters_Sequencer = new ScopeParameters(Const.OUTERMOST_SEQ_BACKING_STORE,
+//				2 * Const.IMMORTAL_MEM, 2 * Const.PRIVATE_MEM,
+//				Const.MISSION_MEM);
+//
+//		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_BACKING_STORE,
+//				0, 2002, 0);
+		
+		storageParameters_Sequencer = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO		
+		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO
 		
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 

@@ -20,7 +20,7 @@ public class TestRealtimeClock {
 
 		Clock rtClock = Clock.getRealtimeClock();
 
-		RelativeTime granularity = rtClock.getResolution();
+		RelativeTime granularity = rtClock.getQueryPrecision();
 		AbsoluteTime start = rtClock.getTime();
 
 		int count = ticks;

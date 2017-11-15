@@ -31,6 +31,8 @@ import icecaptools.IcecapCompileMe;
 import java.util.Iterator;
 
 import javax.realtime.AbsoluteTime;
+import javax.realtime.Clock;
+import javax.realtime.RelativeTime;
 import javax.safetycritical.annotate.Level;
 import javax.safetycritical.annotate.Phase;
 import javax.safetycritical.annotate.SCJAllowed;
@@ -69,8 +71,12 @@ public abstract class Mission {
 
 	int activeCount; // only for multiprocessor
 
+	AbsoluteTime start = null;
+	
 	@SCJAllowed
 	public Mission(AbsoluteTime start) {
+		this.start = start;
+		
 		// ToDo: implement
 	}
 
@@ -185,6 +191,15 @@ public abstract class Mission {
 	//  For cyclic schedule execution, this method is overwritten in 
 	//  the subclass CyclicExecutive. 
 	{
+		if (start != null) {
+			Clock clck = Clock.getRealtimeClock();
+			AbsoluteTime time = clck.getTime();
+			if (start.compareTo(time) > 0) {
+				RelativeTime delta = start.subtract(time);
+				// delay (delta);  // delay is not implemented
+			}				
+		}		
+			
 		phaseOfMission = Phase.RUN;
 		missionBehaviour.runExecute(this);
 	}
