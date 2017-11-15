@@ -8,6 +8,7 @@ import icecaptools.FieldOffsetCalculator;
 import icecaptools.HVMProperties;
 import icecaptools.IcecapCFunc;
 import icecaptools.IcecapCompileMe;
+import icecaptools.IcecapExistingNative;
 import icecaptools.IcecapIterator;
 import icecaptools.IcecapProgressMonitor;
 import icecaptools.IcecapTool;
@@ -738,7 +739,14 @@ public class Compiler {
 							methodInfoArray.print(", methodName_ }");
 						}
 					} else {
-						nfileManager.addNativeMethod(methodNumber, "n_" + uniqueMethodId, javaMethod,
+						IcecapExistingNative existingNative = Compiler.hasAnnotation(javaMethod, IcecapExistingNative.class);
+						String nativeMetodName = "n_" + uniqueMethodId;
+						
+						if (existingNative != null) {
+							nativeMetodName = existingNative.signature();
+						}
+						
+						nfileManager.addNativeMethod(methodNumber, nativeMetodName, javaMethod,
 								manager.skipMethodHack(currentMethod.getClassName(), currentMethod.getName(),
 										currentMethod.getSignature()));
 						methodInfoArray.print("0");
@@ -751,7 +759,7 @@ public class Compiler {
 						methodInfoArray.print(", 0");
 						if (javaMethod.isNative() || manager.skipMethodHack(currentMethod.getClassName(),
 								currentMethod.getName(), currentMethod.getSignature())) {
-							methodInfoArray.print(", " + ("n_" + uniqueMethodId).toUpperCase()); // code
+							methodInfoArray.print(", " + (nativeMetodName).toUpperCase()); // code
 						} else {
 							methodInfoArray.print(", 0"); // code
 						}
@@ -1026,7 +1034,7 @@ public class Compiler {
 		return maxLocals;
 	}
 
-	static <A extends Annotation> A hasAnnotation(Method javaMethod, Class<A> annotationClass) {
+	public static <A extends Annotation> A hasAnnotation(Method javaMethod, Class<A> annotationClass) {
 		Attribute[] attributes = javaMethod.getAttributes();
 		for (Attribute attribute : attributes) {
 			if (attribute instanceof AnnotationsAttribute) {

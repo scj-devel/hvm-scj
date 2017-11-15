@@ -637,6 +637,13 @@ int16 n_test_TestInvokeNative1_Super_testNative(int32 *sp) {
 }
 #endif
 
+#ifdef TURN_ON_LIGHT
+int16 turn_on_light(int32 *sp) {
+	sp[0] = 42;
+	return -1;
+}
+#endif
+
 /* testNative
  * param :
  * return: int

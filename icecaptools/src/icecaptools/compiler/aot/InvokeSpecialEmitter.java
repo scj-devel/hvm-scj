@@ -2,6 +2,7 @@ package icecaptools.compiler.aot;
 
 import icecaptools.BNode;
 import icecaptools.ClassfileUtils;
+import icecaptools.IcecapExistingNative;
 import icecaptools.MethodEntryPoints;
 import icecaptools.MethodOrFieldDesc;
 import icecaptools.RawByteCodes;
@@ -95,7 +96,17 @@ public abstract class InvokeSpecialEmitter {
                 output.append("   " + exceptionVariable + " = enterMethodInterpreter(" + uniqueMethodIDCallee.toUpperCase() + ", sp);\n");
             } else {
                 if (referredMethod.isNative() || toolBox.getManager().skipMethodHack(methodDesc.getClassName(), methodDesc.getName(), methodDesc.getSignature())) {
-                    uniqueMethodIDCallee = "n_" + uniqueMethodIDCallee;
+                    
+                	IcecapExistingNative existingNative = Compiler.hasAnnotation(referredMethod, IcecapExistingNative.class);
+
+					
+					if (existingNative == null) {
+						uniqueMethodIDCallee = "n_" + uniqueMethodIDCallee;
+					}
+					else
+					{
+						uniqueMethodIDCallee = existingNative.signature();
+					}
                 }
 
                 output.append("   " + exceptionVariable + " = " + uniqueMethodIDCallee + "(sp");
