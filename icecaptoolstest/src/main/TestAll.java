@@ -34,10 +34,18 @@ import util.ICompilationRegistry;
  * Then select your gcc compile command from one of the predefined commands below 
  * (look at the beginning of the 'compileAndExecute' method
  * 
+ * HSO: 01-12-2017:
+ *   If using the Linux Bash Shell on Windows 10, then 
+ *     runningBash = true;
+ *   else
+ *     runningBash = false;
+ *   
  */
 public class TestAll {
 
 	private static String icecapvmSrcPath;
+	
+	private static boolean runningBash = true;  // Using the Linux Bash Shell on Windows 10
 
 	public static void main(String[] args) throws Throwable {
 		new TestAll().performTest();
@@ -86,15 +94,7 @@ public class TestAll {
 						testlist.add((String) tests[i]);
 					}
 				}
-
-				/*
-				 * testlist = new ArrayList<String>();
-				 * testlist.add("TestFloat.java"); testlist.add("TestReturn.java");
-				 * testlist.add("ANTTestMethodCall.java");
-				 * testlist.add("TestBug3.java");
-				 * testlist.add("ANTTestInvokeVirtual.java");
-				 */
-
+				
 				for (String test : testlist) {
 					if (includeFileInTest(test)) {
 						if (!skipIt(test)) {
@@ -128,6 +128,7 @@ public class TestAll {
 
 	protected File prepareOutputFolder() throws Exception {
 		StringBuffer outputFolderPath = new StringBuffer(System.getProperty("java.io.tmpdir"));
+		
 		outputFolderPath.append(File.separatorChar);
 		outputFolderPath.append("hvm");
 		File outputFolder = new File(outputFolderPath.toString());
@@ -322,58 +323,67 @@ public class TestAll {
 	private void compileAndExecute(File outputFolder, String testClass, int testNo) throws Exception {
 		String exe = "a" + testNo + ".exe";
 		String prefix = "sudo ";
-		String gccCommand = getGCCCommand(testClass, testNo) + exe;
-
-		/* Patmos, fails at TestCVar1.java */
-		// prefix = "pasim ";
+		String gccCommand;
+		
+		if (runningBash)
+			gccCommand = "bash -c" + " \"" + getGCCCommand(testClass, testNo) + exe + "\"";
+		else
+			gccCommand= getGCCCommand(testClass, testNo) + exe;		
+		
+		System.out.println("CMD: " + gccCommand);
 
 		String executablePath = outputFolder.getAbsolutePath() + File.separatorChar + exe;
 		File executable = new File(executablePath);
+		
+		System.out.println("testClass: " + testClass);
+		System.out.println("outputFolder: " + outputFolder.getAbsolutePath());
+		System.out.println("executablePath: " + executablePath);
+		System.out.println("executable file: " + executable);
 
 		deleteIfExists(outputFolder, exe);
 
 		ShellCommand.executeCommand(gccCommand, System.out, true, outputFolder.getAbsolutePath(), null, 1000,
 				new IcecapProgressMonitor() {
-
 					@Override
 					public void worked(String string) {
 					}
-
 					@Override
 					public boolean isCanceled() {
 						return false;
 					}
-
 					@Override
 					public void worked(int i) {
 					}
-
 					@Override
 					public void subTask(String string) {
 					}
-
 				});
 		if (!executable.exists()) {
 
 			throw new Exception("Compilation failed " + executable.getAbsolutePath());
 		}
 
-		int returnValue = ShellCommand.executeCommand(prefix + executablePath, System.out, true,
+		System.out.println("before running ...");
+		
+		String runCommand;
+		
+		if (runningBash)
+			runCommand = "bash -c" + " \" ./" + exe + "\"";
+		else
+			runCommand = prefix + executablePath;
+		
+		int returnValue = ShellCommand.executeCommand(runCommand, System.out, true,
 				outputFolder.getAbsolutePath(), null, 1000, new IcecapProgressMonitor() {
-
 					@Override
 					public void worked(String string) {
 					}
-
 					@Override
 					public boolean isCanceled() {
 						return false;
 					}
-
 					@Override
 					public void worked(int i) {
 					}
-
 					@Override
 					public void subTask(String string) {
 					}
@@ -388,7 +398,9 @@ public class TestAll {
 		/* for 64 bit Linux */
 		String gccCommand = "gcc -Wall -pedantic -Os -DPC64" + getPackedAttribute(testClass) + " -DPRINTFSUPPORT"
 				+ getRefOffset(testNo)
-				+ " -DSUPPORTGC -DJAVA_HEAP_SIZE=10240000 -L/usr/lib64 classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c print.c x86_64_interrupt.s -lpthread -lrt -lm -o ";
+				+ " -DSUPPORTGC -DJAVA_HEAP_SIZE=10240000 -L/usr/lib64 "
+				+ "classes.c  icecapvm.c  methodinterpreter.c  methods.c gc.c natives_allOS.c natives_i86.c rom_heap.c allocation_point.c rom_access.c print.c x86_64_interrupt.s "
+				+ "-lpthread -lrt -lm -o ";
 
 		/* for 32 bit Linux */
 		//String gccCommand =
