@@ -437,6 +437,14 @@ int32 _strlen(const char* str) {
 }
 #endif
 
+#if defined(N_JAVA_LANG_STRICTMATH_LOG)
+int16 n_java_lang_StrictMath_log(int32 *sp)
+{
+	sp[0] = 0;
+	return -1;
+}
+#endif
+
 #if defined(N_SUN_MISC_VM_ISBOOTED)
 int16 n_sun_misc_VM_isBooted(int32 *sp)
 {
