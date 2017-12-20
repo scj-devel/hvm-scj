@@ -183,11 +183,11 @@ static signed char handleGetField(const unsigned char* method_code, int32* sp) _
 static signed char handleGetHWField(const unsigned char* method_code, int32* sp) _NOINLINE_;
 #endif
 
-#if defined(AASTORE_OPCODE_USED) || defined(FASTORE_OPCODE_USED) || defined(BASTORE_OPCODE_USED) || defined(CASTORE_OPCODE_USED) || defined(SASTORE_OPCODE_USED) || defined(LASTORE_OPCODE_USED) || defined(IASTORE_OPCODE_USED)
+#if defined(DASTORE_OPCODE_USED) || defined(AASTORE_OPCODE_USED) || defined(FASTORE_OPCODE_USED) || defined(BASTORE_OPCODE_USED) || defined(CASTORE_OPCODE_USED) || defined(SASTORE_OPCODE_USED) || defined(LASTORE_OPCODE_USED) || defined(IASTORE_OPCODE_USED)
 static unsigned char handleAStore(int32* sp, const unsigned char *method_code) _NOINLINE_;
 #endif
 
-#if defined(FALOAD_OPCODE_USED) || defined(AALOAD_OPCODE_USED) || defined(BALOAD_OPCODE_USED) || defined(CALOAD_OPCODE_USED) || defined(SALOAD_OPCODE_USED) || defined(LALOAD_OPCODE_USED) || defined(IALOAD_OPCODE_USED)
+#if defined(DALOAD_OPCODE_USED) || defined(FALOAD_OPCODE_USED) || defined(AALOAD_OPCODE_USED) || defined(BALOAD_OPCODE_USED) || defined(CALOAD_OPCODE_USED) || defined(SALOAD_OPCODE_USED) || defined(LALOAD_OPCODE_USED) || defined(IALOAD_OPCODE_USED)
 static unsigned char handleALoad(int32* sp, const unsigned char *method_code) _NOINLINE_;
 #endif
 
@@ -1116,7 +1116,9 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 				continue;
 			}
 #endif
-#if defined(AASTORE_OPCODE_USED) || defined(FASTORE_OPCODE_USED) || defined(BASTORE_OPCODE_USED) || defined(CASTORE_OPCODE_USED) || defined(SASTORE_OPCODE_USED) || defined(LASTORE_OPCODE_USED) || defined(IASTORE_OPCODE_USED)
+
+#if defined(DASTORE_OPCODE_USED) || defined(AASTORE_OPCODE_USED) || defined(FASTORE_OPCODE_USED) || defined(BASTORE_OPCODE_USED) || defined(CASTORE_OPCODE_USED) || defined(SASTORE_OPCODE_USED) || defined(LASTORE_OPCODE_USED) || defined(IASTORE_OPCODE_USED)
+			case DASTORE_OPCODE:
 			case AASTORE_OPCODE:
 			case FASTORE_OPCODE:
 			case BASTORE_OPCODE:
@@ -1135,7 +1137,8 @@ static int32 methodInterpreter(unsigned short currentMethodNumber, int32* fp) {
 				continue;
 			}
 #endif
-#if defined(FALOAD_OPCODE_USED) || defined(AALOAD_OPCODE_USED) || defined(BALOAD_OPCODE_USED) || defined(CALOAD_OPCODE_USED) || defined(SALOAD_OPCODE_USED) || defined(LALOAD_OPCODE_USED) || defined(IALOAD_OPCODE_USED)
+#if defined(DALOAD_OPCODE_USED) || defined(FALOAD_OPCODE_USED) || defined(AALOAD_OPCODE_USED) || defined(BALOAD_OPCODE_USED) || defined(CALOAD_OPCODE_USED) || defined(SALOAD_OPCODE_USED) || defined(LALOAD_OPCODE_USED) || defined(IALOAD_OPCODE_USED)
+			case DALOAD_OPCODE:
 			case FALOAD_OPCODE:
 			case AALOAD_OPCODE:
 			case BALOAD_OPCODE:
@@ -2779,7 +2782,7 @@ static signed char handleGetHWField(const unsigned char* method_code, int32* sp)
 }
 #endif
 
-#if defined(AASTORE_OPCODE_USED) || defined(FASTORE_OPCODE_USED) || defined(BASTORE_OPCODE_USED) || defined(CASTORE_OPCODE_USED) || defined(SASTORE_OPCODE_USED) || defined(LASTORE_OPCODE_USED) || defined(IASTORE_OPCODE_USED)
+#if defined(DASTORE_OPCODE_USED) || defined(AASTORE_OPCODE_USED) || defined(FASTORE_OPCODE_USED) || defined(BASTORE_OPCODE_USED) || defined(CASTORE_OPCODE_USED) || defined(SASTORE_OPCODE_USED) || defined(LASTORE_OPCODE_USED) || defined(IASTORE_OPCODE_USED)
 static unsigned char handleAStore(int32* sp, const unsigned char *method_code) {
 	int32 msb = 0, lsb = 0;
 	int32 index;
@@ -2790,7 +2793,7 @@ static unsigned char handleAStore(int32* sp, const unsigned char *method_code) {
 
 	lsb = *(--sp);
 
-	if (pgm_read_byte(method_code) == LASTORE_OPCODE) {
+	if ((pgm_read_byte(method_code) == LASTORE_OPCODE) || (pgm_read_byte(method_code) == DASTORE_OPCODE)) {
 		msb = *(--sp);
 		count++;
 	}
@@ -2848,7 +2851,7 @@ static unsigned char handleAStore(int32* sp, const unsigned char *method_code) {
 }
 #endif
 
-#if defined(FALOAD_OPCODE_USED) || defined(AALOAD_OPCODE_USED) || defined(BALOAD_OPCODE_USED) || defined(CALOAD_OPCODE_USED) || defined(SALOAD_OPCODE_USED) || defined(LALOAD_OPCODE_USED) || defined(IALOAD_OPCODE_USED)
+#if defined(DALOAD_OPCODE_USED) || defined(FALOAD_OPCODE_USED) || defined(AALOAD_OPCODE_USED) || defined(BALOAD_OPCODE_USED) || defined(CALOAD_OPCODE_USED) || defined(SALOAD_OPCODE_USED) || defined(LALOAD_OPCODE_USED) || defined(IALOAD_OPCODE_USED)
 static unsigned char handleALoad(int32* sp, const unsigned char *method_code) {
 	int32 index = *(--sp);
 	unsigned char* array = (unsigned char*) (pointer) *(--sp);
@@ -2894,7 +2897,7 @@ static unsigned char handleALoad(int32* sp, const unsigned char *method_code) {
 					lsb = *((uint32 *) (pointer) ptr);
 					break;
 				}
-				if (pgm_read_byte(method_code) == LALOAD_OPCODE) {
+				if ((pgm_read_byte(method_code) == LALOAD_OPCODE) || (pgm_read_byte(method_code) == DALOAD_OPCODE)) {
 					*sp++ = msb;
 					count++;
 				}
