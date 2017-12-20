@@ -80,7 +80,9 @@ public class ShellCommand {
 						writer.println();
 						compilerProcess = runTime.exec(commands, envp, workingDirectory);
 					}
+					
 					writer.flush();
+					
 					ProcessTerminator waiter = new ProcessTerminator(compilerProcess, timeout, monitor);
 					waiter.startWaiting();
 
@@ -97,21 +99,20 @@ public class ShellCommand {
 					} else {
 						outputStreamGobler = null;
 					}
-
 					inputStreamGobler.start();
 					errorStreamGobler.start();
-
-					compilerProcess.waitFor();
-
+					
+					compilerProcess.waitFor();					
 					waiter.stopWaiting();
-
+					
 					inputStreamGobler.join();
 					errorStreamGobler.join();
-
+					
 					if (outputStreamGobler != null) {
 						outputStreamGobler.join();
 					}
 					consoleOutputStream.flush();
+					
 					if (waiter.killedProcess()) {
 						return PROCESS_HANGED;
 					} else {
@@ -125,7 +126,8 @@ public class ShellCommand {
 				reportEnvironment(envp, System.getenv(), writer);
 				writer.flush();
 				return PROCESS_START_FAILED;
-			} catch (InterruptedException e) {
+			} 
+			catch (InterruptedException e) {
 				return PROCESS_START_FAILED;
 			}
 		} else {

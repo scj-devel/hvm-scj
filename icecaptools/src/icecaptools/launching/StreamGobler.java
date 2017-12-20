@@ -23,14 +23,15 @@ public class StreamGobler extends Thread {
 		try {
 			int count = 0;
 			while (((nextByte = inputStream.read()) != -1) && keepRunning) {
-				outputStream.write(nextByte);
+				outputStream.write(nextByte);  
 				if (count++ % 100 == 0)
 				{
-					outputStream.flush();
+					outputStream.flush();  
 				}
 			}
 			outputStream.flush();
-		} catch (IOException e) {
+		} 
+		catch (IOException e) {
 		}
 	}
 	
