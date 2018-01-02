@@ -96,9 +96,9 @@ public final class TestPortalRT {
 		return clck.getResol();
 	}
 	
-//	public static final boolean getAct(Clock clck) {
-//		return clck.getAct();
-//	}
+	public static final Clock getClock() {
+		return Clock.getClock();
+	}
 	
 	
 	/**
@@ -153,7 +153,6 @@ public final class TestPortalRT {
 	{
 		return release.missHandler;
 	}
-	
 	
 	public static	RelativeTime period(PeriodicParameters pp) {
 		return pp.period;

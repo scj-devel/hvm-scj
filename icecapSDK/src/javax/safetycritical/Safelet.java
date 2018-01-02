@@ -73,6 +73,7 @@ public interface Safelet {
 	 * 	requested size, the infrastructure shall call the <code>handleStartupError()</code> method to determine
 	 * 	whether the application should be immediately halted.
 	*/
+	@SCJAllowed(Level.SUPPORT)
 	@SCJPhase({Phase.STARTUP})
 	@SCJMayAllocate({})
 	@SCJMaySelfSuspend(false)
@@ -95,7 +96,7 @@ public interface Safelet {
 	 *  immortal memory. The application can use this method to allocate data structures in immortal memory. 
 	 *  This method shall be called exactly once by the infrastructure.
 	 *  
-	 *  @param args — The list of parameters passed to the safety-critical Java program on its invocation.
+	 *  @param args - The list of parameters passed to the safety-critical Java program on its invocation.
 	 */
 	@SCJAllowed(Level.SUPPORT)
 	@SCJPhase({Phase.STARTUP})

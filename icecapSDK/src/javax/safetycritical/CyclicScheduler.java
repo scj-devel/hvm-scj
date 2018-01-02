@@ -91,7 +91,9 @@ final class CyclicScheduler extends Scheduler implements vm.Scheduler {
 	void start(MissionSequencer seq, MachineFactory mFactory) {
 		this.seq = seq;
 		current = ManagedSchedMethods.createScjProcess(seq);
+		System.out.println("CyclicScheduler.start 2: current: " + current);
 		startScheduler(mFactory);
+		System.out.println("CyclicScheduler.start 3");
 	}
 
 	ScjProcess getCurrentProcess() {

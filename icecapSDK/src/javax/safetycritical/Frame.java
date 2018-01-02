@@ -62,13 +62,19 @@ public final class Frame {
 	 * @param handlers is the list of periodic handlers.
 	 */
 	@SCJAllowed
-	public Frame(RelativeTime duration, PeriodicEventHandler[] handlers) {
+	public Frame(RelativeTime duration, PeriodicEventHandler[] handlers) 
+	{
 		if (duration == null)
 			throw new IllegalArgumentException();
 		if (duration != null && duration.getMilliseconds() * 1000000 + duration.getNanoseconds() <= 0)
 			throw new IllegalArgumentException();
 		if (handlers == null)
 			throw new IllegalArgumentException();
+		if (handlers.length > 0) {
+			for (int i = 0; i < handlers.length; i++)
+				if (handlers[i] == null) 
+					throw new IllegalArgumentException();
+		}	
 		
 		this.duration = duration;
 		this.handlers = handlers;

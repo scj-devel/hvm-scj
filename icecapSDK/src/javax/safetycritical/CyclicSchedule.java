@@ -57,13 +57,15 @@ public final class CyclicSchedule {
 		if (Launcher.level != 0) 
 			throw new IllegalStateException("level is not 0");
 		if (frames == null)
-			throw new IllegalArgumentException("frames is null");
+			throw new IllegalArgumentException("frames is null");		
 		// frames != null:
-		if (frames != null) {
-			for (int i = 0; i < frames.length; i++) {
-				if (frames[i] == null)
-					throw new IllegalArgumentException("a frame element is null");
-			}
+		if (frames.length < 1)  // array is empty
+			throw new IllegalArgumentException("frames is empty");	
+		
+		// frames is not null and not empty
+		for (int i = 0; i < frames.length; i++) {
+			if (frames[i] == null)
+				throw new IllegalArgumentException("a frame element is null");
 		}
 
 		this.frames = new Frame[frames.length];

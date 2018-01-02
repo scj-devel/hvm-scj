@@ -62,17 +62,6 @@ class RealtimeClock extends Clock {
 		return rtClock;
 	}
 
-//	/*@ 
-//	  public behaviour
-//	    requires true;
-//	    assignable \nothing;
-//	    ensures \result.equals(new RelativeTime(0, 0, this));
-//	  @*/
-//	@Override
-//	public RelativeTime getEpochOffset() {
-//		return new RelativeTime(0, 0, this);
-//	}
-
 	/**
 	 * Returns a newly allocated RelativeTime object that indicates the nominal
 	 * interval between ticks. The return value shall be associated with this

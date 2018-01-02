@@ -599,6 +599,7 @@ int16 n_java_lang_Throwable_clinit_(int32 *sp) {
 }
 #endif
 
+
 /* fillInStackTrace
  * param :
  * return: java.lang.Throwable

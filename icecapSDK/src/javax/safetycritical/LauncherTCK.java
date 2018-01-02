@@ -8,10 +8,6 @@ import javax.safetycritical.ManagedMemory;
 import javax.safetycritical.annotate.Level;
 import javax.scj.util.Const;
 
-//import org.jmlspecs.utils.JmlAssertionError;
-
-
-
 import vm.Machine;
 import vm.MachineFactory;
 import vm.Memory;
@@ -68,6 +64,7 @@ public class LauncherTCK implements Runnable {
 		try {	
 			System.out.println("LauncherTCK.run 1");
 			Constructor<? extends Safelet> constructor = app.getConstructor(); 
+			System.out.println("LauncherTCK.run 1.1");
 			safeletApp = /*(Safelet)*/ constructor.newInstance();	
 			System.out.println("LauncherTCK.run 1.2: safeletApp: " + safeletApp);
 			long immSizeMustHave = safeletApp.immortalMemorySize();
@@ -95,9 +92,11 @@ public class LauncherTCK implements Runnable {
 			  System.out.println("LauncherTCK.run 6.2");
 			  CyclicScheduler sch = CyclicScheduler.instance();
 			  
-			  System.out.println("LauncherTCK.run 6.3");
+			  System.out.println("LauncherTCK.run 6.3: "+ sch);
 			  Machine.setCurrentScheduler(sch);	
+			  System.out.println("LauncherTCK.run 6.4");
 			  sch.start(seq, mFactory);
+			  System.out.println("LauncherTCK.run 6.5");
 		    } 
 		    else	// Level_1 or Level_2
 		    {

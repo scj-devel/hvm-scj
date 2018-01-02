@@ -60,7 +60,7 @@ import javax.safetycritical.annotate.SCJAllowed;
  */
 @SCJAllowed
 public abstract class Clock implements Chronograph {
-
+	
 	protected static vm.RealtimeClock nativeClockInstance;
 
 	// The nominal interval between ticks.
@@ -125,6 +125,7 @@ public abstract class Clock implements Chronograph {
 	 *    The returned object is associated with this clock.
 	 */
 	@SCJAllowed
+	@Override
 	public final RelativeTime getEpochOffset() {
 		return new RelativeTime(0, 0, this);
 	}
@@ -136,6 +137,7 @@ public abstract class Clock implements Chronograph {
 	 *    is associated with this clock.
 	 */
 	@SCJAllowed
+	@Override
 	public abstract RelativeTime getQueryPrecision();
 
 	/**
@@ -150,6 +152,7 @@ public abstract class Clock implements Chronograph {
 	 *    returned. The returned object is associated with <code></code>this clock.
 	 */
 	@SCJAllowed
+	@Override
 	public abstract RelativeTime getQueryPrecision(RelativeTime dest);
 
 	/**
@@ -158,6 +161,7 @@ public abstract class Clock implements Chronograph {
 	 * @return A new <code>AbsoluteTime</code> object whose time is <i>now</i> of this clock. 
 	 */
 	@SCJAllowed
+	@Override
 	public abstract AbsoluteTime getTime();
 
 	/**
@@ -169,12 +173,18 @@ public abstract class Clock implements Chronograph {
 	 * @return The resulting value.
 	 */
 	@SCJAllowed
+	@Override
 	public abstract AbsoluteTime getTime(AbsoluteTime dest);
 	
 	
 	// used for JML annotation only (not public)
 	RelativeTime getResol() {
 		return ensureResolution();
+	}
+	
+	// used for JML annotation only (not public)
+	static  Clock getClock() {
+		return RealtimeClock.rtClock;
 	}
 
 }

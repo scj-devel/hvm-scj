@@ -130,7 +130,6 @@ public abstract class PeriodicEventHandler extends ManagedEventHandler {
 		return TestPortalRT.period(releaseP).getNanoseconds() + TestPortalRT.period(releaseP).getMilliseconds()
 				* 1000000;
 	}
-	
 }
 
 
