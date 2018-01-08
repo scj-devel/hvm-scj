@@ -1,17 +1,21 @@
 package test.ARM.ATSAMe70;
 
+
 import devices.arm.ATSAMe70.ATSAMe70MinimalTargetConfiguration;
+import devices.arm.ATSAMe70.ConfigPath;
 
 public class HelloATSAM extends ATSAMe70MinimalTargetConfiguration {
 
 	@Override
 	protected String getASFIncludeLocation() {
-		return "C:\\Users\\chfs\\Downloads\\SAME70Xplained-sandbox\\src\\ASF";
+		return ConfigPath.SAME_ASF_src;
+		//return "C:\\Users\\hso\\same70\\SAME70Xplained-sandbox\\src\\ASF";
 	}
 	
 	@Override
 	protected String getASFObjectLocation() {
-		return "C:\\Users\\chfs\\Downloads\\SAME70Xplained-sandbox\\Debug\\src\\ASF";
+		return ConfigPath.SAME_DEBUG_ASF_src;
+		//return "C:\\Users\\hso\\same70\\SAME70Xplained-sandbox\\Debug\\src\\ASF";
 	}
 
 	public static void main(String[] args) {
@@ -24,7 +28,7 @@ public class HelloATSAM extends ATSAMe70MinimalTargetConfiguration {
 
 	@Override
 	public String getOutputFolder() {
-		return "C:\\home\\icecapout";
+		return ConfigPath.OUTPUT_FOLDER;
 	}
 
 }

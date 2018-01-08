@@ -53,7 +53,10 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 						"-I\"" + ASFInclude + "/sam/drivers/pio\"", "-I\"" + ASFInclude + "/sam/utils/header_files\"",
 						"-I\"" + ASFInclude + "/common/services/ioport\"", "-I\"" + ASFInclude + "/sam/drivers/mpu\"",
 						"-I\"" + ASFInclude + "/thirdparty/CMSIS/Include\"", "-I\"" + ASFInclude + "/sam/utils/cmsis/same70/include\"",
-						"-I\"C:\\Users\\chfs\\Downloads\\SAME70Xplained-sandbox\\src\\config\"",
+						
+						"-I" + ConfigPath.SAME_CONFIG_src,
+						//"-I\"C:\\Users\\hso\\same70\\SAME70Xplained-sandbox\\src\\config\"",
+						
 						"-O0", "-g", "-fdata-sections", "-ffunction-sections", "-mlong-calls", "-Wall", "-mcpu=cortex-m7",
 						"-pipe", "-fno-strict-aliasing", "-Wall", "-Wstrict-prototypes", "-Wmissing-prototypes",
 						"-Werror-implicit-function-declaration", "-Wpointer-arith", "-std=gnu99", "-ffunction-sections",
@@ -208,5 +211,11 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 	
 	protected String getASFObjectLocation() {
 		return "../../Debug/src/ASF";
+	}
+	
+	/* Use this instead of the above */
+	
+	protected String getASFLocation() {
+		return "C:\\Users\\hso\\same70\\SAME70Xplained-sandbox";
 	}
 }
