@@ -12,7 +12,8 @@ public abstract class ATSAMe70SCJTargetConfiguration extends ATSAMe70TargetConfi
 		String[][] newbuildCommands = new String[buildCommands.length + 1][];
 		int nextIndex = 0;
 		newbuildCommands[nextIndex++] = buildCommands[0];
-		newbuildCommands[nextIndex++] = new String[] { "C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-gcc.exe",
+		newbuildCommands[nextIndex++] = 
+			new String[] { ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-gcc.exe",
 				"-c",
 				"-mthumb",
 				"-Wall",

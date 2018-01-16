@@ -31,28 +31,45 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 		return new String[][] {
 				
 				new String[] {
-						"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-gcc.exe",
-						"-DPC32", "-Os", "-c", "-DJAVA_STACK_SIZE=420", "-x", "c", "-mthumb", "-D__SAME70Q21__",
-						"-DDEBUG", "-DPACKED=", "-D__SAME70Q21__", "-DBOARD=SAME70_XPLAINED", "-Dscanf=iscanf",
-						"-DARM_MATH_CM7=true", "-Dprintf=iprintf ",
-						"-I\"" +  trim(getASFIncludeLocation())+ "\"",
-						"-I\"" + ASFInclude + "/sam/drivers/uart\"",
+						//"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-gcc.exe",
+						ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-gcc.exe",
+						
+//						"-DPC32", "-Os", "-c", "-DJAVA_STACK_SIZE=420", "-x", "c", "-mthumb", "-D__SAME70Q21__",
+//						"-DDEBUG", "-DPACKED=", "-D__SAME70Q21__", "-DBOARD=SAME70_XPLAINED", "-Dscanf=iscanf",
+//						"-DARM_MATH_CM7=true", "-Dprintf=iprintf",	
+						ConfigPath.GCC_D_OPTIONS,						
+						
+						//"-I\"" +  trim(getASFIncludeLocation())+ "\"",
+						"-I" +  ConfigPath.SAME_ASF_src + File.separator,
+						
+						//"-I" +  ConfigPath.SAME_ASF_src + File.separator + "sam" + File.separator + "drivers" + File.separator + "uart",
+						"-I\"" + ASFInclude + "/sam/drivers/uart\"",						
 						"-I\"" + ASFInclude + "/sam/drivers/usart\"",
 						"-I\"" + ASFInclude + "/sam/drivers/spi\"",
 						"-I\"" + ASFInclude + "/sam/drivers/pwm\"",
 						"-I\"" + ASFInclude + "/common/utils/stdio/stdio_serial\"",
 						"-I\"" + ASFInclude + "/common/services/serial\"",						
-						"-I\"" + ASFInclude + "/thirdparty/CMSIS/Lib/GCC\"", "-I\"" + ASFInclude + "/common/utils\"",
-						"-I\"" + ASFInclude + "/sam/boards/same70_xplained\"", "-I\"" + ASFInclude + "/sam/utils/fpu\"", "-I\"../src\"",
+						"-I\"" + ASFInclude + "/thirdparty/CMSIS/Lib/GCC\"", 
+						"-I\"" + ASFInclude + "/common/utils\"",
+						"-I\"" + ASFInclude + "/sam/boards/same70_xplained\"", 
+						"-I\"" + ASFInclude + "/sam/utils/fpu\"", 
+						"-I\"../src\"",
 						"-I\"" + ASFInclude + "/common/services/clock\"",
 						"-I\"" + ASFInclude + "/common/services/fifo\"",
-						"-I\"" + ASFInclude + "/sam/utils/cmsis/same70/source/templates\"", "-I\"" + ASFInclude + "/sam/drivers/pmc\"",
-						"-I\"" + ASFInclude + "/common/services/delay\"", "-I\"" + ASFInclude + "/sam/utils\"",
-						"-I\"" + ASFInclude + "/sam/utils/preprocessor\"", "-I\"" + ASFInclude + "/sam/boards\"",
-						"-I\"" + ASFInclude + "/common/boards\"", "-I\"" + ASFInclude + "/common/services/gpio\"",
-						"-I\"" + ASFInclude + "/sam/drivers/pio\"", "-I\"" + ASFInclude + "/sam/utils/header_files\"",
-						"-I\"" + ASFInclude + "/common/services/ioport\"", "-I\"" + ASFInclude + "/sam/drivers/mpu\"",
-						"-I\"" + ASFInclude + "/thirdparty/CMSIS/Include\"", "-I\"" + ASFInclude + "/sam/utils/cmsis/same70/include\"",
+						"-I\"" + ASFInclude + "/sam/utils/cmsis/same70/source/templates\"", 
+						"-I\"" + ASFInclude + "/sam/drivers/pmc\"",
+						"-I\"" + ASFInclude + "/common/services/delay\"", 
+						"-I\"" + ASFInclude + "/sam/utils\"",
+						"-I\"" + ASFInclude + "/sam/utils/preprocessor\"", 
+						"-I\"" + ASFInclude + "/sam/boards\"",
+						"-I\"" + ASFInclude + "/common/boards\"", 
+						"-I\"" + ASFInclude + "/common/services/gpio\"",
+						"-I\"" + ASFInclude + "/sam/drivers/pio\"", 
+						"-I\"" + ASFInclude + "/sam/utils/header_files\"",
+						"-I\"" + ASFInclude + "/common/services/ioport\"", 
+						"-I\"" + ASFInclude + "/sam/drivers/mpu\"",
+						"-I\"" + ASFInclude + "/thirdparty/CMSIS/Include\"", 
+						"-I\"" + ASFInclude + "/sam/utils/cmsis/same70/include\"",
 						
 						"-I" + ConfigPath.SAME_CONFIG_src,
 						//"-I\"C:\\Users\\hso\\same70\\SAME70Xplained-sandbox\\src\\config\"",
@@ -68,8 +85,9 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 						"-Wno-deprecated-declarations", "-Wpacked", "-Wnested-externs",
 						"-Wlong-long", "-Wunreachable-code", "-Wcast-align", "--param", "max-inline-insns-single=500",
 						"-mfloat-abi=softfp", "-mfpu=fpv5-sp-d16", "natives_arm.c" },
+				
 				new String[] {
-						"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-gcc.exe",
+						ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-gcc.exe",
 						"-o", 
 						"main.elf", 
 						"*.o", 
@@ -104,22 +122,21 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 						"-Wl,--cref", 
 						"-mthumb",
 						"-T" + trim(getASFIncludeLocation()) + "/sam/utils/linker_scripts/same70/same70q21/gcc/flash.ld" },
+				
 				new String[] {
-						"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-nm.exe",
+						ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-nm.exe",
 						"--print-size", "--size-sort", "main.elf" },
 				new String[] {
-						"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-size.exe",
+						ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-size.exe",
 						"-d", "-A", "main.elf" },
 				new String[] {
-						"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-strip.exe",
+						ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-strip.exe",
 						"main.elf" },
-				new String[] { "C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\atbackend\\atprogram.exe", "-t", "edbg",
+				new String[] { ConfigPath.ATMEL_STUDIO + File.separator + "atbackend"  + File.separator + "atprogram.exe", "-t", "edbg",
 						"-i", "SWD", "-d", "atsame70q21", "program", "-f", "main.elf", }, 
 				new String[] { "cmd", "/c", "del", "main.elf" } 
 				};		
 	}
-
-	
 	
 	
 	@IcecapInlineNative(functionBody = ""
@@ -127,11 +144,14 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 			+ "   sysclk_init();\n"
 			+ "   board_init();\n"
 			+ "   configure_console();\n"
+			+ "   front_light_init();\n"
 			+ "   return -1;\n"
 			+ "}\n",
 			requiredIncludes = ""
 					+ "#include \"..\\asf.h\"\n"
-					+ "#include \"..\\console_setup.h\"\n")
+					+ "#include \"..\\console_setup.h\"\n"
+					+ "#include \"..\\scalextric\\front_light.h\"\n"
+		)
 	protected static native void initNative();
 
 	@IcecapCompileMe
@@ -169,20 +189,61 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 			initialized = true;
 		}
 
-		while (true) {
-			toggle_led();
+		for (int j = 0; j < 3000; j++) {
+			//toggle_led();
+			devices.System.delay(i);
+		}
+	}
+	
+	@IcecapCompileMe
+	protected static void delay(int i) {
+
+		for (int j = 0; j < 2000; j++) {
 			devices.System.delay(i);
 		}
 	}
 
+//	@IcecapInlineNative(functionBody = ""
+//			+ "{\n"
+//			+ "   return -1;\n"
+//			+ "}\n",
+//			requiredIncludes = "#include \"..\\asf.h\"\n"
+//			)
+//	protected static native void toggle_led();
+	
+	//@IcecapCompileMe
+	protected static void turnOnFrontLight() {
+		
+		front_light_turn_on();
+	}
+
 	@IcecapInlineNative(functionBody = ""
 			+ "{\n"
+			+ "   front_light_turn_on();\n"
+			+ "   front_light_low_beam();\n"
 			+ "   return -1;\n"
 			+ "}\n",
-			requiredIncludes = "#include \"..\\asf.h\"\n"
+			requiredIncludes = ""
+				+ "#include \"..\\scalextric\\front_light.h\"\n"
 			)
-	protected static native void toggle_led();
+	protected static native void front_light_turn_on();
+	
+	//@IcecapCompileMe
+	protected static void turnOffFrontLight() {
+		
+		front_light_turn_off();
+	}
 
+	@IcecapInlineNative(functionBody = ""
+			+ "{\n"
+			+ "   front_light_turn_off();\n"
+			+ "   return -1;\n"
+			+ "}\n",
+			requiredIncludes = ""
+				+ "#include \"..\\scalextric\\front_light.h\"\n"
+			)
+	protected static native void front_light_turn_off();	
+	
 	public static class ATSAMe70Writer implements Writer {
 
 		@Override
@@ -206,16 +267,19 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 	}
 	
 	protected String getASFIncludeLocation() {
+		//return ConfigPath.SAME_ASF_src;
 		return "../ASF";
 	}
 	
 	protected String getASFObjectLocation() {
+		//return ConfigPath.SAME_DEBUG_ASF_src;
 		return "../../Debug/src/ASF";
 	}
 	
 	/* Use this instead of the above */
 	
 	protected String getASFLocation() {
-		return "C:\\Users\\hso\\same70\\SAME70Xplained-sandbox";
+		return ConfigPath.SAME_PATH;
+		//return "C:\\Users\\hso\\same70\\SAME70Xplained-sandbox";
 	}
 }

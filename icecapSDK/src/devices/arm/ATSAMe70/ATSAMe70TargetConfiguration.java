@@ -33,10 +33,13 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 		return new String[][] {
 				
 				new String[] {
-						"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-gcc.exe",
-						"-DPC32", "-Os", "-c", "-DJAVA_STACK_SIZE=420", "-x", "c", "-mthumb", "-D__SAME70Q21__",
-						"-DDEBUG", "-DPACKED=", "-D__SAME70Q21__", "-DBOARD=SAME70_XPLAINED", "-Dscanf=iscanf",
-						"-DARM_MATH_CM7=true", "-Dprintf=iprintf ",
+						ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-gcc.exe",
+						
+//						"-DPC32", "-Os", "-c", "-DJAVA_STACK_SIZE=432", "-x", "c", "-mthumb", "-D__SAME70Q21__",
+//						"-DDEBUG", "-DPACKED=", "-D__SAME70Q21__", "-DBOARD=SAME70_XPLAINED", "-Dscanf=iscanf",
+//						"-DARM_MATH_CM7=true", "-Dprintf=iprintf ",
+						ConfigPath.GCC_D_OPTIONS,
+						
 						"-I\"" +  trim(getASFLocation())+ "\"",
 						"-I\"" + ASF + "/sam/drivers/uart\"",
 						"-I\"" + ASF + "/sam/drivers/usart\"",
@@ -67,7 +70,7 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 						"-Wlong-long", "-Wunreachable-code", "-Wcast-align", "--param", "max-inline-insns-single=500",
 						"-mfloat-abi=softfp", "-mfpu=fpv5-sp-d16", "natives_arm.c" },
 				new String[] {
-						"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-gcc.exe",
+						ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-gcc.exe",
 						"-o", 
 						"main.elf", 
 						"*.o", 
@@ -110,16 +113,16 @@ public abstract class ATSAMe70TargetConfiguration extends BaseTargetConfiguratio
 						"-mthumb",
 						"-T" + trim(getASFLocation()) + "/sam/utils/linker_scripts/same70/same70q21/gcc/flash.ld" },
 				new String[] {
-						"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-nm.exe",
+						ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-nm.exe",
 						"--print-size", "--size-sort", "main.elf" },
 				new String[] {
-						"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-size.exe",
+						ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-size.exe",
 						"-d", "-A", "main.elf" },
 				new String[] {
-						"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-strip.exe",
+						ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-strip.exe",
 						"main.elf" },
-				new String[] { "C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\atbackend\\atprogram.exe", "-t", "edbg",
-						"-i", "SWD", "-d", "atsame70q21", "program", "-f", "main.elf", }, 
+				new String[] { ConfigPath.ATMEL_STUDIO + File.separator + "atbackend" + File.separator + "atprogram.exe", 
+						"-t", "edbg", "-i", "SWD", "-d", "atsame70q21", "program", "-f", "main.elf", }, 
 				new String[] { "cmd", "/c", "del", "main.elf" } 
 				};		
 	}
