@@ -26,53 +26,61 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 	
 	@Override
 	public String[][] getBuildCommands() {
-		String ASFInclude = trim(getASFIncludeLocation());
-		String ASFObject = trim(getASFObjectLocation());
+		String srcASFInclude = trim(getSrcASFLocation());
+		String debugSrcASF = trim(getDebugSrcASFLocation());
+		String srcInclude = trim(getSrcLocation());
+		
 		return new String[][] {
 				
 				new String[] {
-						//"C:\\Program Files (x86)\\Atmel\\Studio\\7.0\\toolchain\\arm\\arm-gnu-toolchain\\bin\\arm-none-eabi-gcc.exe",
-						ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-gcc.exe",
+						ATSAMe70Config.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-gcc.exe",
 						
-//						"-DPC32", "-Os", "-c", "-DJAVA_STACK_SIZE=420", "-x", "c", "-mthumb", "-D__SAME70Q21__",
-//						"-DDEBUG", "-DPACKED=", "-D__SAME70Q21__", "-DBOARD=SAME70_XPLAINED", "-Dscanf=iscanf",
-//						"-DARM_MATH_CM7=true", "-Dprintf=iprintf",	
-						ConfigPath.GCC_D_OPTIONS,						
+						"-DPC32", "-c", "-DJAVA_STACK_SIZE=420", "-x", "c", "-mthumb", "-D__SAME70Q21__",
+						"-DDEBUG", "-DPACKED=", "-D__SAME70Q21__", "-DBOARD=SAME70_XPLAINED", "-Dscanf=iscanf",
+						"-DARM_MATH_CM7=true", "-Dprintf=iprintf",	
+						//ConfigPath.GCC_D_OPTIONS,						
 						
-						//"-I\"" +  trim(getASFIncludeLocation())+ "\"",
-						"-I" +  ConfigPath.SAME_ASF_src + File.separator,
+						"-I\"" + srcASFInclude + "\"",
+						//"-I" +  ConfigPath.SAME_src_ASF + File.separator,	
 						
-						//"-I" +  ConfigPath.SAME_ASF_src + File.separator + "sam" + File.separator + "drivers" + File.separator + "uart",
-						"-I\"" + ASFInclude + "/sam/drivers/uart\"",						
-						"-I\"" + ASFInclude + "/sam/drivers/usart\"",
-						"-I\"" + ASFInclude + "/sam/drivers/spi\"",
-						"-I\"" + ASFInclude + "/sam/drivers/pwm\"",
-						"-I\"" + ASFInclude + "/common/utils/stdio/stdio_serial\"",
-						"-I\"" + ASFInclude + "/common/services/serial\"",						
-						"-I\"" + ASFInclude + "/thirdparty/CMSIS/Lib/GCC\"", 
-						"-I\"" + ASFInclude + "/common/utils\"",
-						"-I\"" + ASFInclude + "/sam/boards/same70_xplained\"", 
-						"-I\"" + ASFInclude + "/sam/utils/fpu\"", 
-						"-I\"../src\"",
-						"-I\"" + ASFInclude + "/common/services/clock\"",
-						"-I\"" + ASFInclude + "/common/services/fifo\"",
-						"-I\"" + ASFInclude + "/sam/utils/cmsis/same70/source/templates\"", 
-						"-I\"" + ASFInclude + "/sam/drivers/pmc\"",
-						"-I\"" + ASFInclude + "/common/services/delay\"", 
-						"-I\"" + ASFInclude + "/sam/utils\"",
-						"-I\"" + ASFInclude + "/sam/utils/preprocessor\"", 
-						"-I\"" + ASFInclude + "/sam/boards\"",
-						"-I\"" + ASFInclude + "/common/boards\"", 
-						"-I\"" + ASFInclude + "/common/services/gpio\"",
-						"-I\"" + ASFInclude + "/sam/drivers/pio\"", 
-						"-I\"" + ASFInclude + "/sam/utils/header_files\"",
-						"-I\"" + ASFInclude + "/common/services/ioport\"", 
-						"-I\"" + ASFInclude + "/sam/drivers/mpu\"",
-						"-I\"" + ASFInclude + "/thirdparty/CMSIS/Include\"", 
-						"-I\"" + ASFInclude + "/sam/utils/cmsis/same70/include\"",
+						"-I\"" + srcASFInclude + "/sam/drivers/uart\"",						
+						"-I\"" + srcASFInclude + "/sam/drivers/usart\"",
 						
-						"-I" + ConfigPath.SAME_CONFIG_src,
+						//"-I" +  ConfigPath.SAME_src_ASF_sam_drivers + File.separator + "uart",
+						//"-I" +  ConfigPath.SAME_src_ASF_sam_drivers + File.separator + "usart",
+						
+						"-I\"" + srcASFInclude + "/sam/drivers/spi\"",
+						"-I\"" + srcASFInclude + "/sam/drivers/pwm\"",
+						"-I\"" + srcASFInclude + "/common/utils/stdio/stdio_serial\"",
+						"-I\"" + srcASFInclude + "/common/services/serial\"",						
+						"-I\"" + srcASFInclude + "/thirdparty/CMSIS/Lib/GCC\"", 
+						"-I\"" + srcASFInclude + "/common/utils\"",
+						"-I\"" + srcASFInclude + "/sam/boards/same70_xplained\"", 
+						"-I\"" + srcASFInclude + "/sam/utils/fpu\"", 
+						
+						//"-I\"../src\"",
+						"-I\"" + srcInclude + "\"",
+						
+						"-I\"" + srcASFInclude + "/common/services/clock\"",
+						"-I\"" + srcASFInclude + "/common/services/fifo\"",
+						"-I\"" + srcASFInclude + "/sam/utils/cmsis/same70/source/templates\"", 
+						"-I\"" + srcASFInclude + "/sam/drivers/pmc\"",
+						"-I\"" + srcASFInclude + "/common/services/delay\"", 
+						"-I\"" + srcASFInclude + "/sam/utils\"",
+						"-I\"" + srcASFInclude + "/sam/utils/preprocessor\"", 
+						"-I\"" + srcASFInclude + "/sam/boards\"",
+						"-I\"" + srcASFInclude + "/common/boards\"", 
+						"-I\"" + srcASFInclude + "/common/services/gpio\"",
+						"-I\"" + srcASFInclude + "/sam/drivers/pio\"", 
+						"-I\"" + srcASFInclude + "/sam/utils/header_files\"",
+						"-I\"" + srcASFInclude + "/common/services/ioport\"", 
+						"-I\"" + srcASFInclude + "/sam/drivers/mpu\"",
+						"-I\"" + srcASFInclude + "/thirdparty/CMSIS/Include\"", 
+						"-I\"" + srcASFInclude + "/sam/utils/cmsis/same70/include\"",						
+					
 						//"-I\"C:\\Users\\hso\\same70\\SAME70Xplained-sandbox\\src\\config\"",
+						"-I\"" + srcInclude + "/config\"", 						
+						//"-I" + ConfigPath.SAME_src_config,
 						
 						"-O0", "-g", "-fdata-sections", "-ffunction-sections", "-mlong-calls", "-Wall", "-mcpu=cortex-m7",
 						"-pipe", "-fno-strict-aliasing", "-Wall", "-Wstrict-prototypes", "-Wmissing-prototypes",
@@ -84,55 +92,58 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 						"-Wmissing-declarations", "-Wformat", "-Wmissing-format-attribute",
 						"-Wno-deprecated-declarations", "-Wpacked", "-Wnested-externs",
 						"-Wlong-long", "-Wunreachable-code", "-Wcast-align", "--param", "max-inline-insns-single=500",
-						"-mfloat-abi=softfp", "-mfpu=fpv5-sp-d16", "natives_arm.c" },
+						"-mfloat-abi=softfp", "-mfpu=fpv5-sp-d16", 	
+						//ConfigPath.GCC_W_OPTIONS,
+						
+						"natives_arm.c" },
 				
 				new String[] {
-						ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-gcc.exe",
+						ATSAMe70Config.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-gcc.exe",
 						"-o", 
 						"main.elf", 
 						"*.o", 
-						ASFObject + "/common/services/clock/same70/sysclk.o", 
-						ASFObject + "/common/services/serial/usart_serial.o",
-						ASFObject + "/common/utils/interrupt/interrupt_sam_nvic.o",
-						ASFObject + "/common/utils/stdio/read.o",
-						ASFObject + "/common/utils/stdio/write.o",
-						ASFObject + "/sam/boards/same70_xplained/init.o",
-						ASFObject + "/sam/drivers/mpu/mpu.o",
-						ASFObject + "/sam/drivers/pwm/pwm.o",
-						ASFObject + "/sam/drivers/pio/pio.o",
-						ASFObject + "/sam/drivers/pio/pio_handler.o",
-						ASFObject + "/sam/drivers/pmc/pmc.o",
-						ASFObject + "/sam/drivers/pmc/sleep.o",
-						ASFObject + "/sam/drivers/uart/uart.o",
-						ASFObject + "/sam/drivers/usart/usart.o",									
-						ASFObject + "/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o",
-						ASFObject + "/sam/utils/cmsis/same70/source/templates/system_same70.o",
-						ASFObject + "/sam/utils/syscalls/gcc/syscalls.o",	
-						ASFObject + "/../console_setup.o",
+						debugSrcASF + "/common/services/clock/same70/sysclk.o", 
+						debugSrcASF + "/common/services/serial/usart_serial.o",
+						debugSrcASF + "/common/utils/interrupt/interrupt_sam_nvic.o",
+						debugSrcASF + "/common/utils/stdio/read.o",
+						debugSrcASF + "/common/utils/stdio/write.o",
+						debugSrcASF + "/sam/boards/same70_xplained/init.o",
+						debugSrcASF + "/sam/drivers/mpu/mpu.o",
+						debugSrcASF + "/sam/drivers/pwm/pwm.o",
+						debugSrcASF + "/sam/drivers/pio/pio.o",
+						debugSrcASF + "/sam/drivers/pio/pio_handler.o",
+						debugSrcASF + "/sam/drivers/pmc/pmc.o",
+						debugSrcASF + "/sam/drivers/pmc/sleep.o",
+						debugSrcASF + "/sam/drivers/uart/uart.o",
+						debugSrcASF + "/sam/drivers/usart/usart.o",									
+						debugSrcASF + "/sam/utils/cmsis/same70/source/templates/gcc/startup_same70.o",
+						debugSrcASF + "/sam/utils/cmsis/same70/source/templates/system_same70.o",
+						debugSrcASF + "/sam/utils/syscalls/gcc/syscalls.o",	
+						debugSrcASF + "/../console_setup.o",
 						"-mthumb", 
 						"-Wl,-Map=\"main.map\"", 
 						"-Wl,--start-group",
 						"-larm_cortexM7lfsp_math_softfp", 
 						"-lm", 
 						"-Wl,--end-group",
-						"-L\"" + trim(getASFIncludeLocation()) + "/thirdparty/CMSIS/Lib/GCC\"", 
+						"-L\"" + trim(getSrcASFLocation()) + "/thirdparty/CMSIS/Lib/GCC\"", 
 						"-Wl,--gc-sections",
 						"-mcpu=cortex-m7", 
 						"-Wl,--entry=Reset_Handler", 
 						"-Wl,--cref", 
 						"-mthumb",
-						"-T" + trim(getASFIncludeLocation()) + "/sam/utils/linker_scripts/same70/same70q21/gcc/flash.ld" },
+						"-T" + trim(getSrcASFLocation()) + "/sam/utils/linker_scripts/same70/same70q21/gcc/flash.ld" },
 				
 				new String[] {
-						ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-nm.exe",
+						ATSAMe70Config.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-nm.exe",
 						"--print-size", "--size-sort", "main.elf" },
 				new String[] {
-						ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-size.exe",
+						ATSAMe70Config.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-size.exe",
 						"-d", "-A", "main.elf" },
 				new String[] {
-						ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-strip.exe",
+						ATSAMe70Config.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-strip.exe",
 						"main.elf" },
-				new String[] { ConfigPath.ATMEL_STUDIO + File.separator + "atbackend"  + File.separator + "atprogram.exe", "-t", "edbg",
+				new String[] { ATSAMe70Config.ATMEL_STUDIO + File.separator + "atbackend"  + File.separator + "atprogram.exe", "-t", "edbg",
 						"-i", "SWD", "-d", "atsame70q21", "program", "-f", "main.elf", }, 
 				new String[] { "cmd", "/c", "del", "main.elf" } 
 				};		
@@ -266,20 +277,42 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 		}
 	}
 	
-	protected String getASFIncludeLocation() {
-		//return ConfigPath.SAME_ASF_src;
-		return "../ASF";
+//	protected String getSrcASFLocation() {
+//		//return ConfigPath.SAME_src_ASF;
+//		return "../ASF";
+//	}
+//	
+//	protected String getDebugSrcASFLocation() {
+//		//return ConfigPath.SAME_DEBUG_ASF_src;
+//		return "../../Debug/src/ASF";
+//	}
+//	
+//	protected String getSrcLocation() {
+//		//return ConfigPath.SAME_ASF_src;
+//		return "../../src";
+//	}
+//	
+//	public String getOutputFolder() { 
+//		return ConfigPath.OUTPUT_FOLDER;
+//	}
+
+
+	protected String getSrcASFLocation() {	
+		return ATSAMe70Config.SAME_src_ASF;
 	}
 	
-	protected String getASFObjectLocation() {
-		//return ConfigPath.SAME_DEBUG_ASF_src;
-		return "../../Debug/src/ASF";
+	protected String getDebugSrcASFLocation() {
+		return ATSAMe70Config.SAME_Debug_src_ASF;
 	}
 	
-	/* Use this instead of the above */
-	
-	protected String getASFLocation() {
-		return ConfigPath.SAME_PATH;
-		//return "C:\\Users\\hso\\same70\\SAME70Xplained-sandbox";
+	protected String getSrcLocation() {
+		return ATSAMe70Config.SAME_src;
 	}
+
+	@Override
+	public String getOutputFolder() { 
+		return ATSAMe70Config.OUTPUT_FOLDER;
+	}
+	
+	
 }

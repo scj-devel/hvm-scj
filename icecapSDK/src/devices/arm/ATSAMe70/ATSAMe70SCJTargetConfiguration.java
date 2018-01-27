@@ -13,7 +13,7 @@ public abstract class ATSAMe70SCJTargetConfiguration extends ATSAMe70TargetConfi
 		int nextIndex = 0;
 		newbuildCommands[nextIndex++] = buildCommands[0];
 		newbuildCommands[nextIndex++] = 
-			new String[] { ConfigPath.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-gcc.exe",
+			new String[] { ATSAMe70Config.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-gcc.exe",
 				"-c",
 				"-mthumb",
 				"-Wall",
