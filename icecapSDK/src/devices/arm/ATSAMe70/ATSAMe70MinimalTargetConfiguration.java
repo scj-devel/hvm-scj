@@ -38,17 +38,14 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 						"-DPC32", "-c", "-DJAVA_STACK_SIZE=420", "-x", "c", "-mthumb", "-D__SAME70Q21__",
 						"-DDEBUG", "-DPACKED=", "-D__SAME70Q21__", "-DBOARD=SAME70_XPLAINED", "-Dscanf=iscanf",
 						"-DARM_MATH_CM7=true", "-Dprintf=iprintf",	
-						//ConfigPath.GCC_D_OPTIONS,						
+						//ATSAMe70Config.GCC_D_OPTIONS,	  // does not work
 						
+						"-I\"" + srcInclude + "\"",
+						"-I\"" + srcInclude + "/config\"",
 						"-I\"" + srcASFInclude + "\"",
-						//"-I" +  ConfigPath.SAME_src_ASF + File.separator,	
 						
 						"-I\"" + srcASFInclude + "/sam/drivers/uart\"",						
-						"-I\"" + srcASFInclude + "/sam/drivers/usart\"",
-						
-						//"-I" +  ConfigPath.SAME_src_ASF_sam_drivers + File.separator + "uart",
-						//"-I" +  ConfigPath.SAME_src_ASF_sam_drivers + File.separator + "usart",
-						
+						"-I\"" + srcASFInclude + "/sam/drivers/usart\"",						
 						"-I\"" + srcASFInclude + "/sam/drivers/spi\"",
 						"-I\"" + srcASFInclude + "/sam/drivers/pwm\"",
 						"-I\"" + srcASFInclude + "/common/utils/stdio/stdio_serial\"",
@@ -56,11 +53,7 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 						"-I\"" + srcASFInclude + "/thirdparty/CMSIS/Lib/GCC\"", 
 						"-I\"" + srcASFInclude + "/common/utils\"",
 						"-I\"" + srcASFInclude + "/sam/boards/same70_xplained\"", 
-						"-I\"" + srcASFInclude + "/sam/utils/fpu\"", 
-						
-						//"-I\"../src\"",
-						"-I\"" + srcInclude + "\"",
-						
+						"-I\"" + srcASFInclude + "/sam/utils/fpu\"",						
 						"-I\"" + srcASFInclude + "/common/services/clock\"",
 						"-I\"" + srcASFInclude + "/common/services/fifo\"",
 						"-I\"" + srcASFInclude + "/sam/utils/cmsis/same70/source/templates\"", 
@@ -76,12 +69,8 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 						"-I\"" + srcASFInclude + "/common/services/ioport\"", 
 						"-I\"" + srcASFInclude + "/sam/drivers/mpu\"",
 						"-I\"" + srcASFInclude + "/thirdparty/CMSIS/Include\"", 
-						"-I\"" + srcASFInclude + "/sam/utils/cmsis/same70/include\"",						
-					
-						//"-I\"C:\\Users\\hso\\same70\\SAME70Xplained-sandbox\\src\\config\"",
-						"-I\"" + srcInclude + "/config\"", 						
-						//"-I" + ConfigPath.SAME_src_config,
-						
+						"-I\"" + srcASFInclude + "/sam/utils/cmsis/same70/include\"",	
+				
 						"-O0", "-g", "-fdata-sections", "-ffunction-sections", "-mlong-calls", "-Wall", "-mcpu=cortex-m7",
 						"-pipe", "-fno-strict-aliasing", "-Wall", "-Wstrict-prototypes", "-Wmissing-prototypes",
 						"-Werror-implicit-function-declaration", "-Wpointer-arith", "-std=gnu99", "-ffunction-sections",
@@ -92,8 +81,9 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 						"-Wmissing-declarations", "-Wformat", "-Wmissing-format-attribute",
 						"-Wno-deprecated-declarations", "-Wpacked", "-Wnested-externs",
 						"-Wlong-long", "-Wunreachable-code", "-Wcast-align", "--param", "max-inline-insns-single=500",
-						"-mfloat-abi=softfp", "-mfpu=fpv5-sp-d16", 	
-						//ConfigPath.GCC_W_OPTIONS,
+						"-mfloat-abi=softfp", "-mfpu=fpv5-sp-d16", 
+						
+						//ATSAMe70Config.GCC_W_OPTIONS,  // does not work
 						
 						"natives_arm.c" },
 				
@@ -126,13 +116,13 @@ public abstract class ATSAMe70MinimalTargetConfiguration extends BaseTargetConfi
 						"-larm_cortexM7lfsp_math_softfp", 
 						"-lm", 
 						"-Wl,--end-group",
-						"-L\"" + trim(getSrcASFLocation()) + "/thirdparty/CMSIS/Lib/GCC\"", 
+						"-L\"" + srcASFInclude + "/thirdparty/CMSIS/Lib/GCC\"", 
 						"-Wl,--gc-sections",
 						"-mcpu=cortex-m7", 
 						"-Wl,--entry=Reset_Handler", 
 						"-Wl,--cref", 
 						"-mthumb",
-						"-T" + trim(getSrcASFLocation()) + "/sam/utils/linker_scripts/same70/same70q21/gcc/flash.ld" },
+						"-T" + srcASFInclude + "/sam/utils/linker_scripts/same70/same70q21/gcc/flash.ld" },
 				
 				new String[] {
 						ATSAMe70Config.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-nm.exe",

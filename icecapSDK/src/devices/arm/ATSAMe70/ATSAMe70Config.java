@@ -8,7 +8,7 @@ public abstract class ATSAMe70Config {
 	
 	// At HSO: C:\Users\hso\same70ToBoard
 	public static String SAME_LOCATION = 
-		System.getProperty("user.home") +  File.separator + "same70ToBoard"; //"sameHelloCar";  // "same70ToBoard";
+		System.getProperty("user.home") +  File.separator + "sameHelloCar"; //"sameHelloCar";  // "same70ToBoard";
 	
 			
 	// Maybe this should be changed too:
@@ -47,10 +47,10 @@ public abstract class ATSAMe70Config {
 //	"-DPC32", "-c", "-DJAVA_STACK_SIZE=420", "-x", "c", "-mthumb", "-D__SAME70Q21__",
 //	"-DDEBUG", "-DPACKED=", "-D__SAME70Q21__", "-DBOARD=SAME70_XPLAINED", "-Dscanf=iscanf",
 //	"-DARM_MATH_CM7=true", "-Dprintf=iprintf",	
-	public static final String GCC_D_OPTIONS =  // deleted same70ToBoard
-		"-DPC32 -c -DJAVA_STACK_SIZE=420 -x c -mthumb "
-		+ "-D__SAME70Q21__ -DDEBUG -DPACKED -D__SAME70Q21__ -DBOARD=SAME70_XPLAINED "
-		+ "-Dscanf=iscanf -DARM_MATH_CM7=true -Dprintf=iprintf ";
+	public static final String GCC_D_OPTIONS =  
+		"-DPC32 -c -DJAVA_STACK_SIZE=420 -x c -mthumb -D__SAME70Q21__ "
+		+ "-DDEBUG -DPACKED -D__SAME70Q21__ -DBOARD=SAME70_XPLAINED -Dscanf=iscanf "
+		+ "-DARM_MATH_CM7=true -Dprintf=iprintf ";
 	
 //	"-O0", "-g", "-fdata-sections", "-ffunction-sections", "-mlong-calls", "-Wall", "-mcpu=cortex-m7",
 //	"-pipe", "-fno-strict-aliasing", "-Wall", "-Wstrict-prototypes", "-Wmissing-prototypes",
@@ -63,7 +63,7 @@ public abstract class ATSAMe70Config {
 //	"-Wno-deprecated-declarations", "-Wpacked", "-Wnested-externs",
 //	"-Wlong-long", "-Wunreachable-code", "-Wcast-align", "--param", "max-inline-insns-single=500",
 //	"-mfloat-abi=softfp", "-mfpu=fpv5-sp-d16", 	
-	public static final String GCC_W_OPTIONS =  // option -O with 0 or s or .. ?
+	public static final String GCC_W_OPTIONS =  
 		"-O0 -g -fdata-sections -ffunction-sections -mlong-calls -Wall -mcpu=cortex-m7 "
 		+ "-pipe -fno-strict-aliasing -Wall -Wstrict-prototypes -Wmissing-prototypes "
 		+ "-Werror-implicit-function-declaration -Wpointer-arith -std=gnu99 -ffunction-sections "
