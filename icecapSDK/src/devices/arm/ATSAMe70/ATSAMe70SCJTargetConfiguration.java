@@ -1,4 +1,5 @@
 package devices.arm.ATSAMe70;
+
 public abstract class ATSAMe70SCJTargetConfiguration extends ATSAMe70TargetConfiguration {
 
 	@Override
@@ -15,12 +16,15 @@ public abstract class ATSAMe70SCJTargetConfiguration extends ATSAMe70TargetConfi
 		newbuildCommands[nextIndex++] = 
 			new String[] { ATSAMe70Config.ATMEL_TOOLCHAIN_bin + "arm-none-eabi-gcc.exe",
 				"-c",
-				"-mthumb",
 				"-Wall",
+				"-mthumb",				
 				"-mcpu=cortex-m7",
 				"-mfloat-abi=softfp",
 				"-mfpu=fpv5-sp-d16",
-				"arm7_interrupt.s" };
+				"arm7_interrupt.s"
+				//"x86_32_interrupt.s"  // HSO: added x86_32_interrupt.s
+			}; 
+		
 		for (int inx = 1; inx <  buildCommands.length; inx++)
 		{
 			newbuildCommands[nextIndex++] = buildCommands[inx];

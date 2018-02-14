@@ -23,14 +23,14 @@ public class TestBluetooth extends ATSAMe70TargetConfiguration {
 		int waterMark = mainArea.consumedMemory();
 
 		while (true) {
-			poll_mpu_9520();
+			//poll_mpu_9520();
 
 			/*devices.Console.println(
 					"xx-raw: " + get_raw_x_accel() + ", y-raw: " + get_raw_y_accel() + ", z-raw: " + get_raw_z_accel()); */
-			devices.Console.println("init: " + bt_initialised);
-			if (bt_initialised > 0) {
-				bt_send_bytes("UUUU");
-			}
+//			devices.Console.println("init: " + bt_initialised);
+//			if (bt_initialised > 0) {
+//				bt_send_bytes("UUUU");
+//			}
 			for (byte i = 0; i < 4; i++) {
 				devices.System.delay(20000);
 			}
