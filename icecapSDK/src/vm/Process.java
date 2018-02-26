@@ -22,7 +22,8 @@ public class Process {
 	public Process(ProcessLogic logic, int[] stack) {
 		this.logic = logic;
 		this.stack = stack;
-		this.isFinished = false;
+		this.isFinished = false;		
+		
 		processExecuter = new ProcessExecutor(this);
 		
 		sp = Machine.getMachineFactory().getProcessSP();

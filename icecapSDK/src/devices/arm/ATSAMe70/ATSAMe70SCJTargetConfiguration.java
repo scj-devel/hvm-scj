@@ -22,7 +22,6 @@ public abstract class ATSAMe70SCJTargetConfiguration extends ATSAMe70TargetConfi
 				"-mfloat-abi=softfp",
 				"-mfpu=fpv5-sp-d16",
 				"arm7_interrupt.s"
-				//"x86_32_interrupt.s"  // HSO: added x86_32_interrupt.s
 			}; 
 		
 		for (int inx = 1; inx <  buildCommands.length; inx++)

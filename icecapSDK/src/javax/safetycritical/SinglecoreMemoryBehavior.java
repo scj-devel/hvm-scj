@@ -10,7 +10,7 @@ final class SinglecoreMemoryBehavior extends MemoryBehavior {
 	void enter(Runnable logic, ManagedMemory memory) throws IllegalArgumentException {
 		if (logic == null || !(logic instanceof ManagedSchedulable))
 			throw new IllegalArgumentException();
-
+		
 		ManagedSchedulable ms = (ManagedSchedulable) logic;
 		
 		if (ms instanceof ManagedEventHandler) {
@@ -45,7 +45,7 @@ final class SinglecoreMemoryBehavior extends MemoryBehavior {
 	void executeInArea(Runnable logic, ManagedMemory memory) throws IllegalArgumentException {
 		if (logic == null)
 			throw new IllegalArgumentException("executeInArea: logic is null");
-
+		
 		if (ManagedMemory.flag) {
 			ManagedMemory.flag = false;
 			Memory currentMem = vm.Memory.getHeapArea();

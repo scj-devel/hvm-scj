@@ -22,9 +22,7 @@ public abstract class LaunchSingleCore extends Launcher {
 	protected void startLevel0() {
 		MissionSequencer seq = app.getSequencer();
 		CyclicScheduler sch = CyclicScheduler.instance();
-		
 		Machine.setCurrentScheduler(sch);
-		
 		sch.start(seq, mFactory);
 	}
 	

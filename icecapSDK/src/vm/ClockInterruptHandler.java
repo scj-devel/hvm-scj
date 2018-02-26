@@ -85,7 +85,7 @@ public class ClockInterruptHandler implements InterruptHandler, ProcessLogic {
 		enable();
 		this.currentProcess = process;
 		mFactory.startSystemTick();
-		System.out.println("ClockInterruptHandler.startClockHandler");
+		//devices.Console.println("ClockInterruptHandler.startClockHandler");
 		yield();
 	}
 

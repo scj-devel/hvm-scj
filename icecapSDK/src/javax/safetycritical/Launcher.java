@@ -71,7 +71,6 @@ public abstract class Launcher implements Runnable {
 		this.app = app;
 		Launcher.level = level;
 		init();
-		
 		createImmortalMemory().executeInArea(this);
 	}
 
