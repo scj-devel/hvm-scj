@@ -91,6 +91,7 @@ public class LauncherAtSame70 implements Runnable {
 		    } 
 		    else	// Level_1 or Level_2
 		    {
+		      System.out.println("LauncherAtSame70.run: Level 1");
 			  PriorityScheduler sch = PriorityScheduler.instance();			 
 			  Machine.setCurrentScheduler(sch.prioritySchedulerImpl);			  
 			  sch.insertReadyQueue(ScjProcess.createIdleProcess());
