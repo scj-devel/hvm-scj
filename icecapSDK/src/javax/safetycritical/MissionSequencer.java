@@ -228,7 +228,7 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 				} else {
 					// See Draft 3.6.3
 					missionMemory.resizeArea(currMission.missionMemorySize());  // HSO
-					//System.out.println ("MissionSequencer.handleAsyncEven: resize missionMemory to : " + currMission.missionMemorySize());
+					System.out.println ("MissionSequencer.hAsyncEven: resize missMem to : " + currMission.missionMemorySize());
 
 					currMission.missionTerminate = false;
 					currState = State.INITIALIZE;

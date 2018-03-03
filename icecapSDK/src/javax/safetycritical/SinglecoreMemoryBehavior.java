@@ -15,7 +15,9 @@ final class SinglecoreMemoryBehavior extends MemoryBehavior {
 		
 		if (ms instanceof ManagedEventHandler) {
 			ManagedEventHandler mevh = (ManagedEventHandler) ms;			
-			Memory mem = Memory.switchToArea(mevh.privateMemory.getDelegate());			
+			Memory mem = Memory.switchToArea(mevh.privateMemory.getDelegate());	
+			
+			//System.out.println("SinglecoreMemoryBehavior.enter, ms: " + ms);
 			logic.run();			
 			Memory.switchToArea(mem);
 			mevh.privateMemory.getDelegate().reset(0);
@@ -58,6 +60,7 @@ final class SinglecoreMemoryBehavior extends MemoryBehavior {
 				throw new IllegalArgumentException("executeInArea: process is null");
 
 			Memory mem = Memory.switchToArea(memory.getDelegate());
+			//System.out.println("SinglecoreMemoryBehavior.executeInArea");
 			logic.run();
 			Memory.switchToArea(mem);
 		}

@@ -36,7 +36,7 @@ public class LauncherAtSame70 implements Runnable {
 		immMem = createImmortalMemory(); 
 		
 		immMem.executeInArea(this);
-		System.out.println("LauncherAtSame70.constructor end");
+		System.out.println("LauncherAtSame70.constructor end \n");
 	}
 		
 	private void setHandlers() {
@@ -67,7 +67,7 @@ public class LauncherAtSame70 implements Runnable {
 			System.out.println("LauncherAtSame70.run 1.2: safeletApp: " + safeletApp);
 			long immSizeMustHave = safeletApp.immortalMemorySize();
 			long remainingSize = immMem.memoryRemaining();
-			System.out.println("LauncherAtSame70.run 3.1. ImmSize: " + immSizeMustHave + "; ImmRemaining: " + remainingSize);
+			//System.out.println("LauncherAtSame70.run 3.1. ImmSize: " + immSizeMustHave + "; ImmRemaining: " + remainingSize);
 			
 //			if (remainingSize < immSizeMustHave){ // the amount of remaining immortalMemory < immSizeMustHave
 //				
@@ -75,7 +75,7 @@ public class LauncherAtSame70 implements Runnable {
 //			}
 			safeletApp.managedMemoryBackingStoreSize();
 			
-			System.out.println("LauncherAtSame70.run 5");
+			//System.out.println("LauncherAtSame70.run 5");
 		    
 		    // Level_0
 		    if (Launcher.level == 0) {
@@ -85,7 +85,7 @@ public class LauncherAtSame70 implements Runnable {
 		
 			  CyclicScheduler sch = CyclicScheduler.instance();
 			  
-			  System.out.println("LauncherAtSame70.run 6.3: "+ sch);
+			  //System.out.println("LauncherAtSame70.run 6.3: "+ sch);
 			  Machine.setCurrentScheduler(sch);	
 			  sch.start(seq, mFactory);
 		    } 

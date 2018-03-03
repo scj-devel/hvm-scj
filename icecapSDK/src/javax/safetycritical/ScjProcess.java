@@ -108,7 +108,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 		this.msObject = ms;
 		this.state = State.NEW;
 		this.exceptionReporter = new ExceptionReporter();
-
+		
 		this.process = new vm.Process(new ProcessLogic() {
 			public void run() {
 				try {
@@ -153,8 +153,6 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 	}
 
 	private void runLogic(ManagedSchedulable ms) {
-		//System.out.println ("ScjProcess.runLogic: ms: " + ms);
-		
 		if (ms instanceof ManagedEventHandler)
 			((ManagedEventHandler) ms).privateMemory.enter(ms); // execute logic;  
 		else if (ms instanceof ManagedThread)

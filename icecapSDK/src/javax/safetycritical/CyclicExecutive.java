@@ -98,7 +98,6 @@ public abstract class CyclicExecutive extends Mission {
 				// delay (delta);  // delay is not implemented
 			}				
 		}
-		
 		Mission mission = Mission.getMission();
 		// The following four lines of code: to meet the precondition in getSchedule.
 		PeriodicEventHandler[] pevs = new PeriodicEventHandler[mission.getNumberOfManagedSchedulables()];
@@ -112,7 +111,6 @@ public abstract class CyclicExecutive extends Mission {
 		}
 
 		CyclicSchedule schedule = getSchedule(pevs);
-
 		/**
 		 * local reference to frames
 		 */
@@ -126,11 +124,9 @@ public abstract class CyclicExecutive extends Mission {
 		while (!missionTerminate) {
 			PeriodicEventHandler[] handlers = frames[step].handlers;
 			int n = handlers.length;
-
 			for (int handlerIdx = 0; handlerIdx < n; handlerIdx++) {
 				handlers[handlerIdx].privateMemory.enter(handlers[handlerIdx]);
 			}
-
 			// wait for frame.duration to expire 
 			waitForNextFrame(frames[step].duration);
 
