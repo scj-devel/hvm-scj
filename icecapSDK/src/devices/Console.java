@@ -54,4 +54,28 @@ public class Console {
 	public static void println(int i) {
 		println(StringUtil.constructString("", i));
 	}
+	
+	public static void print(float f) {  // print f with 4 decimals
+		
+		print (floatToString(f));
+	}
+	
+	public static String floatToString (float f) {  // HSO: perhaps later: improve to n decimals
+		float x = f;
+		if (f < 0) 
+			x = -f;
+		
+		// Extract integer part
+	    int ipart = (int) x;
+	    
+	    // Extract floating part
+	    int fpart = Math.round((x - ipart) * 10000);  // four decimals
+	    
+	    String str = StringUtil.constructString("", ipart) + "." + StringUtil.constructString("", fpart);
+		
+	    if (f < 0) 
+		    return "-" + str;
+		else 		    
+		    return str;
+	}
 }
