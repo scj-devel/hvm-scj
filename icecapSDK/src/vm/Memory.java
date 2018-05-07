@@ -39,7 +39,7 @@ public class Memory {
 			buffer.append(StringUtil.constructString("[", instanceCount));
 			buffer.append("]");
 			buffer.append(StringUtil.constructString(": ", size));
-			buffer.append(StringUtil.constructString(", used = ", maxUsed));
+			buffer.append(StringUtil.constructString(", used: ", maxUsed));
 			
 			//HSO:
 			// MemTrk is the name of the MEMORY_TRACKER_AREA_
