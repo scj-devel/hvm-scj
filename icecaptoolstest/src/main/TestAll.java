@@ -45,7 +45,7 @@ public class TestAll {
 
 	private static String icecapvmSrcPath;
 	
-	private static boolean runningBash = true;  // Using the Linux Bash Shell on Windows 10
+	private static boolean runningBash = false;  // Using the Linux Bash Shell on Windows 10
 
 	public static void main(String[] args) throws Throwable {
 		new TestAll().performTest();
@@ -212,7 +212,7 @@ public class TestAll {
 	}
 
 	private static String[] skippedClasses = { "TestSCJWaitAndNotify2.java", "TestSCJLevel2Thread0.java",
-			"TestSCJStep0.java", "TestGC1.java", "TestGCSimple.java", /* "TestCalculator.java",
+			"TestSCJStep0.java", "TestGC1.java", "TestGCSimple.java", "TestCurrentThread.java", "TestJavaLangThread4.java", "TestJavaLangThread5.java",/* "TestCalculator.java",
 									 "TestNewFloat.java",
 									 */"TestLong.java", "TestMiniTests.java", "TestCAS.java" };
 

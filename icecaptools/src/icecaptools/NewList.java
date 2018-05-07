@@ -212,4 +212,8 @@ public class NewList {
     public static int getInstanceCount() {
         return instanceCount;
     }
+
+	public boolean hasElement(String clazzName) {
+		return strings.containsKey(clazzName);
+	}
 }

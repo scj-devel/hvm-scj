@@ -491,14 +491,16 @@ public class DependencyWalker {
 						}
 					}
 				}
-				/* if (ClassfileUtils.findMethodInClass(clazz, "initializeSystemClass", "()V") != null) {
-				     entryPoints = converter.convertByteCode(bnode, clazz, "initializeSystemClass", "()V", true);
-				
-				     if (entryPoints != null) {
-				         NewList calledMethodResult = analyseMethod(entryPoints, newList);
-				         mergeResult(newList, mr, calledMethodResult);
-				     }
-				 }*/
+				/*
+				 * if (ClassfileUtils.findMethodInClass(clazz,
+				 * "initializeSystemClass", "()V") != null) { entryPoints =
+				 * converter.convertByteCode(bnode, clazz,
+				 * "initializeSystemClass", "()V", true);
+				 * 
+				 * if (entryPoints != null) { NewList calledMethodResult =
+				 * analyseMethod(entryPoints, newList); mergeResult(newList, mr,
+				 * calledMethodResult); } }
+				 */
 			} else {
 				if (ClassfileUtils.hasClassInitializer(clazz)) {
 					observer.classInitializerUsed(clazz.getClassName());
@@ -569,8 +571,10 @@ public class DependencyWalker {
 		clazzName = methodAndClass.getClazz().getClassName();
 		String methodName = bnode.getMethodName();
 
-		observer.methodCodeUsed(clazzName, methodName, bnode.getMethodSig(), true);
-
+		if (newList.hasElement(clazzName)) {
+			observer.methodCodeUsed(clazzName, methodName, bnode.getMethodSig(), true);
+		}
+		
 		if (clazzName.equals("java.lang.Float")) {
 			if (methodName.equals("toString")) {
 				ensureStringInitializer(bnode, newList, mr);
