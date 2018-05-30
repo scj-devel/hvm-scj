@@ -87,7 +87,7 @@ public final class ScopeParameters extends javax.realtime.MemoryParameters {
 		return maxContainingArea;
 	}
 
-	public long getMaxInitialBackingStore() {
+	public long getMaxBackingStore() {
 		return maxInitialBackingStore;
 	}
 

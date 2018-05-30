@@ -120,7 +120,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 			currentMemory = ImmortalMemory.instance();
 		} else {
 			//backingStoreOfThisMemory = (int) this.storage.totalBackingStore;
-			backingStoreOfThisMemory = (int) this.storage.getMaxInitialArea() + (int) this.storage.getMaxInitialBackingStore(); // HSO
+			backingStoreOfThisMemory = (int) this.storage.getMaxInitialArea() + (int) this.storage.getMaxBackingStore(); // HSO
    			if(mission !=null){
 				this.currentMemory = mission.currMissSeq.missionMemory;
 				this.set = mission.currMissSeq.set;
