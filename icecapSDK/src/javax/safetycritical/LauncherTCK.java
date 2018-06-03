@@ -55,7 +55,7 @@ public class LauncherTCK implements Runnable {
 		}
 		
 		System.out.println("LauncherTCK.createImmortalMemory: " + Const.IMMORTAL_MEM);
-		return new ImmortalMemory(Const.IMMORTAL_MEM);
+		return new ImmortalMemory(Const.IMMORTAL_MEM );
 	}
 
 	@Override
@@ -67,19 +67,26 @@ public class LauncherTCK implements Runnable {
 			System.out.println("LauncherTCK.run 1.1");
 			safeletApp = /*(Safelet)*/ constructor.newInstance();	
 			System.out.println("LauncherTCK.run 1.2: safeletApp: " + safeletApp);
-			long immSizeMustHave = safeletApp.immortalMemorySize();
+			
+			long desiredImmMemSize = safeletApp.immortalMemorySize();
 			System.out.println("LauncherTCK.run 1.3");
-			long remainingSize = immMem.memoryRemaining();
-			System.out.println("LauncherTCK.run 3.1. ImmSize: " + immSizeMustHave + "; ImmRemaining: " + remainingSize);
+			long remainingImmMemSize = immMem.memoryRemaining();
+			System.out.println("LauncherTCK.run 3.1. desired imm: " + desiredImmMemSize + "; ImmRemaining: " + remainingImmMemSize);
 			
-//			if (remainingSize < immSizeMustHave){ // the amount of remaining immortalMemory < immSizeMustHave
-//				
-//				safeletApp.handleStartupError(Safelet.INSUFFICIENT_IMMORTAL_MEMORY, immSizeMustHave - immMem.memoryRemaining());
-//			}	
-			System.out.println("LauncherTCK.run 4");
-			safeletApp.managedMemoryBackingStoreSize();
+			if (remainingImmMemSize < desiredImmMemSize){ // the amount of remaining immortalMemory < immSizeMustHave
+				
+				safeletApp.handleStartupError(Safelet.INSUFFICIENT_IMMORTAL_MEMORY, desiredImmMemSize - remainingImmMemSize);
+			}
 			
-			System.out.println("LauncherTCK.run 5");
+			long desiredBackingStoreSize = safeletApp.managedMemoryBackingStoreSize();
+			long backingStoreSize = Const.OUTERMOST_SEQ_BACKING_STORE;			
+			System.out.println("LauncherTCK.run 5: desired backingStore: " + desiredBackingStoreSize
+					+ "; available backingStore: " + backingStoreSize);
+			
+			if (backingStoreSize < desiredBackingStoreSize){ // the amount of backing store size < desiredBackingStoreSize
+				
+				safeletApp.handleStartupError(Safelet.INSUFFICIENT_BACKING_STORE, desiredBackingStoreSize - backingStoreSize);
+			}
 		    
 		    // Level_0
 		    if (Launcher.level == 0) {

@@ -64,11 +64,12 @@ public final class Const {
 
 	public static int OVERALL_BACKING_STORE = OVERALL_BACKING_STORE_DEFAULT;
 	public static int IDLE_BACKING_STORE = IDLE_BACKING_STORE_DEFAULT;
+	
 	public static int IMMORTAL_MEM = IMMORTAL_MEM_DEFAULT;
-	public static int OUTERMOST_SEQ_BACKING_STORE = 
+	
+	public static int OUTERMOST_SEQ_BACKING_STORE =  // The top-level mission seq. backingstore area ?
 			OVERALL_BACKING_STORE - IMMORTAL_MEM - IDLE_BACKING_STORE;
 			
-
 	public static int MISSION_MEM = MISSION_MEM_DEFAULT;
 
 	public static int PRIVATE_BACKING_STORE = PRIVATE_BACKING_STORE_DEFAULT;
