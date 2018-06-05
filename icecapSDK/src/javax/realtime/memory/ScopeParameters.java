@@ -69,6 +69,12 @@ public final class ScopeParameters extends javax.realtime.MemoryParameters {
 			throws java.lang.IllegalArgumentException { 
 
 		super(maxInitialArea, maxImmortal);
+		
+		if (maxContainingArea <= UNLIMITED)
+			throw new IllegalArgumentException("maxContainingArea not legal");
+		if (maxInitialBackingStore <= UNLIMITED)
+			throw new IllegalArgumentException("maxInitialBackingStore not legal");
+
 		this.maxContainingArea = maxContainingArea;
 		this.maxInitialBackingStore = maxInitialBackingStore;
 	}
@@ -77,10 +83,6 @@ public final class ScopeParameters extends javax.realtime.MemoryParameters {
 			throws java.lang.IllegalArgumentException { 
 
 		this(maxInitialArea, maxImmortal, 0, maxInitialBackingStore);
-	}
-
-	public  long getMaxInitialArea() {
-		return maxInitialArea;
 	}
 	
 	public long getMaxContainingArea() {

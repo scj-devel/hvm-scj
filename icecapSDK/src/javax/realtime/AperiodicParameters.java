@@ -69,4 +69,9 @@ public class AperiodicParameters extends ReleaseParameters {
 			AsyncEventHandler missHandler) {
 		super(deadline, missHandler);
 	}
+	
+	public java.lang.Object clone() {
+		System.out.println("AperiodicParameters.clone");
+		return super.clone();
+	}
 }

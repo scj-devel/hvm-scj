@@ -65,7 +65,7 @@ public class LauncherTCK implements Runnable {
 			System.out.println("LauncherTCK.run 1");
 			Constructor<? extends Safelet> constructor = app.getConstructor(); 
 			System.out.println("LauncherTCK.run 1.1");
-			safeletApp = /*(Safelet)*/ constructor.newInstance();	
+			safeletApp = constructor.newInstance();	
 			System.out.println("LauncherTCK.run 1.2: safeletApp: " + safeletApp);
 			
 			long desiredImmMemSize = safeletApp.immortalMemorySize();

@@ -101,5 +101,10 @@ public class PeriodicParameters extends ReleaseParameters {
 
 		this.period = new RelativeTime(period);
 	}
+	
+	public java.lang.Object clone() {
+		System.out.println("PeriodicParameters.clone");
+		return super.clone();
+	}
 
 }

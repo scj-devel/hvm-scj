@@ -184,36 +184,36 @@ public final class TestPortalRT {
 		return configParam.getStackTraceLength();
 	}
 	
-	/**
-	 * Used by test programs to get <code>NO_MAX</code>.
-	 * 
-	 * @return the <code>NO_MAX</code> defined in <code>MemoryParameters</code>.
-	 */	
-	public static long getNO_MAX() {
-		return MemoryParameters.NO_MAX;
-	}
+//	/**
+//	 * Used by test programs to get <code>NO_MAX</code>.
+//	 * 
+//	 * @return the <code>NO_MAX</code> defined in <code>MemoryParameters</code>.
+//	 */	
+//	public static long getNO_MAX() {
+//		return MemoryParameters.NO_MAX;
+//	}
 
-	/**
-	 * Used by test programs to get the memory parameter's maximum memory area.
-	 *
-	 * @param mp is a memory parameter.
-	 * 
-	 * @return the maximum memory area of the parameter <code>mp</code>.
-	 */	
-	public static long getMaxInitialArea(MemoryParameters mp) {
-		return mp.getMaxInitialArea();
-	}
+//	/**
+//	 * Used by test programs to get the memory parameter's maximum memory area.
+//	 *
+//	 * @param mp is a memory parameter.
+//	 * 
+//	 * @return the maximum memory area of the parameter <code>mp</code>.
+//	 */	
+//	public static long getMaxInitialArea(MemoryParameters mp) {
+//		return mp.getMaxInitialArea();
+//	}
 
-	/**
-	 * Used by test programs to get the memory parameter's maximum immortal memory size.
-	 *
-	 * @param mp is a memory parameter.
-	 * 
-	 * @return the maximum immortal area of the parameter <code>mp</code>.
-	 */	
-	public static long getMaxImmortal(MemoryParameters mp) {
-		return mp.getMaxImmortal();
-	}
+//	/**
+//	 * Used by test programs to get the memory parameter's maximum immortal memory size.
+//	 *
+//	 * @param mp is a memory parameter.
+//	 * 
+//	 * @return the maximum immortal area of the parameter <code>mp</code>.
+//	 */	
+//	public static long getMaxImmortal(MemoryParameters mp) {
+//		return mp.getMaxImmortal();
+//	}
 }
 
 

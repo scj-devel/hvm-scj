@@ -11,17 +11,15 @@ public class MemoryParameters implements Cloneable, Serializable {
 	protected long maxInitialArea;  // maximum amount of memory in the per-release private memory area.
 	protected long maxImmortal;
 
-	public static final long NO_MAX = -1L;
+	//public static final long NO_MAX = -1L;
 	
 	@SCJAllowed
-	public static final long UNLIMITED = -2L;
-	@SCJAllowed
-	public static final long UNREFERENCED = -3L;
+	public static final long UNLIMITED = -1L;
 
 	public MemoryParameters(long maxInitialArea, long maxImmortal) {
-		if (maxInitialArea <= -1L)
+		if (maxInitialArea <= UNLIMITED)
 			throw new IllegalArgumentException("maxInitialArea not legal");
-		if (maxImmortal <= -1L)
+		if (maxImmortal <= UNLIMITED)
 			throw new IllegalArgumentException("maxImmortal not legal");
 
 		this.maxInitialArea = maxInitialArea;
@@ -40,13 +38,13 @@ public class MemoryParameters implements Cloneable, Serializable {
 		}
 	}
 
-	// used for JML annotation only in TestPortalRT (not public)
-	long getMaxInitialArea() {
+	// public in Draft, Version 0.113, 1 June 2018
+	public long getMaxInitialArea() { 		
 		return maxInitialArea;
 	}
 
-	// used for JML annotation only (not public)
-	long getMaxImmortal() {
+	// public in Draft, Version 0.113, 1 June 2018
+	public long getMaxImmortal() {
 		return maxImmortal;
 	}
 }
