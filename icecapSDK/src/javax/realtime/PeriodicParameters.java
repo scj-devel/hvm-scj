@@ -87,19 +87,30 @@ public class PeriodicParameters extends ReleaseParameters {
 			AsyncEventHandler missHandler) {
 		super(deadline == null ? period : deadline, missHandler);
 
-		if (start == null)
+		if (start == null || start.millis < 0 || (start.millis == 0 && start.nanos < 0) )
 			this.start = new RelativeTime();
 		else
 			this.start = new RelativeTime(start);
 
-		if (period == null || period.millis < 0 || (period.millis == 0 && period.nanos == 0)
-				|| start.clock != period.clock)
+		if (period == null || period.millis < 0 || (period.millis == 0 && period.nanos <= 0)
+				//|| start.clock != period.clock
+			)
 			throw new IllegalArgumentException("period is null or not vaild");
 		if (deadline != null
-				&& (deadline.millis < 0 || (deadline.millis == 0 && deadline.nanos == 0) || period.clock != deadline.clock))
+				&& (deadline.millis < 0 || (deadline.millis == 0 && deadline.nanos == 0) 
+				      //	|| period.clock != deadline.clock
+				   )
+			)
 			throw new IllegalArgumentException("deadline is null or not vaild");
 
 		this.period = new RelativeTime(period);
+		
+		// now start != null, period != null, deadline != null
+		if (this.start.getClock() != this.period.getClock() || 
+			this.start.getClock() != this.deadline.getClock() || 
+			this.period.getClock() != this.deadline.getClock()
+		   )
+		   throw new IllegalArgumentException("clock is not vaild");
 	}
 	
 	public java.lang.Object clone() {

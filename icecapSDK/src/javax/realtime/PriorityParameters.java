@@ -64,6 +64,12 @@ import javax.safetycritical.annotate.SCJAllowed;
 public class PriorityParameters extends SchedulingParameters {
 
 	int priority;
+	Affinity affinity;
+	
+	public PriorityParameters(int priority, Affinity affinity) {
+		this.priority = priority;
+		this.affinity = affinity;
+	}
 
 	/**
 	 * Creates an instance of <code>PriorityParameters</code> 
