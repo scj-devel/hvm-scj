@@ -99,15 +99,17 @@ public abstract class Clock implements Chronograph {
 	}
 	
 	
-//	protected abstract void clearAlarm();
-//	
-//	public abstract RelativeTime getDrivePrecision();
-//	
-//	public abstract RelativeTime getDrivePrecision(RelativeTime dest);
-//	
-//	protected abstract void setAlarm(long milliseconds, int nanoseconds);
-//	
-//	protected abstract void triggerAlarm(); 
+	protected abstract void clearAlarm();
+	
+	public abstract RelativeTime getDrivePrecision();
+	
+	public abstract RelativeTime getDrivePrecision(RelativeTime dest);
+	
+	protected abstract void setAlarm(long milliseconds, int nanoseconds);
+	
+	protected final void triggerAlarm() {
+		// ToDo
+	}
 
 	
 	/**
@@ -162,7 +164,10 @@ public abstract class Clock implements Chronograph {
 	 */
 	@SCJAllowed
 	@Override
-	public abstract AbsoluteTime getTime();
+	public final AbsoluteTime getTime()  // Is final now and not abstract
+	{
+		return getTime(new AbsoluteTime(0, 0, this));
+	}
 
 	/**
 	 * Stores <i>now</i> of this clock in <code>dest</code>.

@@ -60,6 +60,8 @@ final class ManagedSchedMethods {
 			return new ScjMissionSequencerProcess(target, ps);
 		} else if (target instanceof AperiodicEventHandler) {
 			return new ScjAperiodicEventHandlerProcess(target, ps);
+		} else if (target instanceof AperiodicLongEventHandler) {
+			return new ScjAperiodicLongEventHandlerProcess(target, ps);
 		} else if (target instanceof ManagedThread) {
 			return new ScjManagedThreadProcess(target, ps);
 		} else {

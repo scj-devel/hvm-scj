@@ -12,6 +12,12 @@ final class MulticoreHandlerBehavior extends HandlerBehavior {
 	}
 
 	@Override
+	void aperiodicLongHandlerRelease(AperiodicLongEventHandler handler) {
+		handler.fireNextRelease();
+		handler.isReleased = true;
+	}
+	
+	@Override
 	boolean oneshotHandlerDeschedule(OneShotEventHandler handler) {
 		if (handler.process.executable.startTimer_c > 0 || handler.state == 0) {
 			handler.deschedulePending = true;
@@ -59,7 +65,7 @@ final class MulticoreHandlerBehavior extends HandlerBehavior {
 			handler.currentSeqIsOuterMost = true;
 
 			OSProcess.setOuterMostMissionSequencer(handler.priority.getPriority(), handler);
-			handler.set = Launcher.level == 1 ? findAffinitySetForLevel1()
+			handler.affinitySet = Launcher.level == 1 ? findAffinitySetForLevel1()
 					: AffinitySet.AFFINITY_SET[0];
 		}
 	}

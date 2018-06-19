@@ -69,7 +69,7 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 	ManagedMemory currentMemory;	//for multicore only
 	
 	String name;
-	AffinitySet set = null;
+	AffinitySet affinitySet = null;
 
 	// used in JML spec. methods
 	boolean isRegistered;
@@ -114,7 +114,7 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 				backingStoreProvider, privateMemoryName);
 		
 		this.currentMemory = mission.currMissSeq.missionMemory;
-		this.set = mission.currMissSeq.set;
+		this.affinitySet = mission.currMissSeq.affinitySet;
 		
 		this.isRegistered = false;
 		this.isInMissionScope = false;
@@ -203,7 +203,7 @@ public class ManagedThread extends RealtimeThread implements ManagedSchedulable 
 	}
 	
 	AffinitySet getAffinitySet(){
-		return this.set;
+		return this.affinitySet;
 	}
 	
 }

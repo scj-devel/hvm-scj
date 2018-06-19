@@ -16,8 +16,6 @@ final class SinglecoreMemoryBehavior extends MemoryBehavior {
 		if (ms instanceof ManagedEventHandler) {
 			ManagedEventHandler mevh = (ManagedEventHandler) ms;			
 			Memory mem = Memory.switchToArea(mevh.privateMemory.getDelegate());	
-			
-			//System.out.println("SinglecoreMemoryBehavior.enter, ms: " + ms);
 			logic.run();			
 			Memory.switchToArea(mem);
 			mevh.privateMemory.getDelegate().reset(0);
@@ -30,9 +28,11 @@ final class SinglecoreMemoryBehavior extends MemoryBehavior {
 			mth.privateMemory.getDelegate().reset(0);
 		} else {
 			// (ms is instanceof ManagedLongEventHandler)
-			devices.Console.println("ManagedMemory.enter: UPS ManagedLongEventHandler not implemented");
-			//ManagedLongEventHandler mevh = (ManagedLongEventHandler) ms;
-			// finish this ...
+			ManagedLongEventHandler mlevh = (ManagedLongEventHandler) ms;
+			Memory mem = Memory.switchToArea(mlevh.privateMemory.getDelegate());				
+			logic.run();			
+			Memory.switchToArea(mem);
+			mlevh.privateMemory.getDelegate().reset(0);
 		}
 	}
 	

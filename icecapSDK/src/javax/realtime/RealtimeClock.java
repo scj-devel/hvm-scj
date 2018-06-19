@@ -92,11 +92,11 @@ class RealtimeClock extends Clock {
 	 
 
 	//@Override
-	public AbsoluteTime getTime() {
-		return getTime(new AbsoluteTime(0, 0, this));
-	}
+//	public AbsoluteTime getTime() {
+//		return getTime(new AbsoluteTime(0, 0, this));
+//	}
 
-	//@Override
+	@Override
 	@IcecapCompileMe
 	public AbsoluteTime getTime(AbsoluteTime dest) {
 		if (dest == null)
@@ -111,6 +111,26 @@ class RealtimeClock extends Clock {
 		dest.clock = Clock.getRealtimeClock();
 
 		return dest;
+	}
+	
+	@Override
+    protected void clearAlarm() {
+    	// ToDo
+    }
+	
+	@Override
+	public RelativeTime getDrivePrecision() {
+		return getQueryPrecision();
+	}
+	
+	@Override
+	public RelativeTime getDrivePrecision(RelativeTime dest) {
+		return getQueryPrecision(dest);
+	}
+	
+	@Override
+	protected void setAlarm(long milliseconds, int nanoseconds) {
+		// ToDo
 	}
 
 }

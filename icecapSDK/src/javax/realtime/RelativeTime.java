@@ -235,4 +235,8 @@ public class RelativeTime extends HighResolutionTime<RelativeTime> {
 		}
 		return dest;
 	}
+	
+	public int compareTo(RelativeTime time) {
+		return super.compareTo(time);
+	}
 }

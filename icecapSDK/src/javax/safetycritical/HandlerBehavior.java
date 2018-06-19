@@ -5,6 +5,8 @@ import javax.realtime.HighResolutionTime;
 abstract class HandlerBehavior {
 
 	abstract void aperiodicHandlerRelease(AperiodicEventHandler handler);
+	
+	abstract void aperiodicLongHandlerRelease(AperiodicLongEventHandler handler);
 
 	abstract boolean oneshotHandlerDeschedule(OneShotEventHandler handler);
 

@@ -36,7 +36,6 @@ public interface Chronograph {
 	public RelativeTime getQueryPrecision();
 	public AbsoluteTime getTime(AbsoluteTime dest);
 	public AbsoluteTime getTime();
-
 }
 
 

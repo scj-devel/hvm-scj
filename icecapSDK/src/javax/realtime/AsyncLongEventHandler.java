@@ -4,7 +4,7 @@ public class AsyncLongEventHandler extends AsyncBaseEventHandler {
 
 	protected long data = 0L;
 	
-	public void run() {
+	public final void run() {
 		handleAsyncEvent(data);
 	}
 	

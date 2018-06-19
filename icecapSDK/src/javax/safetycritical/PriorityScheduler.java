@@ -168,6 +168,25 @@ public class PriorityScheduler extends javax.realtime.PriorityScheduler {
 		vm.ClockInterruptHandler.instance.enable();
 		vm.ClockInterruptHandler.instance.yield();
 	}
+	
+	void release(AperiodicLongEventHandler handler) {
+		// see AperiodicLongEventHandler, where release is called
+		ScjProcess process = (ScjProcess) handler.process;
+		vm.ClockInterruptHandler.instance.disable();
+		if (process.state == ScjProcess.State.EXECUTING) {
+			; // do nothing, - is already running
+		}
+
+		else if (process.state == ScjProcess.State.BLOCKED) {
+			process.state = ScjProcess.State.READY;
+			process.start();
+			pFrame.readyQueue.insert(process);
+		} else {
+			; // it is already ready
+		}
+		vm.ClockInterruptHandler.instance.enable();
+		vm.ClockInterruptHandler.instance.yield();
+	}
 
 	@IcecapCompileMe
 	ScjProcess move() {

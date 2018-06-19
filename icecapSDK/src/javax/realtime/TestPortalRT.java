@@ -80,6 +80,10 @@ public final class TestPortalRT {
 		}
 	}
 	
+	
+	public static final Chronograph getChronogr(HighResolutionTime<?> ht) {
+		return ht.getChronogr();
+	}
 	public static final Clock getClck(HighResolutionTime<?> ht) {
 		return ht.getClck();
 	}

@@ -156,6 +156,24 @@ class ManagedSchedulableSet {
 				m.getSequencer().seqNotify();
 		}
 	}
+	
+	void removeAperiodicLongHandlers(Mission m) {
+		if (msCount > 0) {
+			for (int i = 0; i < noOfRegistered; i++) {
+				if (schedulables[i] instanceof AperiodicLongEventHandler) {
+					ManagedSchedulable ms = schedulables[i];
+
+					schedulables[i].cleanUp();
+
+					deleteSchedulable(i);
+
+					PriorityScheduler.instance().pFrame.removeFromQueue((ScjProcess) Process.getProcess(ms));
+				}
+			}
+			if (msCount == 0)
+				m.getSequencer().seqNotify();
+		}
+	}
 
 	public String toString() {
 		StringBuffer buf = StringUtil.constructStringBuffer("Mission: ", noOfRegistered);

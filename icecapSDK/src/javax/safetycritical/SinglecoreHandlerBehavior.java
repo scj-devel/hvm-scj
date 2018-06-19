@@ -8,6 +8,11 @@ final class SinglecoreHandlerBehavior extends HandlerBehavior {
 	void aperiodicHandlerRelease(AperiodicEventHandler handler) {
 		PriorityScheduler.instance().release(handler);
 	}
+	
+	@Override
+	void aperiodicLongHandlerRelease(AperiodicLongEventHandler handler) {
+		PriorityScheduler.instance().release(handler);
+	}
 
 	@Override
 	boolean oneshotHandlerDeschedule(OneShotEventHandler handler) {

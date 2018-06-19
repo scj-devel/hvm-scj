@@ -61,8 +61,12 @@ import vm.Memory;
 public abstract class ManagedEventHandler extends BoundAsyncEventHandler implements ManagedSchedulable {
 
 	PriorityParameters priority;
+	ReleaseParameters release;
+
 	ScopeParameters storage;
 	ConfigurationParameters config;
+	
+	String name;
 	
 	Process process = null;
 	Mission mission = null;
@@ -70,12 +74,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	ManagedMemory privateMemory;    // backing store of this handler ??
 	
 	ManagedMemory currentMemory;	// for multicore only
-	
-	ReleaseParameters release;
-
-	String name;
-	
-	AffinitySet set = null;
+	AffinitySet affinitySet = null;
 	
 	// used in JML spec. methods
 	boolean isRegistered;
@@ -123,9 +122,8 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 			backingStoreOfThisMemory = (int) this.storage.getMaxInitialArea() + (int) this.storage.getMaxBackingStore(); // HSO
    			if(mission !=null){
 				this.currentMemory = mission.currMissSeq.missionMemory;
-				this.set = mission.currMissSeq.set;
-			}
-				
+				this.affinitySet = mission.currMissSeq.affinitySet;
+			}				
 		}
 
 		MemoryArea backingStoreProvider = (mission == null) ? 
@@ -142,7 +140,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 		this.isInMissionScope = false;
 	}
 
-	public abstract void handleAsyncEvent();
+	//public abstract void handleAsyncEvent();
 
 	@SCJAllowed(Level.SUPPORT)
 	@SCJPhase(Phase.CLEANUP)
@@ -195,7 +193,7 @@ public abstract class ManagedEventHandler extends BoundAsyncEventHandler impleme
 	}
 	
 	AffinitySet getAffinitySet() {
-		return set;
+		return affinitySet;
 	}
 	
 	// used for JML annotation only (not public)

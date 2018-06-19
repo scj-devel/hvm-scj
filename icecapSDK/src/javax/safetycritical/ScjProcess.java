@@ -120,6 +120,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 						((MissionSequencer)msObject).currState = MissionSequencer.State.END;
 					
 				} finally {
+					//System.out.println("ScjProcess.run.finally");
 					if (msObject instanceof PeriodicEventHandler) {
 						next.add(period, next); // next = next + period
 					}	
@@ -144,7 +145,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 		}, stack);
 
 		this.process.initialize();
-
+		
 		rtClock.getTime(this.next);
 
 		setRelease(msObject);
@@ -152,17 +153,20 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 		setProcess(msObject);
 	}
 
-	private void runLogic(ManagedSchedulable ms) {
+	private void runLogic(ManagedSchedulable ms) {	
+		//System.out.println("*** ScjProcess.runLogic for: " + ms);
 		if (ms instanceof ManagedEventHandler)
 			((ManagedEventHandler) ms).privateMemory.enter(ms); // execute logic;  
 		else if (ms instanceof ManagedThread)
 			((ManagedThread) ms).privateMemory.enter(ms);
-		else
+		else {
 			// (ms is instanceof ManagedLongEventHandler)
 			((ManagedLongEventHandler) ms).privateMemory.enter(ms);
+		}
 	}
 
 	private void setRelease(ManagedSchedulable ms) {
+		//System.out.println("*** ScjProcess.setRelease: " + ms);
 		if (ms instanceof PeriodicEventHandler) {
 			//this.start = ((PeriodicParameters) ((PeriodicEventHandler) ms).release).getStart();
 			this.start = TestPortalRT.start((PeriodicParameters) ((PeriodicEventHandler) ms).release);
@@ -181,7 +185,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 				else
 					next.set(releaseTime);
 			}
-		} else if (ms instanceof AperiodicEventHandler) {
+		} else if (ms instanceof AperiodicEventHandler || ms instanceof AperiodicLongEventHandler) {
 			
 			rtClock.getTime(this.next);  // has been done in constructor
 		}

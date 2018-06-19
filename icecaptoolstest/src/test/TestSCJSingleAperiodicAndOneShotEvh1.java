@@ -161,7 +161,7 @@ public class TestSCJSingleAperiodicAndOneShotEvh1 {
 		
 		//new LauncherTCK(Level.LEVEL_1, TestSCJSingleAperiodicAndOneShotEvh1.MyApp.class);  // using Launcher version with .class; works
 		
-		devices.Console.println("***** TestSCJSingleAperiodicAndOneShotEvh1 end *****");
+		devices.Console.println("***** TestSCJSingleAperiodicAndOneShotEvh1 end *****; testCount = " + testCount);
 		if (testCount == 2) {
 			VMTest.markResult(false);
 		}

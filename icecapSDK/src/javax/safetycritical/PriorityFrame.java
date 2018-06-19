@@ -92,6 +92,11 @@ class PriorityFrame {
 			//devices.Console.println("PrFrame.addProcess, aperiodic " + process+ ", index " + process.index);
 			process.state = ScjProcess.State.BLOCKED;
 		}
+		
+		else if (process.getTarget() instanceof AperiodicLongEventHandler) {
+			//devices.Console.println("PrFrame.addProcess, aperiodicLong " + process+ ", index " + process.index);
+			process.state = ScjProcess.State.BLOCKED;
+		}
 
 		else if (process.getTarget() instanceof OneShotEventHandler) {
 			//devices.Console.println("PrFrame.addProcess, oneshot " + process+ ", index " + process.index);

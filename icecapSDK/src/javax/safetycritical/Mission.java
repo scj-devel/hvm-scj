@@ -237,6 +237,10 @@ public abstract class Mission {
 	void removeAperiodicHandlers() {
 		msSetForMission.removeAperiodicHandlers(this);
 	}
+	
+	void removeAperiodicLongHandlers() {
+		msSetForMission.removeAperiodicLongHandlers(this);
+	}
 
 	int getNumberOfManagedSchedulables() {
 		return msSetForMission.getNumberOfManagedSchedulables();

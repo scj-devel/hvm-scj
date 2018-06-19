@@ -37,9 +37,9 @@ public final class AffinitySet {
 	public static final AffinitySet getAffinitySet(ManagedSchedulable sched) {
 		AffinitySet set = null;
 		if (sched instanceof ManagedEventHandler) {
-			set = ((ManagedEventHandler) sched).set;
+			set = ((ManagedEventHandler) sched).affinitySet;
 		} else {
-			set = ((ManagedThread) sched).set;
+			set = ((ManagedThread) sched).affinitySet;
 		}
 		return set;
 	}
@@ -50,10 +50,10 @@ public final class AffinitySet {
 
 		if (sched instanceof ManagedEventHandler) {
 			ManagedEventHandler handler = (ManagedEventHandler) sched;
-			handler.set = set;
+			handler.affinitySet = set;
 		} else {
 			ManagedThread thread = (ManagedThread) sched;
-			thread.set = set;
+			thread.affinitySet = set;
 		}
 	}
 

@@ -60,9 +60,9 @@ class OSProcess extends Process {
 			info = setThreadInfo(process.msObject);
 
 			if (process.msObject instanceof ManagedEventHandler) {
-				processors = ((ManagedEventHandler) process.msObject).set.processorSet;
+				processors = ((ManagedEventHandler) process.msObject).affinitySet.processorSet;
 			} else {
-				processors = ((ManagedThread) process.msObject).set.processorSet;
+				processors = ((ManagedThread) process.msObject).affinitySet.processorSet;
 			}
 			
 			sizeOfProcessor = processors.length;
