@@ -124,6 +124,10 @@ public final class TestPortalSC {
 		return evh.priority;
 	}
 	
+	public static PriorityParameters getPriorityParam (ManagedLongEventHandler evh) {
+		return evh.priority;
+	}
+	
 	/**
 	 * Used by test programs to get the release parameter of a periodic event handler.
 	 * 
@@ -132,6 +136,10 @@ public final class TestPortalSC {
 	 * @return the release parameter of <code>pevh</code>.
 	 */
 	public static ReleaseParameters getReleaseParam (ManagedEventHandler evh) {
+		return evh.release;
+	}
+	
+	public static ReleaseParameters getReleaseParam (ManagedLongEventHandler evh) {
 		return evh.release;
 	}
 	
@@ -199,6 +207,10 @@ public final class TestPortalSC {
 	}
 	
 	public static final String getHandlerName(ManagedEventHandler evh) {
+		return evh.getHandlerName();
+	}
+	
+	public static final String getHandlerName(ManagedLongEventHandler evh) {
 		return evh.getHandlerName();
 	}
 	

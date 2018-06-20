@@ -212,16 +212,9 @@ public class TestSCJSingleAperiodicAndOneShotEvh2 {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-//		storageParameters_Sequencer = new ScopeParameters(
-//				Const.OUTERMOST_SEQ_BACKING_STORE, Const.IMMORTAL_MEM,
-//				Const.PRIVATE_MEM, Const.MISSION_MEM);
-//		storageParameters_Handlers = new ScopeParameters(
-//				Const.PRIVATE_BACKING_STORE, 0, Const.PRIVATE_MEM,
-//				0);
 		
 		storageParameters_Sequencer = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO		
-		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO
-		
+		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO		
 		configParameters = new ConfigurationParameters (-1, -1, new long[] { Const.HANDLER_STACK_SIZE });
 
 		devices.Console.println("***** TestSCJSingleAperiodicAndOneShotEvh2 begin *****");

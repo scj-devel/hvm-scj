@@ -139,4 +139,9 @@ public abstract class ManagedLongEventHandler extends BoundAsyncLongEventHandler
 	public PriorityParameters getPriorityParam() {
 		return priority;
 	}
+	
+	// used for JML annotation only (not public)
+	String getHandlerName() {
+		return name;
+	}
 }

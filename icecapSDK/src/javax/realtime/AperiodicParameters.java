@@ -61,7 +61,7 @@ public class AperiodicParameters extends ReleaseParameters {
 	 * @param deadline is an offset from the release time by which the release 
 	 *   should finish. A null deadline indicates that there is no deadline.
 	 * 
-	 * @param missHandler is the <code>AsynncEventHandler to be released 
+	 * @param missHandler is the <code>AsyncEventHandler to be released 
 	 *   if the handler misses its deadline. 
 	 *   A null parameter indicates that no handler should be released.
 	 */

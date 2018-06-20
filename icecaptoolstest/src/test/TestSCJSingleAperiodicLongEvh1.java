@@ -65,7 +65,7 @@ public class TestSCJSingleAperiodicLongEvh1 {
 	    {
 	      System.out.println(this.getName() + " ==> " + testCount++);
 	      
-	      if (testCount > 3)
+	      if (testCount == 3)
 	    	  apevh.release(123);
 	    }
 	} 
@@ -164,7 +164,7 @@ public class TestSCJSingleAperiodicLongEvh1 {
 		//new LauncherTCK(Level.LEVEL_1, TestSCJSingleAperiodicLongEvh1.MyApp.class);  // using Launcher version with .class; works
 		
 		System.out.println("***** TestSCJSingleAperiodicLongEvh1 end *****; testCount = " + testCount);
-		if (testCount == 5) {
+		if (testCount == 4) {
 			VMTest.markResult(false);
 		}
 	}
