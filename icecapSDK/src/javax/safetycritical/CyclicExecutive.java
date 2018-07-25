@@ -96,6 +96,8 @@ public abstract class CyclicExecutive extends Mission {
 			if (start.compareTo(time) > 0) {
 				RelativeTime delta = start.subtract(time);
 				// delay (delta);  // delay is not implemented
+				// instead:
+				//vm.RealtimeClock.delayUntilTime(start);  // HSO: does not work ??
 			}				
 		}
 		Mission mission = Mission.getMission();

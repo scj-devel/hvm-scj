@@ -44,21 +44,13 @@ import javax.safetycritical.annotate.SCJAllowed;
 public class Services {
 
 	static ServicesBehavior servicesBehavior = null;
-
+	
 	@SCJAllowed
-	public static void captureBackTrace(Throwable association) {
-		// not implemented
+	public static javax.safetycritical.annotate.Level getComplianceLevel() {
+		// ToDo
+		return null;
 	}
-
-	//	@SCJAllowed
-	//	public static Level getDeploymentLevel()
-	//	{
-	//	  if (Launcher.level == 0)
-	//	    return Level.LEVEL_0; 
-	//	  if (Launcher.level == 1)
-	//		return Level.LEVEL_1; 
-	//	}
-
+	
 	@SCJAllowed(Level.LEVEL_1)
 	public static int getDefaultCeiling() {
 		return servicesBehavior.getDefaultCeiling();
@@ -69,26 +61,41 @@ public class Services {
 		servicesBehavior.setCeiling(target, ceiling);
 	}
 	
+	
+//	@SCJAllowed
+//	public static void captureBackTrace(Throwable association) {
+//		// not implemented
+//	}
+
+	//	@SCJAllowed
+	//	public static Level getDeploymentLevel()
+	//	{
+	//	  if (Launcher.level == 0)
+	//	    return Level.LEVEL_0; 
+	//	  if (Launcher.level == 1)
+	//		return Level.LEVEL_1; 
+	//	}	
+	
 	public static AffinitySet[] getSchedulingAllocationDomains() {
 		return AffinitySet.AFFINITY_SET;
 	}
 
-	@SCJAllowed(Level.LEVEL_0)
-	public static void nanoSpin(int nanos) // Busy waiting
-	{
-		// not tested
-		Clock clock = Clock.getRealtimeClock();
-		AbsoluteTime time = new AbsoluteTime();
-		AbsoluteTime next = new AbsoluteTime();
-
-		clock.getTime(time);
-		time.add(0, nanos, next);
-
-		while (time.compareTo(next) < 0) // time < next
-		{
-			clock.getTime(time);
-		}
-	}
+//	@SCJAllowed(Level.LEVEL_0)
+//	public static void nanoSpin(int nanos) // Busy waiting
+//	{
+//		// not tested
+//		Clock clock = Clock.getRealtimeClock();
+//		AbsoluteTime time = new AbsoluteTime();
+//		AbsoluteTime next = new AbsoluteTime();
+//
+//		clock.getTime(time);
+//		time.add(0, nanos, next);
+//
+//		while (time.compareTo(next) < 0) // time < next
+//		{
+//			clock.getTime(time);
+//		}
+//	}
 	
 	
 	// for testing only

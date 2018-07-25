@@ -44,11 +44,8 @@ public final class ScopeParameters extends javax.realtime.MemoryParameters {
 
 	private static final long serialVersionUID = 123456789987654101L;
 	
-//	long totalBackingStore;
-//	long maxMissionMemory;
-	
-	long maxContainingArea; // HSO
-	long maxInitialBackingStore; // HSO
+	long maxContainingArea; 
+	long maxInitialBackingStore; 
 
 	/**
 	 * Create a ScopeParameters instance with the given values.
@@ -57,29 +54,21 @@ public final class ScopeParameters extends javax.realtime.MemoryParameters {
 	 * 		in its initial scoped memory area <p>
 	 */
 	@SCJAllowed
-//	public ScopeParameters(long maxInitialArea, long maxImmortal, long maxMemoryArea, long maxMissionMemory) {  // HSO: old
-//	
-//		super(maxMemoryArea, maxImmortal);
-//
-//		this.totalBackingStore = maxInitialArea;
-//		this.maxMissionMemory = maxMissionMemory;
-//	}
-	
-	public ScopeParameters(long maxInitialArea, long maxImmortal, long maxContainingArea, long maxInitialBackingStore) // HSO
+	public ScopeParameters(long maxInitialArea, long maxImmortal, long maxContainingArea, long maxInitialBackingStore) 
 			throws java.lang.IllegalArgumentException { 
 
 		super(maxInitialArea, maxImmortal);
 		
-		if (maxContainingArea <= UNLIMITED)
+		if (maxContainingArea < 0)
 			throw new IllegalArgumentException("maxContainingArea not legal");
-		if (maxInitialBackingStore <= UNLIMITED)
+		if (maxInitialBackingStore < 0)
 			throw new IllegalArgumentException("maxInitialBackingStore not legal");
 
 		this.maxContainingArea = maxContainingArea;
 		this.maxInitialBackingStore = maxInitialBackingStore;
 	}
 	
-	public ScopeParameters(long maxInitialArea, long maxImmortal, long maxInitialBackingStore) // HSO
+	public ScopeParameters(long maxInitialArea, long maxImmortal, long maxInitialBackingStore) 
 			throws java.lang.IllegalArgumentException { 
 
 		this(maxInitialArea, maxImmortal, 0, maxInitialBackingStore);
@@ -92,17 +81,6 @@ public final class ScopeParameters extends javax.realtime.MemoryParameters {
 	public long getMaxBackingStore() {
 		return maxInitialBackingStore;
 	}
-
-
-//	//used in JML annotation only (not public)
-//	long getBackingStoreSize() {
-//		return totalBackingStore;
-//	}
-//	
-//	//used in JML annotation only (not public)
-//	long getMaxMissionMemory() {
-//		return maxMissionMemory;
-//	}
 
 }
 

@@ -194,7 +194,7 @@ class ScjProcess extends Process implements Comparable<ScjProcess> {
 			;  // do nothing
 		}
 		else
-		devices.Console.println("UPS: ScjProcess.setRelease: more cases?");
+			devices.Console.println("UPS: ScjProcess.setRelease: more cases? ManagedThreads?");
 	}
 
 	private static class ExceptionReporter implements Runnable {

@@ -66,14 +66,16 @@ public class TestSCJSingleCyclicSchedule4 {
     public static class MyMission extends CyclicExecutive {
 
         public void initialize() {
-            PeriodicEventHandler pevh1 = new MyPeriodicEvh(new PriorityParameters(Priorities.MIN_PRIORITY), new PeriodicParameters(new RelativeTime(), // start
+            PeriodicEventHandler pevh1 = new MyPeriodicEvh(new PriorityParameters(Priorities.MIN_PRIORITY), 
+            		new PeriodicParameters(new RelativeTime(), // start
                     new RelativeTime(200, 0)), // period
                     storageParameters_Handlers,
                     2); // used in handleAsyncEvent
                    
             pevh1.register();
 
-            PeriodicEventHandler pevh2 = new MyPeriodicEvh(new PriorityParameters(Priorities.MIN_PRIORITY), new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()), // start
+            PeriodicEventHandler pevh2 = new MyPeriodicEvh(new PriorityParameters(Priorities.MIN_PRIORITY), 
+            		new PeriodicParameters(new RelativeTime(Clock.getRealtimeClock()), // start
                     new RelativeTime(400, 0, Clock.getRealtimeClock())), // period
                     storageParameters_Handlers,
                     4); // used in handleAsyncEvent
@@ -140,21 +142,7 @@ public class TestSCJSingleCyclicSchedule4 {
 	public static ScopeParameters storageParameters_Handlers;
 	public static ConfigurationParameters configParameters;
 	
-	public static void main(String[] args) {
-//	  storageParameters_Sequencer = 
-//        new ScopeParameters(
-//            Const.OUTERMOST_SEQ_BACKING_STORE,
-//            Const.IMMORTAL_MEM, 
-//            Const.PRIVATE_MEM, 
-//            Const.MISSION_MEM);
-//	  
-//	  storageParameters_Handlers = 
-//        new ScopeParameters(
-//            Const.PRIVATE_BACKING_STORE,
-//            0, 
-//            Const.PRIVATE_MEM, 
-//            0);
-	  
+	public static void main(String[] args) {	  
 		storageParameters_Sequencer = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO		
 		storageParameters_Handlers = new ScopeParameters(Const.PRIVATE_MEM, 0, 0, 0); // HSO
 		

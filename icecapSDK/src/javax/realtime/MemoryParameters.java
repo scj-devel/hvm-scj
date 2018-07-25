@@ -10,16 +10,14 @@ public class MemoryParameters implements Cloneable, Serializable {
 	
 	protected long maxInitialArea;  // maximum amount of memory in the per-release private memory area.
 	protected long maxImmortal;
-
-	//public static final long NO_MAX = -1L;
 	
 	@SCJAllowed
-	public static final long UNLIMITED = -1L;
+	public static final long UNLIMITED = Long.MAX_VALUE;
 
 	public MemoryParameters(long maxInitialArea, long maxImmortal) {
-		if (maxInitialArea <= UNLIMITED)
+		if (maxInitialArea < 0)
 			throw new IllegalArgumentException("maxInitialArea not legal");
-		if (maxImmortal <= UNLIMITED)
+		if (maxImmortal < 0)
 			throw new IllegalArgumentException("maxImmortal not legal");
 
 		this.maxInitialArea = maxInitialArea;

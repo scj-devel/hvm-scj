@@ -200,7 +200,7 @@ public class TestSCJSingleCyclicSchedule3 {
                 MyApp.count++;
                 if (MyApp.count % 10 == 0) // or MyApp.count % 10, etc.
                 {
-                    devices.Console.println("MS " + MyApp.count);
+                    //devices.Console.println("MS " + MyApp.count);
                 }
                 if (missions[active].terminationPending() && MyApp.count > 150) {
                     devices.Console.println("MySeq.getNextMission: null");

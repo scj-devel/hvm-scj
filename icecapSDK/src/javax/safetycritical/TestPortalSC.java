@@ -198,6 +198,14 @@ public final class TestPortalSC {
 		return m.getPhase();
 	}
 	
+	public static boolean requestTerminationHasBeenInvoked(Mission m) {
+		return m.missionTerminate;
+	}
+	
+	public static int missionTerminateCalled(Mission m) {
+		return m.missionTerminateCalled;
+	}
+	
 	public static boolean isRegistered(Mission m, ManagedSchedulable target) {
 		return m.isRegistered(target);
 	}

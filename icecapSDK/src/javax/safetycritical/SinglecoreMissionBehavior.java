@@ -28,6 +28,7 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 
 	@Override
 	boolean requestTermination(Mission mission) {
+				
 		if (mission.missionTerminate == false) { // called the first time during mission execution	
 
 			mission.missionTerminate = true; // ensure that no further calls have effect
@@ -44,8 +45,13 @@ final class SinglecoreMissionBehavior extends MissionBehavior {
 			//System.out.println("SinglecoreMissionBehavior.requestTermination");
 
 			return false;
-		} else
+		} 
+		else {
+			// for JML test
+			mission.missionTerminateCalled++;
+			
 			return true; // called more than once: nothing done
+		}
 	}
 
 	int addNewMission(Mission mission) {

@@ -118,14 +118,9 @@ public abstract class MissionSequencer extends ManagedEventHandler {
 //				privateMemory, //backingstore of sequencer
 //				name);
 		
-		String missionMemoryName = Memory.getNextMemoryName("MissionMem");	
+		String missionMemoryName = Memory.getNextMemoryName("MissionMem");
 		
-//		missionMemory = new MissionMemory((int)privateMemory.size(), // mission memory  HSO
-//				privateMemory, //backingstore provider
-//				//name);
-//				missionMemoryName);
-		
-		missionMemory = new MissionMemory((int)privateMemory.size(), // mission memory  HSO
+		missionMemory = new MissionMemory ((int)privateMemory.size(), // mission memory  HSO
 				privateMemory, //backingstore provider
 				//name);
 				missionMemoryName);

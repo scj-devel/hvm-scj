@@ -57,6 +57,9 @@ public abstract class Mission {
 	MissionSequencer currMissSeq;
 
 	boolean missionTerminate = false;
+	
+	// for JML test
+	int missionTerminateCalled = 0;
 
 	static Mission[] missionSet = null;
 	static boolean isMissionSetInit = false;
@@ -76,18 +79,19 @@ public abstract class Mission {
 	@SCJAllowed
 	public Mission(AbsoluteTime start) {
 		this.start = start;
+		activeCount = 0;
 		
-		// ToDo: implement
+		// ToDo: implement		
 	}
 
 	@SCJAllowed
 	public Mission() {
-		activeCount = 0;
+		this (null);		
 	}
 
 	/** 
 	 * Method to clean up after a mission terminates. <br> The infrastructure calls 
-	 * <code>cleanup</code> after all <code>ManagedSchedulable</code>s 
+	 * <code>cleanUp</code> after all <code>ManagedSchedulable</code>s 
 	 * associated with this <code>Mission</code> have terminated, but before
 	 * control leaves the dedicated <code>MissionMemory</code> area. 
 	 * The default implementation of <code>cleanup</code> does nothing.
@@ -197,6 +201,8 @@ public abstract class Mission {
 			if (start.compareTo(time) > 0) {
 				RelativeTime delta = start.subtract(time);
 				// delay (delta);  // delay is not implemented
+				// instead:
+				//vm.RealtimeClock.delayUntilTime(start);  // HSO: does not work ??
 			}				
 		}		
 			
