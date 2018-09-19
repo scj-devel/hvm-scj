@@ -36,6 +36,8 @@ import carcontrol.infrastructure.VMConfiguration;
    c) ./a.out
   
  * @author hso
+ * 
+ * New comment for test
  *
  */
 public class Car implements Safelet  {
