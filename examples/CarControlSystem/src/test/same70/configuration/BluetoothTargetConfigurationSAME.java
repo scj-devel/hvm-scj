@@ -44,8 +44,7 @@ public abstract class BluetoothTargetConfigurationSAME extends BaseTargetConfigu
 				"-DPC32", "-c", "-DJAVA_STACK_SIZE=840", "-x", "c", "-mthumb", "-D__SAME70Q21__",
 				"-DDEBUG", "-DPACKED=", "-D__SAME70Q21__", "-DBOARD=SAME70_XPLAINED", "-Dscanf=iscanf",
 				"-DARM_MATH_CM7=true", "-Dprintf=iprintf",	
-				//ATSAMe70Config.GCC_D_OPTIONS,	  // does not work
-				
+
 				"-I\"" + srcInclude + "\"",
 				"-I\"" + srcInclude + "/config\"",
 				"-I\"" + srcASFInclude + "\"",
@@ -87,10 +86,7 @@ public abstract class BluetoothTargetConfigurationSAME extends BaseTargetConfigu
 				"-Wmissing-declarations", "-Wformat", "-Wmissing-format-attribute",
 				"-Wno-deprecated-declarations", "-Wpacked", "-Wnested-externs",
 				"-Wlong-long", "-Wunreachable-code", "-Wcast-align", "--param", "max-inline-insns-single=500",
-				"-mfloat-abi=softfp", "-mfpu=fpv5-sp-d16", 
-				
-				//ATSAMe70Config.GCC_W_OPTIONS,  // does not work
-				
+				"-mfloat-abi=softfp", "-mfpu=fpv5-sp-d16", 				
 				"natives_arm.c" },
 				
 			new String[] {
@@ -145,19 +141,16 @@ public abstract class BluetoothTargetConfigurationSAME extends BaseTargetConfigu
 		};		
 	}
 	
-	
 	@IcecapInlineNative(functionBody = ""
 			+ "{\n"
 			+ "   sysclk_init();\n"
 			+ "   board_init();\n"
 			+ "   configure_console();\n"
-			+ "   front_light_init();\n"
 			+ "   return -1;\n"
 			+ "}\n",
 			requiredIncludes = ""
 					+ "#include \"..\\asf.h\"\n"
 					+ "#include \"..\\deviceconfig\\console_setup.h\"\n"
-					+ "#include \"..\\scalextric\\front_light.h\"\n"
 					+ "#include \"..\\scalextric\\bluetooth.h\"\n"
 		)
 	protected static native void initNative();
@@ -184,16 +177,6 @@ public abstract class BluetoothTargetConfigurationSAME extends BaseTargetConfigu
 		return null;
 	}
 		
-	@IcecapCompileMe
-	protected static void blink(int i) {
-		if (!initialized) {
-			initialized = true;
-		}
-
-		for (int j = 0; j < 3000; j++) {
-			devices.System.delay(i);
-		}
-	}
 	
 	@IcecapCompileMe
 	protected static void delay(int i) {
@@ -202,39 +185,6 @@ public abstract class BluetoothTargetConfigurationSAME extends BaseTargetConfigu
 			devices.System.delay(i);
 		}
 	}
-	
-	//@IcecapCompileMe
-	protected static void turnOnFrontLight() {
-		
-		front_light_turn_on();
-	}
-
-	@IcecapInlineNative(functionBody = ""
-			+ "{\n"
-			+ "   front_light_turn_on();\n"
-			+ "   front_light_low_beam();\n"
-			+ "   return -1;\n"
-			+ "}\n",
-			requiredIncludes = ""
-				+ "#include \"..\\scalextric\\front_light.h\"\n"
-			)
-	protected static native void front_light_turn_on();
-	
-	//@IcecapCompileMe
-	protected static void turnOffFrontLight() {
-		
-		front_light_turn_off();
-	}
-
-	@IcecapInlineNative(functionBody = ""
-			+ "{\n"
-			+ "   front_light_turn_off();\n"
-			+ "   return -1;\n"
-			+ "}\n",
-			requiredIncludes = ""
-				+ "#include \"..\\scalextric\\front_light.h\"\n"
-			)
-	protected static native void front_light_turn_off();	
 	
 	public static class ATSAMe70Writer implements Writer {
 
@@ -274,6 +224,4 @@ public abstract class BluetoothTargetConfigurationSAME extends BaseTargetConfigu
 	public String getOutputFolder() { 
 		return ConfigSAME.OUTPUT_FOLDER;
 	}
-	
-	
 }
