@@ -145,12 +145,14 @@ public abstract class BluetoothTargetConfigurationSAME extends BaseTargetConfigu
 			+ "{\n"
 			+ "   sysclk_init();\n"
 			+ "   board_init();\n"
+			+ "   systick_init();\n"
 			+ "   configure_console();\n"
 			+ "   return -1;\n"
 			+ "}\n",
 			requiredIncludes = ""
 					+ "#include \"..\\asf.h\"\n"
 					+ "#include \"..\\deviceconfig\\console_setup.h\"\n"
+					+ "#include \"..\\deviceconfig\\systick.h\"\n"
 					+ "#include \"..\\scalextric\\bluetooth.h\"\n"
 		)
 	protected static native void initNative();
