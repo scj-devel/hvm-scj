@@ -23,13 +23,14 @@ public class Connector {
 	private static final String SerialPort_URI = "HVMSerialPortAnd:PortNumber"; // to be implemented
 	private static ConsoleConnection consoleCon; // The default connection
 
-	static {
-		try {
-			consoleCon = new ConsoleConnection(SerialPort_URI); // The default connection
-		} catch (ConnectionNotFoundException e) {
-			e.toString();
-		}
-	}
+// FIXME this seem to prevent the bluetooth example to print to the console
+//	static {
+//		try {
+//			consoleCon = new ConsoleConnection(SerialPort_URI); // The default connection
+//		} catch (ConnectionNotFoundException e) {
+//			e.toString();
+//		}
+//	}
 
 	// No instantiation of class Connector
 	private Connector() {
