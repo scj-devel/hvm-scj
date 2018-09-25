@@ -17,15 +17,24 @@ public class BluetoothAtSAME extends BluetoothTargetConfigurationSAME {
 		try {
 			devices.Console.println("bluetooth starting");
 			Port port = new Port(new BluetoothCommunicationDeviceImpl());
-
-			delay(1000);
-			devices.Console.println("sending byte");
-			port.send((byte) 42);
-
-			delay(1000);
-			devices.Console.println("receiving byte");
-			byte data = port.receive();
-			devices.Console.println("byte: " + data);
+			// delaying so that bluetooth have time to initialize
+			delay(5000);
+			
+			byte data = 0;
+			
+			while (data != 4) { // 4 = EOT
+				
+				devices.Console.println("receiving byte");
+				data = port.receive();
+				devices.Console.println("byte: " + (char)data);
+				delay(10000);
+				
+				if (data > '!' && data < '~') {
+					devices.Console.println("sending byte");
+					port.send(data);
+					delay(10000);
+				}
+			}
 
 		} catch (IOException e) {
 			devices.Console.println(e.getStackTrace().toString());
