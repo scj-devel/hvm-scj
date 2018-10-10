@@ -13,7 +13,7 @@ import mockit.integration.junit4.JMockit;
 @RunWith(JMockit.class)
 public class FrontLightTest {
 	
-	int nativeMethodHasBeenCalled;
+	int nativeMethodHasBeenCalled; // HSO: for some  test
 	
 	@Before
 	public void setup() {
