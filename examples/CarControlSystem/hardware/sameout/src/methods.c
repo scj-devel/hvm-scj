@@ -1,0 +1,2081 @@
+#include "ostypes.h"
+#include "types.h"
+#include "classes.h"
+#include "..\scalextric\bluetooth.h"
+#include <stdio.h>
+#include "methods.h"
+#include "..\asf.h"
+#include "..\deviceconfig\console_setup.h"
+#include "..\deviceconfig\systick.h"
+int16 n_carcontrol_device_impl_BluetoothSerialImpl_bluetooth_read_byte(
+		int32* sp);
+int16 n_carcontrol_device_impl_BluetoothSerialImpl_bluetooth_send_byte(
+		int32* sp);
+int16 n_carcontrol_device_impl_BluetoothSerialImpl_bluetooth_start(int32* sp);
+#ifndef EXCLUDESTUB_N_JAVA_IO_IOEXCEPTION_INIT_
+int16 n_java_io_IOException_init_(int32* sp);
+#endif
+#ifndef EXCLUDESTUB_N_JAVA_IO_IOEXCEPTION_INIT__
+int16 n_java_io_IOException_init__(int32* sp);
+#endif
+#ifndef EXCLUDESTUB_N_JAVA_LANG_CLASS_CLINIT_
+int16 n_java_lang_Class_clinit_(int32* sp);
+#endif
+#ifndef EXCLUDESTUB_N_JAVA_LANG_CLASS_DESIREDASSERTIONSTATUS
+int16 n_java_lang_Class_desiredAssertionStatus(int32* sp);
+#endif
+#ifndef EXCLUDESTUB_N_JAVA_LANG_CLASS_GETNAME0
+int16 n_java_lang_Class_getName0(int32* sp);
+#endif
+#ifndef EXCLUDESTUB_N_JAVA_LANG_CLASS_GETPRIMITIVECLASS
+int16 n_java_lang_Class_getPrimitiveClass(int32* sp);
+#endif
+#ifndef EXCLUDESTUB_N_JAVA_LANG_CLASS_TOSTRING
+int16 n_java_lang_Class_toString(int32* sp);
+#endif
+#ifndef EXCLUDESTUB_N_JAVA_LANG_THROWABLE_CLINIT_
+int16 n_java_lang_Throwable_clinit_(int32* sp);
+#endif
+#ifndef EXCLUDESTUB_N_JAVA_LANG_THROWABLE_FILLINSTACKTRACE_
+int16 n_java_lang_Throwable_fillInStackTrace_(int32* sp);
+#endif
+#ifndef EXCLUDESTUB_N_JAVA_LANG_THROWABLE_GETSTACKTRACE
+int16 n_java_lang_Throwable_getStackTrace(int32* sp);
+#endif
+int16 n_test_same70_configuration_BluetoothTargetConfigurationSAME_ATSAMe70Writer_putc(
+		int32* sp);
+int16 test_same70_configuration_BluetoothTargetConfigurationSAME_delay(
+		int32 *fp);
+RANGE extern const MethodInfo *methods;
+extern int16 enterMethodInterpreter(unsigned short methodNumber, int32* sp);
+int16 test_same70_configuration_BluetoothTargetConfigurationSAME_init(
+		int32 *fp);
+extern unsigned char *classData;
+extern const ClassInfo *classes;
+int16 n_test_same70_configuration_BluetoothTargetConfigurationSAME_initNative(
+		int32* sp);
+extern void unimplemented_native_function(uint16 methodID);
+int16 dispatch_native_func(int16 functionNumber, int32 *sp);
+unsigned char initMethods(void);
+uint16 NUMBEROFCLASSINITIALIZERS_var = NUMBEROFCLASSINITIALIZERS;
+uint16 NUMBEROFCONSTANTS_var = NUMBEROFCONSTANTS;
+uint16 mainMethodIndex = MAINMETHODINDEX;
+
+RANGE const ExceptionHandler ex_carcontrol_io_BluetoothCommunicationDeviceImpl_receive[1] PROGMEM = {
+	{	5, 17, 20, 53}
+};
+
+RANGE const ExceptionHandler ex_java_io_InputStream_read_[1] PROGMEM = {
+	{	81, 127, 130, 53}
+};
+
+RANGE const ExceptionHandler ex_javax_microedition_io_Connector_open[2] PROGMEM = {
+	{	89, 97, 100, 20},
+	{	51, 127, 130, 57}
+};
+
+RANGE const ExceptionHandler ex_javax_microedition_io_Connector_openDataInputStream[1] PROGMEM = {
+	{	2, 12, 15, 37}
+};
+
+RANGE const ExceptionHandler ex_javax_microedition_io_Connector_openDataOutputStream[1] PROGMEM = {
+	{	2, 12, 15, 37}
+};
+
+RANGE const ExceptionHandler ex_javax_safetycritical_io_ConnectionFactory_init_[1] PROGMEM = {
+	{	5, 50, 53, 57}
+};
+/* Class: test.same70.configuration.BluetoothTargetConfigurationSAME */
+/* Method: delay */
+/* delay
+ * param : int
+ * return: void
+ */
+int16 test_same70_configuration_BluetoothTargetConfigurationSAME_delay(
+		int32 *fp) {
+	int32* sp;
+	int32 i_val1;
+	int16 rval_m_6;
+	int16 s_val0;
+	int32 i;
+	int32 j;
+	i = (int32)(*(fp + 0));
+	j = (int32)(*(fp + 1));
+	sp = &fp[4]; /* make room for local VM state on the stack */
+	/*		for (int j = 0; j < 2000; j++) { */
+	i_val1 = 0;
+	/*		for (int j = 0; j < 2000; j++) { */
+	j = i_val1;
+	/*		for (int j = 0; j < 2000; j++) { */
+	goto L13;
+	/*			devices.System.delay(i); */
+	L5: i_val1 = (int32) i;
+	/*			devices.System.delay(i); */
+	*sp = (int32) i_val1;
+	sp++;
+	sp -= 1;
+	rval_m_6 = enterMethodInterpreter(DEVICES_SYSTEM_DELAY, sp);
+	if (rval_m_6 == -1) {
+		;
+	} else {
+		fp[0] = *sp;
+		return rval_m_6;
+	}
+	/*		for (int j = 0; j < 2000; j++) { */
+	j = (int32) j + 1;
+	/*		for (int j = 0; j < 2000; j++) { */
+	L13: i_val1 = (int32) j;
+	/*		for (int j = 0; j < 2000; j++) { */
+	s_val0 = 2000;
+	/*		for (int j = 0; j < 2000; j++) { */
+	if (i_val1 < s_val0) {
+		goto L5;
+	}
+	/*	} */
+	return -1;
+}
+
+/* Class: test.same70.configuration.BluetoothTargetConfigurationSAME */
+/* Method: init */
+/* init
+ * param : 
+ * return: void
+ */
+int16 test_same70_configuration_BluetoothTargetConfigurationSAME_init(
+		int32 *fp) {
+	int32* sp;
+	int32 i_val0;
+	int16 rval_m_9;
+	int8 b_val0;
+	int8 lsb_int8;
+	sp = &fp[3]; /* make room for local VM state on the stack */
+	/*		if (!initialized) { */
+	i_val0 = ((struct _staticClassFields_c *)(pointer)HEAP_REF((pointer)classData, staticClassFields_c*)) -> initialized_f;
+	/*		if (!initialized) { */
+	if (i_val0 != 0) {
+		goto L20;
+	}
+	/*			initNative(); */
+	sp -= 0;
+	rval_m_9 =
+			n_test_same70_configuration_BluetoothTargetConfigurationSAME_initNative(
+					sp);
+	if (rval_m_9 == -1) {
+		;
+	} else {
+		fp[0] = *sp;
+		return rval_m_9;
+	}
+	/*			initialized = true; */
+	b_val0 = 1;
+	/*			initialized = true; */
+	lsb_int8 = b_val0;
+	((struct _staticClassFields_c *)(pointer)HEAP_REF((pointer)classData, staticClassFields_c*)) -> initialized_f = lsb_int8;
+	/*	} */
+	L20: return -1;
+}
+
+RANGE const ExceptionHandler ex_test_same70_examples_BluetoothAtSAME_main[1] PROGMEM = {
+	{	18, 136, 139, 53}
+};
+
+/* bluetooth_read_byte
+ * param : 
+ * return: int
+ */
+int16 n_carcontrol_device_impl_BluetoothSerialImpl_bluetooth_read_byte(
+		int32* sp) {
+	int value = bluetooth_read_byte();
+	sp[0] = value;
+	return -1;
+}
+
+/* bluetooth_send_byte
+ * param : int
+ * return: void
+ */
+int16 n_carcontrol_device_impl_BluetoothSerialImpl_bluetooth_send_byte(
+		int32* sp) {
+	bluetooth_send_byte(sp[1]);
+	return -1;
+}
+
+/* bluetooth_start
+ * param : 
+ * return: void
+ */
+int16 n_carcontrol_device_impl_BluetoothSerialImpl_bluetooth_start(int32* sp) {
+	bluetooth_start();
+	return -1;
+}
+
+/* nwrite
+ * param : byte[], int
+ * return: void
+ */
+extern int16 n_devices_DefaultWriter_nwrite(int32 *sp);
+/* <init>
+ * param : 
+ * return: void
+ */
+#ifndef EXCLUDESTUB_N_JAVA_IO_IOEXCEPTION_INIT_
+int16 n_java_io_IOException_init_(int32* sp) {
+	unimplemented_native_function (N_JAVA_IO_IOEXCEPTION_INIT_);
+	return -1;
+}
+#else
+extern int16 n_java_io_IOException_init_(int32 *sp);
+#endif
+
+/* <init>
+ * param : java.lang.String
+ * return: void
+ */
+#ifndef EXCLUDESTUB_N_JAVA_IO_IOEXCEPTION_INIT__
+int16 n_java_io_IOException_init__(int32* sp) {
+	unimplemented_native_function (N_JAVA_IO_IOEXCEPTION_INIT__);
+	return -1;
+}
+#else
+extern int16 n_java_io_IOException_init__(int32 *sp);
+#endif
+
+/* <clinit>
+ * param : 
+ * return: void
+ */
+#ifndef EXCLUDESTUB_N_JAVA_LANG_CLASS_CLINIT_
+int16 n_java_lang_Class_clinit_(int32* sp) {
+	unimplemented_native_function (N_JAVA_LANG_CLASS_CLINIT_);
+	return -1;
+}
+#else
+extern int16 n_java_lang_Class_clinit_(int32 *sp);
+#endif
+
+/* desiredAssertionStatus
+ * param : 
+ * return: boolean
+ */
+#ifndef EXCLUDESTUB_N_JAVA_LANG_CLASS_DESIREDASSERTIONSTATUS
+int16 n_java_lang_Class_desiredAssertionStatus(int32* sp) {
+	unimplemented_native_function (N_JAVA_LANG_CLASS_DESIREDASSERTIONSTATUS);
+	return -1;
+}
+#else
+extern int16 n_java_lang_Class_desiredAssertionStatus(int32 *sp);
+#endif
+
+/* getName0
+ * param : 
+ * return: java.lang.String
+ */
+#ifndef EXCLUDESTUB_N_JAVA_LANG_CLASS_GETNAME0
+int16 n_java_lang_Class_getName0(int32* sp) {
+	unimplemented_native_function (N_JAVA_LANG_CLASS_GETNAME0);
+	return -1;
+}
+#else
+extern int16 n_java_lang_Class_getName0(int32 *sp);
+#endif
+
+/* getPrimitiveClass
+ * param : java.lang.String
+ * return: java.lang.Class
+ */
+#ifndef EXCLUDESTUB_N_JAVA_LANG_CLASS_GETPRIMITIVECLASS
+int16 n_java_lang_Class_getPrimitiveClass(int32* sp) {
+	unimplemented_native_function (N_JAVA_LANG_CLASS_GETPRIMITIVECLASS);
+	return -1;
+}
+#else
+extern int16 n_java_lang_Class_getPrimitiveClass(int32 *sp);
+#endif
+
+/* toString
+ * param : 
+ * return: java.lang.String
+ */
+#ifndef EXCLUDESTUB_N_JAVA_LANG_CLASS_TOSTRING
+int16 n_java_lang_Class_toString(int32* sp) {
+	unimplemented_native_function (N_JAVA_LANG_CLASS_TOSTRING);
+	return -1;
+}
+#else
+extern int16 n_java_lang_Class_toString(int32 *sp);
+#endif
+
+/* doubleToRawLongBits
+ * param : double
+ * return: long
+ */
+extern int16 n_java_lang_Double_doubleToRawLongBits(int32 *sp);
+/* longBitsToDouble
+ * param : long
+ * return: double
+ */
+extern int16 n_java_lang_Double_longBitsToDouble(int32 *sp);
+/* floatToRawIntBits
+ * param : float
+ * return: int
+ */
+extern int16 n_java_lang_Float_floatToRawIntBits(int32 *sp);
+/* getClass
+ * param : 
+ * return: java.lang.Class
+ */
+extern int16 n_java_lang_Object_getClass(int32 *sp);
+/* hashCode
+ * param : 
+ * return: int
+ */
+extern int16 n_java_lang_Object_hashCode(int32 *sp);
+/* arraycopy
+ * param : java.lang.Object, int, java.lang.Object, int, int
+ * return: void
+ */
+extern int16 n_java_lang_System_arraycopy(int32 *sp);
+/* registerNatives
+ * param : 
+ * return: void
+ */
+extern int16 n_java_lang_System_registerNatives(int32 *sp);
+/* <clinit>
+ * param : 
+ * return: void
+ */
+#ifndef EXCLUDESTUB_N_JAVA_LANG_THROWABLE_CLINIT_
+int16 n_java_lang_Throwable_clinit_(int32* sp) {
+	unimplemented_native_function (N_JAVA_LANG_THROWABLE_CLINIT_);
+	return -1;
+}
+#else
+extern int16 n_java_lang_Throwable_clinit_(int32 *sp);
+#endif
+
+/* fillInStackTrace
+ * param : int
+ * return: java.lang.Throwable
+ */
+#ifndef EXCLUDESTUB_N_JAVA_LANG_THROWABLE_FILLINSTACKTRACE_
+int16 n_java_lang_Throwable_fillInStackTrace_(int32* sp) {
+	unimplemented_native_function (N_JAVA_LANG_THROWABLE_FILLINSTACKTRACE_);
+	return -1;
+}
+#else
+extern int16 n_java_lang_Throwable_fillInStackTrace_(int32 *sp);
+#endif
+
+/* getStackTrace
+ * param : 
+ * return: java.lang.StackTraceElement[]
+ */
+#ifndef EXCLUDESTUB_N_JAVA_LANG_THROWABLE_GETSTACKTRACE
+int16 n_java_lang_Throwable_getStackTrace(int32* sp) {
+	unimplemented_native_function (N_JAVA_LANG_THROWABLE_GETSTACKTRACE);
+	return -1;
+}
+#else
+extern int16 n_java_lang_Throwable_getStackTrace(int32 *sp);
+#endif
+
+/* putc
+ * param : byte
+ * return: void
+ */
+int16 n_test_same70_configuration_BluetoothTargetConfigurationSAME_ATSAMe70Writer_putc(
+		int32* sp) {
+	putchar(sp[0] & 0xff);
+	return -1;
+}
+
+/* initNative
+ * param : 
+ * return: void
+ */
+int16 n_test_same70_configuration_BluetoothTargetConfigurationSAME_initNative(
+		int32* sp) {
+	sysclk_init();
+	board_init();
+	systick_init();
+	configure_console();
+	return -1;
+}
+
+RANGE const unsigned char _codecache[6444] PROGMEM = {
+	0xFF,
+	/* carcontrol_device_impl_BluetoothSerialImpl_init_*/
+	0x2A,0xB7,0x00,0x66,0x0A,0xB1,0x01,0x01,
+	/* carcontrol_device_impl_BluetoothSerialImpl_openSerial*/
+	0x2A,0xB7,0x00,0x03,0x11,0xB1,0x01,0x01,
+	/* carcontrol_device_impl_BluetoothSerialImpl_read*/
+	0x2A,0xB7,0x00,0x01,0x1E,0xAC,0x01,0x01,
+	/* carcontrol_device_impl_BluetoothSerialImpl_write*/
+	0x2A,0x1B,0xB7,0x00,0x02,0x17,0xB1,0x01,0x01,
+	/* carcontrol_io_BluetoothCommunicationDeviceImpl_init_*/
+	0x2A,0xB7,0x00,0x66,0x13,0x2A,0x12,0x00,0x00,0xB5,0x00,0x17,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, name_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, name_f) - sizeof(Object)) << 3)) & 0xff),
+	0xBB,
+	0x00,0x00,0x59,0x2A,0xB4,0x00,0x17,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, name_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, name_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB7,0x00,0x16,0x1B,0xB8,0x00,
+	0xA3,0x1E,0x2A,0x2A,0xB4,0x00,0x17,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, name_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, name_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB8,0x00,0x9D,0x24,0xB5,0x00,
+	0x17,0x22,
+	/* offset: 0, 64*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, ostream_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, ostream_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0x2A,0xB4,0x00,0x17,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, name_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, name_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB8,0x00,0x9C,0x2C,
+	0xB5,0x00,0x17,0x22,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, istream_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, istream_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,0x01,
+	/* carcontrol_io_BluetoothCommunicationDeviceImpl_receive*/
+	0x04,0xBC,0x00,0x20,0x4C,0x2A,0x2B,0x03,0x04,0xB7,0x00,0x09,0x47,0x57,0x2B,0x03,
+	0x33,0xAC,0x01,0x03,0x4D,0x10,0x9D,0xAC,0x01,0x05,
+	/* carcontrol_io_BluetoothCommunicationDeviceImpl_receive_*/
+	0x2A,0xB4,0x00,0x17,0x22,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, istream_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, istream_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB6,0x01,0x06,0x00,0x02,0x00,0x1D,0x00,0x0C,
+	0x00,0x29,0x00,0x2C,0x99,0x00,0x1D,0x2A,0xB4,0x00,0x17,0x22,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, istream_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, istream_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2B,0x1C,
+	0x1D,0xB6,0x01,0x05,0x03,0x02,0x00,0x41,0x00,0x34,0x00,0x1C,0x00,0x25,0xAC,0x01,
+	0x03,0x10,0x9D,0xAC,0x01,0x03,
+	/* carcontrol_io_BluetoothCommunicationDeviceImpl_send*/
+	0x2A,0xB4,0x00,0x17,0x22,
+	/* offset: 0, 64*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, ostream_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, ostream_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2B,0x1C,0x1D,0xB6,0x00,0x05,0x03,0x02,0x00,
+	0x34,0x00,0x38,0x00,0x0A,0x00,0x2A,0x2A,0xB4,0x00,0x17,0x22,
+	/* offset: 0, 64*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, ostream_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothCommunicationDeviceImpl_c, ostream_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB6,0x00,
+	0x06,0x00,0x02,0x00,0x34,0x00,0x36,0x00,0x0A,0x00,0x27,0xB1,0x01,0x03,
+	/* carcontrol_io_BluetoothConnection_1_init_*/
+	0x2A,0x2B,0xB5,0x00,0x1D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothConnection_1_c, this_0_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothConnection_1_c, this_0_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB7,0x00,0x31,0x0C,0xB1,0x01,0x03,
+	/* carcontrol_io_BluetoothConnection_1_available*/
+	0x04,0xAC,0x01,0x01,
+	/* carcontrol_io_BluetoothConnection_1_read*/
+	0x2A,0xB4,0x00,0x1D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothConnection_1_c, this_0_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothConnection_1_c, this_0_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB8,0x00,0x11,0x18,0xB9,0x00,0x03,0x00,0x02,
+	0x01,0x00,0x11,0x00,0x05,0xAC,0x01,0x01,
+	/* carcontrol_io_BluetoothConnection_2_init_*/
+	0x2A,0x2B,0xB5,0x00,0x1F,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothConnection_2_c, this_0_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothConnection_2_c, this_0_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB7,0x00,0x35,0x0C,0xB1,0x01,0x03,
+	/* carcontrol_io_BluetoothConnection_2_write*/
+	0x2A,0xB4,0x00,0x1F,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothConnection_2_c, this_0_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothConnection_2_c, this_0_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB8,0x00,0x11,0x18,0x1B,0xB9,0x00,0x02,0x01,
+	0x02,0x01,0x00,0x11,0x00,0x06,0xB1,0x01,0x01,
+	/* carcontrol_io_BluetoothConnection_init_*/
+	0x2A,0xB7,0x00,0x66,0x0C,0x2A,0xBB,0x00,0x22,0x59,0xB7,0x00,0x00,0x11,0xB5,0x00,
+	0x0F,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothConnection_c, bluetoothSerial_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothConnection_c, bluetoothSerial_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB4,0x00,0x0F,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothConnection_c, bluetoothSerial_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothConnection_c, bluetoothSerial_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB9,0x00,0x00,0x00,0x02,
+	0x01,0x00,0x11,0x00,0x04,0xB1,0x01,0x03,
+	/* carcontrol_io_BluetoothConnection_access_0*/
+	0x2A,0xB4,0x00,0x0F,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothConnection_c, bluetoothSerial_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_BluetoothConnection_c, bluetoothSerial_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB0,0x01,0x03,
+	/* carcontrol_io_BluetoothConnection_openDataInputStream*/
+	0xBB,0x00,0x38,0x59,0x2A,0xB7,0x00,0x14,0x23,0xB7,0x00,0x24,0x27,0xB0,0x01,0x03,
+	/* carcontrol_io_BluetoothConnection_openDataOutputStream*/
+	0xBB,0x00,0x14,0x59,0x2A,0xB7,0x00,0x15,0x36,0xB7,0x00,0x26,0x3A,0xB0,0x01,0x03,
+	/* carcontrol_io_BluetoothConnection_openInputStream*/
+	0xBB,0x00,0x3A,0x59,0x2A,0xB7,0x00,0x0B,0x2C,0xB0,0x01,0x03,
+	/* carcontrol_io_BluetoothConnection_openOutputStream*/
+	0xBB,0x00,0x3E,0x59,0x2A,0xB7,0x00,0x0E,0x3F,0xB0,0x01,0x03,
+	/* carcontrol_io_BluetoothConnectionFactory_init_*/
+	0x2A,0x2B,0xB7,0x00,0x9F,0x08,0xB1,0x01,0x03,
+	/* carcontrol_io_BluetoothConnectionFactory_create*/
+	0xBB,0x00,0x1E,0x59,0x2B,0xB7,0x00,0x10,0x19,0x4D,0x2C,0xB0,0x01,0x0F,
+	/* carcontrol_io_Port_init_*/
+	0x2A,0xB7,0x00,0x66,0x0C,0x2A,0x2B,0xB5,0x00,0x09,0x22,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, commDevice_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, commDevice_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0x11,0x04,
+	0x00,0xBC,0x00,0x20,0xB5,0x00,0x09,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, message_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, message_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,0x03,
+	/* carcontrol_io_Port_receive*/
+	0x2A,0xB4,0x00,0x09,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, message_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, message_f) - sizeof(Object)) << 3)) & 0xff),
+	0x03,0x2A,0xB4,0x00,0x09,0x22,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, commDevice_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, commDevice_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB9,
+	0x00,0x00,0x00,0x05,0x01,0x00,0x17,0x00,0x08,0x91,0x54,0x2A,0xB4,0x00,0x09,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, message_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, message_f) - sizeof(Object)) << 3)) & 0xff),
+	0x03,0x33,0xAC,0x01,0x01,
+	/* carcontrol_io_Port_send*/
+	0x2A,0xB4,0x00,0x09,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, message_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, message_f) - sizeof(Object)) << 3)) & 0xff),
+	0x03,0x1B,0x54,0x2A,0xB4,0x00,0x09,0x22,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, commDevice_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, commDevice_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB4,0x00,0x09,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, message_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _carcontrol_io_Port_c, message_f) - sizeof(Object)) << 3)) & 0xff),
+	0x03,0x04,0xB9,0x00,0x03,0x03,0x05,0x01,
+	0x00,0x17,0x00,0x0A,0xB1,0x01,0x01,
+	/* devices_Console_getBytes*/
+	0x03,0x3D,0x2A,0xB7,0x00,0x7A,0x2B,0x93,0x3E,0xB2,0x00,0x0E,0x22,
+	/* offset: 3, -112*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, writer_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, writer_f) << 3)) & 0xff),
+	0xC7,
+	0x00,0x11,0xBB,0x00,0x64,0x59,0xB7,0x00,0x1E,0x32,0xB3,0x00,0x0E,0x22,
+	/* offset: 3, -112*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, writer_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, writer_f) << 3)) & 0xff),
+
+	0xB2,0x00,0x0E,0x22,
+	/* offset: 3, -112*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, writer_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, writer_f) << 3)) & 0xff),
+	0xB9,0x00,0x01,0x00,0x12,0x02,0x00,0x40,0x00,0xA5,
+	0x00,0x32,0x00,0x1F,0x36,0x04,0xB2,0x00,0x0E,0x22,
+	/* offset: 3, 112*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, bytes_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, bytes_f) << 3)) & 0xff),
+	0xC7,0x00,0x27,0x15,
+	0x04,0x04,0x60,0xBC,0x00,0x20,0xB3,0x00,0x0E,0x22,
+	/* offset: 3, 112*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, bytes_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, bytes_f) << 3)) & 0xff),
+	0xA7,0x00,0x17,0xB2,
+	0x00,0x0E,0x22,
+	/* offset: 3, 112*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, bytes_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, bytes_f) << 3)) & 0xff),
+	0x1C,0x2A,0x1C,0xB7,0x00,0x73,0x37,0x91,0x54,0x1C,0x04,
+	0x60,0x93,0x3D,0x1C,0x1D,0xA2,0x00,0x0B,0x1C,0x15,0x04,0x04,0x64,0xA1,0xFF,0xE2,
+	0x1B,0x99,0x00,0x12,0xB2,0x00,0x0E,0x22,
+	/* offset: 3, 112*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, bytes_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, bytes_f) << 3)) & 0xff),
+	0x1C,0x10,0x0A,0x54,0x1C,0x04,
+	0x60,0x93,0x3D,0x1C,0xAC,0x01,0x01,
+	/* devices_Console_println*/
+	0x2A,0x04,0xB8,0x00,0x1D,0x14,0xB1,0x01,0x01,
+	/* devices_Console_println_*/
+	0x2A,0x1B,0xB8,0x00,0x1B,0x19,0x3D,0xB2,0x00,0x0E,0x22,
+	/* offset: 3, -112*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, writer_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, writer_f) << 3)) & 0xff),
+	0xB2,0x00,0x0E,
+	0x22,
+	/* offset: 3, 112*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, bytes_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, bytes_f) << 3)) & 0xff),
+	0x1C,0xB9,0x00,0x00,0x02,0x12,0x02,0x00,0x32,0x00,0x21,0x00,0x40,
+	0x00,0xA7,0xB1,0x01,0x01,
+	/* devices_DefaultWriter_init_*/
+	0x2A,0xB7,0x00,0x66,0x0A,0xB1,0x01,0x01,
+	/* devices_DefaultWriter_getMaxLineLength*/
+	0x11,0x02,0x00,0xAC,0x01,0x01,
+	/* devices_DefaultWriter_write*/
+	0x2B,0x1C,0xB8,0x00,0x20,0x14,0xB1,0x01,0x03,
+	/* devices_System_clinit_*/
+	0xB8,0x00,0xB3,0x0A,0xC7,0x00,0x0F,0xBB,0x00,0x2C,0x59,0xB7,0x00,0xB5,0x12,0xB8,
+	0x00,0xB4,0x15,0xB1,0x00,
+	/* devices_System_delay*/
+	0xA7,0x00,0x06,0x84,0x00,0xFF,0x1A,0x9D,0xFF,0xFC,0xB1,0x01,0x00,
+	/* java_io_DataInputStream_init_*/
+	0x2A,0x2B,0xB7,0x00,0x2B,0x87,0x2A,0x10,0x50,0xBC,0x00,0x20,0xB5,0x00,0x1C,0x22,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_io_DataInputStream_c, bytearr_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_io_DataInputStream_c, bytearr_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0x10,0x50,0xBC,0x00,0x21,0xB5,0x00,0x1C,0x22,
+	/* offset: 0, 64*/
+	(uint8)(((uint16)((offsetof(struct _java_io_DataInputStream_c, chararr_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_io_DataInputStream_c, chararr_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0x10,
+	0x08,0xBC,0x00,0x20,0xB5,0x00,0x1C,0x22,
+	/* offset: 0, 96*/
+	(uint8)(((uint16)((offsetof(struct _java_io_DataInputStream_c, readBuffer_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_io_DataInputStream_c, readBuffer_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,0x03,
+	/* java_io_DataInputStream_read*/
+	0x2A,0xB4,0x00,0x29,0x23,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_io_FilterInputStream_c, in_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_io_FilterInputStream_c, in_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2B,0x1C,0x1D,0xB6,0x01,0x05,0x03,0x02,0x00,
+	0x41,0x00,0x34,0x00,0x1C,0x00,0x25,0xAC,0x01,0x03,
+	/* java_io_DataOutputStream_init_*/
+	0x2A,0x2B,0xB7,0x00,0x2E,0x6A,0x2A,0x01,0xB5,0x00,0x0A,0x22,
+	/* offset: 0, 64*/
+	(uint8)(((uint16)((offsetof(struct _java_io_DataOutputStream_c, bytearr_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_io_DataOutputStream_c, bytearr_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0x10,
+	0x08,0xBC,0x00,0x20,0xB5,0x00,0x0A,0x22,
+	/* offset: 0, 96*/
+	(uint8)(((uint16)((offsetof(struct _java_io_DataOutputStream_c, writeBuffer_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_io_DataOutputStream_c, writeBuffer_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,0x03,
+	/* java_io_DataOutputStream_flush*/
+	0x2A,0xB4,0x00,0x12,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_io_FilterOutputStream_c, out_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_io_FilterOutputStream_c, out_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB6,0x00,0x06,0x00,0x02,0x00,0x34,0x00,0x36,
+	0x00,0x0A,0x00,0x27,0xB1,0x01,0x01,
+	/* java_io_DataOutputStream_incCount*/
+	0x2A,0xB4,0x00,0x0A,0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_io_DataOutputStream_c, written_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_io_DataOutputStream_c, written_f) - sizeof(Object)) << 3)) & 0xff),
+	0x1B,0x60,0x3D,0x1C,0x9C,0x00,0x07,0x12,0x00,
+	0x01,0x3D,0x2A,0x1C,0xB5,0x00,0x0A,0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_io_DataOutputStream_c, written_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_io_DataOutputStream_c, written_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,0x01,
+	/* java_io_DataOutputStream_write*/
+	0x2A,0xB4,0x00,0x12,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_io_FilterOutputStream_c, out_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_io_FilterOutputStream_c, out_f) - sizeof(Object)) << 3)) & 0xff),
+	0x1B,0xB6,0x00,0x04,0x01,0x02,0x00,0x1F,0x00,
+	0x0F,0x00,0x0A,0x00,0x29,0x2A,0x04,0xB7,0x00,0x28,0x66,0xB1,0x01,0x01,
+	/* java_io_DataOutputStream_write_*/
+	0x2A,0xB4,0x00,0x12,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_io_FilterOutputStream_c, out_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_io_FilterOutputStream_c, out_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2B,0x1C,0x1D,0xB6,0x00,0x05,0x03,0x02,0x00,
+	0x34,0x00,0x38,0x00,0x0A,0x00,0x2A,0x2A,0x1D,0xB7,0x00,0x28,0x66,0xB1,0x01,0x03,
+	/* java_io_FilterInputStream_init_*/
+	0x2A,0xB7,0x00,0x31,0x29,0x2A,0x2B,0xB5,0x00,0x29,0x23,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_io_FilterInputStream_c, in_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_io_FilterInputStream_c, in_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,0x03,
+	/* java_io_FilterInputStream_available*/
+	0x2A,0xB4,0x00,0x29,0x23,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_io_FilterInputStream_c, in_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_io_FilterInputStream_c, in_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB6,0x01,0x06,0x00,0x02,0x00,0x1D,0x00,0x0C,
+	0x00,0x29,0x00,0x2C,0xAC,0x01,0x01,
+	/* java_io_FilterInputStream_read*/
+	0x2A,0xB4,0x00,0x29,0x23,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_io_FilterInputStream_c, in_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_io_FilterInputStream_c, in_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB6,0x01,0x04,0x00,0x02,0x00,0x1D,0x00,0x0D,
+	0x00,0x29,0x00,0x2D,0xAC,0x01,0x01,
+	/* java_io_FilterOutputStream_init_*/
+	0x2A,0xB7,0x00,0x35,0x26,0x2A,0x2B,0xB5,0x00,0x12,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_io_FilterOutputStream_c, out_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_io_FilterOutputStream_c, out_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,0x03,
+	/* java_io_InputStream_init_*/
+	0x2A,0xB7,0x00,0x66,0x39,0xB1,0x01,0x01,
+	/* java_io_InputStream_available*/
+	0x03,0xAC,
+	/* java_io_InputStream_read_*/
+	0x2B,0xC7,0x00,0x0C,0xBB,0x00,0x0C,0x59,0xB7,0x00,0x65,0x38,0xBF,0x1C,0x9B,0x00,
+	0x0F,0x1D,0x9B,0x00,0x0B,0x1D,0x2B,0xBE,0x1C,0x64,0xA4,0x00,0x0C,0xBB,0x00,0x04,
+	0x59,0xB7,0x00,0x56,0x36,0xBF,0x1D,0x9A,0x00,0x07,0x03,0xAC,0x01,0x03,0x2A,0xB6,
+	0x01,0x04,0x00,0x02,0x00,0x1D,0x00,0x0D,0x00,0x29,0x00,0x2D,0x36,0x04,0x15,0x04,
+	0x02,0xA0,0x00,0x07,0x02,0xAC,0x01,0x03,0x2B,0x1C,0x15,0x04,0x91,0x54,0x04,0x36,
+	0x05,0x15,0x05,0x1D,0xA2,0x00,0x2B,0x2A,0xB6,0x01,0x04,0x00,0x02,0x00,0x1D,0x00,
+	0x0D,0x00,0x29,0x00,0x2D,0x36,0x04,0x15,0x04,0x02,0xA0,0x00,0x06,0xA7,0x00,0x12,
+	0x2B,0x1C,0x15,0x05,0x60,0x15,0x04,0x91,0x54,0x84,0x05,0x01,0xA7,0xFF,0xD5,0xA7,
+	0x00,0x05,0x3A,0x06,0x15,0x05,0xAC,0x01,0x43,
+	/* java_io_OutputStream_init_*/
+	0x2A,0xB7,0x00,0x66,0x21,0xB1,0x01,0x01,
+	/* java_io_OutputStream_flush*/
+	0xB1,0x01,0x01,
+	/* java_io_OutputStream_write_*/
+	0x2B,0xC7,0x00,0x0C,0xBB,0x00,0x0C,0x59,0xB7,0x00,0x65,0x20,0xBF,0x1C,0x9B,0x00,
+	0x1B,0x1C,0x2B,0xBE,0xA3,0x00,0x15,0x1D,0x9B,0x00,0x11,0x1C,0x1D,0x60,0x2B,0xBE,
+	0xA3,0x00,0x09,0x1C,0x1D,0x60,0x9C,0x00,0x0C,0xBB,0x00,0x04,0x59,0xB7,0x00,0x56,
+	0x1F,0xBF,0x1D,0x9A,0x00,0x06,0xB1,0x01,0x03,0x03,0x36,0x04,0x15,0x04,0x1D,0xA2,
+	0x00,0x1D,0x2A,0x2B,0x1C,0x15,0x04,0x60,0x33,0xB6,0x00,0x04,0x01,0x02,0x00,0x1F,
+	0x00,0x0F,0x00,0x0A,0x00,0x29,0x84,0x04,0x01,0xA7,0xFF,0xE3,0xB1,0x01,0x03,
+	/* java_lang_AbstractStringBuilder_init_*/
+	0x2A,0xB7,0x00,0x66,0x1D,0x2A,0x1B,0xBC,0x00,0x21,0xB5,0x00,0x2C,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+
+	0xB1,0x01,0x01,
+	/* java_lang_AbstractStringBuilder_append*/
+	0x2A,0x2A,0xB4,0x00,0x2C,0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) & 0xff),
+	0x04,0x60,0xB7,0x00,0x3E,0xFF,0x2A,0xB4,
+	0x00,0x2C,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0x59,0xB4,0x00,0x2C,0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) & 0xff),
+	0x5A,0x04,0x60,
+	0xB5,0x00,0x2C,0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) & 0xff),
+	0x1B,0x55,0x2A,0xB0,0x01,0x05,
+	/* java_lang_AbstractStringBuilder_append_*/
+	0x1B,0x12,0x00,0x02,0xA0,0x00,0x10,0x2A,0x12,0x00,0x03,0xB7,0x00,0x82,0x0B,0x57,
+	0x2A,0xB0,0x01,0x11,0x1B,0x9C,0x00,0x0E,0x1B,0x74,0xB8,0x00,0x5C,0x19,0x04,0x60,
+	0xA7,0x00,0x08,0x1B,0xB8,0x00,0x5C,0x19,0x3D,0x2A,0xB4,0x00,0x2C,0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) & 0xff),
+
+	0x1C,0x60,0x3E,0x2A,0x1D,0xB7,0x00,0x3E,0xFF,0x1B,0x1D,0x2A,0xB4,0x00,0x2C,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB8,0x00,0x5A,0x1A,0x2A,0x1D,0xB5,0x00,0x2C,0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB0,
+	0x01,0x11,
+	/* java_lang_AbstractStringBuilder_append__*/
+	0x2B,0xC7,0x00,0x0B,0x2A,0xB7,0x00,0x3D,0x01,0xB0,0x01,0x0B,0x2B,0xB7,0x00,0x7A,
+	0x1F,0x3D,0x2A,0x2A,0xB4,0x00,0x2C,0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) & 0xff),
+	0x1C,0x60,0xB7,0x00,0x3E,0xFF,
+	0x2B,0x03,0x1C,0x2A,0xB4,0x00,0x2C,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB4,0x00,0x2C,0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB7,0x00,0x75,0x20,0x2A,0x59,0xB4,0x00,0x2C,0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) & 0xff),
+	0x1C,0x60,0xB5,
+	0x00,0x2C,0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB0,0x01,0x0B,
+	/* java_lang_AbstractStringBuilder_appendNull*/
+	0x2A,0xB4,0x00,0x2C,0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) & 0xff),
+	0x3C,0x2A,0x1B,0x07,0x60,0xB7,0x00,0x3E,0xFF,
+	0x2A,0xB4,0x00,0x2C,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0x4D,0x2C,0x1B,0x84,0x01,0x01,0x10,0x6E,0x55,
+	0x2C,0x1B,0x84,0x01,0x01,0x10,0x75,0x55,0x2C,0x1B,0x84,0x01,0x01,0x10,0x6C,0x55,
+	0x2C,0x1B,0x84,0x01,0x01,0x10,0x6C,0x55,0x2A,0x1B,0xB5,0x00,0x2C,0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) & 0xff),
+
+	0x2A,0xB0,0x01,0x0D,
+	/* java_lang_AbstractStringBuilder_ensureCapacityInternal*/
+	0x1B,0x2A,0xB4,0x00,0x2C,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xBE,0x64,0x9E,0x00,0x1B,0x2A,0x2A,0xB4,
+	0x00,0x2C,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0x1B,0xB7,0x00,0x40,0xFE,0xB8,0x00,0x95,0x35,0xB5,
+	0x00,0x2C,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,0x01,
+	/* java_lang_AbstractStringBuilder_hugeCapacity*/
+	0x12,0x00,0x01,0x1B,0x64,0x9C,0x00,0x0C,0xBB,0x00,0x7E,0x59,0xB7,0x00,0x6A,0x1E,
+	0xBF,0x1B,0x12,0x00,0x04,0xA4,0x00,0x07,0x1B,0xA7,0x00,0x06,0x12,0x00,0x04,0xAC,
+	0x01,0x01,
+	/* java_lang_AbstractStringBuilder_newCapacity*/
+	0x2A,0xB4,0x00,0x2C,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xBE,0x04,0x78,0x05,0x60,0x3D,0x1C,0x1B,0x64,
+	0x9C,0x00,0x05,0x1B,0x3D,0x1C,0x9E,0x00,0x0B,0x12,0x00,0x04,0x1C,0x64,0x9C,0x00,
+	0x0C,0x2A,0x1B,0xB7,0x00,0x3F,0xFD,0xA7,0x00,0x04,0x1C,0xAC,0x01,0x01,
+	/* java_lang_ArithmeticException_init_*/
+	0x2A,0xB7,0x00,0x6B,0x10,0xB1,0x01,0x01,
+	/* java_lang_ArrayIndexOutOfBoundsException_init_*/
+	0x2A,0xB7,0x00,0x56,0x1D,0xB1,0x01,0x01,
+	/* java_lang_ArrayStoreException_init_*/
+	0x2A,0xB7,0x00,0x6B,0x10,0xB1,0x01,0x01,
+	/* java_lang_AssertionError_init_*/
+	0x2A,0xB7,0x00,0x4F,0x34,0xB1,0x01,0x01,
+	/* java_lang_Class_getName*/
+	0x2A,0xB4,0x00,0x3E,0x22,
+	/* offset: 0, 64*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_Class_c, name_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_Class_c, name_f) - sizeof(Object)) << 3)) & 0xff),
+	0x4C,0x2B,0xC7,0x00,0x11,0x2A,0x2A,0xB7,0x00,
+	0x47,0xE0,0x59,0x4C,0xB5,0x00,0x3E,0x22,
+	/* offset: 0, 64*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_Class_c, name_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_Class_c, name_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2B,0xB0,0x01,0x07,
+	/* java_lang_ClassCastException_init_*/
+	0x2A,0xB7,0x00,0x6B,0x10,0xB1,0x01,0x01,
+	/* java_lang_Double_clinit_*/
+	0x12,0x00,0x05,0xB8,0x00,0x49,0xBF,0xB3,0x00,0x1E,0x22,
+	/* offset: 4, -48*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, TYPE_f__f__f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, TYPE_f__f__f) << 3)) & 0xff),
+	0xB1,0x00,
+	/* java_lang_Error_init_*/
+	0x2A,0xB7,0x00,0x8A,0x16,0xB1,0x01,0x01,
+	/* java_lang_Exception_init_*/
+	0x2A,0xB7,0x00,0x8A,0x16,0xB1,0x01,0x01,
+	/* java_lang_Exception_init__*/
+	0x2A,0x2B,0xB7,0x00,0x8B,0x17,0xB1,0x01,0x03,
+	/* java_lang_Float_clinit_*/
+	0x12,0x00,0x06,0xB8,0x00,0x49,0x92,0xB3,0x00,0x01,0x22,
+	/* offset: 0, 64*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, TYPE_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, TYPE_f) << 3)) & 0xff),
+	0xB1,0x00,
+	/* java_lang_IllegalArgumentException_init_*/
+	0x2A,0x2B,0xB7,0x00,0x6C,0x15,0xB1,0x01,0x03,
+	/* java_lang_IllegalMonitorStateException_init_*/
+	0x2A,0xB7,0x00,0x6B,0x10,0xB1,0x01,0x01,
+	/* java_lang_IndexOutOfBoundsException_init_*/
+	0x2A,0xB7,0x00,0x6B,0x10,0xB1,0x01,0x01,
+	/* java_lang_IndexOutOfBoundsException_init__*/
+	0x2A,0x2B,0xB7,0x00,0x6C,0x11,0xB1,0x01,0x03,
+	/* java_lang_Integer_clinit_*/
+	0x12,0x00,0x07,0xB8,0x00,0x49,0x0A,0xB3,0x00,0x05,0x22,
+	/* offset: 1, 72*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, TYPE_f__f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, TYPE_f__f) << 3)) & 0xff),
+	0x10,0x24,0xBC,
+	0x00,0x21,0x59,0x03,0x10,0x30,0x55,0x59,0x04,0x10,0x31,0x55,0x59,0x05,0x10,0x32,
+	0x55,0x59,0x06,0x10,0x33,0x55,0x59,0x07,0x10,0x34,0x55,0x59,0x08,0x10,0x35,0x55,
+	0x59,0x10,0x06,0x10,0x36,0x55,0x59,0x10,0x07,0x10,0x37,0x55,0x59,0x10,0x08,0x10,
+	0x38,0x55,0x59,0x10,0x09,0x10,0x39,0x55,0x59,0x10,0x0A,0x10,0x61,0x55,0x59,0x10,
+	0x0B,0x10,0x62,0x55,0x59,0x10,0x0C,0x10,0x63,0x55,0x59,0x10,0x0D,0x10,0x64,0x55,
+	0x59,0x10,0x0E,0x10,0x65,0x55,0x59,0x10,0x0F,0x10,0x66,0x55,0x59,0x10,0x10,0x10,
+	0x67,0x55,0x59,0x10,0x11,0x10,0x68,0x55,0x59,0x10,0x12,0x10,0x69,0x55,0x59,0x10,
+	0x13,0x10,0x6A,0x55,0x59,0x10,0x14,0x10,0x6B,0x55,0x59,0x10,0x15,0x10,0x6C,0x55,
+	0x59,0x10,0x16,0x10,0x6D,0x55,0x59,0x10,0x17,0x10,0x6E,0x55,0x59,0x10,0x18,0x10,
+	0x6F,0x55,0x59,0x10,0x19,0x10,0x70,0x55,0x59,0x10,0x1A,0x10,0x71,0x55,0x59,0x10,
+	0x1B,0x10,0x72,0x55,0x59,0x10,0x1C,0x10,0x73,0x55,0x59,0x10,0x1D,0x10,0x74,0x55,
+	0x59,0x10,0x1E,0x10,0x75,0x55,0x59,0x10,0x1F,0x10,0x76,0x55,0x59,0x10,0x20,0x10,
+	0x77,0x55,0x59,0x10,0x21,0x10,0x78,0x55,0x59,0x10,0x22,0x10,0x79,0x55,0x59,0x10,
+	0x23,0x10,0x7A,0x55,0xB3,0x00,0x05,0x22,
+	/* offset: 1, 104*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, digits_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, digits_f) << 3)) & 0xff),
+	0x10,0x64,0xBC,0x00,0x21,0x59,
+	0x03,0x10,0x30,0x55,0x59,0x04,0x10,0x30,0x55,0x59,0x05,0x10,0x30,0x55,0x59,0x06,
+	0x10,0x30,0x55,0x59,0x07,0x10,0x30,0x55,0x59,0x08,0x10,0x30,0x55,0x59,0x10,0x06,
+	0x10,0x30,0x55,0x59,0x10,0x07,0x10,0x30,0x55,0x59,0x10,0x08,0x10,0x30,0x55,0x59,
+	0x10,0x09,0x10,0x30,0x55,0x59,0x10,0x0A,0x10,0x31,0x55,0x59,0x10,0x0B,0x10,0x31,
+	0x55,0x59,0x10,0x0C,0x10,0x31,0x55,0x59,0x10,0x0D,0x10,0x31,0x55,0x59,0x10,0x0E,
+	0x10,0x31,0x55,0x59,0x10,0x0F,0x10,0x31,0x55,0x59,0x10,0x10,0x10,0x31,0x55,0x59,
+	0x10,0x11,0x10,0x31,0x55,0x59,0x10,0x12,0x10,0x31,0x55,0x59,0x10,0x13,0x10,0x31,
+	0x55,0x59,0x10,0x14,0x10,0x32,0x55,0x59,0x10,0x15,0x10,0x32,0x55,0x59,0x10,0x16,
+	0x10,0x32,0x55,0x59,0x10,0x17,0x10,0x32,0x55,0x59,0x10,0x18,0x10,0x32,0x55,0x59,
+	0x10,0x19,0x10,0x32,0x55,0x59,0x10,0x1A,0x10,0x32,0x55,0x59,0x10,0x1B,0x10,0x32,
+	0x55,0x59,0x10,0x1C,0x10,0x32,0x55,0x59,0x10,0x1D,0x10,0x32,0x55,0x59,0x10,0x1E,
+	0x10,0x33,0x55,0x59,0x10,0x1F,0x10,0x33,0x55,0x59,0x10,0x20,0x10,0x33,0x55,0x59,
+	0x10,0x21,0x10,0x33,0x55,0x59,0x10,0x22,0x10,0x33,0x55,0x59,0x10,0x23,0x10,0x33,
+	0x55,0x59,0x10,0x24,0x10,0x33,0x55,0x59,0x10,0x25,0x10,0x33,0x55,0x59,0x10,0x26,
+	0x10,0x33,0x55,0x59,0x10,0x27,0x10,0x33,0x55,0x59,0x10,0x28,0x10,0x34,0x55,0x59,
+	0x10,0x29,0x10,0x34,0x55,0x59,0x10,0x2A,0x10,0x34,0x55,0x59,0x10,0x2B,0x10,0x34,
+	0x55,0x59,0x10,0x2C,0x10,0x34,0x55,0x59,0x10,0x2D,0x10,0x34,0x55,0x59,0x10,0x2E,
+	0x10,0x34,0x55,0x59,0x10,0x2F,0x10,0x34,0x55,0x59,0x10,0x30,0x10,0x34,0x55,0x59,
+	0x10,0x31,0x10,0x34,0x55,0x59,0x10,0x32,0x10,0x35,0x55,0x59,0x10,0x33,0x10,0x35,
+	0x55,0x59,0x10,0x34,0x10,0x35,0x55,0x59,0x10,0x35,0x10,0x35,0x55,0x59,0x10,0x36,
+	0x10,0x35,0x55,0x59,0x10,0x37,0x10,0x35,0x55,0x59,0x10,0x38,0x10,0x35,0x55,0x59,
+	0x10,0x39,0x10,0x35,0x55,0x59,0x10,0x3A,0x10,0x35,0x55,0x59,0x10,0x3B,0x10,0x35,
+	0x55,0x59,0x10,0x3C,0x10,0x36,0x55,0x59,0x10,0x3D,0x10,0x36,0x55,0x59,0x10,0x3E,
+	0x10,0x36,0x55,0x59,0x10,0x3F,0x10,0x36,0x55,0x59,0x10,0x40,0x10,0x36,0x55,0x59,
+	0x10,0x41,0x10,0x36,0x55,0x59,0x10,0x42,0x10,0x36,0x55,0x59,0x10,0x43,0x10,0x36,
+	0x55,0x59,0x10,0x44,0x10,0x36,0x55,0x59,0x10,0x45,0x10,0x36,0x55,0x59,0x10,0x46,
+	0x10,0x37,0x55,0x59,0x10,0x47,0x10,0x37,0x55,0x59,0x10,0x48,0x10,0x37,0x55,0x59,
+	0x10,0x49,0x10,0x37,0x55,0x59,0x10,0x4A,0x10,0x37,0x55,0x59,0x10,0x4B,0x10,0x37,
+	0x55,0x59,0x10,0x4C,0x10,0x37,0x55,0x59,0x10,0x4D,0x10,0x37,0x55,0x59,0x10,0x4E,
+	0x10,0x37,0x55,0x59,0x10,0x4F,0x10,0x37,0x55,0x59,0x10,0x50,0x10,0x38,0x55,0x59,
+	0x10,0x51,0x10,0x38,0x55,0x59,0x10,0x52,0x10,0x38,0x55,0x59,0x10,0x53,0x10,0x38,
+	0x55,0x59,0x10,0x54,0x10,0x38,0x55,0x59,0x10,0x55,0x10,0x38,0x55,0x59,0x10,0x56,
+	0x10,0x38,0x55,0x59,0x10,0x57,0x10,0x38,0x55,0x59,0x10,0x58,0x10,0x38,0x55,0x59,
+	0x10,0x59,0x10,0x38,0x55,0x59,0x10,0x5A,0x10,0x39,0x55,0x59,0x10,0x5B,0x10,0x39,
+	0x55,0x59,0x10,0x5C,0x10,0x39,0x55,0x59,0x10,0x5D,0x10,0x39,0x55,0x59,0x10,0x5E,
+	0x10,0x39,0x55,0x59,0x10,0x5F,0x10,0x39,0x55,0x59,0x10,0x60,0x10,0x39,0x55,0x59,
+	0x10,0x61,0x10,0x39,0x55,0x59,0x10,0x62,0x10,0x39,0x55,0x59,0x10,0x63,0x10,0x39,
+	0x55,0xB3,0x00,0x05,0x22,
+	/* offset: 1, -120*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, DigitTens_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, DigitTens_f) << 3)) & 0xff),
+	0x10,0x64,0xBC,0x00,0x21,0x59,0x03,0x10,0x30,
+	0x55,0x59,0x04,0x10,0x31,0x55,0x59,0x05,0x10,0x32,0x55,0x59,0x06,0x10,0x33,0x55,
+	0x59,0x07,0x10,0x34,0x55,0x59,0x08,0x10,0x35,0x55,0x59,0x10,0x06,0x10,0x36,0x55,
+	0x59,0x10,0x07,0x10,0x37,0x55,0x59,0x10,0x08,0x10,0x38,0x55,0x59,0x10,0x09,0x10,
+	0x39,0x55,0x59,0x10,0x0A,0x10,0x30,0x55,0x59,0x10,0x0B,0x10,0x31,0x55,0x59,0x10,
+	0x0C,0x10,0x32,0x55,0x59,0x10,0x0D,0x10,0x33,0x55,0x59,0x10,0x0E,0x10,0x34,0x55,
+	0x59,0x10,0x0F,0x10,0x35,0x55,0x59,0x10,0x10,0x10,0x36,0x55,0x59,0x10,0x11,0x10,
+	0x37,0x55,0x59,0x10,0x12,0x10,0x38,0x55,0x59,0x10,0x13,0x10,0x39,0x55,0x59,0x10,
+	0x14,0x10,0x30,0x55,0x59,0x10,0x15,0x10,0x31,0x55,0x59,0x10,0x16,0x10,0x32,0x55,
+	0x59,0x10,0x17,0x10,0x33,0x55,0x59,0x10,0x18,0x10,0x34,0x55,0x59,0x10,0x19,0x10,
+	0x35,0x55,0x59,0x10,0x1A,0x10,0x36,0x55,0x59,0x10,0x1B,0x10,0x37,0x55,0x59,0x10,
+	0x1C,0x10,0x38,0x55,0x59,0x10,0x1D,0x10,0x39,0x55,0x59,0x10,0x1E,0x10,0x30,0x55,
+	0x59,0x10,0x1F,0x10,0x31,0x55,0x59,0x10,0x20,0x10,0x32,0x55,0x59,0x10,0x21,0x10,
+	0x33,0x55,0x59,0x10,0x22,0x10,0x34,0x55,0x59,0x10,0x23,0x10,0x35,0x55,0x59,0x10,
+	0x24,0x10,0x36,0x55,0x59,0x10,0x25,0x10,0x37,0x55,0x59,0x10,0x26,0x10,0x38,0x55,
+	0x59,0x10,0x27,0x10,0x39,0x55,0x59,0x10,0x28,0x10,0x30,0x55,0x59,0x10,0x29,0x10,
+	0x31,0x55,0x59,0x10,0x2A,0x10,0x32,0x55,0x59,0x10,0x2B,0x10,0x33,0x55,0x59,0x10,
+	0x2C,0x10,0x34,0x55,0x59,0x10,0x2D,0x10,0x35,0x55,0x59,0x10,0x2E,0x10,0x36,0x55,
+	0x59,0x10,0x2F,0x10,0x37,0x55,0x59,0x10,0x30,0x10,0x38,0x55,0x59,0x10,0x31,0x10,
+	0x39,0x55,0x59,0x10,0x32,0x10,0x30,0x55,0x59,0x10,0x33,0x10,0x31,0x55,0x59,0x10,
+	0x34,0x10,0x32,0x55,0x59,0x10,0x35,0x10,0x33,0x55,0x59,0x10,0x36,0x10,0x34,0x55,
+	0x59,0x10,0x37,0x10,0x35,0x55,0x59,0x10,0x38,0x10,0x36,0x55,0x59,0x10,0x39,0x10,
+	0x37,0x55,0x59,0x10,0x3A,0x10,0x38,0x55,0x59,0x10,0x3B,0x10,0x39,0x55,0x59,0x10,
+	0x3C,0x10,0x30,0x55,0x59,0x10,0x3D,0x10,0x31,0x55,0x59,0x10,0x3E,0x10,0x32,0x55,
+	0x59,0x10,0x3F,0x10,0x33,0x55,0x59,0x10,0x40,0x10,0x34,0x55,0x59,0x10,0x41,0x10,
+	0x35,0x55,0x59,0x10,0x42,0x10,0x36,0x55,0x59,0x10,0x43,0x10,0x37,0x55,0x59,0x10,
+	0x44,0x10,0x38,0x55,0x59,0x10,0x45,0x10,0x39,0x55,0x59,0x10,0x46,0x10,0x30,0x55,
+	0x59,0x10,0x47,0x10,0x31,0x55,0x59,0x10,0x48,0x10,0x32,0x55,0x59,0x10,0x49,0x10,
+	0x33,0x55,0x59,0x10,0x4A,0x10,0x34,0x55,0x59,0x10,0x4B,0x10,0x35,0x55,0x59,0x10,
+	0x4C,0x10,0x36,0x55,0x59,0x10,0x4D,0x10,0x37,0x55,0x59,0x10,0x4E,0x10,0x38,0x55,
+	0x59,0x10,0x4F,0x10,0x39,0x55,0x59,0x10,0x50,0x10,0x30,0x55,0x59,0x10,0x51,0x10,
+	0x31,0x55,0x59,0x10,0x52,0x10,0x32,0x55,0x59,0x10,0x53,0x10,0x33,0x55,0x59,0x10,
+	0x54,0x10,0x34,0x55,0x59,0x10,0x55,0x10,0x35,0x55,0x59,0x10,0x56,0x10,0x36,0x55,
+	0x59,0x10,0x57,0x10,0x37,0x55,0x59,0x10,0x58,0x10,0x38,0x55,0x59,0x10,0x59,0x10,
+	0x39,0x55,0x59,0x10,0x5A,0x10,0x30,0x55,0x59,0x10,0x5B,0x10,0x31,0x55,0x59,0x10,
+	0x5C,0x10,0x32,0x55,0x59,0x10,0x5D,0x10,0x33,0x55,0x59,0x10,0x5E,0x10,0x34,0x55,
+	0x59,0x10,0x5F,0x10,0x35,0x55,0x59,0x10,0x60,0x10,0x36,0x55,0x59,0x10,0x61,0x10,
+	0x37,0x55,0x59,0x10,0x62,0x10,0x38,0x55,0x59,0x10,0x63,0x10,0x39,0x55,0xB3,0x00,
+	0x05,0x22,
+	/* offset: 1, -88*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, DigitOnes_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, DigitOnes_f) << 3)) & 0xff),
+	0x10,0x0A,0xBC,0x00,0x26,0x59,0x03,0x10,0x09,0x4F,0x59,0x04,
+	0x10,0x63,0x4F,0x59,0x05,0x11,0x03,0xE7,0x4F,0x59,0x06,0x11,0x27,0x0F,0x4F,0x59,
+	0x07,0x12,0x00,0x08,0x4F,0x59,0x08,0x12,0x00,0x09,0x4F,0x59,0x10,0x06,0x12,0x00,
+	0x0A,0x4F,0x59,0x10,0x07,0x12,0x00,0x0B,0x4F,0x59,0x10,0x08,0x12,0x00,0x0C,0x4F,
+	0x59,0x10,0x09,0x12,0x00,0x01,0x4F,0xB3,0x00,0x05,0x22,
+	/* offset: 1, -56*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, sizeTable_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, sizeTable_f) << 3)) & 0xff),
+	0xB1,0x00,
+	/* java_lang_Integer_formatUnsignedInt*/
+	0x15,0x04,0x36,0x05,0x04,0x1B,0x78,0x36,0x06,0x15,0x06,0x04,0x64,0x36,0x07,0x2C,
+	0x1D,0x84,0x05,0xFF,0x15,0x05,0x60,0xB2,0x00,0x05,0x22,
+	/* offset: 1, 104*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, digits_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, digits_f) << 3)) & 0xff),
+	0x1A,0x15,0x07,
+	0x7E,0x34,0x55,0x1A,0x1B,0x7C,0x3B,0x1A,0x99,0x00,0x08,0x15,0x05,0x9D,0xFF,0xE2,
+	0x15,0x05,0xAC,0x02,0x04,0x00,
+	/* java_lang_Integer_getChars*/
+	0x1B,0x36,0x05,0x03,0x36,0x06,0x1A,0x9C,0x00,0x0A,0x10,0x2D,0x36,0x06,0x1A,0x74,
+	0x3B,0x1A,0x12,0x00,0x0D,0xA1,0x00,0x3D,0x1A,0x10,0x64,0x6C,0x3E,0x1A,0x1D,0x10,
+	0x06,0x78,0x1D,0x08,0x78,0x60,0x1D,0x05,0x78,0x60,0x64,0x36,0x04,0x1D,0x3B,0x2C,
+	0x84,0x05,0xFF,0x15,0x05,0xB2,0x00,0x05,0x22,
+	/* offset: 1, -88*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, DigitOnes_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, DigitOnes_f) << 3)) & 0xff),
+	0x15,0x04,0x34,0x55,0x2C,
+	0x84,0x05,0xFF,0x15,0x05,0xB2,0x00,0x05,0x22,
+	/* offset: 1, -120*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, DigitTens_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, DigitTens_f) << 3)) & 0xff),
+	0x15,0x04,0x34,0x55,0xA7,
+	0xFF,0xC2,0x1A,0x12,0x00,0x0E,0x68,0x10,0x13,0x7C,0x3E,0x1A,0x1D,0x06,0x78,0x1D,
+	0x04,0x78,0x60,0x64,0x36,0x04,0x2C,0x84,0x05,0xFF,0x15,0x05,0xB2,0x00,0x05,0x22,
+	/* offset: 1, 104*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, digits_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, digits_f) << 3)) & 0xff),
+	0x15,0x04,0x34,0x55,0x1D,0x3B,0x1A,0x9A,0xFF,0xD9,0xA7,0x00,0x03,0x15,
+	0x06,0x99,0x00,0x0C,0x2C,0x84,0x05,0xFF,0x15,0x05,0x15,0x06,0x55,0xB1,0x01,0x04,
+	/* java_lang_Integer_numberOfLeadingZeros*/
+	0x1A,0x9A,0x00,0x08,0x10,0x20,0xAC,0x01,0x00,0x04,0x3C,0x1A,0x10,0x10,0x7C,0x9A,
+	0x00,0x0B,0x84,0x01,0x10,0x1A,0x10,0x10,0x78,0x3B,0x1A,0x10,0x18,0x7C,0x9A,0x00,
+	0x0B,0x84,0x01,0x08,0x1A,0x10,0x08,0x78,0x3B,0x1A,0x10,0x1C,0x7C,0x9A,0x00,0x0A,
+	0x84,0x01,0x04,0x1A,0x07,0x78,0x3B,0x1A,0x10,0x1E,0x7C,0x9A,0x00,0x0A,0x84,0x01,
+	0x02,0x1A,0x05,0x78,0x3B,0x1B,0x1A,0x10,0x1F,0x7C,0x64,0x3C,0x1B,0xAC,0x01,0x00,
+	/* java_lang_Integer_stringSize*/
+	0x03,0x3C,0x1A,0xB2,0x00,0x05,0x22,
+	/* offset: 1, -56*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, sizeTable_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, sizeTable_f) << 3)) & 0xff),
+	0x1B,0x2E,0xA3,0x00,0x09,0x1B,0x04,
+	0x60,0xAC,0x01,0x00,0x84,0x01,0x01,0xA7,0xFF,0xEB,
+	/* java_lang_Integer_toHexString*/
+	0x1A,0x07,0xB8,0x00,0x5E,0x17,0xB0,0x01,0x02,
+	/* java_lang_Integer_toUnsignedString0*/
+	0x10,0x20,0x1A,0xB8,0x00,0x5B,0x0D,0x64,0x3D,0x1C,0x1B,0x04,0x64,0x60,0x1B,0x6C,
+	0x04,0xB8,0x00,0x61,0x20,0x3E,0x1D,0xBC,0x00,0x21,0x3A,0x04,0x1A,0x1B,0x19,0x04,
+	0x03,0x1D,0xB8,0x00,0x59,0x13,0x57,0xBB,0x00,0x5A,0x59,0x19,0x04,0x04,0xB7,0x00,
+	0x72,0x28,0xB0,0x01,0x30,
+	/* java_lang_Math_clinit_*/
+	0x12,0x00,0x0F,0xB7,0x00,0x46,0xE8,0x9A,0x00,0x07,0x04,0xA7,0x00,0x04,0x03,0xB3,
+	0x00,0x0B,0x08,
+	/* offset: 3, 40*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, _assertionsDisabled_f__f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, _assertionsDisabled_f__f) << 3)) & 0xff),
+	0x12,0x00,0x10,0xB8,0x00,0x53,0xEC,0x85,0xB3,0x00,0x0B,
+	0x40,
+	/* offset: 2, 40*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, negativeZeroFloatBits_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, negativeZeroFloatBits_f) << 3)) & 0xff),
+	0x14,0x00,0x11,0xB8,0x00,0x4D,0xE9,0xB3,0x00,0x0B,0x40,
+	/* offset: 2, 104*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, negativeZeroDoubleBits_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, negativeZeroDoubleBits_f) << 3)) & 0xff),
+
+	0x11,0x02,0x00,0xB8,0x00,0x63,0xF5,0xB3,0x00,0x0B,0x40,
+	/* offset: 2, -88*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, twoToTheDoubleScaleUp_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, twoToTheDoubleScaleUp_f) << 3)) & 0xff),
+	0x11,0xFE,0x00,
+	0xB8,0x00,0x63,0xF5,0xB3,0x00,0x0B,0x40,
+	/* offset: 2, -24*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, twoToTheDoubleScaleDown_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, twoToTheDoubleScaleDown_f) << 3)) & 0xff),
+	0xB1,0x00,
+	/* java_lang_Math_init_*/
+	0x2A,0xB7,0x00,0x66,0xFC,0xB1,0x01,0x01,
+	/* java_lang_Math_max*/
+	0x1A,0x1B,0xA1,0x00,0x07,0x1A,0xA7,0x00,0x04,0x1B,0xAC,0x01,0x00,
+	/* java_lang_Math_min*/
+	0x1A,0x1B,0xA3,0x00,0x07,0x1A,0xA7,0x00,0x04,0x1B,0xAC,0x01,0x00,
+	/* java_lang_Math_powerOfTwoD*/
+	0xB2,0x00,0x0B,0x08,
+	/* offset: 3, 40*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, _assertionsDisabled_f__f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, _assertionsDisabled_f__f) << 3)) & 0xff),
+	0x9A,0x00,0x1A,0x1A,0x11,0xFC,0x02,0xA1,0x00,0x0A,
+	0x1A,0x11,0x03,0xFF,0xA4,0x00,0x0C,0xBB,0x00,0x46,0x59,0xB7,0x00,0x44,0xE7,0xBF,
+	0x1A,0x85,0x14,0x00,0x12,0x61,0x10,0x34,0x79,0x14,0x00,0x13,0x7F,0xB8,0x00,0x4E,
+	0xEB,0xAF,0x01,0x00,
+	/* java_lang_NegativeArraySizeException_init_*/
+	0x2A,0xB7,0x00,0x6B,0x10,0xB1,0x01,0x01,
+	/* java_lang_NullPointerException_init_*/
+	0x2A,0xB7,0x00,0x6B,0x10,0xB1,0x01,0x01,
+	/* java_lang_Object_init_*/
+	0xB1,0x01,0x01,
+	/* java_lang_Object_toString*/
+	0xBB,0x00,0x30,0x59,0xB7,0x00,0x7E,0x48,0x2A,0xB7,0x00,0x67,0x47,0xB7,0x00,0x48,
+	0x41,0xB7,0x00,0x83,0x4A,0x12,0x00,0x14,0xB7,0x00,0x83,0x4A,0x2A,0xB6,0x01,0x02,
+	0x00,0x02,0x00,0x3D,0x00,0x68,0x00,0x2D,0x00,0x76,0xB8,0x00,0x5D,0x43,0xB7,0x00,
+	0x83,0x4A,0xB7,0x00,0x84,0x49,0xB0,0x01,0x03,
+	/* java_lang_OutOfMemoryError_init_*/
+	0x2A,0xB7,0x00,0x92,0x10,0xB1,0x01,0x01,
+	/* java_lang_RuntimeException_init_*/
+	0x2A,0xB7,0x00,0x50,0x16,0xB1,0x01,0x01,
+	/* java_lang_RuntimeException_init__*/
+	0x2A,0x2B,0xB7,0x00,0x51,0x17,0xB1,0x01,0x03,
+	/* java_lang_String_CaseInsensitiveComparator_init_*/
+	0x2A,0xB7,0x00,0x66,0x3A,0xB1,0x01,0x01,
+	/* java_lang_String_CaseInsensitiveComparator_init__*/
+	0x2A,0xB7,0x00,0x6D,0x3D,0xB1,0x01,0x03,
+	/* java_lang_String_clinit_*/
+	0x03,0xBD,0x00,0x1A,0xB3,0x00,0x2D,0x22,
+	/* offset: 6, 88*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, serialPersistentFields_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, serialPersistentFields_f) << 3)) & 0xff),
+	0xBB,0x00,0x78,0x59,0x01,0xB7,
+	0x00,0x6E,0xEA,0xB3,0x00,0x2D,0x22,
+	/* offset: 6, 120*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, CASE_INSENSITIVE_ORDER_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, CASE_INSENSITIVE_ORDER_f) << 3)) & 0xff),
+	0xB1,0x00,
+	/* java_lang_String_initFromCharArray*/
+	0x2A,0xB7,0x00,0x66,0xC8,0x2A,0x2B,0x2B,0xBE,0xB8,0x00,0x95,0xFC,0xB5,0x00,0x2D,
+	0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,0x03,
+	/* java_lang_String_init__*/
+	0x2A,0xB7,0x00,0x66,0xC8,0x1C,0x9C,0x00,0x0D,0xBB,0x00,0x20,0x59,0x1C,0xB7,0x00,
+	0x85,0xF5,0xBF,0x1D,0x9D,0x00,0x2A,0x1D,0x9C,0x00,0x0D,0xBB,0x00,0x20,0x59,0x1D,
+	0xB7,0x00,0x85,0xF5,0xBF,0x1C,0x2B,0xBE,0xA3,0x00,0x16,0x2A,0x12,0x00,0x15,0xB4,
+	0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB5,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,0x03,0x1C,0x2B,
+	0xBE,0x1D,0x64,0xA4,0x00,0x0F,0xBB,0x00,0x20,0x59,0x1C,0x1D,0x60,0xB7,0x00,0x85,
+	0xF5,0xBF,0x2A,0x2B,0x1C,0x1C,0x1D,0x60,0xB8,0x00,0x96,0xFD,0xB5,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,0x03,
+	/* java_lang_String_init___*/
+	0x2A,0xB7,0x00,0x66,0xC8,0x2A,0x2B,0xB5,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,0x03,
+	/* java_lang_String_charAt*/
+	0x1B,0x9B,0x00,0x0F,0x1B,0x2A,0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xBE,0xA1,0x00,0x0D,
+	0xBB,0x00,0x20,0x59,0x1B,0xB7,0x00,0x85,0xF5,0xBF,0x2A,0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0x1B,0x34,0xAC,0x01,0x01,
+	/* java_lang_String_equals*/
+	0x2A,0x2B,0xA6,0x00,0x07,0x04,0xAC,0x01,0x03,0x2B,0xC1,0x00,0x5A,0x99,0x00,0x54,
+	0x2B,0xC0,0x00,0x5A,0x4D,0x2A,0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xBE,0x3E,0x1D,0x2C,
+	0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xBE,0xA0,0x00,0x3A,0x2A,0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0x3A,0x04,0x2C,0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0x3A,0x05,0x03,0x36,0x06,0x1D,
+	0x84,0x03,0xFF,0x99,0x00,0x1A,0x19,0x04,0x15,0x06,0x34,0x19,0x05,0x15,0x06,0x34,
+	0x9F,0x00,0x07,0x03,0xAC,0x01,0x37,0x84,0x06,0x01,0xA7,0xFF,0xE5,0x04,0xAC,0x01,
+	0x37,0x03,0xAC,0x01,0x07,
+	/* java_lang_String_getChars*/
+	0x1B,0x9C,0x00,0x0D,0xBB,0x00,0x20,0x59,0x1B,0xB7,0x00,0x85,0xF5,0xBF,0x1C,0x2A,
+	0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xBE,0xA4,0x00,0x0D,0xBB,0x00,0x20,0x59,0x1C,0xB7,
+	0x00,0x85,0xF5,0xBF,0x1B,0x1C,0xA4,0x00,0x0F,0xBB,0x00,0x20,0x59,0x1C,0x1B,0x64,
+	0xB7,0x00,0x85,0xF5,0xBF,0x2A,0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0x1B,0x2D,0x15,0x04,
+	0x1C,0x1B,0x64,0xB8,0x00,0x87,0xF6,0xB1,0x01,0x09,
+	/* java_lang_String_hashCode*/
+	0x2A,0xB4,0x00,0x2D,0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, hash_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, hash_f) - sizeof(Object)) << 3)) & 0xff),
+	0x3C,0x1B,0x9A,0x00,0x3B,0x2A,0xB4,0x00,0x2D,
+	0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xBE,0x9E,0x00,0x30,0x2A,0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0x4D,0x03,
+	0x3E,0x1D,0x2A,0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xBE,0xA2,0x00,0x12,0x10,0x1F,0x1B,
+	0x68,0x2C,0x1D,0x34,0x60,0x3C,0x84,0x03,0x01,0xA7,0xFF,0xE8,0x2A,0x1B,0xB5,0x00,
+	0x2D,0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, hash_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, hash_f) - sizeof(Object)) << 3)) & 0xff),
+	0x1B,0xAC,0x01,0x05,
+	/* java_lang_String_indexOf*/
+	0x2A,0x2B,0x03,0xB7,0x00,0x78,0xE1,0xAC,0x01,0x03,
+	/* java_lang_String_indexOf_*/
+	0x2A,0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0x03,0x2A,0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xBE,
+	0x2B,0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0x03,0x2B,0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xBE,
+	0x1C,0xB8,0x00,0x79,0xD8,0xAC,0x01,0x03,
+	/* java_lang_String_indexOf__*/
+	0x15,0x06,0x1C,0xA1,0x00,0x11,0x15,0x05,0x9A,0x00,0x07,0x1C,0xA7,0x00,0x04,0x02,
+	0xAC,0x02,0x09,0x00,0x15,0x06,0x9C,0x00,0x06,0x03,0x36,0x06,0x15,0x05,0x9A,0x00,
+	0x09,0x15,0x06,0xAC,0x02,0x09,0x00,0x2D,0x15,0x04,0x34,0x36,0x07,0x1B,0x1C,0x15,
+	0x05,0x64,0x60,0x36,0x08,0x1B,0x15,0x06,0x60,0x36,0x09,0x15,0x09,0x15,0x08,0xA3,
+	0x00,0x6E,0x2A,0x15,0x09,0x34,0x15,0x07,0x9F,0x00,0x19,0x84,0x09,0x01,0x15,0x09,
+	0x15,0x08,0xA3,0x00,0x0F,0x2A,0x15,0x09,0x34,0x15,0x07,0x9F,0x00,0x06,0xA7,0xFF,
+	0xED,0x15,0x09,0x15,0x08,0xA3,0x00,0x42,0x15,0x09,0x04,0x60,0x36,0x0A,0x15,0x0A,
+	0x15,0x05,0x60,0x04,0x64,0x36,0x0B,0x15,0x04,0x04,0x60,0x36,0x0C,0x15,0x0A,0x15,
+	0x0B,0xA2,0x00,0x17,0x2A,0x15,0x0A,0x34,0x2D,0x15,0x0C,0x34,0xA0,0x00,0x0C,0x84,
+	0x0A,0x01,0x84,0x0C,0x01,0xA7,0xFF,0xE8,0x15,0x0A,0x15,0x0B,0xA0,0x00,0x0B,0x15,
+	0x09,0x1B,0x64,0xAC,0x02,0x09,0x00,0x84,0x09,0x01,0xA7,0xFF,0x91,0x02,0xAC,0x02,
+	0x09,0x00,
+	/* java_lang_String_length*/
+	0x2A,0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xBE,0xAC,0x01,0x01,
+	/* java_lang_String_substring*/
+	0x1B,0x9C,0x00,0x0D,0xBB,0x00,0x20,0x59,0x1B,0xB7,0x00,0x85,0xF5,0xBF,0x1C,0x2A,
+	0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xBE,0xA4,0x00,0x0D,0xBB,0x00,0x20,0x59,0x1C,0xB7,
+	0x00,0x85,0xF5,0xBF,0x1C,0x1B,0x64,0x3E,0x1D,0x9C,0x00,0x0D,0xBB,0x00,0x20,0x59,
+	0x1D,0xB7,0x00,0x85,0xF5,0xBF,0x1B,0x9A,0x00,0x13,0x1C,0x2A,0xB4,0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0xBE,0xA0,0x00,0x07,0x2A,0xA7,0x00,0x14,0xBB,0x00,0x5A,0x59,0x2A,0xB4,
+	0x00,0x2D,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_String_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0x1B,0x1D,0xB7,0x00,0x71,0xD7,0xB0,0x01,0x11,
+	/* java_lang_String_toString*/
+	0x2A,0xB0,0x01,0x03,
+	/* java_lang_String_valueOf*/
+	0x2A,0xC7,0x00,0x09,0x12,0x00,0x16,0xA7,0x00,0x1D,0x2A,0xB6,0x01,0x03,0x00,0x05,
+	0x00,0x3D,0x00,0x69,0x00,0x1B,0x00,0x91,0x00,0x3E,0x00,0x4A,0x00,0x2D,0x00,0x7C,
+	0x00,0x18,0x00,0x84,0xB0,0x01,0x03,
+	/* java_lang_StringBuilder_init_*/
+	0x2A,0x10,0x10,0xB7,0x00,0x39,0xF5,0xB1,0x01,0x01,
+	/* java_lang_StringBuilder_init__*/
+	0x2A,0x2B,0xB7,0x00,0x7A,0x20,0x10,0x10,0x60,0xB7,0x00,0x39,0xF5,0x2A,0x2B,0xB7,
+	0x00,0x83,0x40,0x57,0xB1,0x01,0x03,
+	/* java_lang_StringBuilder_append_*/
+	0x2A,0x1B,0xB7,0x00,0x3A,0xFD,0x57,0x2A,0xB0,0x01,0x05,
+	/* java_lang_StringBuilder_append__*/
+	0x2A,0x1B,0xB7,0x00,0x3B,0x00,0x57,0x2A,0xB0,0x01,0x05,
+	/* java_lang_StringBuilder_append___*/
+	0x2A,0x2B,0xB7,0x00,0x83,0x40,0xB0,0x01,0x07,
+	/* java_lang_StringBuilder_append____*/
+	0x2A,0x2B,0xB7,0x00,0x3C,0x1E,0x57,0x2A,0xB0,0x01,0x07,
+	/* java_lang_StringBuilder_toString*/
+	0xBB,0x00,0x5A,0x59,0x2A,0xB4,0x00,0x2C,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, value_f) - sizeof(Object)) << 3)) & 0xff),
+	0x03,0x2A,0xB4,0x00,0x2C,
+	0x20,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_AbstractStringBuilder_c, count_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB7,0x00,0x71,0x21,0xB0,0x01,0x03,
+	/* java_lang_StringIndexOutOfBoundsException_init_*/
+	0x2A,0xBB,0x00,0x30,0x59,0xB7,0x00,0x7E,0x1F,0x12,0x00,0x17,0xB7,0x00,0x83,0x22,
+	0x1B,0xB7,0x00,0x81,0x21,0xB7,0x00,0x84,0x20,0xB7,0x00,0x57,0x1E,0xB1,0x01,0x01,
+	/* java_lang_System_clinit_*/
+	0xB8,0x00,0x88,0x4C,0x01,0xB3,0x00,0x04,0x22,
+	/* offset: 0, -88*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, in_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, in_f) << 3)) & 0xff),
+	0x01,0xB3,0x00,0x04,0x22,
+	/* offset: 0, -56*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, out_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, out_f) << 3)) & 0xff),
+	0x01,0xB3,0x00,0x04,0x22,
+	/* offset: 0, -24*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, err_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, err_f) << 3)) & 0xff),
+	0x01,0xB3,0x00,0x04,0x22,
+	/* offset: 1, 8*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, security_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, security_f) << 3)) & 0xff),
+
+	0x01,0xB3,0x00,0x04,0x22,
+	/* offset: 1, 40*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, cons_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, cons_f) << 3)) & 0xff),
+	0xB1,0x00,
+	/* java_lang_Throwable_init_*/
+	0x2A,0xB7,0x00,0x66,0x19,0x2A,0x2A,0xB5,0x00,0x1B,0x22,
+	/* offset: 0, 64*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, cause_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, cause_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB2,0x00,
+	0x1B,0x22,
+	/* offset: 8, -96*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, UNASSIGNED_STACK_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, UNASSIGNED_STACK_f) << 3)) & 0xff),
+	0xB5,0x00,0x1B,0x22,
+	/* offset: 0, 96*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, stackTrace_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, stackTrace_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB2,0x00,0x1B,0x22,
+	/* offset: 8, -64*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, SUPPRESSED_SENTINEL_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, SUPPRESSED_SENTINEL_f) << 3)) & 0xff),
+	0xB5,0x00,0x1B,0x22,
+	/* offset: 0, -128*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, suppressedExceptions_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, suppressedExceptions_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB7,0x00,0x8C,0x29,0x57,0xB1,0x01,0x01,
+	/* java_lang_Throwable_init__*/
+	0x2A,0xB7,0x00,0x66,0x19,0x2A,0x2A,0xB5,0x00,0x1B,0x22,
+	/* offset: 0, 64*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, cause_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, cause_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB2,0x00,
+	0x1B,0x22,
+	/* offset: 8, -96*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, UNASSIGNED_STACK_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, UNASSIGNED_STACK_f) << 3)) & 0xff),
+	0xB5,0x00,0x1B,0x22,
+	/* offset: 0, 96*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, stackTrace_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, stackTrace_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB2,0x00,0x1B,0x22,
+	/* offset: 8, -64*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, SUPPRESSED_SENTINEL_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, SUPPRESSED_SENTINEL_f) << 3)) & 0xff),
+	0xB5,0x00,0x1B,0x22,
+	/* offset: 0, -128*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, suppressedExceptions_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, suppressedExceptions_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB7,0x00,0x8C,0x29,0x57,0x2A,0x2B,0xB5,
+	0x00,0x1B,0x22,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, detailMessage_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, detailMessage_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,0x03,
+	/* java_lang_Throwable_fillInStackTrace*/
+	0x2A,0xB4,0x00,0x1B,0x22,
+	/* offset: 0, 96*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, stackTrace_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, stackTrace_f) - sizeof(Object)) << 3)) & 0xff),
+	0xC7,0x00,0x0D,0x2A,0xB4,0x00,0x1B,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, backtrace_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, backtrace_f) - sizeof(Object)) << 3)) & 0xff),
+	0xC6,0x00,0x17,0x2A,0x03,0xB7,0x00,0x8D,0x2C,0x57,0x2A,0xB2,0x00,0x1B,0x22,
+	/* offset: 8, -96*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, UNASSIGNED_STACK_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, UNASSIGNED_STACK_f) << 3)) & 0xff),
+	0xB5,0x00,0x1B,0x22,
+	/* offset: 0, 96*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, stackTrace_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, stackTrace_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB0,0x01,0x03,
+	/* java_lang_Throwable_getLocalizedMessage*/
+	0x2A,0xB7,0x00,0x8F,0x27,0xB0,0x01,0x03,
+	/* java_lang_Throwable_getMessage*/
+	0x2A,0xB4,0x00,0x1B,0x22,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, detailMessage_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _java_lang_OutOfMemoryError_c, detailMessage_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB0,0x01,0x03,
+	/* java_lang_Throwable_toString*/
+	0x2A,0xB7,0x00,0x67,0x1A,0xB7,0x00,0x48,0x14,0x4C,0x2A,0xB7,0x00,0x8E,0x26,0x4D,
+	0x2C,0xC6,0x00,0x23,0xBB,0x00,0x30,0x59,0xB7,0x00,0x7E,0x1C,0x2B,0xB7,0x00,0x83,
+	0x20,0x12,0x00,0x18,0xB7,0x00,0x83,0x20,0x2C,0xB7,0x00,0x83,0x20,0xB7,0x00,0x84,
+	0x1D,0xA7,0x00,0x04,0x2B,0xB0,0x01,0x0F,
+	/* java_lang_VirtualMachineError_init_*/
+	0x2A,0xB7,0x00,0x4F,0x14,0xB1,0x01,0x01,
+	/* java_util_Arrays_clinit_*/
+	0x12,0x00,0x19,0xB7,0x00,0x46,0x69,0x9A,0x00,0x07,0x04,0xA7,0x00,0x04,0x03,0xB3,
+	0x00,0x03,0x08,
+	/* offset: 0, -96*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, _assertionsDisabled_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, _assertionsDisabled_f) << 3)) & 0xff),
+	0xB1,0x00,
+	/* java_util_Arrays_init_*/
+	0x2A,0xB7,0x00,0x66,0x71,0xB1,0x01,0x01,
+	/* java_util_Arrays_copyOf*/
+	0x1B,0xBC,0x00,0x21,0x4D,0x2A,0x03,0x2C,0x03,0x2A,0xBE,0x1B,0xB8,0x00,0x62,0x6F,
+	0xB8,0x00,0x87,0x80,0x2C,0xB0,0x01,0x0D,
+	/* java_util_Arrays_copyOfRange*/
+	0x1C,0x1B,0x64,0x3E,0x1D,0x9C,0x00,0x29,0xBB,0x00,0x70,0x59,0xBB,0x00,0x30,0x59,
+	0xB7,0x00,0x7E,0x76,0x1B,0xB7,0x00,0x81,0x7C,0x12,0x00,0x1A,0xB7,0x00,0x83,0x7F,
+	0x1C,0xB7,0x00,0x81,0x7C,0xB7,0x00,0x84,0x78,0xB7,0x00,0x54,0x6E,0xBF,0x1D,0xBC,
+	0x00,0x21,0x3A,0x04,0x2A,0x1B,0x19,0x04,0x03,0x2A,0xBE,0x1B,0x64,0x1D,0xB8,0x00,
+	0x62,0x6F,0xB8,0x00,0x87,0x80,0x19,0x04,0xB0,0x01,0x31,
+	/* javax_microedition_io_ConnectionNotFoundException_init_*/
+	0x2A,0xB7,0x00,0x2F,0x0D,0xB1,0x01,0x01,
+	/* javax_microedition_io_Connector_getFactory*/
+	0x2A,0xB8,0x00,0xA1,0x8B,0xB0,0x01,0x03,
+	/* javax_microedition_io_Connector_open*/
+	0x1B,0x04,0x9F,0x00,0x19,0x1B,0x05,0x9F,0x00,0x14,0x1B,0x06,0x9F,0x00,0x0F,0xBB,
+	0x00,0x70,0x59,0x12,0x00,0x1B,0xB7,0x00,0x54,0x2B,0xBF,0x2A,0xC6,0x00,0x0B,0x2A,
+	0xB7,0x00,0x7A,0x2E,0x9A,0x00,0x0F,0xBB,0x00,0x70,0x59,0x12,0x00,0x1C,0xB7,0x00,
+	0x54,0x2B,0xBF,0xBB,0x00,0x10,0x59,0x2A,0xB7,0x00,0xAE,0x38,0x4D,0x2C,0xB7,0x00,
+	0xAF,0x39,0xB8,0x00,0x98,0x3D,0x4E,0x01,0x3A,0x04,0x2D,0xC6,0x00,0x0E,0x2D,0x2A,
+	0xB7,0x00,0x17,0x41,0x3A,0x04,0xA7,0x00,0x19,0xB2,0x00,0x27,0x22,
+	/* offset: 5, -72*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, consoleCon_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, consoleCon_f) << 3)) & 0xff),
+	0x3A,
+	0x04,0xA7,0x00,0x0E,0x3A,0x05,0xBB,0x00,0x76,0x59,0xB7,0x00,0x97,0x4A,0xBF,0x19,
+	0x04,0xC7,0x00,0x0C,0xBB,0x00,0x76,0x59,0xB7,0x00,0x97,0x4A,0xBF,0x19,0x04,0xB0,
+	0x01,0x5D,0x4D,0xBB,0x00,0x70,0x59,0xBB,0x00,0x30,0x59,0x2A,0xB8,0x00,0x7D,0x4D,
+	0xB7,0x00,0x7F,0x51,0x12,0x00,0x1D,0xB7,0x00,0x83,0x54,0xB7,0x00,0x84,0x58,0xB7,
+	0x00,0x54,0x2B,0xBF,
+	/* javax_microedition_io_Connector_openDataInputStream*/
+	0x01,0x4C,0x2A,0x04,0xB8,0x00,0x99,0x23,0xC0,0x00,0x15,0x4C,0xA7,0x00,0x12,0x4D,
+	0xBB,0x00,0x6A,0x59,0x2C,0xB7,0x00,0x91,0x71,0xB7,0x00,0x30,0x74,0xBF,0x2B,0xB9,
+	0x00,0x00,0x00,0x0A,0x01,0x00,0x0F,0x00,0x12,0xB0,0x01,0x0B,
+	/* javax_microedition_io_Connector_openDataOutputStream*/
+	0x01,0x4C,0x2A,0x05,0xB8,0x00,0x99,0x23,0xC0,0x00,0x0F,0x4C,0xA7,0x00,0x12,0x4D,
+	0xBB,0x00,0x6A,0x59,0x2C,0xB7,0x00,0x91,0x71,0xB7,0x00,0x30,0x74,0xBF,0x2B,0xB9,
+	0x00,0x00,0x00,0x07,0x01,0x00,0x0F,0x00,0x13,0xB0,0x01,0x0B,
+	/* javax_microedition_io_Connector_openInputStream*/
+	0x2A,0xB8,0x00,0x9A,0x85,0xB0,0x01,0x03,
+	/* javax_microedition_io_Connector_openOutputStream*/
+	0x2A,0xB8,0x00,0x9B,0x89,0xB0,0x01,0x03,
+	/* javax_safetycritical_io_ConnectionFactory_clinit_*/
+	0x10,0x0A,0xBD,0x00,0x2B,0xB3,0x00,0x30,0x22,
+	/* offset: 6, -104*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, connectionFactorySet_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, connectionFactorySet_f) << 3)) & 0xff),
+	0x03,0xB3,0x00,0x30,0x20,
+	/* offset: 6, -72*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, count_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, count_f) << 3)) & 0xff),
+	0xB1,0x00,
+	/* javax_safetycritical_io_ConnectionFactory_init_*/
+	0x2A,0xB7,0x00,0x66,0x16,0xBB,0x00,0x10,0x59,0x2B,0xB7,0x00,0xAE,0x1A,0x4D,0x2C,
+	0xB7,0x00,0xAF,0x1C,0xC6,0x00,0x12,0x2A,0x2C,0xB7,0x00,0xAF,0x1C,0xB5,0x00,0x30,
+	0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _javax_safetycritical_io_ConnectionFactory_c, name_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _javax_safetycritical_io_ConnectionFactory_c, name_f) - sizeof(Object)) << 3)) & 0xff),
+	0xA7,0x00,0x1B,0x2A,0x2C,0xB7,0x00,0xB0,0x22,0xB5,0x00,0x30,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _javax_safetycritical_io_ConnectionFactory_c, name_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _javax_safetycritical_io_ConnectionFactory_c, name_f) - sizeof(Object)) << 3)) & 0xff),
+	0xA7,0x00,0x0C,0x4D,0x2A,0x2B,0xB5,0x00,0x30,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _javax_safetycritical_io_ConnectionFactory_c, name_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _javax_safetycritical_io_ConnectionFactory_c, name_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,
+	0x07,
+	/* javax_safetycritical_io_ConnectionFactory_getRegistered*/
+	0x2A,0xB8,0x00,0xA2,0x3F,0x3C,0x1B,0x02,0xA0,0x00,0x07,0x01,0xB0,0x01,0x05,0xB2,
+	0x00,0x30,0x22,
+	/* offset: 6, -104*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, connectionFactorySet_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, connectionFactorySet_f) << 3)) & 0xff),
+	0x1B,0x32,0xB0,0x01,0x05,
+	/* javax_safetycritical_io_ConnectionFactory_isRegistered*/
+	0x03,0x3C,0xA7,0x00,0x20,0xB2,0x00,0x30,0x22,
+	/* offset: 6, -104*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, connectionFactorySet_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, connectionFactorySet_f) << 3)) & 0xff),
+	0x1B,0x32,0xB4,0x00,0x30,
+	0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _javax_safetycritical_io_ConnectionFactory_c, name_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _javax_safetycritical_io_ConnectionFactory_c, name_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB7,0x00,0x74,0x39,0x99,0x00,0x07,0x1B,0xAC,0x01,0x01,0x84,
+	0x01,0x01,0x1B,0xB2,0x00,0x30,0x20,
+	/* offset: 6, -72*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, count_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, count_f) << 3)) & 0xff),
+	0xA1,0xFF,0xDC,0x02,0xAC,0x01,0x01,
+	/* javax_safetycritical_io_ConnectionFactory_register*/
+	0x2A,0xB4,0x00,0x30,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _javax_safetycritical_io_ConnectionFactory_c, name_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _javax_safetycritical_io_ConnectionFactory_c, name_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB8,0x00,0xA2,0x3F,0x3C,0x1B,0x02,0xA0,0x00,
+	0x1D,0xB2,0x00,0x30,0x22,
+	/* offset: 6, -104*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, connectionFactorySet_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, connectionFactorySet_f) << 3)) & 0xff),
+	0xB2,0x00,0x30,0x20,
+	/* offset: 6, -72*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, count_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, count_f) << 3)) & 0xff),
+	0x59,0x04,0x60,
+	0xB3,0x00,0x30,0x20,
+	/* offset: 6, -72*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, count_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, count_f) << 3)) & 0xff),
+	0x2A,0x53,0xA7,0x00,0x0C,0xB2,0x00,0x30,0x22,
+	/* offset: 6, -104*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, connectionFactorySet_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, connectionFactorySet_f) << 3)) & 0xff),
+	0x1B,0x2A,0x53,0xB1,0x01,0x01,
+	/* test_same70_configuration_BluetoothTargetConfigurationSAME_ATSAMe70Writer_init_*/
+	0x2A,0xB7,0x00,0x66,0x0A,0xB1,0x01,0x01,
+	/* test_same70_configuration_BluetoothTargetConfigurationSAME_ATSAMe70Writer_getMaxLineLength*/
+	0x11,0x00,0x80,0xAC,0x01,0x01,
+	/* test_same70_configuration_BluetoothTargetConfigurationSAME_ATSAMe70Writer_write*/
+	0x03,0x3E,0xA7,0x00,0x0F,0x2B,0x1D,0x33,0xB8,0x00,0xA6,0x12,0x1D,0x04,0x60,0x93,
+	0x3E,0x1D,0x1C,0xA1,0xFF,0xF2,0xB1,0x01,0x03,
+	/* test_same70_configuration_BluetoothTargetConfigurationSAME_clinit_*/
+	0x03,0xB3,0x00,0x31,0x08,
+	/* offset: 6, -40*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, initialized_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, initialized_f) << 3)) & 0xff),
+	0xBB,0x00,0x0E,0x59,0xB7,0x00,0xAC,0x10,0xB8,
+	0x00,0xB4,0x13,0xBB,0x00,0x80,0x59,0xB7,0x00,0xA4,0x1B,0xB3,0x00,0x0E,0x22,
+	/* offset: 3, -112*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, writer_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, writer_f) << 3)) & 0xff),
+	0xB1,0x00,
+	/* test_same70_configuration_MachineFactorySAME_init_*/
+	0x2A,0xB7,0x00,0xB2,0x08,0xB1,0x01,0x01,
+	/* test_same70_examples_BluetoothAtSAME_main*/
+	0xB8,0x00,0xAA,0x10,0x12,0x00,0x1E,0xB8,0x00,0x1C,0x15,0x11,0x03,0xE8,0xB8,0x00,
+	0xA9,0x1B,0x12,0x00,0x1F,0xB8,0x00,0x1C,0x15,0xBB,0x00,0x12,0x59,0xBB,0x00,0x2E,
+	0x59,0xB7,0x00,0x07,0x25,0xB7,0x00,0x18,0x26,0x4C,0x11,0x13,0x88,0xB8,0x00,0xA9,
+	0x1B,0x03,0x3D,0xA7,0x00,0x50,0x12,0x00,0x20,0xB8,0x00,0x1C,0x15,0x2B,0xB7,0x00,
+	0x19,0x2B,0x3D,0xBB,0x00,0x30,0x59,0x12,0x00,0x21,0xB7,0x00,0x7F,0x33,0x1C,0x92,
+	0xB7,0x00,0x80,0x35,0xB7,0x00,0x84,0x39,0xB8,0x00,0x1C,0x15,0x11,0x27,0x10,0xB8,
+	0x00,0xA9,0x1B,0x1C,0x10,0x21,0xA4,0x00,0x1D,0x1C,0x10,0x7E,0xA2,0x00,0x17,0x12,
+	0x00,0x22,0xB8,0x00,0x1C,0x15,0x2B,0x1C,0xB7,0x00,0x1A,0x3F,0x11,0x27,0x10,0xB8,
+	0x00,0xA9,0x1B,0x1C,0x07,0xA0,0xFF,0xB1,0xA7,0x00,0x26,0x4C,0x2B,0xB7,0x00,0x90,
+	0x43,0xB6,0x01,0x03,0x00,0x05,0x00,0x3D,0x00,0x69,0x00,0x1B,0x00,0x91,0x00,0x3E,
+	0x00,0x4A,0x00,0x2D,0x00,0x7C,0x00,0x18,0x00,0x84,0xB8,0x00,0x1C,0x15,0x11,0x03,
+	0xE8,0xB8,0x00,0xA9,0x1B,0x12,0x00,0x23,0xB8,0x00,0x1C,0x15,0xB1,0x01,0x03,
+	/* util_URL_init_*/
+	0x2A,0xB7,0x00,0x66,0x10,0x2A,0x2B,0xB5,0x00,0x08,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _util_URL_c, raw_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _util_URL_c, raw_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,0x03,
+	/* util_URL_getScheme*/
+	0x2A,0xB4,0x00,0x08,0x22,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _util_URL_c, scheme_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _util_URL_c, scheme_f) - sizeof(Object)) << 3)) & 0xff),
+	0xC7,0x00,0x49,0x2A,0xB4,0x00,0x08,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _util_URL_c, raw_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _util_URL_c, raw_f) - sizeof(Object)) << 3)) & 0xff),
+	0x12,0x00,0x24,0xB7,0x00,0x77,0x23,0x3C,0x1B,0x02,0xA0,0x00,0x14,0x2A,0x2A,
+	0xB4,0x00,0x08,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _util_URL_c, raw_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _util_URL_c, raw_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB5,0x00,0x08,0x22,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _util_URL_c, scheme_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _util_URL_c, scheme_f) - sizeof(Object)) << 3)) & 0xff),
+	0xA7,0x00,0x24,0x1B,
+	0x9A,0x00,0x0C,0xBB,0x00,0x72,0x59,0xB7,0x00,0xB1,0x29,0xBF,0x2A,0x2A,0xB4,0x00,
+	0x08,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _util_URL_c, raw_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _util_URL_c, raw_f) - sizeof(Object)) << 3)) & 0xff),
+	0x03,0x1B,0xB7,0x00,0x7B,0x2A,0xB5,0x00,0x08,0x22,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _util_URL_c, scheme_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _util_URL_c, scheme_f) - sizeof(Object)) << 3)) & 0xff),
+
+	0x2A,0xB4,0x00,0x08,0x22,
+	/* offset: 0, 32*/
+	(uint8)(((uint16)((offsetof(struct _util_URL_c, scheme_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _util_URL_c, scheme_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB0,0x01,0x05,
+	/* util_URL_getSchemeSpecificPart*/
+	0x2A,0xB4,0x00,0x08,0x22,
+	/* offset: 0, 64*/
+	(uint8)(((uint16)((offsetof(struct _util_URL_c, schemeSpecificPart_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _util_URL_c, schemeSpecificPart_f) - sizeof(Object)) << 3)) & 0xff),
+	0xC7,0x00,0x42,0x2A,0xB4,0x00,0x08,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _util_URL_c, raw_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _util_URL_c, raw_f) - sizeof(Object)) << 3)) & 0xff),
+	0x12,0x00,0x24,0xB7,0x00,0x77,0x23,0x3C,0x1B,0x02,0xA0,0x00,0x0E,0x2A,0x01,
+	0xB5,0x00,0x08,0x22,
+	/* offset: 0, 64*/
+	(uint8)(((uint16)((offsetof(struct _util_URL_c, schemeSpecificPart_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _util_URL_c, schemeSpecificPart_f) - sizeof(Object)) << 3)) & 0xff),
+	0xA7,0x00,0x23,0x2A,0x2A,0xB4,0x00,0x08,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _util_URL_c, raw_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _util_URL_c, raw_f) - sizeof(Object)) << 3)) & 0xff),
+	0x1B,0x04,0x60,0x2A,0xB4,0x00,0x08,0x22,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _util_URL_c, raw_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _util_URL_c, raw_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB7,0x00,0x7A,0x34,0xB7,
+	0x00,0x7B,0x2A,0xB5,0x00,0x08,0x22,
+	/* offset: 0, 64*/
+	(uint8)(((uint16)((offsetof(struct _util_URL_c, schemeSpecificPart_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _util_URL_c, schemeSpecificPart_f) - sizeof(Object)) << 3)) & 0xff),
+	0x2A,0xB4,0x00,0x08,0x22,
+	/* offset: 0, 64*/
+	(uint8)(((uint16)((offsetof(struct _util_URL_c, schemeSpecificPart_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _util_URL_c, schemeSpecificPart_f) - sizeof(Object)) << 3)) & 0xff),
+
+	0xB0,0x01,0x05,
+	/* util_URLSyntaxException_init_*/
+	0x2A,0xB7,0x00,0x50,0x0D,0xB1,0x01,0x01,
+	/* vm_AbstractMachineFactory_init_*/
+	0x2A,0xB7,0x00,0x66,0x0C,0x2A,0xB8,0x00,0xB4,0x0E,0x2A,0x03,0xB5,0x00,0x2F,0x08,
+	/* offset: 0, 0*/
+	(uint8)(((uint16)((offsetof(struct _vm_AbstractMachineFactory_c, systemTickStarted_f) - sizeof(Object)) << 3)) >> 8), (uint8)(((uint16)((offsetof(struct _vm_AbstractMachineFactory_c, systemTickStarted_f) - sizeof(Object)) << 3)) & 0xff),
+	0xB1,0x01,0x01,
+	/* vm_Machine_getMachineFactory*/
+	0xB2,0x00,0x13,0x22,
+	/* offset: 3, -16*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, mFactory_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, mFactory_f) << 3)) & 0xff),
+	0xB0,0x01,0x01,
+	/* vm_Machine_setMachineFactory*/
+	0x2A,0xB3,0x00,0x13,0x22,
+	/* offset: 3, -16*/
+	(uint8)(((uint16)(offsetof(struct _staticClassFields_c, mFactory_f) << 3)) >> 8), (uint8)(((uint16)(offsetof(struct _staticClassFields_c, mFactory_f) << 3)) & 0xff),
+	0xB1,0x01,0x01,
+	/* vm_POSIX64BitMachineFactory_init_*/
+	0x2A,0xB7,0x00,0xB2,0x08,0xB1,0x01,0x01,
+};
+
+int16 dispatch_native_func(int16 functionNumber, int32 *sp) {
+	switch (functionNumber) {
+	case N_CARCONTROL_DEVICE_IMPL_BLUETOOTHSERIALIMPL_BLUETOOTH_READ_BYTE:
+		return n_carcontrol_device_impl_BluetoothSerialImpl_bluetooth_read_byte(
+				sp);
+	case N_CARCONTROL_DEVICE_IMPL_BLUETOOTHSERIALIMPL_BLUETOOTH_SEND_BYTE:
+		return n_carcontrol_device_impl_BluetoothSerialImpl_bluetooth_send_byte(
+				sp);
+	case N_CARCONTROL_DEVICE_IMPL_BLUETOOTHSERIALIMPL_BLUETOOTH_START:
+		return n_carcontrol_device_impl_BluetoothSerialImpl_bluetooth_start(sp);
+	case N_DEVICES_DEFAULTWRITER_NWRITE:
+		return n_devices_DefaultWriter_nwrite(sp);
+	case N_JAVA_IO_IOEXCEPTION_INIT_:
+		return n_java_io_IOException_init_(sp);
+	case N_JAVA_IO_IOEXCEPTION_INIT__:
+		return n_java_io_IOException_init__(sp);
+	case N_JAVA_LANG_CLASS_CLINIT_:
+		return n_java_lang_Class_clinit_(sp);
+	case N_JAVA_LANG_CLASS_DESIREDASSERTIONSTATUS:
+		return n_java_lang_Class_desiredAssertionStatus(sp);
+	case N_JAVA_LANG_CLASS_GETNAME0:
+		return n_java_lang_Class_getName0(sp);
+	case N_JAVA_LANG_CLASS_GETPRIMITIVECLASS:
+		return n_java_lang_Class_getPrimitiveClass(sp);
+	case N_JAVA_LANG_CLASS_TOSTRING:
+		return n_java_lang_Class_toString(sp);
+	case N_JAVA_LANG_DOUBLE_DOUBLETORAWLONGBITS:
+		return n_java_lang_Double_doubleToRawLongBits(sp);
+	case N_JAVA_LANG_DOUBLE_LONGBITSTODOUBLE:
+		return n_java_lang_Double_longBitsToDouble(sp);
+	case N_JAVA_LANG_FLOAT_FLOATTORAWINTBITS:
+		return n_java_lang_Float_floatToRawIntBits(sp);
+	case N_JAVA_LANG_OBJECT_GETCLASS:
+		return n_java_lang_Object_getClass(sp);
+	case N_JAVA_LANG_OBJECT_HASHCODE:
+		return n_java_lang_Object_hashCode(sp);
+	case N_JAVA_LANG_SYSTEM_ARRAYCOPY:
+		return n_java_lang_System_arraycopy(sp);
+	case N_JAVA_LANG_SYSTEM_REGISTERNATIVES:
+		return n_java_lang_System_registerNatives(sp);
+	case N_JAVA_LANG_THROWABLE_CLINIT_:
+		return n_java_lang_Throwable_clinit_(sp);
+	case N_JAVA_LANG_THROWABLE_FILLINSTACKTRACE_:
+		return n_java_lang_Throwable_fillInStackTrace_(sp);
+	case N_JAVA_LANG_THROWABLE_GETSTACKTRACE:
+		return n_java_lang_Throwable_getStackTrace(sp);
+	case N_TEST_SAME70_CONFIGURATION_BLUETOOTHTARGETCONFIGURATIONSAME_ATSAME70WRITER_PUTC:
+		return n_test_same70_configuration_BluetoothTargetConfigurationSAME_ATSAMe70Writer_putc(
+				sp);
+	case N_TEST_SAME70_CONFIGURATION_BLUETOOTHTARGETCONFIGURATIONSAME_INITNATIVE:
+		return n_test_same70_configuration_BluetoothTargetConfigurationSAME_initNative(
+				sp);
+	case TEST_SAME70_CONFIGURATION_BLUETOOTHTARGETCONFIGURATIONSAME_DELAY:
+		return test_same70_configuration_BluetoothTargetConfigurationSAME_delay(
+				sp);
+	case TEST_SAME70_CONFIGURATION_BLUETOOTHTARGETCONFIGURATIONSAME_INIT:
+		return test_same70_configuration_BluetoothTargetConfigurationSAME_init(
+				sp);
+	default:
+		return JAVA_LANG_NULLPOINTEREXCEPTION_var;
+	}
+}
+
+RANGE static const char methodName0[50] PROGMEM = "carcontrol.device.impl.BluetoothSerialImpl.<init>";
+RANGE static const char methodName1[20] PROGMEM = "bluetooth_read_byte";
+RANGE static const char methodName2[20] PROGMEM = "bluetooth_send_byte";
+RANGE static const char methodName3[16] PROGMEM = "bluetooth_start";
+RANGE static const char methodName4[54] PROGMEM = "carcontrol.device.impl.BluetoothSerialImpl.openSerial";
+RANGE static const char methodName5[48] PROGMEM = "carcontrol.device.impl.BluetoothSerialImpl.read";
+RANGE static const char methodName6[49] PROGMEM = "carcontrol.device.impl.BluetoothSerialImpl.write";
+RANGE static const char methodName7[54] PROGMEM = "carcontrol.io.BluetoothCommunicationDeviceImpl.<init>";
+RANGE static const char methodName8[55] PROGMEM = "carcontrol.io.BluetoothCommunicationDeviceImpl.receive";
+RANGE static const char methodName9[55] PROGMEM = "carcontrol.io.BluetoothCommunicationDeviceImpl.receive";
+RANGE static const char methodName10[52] PROGMEM = "carcontrol.io.BluetoothCommunicationDeviceImpl.send";
+RANGE static const char methodName11[43] PROGMEM = "carcontrol.io.BluetoothConnection$1.<init>";
+RANGE static const char methodName12[46] PROGMEM = "carcontrol.io.BluetoothConnection$1.available";
+RANGE static const char methodName13[41] PROGMEM = "carcontrol.io.BluetoothConnection$1.read";
+RANGE static const char methodName14[43] PROGMEM = "carcontrol.io.BluetoothConnection$2.<init>";
+RANGE static const char methodName15[42] PROGMEM = "carcontrol.io.BluetoothConnection$2.write";
+RANGE static const char methodName16[41] PROGMEM = "carcontrol.io.BluetoothConnection.<init>";
+RANGE static const char methodName17[43] PROGMEM = "carcontrol.io.BluetoothConnection.access$0";
+RANGE static const char methodName18[54] PROGMEM = "carcontrol.io.BluetoothConnection.openDataInputStream";
+RANGE static const char methodName19[55] PROGMEM = "carcontrol.io.BluetoothConnection.openDataOutputStream";
+RANGE static const char methodName20[50] PROGMEM = "carcontrol.io.BluetoothConnection.openInputStream";
+RANGE static const char methodName21[51] PROGMEM = "carcontrol.io.BluetoothConnection.openOutputStream";
+RANGE static const char methodName22[48] PROGMEM = "carcontrol.io.BluetoothConnectionFactory.<init>";
+RANGE static const char methodName23[48] PROGMEM = "carcontrol.io.BluetoothConnectionFactory.create";
+RANGE static const char methodName24[26] PROGMEM = "carcontrol.io.Port.<init>";
+RANGE static const char methodName25[27] PROGMEM = "carcontrol.io.Port.receive";
+RANGE static const char methodName26[24] PROGMEM = "carcontrol.io.Port.send";
+RANGE static const char methodName27[25] PROGMEM = "devices.Console.getBytes";
+RANGE static const char methodName28[24] PROGMEM = "devices.Console.println";
+RANGE static const char methodName29[24] PROGMEM = "devices.Console.println";
+RANGE static const char methodName30[29] PROGMEM = "devices.DefaultWriter.<init>";
+RANGE static const char methodName31[39] PROGMEM = "devices.DefaultWriter.getMaxLineLength";
+RANGE static const char methodName32[7] PROGMEM = "nwrite";
+RANGE static const char methodName33[28] PROGMEM = "devices.DefaultWriter.write";
+RANGE static const char methodName34[24] PROGMEM = "devices.System.<clinit>";
+RANGE static const char methodName35[21] PROGMEM = "devices.System.delay";
+RANGE static const char methodName36[31] PROGMEM = "java.io.DataInputStream.<init>";
+RANGE static const char methodName37[29] PROGMEM = "java.io.DataInputStream.read";
+RANGE static const char methodName38[32] PROGMEM = "java.io.DataOutputStream.<init>";
+RANGE static const char methodName39[31] PROGMEM = "java.io.DataOutputStream.flush";
+RANGE static const char methodName40[34] PROGMEM = "java.io.DataOutputStream.incCount";
+RANGE static const char methodName41[31] PROGMEM = "java.io.DataOutputStream.write";
+RANGE static const char methodName42[31] PROGMEM = "java.io.DataOutputStream.write";
+RANGE static const char methodName43[33] PROGMEM = "java.io.FilterInputStream.<init>";
+RANGE static const char methodName44[36] PROGMEM = "java.io.FilterInputStream.available";
+RANGE static const char methodName45[31] PROGMEM = "java.io.FilterInputStream.read";
+RANGE static const char methodName46[34] PROGMEM = "java.io.FilterOutputStream.<init>";
+RANGE static const char methodName47[7] PROGMEM = "<init>";
+RANGE static const char methodName48[7] PROGMEM = "<init>";
+RANGE static const char methodName49[27] PROGMEM = "java.io.InputStream.<init>";
+RANGE static const char methodName50[30] PROGMEM = "java.io.InputStream.available";
+RANGE static const char methodName51[5] PROGMEM = "read";
+RANGE static const char methodName52[25] PROGMEM = "java.io.InputStream.read";
+RANGE static const char methodName53[28] PROGMEM = "java.io.OutputStream.<init>";
+RANGE static const char methodName54[27] PROGMEM = "java.io.OutputStream.flush";
+RANGE static const char methodName55[6] PROGMEM = "write";
+RANGE static const char methodName56[27] PROGMEM = "java.io.OutputStream.write";
+RANGE static const char methodName57[39] PROGMEM = "java.lang.AbstractStringBuilder.<init>";
+RANGE static const char methodName58[39] PROGMEM = "java.lang.AbstractStringBuilder.append";
+RANGE static const char methodName59[39] PROGMEM = "java.lang.AbstractStringBuilder.append";
+RANGE static const char methodName60[39] PROGMEM = "java.lang.AbstractStringBuilder.append";
+RANGE static const char methodName61[43] PROGMEM = "java.lang.AbstractStringBuilder.appendNull";
+RANGE static const char methodName62[55] PROGMEM = "java.lang.AbstractStringBuilder.ensureCapacityInternal";
+RANGE static const char methodName63[45] PROGMEM = "java.lang.AbstractStringBuilder.hugeCapacity";
+RANGE static const char methodName64[44] PROGMEM = "java.lang.AbstractStringBuilder.newCapacity";
+RANGE static const char methodName65[37] PROGMEM = "java.lang.ArithmeticException.<init>";
+RANGE static const char methodName66[48] PROGMEM = "java.lang.ArrayIndexOutOfBoundsException.<init>";
+RANGE static const char methodName67[37] PROGMEM = "java.lang.ArrayStoreException.<init>";
+RANGE static const char methodName68[32] PROGMEM = "java.lang.AssertionError.<init>";
+RANGE static const char methodName69[9] PROGMEM = "<clinit>";
+RANGE static const char methodName70[23] PROGMEM = "desiredAssertionStatus";
+RANGE static const char methodName71[9] PROGMEM = "getName0";
+RANGE static const char methodName72[24] PROGMEM = "java.lang.Class.getName";
+RANGE static const char methodName73[18] PROGMEM = "getPrimitiveClass";
+RANGE static const char methodName74[9] PROGMEM = "toString";
+RANGE static const char methodName75[36] PROGMEM = "java.lang.ClassCastException.<init>";
+RANGE static const char methodName76[26] PROGMEM = "java.lang.Double.<clinit>";
+RANGE static const char methodName77[20] PROGMEM = "doubleToRawLongBits";
+RANGE static const char methodName78[17] PROGMEM = "longBitsToDouble";
+RANGE static const char methodName79[23] PROGMEM = "java.lang.Error.<init>";
+RANGE static const char methodName80[27] PROGMEM = "java.lang.Exception.<init>";
+RANGE static const char methodName81[27] PROGMEM = "java.lang.Exception.<init>";
+RANGE static const char methodName82[25] PROGMEM = "java.lang.Float.<clinit>";
+RANGE static const char methodName83[18] PROGMEM = "floatToRawIntBits";
+RANGE static const char methodName84[42] PROGMEM = "java.lang.IllegalArgumentException.<init>";
+RANGE static const char methodName85[46] PROGMEM = "java.lang.IllegalMonitorStateException.<init>";
+RANGE static const char methodName86[43] PROGMEM = "java.lang.IndexOutOfBoundsException.<init>";
+RANGE static const char methodName87[43] PROGMEM = "java.lang.IndexOutOfBoundsException.<init>";
+RANGE static const char methodName88[27] PROGMEM = "java.lang.Integer.<clinit>";
+RANGE static const char methodName89[36] PROGMEM = "java.lang.Integer.formatUnsignedInt";
+RANGE static const char methodName90[27] PROGMEM = "java.lang.Integer.getChars";
+RANGE static const char methodName91[39] PROGMEM = "java.lang.Integer.numberOfLeadingZeros";
+RANGE static const char methodName92[29] PROGMEM = "java.lang.Integer.stringSize";
+RANGE static const char methodName93[30] PROGMEM = "java.lang.Integer.toHexString";
+RANGE static const char methodName94[36] PROGMEM = "java.lang.Integer.toUnsignedString0";
+RANGE static const char methodName95[24] PROGMEM = "java.lang.Math.<clinit>";
+RANGE static const char methodName96[22] PROGMEM = "java.lang.Math.<init>";
+RANGE static const char methodName97[19] PROGMEM = "java.lang.Math.max";
+RANGE static const char methodName98[19] PROGMEM = "java.lang.Math.min";
+RANGE static const char methodName99[27] PROGMEM = "java.lang.Math.powerOfTwoD";
+RANGE static const char methodName100[44] PROGMEM = "java.lang.NegativeArraySizeException.<init>";
+RANGE static const char methodName101[38] PROGMEM = "java.lang.NullPointerException.<init>";
+RANGE static const char methodName102[24] PROGMEM = "java.lang.Object.<init>";
+RANGE static const char methodName103[9] PROGMEM = "getClass";
+RANGE static const char methodName104[9] PROGMEM = "hashCode";
+RANGE static const char methodName105[26] PROGMEM = "java.lang.Object.toString";
+RANGE static const char methodName106[34] PROGMEM = "java.lang.OutOfMemoryError.<init>";
+RANGE static const char methodName107[34] PROGMEM = "java.lang.RuntimeException.<init>";
+RANGE static const char methodName108[34] PROGMEM = "java.lang.RuntimeException.<init>";
+RANGE static const char methodName109[50] PROGMEM = "java.lang.String$CaseInsensitiveComparator.<init>";
+RANGE static const char methodName110[50] PROGMEM = "java.lang.String$CaseInsensitiveComparator.<init>";
+RANGE static const char methodName111[26] PROGMEM = "java.lang.String.<clinit>";
+RANGE static const char methodName112[24] PROGMEM = "java.lang.String.<init>";
+RANGE static const char methodName113[24] PROGMEM = "java.lang.String.<init>";
+RANGE static const char methodName114[24] PROGMEM = "java.lang.String.<init>";
+RANGE static const char methodName115[24] PROGMEM = "java.lang.String.charAt";
+RANGE static const char methodName116[24] PROGMEM = "java.lang.String.equals";
+RANGE static const char methodName117[26] PROGMEM = "java.lang.String.getChars";
+RANGE static const char methodName118[26] PROGMEM = "java.lang.String.hashCode";
+RANGE static const char methodName119[25] PROGMEM = "java.lang.String.indexOf";
+RANGE static const char methodName120[25] PROGMEM = "java.lang.String.indexOf";
+RANGE static const char methodName121[25] PROGMEM = "java.lang.String.indexOf";
+RANGE static const char methodName122[24] PROGMEM = "java.lang.String.length";
+RANGE static const char methodName123[27] PROGMEM = "java.lang.String.substring";
+RANGE static const char methodName124[26] PROGMEM = "java.lang.String.toString";
+RANGE static const char methodName125[25] PROGMEM = "java.lang.String.valueOf";
+RANGE static const char methodName126[31] PROGMEM = "java.lang.StringBuilder.<init>";
+RANGE static const char methodName127[31] PROGMEM = "java.lang.StringBuilder.<init>";
+RANGE static const char methodName128[31] PROGMEM = "java.lang.StringBuilder.append";
+RANGE static const char methodName129[31] PROGMEM = "java.lang.StringBuilder.append";
+RANGE static const char methodName130[31] PROGMEM = "java.lang.StringBuilder.append";
+RANGE static const char methodName131[31] PROGMEM = "java.lang.StringBuilder.append";
+RANGE static const char methodName132[33] PROGMEM = "java.lang.StringBuilder.toString";
+RANGE static const char methodName133[49] PROGMEM = "java.lang.StringIndexOutOfBoundsException.<init>";
+RANGE static const char methodName134[26] PROGMEM = "java.lang.System.<clinit>";
+RANGE static const char methodName135[10] PROGMEM = "arraycopy";
+RANGE static const char methodName136[16] PROGMEM = "registerNatives";
+RANGE static const char methodName137[9] PROGMEM = "<clinit>";
+RANGE static const char methodName138[27] PROGMEM = "java.lang.Throwable.<init>";
+RANGE static const char methodName139[27] PROGMEM = "java.lang.Throwable.<init>";
+RANGE static const char methodName140[37] PROGMEM = "java.lang.Throwable.fillInStackTrace";
+RANGE static const char methodName141[17] PROGMEM = "fillInStackTrace";
+RANGE static const char methodName142[40] PROGMEM = "java.lang.Throwable.getLocalizedMessage";
+RANGE static const char methodName143[31] PROGMEM = "java.lang.Throwable.getMessage";
+RANGE static const char methodName144[14] PROGMEM = "getStackTrace";
+RANGE static const char methodName145[29] PROGMEM = "java.lang.Throwable.toString";
+RANGE static const char methodName146[37] PROGMEM = "java.lang.VirtualMachineError.<init>";
+RANGE static const char methodName147[26] PROGMEM = "java.util.Arrays.<clinit>";
+RANGE static const char methodName148[24] PROGMEM = "java.util.Arrays.<init>";
+RANGE static const char methodName149[24] PROGMEM = "java.util.Arrays.copyOf";
+RANGE static const char methodName150[29] PROGMEM = "java.util.Arrays.copyOfRange";
+RANGE static const char methodName151[57] PROGMEM = "javax.microedition.io.ConnectionNotFoundException.<init>";
+RANGE static const char methodName152[43] PROGMEM = "javax.microedition.io.Connector.getFactory";
+RANGE static const char methodName153[37] PROGMEM = "javax.microedition.io.Connector.open";
+RANGE static const char methodName154[52] PROGMEM = "javax.microedition.io.Connector.openDataInputStream";
+RANGE static const char methodName155[53] PROGMEM = "javax.microedition.io.Connector.openDataOutputStream";
+RANGE static const char methodName156[48] PROGMEM = "javax.microedition.io.Connector.openInputStream";
+RANGE static const char methodName157[49] PROGMEM = "javax.microedition.io.Connector.openOutputStream";
+RANGE static const char methodName158[51] PROGMEM = "javax.safetycritical.io.ConnectionFactory.<clinit>";
+RANGE static const char methodName159[49] PROGMEM = "javax.safetycritical.io.ConnectionFactory.<init>";
+RANGE static const char methodName160[7] PROGMEM = "create";
+RANGE static const char methodName161[56] PROGMEM = "javax.safetycritical.io.ConnectionFactory.getRegistered";
+RANGE static const char methodName162[55] PROGMEM = "javax.safetycritical.io.ConnectionFactory.isRegistered";
+RANGE static const char methodName163[51] PROGMEM = "javax.safetycritical.io.ConnectionFactory.register";
+RANGE static const char methodName164[81] PROGMEM = "test.same70.configuration.BluetoothTargetConfigurationSAME$ATSAMe70Writer.<init>";
+RANGE static const char methodName165[91] PROGMEM = "test.same70.configuration.BluetoothTargetConfigurationSAME$ATSAMe70Writer.getMaxLineLength";
+RANGE static const char methodName166[5] PROGMEM = "putc";
+RANGE static const char methodName167[80] PROGMEM = "test.same70.configuration.BluetoothTargetConfigurationSAME$ATSAMe70Writer.write";
+RANGE static const char methodName168[68] PROGMEM = "test.same70.configuration.BluetoothTargetConfigurationSAME.<clinit>";
+RANGE static const char methodName169[65] PROGMEM = "test.same70.configuration.BluetoothTargetConfigurationSAME.delay";
+RANGE static const char methodName170[64] PROGMEM = "test.same70.configuration.BluetoothTargetConfigurationSAME.init";
+RANGE static const char methodName171[11] PROGMEM = "initNative";
+RANGE static const char methodName172[52] PROGMEM = "test.same70.configuration.MachineFactorySAME.<init>";
+RANGE static const char methodName173[42] PROGMEM = "test.same70.examples.BluetoothAtSAME.main";
+RANGE static const char methodName174[16] PROGMEM = "util.URL.<init>";
+RANGE static const char methodName175[19] PROGMEM = "util.URL.getScheme";
+RANGE static const char methodName176[31] PROGMEM = "util.URL.getSchemeSpecificPart";
+RANGE static const char methodName177[31] PROGMEM = "util.URLSyntaxException.<init>";
+RANGE static const char methodName178[33] PROGMEM = "vm.AbstractMachineFactory.<init>";
+RANGE static const char methodName179[29] PROGMEM = "vm.Machine.getMachineFactory";
+RANGE static const char methodName180[29] PROGMEM = "vm.Machine.setMachineFactory";
+RANGE static const char methodName181[35] PROGMEM = "vm.POSIX64BitMachineFactory.<init>";
+
+static RANGE const MethodInfo _methods[182] PROGMEM = {
+	{	34, 1, 1, 8, 0, 0, 64, 0, 1 /* carcontrol_device_impl_BluetoothSerialImpl_init_ */, 0, methodName0},
+	{	34, 0, 0, 0, 0, 0, 17, 0, 0, N_CARCONTROL_DEVICE_IMPL_BLUETOOTHSERIALIMPL_BLUETOOTH_READ_BYTE, methodName1},
+	{	34, 0, 0, 0, 0, 1, 32, 0, 0, N_CARCONTROL_DEVICE_IMPL_BLUETOOTHSERIALIMPL_BLUETOOTH_SEND_BYTE, methodName2},
+	{	34, 0, 0, 0, 0, 0, 32, 0, 0, N_CARCONTROL_DEVICE_IMPL_BLUETOOTHSERIALIMPL_BLUETOOTH_START, methodName3},
+	{	34, 1, 1, 8, 0, 0, 32, 0, 9 /* carcontrol_device_impl_BluetoothSerialImpl_openSerial */, 0, methodName4},
+	{	34, 1, 1, 8, 0, 0, 17, 0, 17 /* carcontrol_device_impl_BluetoothSerialImpl_read */, 0, methodName5},
+	{	34, 2, 2, 9, 0, 1, 32, 0, 25 /* carcontrol_device_impl_BluetoothSerialImpl_write */, 0, methodName6},
+	{	46, 3, 1, 73, 0, 0, 64, 0, 34 /* carcontrol_io_BluetoothCommunicationDeviceImpl_init_ */, 0, methodName7},
+	{	46, 4, 3, 26, 1, 0, 17, ex_carcontrol_io_BluetoothCommunicationDeviceImpl_receive, 107 /* carcontrol_io_BluetoothCommunicationDeviceImpl_receive */, 0, methodName8},
+	{	46, 4, 4, 54, 0, 3, 17, 0, 133 /* carcontrol_io_BluetoothCommunicationDeviceImpl_receive_ */, 0, methodName9},
+	{	46, 4, 4, 46, 0, 3, 32, 0, 187 /* carcontrol_io_BluetoothCommunicationDeviceImpl_send */, 0, methodName10},
+	{	58, 2, 2, 16, 0, 1, 64, 0, 233 /* carcontrol_io_BluetoothConnection_1_init_ */, 0, methodName11},
+	{	58, 1, 1, 4, 0, 0, 17, 0, 249 /* carcontrol_io_BluetoothConnection_1_available */, 0, methodName12},
+	{	58, 1, 1, 24, 0, 0, 17, 0, 253 /* carcontrol_io_BluetoothConnection_1_read */, 0, methodName13},
+	{	62, 2, 2, 16, 0, 1, 64, 0, 277 /* carcontrol_io_BluetoothConnection_2_init_ */, 0, methodName14},
+	{	62, 2, 2, 25, 0, 1, 32, 0, 293 /* carcontrol_io_BluetoothConnection_2_write */, 0, methodName15},
+	{	30, 3, 2, 40, 0, 1, 64, 0, 318 /* carcontrol_io_BluetoothConnection_init_ */, 0, methodName16},
+	{	30, 1, 1, 10, 0, 1, 33, 0, 358 /* carcontrol_io_BluetoothConnection_access_0 */, 0, methodName17},
+	{	30, 3, 1, 16, 0, 0, 33, 0, 368 /* carcontrol_io_BluetoothConnection_openDataInputStream */, 0, methodName18},
+	{	30, 3, 1, 16, 0, 0, 33, 0, 384 /* carcontrol_io_BluetoothConnection_openDataOutputStream */, 0, methodName19},
+	{	30, 3, 1, 12, 0, 0, 33, 0, 400 /* carcontrol_io_BluetoothConnection_openInputStream */, 0, methodName20},
+	{	30, 3, 1, 12, 0, 0, 33, 0, 412 /* carcontrol_io_BluetoothConnection_openOutputStream */, 0, methodName21},
+	{	0, 2, 2, 9, 0, 1, 64, 0, 424 /* carcontrol_io_BluetoothConnectionFactory_init_ */, 0, methodName22},
+	{	0, 3, 3, 14, 0, 1, 33, 0, 433 /* carcontrol_io_BluetoothConnectionFactory_create */, 0, methodName23},
+	{	18, 2, 2, 29, 0, 1, 64, 0, 447 /* carcontrol_io_Port_init_ */, 0, methodName24},
+	{	18, 3, 1, 39, 0, 0, 133, 0, 476 /* carcontrol_io_Port_receive */, 0, methodName25},
+	{	18, 4, 2, 39, 0, 1, 160, 0, 515 /* carcontrol_io_Port_send */, 0, methodName26},
+	{	28, 4, 5, 135, 0, 2, 9, 0, 554 /* devices_Console_getBytes */, 0, methodName27},
+	{	28, 2, 1, 9, 0, 1, 32, 0, 689 /* devices_Console_println */, 0, methodName28},
+	{	28, 3, 3, 37, 0, 2, 32, 0, 698 /* devices_Console_println_ */, 0, methodName29},
+	{	100, 1, 1, 8, 0, 0, 64, 0, 735 /* devices_DefaultWriter_init_ */, 0, methodName30},
+	{	100, 1, 1, 6, 0, 0, 9, 0, 743 /* devices_DefaultWriter_getMaxLineLength */, 0, methodName31},
+	{	100, 0, 0, 0, 0, 2, 32, 0, 0, N_DEVICES_DEFAULTWRITER_NWRITE, methodName32},
+	{	100, 2, 3, 9, 0, 2, 32, 0, 749 /* devices_DefaultWriter_write */, 0, methodName33},
+	{	116, 2, 1, 21, 0, 0, 32, 0, 758 /* devices_System_clinit_ */, 0, methodName34},
+	{	116, 1, 1, 13, 0, 1, 32, 0, 779 /* devices_System_delay */, 0, methodName35},
+	{	56, 2, 2, 45, 0, 1, 64, 0, 792 /* java_io_DataInputStream_init_ */, 0, methodName36},
+	{	56, 4, 4, 26, 0, 3, 17, 0, 837 /* java_io_DataInputStream_read */, 0, methodName37},
+	{	20, 2, 2, 29, 0, 1, 64, 0, 863 /* java_io_DataOutputStream_init_ */, 0, methodName38},
+	{	20, 1, 1, 23, 0, 0, 32, 0, 892 /* java_io_DataOutputStream_flush */, 0, methodName39},
+	{	20, 2, 3, 29, 0, 1, 32, 0, 915 /* java_io_DataOutputStream_incCount */, 0, methodName40},
+	{	20, 2, 2, 30, 0, 1, 160, 0, 944 /* java_io_DataOutputStream_write */, 0, methodName41},
+	{	20, 4, 4, 32, 0, 3, 160, 0, 974 /* java_io_DataOutputStream_write_ */, 0, methodName42},
+	{	82, 2, 2, 16, 0, 1, 64, 0, 1006 /* java_io_FilterInputStream_init_ */, 0, methodName43},
+	{	82, 1, 1, 23, 0, 0, 17, 0, 1022 /* java_io_FilterInputStream_available */, 0, methodName44},
+	{	82, 1, 1, 23, 0, 0, 17, 0, 1045 /* java_io_FilterInputStream_read */, 0, methodName45},
+	{	36, 2, 2, 16, 0, 1, 64, 0, 1068 /* java_io_FilterOutputStream_init_ */, 0, methodName46},
+	{	106, 0, 0, 0, 0, 0, 64, 0, 0, N_JAVA_IO_IOEXCEPTION_INIT_, methodName47},
+	{	106, 0, 0, 0, 0, 1, 64, 0, 0, N_JAVA_IO_IOEXCEPTION_INIT__, methodName48},
+	{	130, 1, 1, 8, 0, 0, 64, 0, 1084 /* java_io_InputStream_init_ */, 0, methodName49},
+	{	130, 1, 1, 2, 0, 0, 17, 0, 1092 /* java_io_InputStream_available */, 0, methodName50},
+	{	130, 0, 0, 0, 0, 0, 17, 0, 0, 0, methodName51},
+	{	130, 3, 7, 137, 1, 3, 17, ex_java_io_InputStream_read_, 1094 /* java_io_InputStream_read_ */, 0, methodName52},
+	{	104, 1, 1, 8, 0, 0, 64, 0, 1231 /* java_io_OutputStream_init_ */, 0, methodName53},
+	{	104, 0, 1, 3, 0, 0, 32, 0, 1239 /* java_io_OutputStream_flush */, 0, methodName54},
+	{	104, 0, 0, 0, 0, 1, 32, 0, 0, 0, methodName55},
+	{	104, 4, 5, 95, 0, 3, 32, 0, 1242 /* java_io_OutputStream_write_ */, 0, methodName56},
+	{	88, 2, 2, 19, 0, 1, 64, 0, 1337 /* java_lang_AbstractStringBuilder_init_ */, 0, methodName57},
+	{	88, 5, 2, 44, 0, 1, 33, 0, 1356 /* java_lang_AbstractStringBuilder_append */, 0, methodName58},
+	{	88, 3, 4, 82, 0, 1, 33, 0, 1400 /* java_lang_AbstractStringBuilder_append_ */, 0, methodName59},
+	{	88, 5, 3, 73, 0, 1, 33, 0, 1482 /* java_lang_AbstractStringBuilder_append__ */, 0, methodName60},
+	{	88, 3, 3, 68, 0, 0, 33, 0, 1555 /* java_lang_AbstractStringBuilder_appendNull */, 0, methodName61},
+	{	88, 4, 2, 40, 0, 1, 32, 0, 1623 /* java_lang_AbstractStringBuilder_ensureCapacityInternal */, 0, methodName62},
+	{	88, 2, 2, 34, 0, 1, 17, 0, 1663 /* java_lang_AbstractStringBuilder_hugeCapacity */, 0, methodName63},
+	{	88, 2, 3, 46, 0, 1, 17, 0, 1697 /* java_lang_AbstractStringBuilder_newCapacity */, 0, methodName64},
+	{	24, 1, 1, 8, 0, 0, 64, 0, 1743 /* java_lang_ArithmeticException_init_ */, 0, methodName65},
+	{	110, 1, 1, 8, 0, 0, 64, 0, 1751 /* java_lang_ArrayIndexOutOfBoundsException_init_ */, 0, methodName66},
+	{	50, 1, 1, 8, 0, 0, 64, 0, 1759 /* java_lang_ArrayStoreException_init_ */, 0, methodName67},
+	{	70, 1, 1, 8, 0, 0, 64, 0, 1767 /* java_lang_AssertionError_init_ */, 0, methodName68},
+	{	124, 0, 0, 0, 0, 0, 32, 0, 0, N_JAVA_LANG_CLASS_CLINIT_, methodName69},
+	{	124, 0, 0, 0, 0, 0, 1, 0, 0, N_JAVA_LANG_CLASS_DESIREDASSERTIONSTATUS, methodName70},
+	{	124, 0, 0, 0, 0, 0, 33, 0, 0, N_JAVA_LANG_CLASS_GETNAME0, methodName71},
+	{	124, 3, 2, 30, 0, 0, 33, 0, 1775 /* java_lang_Class_getName */, 0, methodName72},
+	{	124, 0, 0, 0, 0, 1, 33, 0, 0, N_JAVA_LANG_CLASS_GETPRIMITIVECLASS, methodName73},
+	{	124, 0, 0, 0, 0, 0, 33, 0, 0, N_JAVA_LANG_CLASS_TOSTRING, methodName74},
+	{	74, 1, 1, 8, 0, 0, 64, 0, 1805 /* java_lang_ClassCastException_init_ */, 0, methodName75},
+	{	60, 1, 1, 15, 0, 0, 32, 0, 1813 /* java_lang_Double_clinit_ */, 0, methodName76},
+	{	60, 0, 0, 0, 0, 2, 22, 0, 0, N_JAVA_LANG_DOUBLE_DOUBLETORAWLONGBITS, methodName77},
+	{	60, 0, 0, 0, 0, 2, 26, 0, 0, N_JAVA_LANG_DOUBLE_LONGBITSTODOUBLE, methodName78},
+	{	68, 1, 1, 8, 0, 0, 64, 0, 1828 /* java_lang_Error_init_ */, 0, methodName79},
+	{	40, 1, 1, 8, 0, 0, 64, 0, 1836 /* java_lang_Exception_init_ */, 0, methodName80},
+	{	40, 2, 2, 9, 0, 1, 64, 0, 1844 /* java_lang_Exception_init__ */, 0, methodName81},
+	{	2, 1, 1, 15, 0, 0, 32, 0, 1853 /* java_lang_Float_clinit_ */, 0, methodName82},
+	{	2, 0, 0, 0, 0, 1, 17, 0, 0, N_JAVA_LANG_FLOAT_FLOATTORAWINTBITS, methodName83},
+	{	112, 2, 2, 9, 0, 1, 64, 0, 1868 /* java_lang_IllegalArgumentException_init_ */, 0, methodName84},
+	{	80, 1, 1, 8, 0, 0, 64, 0, 1877 /* java_lang_IllegalMonitorStateException_init_ */, 0, methodName85},
+	{	4, 1, 1, 8, 0, 0, 64, 0, 1885 /* java_lang_IndexOutOfBoundsException_init_ */, 0, methodName86},
+	{	4, 2, 2, 9, 0, 1, 64, 0, 1893 /* java_lang_IndexOutOfBoundsException_init__ */, 0, methodName87},
+	{	10, 4, 1, 1519, 0, 0, 32, 0, 1902 /* java_lang_Integer_clinit_ */, 0, methodName88},
+	{	10, 5, 8, 54, 0, 5, 17, 0, 3421 /* java_lang_Integer_formatUnsignedInt */, 0, methodName89},
+	{	10, 4, 7, 144, 0, 3, 32, 0, 3475 /* java_lang_Integer_getChars */, 0, methodName90},
+	{	10, 3, 2, 80, 0, 1, 17, 0, 3619 /* java_lang_Integer_numberOfLeadingZeros */, 0, methodName91},
+	{	10, 3, 2, 26, 0, 1, 17, 0, 3699 /* java_lang_Integer_stringSize */, 0, methodName92},
+	{	10, 2, 1, 9, 0, 1, 33, 0, 3725 /* java_lang_Integer_toHexString */, 0, methodName93},
+	{	10, 5, 5, 53, 0, 2, 33, 0, 3734 /* java_lang_Integer_toUnsignedString0 */, 0, methodName94},
+	{	22, 2, 1, 76, 0, 0, 32, 0, 3787 /* java_lang_Math_clinit_ */, 0, methodName95},
+	{	22, 1, 1, 8, 0, 0, 64, 0, 3863 /* java_lang_Math_init_ */, 0, methodName96},
+	{	22, 2, 2, 13, 0, 2, 17, 0, 3871 /* java_lang_Math_max */, 0, methodName97},
+	{	22, 2, 2, 13, 0, 2, 17, 0, 3884 /* java_lang_Math_min */, 0, methodName98},
+	{	22, 4, 1, 52, 0, 1, 26, 0, 3897 /* java_lang_Math_powerOfTwoD */, 0, methodName99},
+	{	102, 1, 1, 8, 0, 0, 64, 0, 3949 /* java_lang_NegativeArraySizeException_init_ */, 0, methodName100},
+	{	12, 1, 1, 8, 0, 0, 64, 0, 3957 /* java_lang_NullPointerException_init_ */, 0, methodName101},
+	{	122, 0, 1, 3, 0, 0, 64, 0, 3965 /* java_lang_Object_init_ */, 0, methodName102},
+	{	122, 0, 0, 0, 0, 0, 33, 0, 0, N_JAVA_LANG_OBJECT_GETCLASS, methodName103},
+	{	122, 0, 0, 0, 0, 0, 17, 0, 0, N_JAVA_LANG_OBJECT_HASHCODE, methodName104},
+	{	122, 2, 1, 57, 0, 0, 33, 0, 3968 /* java_lang_Object_toString */, 0, methodName105},
+	{	126, 1, 1, 8, 0, 0, 64, 0, 4025 /* java_lang_OutOfMemoryError_init_ */, 0, methodName106},
+	{	108, 1, 1, 8, 0, 0, 64, 0, 4033 /* java_lang_RuntimeException_init_ */, 0, methodName107},
+	{	108, 2, 2, 9, 0, 1, 64, 0, 4041 /* java_lang_RuntimeException_init__ */, 0, methodName108},
+	{	120, 1, 1, 8, 0, 0, 64, 0, 4050 /* java_lang_String_CaseInsensitiveComparator_init_ */, 0, methodName109},
+	{	120, 1, 2, 8, 0, 1, 64, 0, 4058 /* java_lang_String_CaseInsensitiveComparator_init__ */, 0, methodName110},
+	{	90, 3, 1, 27, 0, 0, 32, 0, 4066 /* java_lang_String_clinit_ */, 0, methodName111},
+	{	90, 3, 2, 22, 0, 1, 64, 0, 4093 /* java_lang_String_initFromCharArray */, 0, methodName112},
+	{	90, 5, 4, 101, 0, 3, 64, 0, 4115 /* java_lang_String_init__ */, 0, methodName113},
+	{	90, 2, 3, 16, 0, 2, 64, 0, 4216 /* java_lang_String_init___ */, 0, methodName114},
+	{	90, 3, 2, 38, 0, 1, 13, 0, 4232 /* java_lang_String_charAt */, 0, methodName115},
+	{	90, 3, 7, 101, 0, 1, 1, 0, 4270 /* java_lang_String_equals */, 0, methodName116},
+	{	90, 6, 5, 74, 0, 4, 32, 0, 4371 /* java_lang_String_getChars */, 0, methodName117},
+	{	90, 3, 4, 72, 0, 0, 17, 0, 4445 /* java_lang_String_hashCode */, 0, methodName118},
+	{	90, 3, 2, 10, 0, 1, 17, 0, 4517 /* java_lang_String_indexOf */, 0, methodName119},
+	{	90, 7, 3, 40, 0, 2, 17, 0, 4527 /* java_lang_String_indexOf_ */, 0, methodName120},
+	{	90, 3, 13, 178, 0, 7, 17, 0, 4567 /* java_lang_String_indexOf__ */, 0, methodName121},
+	{	90, 1, 1, 11, 0, 0, 17, 0, 4745 /* java_lang_String_length */, 0, methodName122},
+	{	90, 5, 4, 94, 0, 2, 33, 0, 4756 /* java_lang_String_substring */, 0, methodName123},
+	{	90, 1, 1, 4, 0, 0, 33, 0, 4850 /* java_lang_String_toString */, 0, methodName124},
+	{	90, 1, 1, 39, 0, 1, 33, 0, 4854 /* java_lang_String_valueOf */, 0, methodName125},
+	{	48, 2, 1, 10, 0, 0, 64, 0, 4893 /* java_lang_StringBuilder_init_ */, 0, methodName126},
+	{	48, 3, 2, 23, 0, 1, 64, 0, 4903 /* java_lang_StringBuilder_init__ */, 0, methodName127},
+	{	48, 2, 2, 11, 0, 1, 33, 0, 4926 /* java_lang_StringBuilder_append_ */, 0, methodName128},
+	{	48, 2, 2, 11, 0, 1, 33, 0, 4937 /* java_lang_StringBuilder_append__ */, 0, methodName129},
+	{	48, 2, 2, 9, 0, 1, 33, 0, 4948 /* java_lang_StringBuilder_append___ */, 0, methodName130},
+	{	48, 2, 2, 11, 0, 1, 33, 0, 4957 /* java_lang_StringBuilder_append____ */, 0, methodName131},
+	{	48, 5, 1, 26, 0, 0, 33, 0, 4968 /* java_lang_StringBuilder_toString */, 0, methodName132},
+	{	32, 3, 2, 32, 0, 1, 64, 0, 4994 /* java_lang_StringIndexOutOfBoundsException_init_ */, 0, methodName133},
+	{	8, 1, 1, 41, 0, 0, 32, 0, 5026 /* java_lang_System_clinit_ */, 0, methodName134},
+	{	8, 0, 0, 0, 0, 5, 32, 0, 0, N_JAVA_LANG_SYSTEM_ARRAYCOPY, methodName135},
+	{	8, 0, 0, 0, 0, 0, 32, 0, 0, N_JAVA_LANG_SYSTEM_REGISTERNATIVES, methodName136},
+	{	54, 0, 0, 0, 0, 0, 32, 0, 0, N_JAVA_LANG_THROWABLE_CLINIT_, methodName137},
+	{	54, 2, 1, 48, 0, 0, 64, 0, 5067 /* java_lang_Throwable_init_ */, 0, methodName138},
+	{	54, 2, 2, 56, 0, 1, 64, 0, 5115 /* java_lang_Throwable_init__ */, 0, methodName139},
+	{	54, 2, 1, 44, 0, 0, 161, 0, 5171 /* java_lang_Throwable_fillInStackTrace */, 0, methodName140},
+	{	54, 0, 0, 0, 0, 1, 33, 0, 0, N_JAVA_LANG_THROWABLE_FILLINSTACKTRACE_, methodName141},
+	{	54, 1, 1, 8, 0, 0, 33, 0, 5215 /* java_lang_Throwable_getLocalizedMessage */, 0, methodName142},
+	{	54, 1, 1, 10, 0, 0, 33, 0, 5223 /* java_lang_Throwable_getMessage */, 0, methodName143},
+	{	54, 0, 0, 0, 0, 0, 33, 0, 0, N_JAVA_LANG_THROWABLE_GETSTACKTRACE, methodName144},
+	{	54, 2, 3, 56, 0, 0, 33, 0, 5233 /* java_lang_Throwable_toString */, 0, methodName145},
+	{	84, 1, 1, 8, 0, 0, 64, 0, 5289 /* java_lang_VirtualMachineError_init_ */, 0, methodName146},
+	{	6, 1, 1, 23, 0, 0, 32, 0, 5297 /* java_util_Arrays_clinit_ */, 0, methodName147},
+	{	6, 1, 1, 8, 0, 0, 64, 0, 5320 /* java_util_Arrays_init_ */, 0, methodName148},
+	{	6, 6, 3, 24, 0, 2, 33, 0, 5328 /* java_util_Arrays_copyOf */, 0, methodName149},
+	{	6, 6, 5, 75, 0, 3, 33, 0, 5352 /* java_util_Arrays_copyOfRange */, 0, methodName150},
+	{	118, 1, 1, 8, 0, 0, 64, 0, 5427 /* javax_microedition_io_ConnectionNotFoundException_init_ */, 0, methodName151},
+	{	78, 1, 1, 8, 0, 1, 33, 0, 5435 /* javax_microedition_io_Connector_getFactory */, 0, methodName152},
+	{	78, 5, 6, 164, 2, 2, 33, ex_javax_microedition_io_Connector_open, 5443 /* javax_microedition_io_Connector_open */, 0, methodName153},
+	{	78, 3, 3, 44, 1, 1, 33, ex_javax_microedition_io_Connector_openDataInputStream, 5607 /* javax_microedition_io_Connector_openDataInputStream */, 0, methodName154},
+	{	78, 3, 3, 44, 1, 1, 33, ex_javax_microedition_io_Connector_openDataOutputStream, 5651 /* javax_microedition_io_Connector_openDataOutputStream */, 0, methodName155},
+	{	78, 1, 1, 8, 0, 1, 33, 0, 5695 /* javax_microedition_io_Connector_openInputStream */, 0, methodName156},
+	{	78, 1, 1, 8, 0, 1, 33, 0, 5703 /* javax_microedition_io_Connector_openOutputStream */, 0, methodName157},
+	{	96, 1, 1, 20, 0, 0, 32, 0, 5711 /* javax_safetycritical_io_ConnectionFactory_clinit_ */, 0, methodName158},
+	{	96, 3, 3, 65, 1, 1, 64, ex_javax_safetycritical_io_ConnectionFactory_init_, 5731 /* javax_safetycritical_io_ConnectionFactory_init_ */, 0, methodName159},
+	{	96, 0, 0, 0, 0, 1, 33, 0, 0, 0, methodName160},
+	{	96, 2, 2, 26, 0, 1, 33, 0, 5796 /* javax_safetycritical_io_ConnectionFactory_getRegistered */, 0, methodName161},
+	{	96, 2, 2, 48, 0, 1, 17, 0, 5822 /* javax_safetycritical_io_ConnectionFactory_isRegistered */, 0, methodName162},
+	{	96, 4, 2, 55, 0, 1, 32, 0, 5870 /* javax_safetycritical_io_ConnectionFactory_register */, 0, methodName163},
+	{	128, 1, 1, 8, 0, 0, 64, 0, 5925 /* test_same70_configuration_BluetoothTargetConfigurationSAME_ATSAMe70Writer_init_ */, 0, methodName164},
+	{	128, 1, 1, 6, 0, 0, 9, 0, 5933 /* test_same70_configuration_BluetoothTargetConfigurationSAME_ATSAMe70Writer_getMaxLineLength */, 0, methodName165},
+	{	128, 0, 0, 0, 0, 1, 32, 0, 0, N_TEST_SAME70_CONFIGURATION_BLUETOOTHTARGETCONFIGURATIONSAME_ATSAME70WRITER_PUTC, methodName166},
+	{	128, 2, 4, 25, 0, 2, 32, 0, 5939 /* test_same70_configuration_BluetoothTargetConfigurationSAME_ATSAMe70Writer_write */, 0, methodName167},
+	{	98, 2, 1, 35, 0, 0, 32, 0, 5964 /* test_same70_configuration_BluetoothTargetConfigurationSAME_clinit_ */, 0, methodName168},
+	{	98, 2, 2, 0, 0, 1, 32, 0, 0, TEST_SAME70_CONFIGURATION_BLUETOOTHTARGETCONFIGURATIONSAME_DELAY, methodName169},
+	{	98, 1, 1, 0, 0, 0, 32, 0, 0, TEST_SAME70_CONFIGURATION_BLUETOOTHTARGETCONFIGURATIONSAME_INIT, methodName170},
+	{	98, 0, 0, 0, 0, 0, 32, 0, 0, N_TEST_SAME70_CONFIGURATION_BLUETOOTHTARGETCONFIGURATIONSAME_INITNATIVE, methodName171},
+	{	14, 1, 1, 8, 0, 0, 64, 0, 5999 /* test_same70_configuration_MachineFactorySAME_init_ */, 0, methodName172},
+	{	72, 4, 3, 191, 1, 1, 32, ex_test_same70_examples_BluetoothAtSAME_main, 6007 /* test_same70_examples_BluetoothAtSAME_main */, 0, methodName173},
+	{	16, 2, 2, 16, 0, 1, 64, 0, 6198 /* util_URL_init_ */, 0, methodName174},
+	{	16, 4, 2, 90, 0, 0, 33, 0, 6214 /* util_URL_getScheme */, 0, methodName175},
+	{	16, 4, 2, 83, 0, 0, 33, 0, 6304 /* util_URL_getSchemeSpecificPart */, 0, methodName176},
+	{	114, 1, 1, 8, 0, 0, 64, 0, 6387 /* util_URLSyntaxException_init_ */, 0, methodName177},
+	{	94, 2, 1, 21, 0, 0, 64, 0, 6395 /* vm_AbstractMachineFactory_init_ */, 0, methodName178},
+	{	38, 1, 1, 9, 0, 0, 33, 0, 6416 /* vm_Machine_getMachineFactory */, 0, methodName179},
+	{	38, 1, 1, 10, 0, 1, 32, 0, 6425 /* vm_Machine_setMachineFactory */, 0, methodName180},
+	{	44, 1, 1, 8, 0, 0, 64, 0, 6435 /* vm_POSIX64BitMachineFactory_init_ */, 0, methodName181}
+};
+
+RANGE static const unsigned char string_constant_0[10] PROGMEM = {0x62,0x6C,0x75,0x65,0x74,0x6F,0x6F,0x74,0x68,0x00}; /* bluetooth */
+RANGE static const unsigned char string_constant_3[12] PROGMEM = {0x2D,0x32,0x31,0x34,0x37,0x34,0x38,0x33,0x36,0x34,0x38,0x00}; /* -2147483648 */
+RANGE static const unsigned char string_constant_5[7] PROGMEM = {0x64,0x6F,0x75,0x62,0x6C,0x65,0x00}; /* double */
+RANGE static const unsigned char string_constant_6[6] PROGMEM = {0x66,0x6C,0x6F,0x61,0x74,0x00}; /* float */
+RANGE static const unsigned char string_constant_7[4] PROGMEM = {0x69,0x6E,0x74,0x00}; /* int */
+RANGE static const double double_constant_17 PROGMEM = -0.0;
+RANGE static const unsigned char long_constant_18[8] PROGMEM = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3, 0xff};
+RANGE static const unsigned char long_constant_19[8] PROGMEM = {0x7f, 0xf0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+RANGE static const unsigned char string_constant_20[2] PROGMEM = {0x40,0x00}; /* @ */
+RANGE static const unsigned char string_constant_21[1] PROGMEM = {0x00}; /*  */
+RANGE static const unsigned char string_constant_22[5] PROGMEM = {0x6E,0x75,0x6C,0x6C,0x00}; /* null */
+RANGE static const unsigned char string_constant_23[28] PROGMEM = {0x53,0x74,0x72,0x69,0x6E,0x67,0x20,0x69,0x6E,0x64,0x65,0x78,0x20,0x6F,0x75,0x74,
+	0x20,0x6F,0x66,0x20,0x72,0x61,0x6E,0x67,0x65,0x3A,0x20,0x00}; /* String index out of range:  */
+RANGE static const unsigned char string_constant_24[3] PROGMEM = {0x3A,0x20,0x00}; /* :  */
+RANGE static const unsigned char string_constant_26[4] PROGMEM = {0x20,0x3E,0x20,0x00}; /*  >  */
+RANGE static const unsigned char string_constant_27[17] PROGMEM = {0x57,0x72,0x6F,0x6E,0x67,0x20,0x6D,0x6F,0x64,0x65,0x20,0x76,0x61,0x6C,0x75,0x65,0x00}; /* Wrong mode value */
+RANGE static const unsigned char string_constant_28[21] PROGMEM = {0x55,0x52,0x4C,0x20,0x69,0x73,0x20,0x6E,0x75,0x6C,0x6C,0x20,0x6F,0x72,0x20,0x65,
+	0x6D,0x70,0x74,0x79,0x00}; /* URL is null or empty */
+RANGE static const unsigned char string_constant_29[15] PROGMEM = {0x20,0x6E,0x6F,0x74,0x20,0x6C,0x65,0x67,0x61,0x6C,0x20,0x55,0x52,0x49,0x00}; /*  not legal URI */
+RANGE static const unsigned char string_constant_30[24] PROGMEM = {0x42,0x6C,0x75,0x65,0x74,0x6F,0x6F,0x74,0x68,0x41,0x74,0x53,0x41,0x4D,0x45,0x20,
+	0x73,0x74,0x61,0x72,0x74,0x65,0x64,0x00}; /* BluetoothAtSAME started */
+RANGE static const unsigned char string_constant_31[19] PROGMEM = {0x62,0x6C,0x75,0x65,0x74,0x6F,0x6F,0x74,0x68,0x20,0x73,0x74,0x61,0x72,0x74,0x69,
+	0x6E,0x67,0x00}; /* bluetooth starting */
+RANGE static const unsigned char string_constant_32[15] PROGMEM = {0x72,0x65,0x63,0x65,0x69,0x76,0x69,0x6E,0x67,0x20,0x62,0x79,0x74,0x65,0x00}; /* receiving byte */
+RANGE static const unsigned char string_constant_33[7] PROGMEM = {0x62,0x79,0x74,0x65,0x3A,0x20,0x00}; /* byte:  */
+RANGE static const unsigned char string_constant_34[13] PROGMEM = {0x73,0x65,0x6E,0x64,0x69,0x6E,0x67,0x20,0x62,0x79,0x74,0x65,0x00}; /* sending byte */
+RANGE static const unsigned char string_constant_35[20] PROGMEM = {0x42,0x6C,0x75,0x65,0x74,0x6F,0x6F,0x74,0x68,0x41,0x74,0x53,0x41,0x4D,0x45,0x20,
+	0x65,0x6E,0x64,0x00}; /* BluetoothAtSAME end */
+RANGE static const unsigned char string_constant_36[2] PROGMEM = {0x3A,0x00}; /* : */
+
+RANGE static const ConstantInfo _constants[37] PROGMEM = {
+	{	CONSTANT_STRING, 9, string_constant_0, 0},
+	{	CONSTANT_INTEGER, 0x7fffffff, 0, 0},
+	{	CONSTANT_INTEGER, 0x80000000, 0, 0},
+	{	CONSTANT_STRING, 65547, string_constant_3, 0},
+	{	CONSTANT_INTEGER, 0x7ffffff7, 0, 0},
+	{	CONSTANT_STRING, 131078, string_constant_5, 0},
+	{	CONSTANT_STRING, 196613, string_constant_6, 0},
+	{	CONSTANT_STRING, 262147, string_constant_7, 0},
+	{	CONSTANT_INTEGER, 0x1869f, 0, 0},
+	{	CONSTANT_INTEGER, 0xf423f, 0, 0},
+	{	CONSTANT_INTEGER, 0x98967f, 0, 0},
+	{	CONSTANT_INTEGER, 0x5f5e0ff, 0, 0},
+	{	CONSTANT_INTEGER, 0x3b9ac9ff, 0, 0},
+	{	CONSTANT_INTEGER, 0x10000, 0, 0},
+	{	CONSTANT_INTEGER, 0xcccd, 0, 0},
+	{	CONSTANT_CLASS, 11, 0, 0},
+	{	CONSTANT_FLOAT, 0, 0, -0.0},
+	{	CONSTANT_DOUBLE, 0, &double_constant_17, 0},
+	{	CONSTANT_LONG, 0, long_constant_18, 0},
+	{	CONSTANT_LONG, 0, long_constant_19, 0},
+	{	CONSTANT_STRING, 327681, string_constant_20, 0},
+	{	CONSTANT_STRING, 393216, string_constant_21, 0},
+	{	CONSTANT_STRING, 458756, string_constant_22, 0},
+	{	CONSTANT_STRING, 524315, string_constant_23, 0},
+	{	CONSTANT_STRING, 589826, string_constant_24, 0},
+	{	CONSTANT_CLASS, 3, 0, 0},
+	{	CONSTANT_STRING, 655363, string_constant_26, 0},
+	{	CONSTANT_STRING, 720912, string_constant_27, 0},
+	{	CONSTANT_STRING, 786452, string_constant_28, 0},
+	{	CONSTANT_STRING, 851982, string_constant_29, 0},
+	{	CONSTANT_STRING, 917527, string_constant_30, 0},
+	{	CONSTANT_STRING, 983058, string_constant_31, 0},
+	{	CONSTANT_STRING, 1048590, string_constant_32, 0},
+	{	CONSTANT_STRING, 1114118, string_constant_33, 0},
+	{	CONSTANT_STRING, 1179660, string_constant_34, 0},
+	{	CONSTANT_STRING, 1245203, string_constant_35, 0},
+	{	CONSTANT_STRING, 1310721, string_constant_36, 0}
+};
+Object* stringConstants[21] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0 };
+
+RANGE static const short _classInitializerSequence[5] PROGMEM = {137, 95, 168, 88, 158};
+
+#if defined(PRE_INITIALIZE_EXCEPTIONS)
+static ExceptionObject _exceptionObjects[13] = {
+	{	2, 86, 0},
+	{	6, 101, 0},
+	{	12, 65, 0},
+	{	25, 67, 0},
+	{	34, 79, 0},
+	{	35, 68, 0},
+	{	37, 75, 0},
+	{	40, 85, 0},
+	{	42, 146, 0},
+	{	51, 100, 0},
+	{	54, 107, 0},
+	{	55, 66, 0},
+	{	63, 106, 0},
+};
+#endif
+const MethodInfo *methods = &_methods[0];
+const ConstantInfo *constants;
+const unsigned char* codecache;
+#ifdef INVOKECLASSINITIALIZERS
+const short* classInitializerSequence;
+#endif
+#if defined(PRE_INITIALIZE_EXCEPTIONS)
+ExceptionObject* exceptionObjects;
+#endif
+
+unsigned char initMethods(void) {
+	constants = &_constants[0];
+#if defined(PRE_INITIALIZE_EXCEPTIONS)
+	exceptionObjects = &_exceptionObjects[0];
+#endif
+
+#ifdef INVOKECLASSINITIALIZERS
+	classInitializerSequence = &_classInitializerSequence[0];
+#endif
+
+	codecache = &_codecache[0];
+	return 1;
+}
+
