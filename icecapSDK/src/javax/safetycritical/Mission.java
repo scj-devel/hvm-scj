@@ -81,7 +81,7 @@ public abstract class Mission {
 		this.start = start;
 		activeCount = 0;
 		
-		// ToDo: implement		
+		// ToDo: implement; OK, - see runExecute()	
 	}
 
 	@SCJAllowed

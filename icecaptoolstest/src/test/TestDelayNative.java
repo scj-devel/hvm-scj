@@ -18,7 +18,7 @@ public class TestDelayNative {
         
     	Clock rtClock = Clock.getRealtimeClock();
         AbsoluteTime next = rtClock.getTime();
-        RelativeTime duration = new RelativeTime(500, 0, rtClock);
+        RelativeTime duration = new RelativeTime(500, 0, rtClock);  //   60*1000 ==> takes about 1½ minute !
         
         for (int i = 0; i < 3; i++) {
             next.add(duration, next);
