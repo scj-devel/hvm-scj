@@ -191,11 +191,24 @@ e_serial_return_code_t serial_send_byte( serial_p handle, uint8_t byte )
 	return _result;
 }
 
+/* ======================================================================= */
+e_serial_return_code_t serial_get_byte( serial_p handle, uint8_t *byte )
+{
+	uint8_t _result = fifo_pull_uint8(handle->rx_fifo_desc, byte );
+
+	if (_result == FIFO_ERROR_UNDERFLOW)
+	{
+		return SERIAL_RX_BUFFER_EMPTY;
+	}
+
+	return SERIAL_OK;
+}
 
 /* ======================================================================= */
-fifo_desc_t *serial_get_rx_fifo_desc( serial_p handle )
+void serial_flush_buffers(serial_p handle)
 {
-	return handle->rx_fifo_desc;
+	fifo_flush(handle->rx_fifo_desc);
+	fifo_flush(handle->tx_fifo_desc);
 }
 
 /* ======================================================================= */

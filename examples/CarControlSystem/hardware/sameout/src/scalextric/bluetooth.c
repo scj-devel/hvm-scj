@@ -1,8 +1,6 @@
 #include "bluetooth.h"
 
-fifo_desc_t *bt_rx_fifo_desc;
 uint8_t bt_initialised = 0;
-
 static serial_p bt_serial = NULL;
 
 // Setup serial channel to be used with BT
@@ -28,11 +26,11 @@ static void bluetooth_call_back ( uint8_t status, uint8_t byte )
         //BT-Module is ready and connected and a new byte is received
         // Use it quickly here or set a flag, and take it out of the BT RX fifo later?
     }
-    else if ( status == DIALOG_OK_STOP )
+    else if ( status == BT_CONNECTED )
     {
         bt_initialised = 1;  // BT-module initialization is finished
     }
-    else if ( status == DIALOG_ERROR_STOP )
+    else if ( status == BT_ERROR_DURING_CONNECTION )
     {
         // BT module is NOT initialized correctly!!
         // What to do??
@@ -45,15 +43,11 @@ void bluetooth_start()
 {
     printf("C: called bluetooth_start\n");
 
-    if ( !bt_initialised && bt_rx_fifo_desc == NULL )
+    if ( !bt_initialised && bt_serial == NULL )
     {
         printf("C: Initializing bluetooth\n");
         bt_uart_init();  // Initialize the serial driver to be used of the BT-Module
-        bt_module_init ( bluetooth_call_back,
-        bt_serial ); // Initialize the BT-Module.
-
-        // This is the receive FIFO for bytes coming from BT - We get received BT bytes directly from the serial driver
-        bt_rx_fifo_desc = serial_get_rx_fifo_desc ( bt_serial );
+        bt_module_init ( bluetooth_call_back, bt_serial ); // Initialize the BT-Module.
     }
     else
     {
@@ -78,10 +72,14 @@ int bluetooth_read_byte()
 	printf("C: called bluetooth_read_byte\n");
 
     uint8_t byte;
-    if ( (bt_initialised == 1) &&
-        fifo_pull_uint8 ( bt_rx_fifo_desc, &byte ) == FIFO_OK )
+    if ( bt_initialised == 1 && bt_get_byte ( &byte ) == BT_SUCCESS )
     { // Are there any bytes received from BT?
         return byte;
     }
     return -1;
+}
+
+void bluetooth_tick()
+{
+    bt_tick();
 }

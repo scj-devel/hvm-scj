@@ -16,7 +16,7 @@
 #include "conf_clock.h"
 #include "../ostypes.h"
 #include "systick.h"
-#include "../bt_module/bt_module.h"
+#include "../scalextric/bluetooth.h"
 
 
 extern uint8_t bt_initialised;
@@ -68,7 +68,7 @@ void SysTick_Handler(void)
     if ( !bt_initialised ) {
         if ( --ms100_count == 0 ) {
             ms100_count = 100;
-            bt_tick();
+            bluetooth_tick();
         }
     }
 }

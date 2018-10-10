@@ -43,7 +43,8 @@ typedef struct serial_instance_t *serial_p;
 typedef enum {
 	SERIAL_OK,
 	SERIAL_ILLEGAL_INSTANCE,
-	SERIAL_NO_ROOM_IN_TX_BUFFER
+	SERIAL_NO_ROOM_IN_TX_BUFFER,
+	SERIAL_RX_BUFFER_EMPTY
 } e_serial_return_code_t;
 
 typedef enum {
@@ -100,6 +101,27 @@ e_serial_return_code_t serial_send_byte( serial_p handle, uint8_t byte );
 /* ======================================================================= */
 /**
     \ingroup serial_driver
+    \brief Get a single byte.
+
+    \param handle serial instance to use.
+    \param pointer to byte, the received byte is tored here.
+
+    \return e_serial_return_code_t return code.
+*/
+e_serial_return_code_t serial_get_byte( serial_p handle, uint8_t *byte );
+
+//-------------------------------------------------
+/**
+    \ingroup serial_driver
+	\brief Flush buffers.
+	
+	\param handle serial instance to use.
+*/
+void serial_flush_buffers(serial_p handle);
+
+/* ======================================================================= */
+/**
+    \ingroup serial_driver
     \brief Set new call back handler for serial instance.
 
     \param handle serial instance to use.
@@ -110,17 +132,6 @@ e_serial_return_code_t serial_send_byte( serial_p handle, uint8_t byte );
 */
 e_serial_return_code_t serial_set_call_back_handler( serial_p handle,
         void ( *handler_call_back )( serial_p, uint8_t ) );
-
-/* ======================================================================= */
-/**
-    \ingroup serial_driver
-    \brief Returns pointer to the fifo descriptor used for the RX fifo.
-
-    \param handle  serial instance to use.
-
-    \return fifo_desc_t * rx_fifo_descriptor
-*/
-fifo_desc_t *serial_get_rx_fifo_desc( serial_p handle );
 
 #ifdef SERIAL_DEBUG
 void serial_get_debug_buffer(serial_p handle, uint8_t *buf, uint16_t *len);
