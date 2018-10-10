@@ -10,8 +10,6 @@ import test.same70.configuration.ConfigSAME;
 
 public class FrontLightImpl implements FrontLight {
 	
-	public static int nativeMethodHasBeenCalled = 0;  // added for mock test only
-	
 	@Override
 	public void turnOn() {
 		  front_light_turn_on();

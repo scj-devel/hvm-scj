@@ -13,9 +13,11 @@ import mockit.integration.junit4.JMockit;
 @RunWith(JMockit.class)
 public class FrontLightTest {
 	
+	int nativeMethodHasBeenCalled;
+	
 	@Before
 	public void setup() {
-		FrontLightImpl.nativeMethodHasBeenCalled = 0;
+		nativeMethodHasBeenCalled = 0;
 	}
 	
 	@Test
@@ -26,18 +28,18 @@ public class FrontLightTest {
 		// Override the private method; Don't provide any ACCESSS MODIFIER!
 	    @Mock
 	    void front_light_turn_on() {	
-	    	FrontLightImpl.nativeMethodHasBeenCalled++;
+	    	nativeMethodHasBeenCalled++;
 	    }	
 	    
 	    @Mock
 	    void front_light_low_beam() {	
-	    	FrontLightImpl.nativeMethodHasBeenCalled++;
+	    	nativeMethodHasBeenCalled++;
 	    }
 	  };
 	   
 	  new FrontLightImpl().turnOn();  
 	  
-	  Assert.assertEquals(2, FrontLightImpl.nativeMethodHasBeenCalled);
+	  Assert.assertEquals(2, nativeMethodHasBeenCalled);
 	 }
 	
 	@Test
@@ -48,13 +50,13 @@ public class FrontLightTest {
 		// Override the private method; Don't provide any ACCESSS MODIFIER!
 	    @Mock
 	    void front_light_turn_off() {	
-	    	FrontLightImpl.nativeMethodHasBeenCalled++;
+	    	nativeMethodHasBeenCalled++;
 	    }	    
 	  };
 	   
 	  new FrontLightImpl().turnOff();  
 	  
-	  Assert.assertEquals(1, FrontLightImpl.nativeMethodHasBeenCalled);
+	  Assert.assertEquals(1, nativeMethodHasBeenCalled);
 	 }
 
 	@Test
@@ -65,13 +67,13 @@ public class FrontLightTest {
 		// Override the private method; Don't provide any ACCESSS MODIFIER!
 	    @Mock
 	    void front_light_low_beam() {	
-	    	FrontLightImpl.nativeMethodHasBeenCalled++;
+	    	nativeMethodHasBeenCalled++;
 	    }	    
 	  };
 	   
 	  new FrontLightImpl().shortLight();  
 	  
-	  Assert.assertEquals(1, FrontLightImpl.nativeMethodHasBeenCalled);
+	  Assert.assertEquals(1, nativeMethodHasBeenCalled);
 	 }
 	
 	@Test
@@ -82,12 +84,12 @@ public class FrontLightTest {
 		// Override the private method; Don't provide any ACCESSS MODIFIER!
 	    @Mock
 	    void front_light_high_beam() {	
-	    	FrontLightImpl.nativeMethodHasBeenCalled++;
+	    	nativeMethodHasBeenCalled++;
 	    }	    
 	  };
 	   
 	  new FrontLightImpl().longLight();  
 	  
-	  Assert.assertEquals(1, FrontLightImpl.nativeMethodHasBeenCalled);
+	  Assert.assertEquals(1, nativeMethodHasBeenCalled);
 	 }
 }
