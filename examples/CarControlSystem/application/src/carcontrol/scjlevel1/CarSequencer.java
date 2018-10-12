@@ -56,7 +56,7 @@ public class CarSequencer extends MissionSequencer {
 		missions[2] = new MissionParking(port, data, engine);  // ToDo: correct 
 		missions[3] = new MissionParking(port, data, engine);  // ToDo: correct 
 		
-		mode = Mode.PARKING;
+		mode = Mode.PARK;
 	}
 	
 	@Override

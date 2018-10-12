@@ -26,7 +26,7 @@ public class CarSequencer extends MissionSequencer {
 		missions[2] = new ReverseMission(CarConfiguration.port, CarConfiguration.data);
 		missions[3] = new DriveMission(CarConfiguration.port, CarConfiguration.data);
 		
-		mode = Mode.PARKING;
+		mode = Mode.PARK;
 	}
 	
 	@Override

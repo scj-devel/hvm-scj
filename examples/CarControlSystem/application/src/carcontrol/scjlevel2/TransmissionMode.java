@@ -9,6 +9,6 @@ public interface TransmissionMode {
 	int DRIVE   = 13;	
 	
 	int OBSERVATION = 14;
-	int PARKING     = 15;
+	int PARK     = 15;
 
 }

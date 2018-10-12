@@ -60,8 +60,8 @@ public class CarConfiguration extends Configuration {
 		}
 		data = new RunData();
 		
-		frontLight =  //new FrontLightImpl();	
-				      new FakeFrontLight();
+		frontLight =  new FrontLightImpl();	
+				      //new FakeFrontLight();
 
 		engine = new EngineImpl(frontLight); 		
 	}	

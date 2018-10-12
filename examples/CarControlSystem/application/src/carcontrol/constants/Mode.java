@@ -3,7 +3,7 @@ package carcontrol.constants;
 
 public enum Mode {
 	 OFF (-1),
-	 PARKING (0), 
+	 PARK (0), 
 	 NEUTRAL (1), 
 	 REVERSE (2), 
 	 DRIVE (3);
@@ -21,7 +21,7 @@ public enum Mode {
 	public static Mode getMode (int x) {
 		switch (x) {
 			case -1: return OFF;
-			case  0: return PARKING;
+			case  0: return PARK;
 			case  1: return NEUTRAL;
 			case  2: return REVERSE;
 			case  3: return DRIVE;

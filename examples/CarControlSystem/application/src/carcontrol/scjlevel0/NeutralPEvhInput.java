@@ -43,7 +43,7 @@ public class NeutralPEvhInput extends PeriodicEventHandler {
 			
 			System.out.println(this.getName() + " received command: " + m);
 			
-			if (m == Mode.PARKING || m == Mode.REVERSE || m == Mode.DRIVE) {
+			if (m == Mode.PARK || m == Mode.REVERSE || m == Mode.DRIVE) {
 				CarSequencer.mode = m;  // change mode and request this mission to terminate
 				Mission.getMission().requestTermination();
 			}

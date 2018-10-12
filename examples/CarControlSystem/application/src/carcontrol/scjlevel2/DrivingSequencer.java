@@ -46,8 +46,8 @@ public class DrivingSequencer extends MissionSequencer {
 //	}
 //	
 //	protected Mission getNextMission() {
-//		if (transmissionMode == TransmissionMode.PARKING) {
-//			System.out.println("DrivingSequencer.getNextMission: mode = PARKING");
+//		if (transmissionMode == TransmissionMode.PARK) {
+//			System.out.println("DrivingSequencer.getNextMission: mode = PARK");
 //			Mission.getMission().requestTermination();
 //			return null;
 //		}			
