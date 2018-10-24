@@ -10,7 +10,7 @@ import carcontrol.data.RunData;
 import carcontrol.device.Engine;
 import carcontrol.io.Port;
 
-public class ParkingMission extends CyclicExecutive {
+public class ParkMission extends CyclicExecutive {
 	
 	long minorCycle = 500;  // 500 ms
 	
@@ -18,7 +18,7 @@ public class ParkingMission extends CyclicExecutive {
 	RunData data;
 	Engine engine;
 	
-	public ParkingMission (Port port, RunData data, Engine engine) {
+	public ParkMission (Port port, RunData data, Engine engine) {
 		this.port = port;
 		this.data = data;
 		this.engine = engine;
@@ -29,7 +29,7 @@ public class ParkingMission extends CyclicExecutive {
 		String pevhName = CarConfiguration.SOnames.get(1);
 		
 		PeriodicEventHandler inputPEvh = 
-			new ParkingPEvhInput(
+			new ParkPEvhInput(
 				CarConfiguration.table.get(pevhName).getPriorityParam(),
 				CarConfiguration.table.get(pevhName).getPeriodicParam(),
 				
@@ -44,7 +44,7 @@ public class ParkingMission extends CyclicExecutive {
 		
 		pevhName = CarConfiguration.SOnames.get(2);
 		PeriodicEventHandler outputPEvh = 
-			new ParkingPEvhOutput(
+			new ParkPEvhOutput(
 				CarConfiguration.table.get(pevhName).getPriorityParam(),
 				CarConfiguration.table.get(pevhName).getPeriodicParam(),
 				

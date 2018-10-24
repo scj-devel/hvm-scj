@@ -46,7 +46,7 @@ public class ParkingMission extends Mission {
 				CarSafelet.storageParameters_Handlers,
 				inputAPEvh).register();
 		
-		System.out.println("  ParkingMission.initialize() finished");
+		System.out.println("  ParkMission.initialize() finished");
 	}
 
 	@Override

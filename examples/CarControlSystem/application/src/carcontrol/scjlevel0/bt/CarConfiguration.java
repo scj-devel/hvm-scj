@@ -78,8 +78,8 @@ public class CarConfiguration extends Configuration {
 		new String[] {
 			"CarSequencer",  // the sequencer
 			
-			"ParkingPEvhInput",  // the handlers in mission Parking
-			"ParkingPEvhOutput",
+			"ParkPEvhInput",  // the handlers in mission Parking
+			"ParkPEvhOutput",
 			
 			"NeutralPEvhInput",  // the handlers in mission Neutral
 			"NeutralPEvhOutput",
@@ -112,14 +112,14 @@ public class CarConfiguration extends Configuration {
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE 
 					},
 	
-	// ParkingPEvhInput:
+	// ParkPEvhInput:
 	/*priority*/	{ 1, 
 	/*times*/		  0, 0,   500, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,        
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE 
 					},
 	
-	// ParkingPEvhOutput:
+	// ParkPEvhOutput:
 	/*priority*/    { 1,       
 	/*times*/		  0, 0,   500, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,      

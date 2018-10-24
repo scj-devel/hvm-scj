@@ -11,12 +11,12 @@ import carcontrol.io.Port;
 
 import javax.realtime.memory.ScopeParameters;
 
-public class ParkingPEvhOutput extends PeriodicEventHandler {
+public class ParkPEvhOutput extends PeriodicEventHandler {
 
 	/*CommunicationDevice*/ Port commDevice;
 	RunData outputData;
 
-	public ParkingPEvhOutput(PriorityParameters priority, PeriodicParameters release, 
+	public ParkPEvhOutput(PriorityParameters priority, PeriodicParameters release, 
 			ScopeParameters storage, ConfigurationParameters config,
 			String name, /*CommunicationDevice*/ Port commDevice, RunData outputData) {
 		

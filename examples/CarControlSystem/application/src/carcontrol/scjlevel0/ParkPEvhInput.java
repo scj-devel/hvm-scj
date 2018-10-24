@@ -16,7 +16,7 @@ import carcontrol.io.Port;
 
 import javax.realtime.memory.ScopeParameters;
 
-public class ParkingPEvhInput extends PeriodicEventHandler {
+public class ParkPEvhInput extends PeriodicEventHandler {
 
 	Port port;
 	RunData data;
@@ -25,7 +25,7 @@ public class ParkingPEvhInput extends PeriodicEventHandler {
 	int count = 0;
 	
 	
-	public ParkingPEvhInput(PriorityParameters priority, PeriodicParameters release, 
+	public ParkPEvhInput(PriorityParameters priority, PeriodicParameters release, 
 			ScopeParameters storage, ConfigurationParameters config, String name, 
 			Port port, RunData data, Engine engine) {
 		
