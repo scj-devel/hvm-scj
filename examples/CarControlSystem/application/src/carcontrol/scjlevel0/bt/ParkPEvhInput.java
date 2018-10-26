@@ -42,7 +42,7 @@ public class ParkPEvhInput extends PeriodicEventHandler {
 	@Override
 	public void handleAsyncEvent() {
 		try {
-			Mode m = Mode.getMode(port.receive());		// Mode.OFF; 
+			Mode m = Mode.getMode(port.receive());		 
 			System.out.println(this.getName() + " Received Command: " + m);		
 		
 			switch (m) {
@@ -51,16 +51,17 @@ public class ParkPEvhInput extends PeriodicEventHandler {
 					//engine.engineOff();
 					CarConfiguration.frontLight.turnOff();
 					
-					//System.out.println(" ==>  " +  this.getName() + " turn off");		
+					System.out.println(" ==>  " +  this.getName() + " turn off");		
 					
 					Mission.getMission().requestTermination();
 					break;
 				case NEUTRAL: 
+					System.out.println(" ==>  " +  this.getName() + "; Mode = " + m);
 					CarSequencer.mode = Mode.NEUTRAL;
 					//engine.engineOn();
 					CarConfiguration.frontLight.turnOn();
 					
-					//System.out.println(" ==>  " +  this.getName() + " turn on");
+					System.out.println(" ==>  " +  this.getName() + " turn on light");
 					
 					Mission.getMission().requestTermination();
 					break;			

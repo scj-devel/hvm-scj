@@ -1,5 +1,7 @@
 package carcontrol.scjlevel0.bt;
 
+import java.io.IOException;
+
 import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
@@ -33,8 +35,11 @@ public class ParkPEvhOutput extends PeriodicEventHandler {
 	public void handleAsyncEvent() {
 		System.out.println(this.getName());
 		
-		//commDevice.send(outputData.getData(), 0, outputData.getData().length);
-
+		try {
+			commDevice.send((byte)65);
+		} 
+		catch (IOException e) {
+		}
 	}
 
 }

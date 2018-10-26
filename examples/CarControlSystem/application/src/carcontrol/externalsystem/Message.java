@@ -9,5 +9,7 @@ public interface Message {
 	byte DRIVE      = 3;
 	byte ACCELERATE = 4;
 	byte BRAKE      = 5;
+	
+	byte NEUTRAL    = 6;
 
 }
