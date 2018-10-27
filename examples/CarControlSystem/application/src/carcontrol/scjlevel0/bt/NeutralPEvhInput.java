@@ -10,6 +10,7 @@ import javax.safetycritical.PeriodicEventHandler;
 
 import carcontrol.constants.Mode;
 import carcontrol.data.RunData;
+import carcontrol.io.Command;
 import carcontrol.io.Port;
 
 import javax.realtime.memory.ScopeParameters;
@@ -37,18 +38,30 @@ public class NeutralPEvhInput extends PeriodicEventHandler {
 	
 	@Override
 	public void handleAsyncEvent() {
-		//System.out.println(this.getName());
-		try {	
-			Mode m = Mode.getMode(port.receive());
+		try {
+			Command m = Command.getCommand(port.receive());
 			
-			System.out.println(this.getName() + " received command: " + m);
+			System.out.println(this.getName() + " received mode: " + m);
 			
-			if (m == Mode.PARK || m == Mode.REVERSE || m == Mode.DRIVE) {
-				CarSequencer.mode = m;  // change mode and request this mission to terminate
-				Mission.getMission().requestTermination();
+			switch (m) {
+				case PARK: 
+					CarSequencer.mode = Mode.PARK;
+					System.out.println(" ==>  " +  this.getName() + " park");					
+					Mission.getMission().requestTermination();
+					break;
+				case REVERSE:
+					CarSequencer.mode = Mode.REVERSE;	
+					System.out.println(" ==>  " +  this.getName() + " reverse");
+					Mission.getMission().requestTermination();
+					break;	
+				case DRIVE:
+					CarSequencer.mode = Mode.DRIVE;	
+					System.out.println(" ==>  " +  this.getName() + " drive");
+					Mission.getMission().requestTermination();
+					break;
+				default: 
+					break;
 			}
-			else
-				; // nothing
 		}
 		catch (IOException e) {
 			System.out.println(this.getName() + " exception: " + e);	

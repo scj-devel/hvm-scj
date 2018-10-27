@@ -6,7 +6,7 @@ public enum Mode {
 	 PARK (0), 
 	 NEUTRAL (1), 
 	 REVERSE (2), 
-	 DRIVE (3);
+	 DRIVE (3);	
 	
 	private int value;
 	
@@ -19,14 +19,10 @@ public enum Mode {
 	}
 	
 	public static Mode getMode (int x) {
-		int cmd = 0;
-		if (x != 0) {
-			cmd = x - 48; // 48 is ASCII value for 0 (zero)
-		}
-
-		System.out.println("Mode.getMode: x: " + x + "; cmd: " + cmd);
 		
-		switch (cmd) {
+		System.out.println("Mode.getMode: x: " + x);
+		
+		switch (x) {
 			case -1: return OFF;
 			case  0: return PARK;
 			case  1: return NEUTRAL;
@@ -34,5 +30,18 @@ public enum Mode {
 			case  3: return DRIVE;
 		}
 		return null;
-	}
+	}	
+	
+//	public static Mode CmdToMode (Command cmd) {		
+//		switch (cmd) {
+//			case OFF:     return Mode.OFF;
+//			case PARK:    return Mode.PARK;
+//			case NEUTRAL: return Mode.NEUTRAL;
+//			case REVERSE: return Mode.REVERSE;
+//			case DRIVE:   return Mode.DRIVE;
+//		}
+//		return null;
+//	
+//		
+//	}
 }

@@ -23,10 +23,14 @@ public enum Command {
 	}
 	
 	public static Command getCommand (int x) {
+		int cmd = 0;  // later: remove or rewrite this
+		if (x != 0) {
+			cmd = x - 48; // 48 is ASCII value for 0 (zero)
+		}
 
-		System.out.println("Command.getCommand: x: " + x);
+		System.out.println("Command.getCommand: x: " + x + "; cmd: " + cmd);
 		
-		switch (x) {
+		switch (cmd) {
 			case -1: return OFF;
 			
 			case  0: return PARK;

@@ -100,7 +100,7 @@ public class CommunicationDeviceImpl implements CommunicationDevice {
 		}
 		
 		
-		System.out.println("  ==> CommunicationDeviceImpl.receive: new command: " + cmd + "; mode: " + Mode.getMode(cmd));
+		System.out.println("  ==> CommunicationDeviceImpl.receive: new command: " + cmd );
 		return cmd;  
 	}
 	

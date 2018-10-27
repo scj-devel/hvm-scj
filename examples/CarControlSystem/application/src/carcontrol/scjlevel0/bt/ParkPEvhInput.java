@@ -12,6 +12,7 @@ import javax.safetycritical.PeriodicEventHandler;
 import carcontrol.constants.Mode;
 import carcontrol.data.RunData;
 import carcontrol.device.Engine;
+import carcontrol.io.Command;
 import carcontrol.io.Port;
 
 import javax.realtime.memory.ScopeParameters;
@@ -41,9 +42,10 @@ public class ParkPEvhInput extends PeriodicEventHandler {
 	
 	@Override
 	public void handleAsyncEvent() {
-		try {
-			Mode m = Mode.getMode(port.receive());		 
-			System.out.println(this.getName() + " Received Command: " + m);		
+		try {	
+			Command m = Command.getCommand(port.receive());
+			
+			System.out.println(this.getName() + " Received cmd: " + m);		
 		
 			switch (m) {
 				case OFF: 

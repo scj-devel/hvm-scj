@@ -10,6 +10,7 @@ import javax.safetycritical.PeriodicEventHandler;
 
 import carcontrol.constants.Mode;
 import carcontrol.data.RunData;
+import carcontrol.io.Command;
 import carcontrol.io.Port;
 
 import javax.realtime.memory.ScopeParameters;
@@ -38,13 +39,12 @@ public class DrivePEvhInput extends PeriodicEventHandler {
 	
 	@Override
 	public void handleAsyncEvent() {
-		//System.out.println(this.getName());
 		try {
-			Mode m = Mode.getMode(port.receive());
+			Command m = Command.getCommand(port.receive());
 			
-			System.out.println(this.getName() + " received command: " + m);
+			System.out.println(this.getName() + " received mode: " + m);
 			
-			if (m == Mode.NEUTRAL) {
+			if (m == Command.NEUTRAL) {
 				CarSequencer.mode = Mode.NEUTRAL;
 				Mission.getMission().requestTermination();
 			}
