@@ -1,5 +1,7 @@
 package carcontrol.scjlevel0.bt;
 
+import java.io.IOException;
+
 import javax.realtime.ConfigurationParameters;
 import javax.realtime.PeriodicParameters;
 import javax.realtime.PriorityParameters;
@@ -32,7 +34,11 @@ public class ReversePEvhOutput extends PeriodicEventHandler {
 	public void handleAsyncEvent() {
 		System.out.println(this.getName());
 		
-		//port.send(outputData.getData(), 0, outputData.getData().length);
+		try {
+			port.send((byte)82);  // R
+		} 
+		catch (IOException e) {
+		}
 
 	}
 

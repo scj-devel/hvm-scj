@@ -42,7 +42,7 @@ public class DrivePEvhInput extends PeriodicEventHandler {
 		try {
 			Mode m = Mode.getMode(port.receive());
 			
-			System.out.println(this.getName() + " received command: " + m);
+			System.out.println(this.getName() + " received mode: " + m);
 			
 			if (m == Mode.NEUTRAL) {
 				CarSequencer.mode = Mode.NEUTRAL;

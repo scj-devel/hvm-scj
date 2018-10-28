@@ -24,7 +24,7 @@ public enum Command {
 	
 	public static Command getCommand (int x) {
 		int cmd = 0;  // later: remove or rewrite this
-		if (x != 0) {
+		if (x >= 48 && x <= 53) {
 			cmd = x - 48; // 48 is ASCII value for 0 (zero)
 		}
 

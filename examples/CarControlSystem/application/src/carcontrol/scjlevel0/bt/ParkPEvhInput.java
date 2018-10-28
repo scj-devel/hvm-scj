@@ -63,7 +63,7 @@ public class ParkPEvhInput extends PeriodicEventHandler {
 					//engine.engineOn();
 					CarConfiguration.frontLight.turnOn();
 					
-					System.out.println(" ==>  " +  this.getName() + " turn on light");
+					System.out.println(" ==>  " +  this.getName() + " turn on");
 					
 					Mission.getMission().requestTermination();
 					break;			

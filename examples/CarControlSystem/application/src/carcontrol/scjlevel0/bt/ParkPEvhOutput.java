@@ -15,19 +15,19 @@ import javax.realtime.memory.ScopeParameters;
 
 public class ParkPEvhOutput extends PeriodicEventHandler {
 
-	/*CommunicationDevice*/ Port commDevice;
+	Port port;
 	RunData outputData;
 
 	public ParkPEvhOutput(PriorityParameters priority, PeriodicParameters release, 
 			ScopeParameters storage, ConfigurationParameters config,
-			String name, /*CommunicationDevice*/ Port commDevice, RunData outputData) {
+			String name, Port port, RunData outputData) {
 		
 	  /*public PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, 
 	                                ScopeParameters storage, ConfigurationParameters config,
 	                                String name)*/
 	  super(priority, release, storage, config, name);
 	  
-	  this.commDevice = commDevice;
+	  this.port = port;
 	  this.outputData = outputData;
 	}
 
@@ -36,7 +36,10 @@ public class ParkPEvhOutput extends PeriodicEventHandler {
 		System.out.println(this.getName());
 		
 		try {
-			commDevice.send((byte)65);
+			port.send((byte)80);  // P
+			port.send((byte)65);  // A
+			port.send((byte)82);  // R
+			port.send((byte)75);  // K
 		} 
 		catch (IOException e) {
 		}
