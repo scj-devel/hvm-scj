@@ -24,17 +24,6 @@
  /** Initial duty cycle value */
  #define MOTOR_PWM_INIT_DUTY_VALUE	0
 
- /*
- // H-Bridge IN1 PIN definitions
- #define PIN_PWM_H_BRIDGE_IN1_GPIO		PIO_PB0_IDX
- #define PIN_PWM_H_BRIDGE_IN1_FLAGS		(IOPORT_MODE_MUX_A)
- #define PIN_PWM_H_BRIDGE_IN1_CHANNEL	PWM_CHANNEL_0
-
-  // H-Bridge IN2 PIN definitions
- #define PIN_PWM_H_BRIDGE_IN2_GPIO		PIO_PD21_IDX
- #define PIN_PWM_H_BRIDGE_IN2_FLAGS		(IOPORT_MODE_MUX_A)
- #define PIN_PWM_H_BRIDGE_IN2_CHANNEL	PWM_CHANNEL_1
- */
   // H-Bridge IN1 PIN definitions
  #define PIN_PWM_H_BRIDGE_IN1_GPIO		PIO_PD11_IDX
  #define PIN_PWM_H_BRIDGE_IN1_FLAGS		(IOPORT_MODE_MUX_B)
@@ -49,8 +38,7 @@
 
  /** PWM channel instance */
  static pwm_channel_t g_pwm_channel;
-
-
+ 
  void motor_init(void) 
  {
  	// Set H-Bridge PWM Channels to use output pins instead of GPIO
@@ -114,7 +102,6 @@
 	/* Enable PWM channels for H-Bridge */
 	// It is only needed to enable CH0, because CH1 is synchronized
 	pwm_channel_enable(PWM_INST, PIN_PWM_H_BRIDGE_IN1_CHANNEL);
-	//pwm_channel_enable(PWM_INST, PIN_PWM_H_BRIDGE_IN2_CHANNEL); // ?????
 
 	// Initialize update mode of the Sync channels to: "Method 1: Manual write of duty-cycle and manual trigger of the update"
 	pwm_sync_init(PWM_INST, PWM_SYNC_UPDATE_MODE_0,	0);

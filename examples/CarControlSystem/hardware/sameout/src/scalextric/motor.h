@@ -9,6 +9,13 @@
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
+//-------------------------------------------------
+/**
+@ingroup board_public_function
+@brief Initialise the H-Bridge driver to control the cars motor.
+
+@note Must be once called before any other functions are used in this driver.
+*/
 void motor_init(void);
 
 //-------------------------------------------------
