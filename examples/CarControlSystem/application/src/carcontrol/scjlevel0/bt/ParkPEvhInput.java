@@ -21,14 +21,12 @@ public class ParkPEvhInput extends PeriodicEventHandler {
 
 	Port port;
 	RunData data;
-	Engine engine;
 	
-	int count = 0;
-	
+	int count = 0;	
 	
 	public ParkPEvhInput(PriorityParameters priority, PeriodicParameters release, 
 			ScopeParameters storage, ConfigurationParameters config, String name, 
-			Port port, RunData data, Engine engine) {
+			Port port, RunData data) {
 		
 		/*public PeriodicEventHandler(PriorityParameters priority, PeriodicParameters release, 
 				                      ScopeParameters storage, ConfigurationParameters config,
@@ -37,7 +35,6 @@ public class ParkPEvhInput extends PeriodicEventHandler {
 
 		this.port = port;
 		this.data = data;
-		this.engine = engine;
 	}
 	
 	@Override
@@ -50,7 +47,8 @@ public class ParkPEvhInput extends PeriodicEventHandler {
 			switch (m) {
 				case OFF: 
 					CarSequencer.mode = Mode.OFF;				
-					//engine.engineOff();
+					
+					//CarConfiguration.engine.engineOff();
 					CarConfiguration.frontLight.turnOff();
 					
 					System.out.println(" ==>  " +  this.getName() + " turn off");		
@@ -60,7 +58,8 @@ public class ParkPEvhInput extends PeriodicEventHandler {
 				case NEUTRAL: 
 					System.out.println(" ==>  " +  this.getName() + "; Mode = " + m);
 					CarSequencer.mode = Mode.NEUTRAL;
-					//engine.engineOn();
+					
+					//CarConfiguration.engine.engineOn();
 					CarConfiguration.frontLight.turnOn();
 					
 					System.out.println(" ==>  " +  this.getName() + " turn on");

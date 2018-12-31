@@ -13,14 +13,13 @@ import carcontrol.io.Port;
 
 public class ReverseMission extends CyclicExecutive {
 
-	long minorCycle = 50;  // 50 ms
+	long minorCycle = 5000;  // 500 ms
 
 	Port port; 
 	RunData data;
 	
 	ScopeParameters storageParameters_Handlers;
 	ConfigurationParameters configParameters;
-
 	public ReverseMission (Port port, RunData data) {
 		this.port = port;
 		this.data = data;

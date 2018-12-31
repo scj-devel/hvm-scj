@@ -16,12 +16,10 @@ public class ParkMission extends CyclicExecutive {
 	
 	Port port; 
 	RunData data;
-	Engine engine;
 	
-	public ParkMission (Port port, RunData data, Engine engine) {
+	public ParkMission (Port port, RunData data) {
 		this.port = port;
 		this.data = data;
-		this.engine = engine;
 	}
 
 	@Override
@@ -38,8 +36,7 @@ public class ParkMission extends CyclicExecutive {
 					
 				pevhName, 
 				port, 
-				data,
-				engine);
+				data);
 		inputPEvh.register();
 		
 		pevhName = CarConfiguration.SOnames.get(2);

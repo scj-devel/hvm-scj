@@ -13,10 +13,10 @@ public class AcceleratorImpl implements Accelerator {
 	
 	@Override
 	public void accelerate() {
-		byte speed = engine.getEngineSpeed();  // speed is in percent; 0% <= speed <= 100%
+		int speed = engine.getEngineSpeed();  // speed is in percent; 0% <= speed <= 100%
 		
-		byte delta = (byte) ((100 - speed) * increase) ; 
+		int delta = (int) ((100 - speed) * increase) ; 
 		
-		engine.setEngineSpeed((byte)(speed + delta));	
+		engine.setEngineSpeed(speed + delta);	
 	}
 }

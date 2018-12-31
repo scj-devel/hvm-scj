@@ -15,6 +15,7 @@ import carcontrol.io.BluetoothCommunicationDeviceImpl;
 import carcontrol.io.CommunicationDevice;
 import carcontrol.io.CommunicationDeviceImpl;
 import carcontrol.io.Port;
+import icecaptools.IcecapCompileMe;
 import mockit.Mock;
 import mockit.MockUp;
 
@@ -43,6 +44,14 @@ public class CarConfiguration extends Configuration {
 	
 	static final byte base = (byte)432;
 	
+//	@IcecapCompileMe
+//	protected static void delay(int i) {
+//
+//		for (int j = 0; j < 2000; j++) {
+//			devices.System.delay(i);
+//		}
+//	}
+	
 	
 	// called in Safelet.initializeApplication()
 	public void initCar() {
@@ -50,6 +59,8 @@ public class CarConfiguration extends Configuration {
 			//port = new Port(new CommunicationDeviceImpl(target, property));
 			
 			port = new Port(new BluetoothCommunicationDeviceImpl());
+			// delaying so that bluetooth have time to initialize
+			//delay(5000);
 			
 			System.out.println("CarConfiguration.initCar: port = " + port);
 		}
@@ -61,7 +72,7 @@ public class CarConfiguration extends Configuration {
 		frontLight =  new FrontLightImpl();	
 				      //new FakeFrontLight();
 
-		engine = new EngineImpl(frontLight); 		
+		//engine = new EngineImpl(frontLight);
 	}	
 	
 	// The mission memory sizes in this Level 0 car control system

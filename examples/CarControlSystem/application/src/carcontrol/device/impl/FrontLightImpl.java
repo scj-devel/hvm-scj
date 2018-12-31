@@ -12,13 +12,13 @@ public class FrontLightImpl implements FrontLight {
 	
 	@Override
 	public void turnOn() {
-		  front_light_turn_on();
-		  front_light_low_beam();
+		front_light_turn_on();
+		front_light_low_beam();
 	}
 
 	@Override
 	public void turnOff() {
-		  front_light_turn_off();
+		front_light_turn_off();
 	}
 
 	@Override

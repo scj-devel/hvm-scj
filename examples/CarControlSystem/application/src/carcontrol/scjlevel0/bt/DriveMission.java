@@ -12,7 +12,7 @@ import carcontrol.io.Port;
 
 public class DriveMission extends CyclicExecutive {
 
-	long minorCycle = 50;  // 50 ms
+	long minorCycle = 5000;  // 500 ms
 
 	Port port; 
 	RunData data;

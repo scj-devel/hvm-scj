@@ -21,11 +21,11 @@ public class BrakeImpl implements Brake {
 		
 		// braking: decrease motor speed; 
 		// in this version the native function set_brake() is not used
-		byte speed = engine.getEngineSpeed();  // speed is in percent; 0% <= speed <= 100%
+		int speed = engine.getEngineSpeed();  // speed is in percent; 0% <= speed <= 100%
 		
-		byte delta = (byte)(speed * decrease); 
+		int delta = (int)(speed * decrease); 
 		
-		engine.setEngineBrake((byte)(speed - delta));	
+		engine.setEngineBrake(speed - delta);	
 		
 		// brake lights off
 		brakeLight.turnOff();		

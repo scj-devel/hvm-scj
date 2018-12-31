@@ -21,7 +21,7 @@ public class CarSequencer extends MissionSequencer {
 			seqName);
 		
 		missions = new CyclicExecutive[4]; 
-		missions[0] = new ParkMission(CarConfiguration.port, CarConfiguration.data, CarConfiguration.engine);
+		missions[0] = new ParkMission(CarConfiguration.port, CarConfiguration.data);
 		missions[1] = new NeutralMission(CarConfiguration.port, CarConfiguration.data);
 		missions[2] = new ReverseMission(CarConfiguration.port, CarConfiguration.data);
 		missions[3] = new DriveMission(CarConfiguration.port, CarConfiguration.data);

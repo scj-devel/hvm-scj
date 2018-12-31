@@ -31,36 +31,37 @@ public class BluetoothSerialImpl implements BluetoothSerial {
 	// --- native methods ------------------------------
 		
 	@IcecapInlineNative(
-			functionBody = ""
-			+ "{\n"
-			+ "   bluetooth_start();\n"
-			+ "   return -1;\n"
-			+ "}\n",
-			requiredIncludes = ""
-				+ "#include \"..\\scalextric\\bluetooth.h\"\n"
-			)
-			native void bluetooth_start();
+		functionBody = ""
+		+ "{\n"
+		+ "   bluetooth_start();\n"
+		+ "   return -1;\n"
+		+ "}\n",
+		requiredIncludes = ""
+			+ "#include \"..\\scalextric\\bluetooth.h\"\n"
+		)
+	native void bluetooth_start();
 	
 	@IcecapInlineNative(
-			functionBody = ""
-			+ "{\n"
-			+ "   bluetooth_send_byte(sp[1]);\n"
-			+ "   return -1;\n"
-			+ "}\n",
-			requiredIncludes = ""
-				+ "#include \"..\\scalextric\\bluetooth.h\"\n"
-			) native void bluetooth_send_byte(int data);
+		functionBody = ""
+		+ "{\n"
+		+ "   bluetooth_send_byte(sp[1]);\n"  //HSO: why sp[1], and not sp[0]  ?
+		+ "   return -1;\n"
+		+ "}\n",
+		requiredIncludes = ""
+			+ "#include \"..\\scalextric\\bluetooth.h\"\n"
+		) 
+	native void bluetooth_send_byte(int data);
 			
 			
 	@IcecapInlineNative(
-			functionBody = ""
-			+ "{\n"
-			+ "   int value = bluetooth_read_byte();\n"
-			+ "   sp[0] = value;\n"
-			+ "   return -1;\n"
-			+ "}\n",
-			requiredIncludes = ""
-				+ "#include \"..\\scalextric\\bluetooth.h\"\n"
-			)
-			native int bluetooth_read_byte();
+		functionBody = ""
+		+ "{\n"
+		+ "   int value = bluetooth_read_byte();\n"
+		+ "   sp[0] = value;\n"
+		+ "   return -1;\n"
+		+ "}\n",
+		requiredIncludes = ""
+			+ "#include \"..\\scalextric\\bluetooth.h\"\n"
+		)
+	native int bluetooth_read_byte();
 }
