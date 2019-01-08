@@ -16,7 +16,7 @@ public class EngineImpl implements Engine {
 	
 	@Override
 	public void engineOn() {
-		System.out.println("EngineImpl.engineOn");
+		System.out.println("** EngineImpl.engineOn");
 		// start motor
 		motor_init();
 		// front lights on
@@ -27,9 +27,9 @@ public class EngineImpl implements Engine {
 
 	@Override
 	public void engineOff() {
-		System.out.println("EngineImpl.engineOff");
+		System.out.println("** EngineImpl.engineOff");
 		// stop motor
-		motor_set_brake (100);
+		//motor_set_brake (100);
 		motor_set_speed (0);
 		// front lights off
 		frontLight.turnOff();
@@ -43,12 +43,14 @@ public class EngineImpl implements Engine {
 	
 	@Override
 	public void setEngineSpeed (int speedPercent) {
+		System.out.println("** EngineImpl.setEngineSpeed: " + speedPercent);
 		motor_set_speed (speedPercent);
 		currentSpeedPct = speedPercent;
 	}
 	
 	@Override
 	public void setEngineBrake (int brakePercent) {
+		System.out.println("** EngineImpl.setEngineBrake: " + brakePercent);
 		motor_set_brake (brakePercent);
 	}
 

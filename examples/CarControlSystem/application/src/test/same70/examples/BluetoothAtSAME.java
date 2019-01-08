@@ -20,20 +20,22 @@ public class BluetoothAtSAME extends BluetoothTargetConfigurationSAME {
 			// delaying so that bluetooth have time to initialize
 			delay(5000);
 			
-			byte data = 0;
+			byte data = 65;
 			
 			while (data != 4) { // 4 = EOT
 				
-				devices.Console.println("receiving byte");
+				devices.Console.println("receiving byte: " + data);
 				data = port.receive();
 				devices.Console.println("byte: " + (char)data);
 				delay(10000);
 				
 				if (data > '!' && data < '~') {
-					devices.Console.println("sending byte");
+					devices.Console.println("sending byte: " + data);
 					port.send(data);
 					delay(10000);
 				}
+				port.send((byte)65); // HSO
+				delay(10000);
 			}
 
 		} catch (IOException e) {

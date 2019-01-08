@@ -1,4 +1,4 @@
-package carcontrol.scjlevel0.bt;
+package carcontrol.scjlevel0.motor;
 
 import javax.scj.util.Const;
 
@@ -11,11 +11,9 @@ import carcontrol.device.FrontLight;
 import carcontrol.device.impl.EngineImpl;
 import carcontrol.device.impl.FakeFrontLight;
 import carcontrol.device.impl.FrontLightImpl;
-import carcontrol.io.BluetoothCommunicationDeviceImpl;
 import carcontrol.io.CommunicationDevice;
 import carcontrol.io.CommunicationDeviceImpl;
 import carcontrol.io.Port;
-import icecaptools.IcecapCompileMe;
 import mockit.Mock;
 import mockit.MockUp;
 
@@ -27,14 +25,20 @@ import java.io.IOException;
  *
  */
 public class CarConfiguration extends Configuration {
+	
+//	/** Active test: 
+//	 *    true, if the car is executed as an active test on PC/Windows 10
+//	 *    false, if the car is executed on SAME.
+//	 */
+//	public static final boolean activeTest = false;
 	 
 	/* The set up of the car */
 	
 //	public final static String host = "HOST???";
 //	public final static int port = 1234;
 	
-	//String target = "/dev/ttyUSB0";
-	//String property = "baudrate=19200";
+	String target = "/dev/ttyUSB0";
+	String property = "baudrate=19200";
 	
 	public static Port port;	
 	public static RunData data;		
@@ -44,24 +48,11 @@ public class CarConfiguration extends Configuration {
 	
 	static final byte base = (byte)432;
 	
-//	@IcecapCompileMe
-//	protected static void delay(int i) {
-//
-//		for (int j = 0; j < 2000; j++) {
-//			devices.System.delay(i);
-//		}
-//	}
-	
 	
 	// called in Safelet.initializeApplication()
 	public void initCar() {
 		try {
-			//port = new Port(new CommunicationDeviceImpl(target, property));
-			
-			port = new Port(new BluetoothCommunicationDeviceImpl());
-			// delaying so that bluetooth have time to initialize
-			//delay(5000);
-			
+			port = new Port(new CommunicationDeviceImpl(target, property));
 			System.out.println("CarConfiguration.initCar: port = " + port);
 		}
 		catch (IOException e) {
@@ -72,9 +63,9 @@ public class CarConfiguration extends Configuration {
 		frontLight =  new FrontLightImpl();	
 				      //new FakeFrontLight();
 
-		engine = new EngineImpl(frontLight);
-		engine.engineOn();
-		engine.setEngineSpeed(75);
+		engine = new EngineImpl(frontLight); 
+//		engine.engineOn();
+//		engine.setEngineSpeed(100);
 	}	
 	
 	// The mission memory sizes in this Level 0 car control system
@@ -91,7 +82,7 @@ public class CarConfiguration extends Configuration {
 		new String[] {
 			"CarSequencer",  // the sequencer
 			
-			"ParkPEvhInput",  // the handlers in mission Park
+			"ParkPEvhInput",  // the handlers in mission Parking
 			"ParkPEvhOutput",
 			
 			"NeutralPEvhInput",  // the handlers in mission Neutral
@@ -127,70 +118,70 @@ public class CarConfiguration extends Configuration {
 	
 	// ParkPEvhInput:
 	/*priority*/	{ 1, 
-	/*times*/		  0, 0,   5000, 0,   0, 0,
+	/*times*/		  0, 0,   500, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,        
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE 
 					},
 	
 	// ParkPEvhOutput:
 	/*priority*/    { 1,       
-	/*times*/		  0, 0,   5000, 0,   0, 0,
+	/*times*/		  0, 0,   500, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,      
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE 
 					},
 	
 	// NeutralPEvhInput:
 	/*priority*/	{ 1, 
-	/*times*/		  0, 0,   5000, 0,   0, 0,
+	/*times*/		  0, 0,   500, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,        
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE
 					},
 	
 	// NeutralPEvhOutput:
 	/*priority*/    { 1,       
-	/*times*/		  0, 0,   5000, 0,   0, 0,
+	/*times*/		  0, 0,   500, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,      
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE 
 					},
 					
 	// ReversePEvhInput:
 	/*priority*/	{ 1, 
-	/*times*/		  0, 0,   5000, 0,   0, 0,
+	/*times*/		  0, 0,   500, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,        
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE
 					},
 	
 	// ReversePEvhOutput:
 	/*priority*/    { 1,       
-	/*times*/		  0, 0,   5000, 0,   0, 0,
+	/*times*/		  0, 0,   500, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,      
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE
 					},
 	
 	// ReversePEvhSpeed:
 	/*priority*/    { 1,       
-	/*times*/		  0, 0,   5000, 0,   0, 0,
+	/*times*/		  0, 0,   500, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,      
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE
 					},
 	
 	// DrivePEvhInput:
 	/*priority*/	{ 1, 
-	/*times*/		  0, 0,   5000, 0,   0, 0,
+	/*times*/		  0, 0,   500, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,        
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE 
 					},
 	
 	// DrivePEvhOutput:
 	/*priority*/    { 1,       
-	/*times*/		  0, 0,   5000, 0,   0, 0,
+	/*times*/		  0, 0,   500, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,      
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE 
 					},
 	
 	// DrivePEvhSpeed:
 	/*priority*/    { 1,       
-	/*times*/		  0, 0,   5000, 0,   0, 0,
+	/*times*/		  0, 0,   500, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,      
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE
 					}
