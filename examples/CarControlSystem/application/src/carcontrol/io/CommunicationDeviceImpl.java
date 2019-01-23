@@ -24,7 +24,7 @@ public class CommunicationDeviceImpl implements CommunicationDevice {
 	private InputStream istream;
 	private OutputStream ostream;
 		
-	private int cmd = -1; // for test only; later deleted
+	private int cmd = 6; // for test only; later deleted
 	private boolean reverse = true;
 	private boolean drive = true;
 	
@@ -74,7 +74,7 @@ public class CommunicationDeviceImpl implements CommunicationDevice {
 		
 		// HSO: for test only
 		
-		if (cmd == -1) {
+		if (cmd == 6) {
 			cmd = 0;
 		}
 		else if (cmd == 0 && reverse && drive) {
@@ -96,7 +96,7 @@ public class CommunicationDeviceImpl implements CommunicationDevice {
 			cmd = 0;
 		}
 		else if (cmd == 0 && !reverse && !drive) {
-			cmd = -1;
+			cmd = 6;
 		}
 		
 		

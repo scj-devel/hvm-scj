@@ -2,7 +2,7 @@ package carcontrol.constants;
 
 
 public enum Mode {
-	 OFF (-1),
+	 OFF (6),
 	 PARK (0), 
 	 NEUTRAL (1), 
 	 REVERSE (2), 
@@ -23,7 +23,7 @@ public enum Mode {
 		System.out.println("Mode.getMode: x: " + x);
 		
 		switch (x) {
-			case -1: return OFF;
+			case  6: return OFF;
 			case  0: return PARK;
 			case  1: return NEUTRAL;
 			case  2: return REVERSE;

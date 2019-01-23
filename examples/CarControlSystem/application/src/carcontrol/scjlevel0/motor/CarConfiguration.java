@@ -118,70 +118,70 @@ public class CarConfiguration extends Configuration {
 	
 	// ParkPEvhInput:
 	/*priority*/	{ 1, 
-	/*times*/		  0, 0,   500, 0,   0, 0,
+	/*times*/		  0, 0,   1000, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,        
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE 
 					},
 	
 	// ParkPEvhOutput:
 	/*priority*/    { 1,       
-	/*times*/		  0, 0,   500, 0,   0, 0,
+	/*times*/		  0, 0,   1000, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,      
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE 
 					},
 	
 	// NeutralPEvhInput:
 	/*priority*/	{ 1, 
-	/*times*/		  0, 0,   500, 0,   0, 0,
+	/*times*/		  0, 0,   1000, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,        
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE
 					},
 	
 	// NeutralPEvhOutput:
 	/*priority*/    { 1,       
-	/*times*/		  0, 0,   500, 0,   0, 0,
+	/*times*/		  0, 0,   1000, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,      
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE 
 					},
 					
 	// ReversePEvhInput:
 	/*priority*/	{ 1, 
-	/*times*/		  0, 0,   500, 0,   0, 0,
+	/*times*/		  0, 0,   1000, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,        
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE
 					},
 	
 	// ReversePEvhOutput:
 	/*priority*/    { 1,       
-	/*times*/		  0, 0,   500, 0,   0, 0,
+	/*times*/		  0, 0,   1000, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,      
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE
 					},
 	
 	// ReversePEvhSpeed:
 	/*priority*/    { 1,       
-	/*times*/		  0, 0,   500, 0,   0, 0,
+	/*times*/		  0, 0,   1000, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,      
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE
 					},
 	
 	// DrivePEvhInput:
 	/*priority*/	{ 1, 
-	/*times*/		  0, 0,   500, 0,   0, 0,
+	/*times*/		  0, 0,   1000, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,        
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE 
 					},
 	
 	// DrivePEvhOutput:
 	/*priority*/    { 1,       
-	/*times*/		  0, 0,   500, 0,   0, 0,
+	/*times*/		  0, 0,   1000, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,      
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE 
 					},
 	
 	// DrivePEvhSpeed:
 	/*priority*/    { 1,       
-	/*times*/		  0, 0,   500, 0,   0, 0,
+	/*times*/		  0, 0,   1000, 0,   0, 0,
 	/*scopeParam*/	  Const.PRIVATE_MEM, 0, 0, 0,      
 	/*configParam*/	  0, 0, Const.HANDLER_STACK_SIZE
 					}

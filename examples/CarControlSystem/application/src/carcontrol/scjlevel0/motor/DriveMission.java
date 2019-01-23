@@ -12,7 +12,7 @@ import carcontrol.io.Port;
 
 public class DriveMission extends CyclicExecutive {
 
-	long minorCycle = 50;  // 50 ms
+	long minorCycle = 1000;  // 500 ms
 
 	Port port; 
 	RunData data;
@@ -26,8 +26,23 @@ public class DriveMission extends CyclicExecutive {
 	}
 
 	protected void initialize() {
-		String pevhName = CarConfiguration.SOnames.get(8);
+		String pevhName;
 		
+		pevhName = CarConfiguration.SOnames.get(10);
+		PeriodicEventHandler speedPEvh = 
+			new DrivePEvhSpeed(
+				CarConfiguration.table.get(pevhName).getPriorityParam(),
+				CarConfiguration.table.get(pevhName).getPeriodicParam(),
+				
+				CarConfiguration.table.get(pevhName).getScopeParam(),					
+				CarConfiguration.table.get(pevhName).getConfigurationParam(),
+				
+				pevhName, 
+				port, 
+				data);
+		speedPEvh.register();	
+		
+		pevhName = CarConfiguration.SOnames.get(8);		
 		PeriodicEventHandler inputPEvh = 
 			new DrivePEvhInput(
 				CarConfiguration.table.get(pevhName).getPriorityParam(),
@@ -53,21 +68,7 @@ public class DriveMission extends CyclicExecutive {
 				pevhName, 
 				port, 
 				data);			
-		outputPEvh.register();
-		
-		pevhName = CarConfiguration.SOnames.get(10);
-		PeriodicEventHandler speedPEvh = 
-			new DrivePEvhSpeed(
-				CarConfiguration.table.get(pevhName).getPriorityParam(),
-				CarConfiguration.table.get(pevhName).getPeriodicParam(),
-				
-				CarConfiguration.table.get(pevhName).getScopeParam(),					
-				CarConfiguration.table.get(pevhName).getConfigurationParam(),
-				
-				pevhName, 
-				port, 
-				data);
-		speedPEvh.register();		
+		outputPEvh.register();			
 	}
 
 	public long missionMemorySize() {
