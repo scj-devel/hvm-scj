@@ -1,21 +1,25 @@
 package carcontrol.io;
 
 
-public enum Command {
-	 OFF (6),
-	 
+public enum Command {	 
 	 PARK (0), 
 	 NEUTRAL (1), 
 	 REVERSE (2), 
 	 DRIVE (3),
 	
 	 BRAKE (4),
-	 ACC (5);
+	 ACC (5),
+	 
+	 OFF (6),
+	
+	 DONOTHING (9);
 	
 	private int value;
 	
-	private Command (int value) {
-		this.value = value;
+	private static Command newCmd = DONOTHING;
+	
+	private Command (int val) {
+		value = val;
 	}
 	
 	public int getValue() {
@@ -23,24 +27,28 @@ public enum Command {
 	}
 	
 	public static Command getCommand (int x) {
-		int cmd = 0;  // later: remove or rewrite this
+		int newValue = 0;  
 		if (x >= 48 && x <= 54) {
-			cmd = x - 48; // 48 is ASCII value for 0 (zero)
-		}
+			newValue = x - 48; // 48 is ASCII value for 0 (zero)
+			switch (newValue) {				
+				case  0: newCmd = PARK; break;
+				case  1: newCmd = NEUTRAL; break;
+				case  2: newCmd = REVERSE; break;
+				case  3: newCmd = DRIVE; break;
+				
+				case  4: newCmd = BRAKE; break;
+				case  5: newCmd = ACC; break;				
 
-		System.out.println("Command.getCommand: x: " + x + "; cmd: " + cmd);
+				case  6: newCmd = OFF; break;
+			}				
+		} 
+		else {
+			newCmd = DONOTHING;		
+		}		
+			
+		System.out.println("Command.getCommand: x:" + x + 
+		                   "; newCmd: " + newCmd + "; value: " + newCmd.getValue());
 		
-		switch (cmd) {
-			case  6: return OFF;
-			
-			case  0: return PARK;
-			case  1: return NEUTRAL;
-			case  2: return REVERSE;
-			case  3: return DRIVE;
-			
-			case  4: return BRAKE;
-			case  5: return ACC;
-		}
-		return null;
+		return newCmd;
 	}
 }

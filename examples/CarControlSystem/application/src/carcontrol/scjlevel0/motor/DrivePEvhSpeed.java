@@ -39,7 +39,7 @@ public class DrivePEvhSpeed extends PeriodicEventHandler {
 	@Override
 	public void handleAsyncEvent() {
 		System.out.println(this.getName() + ": driving");
-		CarConfiguration.engine.setEngineSpeed(100);
+		CarConfiguration.engine.setEngineSpeed((byte)(100));
 		
 //		command = port.receive();
 //		

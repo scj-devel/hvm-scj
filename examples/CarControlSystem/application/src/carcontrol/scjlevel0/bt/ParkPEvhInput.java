@@ -48,7 +48,7 @@ public class ParkPEvhInput extends PeriodicEventHandler {
 				case OFF: 
 					CarSequencer.mode = Mode.OFF;				
 					
-					//CarConfiguration.engine.engineOff();
+					CarConfiguration.engine.engineOff();
 					CarConfiguration.frontLight.turnOff();
 					
 					System.out.println(" ==>  " +  this.getName() + " turn off");		

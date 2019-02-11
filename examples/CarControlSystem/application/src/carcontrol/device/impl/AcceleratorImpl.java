@@ -17,6 +17,6 @@ public class AcceleratorImpl implements Accelerator {
 		
 		int delta = (int) ((100 - speed) * increase) ; 
 		
-		engine.setEngineSpeed(speed + delta);	
+		engine.setEngineSpeed((byte)(speed + delta));	
 	}
 }

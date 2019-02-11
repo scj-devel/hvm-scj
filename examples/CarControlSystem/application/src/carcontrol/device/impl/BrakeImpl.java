@@ -25,7 +25,7 @@ public class BrakeImpl implements Brake {
 		
 		int delta = (int)(speed * decrease); 
 		
-		engine.setEngineBrake(speed - delta);	
+		engine.setEngineBrake((byte)(speed - delta));	
 		
 		// brake lights off
 		brakeLight.turnOff();		

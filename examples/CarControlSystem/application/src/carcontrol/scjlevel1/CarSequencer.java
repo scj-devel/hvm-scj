@@ -33,7 +33,7 @@ public class CarSequencer extends MissionSequencer {
 	RunData data = new RunData();	
 	
 	FrontLight frontLight =  new FrontLightImpl();	// see scjlevel0
-	Engine engine = new EngineImpl(frontLight);
+	Engine engine = new EngineImpl();
 	
 	public CarSequencer() {
 		super (new PriorityParameters(Priorities.SEQUENCER_PRIORITY),

@@ -44,7 +44,8 @@ public class BluetoothSerialImpl implements BluetoothSerial {
 	@IcecapInlineNative(
 		functionBody = ""
 		+ "{\n"
-		+ "   bluetooth_send_byte(sp[1]);\n"  //HSO: why sp[1], and not sp[0]  ?
+		+ "   bluetooth_send_byte(sp[1]);\n"  // HSO: why sp[1], and not sp[0] ? 
+		                                      // Answar: sp[0] has the this pointer, when native method is not static
 		+ "   return -1;\n"
 		+ "}\n",
 		requiredIncludes = ""

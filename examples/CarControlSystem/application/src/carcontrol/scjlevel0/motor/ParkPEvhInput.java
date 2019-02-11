@@ -42,7 +42,7 @@ public class ParkPEvhInput extends PeriodicEventHandler {
 	@Override
 	public void handleAsyncEvent() {
 		try {
-			Mode m = Mode.getMode(port.receive());		// Mode.OFF; 
+			Mode m = Mode.getMode(port.receive());	 
 			System.out.println(this.getName() + " Received Command: " + m);		
 		
 			switch (m) {

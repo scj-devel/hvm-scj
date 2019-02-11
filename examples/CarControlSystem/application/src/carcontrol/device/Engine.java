@@ -5,8 +5,10 @@ public interface Engine {
 	void engineOn();
 	void engineOff();
 	
-	int getEngineSpeed();
-	void setEngineSpeed (int speedPercent); 
-	void setEngineBrake (int brakePercent);
+	boolean engineIsOn();
+	
+	byte getEngineSpeed();
+	void setEngineSpeed (byte speedPercent); 
+	void setEngineBrake (byte brakePercent);
 	
 }

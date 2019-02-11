@@ -19,6 +19,8 @@ import icecaptools.IcecapCompileMe;
 import mockit.Mock;
 import mockit.MockUp;
 
+import test.same70.configuration.TargetConfigurationSAME;
+
 import java.io.IOException;
 
 /**
@@ -43,16 +45,7 @@ public class CarConfiguration extends Configuration {
 	public static FrontLight frontLight;
 	
 	static final byte base = (byte)432;
-	
-//	@IcecapCompileMe
-//	protected static void delay(int i) {
-//
-//		for (int j = 0; j < 2000; j++) {
-//			devices.System.delay(i);
-//		}
-//	}
-	
-	
+		
 	// called in Safelet.initializeApplication()
 	public void initCar() {
 		try {
@@ -60,7 +53,7 @@ public class CarConfiguration extends Configuration {
 			
 			port = new Port(new BluetoothCommunicationDeviceImpl());
 			// delaying so that bluetooth have time to initialize
-			//delay(5000);
+			TargetConfigurationSAME.delay(2000);
 			
 			System.out.println("CarConfiguration.initCar: port = " + port);
 		}
@@ -72,9 +65,9 @@ public class CarConfiguration extends Configuration {
 		frontLight =  new FrontLightImpl();	
 				      //new FakeFrontLight();
 
-		engine = new EngineImpl(frontLight);
+		engine = new EngineImpl();
 		engine.engineOn();
-		engine.setEngineSpeed(75);
+		engine.setEngineSpeed((byte)75);
 	}	
 	
 	// The mission memory sizes in this Level 0 car control system

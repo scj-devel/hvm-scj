@@ -63,7 +63,7 @@ public class CarConfiguration extends Configuration {
 		frontLight =  new FrontLightImpl();	
 				      //new FakeFrontLight();
 
-		engine = new EngineImpl(frontLight); 		
+		engine = new EngineImpl(); 		
 	}	
 	
 	// The mission memory sizes in this Level 0 car control system

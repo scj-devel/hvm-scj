@@ -201,7 +201,7 @@ public abstract class TargetConfigurationSAME extends BaseTargetConfiguration im
 	}
 	
 	@IcecapCompileMe
-	protected static void delay(int i) {
+	public static void delay(int i) {
 		devices.Console.println("d");
 		msDelay(i);
 	}

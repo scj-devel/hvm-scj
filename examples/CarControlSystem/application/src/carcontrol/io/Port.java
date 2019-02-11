@@ -20,6 +20,7 @@ public class Port {
 	
 	public synchronized byte receive() throws IOException {	
 		message[0] = (byte)commDevice.receive();
+		System.out.println("\n ==> Port.receive: " +  message[0] + "\n");	
 		return message[0];	
 	}
 

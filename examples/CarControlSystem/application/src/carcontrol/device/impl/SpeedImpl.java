@@ -4,18 +4,21 @@ import carcontrol.device.Speed;
 
 public class SpeedImpl implements Speed {
 
-	double throttle = 0.0;    // throttle setting 0..100 %
+	int speedPct = 0;    // speedPct setting 0..100 %
 	
 	@Override
 	public int getSpeed() {
-		// TODO Auto-generated method stub
-		return 0;
+		return speedPct;
 	}
 
 	@Override
-	public void speed(double value) {
-		// TODO Auto-generated method stub
-
+	public void speed(int value) {		
+		speedPct += value;
+		
+		if (speedPct <= 0)
+			speedPct = 0;
+		else if (speedPct >= 100)
+			speedPct = 100;
 	}
 
 }
